@@ -1,260 +1,122 @@
 # FirstFrame AI
 
-> **From a vague idea to a production-ready story plan through AI-guided creative reasoning.**
+**From vague ideas to structured story development.**
 
-FirstFrame AI is an AI-powered creative assistant designed to help beginners transform an early idea into a structured short-film story plan.
+FirstFrame AI is a hackathon MVP that turns a rough creative idea into a structured short-film story plan through a **Creative Reasoning Harness**.
 
-Instead of immediately generating a screenplay, FirstFrame AI guides creators through a reasoning workflow inspired by how experienced mentors develop stories.
-
-The project is built on a reusable **Creative Reasoning Harness**, allowing different creative domains to share the same reasoning pipeline while using domain-specific knowledge, prompts, and evaluation rubrics.
-
----
-
-# Why FirstFrame AI?
-
-Many creators have interesting ideas but struggle to answer questions like:
-
-* Is this idea emotionally strong enough?
-* Where is the real conflict?
-* Is the story complete?
-* Is it practical to produce as a short film?
-
-Traditional AI tools often jump directly to content generation.
-
-FirstFrame AI slows down that process and focuses on structured creative thinking before generation.
-
----
-
-# Features
-
-Current MVP includes:
-
-* AI-guided story reasoning
-* Story planning workflow
-* Story quality evaluation
-* Creative Thinking Timeline
-* Structured JSON output
-* Short-film knowledge base
-* Domain plugin architecture
-* Creative Reasoning Harness
-
----
-
-# Demo Workflow
+It is not a chatbot. Every generation follows an explicit workflow:
 
 ```text
-User Idea
-      │
-      ▼
-Creative Reasoning Harness
-      │
-      ├── Reasoning Layer
-      │        Understand the idea
-      │
-      ├── Planning Layer
-      │        Build the story plan
-      │
-      ├── Evaluation Layer
-      │        Review story quality
-      │
-      ▼
-Structured Story Plan
+Idea -> Reasoning -> Planning -> Evaluation -> Structured Story Plan
 ```
 
-Unlike a traditional chatbot, every request follows the same reasoning workflow before producing the final result.
+## Why It Exists
 
----
+Beginners often have a promising story idea but do not know how to shape it:
 
-# Architecture
+- What is the emotional core?
+- Who is the protagonist?
+- Where is the conflict?
+- Does the ending work?
+- Is the story practical for a short film?
 
-The project follows Clean Architecture principles.
+Direct prompting often jumps straight to prose. FirstFrame AI slows the process down and makes story development inspectable, structured, and repeatable.
+
+## Current MVP
+
+- FastAPI backend with `POST /api/generate`
+- Next.js demo frontend
+- Creative Reasoning Harness orchestration
+- OpenAI provider adapter
+- Prompt, Knowledge, Rubric, and Example loaders
+- Short-film domain intelligence pack
+- Pydantic structured output validation
+- AI Thinking Timeline and Story Flow visualization
+- English/Vietnamese loading UX and localized model-output guidance
+
+## Architecture At A Glance
 
 ```text
-Frontend (Next.js)
-
-        │
-
-        ▼
-
+Next.js Frontend
+  |
+  v
 FastAPI API
-
-        │
-
-        ▼
-
+  |
+  v
+StoryGenerationService
+  |
+  v
 Creative Reasoning Harness
-
-        ├── Reasoning Layer
-
-        ├── Planning Layer
-
-        ├── Evaluation Layer
-
-        ▼
-
-Prompt Loader
-
-Knowledge Loader
-
-Rubric Loader
-
-Example Loader
-
-        ▼
-
-OpenAI Provider
-
-        ▼
-
-Structured Output
+  |-- Reasoning Layer
+  |-- Planning Layer
+  |-- Evaluation Layer
+  |
+  v
+Domain Assets
+  |-- prompts
+  |-- knowledge
+  |-- rubrics
+  |-- examples
+  |
+  v
+OpenAI Provider Adapter
+  |
+  v
+Validated Structured JSON
 ```
 
-The Harness is provider-independent.
+The engineering focus is **Track 2: Engineering Depth**: clean boundaries, provider isolation, domain plugin assets, loader components, immutable artifacts, and structured output contracts.
 
-The OpenAI integration is isolated behind infrastructure adapters.
-
-Domain knowledge lives outside the runtime engine.
-
----
-
-# Repository Structure
+## Repository Structure
 
 ```text
-firstframe-ai/
-
-backend/
-    FastAPI backend
-
-frontend/
-    Next.js frontend
-
-domains/
-    Domain plugins
-
-docs/
-    Architecture
-    Workflow
-    Design decisions
-    Roadmap
+backend/              FastAPI API, Harness runtime, core contracts, OpenAI adapter
+frontend/             Next.js App Router demo UI
+domains/short-film/   Short-film prompts, knowledge, rubric, examples, output schema
+docs/                 Architecture, workflow, kernel, decisions, roadmap
 ```
 
----
-
-# Tech Stack
-
-Backend
-
-* FastAPI
-* Pydantic v2
-* OpenAI Responses API
-
-Frontend
-
-* Next.js
-* React
-* TypeScript
-
-Architecture
-
-* Clean Architecture
-* SOLID
-* Provider Adapter Pattern
-* Domain Plugin Pattern
-
----
-
-# Local Development
-
-Backend
-
-```bash
-cd backend
-
-python -m venv .venv
-
-source .venv/bin/activate
-
-pip install -r requirements-dev.txt
-
-uvicorn app.main:app --reload
-```
-
-Frontend
-
-```bash
-cd frontend
-
-npm install
-
-npm run dev
-```
+## Local Development
 
 Backend:
 
-http://localhost:8000
+```bash
+cd backend
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements-dev.txt
+uvicorn app.main:app --reload
+```
+
+Create `backend/.env` from `backend/.env.example` and set `OPENAI_API_KEY`.
 
 Frontend:
 
-http://localhost:3000
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
----
+Default URLs:
 
-# Current Domain
+- Backend: `http://localhost:8000`
+- Frontend: `http://localhost:3000`
 
-The first supported domain is:
+## Current Limitations
 
-🎬 Short Film Story Development
+- One active domain: Short Film Story Development.
+- No auth, persistence, save/resume, deployment, or streaming.
+- Domain registration is currently static in the application service.
+- OpenAI is the only implemented provider adapter.
 
-The architecture is designed to support future domains such as:
+## Future Domains
 
-* YouTube content planning
-* Marketing campaigns
-* Book writing
-* Game narrative design
-* Educational storytelling
+The Harness is designed so future domains can add their own assets without rewriting the core workflow:
 
-without changing the Creative Reasoning Harness.
+- YouTube storytelling
+- Marketing campaigns
+- Game narrative design
+- Book writing
+- Educational storytelling
 
----
-
-# Roadmap
-
-* ✅ Foundation
-* ✅ Creative Reasoning Harness
-* ✅ OpenAI Integration
-* ✅ Prompt & Knowledge Loader
-* ✅ Story Planning
-* ✅ Story Evaluation
-* ✅ Interactive Demo UI
-* 🚧 Deployment
-* 🚧 Multi-domain support
-
----
-
-# Why it is different
-
-FirstFrame AI is **not a chatbot**.
-
-It is a **Creative Reasoning Harness**.
-
-Instead of generating text immediately, it follows an explicit workflow:
-
-Understand
-
-↓
-
-Reason
-
-↓
-
-Plan
-
-↓
-
-Evaluate
-
-↓
-
-Generate
-
-This makes the system more structured, extensible, and reusable across different creative domains.

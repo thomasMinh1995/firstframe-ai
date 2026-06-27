@@ -1,116 +1,140 @@
 # Architecture
 
-FirstFrame AI is organized around a provider-independent Creative Reasoning Harness kernel. The kernel defines the runtime contracts, artifact flow, and domain plugin boundary that future creative domains will share.
+FirstFrame AI is built around a **Creative Reasoning Harness**: a small AI workflow engine that turns a vague creative idea into structured artifacts through Reasoning, Planning, and Evaluation.
 
-Sprint 2 still does not implement AI behavior. It defines the reusable framework surface that Sprint 3 can implement without changing the contracts.
+The current MVP supports Short Film Story Development and uses OpenAI behind an infrastructure adapter. The architecture is intentionally broader than the demo domain so future creative domains can reuse the same Harness.
 
-## Goals
-
-- Keep the Harness domain-agnostic.
-- Keep domain-specific knowledge in plugins.
-- Exchange immutable artifacts between runtime layers.
-- Keep HTTP transport models separate from internal artifacts.
-- Make future provider adapters replaceable infrastructure.
-- Let new domains register without changing Harness code.
-
-## System Shape
+## System Overview
 
 ```text
-Frontend
+Next.js Frontend
+  |
+  | POST /api/generate
+  v
+FastAPI API Layer
   |
   v
-FastAPI Delivery Layer
+Application Workflow
   |
   v
-API Transport Schemas and Validation
+Creative Reasoning Harness
+  |-- DomainRegistry
+  |-- ReasoningLayer
+  |-- PlanningLayer
+  |-- EvaluationLayer
   |
   v
-Application Use Cases
+Domain Intelligence Pack
+  |-- PromptLoader
+  |-- KnowledgeLoader
+  |-- RubricLoader via KnowledgeLoader
+  |-- ExampleLoader
   |
   v
-Creative Reasoning Harness Kernel
+OpenAIProvider
   |
-  +--> Domain Registry
-  |      |
-  |      v
-  |    Domain Plugins
-  |
-  +--> Reasoning Layer
-  +--> Planning Layer
-  +--> Evaluation Layer
+  v
+Pydantic Structured Output Validation
 ```
 
-## Package Boundaries
+## Backend Boundaries
 
-### API
+### API Layer
 
 `backend/app/api/` owns HTTP concerns:
 
-- route registration;
-- request and response schemas;
-- transport-level validation.
+- `GET /health`
+- `POST /api/generate`
+- Pydantic request and response transport models
+- API-safe error mapping for provider failures
+- CORS for local frontend development
 
-The API layer must not expose internal artifacts directly. It maps future HTTP payloads into application inputs and maps application outputs into response schemas.
+Controllers do not call OpenAI directly. They call the application workflow and map internal artifacts to transport responses.
 
-### Application
+### Application Layer
 
-`backend/app/application/` is reserved for use cases and orchestration entry points that sit outside the kernel. It should coordinate API requests, kernel calls, persistence, and other application services without owning domain knowledge.
+`backend/app/application/` contains the current executable runtime:
 
-### Core
+- `workflow.py`: concrete Harness composition and layer implementations
+- `prompt_loader.py`: loads Markdown prompts from the active domain
+- `knowledge_loader.py`: loads knowledge and rubric JSON
+- `example_loader.py`: loads local few-shot example JSON
 
-`backend/app/core/` owns the kernel:
+This layer composes core contracts with infrastructure and domain assets.
 
-- immutable artifact models;
-- domain plugin contracts;
-- domain registry;
-- Harness runtime interfaces.
+### Core Layer
 
-Core must not import FastAPI, provider SDKs, database clients, or frontend code.
+`backend/app/core/` contains provider-independent contracts:
 
-### Domain Plugins
+- immutable artifact dataclasses
+- domain plugin protocol
+- domain registry
+- `ReasoningLayer`, `PlanningLayer`, `EvaluationLayer` interfaces
 
-`domains/` contains domain-owned assets. A plugin exposes metadata plus resource catalogs for:
+Core does not import FastAPI, OpenAI, frontend code, or domain JSON files.
 
-- knowledge;
-- glossary;
-- prompts;
-- rubrics;
-- examples.
+### Infrastructure Layer
 
-The Harness depends on the plugin contract, not on domain folder names.
+`backend/app/infrastructure/openai_provider.py` is a thin OpenAI adapter:
+
+- loads model configuration from environment
+- sends requests through `responses.create`
+- appends strict JSON instructions and Pydantic JSON Schema
+- parses JSON with `json.loads`
+- validates with Pydantic models
+- maps provider failures to provider-independent exceptions
+
+## Frontend
+
+`frontend/app/` is a Next.js App Router demo UI:
+
+- idea textarea with validation
+- API client for `POST /api/generate`
+- Thinking Timeline while waiting
+- Story Flow visualization
+- presentation-ready result cards for Analysis, Story Plan, and Evaluation
+- simple English/Vietnamese loading-label heuristic
+
+The frontend renders the existing API contract only; it does not know about internal artifacts.
 
 ## Domain Plugin Pattern
 
-Every domain plugin must satisfy the `DomainPlugin` protocol. The plugin contract exposes metadata and typed resource collections. The Harness retrieves plugins through `DomainRegistry`; it should not import or hard-code specific domains.
+The first domain is `domains/short-film/`.
 
-This keeps future domains independent. A new domain can be added by creating a plugin and registering it with the registry. The Harness runtime remains unchanged.
+Domain assets include:
 
-## Artifact Flow
+- `prompts/`
+- `knowledge/`
+- `rubrics/`
+- `examples/`
+- `output_schema.json`
 
-Internal Harness layers exchange immutable artifacts:
+The Harness owns workflow order. The domain owns creative knowledge. The provider owns model execution.
 
-```text
-IdeaArtifact
-  |
-  v
-ReasoningArtifact
-  |
-  v
-PlanningArtifact
-  |
-  v
-EvaluationArtifact
-```
+## Structured Output
 
-`StoryPlanArtifact` is a structured planning artifact for story-development outputs. It is an internal artifact, not an API response.
+Planning and evaluation responses are validated against Pydantic models in `workflow.py`.
 
-## Runtime Responsibilities
+The provider sends each model's JSON Schema to OpenAI. The domain-level `output_schema.json` mirrors the field inventory for documentation and tests.
 
-- `ReasoningLayer`: accepts an `IdeaArtifact` and a domain plugin; returns a `ReasoningArtifact`.
-- `PlanningLayer`: accepts a `ReasoningArtifact` and a domain plugin; returns a `PlanningArtifact`.
-- `EvaluationLayer`: accepts a `PlanningArtifact` and a domain plugin; returns an `EvaluationArtifact`.
-- `CreativeReasoningKernel`: defines the runtime boundary that will compose the registry and layers in a later sprint.
+This reduces prompt/schema drift and keeps the API response stable.
 
-## Provider Independence
+## Track 2 Engineering Depth
 
-OpenAI, Claude, Gemini, local models, and other providers belong behind future infrastructure adapters. Provider adapters may implement runtime layer dependencies later, but provider objects must not appear in core artifacts, domain plugins, or API contracts.
+The project emphasizes:
+
+- clear runtime boundaries;
+- provider isolation;
+- explicit artifact flow;
+- domain-owned intelligence packs;
+- loader components for prompts, knowledge, rubrics, and examples;
+- structured output contracts;
+- tests around registry, loaders, provider behavior, workflow, schemas, and CORS.
+
+## Current Limitations
+
+- OpenAI is the only implemented provider.
+- Domain registration is static for the MVP.
+- No streaming, persistence, authentication, or deployment automation yet.
+- The Reasoning Layer still uses inline instructions rather than a domain prompt file.
+

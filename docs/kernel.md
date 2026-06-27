@@ -1,88 +1,128 @@
 # Creative Reasoning Harness Kernel
 
-The Creative Reasoning Harness kernel is the reusable framework boundary for FirstFrame AI. It defines how creative domains, artifacts, and runtime layers fit together without implementing AI behavior.
+The Creative Reasoning Harness is the reusable runtime boundary inside FirstFrame AI.
 
-## Kernel Components
+It is small by design: the kernel defines contracts and layer responsibilities, while the application layer composes concrete OpenAI-backed implementations for the current MVP.
 
-```text
-Core Kernel
-├── Artifacts
-├── Domain Plugin Contract
-├── Domain Registry
-└── Runtime Layer Interfaces
-```
+## Core Contracts
 
-## Artifacts
+`backend/app/core/` defines:
 
-Artifacts are immutable internal data objects exchanged between Harness layers.
+- immutable artifacts;
+- domain plugin protocol;
+- domain registry;
+- Reasoning, Planning, and Evaluation layer interfaces.
 
-Current artifact models:
+Artifacts include:
 
 - `IdeaArtifact`
 - `ReasoningArtifact`
 - `PlanningArtifact`
-- `EvaluationArtifact`
 - `StoryPlanArtifact`
+- `EvaluationArtifact`
 
-Artifacts are not HTTP response models and should not be returned directly from API routes.
+Artifacts are internal data objects. They are not returned directly from the API.
 
-## Domain Plugin Contract
+## Runtime Layers
 
-A domain plugin exposes:
+### ReasoningLayer
 
-- metadata;
-- knowledge resources;
-- glossary resources;
-- prompt resources;
-- rubric resources;
-- example resources.
+Input:
 
-The plugin contract is provider-independent. It describes domain assets; it does not execute prompts or call models.
+- `IdeaArtifact`
+- active `DomainPlugin`
 
-## Domain Registry
+Output:
 
-`DomainRegistry` is responsible for:
+- `ReasoningArtifact`
 
-- registering plugins;
-- listing registered plugins;
-- retrieving plugins by identifier;
-- rejecting duplicate identifiers;
-- rejecting empty identifiers.
+Responsibility:
 
-Future plugin discovery should feed discovered plugins into the registry. The Harness should continue to depend on the registry rather than direct domain imports.
+- understand the idea;
+- summarize creative signals;
+- identify missing information;
+- produce mentor-style questions.
 
-## Runtime Interfaces
+### PlanningLayer
 
-The kernel defines three runtime layer interfaces:
+Input:
 
-- `ReasoningLayer`
-- `PlanningLayer`
-- `EvaluationLayer`
+- `ReasoningArtifact`
+- active `DomainPlugin`
 
-Each interface receives artifacts plus a domain plugin and returns the next artifact. Implementations may be deterministic, provider-backed, or hybrid in later sprints, but the contracts stay provider-independent.
+Output:
 
-## Kernel Boundary
+- `PlanningArtifact`
 
-The kernel may depend on:
+Responsibility:
 
-- Python standard library;
-- internal core contracts.
+- load domain prompt, knowledge, and examples;
+- create a structured story plan;
+- validate the planning output contract.
 
-The kernel must not depend on:
+### EvaluationLayer
 
-- FastAPI;
-- Pydantic transport schemas;
-- OpenAI or other provider SDKs;
-- persistence clients;
-- frontend code.
+Input:
 
-## Sprint 3 Readiness
+- `PlanningArtifact`
+- active `DomainPlugin`
 
-Sprint 3 can implement a concrete runtime by composing:
+Output:
 
-- a `DomainRegistry`;
-- a `ReasoningLayer`;
-- a `PlanningLayer`;
-- an `EvaluationLayer`.
+- `EvaluationArtifact`
 
-That implementation should use the current contracts rather than changing them.
+Responsibility:
+
+- load the domain critic prompt and rubric;
+- score the plan;
+- return strengths, weaknesses, and suggestions.
+
+## Current Composition
+
+The current application composes:
+
+- `DomainRegistry`
+- static short-film domain metadata
+- `OpenAIReasoningLayer`
+- `OpenAIPlanningLayer`
+- `OpenAIEvaluationLayer`
+- `OpenAIProvider`
+- prompt, knowledge, rubric, and example loaders
+
+This composition lives in `backend/app/application/workflow.py`.
+
+## Domain Boundary
+
+The kernel depends on the `DomainPlugin` contract, not on short-film files.
+
+The short-film domain currently provides assets from `domains/short-film/`:
+
+- prompts;
+- knowledge;
+- rubrics;
+- examples;
+- output schema documentation.
+
+## Provider Boundary
+
+The kernel does not import OpenAI.
+
+OpenAI is used through `OpenAIProvider`, which receives structured requests and returns validated Pydantic objects. Provider-specific exceptions are converted into provider-independent errors.
+
+## Why The Kernel Matters
+
+The kernel is what makes FirstFrame AI an early AI framework rather than a single prompt demo:
+
+- layer interfaces are explicit;
+- artifacts are typed;
+- domain assets are externalized;
+- provider calls are isolated;
+- structured output contracts are testable.
+
+## Current Limitations
+
+- Runtime implementations are currently OpenAI-backed only.
+- Plugin discovery is static for the MVP.
+- Reasoning instructions are inline rather than loaded from a domain prompt file.
+- No persistence or cross-request memory exists yet.
+

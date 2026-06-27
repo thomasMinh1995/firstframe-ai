@@ -1,81 +1,100 @@
 # Design Decisions
 
-## 1. Kernel Contracts Before Runtime Behavior
+## 1. Build A Harness, Not A Chatbot
 
-Sprint 2 defines contracts only. It does not implement reasoning, planning, evaluation, prompt execution, or provider calls.
-
-Reason:
-
-- stabilizes the framework surface before behavior exists;
-- keeps Sprint 3 focused on runtime implementation;
-- prevents prototype logic from defining the architecture accidentally.
-
-## 2. Domain Registry as the Domain Entry Point
-
-`DomainRegistry` is the only core entry point for registering, listing, and retrieving domain plugins.
+FirstFrame AI uses a fixed Creative Reasoning Harness instead of a free-form chat loop.
 
 Reason:
 
-- avoids hard-coded domain references in the Harness;
-- makes duplicate domain identifiers fail fast;
-- gives future discovery and loading a single place to evolve.
+- story development benefits from repeatable steps;
+- judges can inspect the pipeline;
+- future domains can reuse the same Reasoning -> Planning -> Evaluation structure;
+- the system can validate structured outputs instead of trusting free-form prose.
+
+## 2. Harness Owns Workflow
+
+The Harness decides the runtime order:
+
+```text
+Idea -> Reasoning -> Planning -> Evaluation
+```
+
+Reason:
+
+- workflow order is domain-agnostic;
+- controllers stay thin;
+- domain packs do not become mini-applications;
+- future providers can plug in behind the same runtime shape.
 
 ## 3. Domain Owns Knowledge
 
-Domain plugins expose metadata, knowledge, glossary, prompts, rubrics, and examples.
+The short-film domain owns prompts, film knowledge, rubric criteria, examples, and output schema documentation.
 
 Reason:
 
-- creative knowledge is domain-specific;
-- the Harness should own workflow, not subject matter;
-- new domains should not require edits to kernel contracts.
+- creative knowledge varies by domain;
+- adding a marketing or game-design domain should not require changing the Harness;
+- prompts and rubrics can evolve without touching API routes.
 
-## 4. Immutable Artifacts Inside the Kernel
+## 4. Load Domain Assets At Runtime
 
-Harness layers exchange frozen dataclass artifacts instead of dictionaries.
-
-Reason:
-
-- makes layer contracts explicit;
-- reduces accidental shape drift;
-- helps tests and future provider adapters target stable data objects.
-
-## 5. API Schemas Are Transport Contracts
-
-Pydantic models live in `backend/app/api/schemas/` and are separate from internal artifacts.
+`PromptLoader`, `KnowledgeLoader`, and `ExampleLoader` read assets from the active domain and cache them in memory.
 
 Reason:
 
-- HTTP payloads change for product and compatibility reasons;
-- artifacts change for runtime architecture reasons;
-- keeping them separate prevents API leakage into the core.
+- avoids hardcoded prompt/knowledge text in Python;
+- keeps the Short Film Intelligence Pack inspectable;
+- enables future domain assets to follow the same pattern.
 
-## 6. Validation Happens Before Harness Entry
+## 5. Keep Provider Logic In Infrastructure
 
-Incoming request validation is provider-independent and handled at the transport edge.
-
-Reason:
-
-- malformed input should fail before runtime orchestration;
-- provider-specific fields should not leak into the API contract;
-- validation can evolve without introducing model-provider coupling.
-
-## 7. Provider Adapters Belong to Infrastructure
-
-OpenAI, Claude, Gemini, and other providers are future infrastructure concerns.
+OpenAI calls live in `OpenAIProvider`, not controllers or core contracts.
 
 Reason:
 
-- provider choice should be replaceable;
-- provider SDKs should not pollute core contracts;
-- testable runtime layers can be composed without network calls.
+- provider SDKs should not leak into the Harness;
+- provider failures can be mapped safely;
+- tests can mock the provider boundary;
+- future adapters can be added without changing API routes.
 
-## 8. Composition Over Inheritance
+## 6. Validate Structured Output With Pydantic
 
-Future runtime implementations should compose a domain registry and concrete layer implementations.
+The provider returns JSON, then Pydantic validates the exact shape expected by each layer.
 
 Reason:
 
-- each layer has a narrow responsibility;
-- providers can be swapped behind layer implementations;
-- domains can be registered without subclassing the Harness.
+- prevents prompt/schema drift;
+- avoids markdown parsing;
+- keeps the frontend response stable;
+- catches malformed provider responses before API serialization.
+
+## 7. Separate Transport Models From Artifacts
+
+API schemas are not internal artifacts.
+
+Reason:
+
+- HTTP response shape is product-facing;
+- artifacts are Harness-facing;
+- each can evolve without forcing the other to change immediately.
+
+## 8. Frontend Shows The Workflow
+
+The Thinking Timeline, Story Flow visualization, and result cards are intentionally part of the demo experience.
+
+Reason:
+
+- makes the Harness visible to judges;
+- communicates that the product reasons, plans, and evaluates;
+- helps users scan the result quickly instead of reading raw JSON.
+
+## 9. Honest MVP Constraints
+
+The MVP avoids auth, persistence, streaming, multi-agent orchestration, RAG, LangGraph, and vector search.
+
+Reason:
+
+- hackathon scope favors a reliable end-to-end flow;
+- engineering depth is shown through clean contracts and boundaries;
+- unnecessary infrastructure would obscure the core product idea.
+
