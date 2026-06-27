@@ -1,0 +1,109 @@
+{
+  "rubric": {
+    "name": "Short Film Story Rubric",
+    "intended_use": "Evaluate early short-film ideas and structured story plans for 5-20 minute films.",
+    "score_range": {
+      "min": 1,
+      "max": 5,
+      "scale": {
+        "1": "Unclear or not yet working",
+        "2": "Partially present but weak",
+        "3": "Functional but needs refinement",
+        "4": "Strong with minor gaps",
+        "5": "Excellent and ready for development"
+      }
+    },
+    "criteria": [
+      {
+        "name": "Story Clarity",
+        "description": "How clearly the story communicates its premise, central situation, and progression.",
+        "evaluation_guidance": "Look for a focused premise, understandable setup, clear beginning-middle-ending movement, and a story question the audience can follow.",
+        "score_range": {
+          "min": 1,
+          "max": 5
+        },
+        "common_mistakes": [
+          "The idea is only a mood or theme without a clear situation.",
+          "Too many plot threads compete for attention.",
+          "The audience cannot tell what changes from beginning to end.",
+          "Important context is explained too late or not at all."
+        ]
+      },
+      {
+        "name": "Character",
+        "description": "How well the protagonist is defined through motivation, behavior, and choice.",
+        "evaluation_guidance": "Assess whether the protagonist has a visible want, an emotional need, a reason to act now, and a meaningful choice that reveals character.",
+        "score_range": {
+          "min": 1,
+          "max": 5
+        },
+        "common_mistakes": [
+          "The protagonist is passive throughout the story.",
+          "The character wants something vague or invisible.",
+          "Motivation is explained but not dramatized.",
+          "The protagonist does not make a meaningful choice."
+        ]
+      },
+      {
+        "name": "Conflict",
+        "description": "How effectively the story creates pressure, obstacles, and dramatic movement.",
+        "evaluation_guidance": "Evaluate whether the conflict is specific, filmable, connected to the protagonist's goal, and strong enough to sustain a short film without becoming overcomplicated.",
+        "score_range": {
+          "min": 1,
+          "max": 5
+        },
+        "common_mistakes": [
+          "The conflict is too abstract to show on screen.",
+          "The obstacle is solved too easily.",
+          "The story relies on coincidence instead of character decisions.",
+          "There is tension, but it does not escalate."
+        ]
+      },
+      {
+        "name": "Emotional Impact",
+        "description": "How strongly the story creates a specific emotional journey for the audience.",
+        "evaluation_guidance": "Look for emotional stakes, a clear emotional turn, specificity in relationships or situations, and moments that allow the audience to feel rather than simply understand.",
+        "score_range": {
+          "min": 1,
+          "max": 5
+        },
+        "common_mistakes": [
+          "The story tells the audience what to feel instead of earning it.",
+          "The emotional goal is generic, such as simply being sad or happy.",
+          "The relationship dynamics are underdeveloped.",
+          "The film has events but no emotional change."
+        ]
+      },
+      {
+        "name": "Ending",
+        "description": "How well the ending resolves, reframes, or completes the short film's central question.",
+        "evaluation_guidance": "Assess whether the ending feels earned, expresses the emotional turn, avoids over-explanation, and leaves the audience with a strong final image or action.",
+        "score_range": {
+          "min": 1,
+          "max": 5
+        },
+        "common_mistakes": [
+          "The ending arrives abruptly without setup.",
+          "The ending explains the theme through dialogue instead of dramatizing it.",
+          "The final moment does not connect to the protagonist's choice.",
+          "The story continues too long after the emotional turn has landed."
+        ]
+      },
+      {
+        "name": "Production Feasibility",
+        "description": "How practical the story is for a small short-film production.",
+        "evaluation_guidance": "Consider cast size, number of locations, required effects, time period, props, crowd scenes, and whether the core idea can be filmed with limited resources.",
+        "score_range": {
+          "min": 1,
+          "max": 5
+        },
+        "common_mistakes": [
+          "The idea requires too many locations for a short production.",
+          "The cast is larger than the story needs.",
+          "Expensive visual effects carry the concept instead of character and conflict.",
+          "The story would work better as a feature because it needs too much setup."
+        ]
+      }
+    ]
+  }
+}

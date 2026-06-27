@@ -1,0 +1,232 @@
+{
+  "glossary": [
+    {
+      "term": "protagonist",
+      "simple_definition": "The main character the audience follows through the story.",
+      "why_it_matters": "A short film becomes clearer when the audience knows whose choice or change matters most.",
+      "beginner_example": "In a story about a father saying goodbye, the father may be the protagonist because we follow his emotional decision."
+    },
+    {
+      "term": "antagonist",
+      "simple_definition": "The person, force, or situation that pushes against the protagonist.",
+      "why_it_matters": "Opposition creates pressure and helps the story move.",
+      "beginner_example": "The antagonist could be a strict deadline, a closed airport gate, or the father's own pride."
+    },
+    {
+      "term": "conflict",
+      "simple_definition": "The struggle between what a character wants and what stands in the way.",
+      "why_it_matters": "Conflict gives the short film energy and creates decisions the audience can watch.",
+      "beginner_example": "A daughter is leaving tonight, but her father cannot bring himself to apologize."
+    },
+    {
+      "term": "hook",
+      "simple_definition": "The early moment that makes the audience curious.",
+      "why_it_matters": "Short films have little time, so the story needs a clear reason to keep watching.",
+      "beginner_example": "A man receives a voice message saying, 'My flight leaves in two hours. I hoped you would come.'"
+    },
+    {
+      "term": "premise",
+      "simple_definition": "The basic story idea in one clear sentence.",
+      "why_it_matters": "A strong premise helps every scene stay focused.",
+      "beginner_example": "A retired father tries to meet his daughter one last time before she leaves Vietnam."
+    },
+    {
+      "term": "logline",
+      "simple_definition": "A short summary of the protagonist, goal, obstacle, and stakes.",
+      "why_it_matters": "A logline tests whether the story has a clear engine.",
+      "beginner_example": "Before his daughter leaves the country, a proud retired father must cross the city and admit the apology he has avoided for years."
+    },
+    {
+      "term": "theme",
+      "simple_definition": "The deeper human question or meaning underneath the plot.",
+      "why_it_matters": "Theme gives emotional weight to a simple story.",
+      "beginner_example": "The theme might be that love sometimes means letting someone leave."
+    },
+    {
+      "term": "emotional arc",
+      "simple_definition": "The emotional journey a character takes from the beginning to the end.",
+      "why_it_matters": "In a short film, a small emotional shift can be more powerful than a large plot.",
+      "beginner_example": "A father begins defensive and ends honest enough to say goodbye."
+    },
+    {
+      "term": "character motivation",
+      "simple_definition": "The reason a character wants something or behaves a certain way.",
+      "why_it_matters": "Motivation helps the audience understand actions, even when the character makes mistakes.",
+      "beginner_example": "The father avoids calling because he fears his daughter will reject him."
+    },
+    {
+      "term": "want",
+      "simple_definition": "The visible thing a character is trying to get.",
+      "why_it_matters": "A visible want makes the story easier to follow on screen.",
+      "beginner_example": "The father wants to reach the bus station before his daughter leaves."
+    },
+    {
+      "term": "need",
+      "simple_definition": "The deeper emotional lesson or change a character may need.",
+      "why_it_matters": "The difference between want and need creates emotional depth.",
+      "beginner_example": "The father wants one meeting, but he needs to respect his daughter's independence."
+    },
+    {
+      "term": "stakes",
+      "simple_definition": "What can be lost or gained if the character succeeds or fails.",
+      "why_it_matters": "Stakes make the audience care about the outcome.",
+      "beginner_example": "If the father does not speak now, the relationship may stay broken for years."
+    },
+    {
+      "term": "turning point",
+      "simple_definition": "A moment that changes the direction of the story.",
+      "why_it_matters": "Turning points keep the short film from feeling flat.",
+      "beginner_example": "The father arrives too late and must decide whether to leave a voice message instead."
+    },
+    {
+      "term": "climax",
+      "simple_definition": "The most important decision or confrontation near the end.",
+      "why_it_matters": "The climax reveals what the story has been building toward.",
+      "beginner_example": "The father finally says the apology he has avoided, even though he cannot stop his daughter from leaving."
+    },
+    {
+      "term": "resolution",
+      "simple_definition": "The final state after the main choice or conflict.",
+      "why_it_matters": "Resolution gives the audience a sense of emotional completion.",
+      "beginner_example": "The daughter leaves, but she carries her father's recorded apology with her."
+    },
+    {
+      "term": "ending image",
+      "simple_definition": "A final visual moment that expresses the story's meaning.",
+      "why_it_matters": "Short films often end strongest with an image rather than an explanation.",
+      "beginner_example": "The father sits alone at the station as his daughter's message changes from unread to listened."
+    },
+    {
+      "term": "visual storytelling",
+      "simple_definition": "Showing story information through images, actions, objects, and behavior.",
+      "why_it_matters": "Film is visual, so not every idea should be explained through dialogue.",
+      "beginner_example": "Instead of saying he misses his daughter, the father repairs her old bicycle bell."
+    },
+    {
+      "term": "dialogue",
+      "simple_definition": "The words characters speak.",
+      "why_it_matters": "Good dialogue reveals character and conflict, not just information.",
+      "beginner_example": "A daughter saying 'You always arrive after the decision is made' reveals history between them."
+    },
+    {
+      "term": "subtext",
+      "simple_definition": "The meaning underneath what characters say or do.",
+      "why_it_matters": "Subtext makes scenes feel more real and less obvious.",
+      "beginner_example": "The father asks if she packed food, but he really means he is worried and does not know how to say it."
+    },
+    {
+      "term": "scene",
+      "simple_definition": "A unit of action that happens in a specific place and time.",
+      "why_it_matters": "Clear scenes help a short film stay organized and shootable.",
+      "beginner_example": "A scene could be the father waiting outside his daughter's apartment."
+    },
+    {
+      "term": "sequence",
+      "simple_definition": "A group of connected scenes that build toward a small outcome.",
+      "why_it_matters": "Sequences help structure a short film without overcomplicating it.",
+      "beginner_example": "A travel sequence might show the father moving from home to taxi to station."
+    },
+    {
+      "term": "pacing",
+      "simple_definition": "The speed and rhythm of story events.",
+      "why_it_matters": "Short films need enough breathing room for emotion but enough movement to stay alive.",
+      "beginner_example": "A quiet goodbye scene may need slower pacing than a last-minute trip across town."
+    },
+    {
+      "term": "setup",
+      "simple_definition": "The beginning information that prepares the audience for the story.",
+      "why_it_matters": "A clean setup helps viewers understand the character, situation, and pressure quickly.",
+      "beginner_example": "The father sees his daughter's packed suitcase before we know she is leaving."
+    },
+    {
+      "term": "payoff",
+      "simple_definition": "A later moment that gives meaning to something set up earlier.",
+      "why_it_matters": "Payoffs make a short film feel intentional and satisfying.",
+      "beginner_example": "An old family song heard at the start plays again during the final goodbye."
+    },
+    {
+      "term": "inciting incident",
+      "simple_definition": "The event that starts the main story movement.",
+      "why_it_matters": "It gives the protagonist a reason to act now.",
+      "beginner_example": "The daughter texts that she is leaving tonight, not next week."
+    },
+    {
+      "term": "obstacle",
+      "simple_definition": "Something that makes the protagonist's goal harder to reach.",
+      "why_it_matters": "Obstacles create drama and reveal character under pressure.",
+      "beginner_example": "Rain, traffic, a dead phone battery, or unresolved anger can all become obstacles."
+    },
+    {
+      "term": "choice",
+      "simple_definition": "A decision that reveals who a character is.",
+      "why_it_matters": "Short films often become powerful when they build to one meaningful choice.",
+      "beginner_example": "The father chooses to apologize instead of asking his daughter to stay."
+    },
+    {
+      "term": "relationship dynamic",
+      "simple_definition": "The emotional pattern between characters.",
+      "why_it_matters": "Relationships create tension even in simple scenes.",
+      "beginner_example": "A father and daughter may love each other but avoid direct honesty."
+    },
+    {
+      "term": "tone",
+      "simple_definition": "The emotional flavor of the film.",
+      "why_it_matters": "Tone guides choices in dialogue, pacing, visuals, and ending.",
+      "beginner_example": "The same goodbye idea could be tender, bitter, funny, or quietly hopeful."
+    },
+    {
+      "term": "genre",
+      "simple_definition": "The type of story and audience expectation, such as drama, thriller, comedy, or slice of life.",
+      "why_it_matters": "Genre helps decide what kind of tension and payoff the audience expects.",
+      "beginner_example": "A family drama focuses on emotional truth, while a thriller version might focus on urgent pursuit."
+    },
+    {
+      "term": "production feasibility",
+      "simple_definition": "How practical the story is to film with available time, money, locations, and people.",
+      "why_it_matters": "A strong short film idea should be achievable by the team making it.",
+      "beginner_example": "A goodbye at one bus station is more feasible than a story across five countries."
+    },
+    {
+      "term": "location",
+      "simple_definition": "The place where a scene happens.",
+      "why_it_matters": "Locations affect mood, cost, logistics, and visual storytelling.",
+      "beginner_example": "A cramped family kitchen can reveal more history than a generic cafe."
+    },
+    {
+      "term": "prop",
+      "simple_definition": "An object used by characters or featured in the scene.",
+      "why_it_matters": "Props can carry emotion visually without extra dialogue.",
+      "beginner_example": "A repaired watch, suitcase tag, or old photograph can hold meaning in a goodbye story."
+    },
+    {
+      "term": "motif",
+      "simple_definition": "A repeated image, sound, object, or action that gains meaning.",
+      "why_it_matters": "Motifs help a short film feel unified and emotionally layered.",
+      "beginner_example": "Repeated train announcements can remind the audience that time is running out."
+    },
+    {
+      "term": "backstory",
+      "simple_definition": "Important events that happened before the film begins.",
+      "why_it_matters": "Backstory can deepen the story, but too much can slow a short film down.",
+      "beginner_example": "We may only need to know that the father missed a major moment in his daughter's life."
+    },
+    {
+      "term": "exposition",
+      "simple_definition": "Information the audience needs to understand the story.",
+      "why_it_matters": "Short films need exposition to be clear, but too much can feel unnatural.",
+      "beginner_example": "A packed suitcase can explain that someone is leaving without a character saying it."
+    },
+    {
+      "term": "structure",
+      "simple_definition": "The arrangement of beginning, middle, and ending.",
+      "why_it_matters": "Structure helps a short film build pressure and land emotionally.",
+      "beginner_example": "Beginning: the father learns she is leaving. Middle: he tries to reach her. Ending: he says goodbye honestly."
+    },
+    {
+      "term": "revision",
+      "simple_definition": "The process of improving a story through focused changes.",
+      "why_it_matters": "Most strong short films become clear through revision, not the first idea.",
+      "beginner_example": "A revision might make the daughter more active or change the ending from a speech to a silent gesture."
+    }
+  ]
+}

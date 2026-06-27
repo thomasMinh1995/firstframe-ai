@@ -1,0 +1,82 @@
+{
+  "planning": {
+    "root_fields": [
+      "story_plan"
+    ],
+    "story_plan_fields": [
+      "working_title",
+      "logline",
+      "characters",
+      "conflict",
+      "beginning",
+      "middle",
+      "ending",
+      "theme",
+      "visual_style",
+      "tone",
+      "production_notes"
+    ],
+    "nested_fields": {
+      "working_title": [
+        "title"
+      ],
+      "logline": [
+        "text"
+      ],
+      "characters": [
+        "protagonist",
+        "supporting_characters",
+        "antagonist_or_obstacle"
+      ],
+      "conflict": [
+        "external",
+        "internal",
+        "stakes"
+      ],
+      "beginning": [
+        "setup",
+        "key_event"
+      ],
+      "middle": [
+        "escalation",
+        "turning_point"
+      ],
+      "ending": [
+        "resolution",
+        "final_image"
+      ],
+      "theme": [
+        "statement"
+      ],
+      "visual_style": [
+        "description",
+        "visual_motifs"
+      ],
+      "tone": [
+        "description"
+      ],
+      "production_notes": [
+        "notes",
+        "locations",
+        "cast_size"
+      ]
+    }
+  },
+  "evaluation": {
+    "root_fields": [
+      "passed",
+      "rubric_scores",
+      "strengths",
+      "weaknesses",
+      "suggestions"
+    ],
+    "rubric_score_fields": [
+      "story_clarity",
+      "character",
+      "conflict",
+      "emotional_impact",
+      "ending",
+      "production_feasibility"
+    ]
+  }
+}

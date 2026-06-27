@@ -1,0 +1,43 @@
+{
+  "theme": "Slice of Life",
+  "genre": "Slice of Life",
+  "user_idea": "A woman working at a small noodle shop notices the same customer comes in every night but never orders.",
+  "story_plan": {
+    "working_title": "Table Four",
+    "core_idea": "A noodle shop worker slowly realizes a silent nightly customer is returning to the place where he last ate with someone he lost.",
+    "protagonist": "Mai, a practical shop worker who believes kindness should be useful, not sentimental.",
+    "main_conflict": "Mai wants to understand the customer without invading his privacy, while her boss wants the empty table cleared.",
+    "emotional_goal": "Move from irritation and curiosity toward quiet compassion.",
+    "theme": "Small acts of care can meet grief without needing to explain or fix it.",
+    "beginning": "Mai notices an older man sitting at table four each night, leaving before ordering.",
+    "middle": "She tries different ways to get him to order, then finds an old photo tucked under the table glass.",
+    "ending": "Mai places a bowl of plain noodles at table four without asking questions; the man finally takes one bite.",
+    "key_scenes": [
+      "Mai wipes the same untouched table each night.",
+      "The boss complains about losing a paying seat.",
+      "Mai silently serves the bowl and returns to work."
+    ],
+    "visual_motifs": [
+      "Steam",
+      "Empty bowls",
+      "Table numbers"
+    ],
+    "production_notes": "One primary location, minimal cast, and controlled lighting make this highly feasible."
+  },
+  "evaluation_summary": {
+    "strengths": [
+      "Strong visual repetition creates a gentle rhythm.",
+      "The story is production-friendly with one main location.",
+      "The ending uses action instead of explanation."
+    ],
+    "weaknesses": [
+      "The customer's backstory should stay suggestive, not overly explained.",
+      "Mai needs a small personal reason to change."
+    ],
+    "suggestions": [
+      "Give Mai a practical worldview in the first scene so her final kindness feels like a turn.",
+      "Avoid a long monologue about grief.",
+      "Use repeated nightly details to show change over time."
+    ]
+  }
+}

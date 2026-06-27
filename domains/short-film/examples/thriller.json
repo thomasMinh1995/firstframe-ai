@@ -1,0 +1,43 @@
+{
+  "theme": "Thriller",
+  "genre": "Contained Thriller",
+  "user_idea": "A night security guard keeps seeing a light turn on in an abandoned office floor.",
+  "story_plan": {
+    "working_title": "Floor 17",
+    "core_idea": "A lonely night guard investigates a forbidden office floor and discovers the light is being used as a signal.",
+    "protagonist": "Huy, a cautious security guard on his final week before quitting.",
+    "main_conflict": "Huy wants to ignore the strange light to keep his job simple, but each night the signal becomes more personal.",
+    "emotional_goal": "Move from avoidance toward responsibility.",
+    "theme": "Fear becomes dangerous when it teaches us to look away.",
+    "beginning": "During a routine camera check, Huy sees a desk lamp turn on in a sealed office floor.",
+    "middle": "He investigates and finds small signs that someone has been hiding there, while the building manager warns him not to report anything.",
+    "ending": "Huy uses the same lamp signal to guide the hidden person toward the stairwell, choosing risk over silence.",
+    "key_scenes": [
+      "Huy watches the lamp blink through grainy security footage.",
+      "The elevator opens on floor 17 even though the button panel says it is locked.",
+      "Huy turns the lamp on and off to signal that the hallway is clear."
+    ],
+    "visual_motifs": [
+      "Security monitors",
+      "Fluorescent lights",
+      "Locked elevator buttons"
+    ],
+    "production_notes": "Use one office hallway, a security desk, and lighting changes to create tension without expensive effects."
+  },
+  "evaluation_summary": {
+    "strengths": [
+      "The premise has an immediate visual hook.",
+      "A contained location supports suspense and production feasibility.",
+      "The lamp signal gives the climax a simple cinematic action."
+    ],
+    "weaknesses": [
+      "The hidden person's identity and stakes need enough clarity to avoid confusion.",
+      "The building manager threat could become too large for a short film if overdeveloped."
+    ],
+    "suggestions": [
+      "Keep the mystery focused on one question: why is the light turning on?",
+      "Reveal only enough backstory to make Huy's final choice matter.",
+      "Use sound and light changes instead of adding chase scenes or extra villains."
+    ]
+  }
+}

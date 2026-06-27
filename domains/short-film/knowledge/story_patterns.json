@@ -1,0 +1,80 @@
+{
+  "patterns": [
+    {
+      "name": "Last Chance Goodbye",
+      "description": "A character has one final opportunity to say or do something emotionally important before separation.",
+      "best_for": [
+        "family drama",
+        "friendship",
+        "romance",
+        "coming of age"
+      ],
+      "story_shape": {
+        "beginning": "The deadline or departure is revealed.",
+        "middle": "The protagonist struggles with pride, fear, distance, or timing.",
+        "ending": "The protagonist makes a clear emotional choice, even if the outcome is bittersweet."
+      },
+      "watch_out_for": "Do not make the ending depend only on a speech; find a visual action that carries the goodbye."
+    },
+    {
+      "name": "One Object, One Memory",
+      "description": "A meaningful object brings buried emotion or unfinished history into the present.",
+      "best_for": [
+        "slice of life",
+        "family drama",
+        "friendship"
+      ],
+      "story_shape": {
+        "beginning": "The object appears or is discovered.",
+        "middle": "Characters avoid, argue over, or reinterpret what the object means.",
+        "ending": "The object is given away, repaired, abandoned, or transformed."
+      },
+      "watch_out_for": "The object should create present action, not only explain backstory."
+    },
+    {
+      "name": "Contained Pressure",
+      "description": "A character is trapped in a limited space or situation where pressure steadily increases.",
+      "best_for": [
+        "thriller",
+        "workplace drama",
+        "family confrontation"
+      ],
+      "story_shape": {
+        "beginning": "A normal space becomes tense because of a new problem.",
+        "middle": "Options narrow and the protagonist must act with limited information.",
+        "ending": "A decisive action changes the power dynamic or reveals the truth."
+      },
+      "watch_out_for": "Keep the threat specific and filmable; avoid adding mythology the short film cannot resolve."
+    },
+    {
+      "name": "Small Kindness",
+      "description": "A quiet act of care changes how one character sees another person or themselves.",
+      "best_for": [
+        "slice of life",
+        "gentle drama",
+        "community stories"
+      ],
+      "story_shape": {
+        "beginning": "A character notices a small need or repeated behavior.",
+        "middle": "They resist, misunderstand, or test whether to get involved.",
+        "ending": "A modest action creates emotional recognition without over-explaining."
+      },
+      "watch_out_for": "Avoid sentimentality by keeping the gesture specific and earned."
+    },
+    {
+      "name": "Crossing the Threshold",
+      "description": "A character takes a concrete step away from childhood, safety, denial, or expectation.",
+      "best_for": [
+        "coming of age",
+        "identity",
+        "personal ambition"
+      ],
+      "story_shape": {
+        "beginning": "The character is presented inside an old role or expectation.",
+        "middle": "They face a choice that risks disappointment or failure.",
+        "ending": "They act from a more honest sense of self."
+      },
+      "watch_out_for": "The ending does not need to guarantee success; ownership of the choice is enough."
+    }
+  ]
+}

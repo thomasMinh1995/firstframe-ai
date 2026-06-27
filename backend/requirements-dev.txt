@@ -1,0 +1,11 @@
+-r requirements.txt
+
+# Testing
+pytest~=9.1
+pytest-cov~=7.0
+httpx~=0.28
+
+# Quality
+ruff~=0.15
+mypy~=1.18
+pre-commit~=4.0

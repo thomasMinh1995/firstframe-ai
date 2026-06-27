@@ -1,0 +1,43 @@
+{
+  "theme": "Coming of Age",
+  "genre": "Coming-of-Age Drama",
+  "user_idea": "A teenager skips his last day of school to secretly audition for a street dance group.",
+  "story_plan": {
+    "working_title": "Last Bell",
+    "core_idea": "A cautious teenager risks disappointing his family to prove to himself that his dream is not just a hobby.",
+    "protagonist": "Khoa, a high-achieving student who has learned to hide the parts of himself that feel risky.",
+    "main_conflict": "Khoa wants to audition, but the school ceremony and his family's expectations pull him back toward the safe path.",
+    "emotional_goal": "Move from permission-seeking toward owning a personal choice.",
+    "theme": "Growing up begins when you stop treating your own desire as something to apologize for.",
+    "beginning": "Khoa receives an audition location just as his class prepares for the final school assembly.",
+    "middle": "He sneaks out, changes clothes in a public restroom, and nearly turns back after seeing missed calls from his mother.",
+    "ending": "Khoa dances imperfectly but honestly, then sends his mother a video instead of another excuse.",
+    "key_scenes": [
+      "Khoa folds his school uniform into his backpack beside dance shoes.",
+      "A friend covers for him but asks whether this is worth the trouble.",
+      "The audition ends with Khoa breathless, scared, and smiling."
+    ],
+    "visual_motifs": [
+      "Uniforms",
+      "Shoes",
+      "School bells and street music"
+    ],
+    "production_notes": "Use school exterior, restroom, and one dance location. Keep the audition small rather than staging a large competition."
+  },
+  "evaluation_summary": {
+    "strengths": [
+      "The protagonist has a clear visible goal and emotional need.",
+      "The school ceremony creates useful time pressure.",
+      "Dance allows the emotional turn to be shown physically."
+    ],
+    "weaknesses": [
+      "The family pressure could feel generic if not personalized.",
+      "The audition should not solve the entire future of the character."
+    ],
+    "suggestions": [
+      "Make the mother's expectation specific and sympathetic.",
+      "Let Khoa's dance be expressive rather than perfect.",
+      "End with ownership of the choice, not guaranteed success."
+    ]
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "theme": "Friendship",
+  "genre": "Friendship Drama",
+  "user_idea": "Two childhood friends meet again to return a borrowed jacket after years of not speaking.",
+  "story_plan": {
+    "working_title": "The Jacket",
+    "core_idea": "A simple return of an old jacket becomes a test of whether two former best friends can name the hurt between them.",
+    "protagonist": "An, a quiet young woman who avoids confrontation by pretending old wounds do not matter.",
+    "main_conflict": "An wants the meeting to stay casual, but the jacket carries memories neither friend can ignore.",
+    "emotional_goal": "Move from guarded politeness toward a small act of honesty.",
+    "theme": "Some friendships end because of one event, but others end because no one knows how to restart the conversation.",
+    "beginning": "An discovers the jacket while moving apartments and messages her old friend Bao to return it.",
+    "middle": "They meet at a closed schoolyard, making small talk until objects in the jacket pockets reveal the day their friendship broke.",
+    "ending": "An admits she was hurt, Bao admits he was ashamed, and they leave without forcing instant closeness.",
+    "key_scenes": [
+      "An finds an old movie ticket in the jacket pocket.",
+      "The friends sit on opposite ends of a school bench, talking around the real issue.",
+      "An leaves the jacket with Bao but keeps the movie ticket."
+    ],
+    "visual_motifs": [
+      "Old clothing",
+      "Schoolyard gates",
+      "Objects in pockets"
+    ],
+    "production_notes": "One main location and two actors make this suitable for a small crew."
+  },
+  "evaluation_summary": {
+    "strengths": [
+      "The jacket is a strong prop that carries memory and subtext.",
+      "The story fits the short-film scale with one meeting and one emotional turn.",
+      "The ending avoids unrealistic instant reconciliation."
+    ],
+    "weaknesses": [
+      "The original break in the friendship must be specific enough to matter.",
+      "The scene could become too dialogue-heavy without visual beats."
+    ],
+    "suggestions": [
+      "Choose one concrete incident that ended the friendship.",
+      "Use the jacket pockets to reveal story information visually.",
+      "Let the final gesture be small and unresolved rather than overly neat."
+    ]
+  }
+}

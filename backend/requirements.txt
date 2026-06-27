@@ -1,0 +1,10 @@
+# Web API
+fastapi~=0.138
+uvicorn[standard]~=0.49
+pydantic~=2.13
+
+# AI provider client
+openai~=2.0
+
+# Configuration
+python-dotenv~=1.2

@@ -1,0 +1,129 @@
+{
+  "rules": [
+    {
+      "rule": "Keep one central conflict.",
+      "guidance": "A short film is strongest when the audience can track one clear pressure from beginning to end.",
+      "beginner_example": "Instead of adding family history, work problems, and romance, focus on whether the father can say goodbye before his daughter leaves."
+    },
+    {
+      "rule": "Focus on one emotional journey.",
+      "guidance": "Choose the main emotional shift and build the film around it.",
+      "beginner_example": "A character moves from pride to vulnerability, or from denial to acceptance."
+    },
+    {
+      "rule": "Use a small cast.",
+      "guidance": "Too many characters dilute attention and make production harder.",
+      "beginner_example": "A father, daughter, and one supporting character may be enough."
+    },
+    {
+      "rule": "Limit locations.",
+      "guidance": "Fewer locations make the story easier to produce and can make the film feel more focused.",
+      "beginner_example": "A home, a taxi, and a bus station may be stronger than ten scattered places."
+    },
+    {
+      "rule": "Every scene should move the story.",
+      "guidance": "Each scene should change information, emotion, pressure, or the character's choices.",
+      "beginner_example": "A phone call should not only explain the situation; it should make the father decide whether to act."
+    },
+    {
+      "rule": "Show, don't tell.",
+      "guidance": "Use behavior, images, silence, and objects before relying on explanation.",
+      "beginner_example": "Show the father folding his daughter's childhood drawing instead of saying he misses her childhood."
+    },
+    {
+      "rule": "Start as late as possible.",
+      "guidance": "Begin close to the moment when the story pressure becomes unavoidable.",
+      "beginner_example": "Start when the daughter is already leaving tonight, not months before."
+    },
+    {
+      "rule": "End as soon as the emotional turn lands.",
+      "guidance": "A short film should not overstay after the main choice or realization.",
+      "beginner_example": "End on the daughter listening to the father's apology rather than showing a long aftermath."
+    },
+    {
+      "rule": "Give the protagonist a visible goal.",
+      "guidance": "The audience should be able to see what the character is trying to do.",
+      "beginner_example": "The father wants to reach the station before departure."
+    },
+    {
+      "rule": "Give the protagonist an emotional need.",
+      "guidance": "The visible goal should connect to an inner change or realization.",
+      "beginner_example": "The father needs to stop controlling the goodbye and speak honestly."
+    },
+    {
+      "rule": "Make the obstacle specific.",
+      "guidance": "Specific obstacles create better scenes than vague difficulty.",
+      "beginner_example": "A broken phone and a missed bus are more filmable than 'life gets complicated.'"
+    },
+    {
+      "rule": "Build toward one meaningful choice.",
+      "guidance": "Short films often work best when the climax reveals character through a decision.",
+      "beginner_example": "The father chooses to apologize instead of begging his daughter to stay."
+    },
+    {
+      "rule": "Use time pressure when helpful.",
+      "guidance": "A deadline can give a short film urgency without adding extra plot.",
+      "beginner_example": "The daughter's flight leaves in two hours."
+    },
+    {
+      "rule": "Prefer action over backstory.",
+      "guidance": "Backstory should appear only when it changes the present moment.",
+      "beginner_example": "Show an old photo because it affects the father's choice, not because the audience needs a full history lesson."
+    },
+    {
+      "rule": "Let objects carry meaning.",
+      "guidance": "Props can express emotion in a compact, cinematic way.",
+      "beginner_example": "A repaired watch, ticket stub, or packed suitcase can say more than a speech."
+    },
+    {
+      "rule": "Use silence deliberately.",
+      "guidance": "Silence can reveal tension, avoidance, grief, or love when paired with clear behavior.",
+      "beginner_example": "The father and daughter sit together without speaking before he finally hands her a note."
+    },
+    {
+      "rule": "Avoid explaining the theme directly.",
+      "guidance": "The theme should emerge through choices and images, not lectures.",
+      "beginner_example": "Instead of saying 'letting go is love,' show the father stepping back as his daughter boards."
+    },
+    {
+      "rule": "Make the ending visual.",
+      "guidance": "A strong final image can make a short film memorable.",
+      "beginner_example": "The father watches the bus leave while holding the unopened gift he decided not to force on her."
+    },
+    {
+      "rule": "Keep dialogue under pressure.",
+      "guidance": "Dialogue is stronger when characters want something from each other.",
+      "beginner_example": "A goodbye conversation becomes dramatic if one person wants honesty and the other wants escape."
+    },
+    {
+      "rule": "Avoid convenient coincidence.",
+      "guidance": "Coincidences can weaken the feeling that characters are making meaningful choices.",
+      "beginner_example": "Do not solve the story by having the daughter randomly return; make the father choose how to reach her."
+    },
+    {
+      "rule": "Let scenes turn.",
+      "guidance": "A scene should end in a different emotional or practical place than it began.",
+      "beginner_example": "A simple taxi ride becomes a turning point when the father admits why he is afraid to call."
+    },
+    {
+      "rule": "Keep the world just big enough.",
+      "guidance": "A short film can suggest a larger world without showing all of it.",
+      "beginner_example": "One apartment room can reveal an entire family history through what is missing from the walls."
+    },
+    {
+      "rule": "Make production constraints creative.",
+      "guidance": "Limitations can help focus the story if used intentionally.",
+      "beginner_example": "If you only have one location, make the conflict unfold through calls, objects, and arrivals at the door."
+    },
+    {
+      "rule": "Avoid too many twists.",
+      "guidance": "Short films usually need emotional clarity more than complicated plot surprises.",
+      "beginner_example": "One reveal about why the father hesitated is enough; three reversals may feel rushed."
+    },
+    {
+      "rule": "Revise around the strongest moment.",
+      "guidance": "Find the scene or image with the most emotional power and shape the film to support it.",
+      "beginner_example": "If the strongest moment is the father recording an apology, build the story toward that action."
+    }
+  ]
+}

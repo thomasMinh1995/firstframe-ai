@@ -1,0 +1,43 @@
+{
+  "theme": "Family",
+  "genre": "Family Drama",
+  "user_idea": "A retired father wants to meet his daughter one last time before she leaves Vietnam.",
+  "story_plan": {
+    "working_title": "Before She Leaves",
+    "core_idea": "A proud retired father races across the city to say one honest goodbye to his daughter before she emigrates.",
+    "protagonist": "Minh, a retired bus mechanic who expresses love through practical help instead of words.",
+    "main_conflict": "Minh wants to stop his daughter from leaving but slowly realizes what she needs is his blessing, not his permission.",
+    "emotional_goal": "Move from control and regret toward honest acceptance.",
+    "theme": "Loving someone can mean releasing them without making them carry your fear.",
+    "beginning": "Minh finds out his daughter Linh is leaving for the airport earlier than expected and notices she left behind a childhood keychain.",
+    "middle": "He crosses familiar parts of the city, trying to reach her while rehearsing excuses instead of the apology he owes.",
+    "ending": "At the terminal curb, Minh gives Linh the keychain and says he is proud of her, letting the goodbye stay simple.",
+    "key_scenes": [
+      "Minh repairs an old fan in silence while listening to Linh's voice message.",
+      "A taxi ride forces him to admit to the driver that he does not know how to apologize.",
+      "At the airport curb, Minh chooses not to ask Linh to stay."
+    ],
+    "visual_motifs": [
+      "Keys",
+      "Departure boards",
+      "Hands fixing objects instead of touching"
+    ],
+    "production_notes": "Keep locations limited to Minh's apartment, a taxi, and the airport exterior or bus station substitute."
+  },
+  "evaluation_summary": {
+    "strengths": [
+      "Clear emotional stakes built around a final goodbye.",
+      "Small cast and limited locations make the story filmable.",
+      "The keychain gives the father a visual way to express love."
+    ],
+    "weaknesses": [
+      "The daughter's own desire may need more specificity.",
+      "The middle could become repetitive if every beat is only travel."
+    ],
+    "suggestions": [
+      "Give Linh one line or action that shows why leaving matters to her.",
+      "Make each travel beat reveal a different layer of Minh's avoidance.",
+      "End on a quiet image rather than a long speech."
+    ]
+  }
+}
