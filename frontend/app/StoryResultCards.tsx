@@ -1,68 +1,154 @@
 "use client";
 
 import { AnalysisNote, GenerateResponse, StoryPlanSection } from "./apiClient";
+import type { UiLanguage } from "./language";
 import type { ReactNode } from "react";
 
 type StoryResultCardsProps = {
   result: GenerateResponse;
+  uiLanguage: UiLanguage;
 };
 
-const storySectionOrder = [
-  "Working Title",
-  "Logline",
-  "Theme",
-  "Characters",
-  "Conflict",
-  "Beginning",
-  "Middle",
-  "Ending",
-  "Visual Style",
-  "Tone",
-  "Production Notes",
-];
+const storySectionKeys = [
+  "workingTitle",
+  "logline",
+  "theme",
+  "characters",
+  "conflict",
+  "beginning",
+  "middle",
+  "ending",
+  "visualStyle",
+  "tone",
+  "productionNotes",
+] as const;
 
-export function StoryResultCards({ result }: StoryResultCardsProps) {
+const resultCopy = {
+  en: {
+    analysis: "Analysis",
+    analysisTitle: "What FirstFrame noticed",
+    coreIdea: "Core Idea",
+    emotionalCore: "Emotional Core",
+    missingInformation: "Missing Information",
+    opportunities: "Opportunities",
+    storyPlan: "Story Plan",
+    storyPlanTitle: "First structured pass",
+    workingTitle: "Working Title",
+    evaluation: "Evaluation",
+    evaluationTitle: "Creative quality check",
+    ready: "Ready for demo pass",
+    needsRevision: "Needs revision",
+    strengths: "Strengths",
+    weaknesses: "Weaknesses",
+    suggestions: "Suggestions",
+    emptyMissing: "No major missing information returned.",
+    emptyOpportunities: "No additional opportunities returned.",
+    emptyStrengths: "No strengths returned yet.",
+    emptyWeaknesses: "No weaknesses returned yet.",
+    emptySuggestions: "No suggestions returned yet.",
+    noLogline: "No logline returned yet.",
+    untitled: "Untitled Short Film",
+    notReturned: "Not returned yet.",
+    sectionLabels: {
+      workingTitle: "Working Title",
+      logline: "Logline",
+      theme: "Theme",
+      characters: "Characters",
+      conflict: "Conflict",
+      beginning: "Beginning",
+      middle: "Middle",
+      ending: "Ending",
+      visualStyle: "Visual Style",
+      tone: "Tone",
+      productionNotes: "Production Notes",
+    },
+  },
+  vi: {
+    analysis: "Phân tích",
+    analysisTitle: "Những gì FirstFrame nhận ra",
+    coreIdea: "Ý tưởng chính",
+    emotionalCore: "Lõi cảm xúc",
+    missingInformation: "Thông tin còn thiếu",
+    opportunities: "Cơ hội phát triển",
+    storyPlan: "Story Plan",
+    storyPlanTitle: "Bản phát triển đầu tiên",
+    workingTitle: "Tên tạm thời",
+    evaluation: "Đánh giá",
+    evaluationTitle: "Kiểm tra chất lượng sáng tạo",
+    ready: "Sẵn sàng cho bản demo",
+    needsRevision: "Cần chỉnh sửa",
+    strengths: "Điểm mạnh",
+    weaknesses: "Điểm yếu",
+    suggestions: "Gợi ý cải thiện",
+    emptyMissing: "Chưa có thông tin còn thiếu.",
+    emptyOpportunities: "Chưa có cơ hội phát triển bổ sung.",
+    emptyStrengths: "Chưa có điểm mạnh.",
+    emptyWeaknesses: "Chưa có điểm yếu.",
+    emptySuggestions: "Chưa có gợi ý cải thiện.",
+    noLogline: "Chưa có logline.",
+    untitled: "Phim ngắn chưa đặt tên",
+    notReturned: "Chưa có nội dung.",
+    sectionLabels: {
+      workingTitle: "Tên tạm thời",
+      logline: "Logline",
+      theme: "Chủ đề",
+      characters: "Nhân vật",
+      conflict: "Xung đột",
+      beginning: "Mở đầu",
+      middle: "Phần giữa",
+      ending: "Kết thúc",
+      visualStyle: "Phong cách hình ảnh",
+      tone: "Tông cảm xúc",
+      productionNotes: "Ghi chú sản xuất",
+    },
+  },
+};
+
+type ResultCopy = (typeof resultCopy)[UiLanguage];
+
+export function StoryResultCards({ result, uiLanguage }: StoryResultCardsProps) {
+  const copy = resultCopy[uiLanguage];
   const analysis = shapeAnalysis(result);
-  const storyPlan = shapeStoryPlan(result);
+  const storyPlan = shapeStoryPlan(result, copy);
   const evaluation = shapeEvaluation(result);
 
   return (
     <div className="results report-stack">
-      <ReportCard eyebrow="Analysis" title="What FirstFrame noticed" icon="🧠" delayClass="reveal-1">
+      <ReportCard eyebrow={copy.analysis} title={copy.analysisTitle} icon="🧠" delayClass="reveal-1">
         <DetailGrid
           items={[
-            { label: "Core Idea", content: analysis.coreIdea },
-            { label: "Emotional Core", content: analysis.emotionalCore },
+            { label: copy.coreIdea, content: analysis.coreIdea },
+            { label: copy.emotionalCore, content: analysis.emotionalCore },
           ]}
         />
 
         <SectionList
-          title="Missing Information"
+          title={copy.missingInformation}
           items={result.analysis.missing_information}
-          emptyText="No major missing information returned."
+          emptyText={copy.emptyMissing}
         />
 
         <SectionList
-          title="Opportunities"
+          title={copy.opportunities}
           items={analysis.opportunities}
-          emptyText="No additional opportunities returned."
+          emptyText={copy.emptyOpportunities}
         />
       </ReportCard>
 
-      <ReportCard eyebrow="Story Plan" title="First structured pass" icon="🎬" delayClass="reveal-2">
+      <ReportCard eyebrow={copy.storyPlan} title={copy.storyPlanTitle} icon="🎬" delayClass="reveal-2">
         <div className="story-heading">
-          <span className="story-kicker">Working Title</span>
-          <h3>{result.story_plan.title ?? "Untitled Short Film"}</h3>
+          <span className="story-kicker">{copy.workingTitle}</span>
+          <h3>{result.story_plan.title ?? copy.untitled}</h3>
           {result.story_plan.logline ? <p>{result.story_plan.logline}</p> : null}
         </div>
 
         <DetailGrid items={storyPlan} />
       </ReportCard>
 
-      <ReportCard eyebrow="Evaluation" title="Creative quality check" icon="⭐" delayClass="reveal-3">
+      <ReportCard eyebrow={copy.evaluation} title={copy.evaluationTitle} icon="⭐" delayClass="reveal-3">
         <div className="evaluation-summary">
           <span className={result.evaluation.passed ? "result-pill is-pass" : "result-pill"}>
-            {result.evaluation.passed ? "Ready for demo pass" : "Needs revision"}
+            {result.evaluation.passed ? copy.ready : copy.needsRevision}
           </span>
         </div>
 
@@ -84,19 +170,19 @@ export function StoryResultCards({ result }: StoryResultCardsProps) {
 
         <div className="feedback-grid">
           <SectionList
-            title="Strengths"
+            title={copy.strengths}
             items={evaluation.strengths}
-            emptyText="No strengths returned yet."
+            emptyText={copy.emptyStrengths}
           />
           <SectionList
-            title="Weaknesses"
+            title={copy.weaknesses}
             items={evaluation.weaknesses}
-            emptyText="No weaknesses returned yet."
+            emptyText={copy.emptyWeaknesses}
           />
           <SectionList
-            title="Suggestions"
+            title={copy.suggestions}
             items={evaluation.suggestions}
-            emptyText="No suggestions returned yet."
+            emptyText={copy.emptySuggestions}
           />
         </div>
       </ReportCard>
@@ -183,25 +269,26 @@ function shapeAnalysis(result: GenerateResponse) {
   };
 }
 
-function shapeStoryPlan(result: GenerateResponse) {
-  return storySectionOrder.map((label) => {
-    if (label === "Working Title") {
+function shapeStoryPlan(result: GenerateResponse, copy: ResultCopy) {
+  return storySectionKeys.map((key) => {
+    const label = copy.sectionLabels[key];
+    if (key === "workingTitle") {
       return {
         label,
-        content: result.story_plan.title ?? "Untitled Short Film",
+        content: result.story_plan.title ?? copy.untitled,
       };
     }
-    if (label === "Logline") {
+    if (key === "logline") {
       return {
         label,
-        content: result.story_plan.logline ?? "No logline returned yet.",
+        content: result.story_plan.logline ?? copy.noLogline,
       };
     }
 
-    const matchingSection = findStorySection(result.story_plan.sections, label);
+    const matchingSection = findStorySection(result.story_plan.sections, key);
     return {
       label,
-      content: matchingSection?.content ?? "Not returned yet.",
+      content: matchingSection?.content ?? copy.notReturned,
     };
   });
 }
@@ -236,17 +323,20 @@ function findNoteByKeyword(notes: AnalysisNote[], keyword: string) {
   );
 }
 
-function findStorySection(sections: StoryPlanSection[], label: string) {
-  const normalizedLabel = normalize(label);
-  if (label === "Characters") {
+function findStorySection(sections: StoryPlanSection[], key: (typeof storySectionKeys)[number]) {
+  if (key === "characters") {
     return sections.find((section) => normalize(section.title).includes("maincharacter"));
   }
-  if (label === "Conflict") {
+  if (key === "conflict") {
     return sections.find((section) => normalize(section.title).includes("mainconflict"));
   }
-  if (label === "Working Title" || label === "Logline") {
-    return null;
+  if (key === "visualStyle") {
+    return sections.find((section) => normalize(section.title).includes("visualstyle"));
   }
+  if (key === "productionNotes") {
+    return sections.find((section) => normalize(section.title).includes("productionnotes"));
+  }
+  const normalizedLabel = normalize(key);
   return sections.find((section) => normalize(section.title).includes(normalizedLabel));
 }
 

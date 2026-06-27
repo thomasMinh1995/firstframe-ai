@@ -1,9 +1,11 @@
 "use client";
 
 import { AnalysisNote, GenerateResponse, StoryPlanSection } from "./apiClient";
+import type { UiLanguage } from "./language";
 
 type StoryFlowVisualizationProps = {
   result: GenerateResponse;
+  uiLanguage: UiLanguage;
 };
 
 type FlowStep = {
@@ -11,14 +13,50 @@ type FlowStep = {
   content: string;
 };
 
-export function StoryFlowVisualization({ result }: StoryFlowVisualizationProps) {
-  const steps = buildFlowSteps(result);
+const flowCopy = {
+  en: {
+    eyebrow: "Story Flow",
+    title: "Arc at a glance",
+    labels: {
+      idea: "Idea",
+      emotionalCore: "Emotional Core",
+      conflict: "Conflict",
+      turningPoint: "Turning Point",
+      ending: "Ending",
+    },
+    fallback: {
+      conflict: "The central obstacle is still being clarified.",
+      turningPoint: "The middle turn is still being shaped.",
+      ending: "The final image is still being refined.",
+    },
+  },
+  vi: {
+    eyebrow: "Luồng câu chuyện",
+    title: "Tổng quan câu chuyện",
+    labels: {
+      idea: "Ý tưởng",
+      emotionalCore: "Lõi cảm xúc",
+      conflict: "Xung đột",
+      turningPoint: "Bước ngoặt",
+      ending: "Kết thúc",
+    },
+    fallback: {
+      conflict: "Xung đột trung tâm vẫn đang được làm rõ.",
+      turningPoint: "Bước ngoặt ở phần giữa vẫn đang được định hình.",
+      ending: "Hình ảnh kết thúc vẫn đang được tinh chỉnh.",
+    },
+  },
+};
+
+export function StoryFlowVisualization({ result, uiLanguage }: StoryFlowVisualizationProps) {
+  const copy = flowCopy[uiLanguage];
+  const steps = buildFlowSteps(result, copy);
 
   return (
     <section className="panel story-flow-card" aria-labelledby="story-flow-heading">
       <div className="story-flow-header">
-        <p className="report-eyebrow">Story Flow</p>
-        <h2 id="story-flow-heading">Arc at a glance</h2>
+        <p className="report-eyebrow">{copy.eyebrow}</p>
+        <h2 id="story-flow-heading">{copy.title}</h2>
       </div>
 
       <ol className="story-flow">
@@ -34,7 +72,7 @@ export function StoryFlowVisualization({ result }: StoryFlowVisualizationProps) 
   );
 }
 
-function buildFlowSteps(result: GenerateResponse): FlowStep[] {
+function buildFlowSteps(result: GenerateResponse, copy: (typeof flowCopy)[UiLanguage]): FlowStep[] {
   const originalIdea = findNote(result.analysis.notes, "Original idea")?.content;
   const emotionalCore = findNoteByKeyword(result.analysis.notes, "emotional")?.content;
   const conflict = findStorySection(result.story_plan.sections, ["Main conflict", "Conflict"])?.content;
@@ -43,24 +81,24 @@ function buildFlowSteps(result: GenerateResponse): FlowStep[] {
 
   return [
     {
-      label: "Idea",
+      label: copy.labels.idea,
       content: originalIdea ?? result.story_plan.logline ?? result.analysis.summary,
     },
     {
-      label: "Emotional Core",
+      label: copy.labels.emotionalCore,
       content: emotionalCore ?? result.analysis.summary,
     },
     {
-      label: "Conflict",
-      content: conflict ?? "The central obstacle is still being clarified.",
+      label: copy.labels.conflict,
+      content: conflict ?? copy.fallback.conflict,
     },
     {
-      label: "Turning Point",
-      content: turningPoint ?? "The middle turn is still being shaped.",
+      label: copy.labels.turningPoint,
+      content: turningPoint ?? copy.fallback.turningPoint,
     },
     {
-      label: "Ending",
-      content: ending ?? "The final image is still being refined.",
+      label: copy.labels.ending,
+      content: ending ?? copy.fallback.ending,
     },
   ].filter((step) => step.content.trim().length > 0);
 }

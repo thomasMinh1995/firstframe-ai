@@ -171,6 +171,18 @@ def test_harness_calls_provider_through_runtime_layers() -> None:
     assert run.evaluation.findings
 
 
+def test_harness_passes_detected_language_to_all_provider_steps() -> None:
+    provider = FakeProvider()
+    service = create_story_generation_service(provider=provider)  # type: ignore[arg-type]
+
+    service.generate("Một người cha về hưu muốn gặp con gái trước khi cô rời Việt Nam.")
+
+    assert len(provider.requests) == 3
+    assert "Target response language: Vietnamese" in provider.requests[0].input_text
+    assert "Target response language: Vietnamese" in provider.requests[1].input_text
+    assert "Target response language: Vietnamese" in provider.requests[2].input_text
+
+
 def test_generate_endpoint_returns_structured_response(monkeypatch) -> None:
     provider = FakeProvider()
     monkeypatch.setattr(

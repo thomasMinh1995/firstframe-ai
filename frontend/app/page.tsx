@@ -5,11 +5,10 @@ import { generateStoryPlan, GenerateResponse } from "./apiClient";
 import { StoryFlowVisualization } from "./StoryFlowVisualization";
 import { StoryResultCards } from "./StoryResultCards";
 import { ThinkingTimeline, ThinkingTimelineStatus } from "./ThinkingTimeline";
+import { detectInputLanguage, UiLanguage } from "./language";
 
 const defaultIdea =
   "A retired father wants to meet his daughter one last time before she leaves Vietnam.";
-
-type UiLanguage = "en" | "vi";
 
 const uiCopy = {
   en: {
@@ -174,8 +173,8 @@ export default function Home() {
 
         {result && !timelineStatus ? (
           <>
-            <StoryFlowVisualization result={result} />
-            <StoryResultCards result={result} />
+            <StoryFlowVisualization result={result} uiLanguage={uiLanguage} />
+            <StoryResultCards result={result} uiLanguage={uiLanguage} />
           </>
         ) : null}
       </section>
@@ -185,31 +184,4 @@ export default function Home() {
 
 function wait(milliseconds: number) {
   return new Promise((resolve) => window.setTimeout(resolve, milliseconds));
-}
-
-function detectInputLanguage(value: string): UiLanguage {
-  const lowerValue = value.toLowerCase();
-  const hasVietnameseDiacritics =
-    /[ăâđêôơưáàảãạấầẩẫậắằẳẵặéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵ]/i.test(
-      value,
-    );
-  const commonVietnameseWords = [
-    "một",
-    "người",
-    "câu chuyện",
-    "gia đình",
-    "cha",
-    "mẹ",
-    "con",
-    "trước khi",
-    "rời",
-    "việt nam",
-    "muốn",
-  ];
-
-  if (hasVietnameseDiacritics) {
-    return "vi";
-  }
-
-  return commonVietnameseWords.some((word) => lowerValue.includes(word)) ? "vi" : "en";
 }

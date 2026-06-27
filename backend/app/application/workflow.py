@@ -181,6 +181,7 @@ _PlanningOutput.model_rebuild()
 class _OpenAIPlanningArtifact(PlanningArtifact):
     title: str | None = None
     logline: str | None = None
+    target_response_language: str = "English"
 
 
 @dataclass(frozen=True)
@@ -221,6 +222,7 @@ class OpenAIReasoningLayer(ReasoningLayer):
         self._provider = provider
 
     def reason(self, idea: IdeaArtifact, domain: DomainPlugin) -> ReasoningArtifact:
+        target_language = _target_response_language(idea)
         result = self._provider.request_structured(
             OpenAIStructuredRequest(
                 instructions=(
@@ -241,6 +243,7 @@ class OpenAIReasoningLayer(ReasoningLayer):
             source_idea_id=idea.metadata.artifact_id,
             notes=(
                 ReasoningNote(label="Original idea", content=idea.text),
+                ReasoningNote(label="Target response language", content=target_language),
                 ReasoningNote(label="Analysis summary", content=output.summary),
                 *(
                     ReasoningNote(label=note.label, content=note.content)
@@ -286,6 +289,7 @@ class OpenAIPlanningLayer(PlanningLayer):
             title=story_plan.working_title.title,
             logline=story_plan.logline.text,
             sections=tuple(_structured_plan_sections(story_plan)),
+            target_response_language=_find_note(reasoning, "Target response language"),
         )
 
 
@@ -302,6 +306,7 @@ class OpenAIEvaluationLayer(EvaluationLayer):
 
     def evaluate(self, planning: PlanningArtifact, domain: DomainPlugin) -> EvaluationArtifact:
         rubric = self._knowledge_loader.load_rubric("story_rubric", domain)
+        target_language = getattr(planning, "target_response_language", "English")
         result = self._provider.request_structured(
             OpenAIStructuredRequest(
                 instructions=self._prompt_loader.load("script_critic", domain),
@@ -314,7 +319,7 @@ class OpenAIEvaluationLayer(EvaluationLayer):
             metadata=_metadata(planning.metadata.domain_id, "evaluation"),
             source_planning_id=planning.metadata.artifact_id,
             passed=output.passed,
-            findings=tuple(_evaluation_findings(output)),
+            findings=tuple(_evaluation_findings(output, target_language)),
         )
 
 
@@ -356,10 +361,14 @@ class StoryGenerationService:
         domain_id: str = DEFAULT_DOMAIN_ID,
         constraints: tuple[Constraint, ...] = (),
     ) -> HarnessRun:
+        target_response_language = _detect_response_language(idea_text)
         idea = IdeaArtifact(
             metadata=_metadata(domain_id, "idea"),
             text=idea_text,
-            constraints=constraints,
+            constraints=(
+                *constraints,
+                Constraint(name="target_response_language", value=target_response_language),
+            ),
         )
         return self._harness.generate(idea)
 
@@ -415,6 +424,41 @@ def _metadata(domain_id: str, kind: ArtifactKind) -> ArtifactMetadata:
     )
 
 
+def _target_response_language(idea: IdeaArtifact) -> str:
+    for constraint in idea.constraints:
+        if constraint.name == "target_response_language":
+            return constraint.value
+    return _detect_response_language(idea.text)
+
+
+def _detect_response_language(text: str) -> str:
+    normalized = text.lower()
+    has_vietnamese_diacritics = any(
+        character in normalized
+        for character in "ăâđêôơưáàảãạấầẩẫậắằẳẵặéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵ"
+    )
+    common_vietnamese_words = (
+        "một",
+        "người",
+        "câu chuyện",
+        "gia đình",
+        "cha",
+        "mẹ",
+        "con",
+        "trước khi",
+        "rời",
+        "việt nam",
+        "muốn",
+    )
+    if has_vietnamese_diacritics or any(word in normalized for word in common_vietnamese_words):
+        return "Vietnamese"
+    return "English"
+
+
+def _is_vietnamese_language(language: str) -> bool:
+    return language.strip().lower() in {"vietnamese", "tiếng việt", "tieng viet", "vi"}
+
+
 def _find_note(reasoning: ReasoningArtifact, label: str) -> str:
     for note in reasoning.notes:
         if note.label == label:
@@ -431,9 +475,13 @@ def _make_logline(idea_text: str) -> str:
 
 def _idea_input(idea: IdeaArtifact) -> str:
     constraints = "\n".join(f"- {constraint.value}" for constraint in idea.constraints)
+    target_language = _target_response_language(idea)
     return (
         f"Idea:\n{idea.text}\n\n"
         f"Domain ID: {idea.metadata.domain_id}\n\n"
+        f"Target response language: {target_language}\n"
+        "All generated JSON string values must use this language. Preserve JSON field names "
+        "in English.\n\n"
         f"Constraints:\n{constraints or '- None provided'}"
     )
 
@@ -445,7 +493,11 @@ def _reasoning_input(
 ) -> str:
     notes = "\n".join(f"- {note.label}: {note.content}" for note in reasoning.notes)
     questions = "\n".join(f"- {question}" for question in reasoning.open_questions)
+    target_language = _find_note(reasoning, "Target response language")
     return (
+        f"Target response language: {target_language}\n"
+        "All generated JSON string values must use this language. Preserve JSON field names "
+        "in English.\n\n"
         f"Reasoning notes:\n{notes}\n\n"
         f"Missing information / mentor questions:\n{questions or '- None'}\n\n"
         f"Short-film domain knowledge:\n{json.dumps(knowledge, ensure_ascii=False)}\n\n"
@@ -531,38 +583,38 @@ def _structured_plan_sections(story_plan: _StructuredStoryPlanOutput) -> list[Pl
 
 
 def _characters_text(characters: Characters) -> str:
-    details = [f"Protagonist: {characters.protagonist}"]
+    details = [characters.protagonist]
     if characters.supporting_characters:
-        details.append(f"Supporting characters: {', '.join(characters.supporting_characters)}")
+        details.append(", ".join(characters.supporting_characters))
     if characters.antagonist_or_obstacle:
-        details.append(f"Obstacle: {characters.antagonist_or_obstacle}")
+        details.append(characters.antagonist_or_obstacle)
     return " ".join(details)
 
 
 def _conflict_text(conflict: Conflict) -> str:
-    details = [f"External conflict: {conflict.external}"]
+    details = [conflict.external]
     if conflict.internal:
-        details.append(f"Internal conflict: {conflict.internal}")
+        details.append(conflict.internal)
     if conflict.stakes:
-        details.append(f"Stakes: {conflict.stakes}")
+        details.append(conflict.stakes)
     return " ".join(details)
 
 
 def _beginning_text(beginning: Beginning) -> str:
     if beginning.key_event:
-        return f"{beginning.setup} Key event: {beginning.key_event}"
+        return f"{beginning.setup} {beginning.key_event}"
     return beginning.setup
 
 
 def _middle_text(middle: Middle) -> str:
     if middle.turning_point:
-        return f"{middle.escalation} Turning point: {middle.turning_point}"
+        return f"{middle.escalation} {middle.turning_point}"
     return middle.escalation
 
 
 def _ending_text(ending: Ending) -> str:
     if ending.final_image:
-        return f"{ending.resolution} Final image: {ending.final_image}"
+        return f"{ending.resolution} {ending.final_image}"
     return ending.resolution
 
 
@@ -571,16 +623,16 @@ def _visual_style_text(visual_style: VisualStyle) -> str:
     if visual_style.description:
         details.append(visual_style.description)
     if visual_style.visual_motifs:
-        details.append(f"Motifs: {', '.join(visual_style.visual_motifs)}")
+        details.append(", ".join(visual_style.visual_motifs))
     return " ".join(details) or "Use simple, readable visual choices that support the emotion."
 
 
 def _production_notes_text(production_notes: ProductionNotes) -> str:
     details = [production_notes.notes]
     if production_notes.locations:
-        details.append(f"Locations: {', '.join(production_notes.locations)}")
+        details.append(", ".join(production_notes.locations))
     if production_notes.cast_size:
-        details.append(f"Cast size: {production_notes.cast_size}")
+        details.append(production_notes.cast_size)
     return " ".join(details)
 
 
@@ -595,19 +647,26 @@ def _planning_input(planning: PlanningArtifact) -> str:
 
 
 def _evaluation_input(planning: PlanningArtifact, rubric: object) -> str:
+    target_language = getattr(planning, "target_response_language", "English")
     return (
+        f"Target response language: {target_language}\n"
+        "All generated JSON string values must use this language. Preserve JSON field names "
+        "in English.\n\n"
         f"{_planning_input(planning)}\n\n"
         f"Short-film story rubric:\n{json.dumps(rubric, ensure_ascii=False)}"
     )
 
 
-def _evaluation_findings(output: _EvaluationOutput) -> list[EvaluationFinding]:
+def _evaluation_findings(
+    output: _EvaluationOutput,
+    target_language: str = "English",
+) -> list[EvaluationFinding]:
     findings: list[EvaluationFinding] = []
     for criterion_id, score in output.rubric_scores.model_dump().items():
         findings.append(
             EvaluationFinding(
                 criterion_id=criterion_id,
-                message=f"{criterion_id.replace('_', ' ').title()} score: {score}/5.",
+                message=_score_message(criterion_id, score, target_language),
                 severity="info",
                 score=score,
             )
@@ -637,6 +696,20 @@ def _evaluation_findings(output: _EvaluationOutput) -> list[EvaluationFinding]:
             )
         )
     return findings
+
+
+def _score_message(criterion_id: str, score: int, target_language: str) -> str:
+    if _is_vietnamese_language(target_language):
+        labels = {
+            "story_clarity": "Độ rõ của câu chuyện",
+            "character": "Nhân vật",
+            "conflict": "Xung đột",
+            "emotional_impact": "Tác động cảm xúc",
+            "ending": "Kết thúc",
+            "production_feasibility": "Tính khả thi sản xuất",
+        }
+        return f"{labels.get(criterion_id, criterion_id.replace('_', ' '))}: {score}/5."
+    return f"{criterion_id.replace('_', ' ').title()} score: {score}/5."
 
 
 def _expect_output(output: BaseModel, expected_type: type[OutputT]) -> OutputT:
