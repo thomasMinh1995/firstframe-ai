@@ -179,6 +179,80 @@ button:disabled {
   gap: 22px;
 }
 
+.story-flow-card {
+  margin-top: 22px;
+  opacity: 0;
+  transform: translateY(12px);
+  animation: reveal-report 420ms ease forwards;
+}
+
+.story-flow-header {
+  margin-bottom: 18px;
+}
+
+.story-flow-header h2 {
+  margin: 0;
+}
+
+.story-flow {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.story-flow-step {
+  position: relative;
+  display: grid;
+  gap: 8px;
+  min-height: 170px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--soft);
+}
+
+.story-flow-step:not(:last-child)::after {
+  position: absolute;
+  top: 30px;
+  right: -18px;
+  z-index: 1;
+  width: 22px;
+  height: 2px;
+  background: var(--accent);
+  content: "";
+}
+
+.flow-index {
+  display: inline-grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #ffffff;
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
+.flow-label {
+  color: var(--foreground);
+  font-size: 0.86rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.flow-content {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--muted);
+  line-height: 1.5;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+}
+
 .report-card {
   opacity: 0;
   transform: translateY(12px);
@@ -420,6 +494,14 @@ button:disabled {
   font-weight: 700;
 }
 
+.status-panel h2 {
+  transition: color 180ms ease;
+}
+
+.status-panel:has(.thinking-step.is-complete:last-child) h2 {
+  color: var(--accent);
+}
+
 .story-panel {
   display: grid;
   gap: 14px;
@@ -503,5 +585,28 @@ button:disabled {
 
   .story-panel {
     grid-row: span 2;
+  }
+}
+
+@media (max-width: 760px) {
+  .story-flow {
+    grid-template-columns: 1fr;
+  }
+
+  .story-flow-step {
+    min-height: 0;
+  }
+
+  .story-flow-step:not(:last-child)::after {
+    top: auto;
+    right: auto;
+    bottom: -15px;
+    left: 30px;
+    width: 2px;
+    height: 16px;
+  }
+
+  .flow-content {
+    -webkit-line-clamp: 4;
   }
 }

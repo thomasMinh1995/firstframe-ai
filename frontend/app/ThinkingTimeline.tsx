@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from "react";
 
-export type ThinkingTimelineStatus = "active" | "complete";
+export type ThinkingTimelineStatus = "active" | "ready";
 
 export type ThinkingTimelineProps = {
   steps?: string[];
   status: ThinkingTimelineStatus;
+  onStepChange?: (stepIndex: number) => void;
 };
 
 const defaultSteps = [
@@ -17,31 +18,42 @@ const defaultSteps = [
   "Preparing Story Plan",
 ];
 
-export function ThinkingTimeline({ steps = defaultSteps, status }: ThinkingTimelineProps) {
-  const [completedCount, setCompletedCount] = useState(0);
+export function ThinkingTimeline({
+  steps,
+  status,
+  onStepChange,
+}: ThinkingTimelineProps) {
+  const timelineSteps = steps ?? defaultSteps;
+  const [activeStepIndex, setActiveStepIndex] = useState(0);
 
   useEffect(() => {
-    if (status === "complete") {
-      setCompletedCount(steps.length);
+    if (status === "ready") {
+      setActiveStepIndex(timelineSteps.length);
+      onStepChange?.(timelineSteps.length);
       return;
     }
 
-    setCompletedCount(0);
+    setActiveStepIndex(0);
+    onStepChange?.(0);
     const intervalId = window.setInterval(() => {
-      setCompletedCount((current) => Math.min(current + 1, steps.length));
+      setActiveStepIndex((current) => {
+        const nextStep = Math.min(current + 1, timelineSteps.length - 1);
+        onStepChange?.(nextStep);
+        return nextStep;
+      });
     }, 1000);
 
     return () => window.clearInterval(intervalId);
-  }, [status, steps.length]);
+  }, [onStepChange, status, timelineSteps.length]);
 
   return (
     <section className="panel status-panel" aria-live="polite">
-      <h2>Creative Reasoning Harness</h2>
+      <h2>{status === "ready" ? "Story Plan Ready" : "Creative Reasoning Harness"}</h2>
       <ol className="thinking-timeline">
-        {steps.map((step, index) => {
-          const isComplete = index < completedCount;
-          const isActive = status === "active" && index === completedCount;
-          const stateLabel = isComplete ? "Complete" : isActive ? "In progress" : "Waiting";
+        {timelineSteps.map((step, index) => {
+          const isComplete = status === "ready" || index < activeStepIndex;
+          const isActive = status === "active" && index === activeStepIndex;
+          const stateLabel = isComplete ? "Completed" : isActive ? "In Progress" : "Waiting";
 
           return (
             <li

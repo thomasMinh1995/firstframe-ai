@@ -1,20 +1,28 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useCallback, useState } from "react";
 import { generateStoryPlan, GenerateResponse } from "./apiClient";
+import { StoryFlowVisualization } from "./StoryFlowVisualization";
 import { StoryResultCards } from "./StoryResultCards";
 import { ThinkingTimeline, ThinkingTimelineStatus } from "./ThinkingTimeline";
 
 const defaultIdea =
   "A retired father wants to meet his daughter one last time before she leaves Vietnam.";
 
+const buttonPhaseLabels = ["Analyzing...", "Analyzing...", "Planning...", "Reviewing...", "Finalizing..."];
+
 export default function Home() {
   const [idea, setIdea] = useState(defaultIdea);
   const [result, setResult] = useState<GenerateResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [timelineStatus, setTimelineStatus] = useState<ThinkingTimelineStatus | null>(null);
+  const [activeStepIndex, setActiveStepIndex] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [validationMessage, setValidationMessage] = useState<string | null>(null);
+
+  const handleTimelineStepChange = useCallback((stepIndex: number) => {
+    setActiveStepIndex(stepIndex);
+  }, []);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -26,6 +34,7 @@ export default function Home() {
 
     setIsLoading(true);
     setTimelineStatus("active");
+    setActiveStepIndex(0);
     setError(null);
     setValidationMessage(null);
     setResult(null);
@@ -33,8 +42,9 @@ export default function Home() {
     try {
       const generatedResult = await generateStoryPlan(idea.trim());
       setResult(generatedResult);
-      setTimelineStatus("complete");
-      await wait(250);
+      setTimelineStatus("ready");
+      setActiveStepIndex(buttonPhaseLabels.length - 1);
+      await wait(650);
     } catch (caughtError) {
       setTimelineStatus(null);
       setError(caughtError instanceof Error ? caughtError.message : "Something went wrong.");
@@ -71,15 +81,22 @@ export default function Home() {
           />
           {validationMessage ? <p className="form-message">{validationMessage}</p> : null}
           <button type="submit" disabled={isLoading}>
-            {isLoading ? "Generating..." : "Generate Story Plan"}
+            {isLoading ? buttonPhaseLabels[activeStepIndex] ?? "Finalizing..." : "Generate Story Plan"}
           </button>
         </form>
 
         {error ? <p className="error">{error}</p> : null}
 
-        {timelineStatus ? <ThinkingTimeline status={timelineStatus} /> : null}
+        {timelineStatus ? (
+          <ThinkingTimeline status={timelineStatus} onStepChange={handleTimelineStepChange} />
+        ) : null}
 
-        {result && !timelineStatus ? <StoryResultCards result={result} /> : null}
+        {result && !timelineStatus ? (
+          <>
+            <StoryFlowVisualization result={result} />
+            <StoryResultCards result={result} />
+          </>
+        ) : null}
       </section>
     </main>
   );
