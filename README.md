@@ -1,114 +1,171 @@
 # FirstFrame AI
 
-From vague ideas to structured story development.
+> **From a vague idea to a production-ready story plan through AI-guided creative reasoning.**
 
-FirstFrame AI is a production-oriented foundation for a Creative Reasoning Harness: an extensible AI workflow that will eventually guide creators from an early, ambiguous idea into a structured story plan.
+FirstFrame AI is an AI-powered creative assistant designed to help beginners transform an early idea into a structured short-film story plan.
 
-Sprint 2 designs the kernel contracts for that Harness. It intentionally contains no OpenAI integration, no chatbot, no prompt execution, no evaluation logic, and no advanced AI behavior.
+Instead of immediately generating a screenplay, FirstFrame AI guides creators through a reasoning workflow inspired by how experienced mentors develop stories.
 
-## Vision
+The project is built on a reusable **Creative Reasoning Harness**, allowing different creative domains to share the same reasoning pipeline while using domain-specific knowledge, prompts, and evaluation rubrics.
 
-Creative work often begins with a feeling, fragment, character, image, or unresolved question. FirstFrame AI exists to help creators preserve that spark while gradually shaping it into a coherent development artifact.
+---
 
-The long-term vision is a domain-extensible creative system. The first supported domain is short film story development, but the core Harness should also support future domains such as YouTube concepts, marketing campaigns, game design, book writing, and other structured creative workflows.
+# Why FirstFrame AI?
 
-## Problem
+Many creators have interesting ideas but struggle to answer questions like:
 
-Most AI creative tools jump too quickly from idea to generation. That can flatten taste, skip important questions, and produce output before the creative direction is clear.
+* Is this idea emotionally strong enough?
+* Where is the real conflict?
+* Is the story complete?
+* Is it practical to produce as a short film?
 
-Creators need a workflow that can:
+Traditional AI tools often jump directly to content generation.
 
-- clarify vague ideas without overwriting them;
-- separate reasoning, planning, and evaluation concerns;
-- adapt to different creative domains;
-- preserve domain-specific knowledge outside the core engine;
-- evolve safely from prototype to production.
+FirstFrame AI slows down that process and focuses on structured creative thinking before generation.
 
-## Solution
+---
 
-FirstFrame AI is organized around a Creative Reasoning Harness kernel with three interface-driven runtime layers:
+# Features
 
-- **Reasoning Layer**: defines how raw creative input will be interpreted and clarified.
-- **Planning Layer**: defines how clarified intent will become a structured development plan.
-- **Evaluation Layer**: defines how plans will be checked against domain rubrics and quality criteria.
+Current MVP includes:
 
-The Harness exchanges immutable artifacts between layers and retrieves domain knowledge through a registry-backed plugin contract. Domain-specific assets live in plugins under `domains/`, beginning with `domains/short-film/`.
+* AI-guided story reasoning
+* Story planning workflow
+* Story quality evaluation
+* Creative Thinking Timeline
+* Structured JSON output
+* Short-film knowledge base
+* Domain plugin architecture
+* Creative Reasoning Harness
 
-## Architecture
+---
 
-The repository follows Clean Architecture and SOLID principles:
+# Demo Workflow
 
-- Core interfaces are independent from frameworks and providers.
-- Internal artifacts are immutable data objects, not API response models.
-- Domain plugins hold knowledge, prompts, rubrics, and examples outside the Harness.
-- The domain registry is the only entry point for retrieving domains.
-- Backend delivery code depends inward on application/core boundaries.
-- Frontend code is isolated from backend internals.
-- Future AI providers can be added through adapters without changing core contracts.
+```text
+User Idea
+      │
+      ▼
+Creative Reasoning Harness
+      │
+      ├── Reasoning Layer
+      │        Understand the idea
+      │
+      ├── Planning Layer
+      │        Build the story plan
+      │
+      ├── Evaluation Layer
+      │        Review story quality
+      │
+      ▼
+Structured Story Plan
+```
 
-See [docs/architecture.md](docs/architecture.md) for the full architecture notes.
+Unlike a traditional chatbot, every request follows the same reasoning workflow before producing the final result.
 
-## Repository Structure
+---
+
+# Architecture
+
+The project follows Clean Architecture principles.
+
+```text
+Frontend (Next.js)
+
+        │
+
+        ▼
+
+FastAPI API
+
+        │
+
+        ▼
+
+Creative Reasoning Harness
+
+        ├── Reasoning Layer
+
+        ├── Planning Layer
+
+        ├── Evaluation Layer
+
+        ▼
+
+Prompt Loader
+
+Knowledge Loader
+
+Rubric Loader
+
+Example Loader
+
+        ▼
+
+OpenAI Provider
+
+        ▼
+
+Structured Output
+```
+
+The Harness is provider-independent.
+
+The OpenAI integration is isolated behind infrastructure adapters.
+
+Domain knowledge lives outside the runtime engine.
+
+---
+
+# Repository Structure
 
 ```text
 firstframe-ai/
-├── backend/
-│   ├── app/
-│   │   ├── api/
-│   │   │   ├── routes/
-│   │   │   └── schemas/
-│   │   ├── application/
-│   │   ├── core/
-│   │   │   ├── artifacts.py
-│   │   │   ├── domains/
-│   │   │   └── harness/
-│   │   └── main.py
-│   ├── tests/
-│   └── pyproject.toml
-├── docs/
-│   ├── architecture.md
-│   ├── design-decisions.md
-│   ├── kernel.md
-│   ├── roadmap.md
-│   └── workflow.md
-├── domains/
-│   └── short-film/
-│       ├── examples/
-│       ├── glossary/
-│       ├── knowledge/
-│       ├── prompts/
-│       └── rubrics/
-├── frontend/
-│   ├── app/
-│   ├── package.json
-│   └── tsconfig.json
-└── README.md
+
+backend/
+    FastAPI backend
+
+frontend/
+    Next.js frontend
+
+domains/
+    Domain plugins
+
+docs/
+    Architecture
+    Workflow
+    Design decisions
+    Roadmap
 ```
 
-### Folder Explanation
+---
 
-- `backend/`: FastAPI application skeleton and Python dependency configuration.
-- `backend/app/api/`: HTTP delivery layer. It should expose routes and schemas only.
-- `backend/app/api/schemas/`: Pydantic transport contracts for incoming requests and outgoing responses.
-- `backend/app/application/`: Future use-case orchestration layer. It will coordinate core interfaces without owning domain rules.
-- `backend/app/core/`: Framework-independent contracts for the Harness and domain plugin system.
-- `backend/app/core/artifacts.py`: Immutable artifacts exchanged by Harness layers.
-- `backend/app/core/harness/`: Reasoning, planning, and evaluation interfaces.
-- `backend/app/core/domains/`: Domain plugin contracts and the domain registry.
-- `backend/tests/`: Backend tests for architectural contracts and validation behavior.
-- `docs/`: Product, architecture, workflow, roadmap, and decision documentation.
-- `domains/`: Domain plugin assets. Each domain should be independently versionable in spirit and should not modify Harness contracts.
-- `domains/short-film/`: First supported creative domain placeholder.
-- `domains/short-film/knowledge/`: Future short-film development knowledge assets.
-- `domains/short-film/glossary/`: Future domain vocabulary assets.
-- `domains/short-film/prompts/`: Future domain prompt templates. Empty in Sprint 2 by design.
-- `domains/short-film/rubrics/`: Future quality and evaluation rubrics. Empty in Sprint 2 by design.
-- `domains/short-film/examples/`: Future examples and reference artifacts.
-- `frontend/`: Next.js App Router skeleton with a landing page only.
+# Tech Stack
 
-## Local Development
+Backend
 
-Backend:
+* FastAPI
+* Pydantic v2
+* OpenAI Responses API
+
+Frontend
+
+* Next.js
+* React
+* TypeScript
+
+Architecture
+
+* Clean Architecture
+* SOLID
+* Provider Adapter Pattern
+* Domain Plugin Pattern
+
+---
+
+# Local Development
+
+Backend
 
 ```bash
 cd backend
@@ -122,36 +179,82 @@ pip install -r requirements-dev.txt
 uvicorn app.main:app --reload
 ```
 
-Health check:
-
-```bash
-curl http://localhost:8000/health
-```
-
-Generate workflow:
-
-```bash
-curl -X POST http://localhost:8000/api/generate \
-  -H "Content-Type: application/json" \
-  -d '{"idea":"A lonely astronaut hears music from an abandoned satellite."}'
-```
-
-Frontend:
+Frontend
 
 ```bash
 cd frontend
+
 npm install
+
 npm run dev
 ```
 
-The frontend calls `http://localhost:8000` by default. Set `NEXT_PUBLIC_API_BASE_URL` if the backend runs elsewhere.
+Backend:
 
-## Roadmap
+http://localhost:8000
 
-- **Sprint 1: Foundation**: repository structure, documentation, Harness interfaces, domain plugin placeholders, FastAPI skeleton, Next.js skeleton.
-- **Sprint 2: AI Kernel Design**: immutable artifacts, domain plugin contract, domain registry, runtime interfaces, API schemas, request validation.
-- **Sprint 3: Short-Film Runtime Prototype**: implement non-provider workflow orchestration using the existing kernel contracts.
-- **Sprint 4: AI Provider Adapters**: add OpenAI integration behind infrastructure adapters.
-- **Sprint 5: Product Experience**: build the first guided short-film story development UI.
+Frontend:
 
-See [docs/roadmap.md](docs/roadmap.md) for more detail.
+http://localhost:3000
+
+---
+
+# Current Domain
+
+The first supported domain is:
+
+🎬 Short Film Story Development
+
+The architecture is designed to support future domains such as:
+
+* YouTube content planning
+* Marketing campaigns
+* Book writing
+* Game narrative design
+* Educational storytelling
+
+without changing the Creative Reasoning Harness.
+
+---
+
+# Roadmap
+
+* ✅ Foundation
+* ✅ Creative Reasoning Harness
+* ✅ OpenAI Integration
+* ✅ Prompt & Knowledge Loader
+* ✅ Story Planning
+* ✅ Story Evaluation
+* ✅ Interactive Demo UI
+* 🚧 Deployment
+* 🚧 Multi-domain support
+
+---
+
+# Why it is different
+
+FirstFrame AI is **not a chatbot**.
+
+It is a **Creative Reasoning Harness**.
+
+Instead of generating text immediately, it follows an explicit workflow:
+
+Understand
+
+↓
+
+Reason
+
+↓
+
+Plan
+
+↓
+
+Evaluate
+
+↓
+
+Generate
+
+This makes the system more structured, extensible, and reusable across different creative domains.
