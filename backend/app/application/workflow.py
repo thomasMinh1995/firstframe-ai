@@ -227,7 +227,9 @@ class OpenAIReasoningLayer(ReasoningLayer):
                     "You are the reasoning layer for FirstFrame AI. Analyze a vague "
                     f"{domain.metadata.display_name} idea. Identify what is present, what is "
                     "missing, and mentor questions the creator should answer. Return only the "
-                    "requested structured object."
+                    "requested structured object. Detect the user's input language and return "
+                    "all string values in the same language while preserving JSON field names "
+                    "in English."
                 ),
                 input_text=_idea_input(idea),
                 response_model=_ReasoningOutput,

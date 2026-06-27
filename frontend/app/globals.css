@@ -494,6 +494,15 @@ button:disabled {
   font-weight: 700;
 }
 
+.thinking-detail {
+  margin: 16px 0 0;
+  padding: 12px 14px;
+  border-left: 3px solid var(--accent);
+  background: var(--soft);
+  color: var(--foreground);
+  font-weight: 700;
+}
+
 .status-panel h2 {
   transition: color 180ms ease;
 }

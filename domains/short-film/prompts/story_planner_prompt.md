@@ -159,6 +159,11 @@ The plan should:
 
 Use clear, grounded language.
 
+Detect the user's input language from the idea and reasoning notes.
+Return all JSON field values in the same language as the user input.
+If the user writes Vietnamese, all generated story content should be Vietnamese.
+Preserve JSON field names exactly as specified in English.
+
 Be supportive but precise.
 
 Avoid hype. Avoid vague encouragement like "this has great potential" unless you explain why.
