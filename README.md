@@ -1,13 +1,15 @@
 # FirstFrame AI
 
-**From vague ideas to structured story development.**
+**Your story. Your first short-film screenplay.**
 
-FirstFrame AI is a hackathon MVP that turns a rough creative idea into a structured short-film story plan through a **Creative Reasoning Harness**.
+FirstFrame AI helps beginners develop an idea into their first complete short-film screenplay through guided story development and specific, actionable feedback. The creator keeps control of the story and makes the final creative decisions.
 
-It is not a chatbot. Every generation follows an explicit workflow:
+The current MVP supports saving projects, answering clarification questions before planning, editing a story plan, and requesting feedback on the revised draft through a **Creative Reasoning Harness**. It does not yet produce a complete screenplay.
+
+Current project workflow:
 
 ```text
-Idea -> Reasoning -> Planning -> Evaluation -> Structured Story Plan
+Save Idea -> Analyze -> Answer Questions -> Generate Story Plan -> Edit -> Review -> Save/Reopen
 ```
 
 ## Why It Exists
@@ -20,19 +22,49 @@ Beginners often have a promising story idea but do not know how to shape it:
 - Does the ending work?
 - Is the story practical for a short film?
 
-Direct prompting often jumps straight to prose. FirstFrame AI slows the process down and makes story development inspectable, structured, and repeatable.
+FirstFrame guides creators through these questions, explains revision options, and helps them decide what to develop next. Practical constraints such as cast size and available locations inform the writing process.
+
+## First Users
+
+The first users are Vietnamese-speaking beginners who want to finish their first short-film screenplay. They have an idea or personal experience to explore but lack a development method and someone to give useful feedback.
+
+They may be students, film-club members, or independent enthusiasts. They do not need a crew or a filming schedule to start; they need a willingness to write, review, and revise a draft.
+
+## Product Scope
+
+The planned core journey is:
+
+```text
+Idea -> Story Development -> Scene Outline -> Write and Revise -> Complete Screenplay
+```
+
+A completed draft contains all scenes from beginning to end, uses action and dialogue appropriate to the creator's intent, has undergone at least one feedback-and-revision round, and can be exported for reading and further development. This is the product goal, not a capability already delivered by the MVP.
+
+After the screenplay, optional rough scene illustrations may help creators visualize characters, positions, and key actions. This is a later extension, not a requirement for completing a screenplay. It does not include animation or video generation.
+
+Filming preparation, shooting, editing, screenings, and feature-film or television development are outside the current product roadmap.
 
 ## Current MVP
 
+- Local SQLite project storage, project selection, and explicit save controls
+- Up to three clarification questions before story-plan generation, with an explicit option to defer a decision
+- Editable story plans and feedback tied to the exact reviewed content
+- Version history, story-plan restoration, and JSON backup download
+- Revision checks that reject stale saves from another window
 - FastAPI backend with `POST /api/generate`
+- Project API under `/api/projects`; the original generation endpoint remains available for compatibility
 - Next.js demo frontend
 - Creative Reasoning Harness orchestration
 - OpenAI provider adapter
 - Prompt, Knowledge, Rubric, and Example loaders
 - Short-film domain intelligence pack
 - Pydantic structured output validation
-- AI Thinking Timeline and Story Flow visualization
-- English/Vietnamese loading UX and localized model-output guidance
+- Vietnamese project workspace with operation-specific loading and error messages
+- Localized model-output guidance
+
+Use **Save changes / Lưu thay đổi** before closing a project. Switching projects, creating another project, and requesting AI work save pending edits first. Unsaved changes trigger a browser warning when leaving. Projects are stored in `backend/.data/projects.sqlite3`, which is ignored by Git; keep this file when restarting or moving the local installation. JSON downloads provide a readable backup; importing them is not implemented yet.
+
+This is a local, single-user MVP without authentication. Keep the backend bound to localhost. AI actions require `OPENAI_API_KEY` in `backend/.env`; project saving and reopening work without it.
 
 ## Architecture At A Glance
 
@@ -65,7 +97,7 @@ OpenAI Provider Adapter
 Validated Structured JSON
 ```
 
-The engineering focus is **Track 2: Engineering Depth**: clean boundaries, provider isolation, domain plugin assets, loader components, immutable artifacts, and structured output contracts.
+The Harness provides the technical foundation for story development. Product progress is measured by creators completing and improving drafts, rather than by adding workflow stages or infrastructure.
 
 ## Repository Structure
 
@@ -106,17 +138,18 @@ Default URLs:
 ## Current Limitations
 
 - One active domain: Short Film Story Development.
-- No auth, persistence, save/resume, deployment, or streaming.
+- Output is a story plan, not a scene outline or complete screenplay.
+- No scene-level screenplay editing, account authentication, deployment, or streaming.
+- Storage belongs to the local backend; there is no account-based cloud sync.
 - Domain registration is currently static in the application service.
 - OpenAI is the only implemented provider adapter.
 
-## Future Domains
+## Next Milestones
 
-The Harness is designed so future domains can add their own assets without rewriting the core workflow:
+1. Validate the project clarification and revision loop with beginners.
+2. Develop an editable scene outline from the selected story plan.
+3. Support scene-level writing, specific feedback, and screenplay export.
+4. Consider optional rough scene illustrations after validating the core writing journey.
 
-- YouTube storytelling
-- Marketing campaigns
-- Game narrative design
-- Book writing
-- Educational storytelling
+See [the roadmap](docs/roadmap.md) for milestone outcomes and validation. Expansion into other creative domains is deferred while FirstFrame validates the first-screenplay experience.
 

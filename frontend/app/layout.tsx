@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "FirstFrame AI",
-  description: "From vague ideas to structured story development.",
+  description: "Phát triển và sửa câu chuyện đầu tiên của bạn cùng FirstFrame.",
 };
 
 export default function RootLayout({
@@ -12,7 +12,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="vi">
       <body>{children}</body>
     </html>
   );

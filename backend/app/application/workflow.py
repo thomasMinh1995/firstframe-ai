@@ -35,7 +35,6 @@ from app.core.domains import (
 from app.core.harness import EvaluationLayer, PlanningLayer, ReasoningLayer
 from app.infrastructure.openai_provider import OpenAIProvider, OpenAIStructuredRequest
 
-
 DEFAULT_DOMAIN_ID = "short-film"
 MAX_PLANNING_EXAMPLES = 3
 OutputT = TypeVar("OutputT", bound=BaseModel)
@@ -59,7 +58,7 @@ class _ReasoningOutput(BaseModel):
 class _PlanningOutput(BaseModel):
     model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
 
-    story_plan: "_StructuredStoryPlanOutput"
+    story_plan: _StructuredStoryPlanOutput
 
 
 class EvaluationRubricScores(BaseModel):
@@ -174,6 +173,7 @@ class _StructuredStoryPlanOutput(BaseModel):
     tone: Tone
     production_notes: ProductionNotes
 
+
 _PlanningOutput.model_rebuild()
 
 
@@ -182,6 +182,7 @@ class _OpenAIPlanningArtifact(PlanningArtifact):
     title: str | None = None
     logline: str | None = None
     target_response_language: str = "English"
+    creator_context: str = ""
 
 
 @dataclass(frozen=True)
@@ -228,7 +229,9 @@ class OpenAIReasoningLayer(ReasoningLayer):
                 instructions=(
                     "You are the reasoning layer for FirstFrame AI. Analyze a vague "
                     f"{domain.metadata.display_name} idea. Identify what is present, what is "
-                    "missing, and mentor questions the creator should answer. Return only the "
+                    "missing, and at most three important mentor questions the creator should "
+                    "answer. Return no questions when the brief is already clear. Do not invent "
+                    "the creator's choices or write a story plan. Return only the "
                     "requested structured object. Detect the user's input language and return "
                     "all string values in the same language while preserving JSON field names "
                     "in English."
@@ -245,12 +248,9 @@ class OpenAIReasoningLayer(ReasoningLayer):
                 ReasoningNote(label="Original idea", content=idea.text),
                 ReasoningNote(label="Target response language", content=target_language),
                 ReasoningNote(label="Analysis summary", content=output.summary),
-                *(
-                    ReasoningNote(label=note.label, content=note.content)
-                    for note in output.notes
-                ),
+                *(ReasoningNote(label=note.label, content=note.content) for note in output.notes),
             ),
-            open_questions=tuple(output.missing_information),
+            open_questions=tuple(output.missing_information[:3]),
         )
 
 
@@ -290,6 +290,7 @@ class OpenAIPlanningLayer(PlanningLayer):
             logline=story_plan.logline.text,
             sections=tuple(_structured_plan_sections(story_plan)),
             target_response_language=_find_note(reasoning, "Target response language"),
+            creator_context="\n".join(f"{note.label}: {note.content}" for note in reasoning.notes),
         )
 
 
@@ -339,21 +340,95 @@ class CreativeReasoningHarness:
     def generate(self, idea: IdeaArtifact) -> HarnessRun:
         domain = self.domains.get(idea.metadata.domain_id)
         reasoning = self._reasoning_layer.reason(idea, domain)
+        return self.plan(reasoning)
+
+    def analyze(self, idea: IdeaArtifact) -> ReasoningArtifact:
+        return self._reasoning_layer.reason(idea, self.domains.get(idea.metadata.domain_id))
+
+    def plan(self, reasoning: ReasoningArtifact) -> HarnessRun:
+        domain = self.domains.get(reasoning.metadata.domain_id)
         planning = self._planning_layer.plan(reasoning, domain)
         story_plan = StoryPlanArtifact(
-            metadata=_metadata(idea.metadata.domain_id, "story_plan"),
+            metadata=_metadata(reasoning.metadata.domain_id, "story_plan"),
             source_planning_id=planning.metadata.artifact_id,
             title=getattr(planning, "title", None) or "Untitled Short Film",
-            logline=getattr(planning, "logline", None) or _make_logline(idea.text),
+            logline=getattr(planning, "logline", None)
+            or _make_logline(_find_note(reasoning, "Original idea")),
             sections=planning.sections,
         )
         evaluation = self._evaluation_layer.evaluate(planning, domain)
         return HarnessRun(analysis=reasoning, story_plan=story_plan, evaluation=evaluation)
 
+    def review(self, planning: PlanningArtifact) -> EvaluationArtifact:
+        return self._evaluation_layer.evaluate(
+            planning, self.domains.get(planning.metadata.domain_id)
+        )
+
 
 class StoryGenerationService:
     def __init__(self, harness: CreativeReasoningHarness) -> None:
         self._harness = harness
+
+    def analyze(
+        self, idea_text: str, constraints: tuple[Constraint, ...] = ()
+    ) -> ReasoningArtifact:
+        return self._harness.analyze(
+            IdeaArtifact(
+                metadata=_metadata(DEFAULT_DOMAIN_ID, "idea"),
+                text=idea_text,
+                constraints=constraints,
+            )
+        )
+
+    def plan(
+        self,
+        idea_text: str,
+        answers: tuple[tuple[str, str], ...],
+        constraints: tuple[Constraint, ...] = (),
+    ) -> HarnessRun:
+        return self._harness.plan(
+            ReasoningArtifact(
+                metadata=_metadata(DEFAULT_DOMAIN_ID, "reasoning"),
+                source_idea_id=str(uuid4()),
+                notes=(
+                    ReasoningNote(label="Original idea", content=idea_text),
+                    ReasoningNote(
+                        label="Target response language",
+                        content=_detect_response_language(idea_text),
+                    ),
+                    ReasoningNote(
+                        label="Creator constraints",
+                        content=json.dumps(
+                            [item.value for item in constraints], ensure_ascii=False
+                        ),
+                    ),
+                    *(
+                        ReasoningNote(label=question, content=answer)
+                        for question, answer in answers
+                    ),
+                ),
+            )
+        )
+
+    def review(
+        self,
+        idea_text: str,
+        title: str,
+        logline: str,
+        sections: tuple[PlanSection, ...],
+        creator_context: str,
+    ) -> EvaluationArtifact:
+        return self._harness.review(
+            _OpenAIPlanningArtifact(
+                metadata=_metadata(DEFAULT_DOMAIN_ID, "planning"),
+                source_reasoning_id=str(uuid4()),
+                title=title,
+                logline=logline,
+                sections=sections,
+                target_response_language=_detect_response_language(idea_text),
+                creator_context=creator_context,
+            )
+        )
 
     def generate(
         self,
@@ -373,7 +448,9 @@ class StoryGenerationService:
         return self._harness.generate(idea)
 
 
-def create_story_generation_service(provider: OpenAIProvider | None = None) -> StoryGenerationService:
+def create_story_generation_service(
+    provider: OpenAIProvider | None = None,
+) -> StoryGenerationService:
     openai_provider = provider or OpenAIProvider.from_env()
     prompt_loader = PromptLoader()
     knowledge_loader = KnowledgeLoader()
@@ -653,6 +730,7 @@ def _evaluation_input(planning: PlanningArtifact, rubric: object) -> str:
         "All generated JSON string values must use this language. Preserve JSON field names "
         "in English.\n\n"
         f"{_planning_input(planning)}\n\n"
+        f"Creator intent and decisions:\n{getattr(planning, 'creator_context', '')}\n\n"
         f"Short-film story rubric:\n{json.dumps(rubric, ensure_ascii=False)}"
     )
 
