@@ -215,8 +215,13 @@ def review_project(project_id: str, request: RevisionRequest):
         context = {
             "idea": project.idea,
             "constraints": project.constraints,
-            "questions": project.analysis.missing_information if project.analysis else [],
-            "answers": project.answers,
+            "clarifications": [
+                {"question": question, "answer": answer}
+                for question, answer in zip(
+                    project.analysis.missing_information if project.analysis else [],
+                    project.answers,
+                )
+            ],
         }
         evaluation = get_story_generation_service().review(
             project.idea,
