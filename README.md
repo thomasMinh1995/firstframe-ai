@@ -50,7 +50,7 @@ Filming preparation, shooting, editing, screenings, and feature-film or televisi
 - Up to three clarification questions before story-plan generation, with an explicit option to defer a decision
 - Editable story plans and feedback tied to the exact reviewed content
 - Version history, story-plan restoration, and JSON backup download
-- Clarification history preserves earlier questions and answers when the brief changes; matching questions retain their answers on reanalysis
+- Clarification history preserves earlier questions and answers when the brief changes; answers stay in the active author context across reanalysis of the same brief, even if the new question list changes or is empty
 - Revision checks that reject stale saves from another window
 - FastAPI backend with `POST /api/generate`
 - Project API under `/api/projects`; the original generation endpoint remains available for compatibility
@@ -66,6 +66,13 @@ Filming preparation, shooting, editing, screenings, and feature-film or televisi
 Use **Save changes / Lưu thay đổi** before closing a project. Switching projects, creating another project, and requesting AI work save pending edits first. Unsaved changes trigger a browser warning when leaving. Projects are stored in `backend/.data/projects.sqlite3`, which is ignored by Git; keep this file when restarting or moving the local installation. JSON downloads provide a readable backup; importing them is not implemented yet.
 
 Changing the idea or constraints requires a new clarification round. Earlier answers remain readable in **Các lựa chọn trước đây** and are not silently applied to a new brief. Feedback freshness checks include the questions as well as the answers and draft. Older saved projects remain readable; feedback without this complete context is conservatively marked outdated until reviewed again.
+
+Reanalyzing the same brief passes existing choices to the mentor and retains them
+for planning and review. Current answers override earlier answers to the same
+question, including an explicit deferral or clearing an answer. Changing the brief
+clears this active context while preserving its history. Saved versions include
+the effective clarification context; feedback from before this context was recorded
+is conservatively marked outdated.
 
 This is a local, single-user MVP without authentication. Keep the backend bound to localhost. AI actions require `OPENAI_API_KEY` in `backend/.env`; project saving and reopening work without it.
 

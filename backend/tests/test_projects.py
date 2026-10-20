@@ -250,6 +250,128 @@ def test_reanalysis_does_not_erase_answers_to_unchanged_questions(project_client
     assert result["answers"] == project["answers"]
 
 
+@pytest.mark.parametrize("new_questions", [[], ["Which final image do you want?"]])
+def test_reanalysis_keeps_author_choices_for_planning_and_edited_review(
+    project_client, monkeypatch, new_questions
+):
+    client, provider = project_client
+    project = develop_project(client, start_project(client))
+    url = f"/api/projects/{project['id']}"
+    choices = [
+        {"question": question, "answer": answer}
+        for question, answer in zip(project["analysis"]["missing_information"], project["answers"])
+    ]
+    original_request = provider.request_structured
+
+    def change_questions(request):
+        result = original_request(request)
+        if request.response_model.__name__ == "_ReasoningOutput":
+            result.output.missing_information = new_questions
+        return result
+
+    monkeypatch.setattr(provider, "request_structured", change_questions)
+    response = client.post(f"{url}/analyze", json={"revision": project["revision"]})
+    assert response.status_code == 200
+    project = response.json()
+    brief = json.loads(provider.requests[-1].input_text.split("Creator brief (JSON data):\n", 1)[1])
+    assert brief["clarifications"] == choices
+    assert project["analysis"]["missing_information"] == new_questions
+    assert client.get(url).json() == project
+    if new_questions:
+        assert client.post(f"{url}/plan", json={"revision": project["revision"]}).status_code == 422
+    data = payload(project)
+    data["answers"] = ["An unopened letter remains on the table."] * len(new_questions)
+    data["draft"]["sections"][5]["content"] = "EDITED: An unopened letter remains on the table."
+    project = client.put(url, json=data).json()
+    edited_draft = deepcopy(project["draft"])
+    choices += [
+        {"question": question, "answer": answer}
+        for question, answer in zip(new_questions, project["answers"])
+    ]
+    response = client.post(f"{url}/review", json={"revision": project["revision"]})
+    assert response.status_code == 200
+    project = response.json()
+    context = json.loads(
+        provider.requests[-1]
+        .input_text.split("Creator intent and decisions:\n", 1)[1]
+        .split("\n\n", 1)[0]
+    )
+    assert context["clarifications"] == choices
+    assert "EDITED: An unopened letter" in provider.requests[-1].input_text
+    assert project["draft"] == edited_draft
+    assert project["feedback_is_current"] is True
+    response = client.post(f"{url}/plan", json={"revision": project["revision"]})
+    assert response.status_code == 200
+    for request in provider.requests[-2:]:
+        context = json.loads(
+            request.input_text.split("Creator intent and decisions:\n", 1)[1].split("\n\n", 1)[0]
+        )
+        assert context["clarifications"] == choices
+    project = response.json()
+    data = payload(project)
+    data["idea"] = "Một người mẹ đợi con trai trong căn bếp."
+    changed = client.put(url, json=data).json()
+    assert changed["clarifications"] == {}
+    assert changed["feedback_is_current"] is False
+    assert changed["clarification_history"][-1]["clarifications"] == {
+        item["question"]: item["answer"] for item in choices
+    }
+    response = client.post(f"{url}/analyze", json={"revision": changed["revision"]})
+    assert response.status_code == 200
+    brief = json.loads(provider.requests[-1].input_text.split("Creator brief (JSON data):\n", 1)[1])
+    assert brief["clarifications"] == []
+
+
+def test_changed_or_cleared_answer_overrides_retained_choice(project_client):
+    client, provider = project_client
+    project = develop_project(client, start_project(client))
+    url = f"/api/projects/{project['id']}"
+    project = client.post(f"{url}/analyze", json={"revision": project["revision"]}).json()
+    assert project["clarifications"]
+    data = payload(project)
+    data["answers"] = ["", "Chưa quyết định. Nếu đề xuất, ghi rõ đó là gợi ý của AI."]
+    project = client.put(url, json=data).json()
+    assert project["feedback_is_current"] is False
+    assert client.post(f"{url}/plan", json={"revision": project["revision"]}).status_code == 422
+    response = client.post(f"{url}/review", json={"revision": project["revision"]})
+    assert response.status_code == 200
+    context = json.loads(
+        provider.requests[-1]
+        .input_text.split("Creator intent and decisions:\n", 1)[1]
+        .split("\n\n", 1)[0]
+    )
+    assert context["clarifications"] == [
+        {
+            "question": project["analysis"]["missing_information"][1],
+            "answer": data["answers"][1],
+        }
+    ]
+    assert "He wants to apologize, not stop her" not in provider.requests[-1].input_text
+
+
+def test_clear_initial_brief_waits_for_explicit_plan_request(project_client, monkeypatch):
+    client, provider = project_client
+    project = start_project(client)
+    url = f"/api/projects/{project['id']}"
+    original_request = provider.request_structured
+
+    def no_questions(request):
+        result = original_request(request)
+        if request.response_model.__name__ == "_ReasoningOutput":
+            result.output.missing_information = []
+        return result
+
+    monkeypatch.setattr(provider, "request_structured", no_questions)
+    response = client.post(f"{url}/analyze", json={"revision": project["revision"]})
+    assert response.status_code == 200
+    project = response.json()
+    assert project["draft"] is None
+    assert project["answers"] == []
+    assert len(provider.requests) == 1
+    assert client.post(f"{url}/plan", json={"revision": project["revision"]}).status_code == 200
+    assert len(provider.requests) == 3
+
+
 def test_same_answer_text_for_different_questions_cannot_revalidate_old_feedback(
     project_client, monkeypatch
 ):
@@ -300,10 +422,13 @@ def test_existing_database_records_keep_their_drafts_and_feedback(project_client
     store = project_routes.get_project_store()
     legacy = store.get(project["id"])
     legacy.pop("clarification_history", None)
+    legacy.pop("clarifications", None)
     for version in legacy["versions"]:
         version.pop("questions", None)
+        version.pop("clarifications", None)
     old_content = json.loads(legacy["reviewed_content"])
     old_content.pop("questions", None)
+    old_content.pop("clarifications", None)
     legacy["reviewed_content"] = json.dumps(old_content, ensure_ascii=False, sort_keys=True)
     stored = store.save(legacy, project["revision"])
     response = client.get(f"/api/projects/{project['id']}")
@@ -313,5 +438,6 @@ def test_existing_database_records_keep_their_drafts_and_feedback(project_client
     assert reopened["feedback"] == project["feedback"]
     assert reopened["feedback_is_current"] is False
     assert reopened["clarification_history"] == []
+    assert reopened["clarifications"] == {}
     assert reopened["versions"][0]["questions"] == []
     assert store.get(project["id"]) == stored

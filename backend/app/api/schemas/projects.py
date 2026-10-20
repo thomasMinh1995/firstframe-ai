@@ -45,6 +45,7 @@ class ClarificationVersion(BaseModel):
     constraints: list[str]
     questions: list[str] = Field(default_factory=list)
     answers: list[str]
+    clarifications: dict[str, str] = Field(default_factory=dict)
 
 
 class DraftVersion(ClarificationVersion):
@@ -61,11 +62,18 @@ class ProjectResponse(BaseModel):
     constraints: list[str] = Field(default_factory=list)
     analysis: AnalysisResponse | None = None
     answers: list[str] = Field(default_factory=list)
+    clarifications: dict[str, str] = Field(default_factory=dict)
     draft: StoryDraft | None = None
     feedback: EvaluationResponse | None = None
     reviewed_content: str | None = None
     versions: list[DraftVersion] = Field(default_factory=list)
     clarification_history: list[ClarificationVersion] = Field(default_factory=list)
+
+    def creator_answers(self, answers: list[str] | None = None) -> tuple[tuple[str, str], ...]:
+        questions = self.analysis.missing_information if self.analysis else []
+        current = dict(zip(questions, self.answers if answers is None else answers))
+        combined = {**self.clarifications, **current}
+        return tuple((question, answer) for question, answer in combined.items() if answer.strip())
 
     def content_key(self) -> str:
         return json.dumps(
@@ -74,6 +82,7 @@ class ProjectResponse(BaseModel):
                 "constraints": self.constraints,
                 "answers": self.answers,
                 "questions": self.analysis.missing_information if self.analysis else [],
+                "clarifications": dict(self.creator_answers()),
                 "draft": self.draft.model_dump() if self.draft else None,
             },
             ensure_ascii=False,
