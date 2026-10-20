@@ -232,6 +232,11 @@ def test_initial_critic_context_keeps_author_constraints_without_promoting_ai_an
         "clarifications": [],
     }
     assert "A final meeting creates urgent stakes." not in request.input_text
+    planning_input = provider.requests[1].input_text
+    planning_context = json.loads(
+        planning_input.split("Creator intent and decisions:\n", 1)[1].split("\n\n", 1)[0]
+    )
+    assert planning_context == context
 
 
 def test_reasoning_output_allows_no_questions_but_rejects_more_than_three() -> None:

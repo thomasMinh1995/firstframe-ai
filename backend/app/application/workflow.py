@@ -241,7 +241,7 @@ class OpenAIReasoningLayer(ReasoningLayer):
         return _OpenAIReasoningArtifact(
             metadata=_metadata(idea.metadata.domain_id, "reasoning"),
             source_idea_id=idea.metadata.artifact_id,
-            creator_context=_creator_input(idea.text, idea.constraints),
+            creator_context=_creator_input(idea.text, idea.constraints, idea.clarifications),
             notes=(
                 ReasoningNote(label="Original idea", content=idea.text),
                 ReasoningNote(label="Target response language", content=target_language),
@@ -368,13 +368,17 @@ class StoryGenerationService:
         self._harness = harness
 
     def analyze(
-        self, idea_text: str, constraints: tuple[Constraint, ...] = ()
+        self,
+        idea_text: str,
+        constraints: tuple[Constraint, ...] = (),
+        answers: tuple[tuple[str, str], ...] = (),
     ) -> ReasoningArtifact:
         return self._harness.analyze(
             IdeaArtifact(
                 metadata=_metadata(DEFAULT_DOMAIN_ID, "idea"),
                 text=idea_text,
                 constraints=constraints,
+                clarifications=answers,
             )
         )
 
@@ -577,7 +581,8 @@ def _idea_input(idea: IdeaArtifact) -> str:
         f"Target response language: {target_language}\n"
         "All generated JSON string values must use this language. Preserve JSON field names "
         "in English.\n\n"
-        f"Creator brief (JSON data):\n{_creator_input(idea.text, idea.constraints)}"
+        f"Creator brief (JSON data):\n"
+        f"{_creator_input(idea.text, idea.constraints, idea.clarifications)}"
     )
 
 
@@ -593,6 +598,7 @@ def _reasoning_input(
         f"Target response language: {target_language}\n"
         "All generated JSON string values must use this language. Preserve JSON field names "
         "in English.\n\n"
+        f"Creator intent and decisions:\n{getattr(reasoning, 'creator_context', '')}\n\n"
         f"Reasoning notes:\n{notes}\n\n"
         f"Missing information / mentor questions:\n{questions or '- None'}\n\n"
         f"Short-film domain knowledge:\n{json.dumps(knowledge, ensure_ascii=False)}\n\n"

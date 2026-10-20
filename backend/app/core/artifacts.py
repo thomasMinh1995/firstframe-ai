@@ -2,7 +2,6 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Literal
 
-
 ArtifactKind = Literal["idea", "reasoning", "planning", "evaluation", "story_plan"]
 
 
@@ -26,6 +25,7 @@ class IdeaArtifact:
     metadata: ArtifactMetadata
     text: str
     constraints: tuple[Constraint, ...] = field(default_factory=tuple)
+    clarifications: tuple[tuple[str, str], ...] = field(default_factory=tuple)
 
 
 @dataclass(frozen=True)

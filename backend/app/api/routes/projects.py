@@ -81,6 +81,7 @@ def add_version(project: ProjectResponse) -> None:
             constraints=project.constraints,
             questions=project.analysis.missing_information if project.analysis else [],
             answers=project.answers,
+            clarifications=dict(project.creator_answers()),
             draft=project.draft.model_copy(deep=True),
             feedback=project.feedback if project.feedback_is_current else None,
         )
@@ -93,15 +94,17 @@ def add_version(project: ProjectResponse) -> None:
 
 def archive_clarifications(project: ProjectResponse, answers: list[str] | None = None) -> None:
     answers = project.answers if answers is None else answers
-    if project.analysis is None or not any(answer.strip() for answer in answers):
+    clarifications = dict(project.creator_answers(answers))
+    if not clarifications:
         return
     version = ClarificationVersion(
         id=str(uuid4()),
         created_at=datetime.now(UTC).isoformat(),
         idea=project.idea,
         constraints=project.constraints,
-        questions=project.analysis.missing_information,
+        questions=project.analysis.missing_information if project.analysis else [],
         answers=answers,
+        clarifications=clarifications,
     )
     if project.clarification_history and project.clarification_history[-1].model_dump(
         exclude={"id", "created_at"}
@@ -144,6 +147,7 @@ def update_project(project_id: str, request: ProjectUpdate):
         if brief_changed:
             project.analysis = None
             project.answers = []
+            project.clarifications = {}
         else:
             project.answers = request.answers
         return save_project(project)
@@ -155,11 +159,13 @@ def analyze_project(project_id: str, request: RevisionRequest):
         project = load_project(project_id, request.revision)
         if not project.idea.strip():
             raise HTTPException(422, "Hãy nhập ý tưởng trước khi bắt đầu.")
-        reasoning = get_story_generation_service().analyze(project.idea, constraints_for(project))
-        previous_answers = dict(
-            zip(project.analysis.missing_information if project.analysis else [], project.answers)
+        known_answers = project.creator_answers()
+        reasoning = get_story_generation_service().analyze(
+            project.idea, constraints_for(project), answers=known_answers
         )
+        previous_answers = dict(known_answers)
         archive_clarifications(project)
+        project.clarifications = previous_answers
         project.analysis = AnalysisResponse(
             artifact_id=reasoning.metadata.artifact_id,
             summary=next(
@@ -189,7 +195,7 @@ def plan_project(project_id: str, request: RevisionRequest):
         ):
             raise HTTPException(422, "Hãy trả lời hoặc chọn để quyết định sau cho từng câu hỏi.")
         run = get_story_generation_service().plan(
-            project.idea, tuple(zip(questions, project.answers)), constraints_for(project)
+            project.idea, project.creator_answers(), constraints_for(project)
         )
         generated = _to_response(run)
         add_version(project)
@@ -217,10 +223,7 @@ def review_project(project_id: str, request: RevisionRequest):
             "constraints": project.constraints,
             "clarifications": [
                 {"question": question, "answer": answer}
-                for question, answer in zip(
-                    project.analysis.missing_information if project.analysis else [],
-                    project.answers,
-                )
+                for question, answer in project.creator_answers()
             ],
         }
         evaluation = get_story_generation_service().review(
