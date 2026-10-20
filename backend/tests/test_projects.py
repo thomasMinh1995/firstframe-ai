@@ -200,3 +200,98 @@ def test_incomplete_edits_can_be_saved_without_requesting_ai_feedback(project_cl
     saved = response.json()
     assert client.get(url).json()["draft"] == saved["draft"]
     assert client.post(f"{url}/review", json={"revision": saved["revision"]}).status_code == 422
+
+
+def test_changing_brief_keeps_even_newly_edited_answers_before_a_plan_exists(project_client):
+    client, _ = project_client
+    project = start_project(client)
+    url = f"/api/projects/{project['id']}"
+    project = client.post(f"{url}/analyze", json={"revision": project["revision"]}).json()
+    data = payload(project)
+    data["answers"] = ["An answer not saved separately yet.", "A detail I want to keep."]
+    data["idea"] = "Một ý tưởng đã được sửa lại."
+    changed = client.put(url, json=data).json()
+    assert changed["analysis"] is None
+    assert changed["draft"] is None
+    history = changed["clarification_history"][-1]
+    assert history["idea"] == project["idea"]
+    assert history["questions"] == project["analysis"]["missing_information"]
+    assert history["answers"] == data["answers"]
+    assert client.get(url).json()["clarification_history"] == changed["clarification_history"]
+
+
+def test_reanalysis_does_not_erase_answers_to_unchanged_questions(project_client):
+    client, _ = project_client
+    project = develop_project(client, start_project(client))
+    url = f"/api/projects/{project['id']}"
+    result = client.post(f"{url}/analyze", json={"revision": project["revision"]}).json()
+    assert result["answers"] == project["answers"]
+
+
+def test_same_answer_text_for_different_questions_cannot_revalidate_old_feedback(
+    project_client, monkeypatch
+):
+    client, provider = project_client
+    project = develop_project(client, start_project(client))
+    url = f"/api/projects/{project['id']}"
+    original_request = provider.request_structured
+
+    def ask_different_questions(request):
+        result = original_request(request)
+        if request.response_model.__name__ == "_ReasoningOutput":
+            result.output.missing_information = ["When does the story end?", "What does she want?"]
+        return result
+
+    monkeypatch.setattr(provider, "request_structured", ask_different_questions)
+    analyzed = client.post(f"{url}/analyze", json={"revision": project["revision"]}).json()
+    data = payload(analyzed)
+    data["answers"] = project["answers"]
+    saved = client.put(url, json=data).json()
+    assert saved["feedback_is_current"] is False
+    assert saved["versions"][0]["questions"] == project["analysis"]["missing_information"]
+
+
+def test_omitting_saved_content_cannot_silently_clear_it(project_client):
+    client, _ = project_client
+    project = develop_project(client, start_project(client))
+    url = f"/api/projects/{project['id']}"
+    response = client.put(
+        url, json={"revision": project["revision"], "title": "Rename only", "idea": project["idea"]}
+    )
+    assert response.status_code == 422
+    assert client.get(url).json() == project
+
+
+def test_answers_cannot_be_saved_without_their_corresponding_questions(project_client):
+    client, _ = project_client
+    project = develop_project(client, start_project(client))
+    url = f"/api/projects/{project['id']}"
+    data = payload(project)
+    data["answers"] = ["Only one answer for two questions"]
+    assert client.put(url, json=data).status_code == 422
+    assert client.get(url).json() == project
+
+
+def test_existing_database_records_keep_their_drafts_and_feedback(project_client):
+    client, _ = project_client
+    project = develop_project(client, start_project(client))
+    store = project_routes.get_project_store()
+    legacy = store.get(project["id"])
+    legacy.pop("clarification_history", None)
+    for version in legacy["versions"]:
+        version.pop("questions", None)
+    import json
+
+    old_content = json.loads(legacy["reviewed_content"])
+    old_content.pop("questions", None)
+    legacy["reviewed_content"] = json.dumps(old_content, ensure_ascii=False, sort_keys=True)
+    stored = store.save(legacy, project["revision"])
+    response = client.get(f"/api/projects/{project['id']}")
+    assert response.status_code == 200
+    reopened = response.json()
+    assert reopened["draft"] == project["draft"]
+    assert reopened["feedback"] == project["feedback"]
+    assert reopened["feedback_is_current"] is False
+    assert reopened["clarification_history"] == []
+    assert reopened["versions"][0]["questions"] == []
+    assert store.get(project["id"]) == stored

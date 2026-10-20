@@ -53,9 +53,11 @@ Create/Open Project -> Save Idea -> Analyze -> Answer/Defer Questions
 - `POST /api/projects/{id}/plan`: use the saved answers and constraints to plan and evaluate; rejects unanswered questions.
 - `POST /api/projects/{id}/review`: evaluate the saved edited plan without rewriting it.
 
-Updates and AI actions include the current `revision`. SQLite saves check that revision atomically, including after AI work, so a late response cannot overwrite newer work. The store is `backend/.data/projects.sqlite3`.
+Updates and AI actions include the current `revision`. Project updates are complete replacements of the editable fields: `title`, `idea`, `constraints`, `answers`, and `draft` must all be supplied, even for empty lists or a null draft. Answers must match the current question count. Missing fields are rejected rather than silently clearing saved content. SQLite saves check the revision atomically, including after AI work, so a late response cannot overwrite newer work. The store is `backend/.data/projects.sqlite3`.
 
-Feedback is current only when the idea, constraints, answers, and draft match the reviewed content. Editing those fields marks old feedback as outdated. Versions preserve drafts before replacement and after review. Restoring a version replaces only the story plan, retaining the current brief and earlier versions.
+Feedback is current only when the idea, constraints, questions, answers, and draft match the reviewed content. Editing those fields marks old feedback as outdated. Changing a brief archives its previous questions and answers, including answers submitted in the same save. Reanalysis keeps answers only for unchanged questions and archives the old set before replacing it. Earlier choices remain visible for reference and are not automatically carried into a different brief.
+
+Versions preserve drafts, their source questions/answers, and feedback before replacement and after review. Restoring a version replaces only the story plan, retaining the current brief and earlier versions. Existing database records remain readable through defaults for the added history fields; old feedback without question context is marked outdated without deleting it.
 
 ### Original Generation API
 

@@ -2,8 +2,11 @@ import type { GenerateResponse, StoryPlanSection } from "./apiClient";
 
 export type StoryDraft = { title: string; logline: string; sections: StoryPlanSection[] };
 export type Feedback = GenerateResponse["evaluation"];
-export type DraftVersion = {
+export type ClarificationVersion = {
   id: string; created_at: string; idea: string; constraints: string[]; answers: string[];
+  questions: string[];
+};
+export type DraftVersion = ClarificationVersion & {
   draft: StoryDraft; feedback: Feedback | null;
 };
 export type Project = {
@@ -11,6 +14,7 @@ export type Project = {
   constraints: string[]; analysis: (GenerateResponse["analysis"] & { artifact_id: string }) | null; answers: string[];
   draft: StoryDraft | null; feedback: Feedback | null; feedback_is_current: boolean;
   versions: DraftVersion[];
+  clarification_history: ClarificationVersion[];
 };
 export type ProjectSummary = Pick<Project, "id" | "title" | "updated_at">;
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
@@ -82,8 +86,13 @@ function isProject(value: unknown): value is Project {
     && (value.draft === null || isDraft(value.draft))
     && (value.feedback === null || isFeedback(value.feedback))
     && typeof value.feedback_is_current === "boolean" && Array.isArray(value.versions)
-    && value.versions.every((version) => isRecord(version) && typeof version.id === "string"
-      && typeof version.created_at === "string" && typeof version.idea === "string"
-      && strings(version.constraints) && strings(version.answers) && isDraft(version.draft)
-      && (version.feedback === null || isFeedback(version.feedback)));
+    && value.versions.every((version) => isClarificationVersion(version) && isRecord(version)
+      && isDraft(version.draft) && (version.feedback === null || isFeedback(version.feedback)))
+    && Array.isArray(value.clarification_history)
+    && value.clarification_history.every(isClarificationVersion);
+}
+function isClarificationVersion(value: unknown): value is ClarificationVersion & Record<string, unknown> {
+  return isRecord(value) && typeof value.id === "string" && typeof value.created_at === "string"
+    && typeof value.idea === "string" && strings(value.constraints) && strings(value.questions)
+    && strings(value.answers);
 }

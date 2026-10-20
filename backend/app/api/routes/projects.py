@@ -8,6 +8,7 @@ from fastapi import APIRouter, HTTPException
 
 from app.api.routes.generate import _to_response, get_story_generation_service
 from app.api.schemas.projects import (
+    ClarificationVersion,
     DraftVersion,
     ProjectResponse,
     ProjectSummary,
@@ -78,6 +79,7 @@ def add_version(project: ProjectResponse) -> None:
             created_at=datetime.now(UTC).isoformat(),
             idea=project.idea,
             constraints=project.constraints,
+            questions=project.analysis.missing_information if project.analysis else [],
             answers=project.answers,
             draft=project.draft.model_copy(deep=True),
             feedback=project.feedback if project.feedback_is_current else None,
@@ -87,6 +89,25 @@ def add_version(project: ProjectResponse) -> None:
         ) == version.model_dump(exclude={"id", "created_at"}):
             return
         project.versions.append(version)
+
+
+def archive_clarifications(project: ProjectResponse, answers: list[str] | None = None) -> None:
+    answers = project.answers if answers is None else answers
+    if project.analysis is None or not any(answer.strip() for answer in answers):
+        return
+    version = ClarificationVersion(
+        id=str(uuid4()),
+        created_at=datetime.now(UTC).isoformat(),
+        idea=project.idea,
+        constraints=project.constraints,
+        questions=project.analysis.missing_information,
+        answers=answers,
+    )
+    if project.clarification_history and project.clarification_history[-1].model_dump(
+        exclude={"id", "created_at"}
+    ) == version.model_dump(exclude={"id", "created_at"}):
+        return
+    project.clarification_history.append(version)
 
 
 @router.get("", response_model=list[ProjectSummary])
@@ -110,7 +131,12 @@ def get_project(project_id: str):
 def update_project(project_id: str, request: ProjectUpdate):
     with project_errors():
         project = load_project(project_id, request.revision)
+        questions = project.analysis.missing_information if project.analysis else []
+        if len(request.answers) != len(questions):
+            raise HTTPException(422, "Câu trả lời phải khớp với bộ câu hỏi hiện tại.")
         brief_changed = project.idea != request.idea or project.constraints != request.constraints
+        if brief_changed:
+            archive_clarifications(project, request.answers)
         if project.draft != request.draft:
             add_version(project)
         for key in ("title", "idea", "constraints", "draft"):
@@ -130,6 +156,10 @@ def analyze_project(project_id: str, request: RevisionRequest):
         if not project.idea.strip():
             raise HTTPException(422, "Hãy nhập ý tưởng trước khi bắt đầu.")
         reasoning = get_story_generation_service().analyze(project.idea, constraints_for(project))
+        previous_answers = dict(
+            zip(project.analysis.missing_information if project.analysis else [], project.answers)
+        )
+        archive_clarifications(project)
         project.analysis = AnalysisResponse(
             artifact_id=reasoning.metadata.artifact_id,
             summary=next(
@@ -141,7 +171,9 @@ def analyze_project(project_id: str, request: RevisionRequest):
             ],
             missing_information=list(reasoning.open_questions[:3]),
         )
-        project.answers = [""] * len(project.analysis.missing_information)
+        project.answers = [
+            previous_answers.get(question, "") for question in project.analysis.missing_information
+        ]
         return save_project(project)
 
 
