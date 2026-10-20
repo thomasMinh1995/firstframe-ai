@@ -26,8 +26,10 @@ export default function Home() {
     || JSON.stringify(project.constraints) !== JSON.stringify(saved.constraints));
   const feedbackChanged = project !== null && saved !== null && JSON.stringify({
     idea: project.idea, constraints: project.constraints, answers: project.answers, draft: project.draft,
+    questions: project.analysis?.missing_information ?? [],
   }) !== JSON.stringify({
     idea: saved.idea, constraints: saved.constraints, answers: saved.answers, draft: saved.draft,
+    questions: saved.analysis?.missing_information ?? [],
   });
   const currentFeedback = project?.feedback_is_current && !feedbackChanged;
 
@@ -151,7 +153,7 @@ export default function Home() {
               placeholder="Mỗi dòng một ý, ví dụ: kết thúc mở; hai nhân vật; chỉ một căn nhà."
               onChange={(event) => setProject({ ...project, constraints: event.target.value.split("\n") })} />
             {briefChanged && (project.analysis || project.draft) && <p className="form-message">Ý tưởng đã thay đổi. Làm rõ lại trước khi tạo
-              plan mới; bản thảo hiện có vẫn được giữ.</p>}
+              plan mới; bản thảo và câu trả lời trước đó sẽ được giữ trong lịch sử.</p>}
             {(!project.analysis || briefChanged) && <button disabled={!project.idea.trim()}
               onClick={() => action("analyze")}>Cùng làm rõ ý tưởng</button>}
           </section>
@@ -200,6 +202,14 @@ export default function Home() {
             <button onClick={() => action("review")}>Nhận phản hồi trên bản hiện tại</button>
           </section>}
         </fieldset>
+        {!!project.clarification_history.length && <section className="panel version-history">
+          <h2>Các lựa chọn trước đây</h2>
+          <p>Bạn có thể tham khảo và chép lại câu trả lời phù hợp. Các lựa chọn này không tự áp dụng cho ý tưởng mới.</p>
+          {[...project.clarification_history].reverse().map((version) => <details key={version.id}>
+            <summary>{new Date(version.created_at).toLocaleString("vi-VN")} · {version.idea}</summary>
+            <PastAnswers questions={version.questions} answers={version.answers} />
+          </details>)}
+        </section>}
         {project.feedback && <section className="feedback-section" aria-label="Phản hồi">
           <p className={currentFeedback ? "operation-status" : "form-message"} role="status">
             {currentFeedback ? "Phản hồi cho đúng bản hiện tại."
@@ -215,6 +225,8 @@ export default function Home() {
             <summary>Bản {project.versions.length - index} · {new Date(version.created_at).toLocaleString("vi-VN")}
               {version.feedback ? " · Có phản hồi" : " · Bản lưu trước khi tạo lại"}</summary>
             <p className="preserve-lines">{version.draft.title}{"\n"}{version.draft.logline}</p>
+            <p className="preserve-lines">Ý tưởng của bản này: {version.idea}</p>
+            <PastAnswers questions={version.questions} answers={version.answers} />
             {version.draft.sections.map((section, i) => <div key={i}>
               <h3>{sectionLabels[section.title] ?? section.title}</h3>
               <p className="preserve-lines">{section.content}</p>
@@ -237,4 +249,11 @@ export default function Home() {
 
 function message(error: unknown) {
   return error instanceof Error ? error.message : "Có lỗi xảy ra. Hãy thử lại.";
+}
+
+function PastAnswers({ questions, answers }: { questions: string[]; answers: string[] }) {
+  return <dl>{questions.map((question, index) => <div key={index}>
+    <dt>{question}</dt>
+    <dd className="preserve-lines">{answers[index] || "Chưa trả lời"}</dd>
+  </div>)}</dl>;
 }

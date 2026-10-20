@@ -33,17 +33,21 @@ class RevisionRequest(BaseModel):
 class ProjectUpdate(RevisionRequest):
     title: str = Field(min_length=1, max_length=200)
     idea: str = Field(max_length=5000)
-    constraints: list[ShortText] = Field(default_factory=list, max_length=20)
-    answers: list[ShortText] = Field(default_factory=list, max_length=3)
-    draft: StoryDraft | None = None
+    constraints: list[ShortText] = Field(max_length=20)
+    answers: list[ShortText] = Field(max_length=3)
+    draft: StoryDraft | None
 
 
-class DraftVersion(BaseModel):
+class ClarificationVersion(BaseModel):
     id: str
     created_at: str
     idea: str
     constraints: list[str]
+    questions: list[str] = Field(default_factory=list)
     answers: list[str]
+
+
+class DraftVersion(ClarificationVersion):
     draft: StoryDraft
     feedback: EvaluationResponse | None = None
 
@@ -61,6 +65,7 @@ class ProjectResponse(BaseModel):
     feedback: EvaluationResponse | None = None
     reviewed_content: str | None = None
     versions: list[DraftVersion] = Field(default_factory=list)
+    clarification_history: list[ClarificationVersion] = Field(default_factory=list)
 
     def content_key(self) -> str:
         return json.dumps(
@@ -68,6 +73,7 @@ class ProjectResponse(BaseModel):
                 "idea": self.idea,
                 "constraints": self.constraints,
                 "answers": self.answers,
+                "questions": self.analysis.missing_information if self.analysis else [],
                 "draft": self.draft.model_dump() if self.draft else None,
             },
             ensure_ascii=False,
