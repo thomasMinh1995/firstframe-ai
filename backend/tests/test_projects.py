@@ -1,3 +1,4 @@
+import json
 from copy import deepcopy
 
 import pytest
@@ -82,6 +83,27 @@ def test_questions_gate_generation_and_review_uses_the_saved_edited_draft(projec
     assert "EDITED_ENDING" in provider.requests[-1].input_text
     assert "He wants to apologize" in provider.requests[-1].input_text
     assert "Only one apartment" in provider.requests[-1].input_text
+    review_input = provider.requests[-1].input_text
+    context = json.loads(
+        review_input.split("Creator intent and decisions:\n", 1)[1].split("\n\n", 1)[0]
+    )
+    assert context["clarifications"] == [
+        {"question": question, "answer": answer}
+        for question, answer in zip(project["analysis"]["missing_information"], project["answers"])
+    ]
+    current_draft = json.loads(
+        review_input.split("Current draft (JSON data):\n", 1)[1].split("\n\n", 1)[0]
+    )
+    assert current_draft == {
+        "title": edited_draft["title"],
+        "logline": edited_draft["logline"],
+        "sections": [
+            {"title": section["title"], "content": section["content"]}
+            for section in edited_draft["sections"]
+        ],
+    }
+    assert "Resolve the short film through a visible choice or image." not in review_input
+    assert "He gives Linh his blessing at the airport curb." not in review_input
     assert project["draft"] == edited_draft
     assert project["feedback_is_current"] is True
     assert len(project["versions"]) == 2
@@ -280,8 +302,6 @@ def test_existing_database_records_keep_their_drafts_and_feedback(project_client
     legacy.pop("clarification_history", None)
     for version in legacy["versions"]:
         version.pop("questions", None)
-    import json
-
     old_content = json.loads(legacy["reviewed_content"])
     old_content.pop("questions", None)
     legacy["reviewed_content"] = json.dumps(old_content, ensure_ascii=False, sort_keys=True)

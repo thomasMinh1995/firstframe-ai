@@ -10,6 +10,7 @@ It was chosen because short films are constrained enough for a hackathon demo bu
 
 ```text
 prompts/
+  story_mentor_prompt.md
   story_planner_prompt.md
   script_critic_prompt.md
 
@@ -33,6 +34,10 @@ output_schema.json
 
 ## Prompts
 
+The Story Mentor prompt guides the Reasoning Layer to reflect the supplied intent
+and ask zero to three consequential, specific questions. Explicit ambiguity and
+deferred decisions are respected; a clear brief may need no questions.
+
 The Story Planner prompt guides the Planning Layer to return a structured `story_plan` object.
 
 The Script Critic prompt guides the Evaluation Layer to return:
@@ -43,7 +48,18 @@ The Script Critic prompt guides the Evaluation Layer to return:
 - `weaknesses`
 - `suggestions`
 
-Both prompts instruct the model to preserve JSON field names in English while localizing field values to the user's language.
+All three prompts preserve JSON field names in English while localizing field values.
+Mentor and critic use the explicit target response language supplied by the application.
+
+The critic receives author intent and paired questions/answers separately from the
+current draft. AI analysis is not promoted to an author decision. Generic section
+purpose text is excluded from the draft sent to the critic. Each priority must
+identify evidence in the current draft, explain its effect relative to intent,
+and offer a corresponding small revision or decision. An intentional open ending
+or observational form is not inherently a weakness. No previous draft is sent,
+so feedback must not claim to compare revisions.
+
+See [prompt evaluation](prompt-evaluation.md) for behavioral checks with a real model.
 
 ## Knowledge
 
