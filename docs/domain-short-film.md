@@ -59,6 +59,11 @@ and offer a corresponding small revision or decision. An intentional open ending
 or observational form is not inherently a weakness. No previous draft is sent,
 so feedback must not claim to compare revisions.
 
+The same authoritative creator context is also passed to the planner, including
+the compatibility generation endpoint. Reanalysis passes existing decisions to
+the mentor and retains them if the questions change or disappear. Changing the
+idea or constraints resets that active context; history is not reused as new intent.
+
 See [prompt evaluation](prompt-evaluation.md) for behavioral checks with a real model.
 
 ## Knowledge
