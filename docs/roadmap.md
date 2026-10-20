@@ -94,13 +94,14 @@ Automated tests cover the question gate, persistence across app instances, revie
 - Preserve the selected draft's wording, section order, and incomplete content.
 - Keep AI feedback, rubric scores, and analysis outside the exported document.
 - Save pending edits before exporting the current draft; export history without restoring or changing the working draft.
+- Distinguish save effects from the read-only export step; preserve unsaved buffers on save failures and historical exports, and pin the selected source across retries.
 - Work without an AI provider and handle stale revisions without exporting a different draft.
 
 **User outcome:** A readable development document to share for feedback, clearly labeled as a story plan rather than a completed screenplay.
 
 **Status:** Planning only; no PDF export implementation is delivered yet. See [Feature #5](https://github.com/thomasMinh1995/firstframe-ai/issues/5) and the [implementation plan](plans/story-plan-pdf-export.md). Merging the planning PR does not complete the feature or close the issue.
 
-**Validation:** Exporting historical version A while working on B produces A's content, excludes AI feedback, and preserves B. Vietnamese text and multi-page layout are visually verified.
+**Validation:** Exporting historical version A while working on B produces A's content, excludes AI feedback from the document and PDF metadata, and preserves B's unsaved buffer. Late responses and retries cannot overwrite edits or silently select a newer revision. Vietnamese text and multi-page layout must be visually verified during implementation.
 
 ## Milestone 2: Build an Editable Scene Outline
 
