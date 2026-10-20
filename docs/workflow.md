@@ -38,6 +38,27 @@ GenerateResponse
 
 ## API Flow
 
+### Project Workflow (P0)
+
+The current UI uses `/api/projects` and pauses for the creator's decisions:
+
+```text
+Create/Open Project -> Save Idea -> Analyze -> Answer/Defer Questions
+  -> Generate Story Plan -> Edit -> Save -> Review -> Reopen/Revise
+```
+
+- `GET/POST /api/projects`: list or create projects.
+- `GET/PUT /api/projects/{id}`: open or save a project.
+- `POST /api/projects/{id}/analyze`: analyze the saved idea and return up to three questions, without generating a plan.
+- `POST /api/projects/{id}/plan`: use the saved answers and constraints to plan and evaluate; rejects unanswered questions.
+- `POST /api/projects/{id}/review`: evaluate the saved edited plan without rewriting it.
+
+Updates and AI actions include the current `revision`. SQLite saves check that revision atomically, including after AI work, so a late response cannot overwrite newer work. The store is `backend/.data/projects.sqlite3`.
+
+Feedback is current only when the idea, constraints, answers, and draft match the reviewed content. Editing those fields marks old feedback as outdated. Versions preserve drafts before replacement and after review. Restoring a version replaces only the story plan, retaining the current brief and earlier versions.
+
+### Original Generation API
+
 `POST /api/generate`
 
 Request:

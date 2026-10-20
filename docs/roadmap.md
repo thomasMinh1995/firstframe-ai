@@ -1,6 +1,18 @@
 # Roadmap
 
-## Completed
+## Product Direction
+
+FirstFrame helps beginners complete their first short-film screenplay through guided story development and specific feedback, while keeping creative decisions with the author.
+
+The first users are Vietnamese-speaking beginners with an idea or personal experience they want to turn into a screenplay. A crew and filming schedule are not prerequisites.
+
+```text
+Idea -> Story Development -> Scene Outline -> Write and Revise -> Complete Screenplay
+```
+
+The current MVP supports the project clarification and story-plan revision loop in Milestone 1. Later milestones extend that foundation toward a complete screenplay and remain planned work. Milestones describe delivery order rather than fixed dates.
+
+## Completed MVP Foundation
 
 ### Foundation
 
@@ -18,7 +30,7 @@
 - Reasoning, Planning, and Evaluation interfaces
 - API transport models separated from internal artifacts
 
-### End-To-End Workflow
+### Story-Plan Generation Workflow
 
 - `POST /api/generate`
 - Reasoning -> Planning -> Evaluation orchestration
@@ -61,44 +73,81 @@
 - Presentation-ready Analysis, Story Plan, and Evaluation cards
 - Rubric score indicators
 
-## Near-Term Next Work
+## Milestone 1: Continue and Revise a Story Project — Implemented, Awaiting User Validation
 
-- Deploy backend and frontend for public judging.
-- Add a loaded reasoning prompt instead of inline reasoning instructions.
-- Improve frontend empty/error states.
-- Add smoke tests for the frontend UI.
-- Add a demo seed mode or fixture path for low-risk live presentations.
+- Save and resume projects, including the creator's decisions and story-plan versions.
+- Collect creative intent, desired length and tone, and practical constraints such as cast size and available locations.
+- Ask focused follow-up questions and let the creator answer before developing the plan further.
+- Let the creator edit the story plan and request feedback on the revised version.
 
-## Future Product Work
+Implemented with local SQLite persistence, explicit saves, up to three clarification questions, editable story-plan sections, version history and restoration, and feedback freshness checks. Stale saves are rejected to protect edits made in another window. AI actions save pending edits before running. JSON backup downloads are available; account sync and backup import are not implemented.
 
-- Save/resume story plans.
-- Export story plans to Markdown or PDF.
-- Add iteration loops after mentor questions.
-- Add user-selectable tone, budget, length, and production constraints.
-- Add streaming or progress events if provider/runtime support is introduced.
+Automated tests cover the question gate, persistence across app instances, review of the exact edited draft, stale-save conflicts, provider failure, and preserving replaced drafts. Live model quality and beginner usability still need validation.
 
-## Future Engineering Work
+**User outcome:** A chosen story plan that reflects the creator's intent and resources, with a clear next step.
 
-- Dynamic domain discovery.
-- Additional provider adapters.
-- More explicit application service boundaries.
-- More complete structured contracts for frontend rendering.
-- Observability that remains lightweight and privacy-conscious.
+**Validation:** A beginner can return to a saved project, revise the plan after answering questions, and explain the choices they made.
 
-## Future Domains
+## Milestone 2: Build an Editable Scene Outline
 
-- YouTube storytelling
-- Marketing campaigns
-- Game narrative design
-- Book writing
-- Educational storytelling
+- Develop the selected story plan into an ordered list of scenes.
+- Clarify what happens in each scene, its purpose, and how it connects to the story.
+- Let the creator add, remove, reorder, and revise scenes.
+- Give specific feedback on missing connections, repetition, and whether events can be expressed on screen.
 
-## Not In Current MVP
+**User outcome:** A scene outline clear enough to begin writing the screenplay.
 
-- Authentication
-- Database persistence
-- RAG or vector search
-- Multi-agent orchestration
-- LangGraph
-- Payment or account management
+**Validation:** The creator can use the outline to write scenes and understand the effect of changing their order or purpose.
+
+## Milestone 3: Complete and Revise the Screenplay
+
+- Support writing and editing action and dialogue scene by scene.
+- Anchor feedback to specific scenes or passages, explaining the issue and offering revision options.
+- Let the creator choose which suggestions to apply and retain draft versions.
+- Support at least one feedback-and-revision round and export a readable screenplay.
+- Use the rubric as a discussion aid, adapted to creative intent; an AI score is not a completion gate.
+
+**User outcome:** A complete short-film screenplay, from first scene to last, revised and ready to share for reading and further development.
+
+**Completion means:** All scenes are written, action and dialogue communicate the intended story, at least one feedback-and-revision round has taken place, and the draft can be exported. Shooting or producing a film is not required.
+
+**Validation:** Beginners can complete and revise drafts. Experienced readers review examples of feedback and before/after drafts to check whether suggestions are specific, useful, and respectful of the author's intent.
+
+## Later Optional Extension: Rough Scene Illustrations
+
+Consider this only after validating the core screenplay journey.
+
+- Provide simple scene sketches showing characters, positions, and key actions based on the screenplay.
+- Let the creator correct the sketches when they misrepresent a scene.
+- Use the sketches to reveal unclear action or staging and inform further script revision.
+
+**User outcome:** An optional visual aid for understanding the screenplay. Illustrations are not required to complete a project and do not extend the scope into animation, video generation, or production management.
+
+## Product Validation
+
+Recruit a small pilot of beginners working on their first screenplay. Track:
+
+- How many starting projects reach a completed screenplay, and how long it takes.
+- Whether creators can act on feedback and explain their revision decisions.
+- Reasons projects stall or are abandoned.
+- Experienced readers' assessment of feedback and draft improvement.
+- How much manual mentor support each project needs.
+
+Run a small pilot as soon as Milestone 1 is usable, using manual support to learn what later milestones need. Validate the full writing journey once Milestone 3 is available. Generation counts and AI rubric scores alone do not demonstrate success.
+
+## Engineering Priorities
+
+Keep the existing Harness and domain assets as the foundation. Add persistence, contracts, and checks as required by each milestone. Reliability work, including error handling and pilot access, should support the writing journey.
+
+Dynamic domain discovery, additional providers, RAG, multi-agent orchestration, streaming, and architecture refactoring are not prerequisites; revisit them only when a demonstrated product need justifies the work.
+
+## Outside This Roadmap
+
+- Filming preparation, shooting schedules, and crew management.
+- Shooting, video generation, editing, and screenings.
+- Automatic expansion into feature films or television series, or producer matchmaking.
+- Other creative domains such as marketing, games, books, or educational storytelling.
+- Payment and account-management features beyond access needed for a pilot.
+
+Feature-film potential may remain a long-term ambition. It is not a requirement for a successful first short-film screenplay.
 

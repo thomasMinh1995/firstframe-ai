@@ -28,6 +28,8 @@ body {
 }
 
 button,
+input,
+select,
 textarea {
   font: inherit;
 }
@@ -577,6 +579,65 @@ button:disabled {
   color: var(--foreground);
   font-size: 0.9rem;
   font-weight: 700;
+}
+
+.project-toolbar,
+.save-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.project-toolbar select {
+  flex: 1;
+  min-width: 180px;
+}
+
+.storage-note {
+  flex-basis: 100%;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.save-toolbar {
+  margin: 20px 0;
+}
+
+.save-toolbar p { margin: 0 auto 0 0; }
+.secondary { color: var(--accent); background: #e5efec; }
+.operation-status { margin: 18px 0; color: var(--accent); font-weight: 700; }
+.project-fields { border: 0; padding: 0; margin: 0; min-width: 0; }
+.form-stack { display: grid; gap: 12px; margin-top: 20px; }
+.form-stack h2 { margin-bottom: 0; }
+.form-stack p { margin-bottom: 0; }
+.question-block, .draft-section { display: grid; gap: 10px; }
+.question-block + .question-block { border-top: 1px solid var(--line); padding-top: 18px; }
+.short-textarea { min-height: 90px; }
+.preserve-lines { white-space: pre-wrap; overflow-wrap: anywhere; }
+.feedback-section, .version-history, .empty-project { margin-top: 24px; }
+.version-history details { border-top: 1px solid var(--line); padding: 16px 0; }
+.rubric-details { margin-top: 20px; }
+summary { cursor: pointer; font-weight: 700; margin-bottom: 14px; }
+input, select {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+  color: var(--foreground);
+  background: var(--soft);
+  min-width: 0;
+  width: 100%;
+}
+input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+.version-history .report-card { margin-bottom: 18px; }
+
+@media (max-width: 600px) {
+  .page-shell { padding: 24px 14px; }
+  .project-toolbar select { flex-basis: 100%; }
+  .save-toolbar button { flex-grow: 1; }
 }
 
 @keyframes reveal-report {

@@ -106,6 +106,32 @@ const resultCopy = {
 
 type ResultCopy = (typeof resultCopy)[UiLanguage];
 
+export function StoryFeedback({ evaluation, uiLanguage }: {
+  evaluation: GenerateResponse["evaluation"];
+  uiLanguage: UiLanguage;
+}) {
+  const copy = resultCopy[uiLanguage];
+  const shaped = shapeEvaluation({ evaluation });
+  return (
+    <ReportCard eyebrow={copy.evaluation} title={uiLanguage === "vi" ? "Góp ý cho lần sửa tiếp theo" : copy.evaluationTitle}
+      icon="✍️" delayClass="reveal-1">
+      <p>{uiLanguage === "vi" ? "Đây là gợi ý tham khảo. Bạn quyết định điều gì phù hợp với câu chuyện của mình."
+        : "These are suggestions. You decide what fits your story."}</p>
+      <div className="feedback-grid">
+        <SectionList title={copy.strengths} items={shaped.strengths} emptyText={copy.emptyStrengths} />
+        <SectionList title={copy.weaknesses} items={shaped.weaknesses} emptyText={copy.emptyWeaknesses} />
+        <SectionList title={copy.suggestions} items={shaped.suggestions} emptyText={copy.emptySuggestions} />
+      </div>
+      <details className="rubric-details">
+        <summary>{uiLanguage === "vi" ? "Xem điểm tham khảo" : "Reference scores"}</summary>
+        <div className="scores">{shaped.scores.map((score) => <span key={score.label}>
+          {score.label}: {score.value}/5
+        </span>)}</div>
+      </details>
+    </ReportCard>
+  );
+}
+
 export function StoryResultCards({ result, uiLanguage }: StoryResultCardsProps) {
   const copy = resultCopy[uiLanguage];
   const analysis = shapeAnalysis(result);
@@ -293,7 +319,7 @@ function shapeStoryPlan(result: GenerateResponse, copy: ResultCopy) {
   });
 }
 
-function shapeEvaluation(result: GenerateResponse) {
+function shapeEvaluation(result: Pick<GenerateResponse, "evaluation">) {
   return {
     scores: Object.entries(result.evaluation.rubric_scores).map(([criterion, value]) => ({
       label: formatLabel(criterion),
