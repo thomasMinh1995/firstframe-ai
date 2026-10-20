@@ -88,6 +88,20 @@ Automated tests cover the question gate, persistence across app instances, revie
 
 **Validation:** A beginner can return to a saved project, revise the plan after answering questions, and explain the choices they made.
 
+## Milestone 1.1: Export a Selected Story Plan as PDF — Planned
+
+- Export the current saved revision or a selected historical story-plan version.
+- Preserve the selected draft's wording, section order, and incomplete content.
+- Keep AI feedback, rubric scores, and analysis outside the exported document.
+- Save pending edits before exporting the current draft; export history without restoring or changing the working draft.
+- Work without an AI provider and handle stale revisions without exporting a different draft.
+
+**User outcome:** A readable development document to share for feedback, clearly labeled as a story plan rather than a completed screenplay.
+
+**Status:** Planning only; no PDF export implementation is delivered yet. See [Feature #5](https://github.com/thomasMinh1995/firstframe-ai/issues/5) and the [implementation plan](plans/story-plan-pdf-export.md). Merging the planning PR does not complete the feature or close the issue.
+
+**Validation:** Exporting historical version A while working on B produces A's content, excludes AI feedback, and preserves B. Vietnamese text and multi-page layout are visually verified.
+
 ## Milestone 2: Build an Editable Scene Outline
 
 - Develop the selected story plan into an ordered list of scenes.
