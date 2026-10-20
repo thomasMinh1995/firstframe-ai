@@ -93,7 +93,9 @@ The Reasoning Layer:
 - produces mentor-style notes/questions;
 - returns a `ReasoningArtifact`.
 
-Current implementation: OpenAI-backed structured response with inline reasoning instructions.
+Current implementation: OpenAI-backed structured response using `story_mentor_prompt.md`.
+The mentor asks zero to three questions about consequential unresolved choices,
+grounded in the creator's brief rather than a mandatory story template.
 
 ## Planning Step
 
