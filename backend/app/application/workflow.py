@@ -262,11 +262,14 @@ class LLMPlanningLayer(PlanningLayer):
         prompt_loader: PromptLoader,
         knowledge_loader: KnowledgeLoader,
         example_loader: ExampleLoader,
+        *,
+        compact_context: bool = False,
     ) -> None:
         self._provider = provider
         self._prompt_loader = prompt_loader
         self._knowledge_loader = knowledge_loader
         self._example_loader = example_loader
+        self._compact_context = compact_context
 
     def plan(self, reasoning: ReasoningArtifact, domain: DomainPlugin) -> PlanningArtifact:
         knowledge = {
@@ -275,10 +278,13 @@ class LLMPlanningLayer(PlanningLayer):
             "story_patterns": self._knowledge_loader.load("story_patterns", domain),
         }
         examples = self._example_loader.load(domain, limit=MAX_PLANNING_EXAMPLES)
+        input_text = _reasoning_input(reasoning, knowledge, examples)
+        if self._compact_context:
+            input_text = compact_qwen_planning_input(input_text)
         result = self._provider.request_structured(
             StructuredRequest(
                 instructions=self._prompt_loader.load("story_planner", domain),
-                input_text=_reasoning_input(reasoning, knowledge, examples),
+                input_text=input_text,
                 response_model=_PlanningOutput,
                 stage="planning",
             )
@@ -461,7 +467,9 @@ def create_story_generation_service(
 ) -> StoryGenerationService:
     selected_provider = provider if provider is not None else create_provider()
     selected_provider = recording_provider(selected_provider)
-    prompt_loader = PromptLoader()
+    metadata = selected_provider.metadata
+    qwen_profile = metadata.provider == "ollama" and metadata.model == "qwen2.5:3b"
+    prompt_loader = PromptLoader(variant="ollama-qwen2.5-3b" if qwen_profile else None)
     knowledge_loader = KnowledgeLoader()
     example_loader = ExampleLoader()
     registry = DomainRegistry(
@@ -495,8 +503,12 @@ def create_story_generation_service(
             prompt_loader,
             knowledge_loader,
             example_loader,
+            compact_context=qwen_profile,
         ),
-        evaluation_layer=LLMEvaluationLayer(selected_provider, prompt_loader, knowledge_loader),
+        # Compact critic trials broke intent/feedback pairing; retain its full prompt and context.
+        evaluation_layer=LLMEvaluationLayer(
+            selected_provider, PromptLoader() if qwen_profile else prompt_loader, knowledge_loader
+        ),
     )
     return StoryGenerationService(harness)
 
@@ -610,6 +622,12 @@ def _reasoning_input(
         f"Short-film domain knowledge:\n{json.dumps(knowledge, ensure_ascii=False)}\n\n"
         f"Reusable domain examples:\n{json.dumps(_example_payloads(examples), ensure_ascii=False)}"
     )
+
+
+def compact_qwen_planning_input(input_text: str) -> str:
+    # Keep every author decision and AI note; encyclopedic references distract this small model.
+    context, separator, _ = input_text.partition("\n\nShort-film domain knowledge:\n")
+    return context if separator else input_text
 
 
 def _example_payloads(examples: tuple[DomainExample, ...]) -> list[dict[str, object]]:

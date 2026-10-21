@@ -10,8 +10,9 @@ class PromptNotFoundError(FileNotFoundError):
 class PromptLoader:
     """Loads and caches prompt files for the active creative domain."""
 
-    def __init__(self, domains_root: Path | None = None) -> None:
+    def __init__(self, domains_root: Path | None = None, *, variant: str | None = None) -> None:
         self._domains_root = domains_root or Path(__file__).resolve().parents[3] / "domains"
+        self._variant = variant
         self._cache: dict[tuple[str, str], str] = {}
 
     def load(self, logical_name: str, domain: DomainPlugin) -> str:
@@ -31,9 +32,7 @@ class PromptLoader:
         return prompt
 
     def _prompt_path(self, logical_name: str, domain: DomainPlugin) -> Path:
-        return (
-            self._domains_root
-            / domain.metadata.domain_id
-            / "prompts"
-            / f"{logical_name}_prompt.md"
-        )
+        directory = self._domains_root / domain.metadata.domain_id / "prompts"
+        if self._variant:
+            directory /= self._variant
+        return directory / f"{logical_name}_prompt.md"

@@ -162,8 +162,16 @@ configuration. Models are never downloaded automatically. Choose a chat model fr
 `ollama list`; embedding models such as `nomic-embed-text` cannot generate stories.
 
 The Ollama adapter uses native `/api/chat`, a JSON Schema in `format`, and Pydantic
-validation. Both providers receive the same prompts, creator choices, and current
-draft. Local generation can be slower and its creative quality depends on the model.
+validation. Both providers retain the creator choices, current draft and output
+contracts. `ollama / qwen2.5:3b` uses compact prompts for Vietnamese output under
+`domains/short-film/prompts/ollama-qwen2.5-3b/`; its planning input retains all author
+context and reasoning notes but omits the long domain knowledge and example library.
+The critic keeps its existing prompt, full current draft, author context and rubric:
+the experimental compact critic regressed on intent and feedback pairing and was
+not enabled. See the recorded comparison in `docs/datasets.md`.
+Other provider/model combinations use the existing prompts and references. Exact
+effective prompts and inputs are still recorded in the dataset for comparison.
+Local generation can be slower and its creative quality depends on the model.
 The context size is configurable for longer briefs; do not lower it below the input
 size because Ollama may truncate older input. No provider switch is attempted after
 an OpenAI request fails: an invalid key, timeout, or quota error stays an error.

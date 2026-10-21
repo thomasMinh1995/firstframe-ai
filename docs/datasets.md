@@ -354,3 +354,75 @@ Additional conflict endpoints:
 - `GET /api/datasets/samples/{id}/branches/{branch_id}`: compare current and saved.
 - `POST /api/datasets/samples/{id}/branches/{branch_id}/restore`: accepts the latest
   local-state token, restores the branch and requires review again.
+
+## Comparing Qwen 2.5 3B prompt profiles
+
+The `ollama / qwen2.5:3b` profile uses shorter instructions and compact reference
+context. It retains every creator decision and reasoning note for planning.
+Only the long planning domain knowledge and example library are omitted.
+The critic keeps its existing prompt, complete draft, author context and rubric;
+experimental compact critics were rejected after semantic regressions.
+Other model/provider combinations keep
+the default prompts and references. All actual effective prompts and inputs are
+recorded as usual, with their hashes; no original recording is rewritten.
+
+Replay a JSON recording or JSONL dataset against baseline instructions stored in
+that dataset and the current profile, using the same model, schema, temperature,
+context length and seeds:
+
+```bash
+PYTHONPATH=backend backend/.venv/bin/python backend/scripts/compare_ollama_prompts.py \
+  --dataset demo/datasets/kitchen-waiting.jsonl \
+  --output /tmp/qwen-prompt-comparison.json \
+  --seeds 42 73 --stages reasoning planning
+```
+
+Use a fresh output path: existing reports are never overwritten. `--stages`
+can select reasoning, planning or evaluation; `--variants before` or
+`--variants after` permits a focused rerun. The script calls local Ollama only,
+stores every result (including failed responses) with inputs, prompts, hashes,
+raw outputs and durations, and never writes project or human-review databases.
+
+This is a comparison of individual recorded steps. Downstream drafts stay fixed,
+so it does not measure the quality of an entirely regenerated workflow. After
+planning omits reference material; evaluation is unchanged in the active profile.
+inputs are therefore not byte-identical, but creator context and draft are kept.
+Repetition indicators count repeated four-word sequences across output values;
+they can also count legitimate references to the same story detail. English-word
+markers are screening signals, not language validation. Read the actual pairs
+for invented relationships/events, unwanted dialogue or locations, changes to
+ambiguity, repeated advice, and language. No metric automatically approves a sample
+for training or demo.
+
+### Recorded comparison, 2026-10-21
+
+Evidence: `demo/evaluations/qwen2.5-3b-prompts-2026-10-21.json`. This contains the
+actual inputs, effective prompts, schemas, seed/model provenance, raw outputs,
+screening indicators and qualitative notes. It is an evaluation report, not an
+approved workflow bundle for import or training.
+
+The active reasoning/planning changes were compared across two recorded steps
+and seeds 42/73: four pairs, eight successful structured outputs. Both planning
+baselines invented an absent daughter; neither final planning sample names the
+absent person. All four final reasoning/planning samples are in Vietnamese.
+
+| Signal (mean over two seeds) | Before | After |
+| --- | ---: | ---: |
+| Planning text words | 289 | 173 |
+| Planning repeated four-word fraction | 15.52% | 10.72% |
+| Planning input characters | 28,097 | 847 |
+| Reasoning repeated four-word fraction | 3.28% | 0% |
+
+The report also keeps four baseline critic outputs and three rejected critic
+experiments, each with four outputs. Although the experimental critics improved
+Vietnamese, some introduced dialogue/returns against the brief, copied a
+calibration example, or returned mismatched weakness/suggestion arrays. These
+experiments are **not enabled**; the application keeps the original critic prompt
+and full rubric/context. Mixed-language critic feedback and unreliable intent
+judgments remain unresolved.
+
+This is a small synthetic story used for tuning, not held-out evidence or a general
+quality guarantee. The final planner still invents some emotional/relationship
+pressure and has awkward wording; one camera description is ambiguous. Human
+review remains necessary. No samples were automatically approved. Timings are
+recorded for inspection but hardware load and prompt caching were not controlled.
