@@ -85,7 +85,9 @@ FirstFrame supports Vietnamese and English AI output. The backend makes the same
 language decision for clarification, planning, review and `/api/generate`; the
 frontend does not guess independently. Automatic detection matches whole words
 after Unicode normalization. It needs at least two distinct known words and more
-than twice as many matching words as the other language. A substring such as `con`
+than twice as many matching words as the other language, covering at least one
+third of the input words. Place-name tokens `Việt` and `Nam` are not language hints.
+A substring such as `con`
 inside `concert`, an accent, or a proper name alone is insufficient evidence.
 
 For uncertain, short, unaccented or balanced bilingual ideas, automatic mode asks
@@ -102,6 +104,9 @@ default to automatic mode without rewriting their data or invalidating compatibl
 automatic-mode feedback. Legacy clients that omit the field preserve a saved
 explicit choice. The interface remains Vietnamese regardless of AI output language;
 display labels do not rename JSON keys, rewrite author text or translate quotations.
+Mentor and planner prompts also follow the explicit output choice and instruct the
+model to retain author terminology and source quotations. Model compliance is not
+guaranteed: the Qwen review sample still translated an author-supplied film title.
 
 See the [language detection and UI checks](docs/evaluations/language-detection-ui-2026-10-21.md)
 for regression cases and real Ollama review evidence.

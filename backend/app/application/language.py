@@ -7,7 +7,7 @@ from typing import Literal
 ResponseLanguage = Literal["auto", "vi", "en"]
 
 VI_WORDS = frozenset(
-    ["một", "người", "của", "và", "muốn", "học", "hành", "trình", "hướng", "dẫn", "các", "bạn", "làm", "bài", "tập", "không", "được", "vẫn", "tiếp", "tục", "giúp", "khi", "tôi", "là", "có", "để", "với", "nhưng", "trong", "chưa", "đến", "từ", "sau", "về", "gia", "đình", "mẹ", "cha", "con", "trước", "rời", "việt", "nam", "câu", "chuyện", "phim", "nhân", "vật", "tên", "chờ", "đợi", "giữ", "kết", "mở", "chỉ", "quay", "hai", "căn", "bếp", "cảm", "giác", "im", "lặng", "thoại", "xin", "lỗi", "gái", "trai", "mình", "cô", "ấy", "ông", "anh", "em", "này", "những", "lựa", "chọn", "quyết", "định", "thấy", "biết", "cuộc", "sống"]
+    ["một", "người", "của", "và", "muốn", "học", "hành", "trình", "hướng", "dẫn", "các", "bạn", "làm", "bài", "tập", "không", "được", "vẫn", "tiếp", "tục", "giúp", "khi", "tôi", "là", "có", "để", "với", "nhưng", "trong", "chưa", "đến", "từ", "sau", "về", "gia", "đình", "mẹ", "cha", "con", "trước", "rời", "câu", "chuyện", "phim", "nhân", "vật", "tên", "chờ", "đợi", "giữ", "kết", "mở", "chỉ", "quay", "hai", "căn", "bếp", "cảm", "giác", "im", "lặng", "thoại", "xin", "lỗi", "gái", "trai", "mình", "cô", "ấy", "ông", "anh", "em", "này", "những", "lựa", "chọn", "quyết", "định", "thấy", "biết", "cuộc", "sống"]
 )
 EN_WORDS = frozenset(
     ["a", "an", "the", "and", "or", "but", "of", "to", "for", "with", "without", "from", "in", "on", "at", "before", "after", "while", "who", "whose", "that", "this", "these", "those", "is", "are", "was", "were", "be", "has", "have", "her", "his", "their", "he", "she", "they", "we", "you", "i", "it", "my", "our", "not", "wants", "want", "helps", "help", "young", "named", "tutor", "learner", "student", "mother", "father", "daughter", "son", "story", "idea", "film", "short", "quiet", "kitchen", "waits", "waiting", "goodbye", "leaves", "meet", "must", "one", "last", "time", "learning", "exercise"]
@@ -23,9 +23,11 @@ def detect_response_language(text: str) -> str | None:
     words = re.findall(r"[^\W\d_]+", unicodedata.normalize("NFC", text).casefold())
     vi = [word for word in words if word in VI_WORDS]
     en = [word for word in words if word in EN_WORDS]
-    if len(set(vi)) >= 2 and len(vi) > 2 * len(en):
+    # Sparse shared words (French `film`, `son`) cannot establish a language.
+    # Place-name tokens `Việt`, `Nam` are deliberately not Vietnamese hints.
+    if len(set(vi)) >= 2 and len(vi) > 2 * len(en) and 3 * len(vi) >= len(words):
         return "Vietnamese"
-    if len(set(en)) >= 2 and len(en) > 2 * len(vi):
+    if len(set(en)) >= 2 and len(en) > 2 * len(vi) and 3 * len(en) >= len(words):
         return "English"
     return None
 

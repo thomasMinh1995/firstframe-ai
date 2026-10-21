@@ -1,0 +1,137 @@
+{
+  "scope": "PR #17 review: isolated Ollama smoke test, completed runs only",
+  "known_failure": "Author-supplied film title AI chông gai was generated as AI Challenging despite preservation instructions. No saved author draft was overwritten by this test.",
+  "records": [
+    {
+      "error_type": null,
+      "finished_at": "2026-10-21T08:56:48.311313+00:00",
+      "human_feedback": null,
+      "input": {
+        "idea": "Một lab coach tại VinUni giúp các bạn làm bài build phase. Tôi muốn giữ kết thúc mở về hành trình học AI còn tiếp tục, không kết luận kết quả tuyển dụng. Tên phim tác giả chọn: AI chông gai.",
+        "response_language": "vi"
+      },
+      "input_revision": null,
+      "models_used": [],
+      "operation": "analyze",
+      "output": {
+        "notes": [
+          {
+            "content": "Một lab coach tại VinUni giúp các bạn làm bài build phase. Tôi muốn giữ kết thúc mở về hành trình học AI còn tiếp tục, không kết luận kết quả tuyển dụng. Tên phim tác giả chọn: AI chông gai.",
+            "label": "Original idea"
+          },
+          {
+            "content": "Vietnamese",
+            "label": "Target response language"
+          },
+          {
+            "content": "Tác giả muốn viết một phim ngắn lấy bối cảnh là lab coach tại VinUni hướng dẫn các bạn tham gia build phase. Phim không kết luận về việc tuyển dụng hay có kết quả cụ thể, mà giữ mở với hành trình học AI.",
+            "label": "Analysis summary"
+          }
+        ],
+        "questions": []
+      },
+      "output_revision": null,
+      "parent_run_id": null,
+      "project_id": null,
+      "review_status": "unreviewed",
+      "run_id": "a53d46ce-3217-4c0a-af2c-4a4a01a31371",
+      "schema_version": 1,
+      "source_analysis_id": null,
+      "started_at": "2026-10-21T08:56:42.217777+00:00",
+      "status": "completed",
+      "steps": [],
+      "workflow_complete": false
+    },
+    {
+      "error_type": null,
+      "finished_at": "2026-10-21T08:57:35.476026+00:00",
+      "human_feedback": null,
+      "input": {
+        "idea": "Một lab coach tại VinUni giúp các bạn làm bài build phase. Tôi muốn giữ kết thúc mở về hành trình học AI còn tiếp tục, không kết luận kết quả tuyển dụng. Tên phim tác giả chọn: AI chông gai.",
+        "response_language": "en"
+      },
+      "input_revision": null,
+      "models_used": [],
+      "operation": "plan",
+      "output": {
+        "sections": [
+          {
+            "content": "A lab coach at VinUni guides students through the build phase, hinting at an ongoing journey in AI studies.",
+            "purpose": "State the short film's central promise.",
+            "section_id": "section-1",
+            "title": "Core idea"
+          },
+          {
+            "content": "Lab Coach Student 1, Student 2",
+            "purpose": "Define the protagonist and key character pressure.",
+            "section_id": "section-2",
+            "title": "Main character"
+          },
+          {
+            "content": "Students' progress and engagement in the build phase. Students' success in AI studies",
+            "purpose": "Describe the obstacle and stakes.",
+            "section_id": "section-3",
+            "title": "Main conflict"
+          },
+          {
+            "content": "The lab coach introduces the build phase project to a group of students at VinUni's Innovation Hub. The first student, Student 1, starts working on their project but struggles with coding.",
+            "purpose": "Set up the story world and first dramatic turn.",
+            "section_id": "section-4",
+            "title": "Beginning"
+          },
+          {
+            "content": "Student 2 joins the discussion and offers help. The coach observes this interaction closely. Student 1 decides to collaborate with Student 2 after receiving positive feedback from the lab coach.",
+            "purpose": "Escalate pressure and reveal the emotional turn.",
+            "section_id": "section-5",
+            "title": "Middle"
+          },
+          {
+            "content": "The project progresses, but there are still challenges for both students as they continue their studies in AI.",
+            "purpose": "Resolve the short film through a visible choice or image.",
+            "section_id": "section-6",
+            "title": "Ending"
+          },
+          {
+            "content": "The journey of learning and growth through challenging projects.",
+            "purpose": "Name the human idea underneath the plot.",
+            "section_id": "section-7",
+            "title": "Theme"
+          },
+          {
+            "content": "Dynamic shots showing the lab environment, close-ups on student work, and interactions between students and the coach. Students working in groups, Coach observing closely",
+            "purpose": "Capture the visual approach and recurring motifs.",
+            "section_id": "section-8",
+            "title": "Visual Style"
+          },
+          {
+            "content": "Informative and supportive",
+            "purpose": "Describe the intended emotional register.",
+            "section_id": "section-9",
+            "title": "Tone"
+          },
+          {
+            "content": "Ensure smooth transitions between lab environment shots and close-ups of student work. Use dynamic camera angles to emphasize collaboration. VinUni Innovation Hub, Lab classroom 3 (Coach, Student 1, Student 2)",
+            "purpose": "Keep the idea grounded for short-film production.",
+            "section_id": "section-10",
+            "title": "Production Notes"
+          }
+        ],
+        "title": "AI Challenging"
+      },
+      "output_revision": null,
+      "parent_run_id": null,
+      "project_id": null,
+      "review_status": "unreviewed",
+      "run_id": "4268494f-6d03-4e56-822d-960176d3d04b",
+      "schema_version": 1,
+      "source_analysis_id": null,
+      "started_at": "2026-10-21T08:56:48.321056+00:00",
+      "status": "completed",
+      "steps": [],
+      "workflow_complete": true
+    }
+  ],
+  "configured_provider": "ollama",
+  "configured_model": "qwen2.5:3b",
+  "recording_limit": "Service created before capture_workflow: these records contain service outputs only, with no captured provider-step prompts or metadata. The plan operation completed its planner and critic calls; only the story plan was saved in this smoke-test output."
+}

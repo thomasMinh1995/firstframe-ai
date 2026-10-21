@@ -585,13 +585,20 @@ def _creator_input(
     )
 
 
+def _story_language_header(target_language: str) -> str:
+    return (
+        f"Target response language: {target_language}\n"
+        "Write new narrative, explanations and questions in the target language, even when "
+        "the brief uses another language. Keep author terms, names and verbatim source "
+        "quotations in their original language. Preserve JSON field names in English.\n\n"
+    )
+
+
 def _idea_input(idea: IdeaArtifact) -> str:
     target_language = _target_response_language(idea)
     return (
         f"Domain ID: {idea.metadata.domain_id}\n\n"
-        f"Target response language: {target_language}\n"
-        "All generated JSON string values must use this language. Preserve JSON field names "
-        "in English.\n\n"
+        f"{_story_language_header(target_language)}"
         f"Creator brief (JSON data):\n"
         f"{_creator_input(idea.text, idea.constraints, idea.clarifications)}"
     )
@@ -606,9 +613,7 @@ def _reasoning_input(
     questions = "\n".join(f"- {question}" for question in reasoning.open_questions)
     target_language = _find_note(reasoning, "Target response language")
     return (
-        f"Target response language: {target_language}\n"
-        "All generated JSON string values must use this language. Preserve JSON field names "
-        "in English.\n\n"
+        f"{_story_language_header(target_language)}"
         f"Creator intent and decisions:\n{getattr(reasoning, 'creator_context', '')}\n\n"
         f"Reasoning notes:\n{notes}\n\n"
         f"Missing information / mentor questions:\n{questions or '- None'}\n\n"

@@ -8,7 +8,8 @@ Không áp dụng quy tắc tiếng Việt thuần: thuật ngữ `lab coach`, `
 riêng và trích dẫn của tác giả có thể giữ nguyên.
 
 Tách từ sau chuẩn hóa Unicode NFC, so khớp cả từ, cần ít nhất hai tín hiệu khác nhau
-và số tín hiệu lớn hơn hai lần ngôn ngữ còn lại. Khi không đủ bằng chứng, chế độ tự
+và số tín hiệu lớn hơn hai lần ngôn ngữ còn lại, đồng thời chiếm ít nhất một phần
+ba số từ đầu vào. Không dùng `Việt`, `Nam` làm tín hiệu nhận diện. Khi không đủ bằng chứng, chế độ tự
 động trả HTTP 422 trước khi gọi AI và hướng dẫn chọn ngôn ngữ. Đây là heuristic có
 chủ đích thận trọng, không phải bộ nhận diện mọi ngôn ngữ. Tiếng Việt không dấu,
 đầu vào quá ngắn và nội dung song ngữ cân bằng có thể cần chọn thủ công.
@@ -73,3 +74,48 @@ chứng nhận chất lượng nghệ thuật của góp ý. Qwen vẫn có th�
 kết thúc mở; xem [đánh giá góp ý trước đó](feedback-language-2026-10-21.md).
 Đổi lựa chọn không dịch lại phản hồi, câu hỏi hay bản thảo đã có; cần thao tác AI
 mới để tạo đầu ra theo lựa chọn mới. Không triển khai chuyển ngôn ngữ toàn giao diện.
+
+## Review PR #17
+
+Rà ở quy mô MVP cục bộ một người dùng, gồm caller, prompt mặc định/Qwen, trạng thái
+lưu và phiên bản, nhãn giao diện và dữ liệu kiểm thử giao diện ở trên. Đã sửa:
+
+1. **P2 — Nhận nhầm tiếng Pháp là Anh:** `Un film court, une histoire de famille
+   entre un père et son fils.` có hai từ trùng `film`, `son`, đủ vượt heuristic cũ.
+   Thêm yêu cầu độ phủ tối thiểu một phần ba số từ để ít tín hiệu rời rạc không đủ
+   khẳng định ngôn ngữ. Ca này hiện yêu cầu chọn thủ công.
+2. **P2 — Tên riêng làm nhiễu nhận diện:** `The film follows a character named
+   Việt Nam.` bị coi là chưa xác định; riêng `Việt Nam` bị coi là tiếng Việt.
+   Bỏ hai tín hiệu tên địa danh này: câu Anh được nhận đúng, tên riêng đứng một
+   mình cần lựa chọn. Không sửa nội dung tên riêng trong dữ liệu.
+3. **P1 — Prompt mâu thuẫn với lựa chọn ngôn ngữ và thuật ngữ:** planner mặc định
+   vẫn yêu cầu tự đoán từ đầu vào, trong khi người dùng có thể chọn đầu ra khác.
+   Mentor/planner còn yêu cầu mọi chuỗi cùng ngôn ngữ, thiếu ngoại lệ thuật ngữ.
+   Cả prompt mặc định, Qwen và phần hướng dẫn đầu vào giờ ưu tiên lựa chọn rõ ràng,
+   cho phép giữ thuật ngữ, tên riêng, tên phim đã chỉ định và trích dẫn nguồn.
+
+Không tìm thấy lỗi thêm ở selector và nhãn: đổi lựa chọn chỉ cập nhật trường trong
+state hiện có; không gọi API, không thay câu trả lời/bản thảo. Các thao tác lưu/AI
+khóa trường nhập trong khi chạy, chỉ nhận state mới sau khi API thành công. Kiểm thử
+dự án tiếp tục xác nhận giữ bản sửa/lịch sử, phản hồi đúng bản mới và client cũ.
+Nhãn điểm dùng ánh xạ ID, nội dung góp ý và dữ liệu tác giả không qua phép dịch.
+
+**215 kiểm thử backend đạt**, gồm ba ca nhận diện mới và ma trận lựa chọn Việt/Anh
+qua mọi bước ở cả prompt mặc định lẫn Qwen; Ruff đạt. Không thay mã frontend trong
+lần review này; bằng chứng kiểm thử giao diện và build ở trên vẫn áp dụng.
+
+Chạy thêm ba model step thật với `ollama / qwen2.5:3b`: làm rõ tiếng Việt, tạo bản
+phát triển tiếng Anh từ ý tưởng Việt, góp ý cho bản phát triển đó. Tóm tắt Việt và
+bản phát triển Anh giữ `lab coach`, `build phase`, `VinUni`. **Ca chưa đạt:** tên
+phim tác giả đã chỉ định `AI chông gai` bị model đổi thành `AI Challenging`, dù
+prompt yêu cầu giữ tên. Đây là bằng chứng giới hạn tuân thủ của model, chưa có cơ
+chế đảm bảo giữ tên trong nội dung mới sinh. Không tuyên bố mọi thuật ngữ/tên đã
+được bảo toàn trong mọi đầu ra AI. Bản thảo đã lưu không bị dịch bởi selector.
+
+[Bản ghi Ollama khi review](../../demo/evaluations/language-review-pr17-2026-10-21.json)
+giữ nguyên kết quả, kể cả tên bị dịch; chỉ gồm các lượt hoàn tất trong dataset tạm,
+không ghi vào dự án người dùng. Bản ghi này chỉ lưu kết quả dịch vụ, không có trace
+prompt/model-step vì dịch vụ được tạo trước khi mở capture. Thao tác tạo bản phát
+triển đã hoàn tất cả planner và critic, nhưng smoke test chỉ lưu đầu ra bản phát
+triển; không dùng lượt này để kết luận ngôn ngữ/chất lượng góp ý. Không chạy lại
+OpenAI thật trong lần review này.
