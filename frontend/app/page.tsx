@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { StoryFeedback } from "./StoryResultCards";
+import { OperationProgress } from "./OperationProgress";
+import { applyProgress, progressLanguage, type OperationStep } from "./progressState";
 import { sectionLabels } from "./storyLabels";
 import { responseLanguageLabels, type ResponseLanguage } from "./language";
 import {
-  editableProject, listProjects, projectRequest,
+  editableProject, listProjects, projectRequest, streamProjectOperation,
   type Project, type ProjectSummary, type StoryDraft,
 } from "./projectsApi";
 
@@ -16,6 +18,11 @@ export default function Home() {
   const [busy, setBusy] = useState<string | null>("Đang mở dự án…");
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
+  const [steps, setSteps] = useState<OperationStep[]>([]);
+  const [operationFailed, setOperationFailed] = useState(false);
+  const [operationTiming, setOperationTiming] = useState<{
+    kind: "analyze" | "plan" | "review"; startedAt: number; finishedAt: number | null;
+  } | null>(null);
   const dirty = project !== null && saved !== null
     && JSON.stringify(editableProject(project)) !== JSON.stringify(editableProject(saved));
   const briefChanged = project !== null && saved !== null && (project.idea !== saved.idea
@@ -30,6 +37,7 @@ export default function Home() {
     questions: saved.analysis?.missing_information ?? [],
   });
   const currentFeedback = project?.feedback_is_current && !feedbackChanged;
+  useEffect(() => { if (dirty) setNotice(null); }, [dirty]);
 
   function accept(next: Project) {
     setProject(next); setSaved(next);
@@ -57,7 +65,8 @@ export default function Home() {
     return () => window.removeEventListener("beforeunload", warnBeforeLeaving);
   }, [dirty, busy]);
 
-  async function run(label: string, action: () => Promise<void>) {
+  async function run(label: string, action: () => Promise<void>, showProgress = false) {
+    if (!showProgress) { setSteps([]); setOperationFailed(false); setOperationTiming(null); }
     setBusy(label); setError(null); setNotice(null);
     try { await action(); } catch (caught) { setError(message(caught)); }
     finally { setBusy(null); }
@@ -72,14 +81,29 @@ export default function Home() {
   function action(kind: "analyze" | "plan" | "review") {
     const labels = { analyze: "Đang tìm câu hỏi cần làm rõ…", plan: "Đang phát triển câu chuyện…",
       review: "Đang đọc và góp ý bản đã sửa…" };
+    setOperationFailed(false);
+    setOperationTiming({ kind, startedAt: performance.now(), finishedAt: null });
+    setSteps([{ stage: "prepare", status: "active", occurrence: 1 }]);
     void run(labels[kind], async () => {
-      const next = await persist();
-      if (!next) return;
-      accept(await projectRequest(`/${next.id}/${kind}`, "POST", { revision: next.revision }));
+      try {
+        const next = await persist();
+        if (!next) throw new Error("Hãy mở dự án trước khi tiếp tục.");
+        setSteps((items) => items.map((step) => step.stage === "prepare" ? { ...step, status: "completed" } : step));
+        accept(await streamProjectOperation(next, kind, (event) => {
+          setSteps((items) => applyProgress(items, event));
+        }, progressLanguage(next.response_language)));
+      } catch (caught) {
+        setOperationFailed(true);
+        setSteps((items) => items.map((step) => step.status === "active" ? { ...step, status: "failed" } : step));
+        throw caught;
+      } finally {
+        const finishedAt = performance.now();
+        setOperationTiming((timing) => timing ? { ...timing, finishedAt } : timing);
+      }
       setNotice(kind === "analyze" ? "Hãy trả lời các câu hỏi trước khi tạo bản phát triển."
         : kind === "plan" ? "Đã tạo và lưu bản phát triển. Bạn có thể sửa trực tiếp bên dưới."
           : "Đã lưu phản hồi và phiên bản cho đúng nội dung hiện tại.");
-    });
+    }, true);
   }
   function updateDraft(next: StoryDraft) {
     if (project) setProject({ ...project, draft: next });
@@ -121,7 +145,9 @@ export default function Home() {
         })}>Dự án mới</button>
         <p className="storage-note">Dự án được lưu cục bộ trên máy này. Chưa có đồng bộ tài khoản.</p>
       </nav>
-      {busy && <p className="operation-status" role="status">{busy}</p>}
+      {!!steps.length && operationTiming && <OperationProgress steps={steps} failed={operationFailed}
+        timing={operationTiming} dirty={dirty} language={progressLanguage(project?.response_language ?? "auto")} />}
+      {busy && !steps.length && <p className="operation-status" role="status">{busy}</p>}
       {error && <p className="error" role="alert">{error}</p>}
       {notice && <p className="operation-status" role="status">{notice}</p>}
       {!project && !busy && <section className="panel empty-project">
