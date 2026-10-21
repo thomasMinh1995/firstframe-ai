@@ -329,3 +329,64 @@ def test_mismatched_critic_pairs_stop_before_audit_and_count_withheld_suggestion
     assert [r.stage for r in provider.requests] == ["fidelity", "evaluation"]
     assert result.fidelity["withheld_count"] == 1
     assert not result.findings and result.passed is None
+
+
+def test_rejected_allegation_is_not_shown_as_an_unresolved_finding():
+    provider = ScriptedProvider([
+        {"status": "issues", "issues": [issue()]}, audit("contradicted"),
+    ])
+    result = review(provider)
+    assert result.fidelity == {"status": "unverified", "checks": [], "withheld_count": 1}
+
+
+def test_uncertain_audit_preserves_its_reason_and_original_evidence():
+    provider = ScriptedProvider([
+        {"status": "issues", "issues": [issue()]},
+        audit("uncertain", reason="Chưa đủ căn cứ để kết luận."),
+    ])
+    result = review(provider)
+    check = result.fidelity["checks"][0]
+    assert check["verification_note"] == "Chưa đủ căn cứ để kết luận."
+    assert check["draft_quote"] == "🙂 Người kể quyết định pass."
+    assert check["suggestion"] is None
+
+
+def test_review_after_edit_anchors_new_snapshot_and_keeps_old_history(project_client, monkeypatch):
+    from test_projects import develop_project, payload, start_project
+
+    from app.api.routes import projects as routes
+
+    client, _ = project_client
+    project = develop_project(client, start_project(client))
+    old_feedback = copy.deepcopy(project["feedback"])
+    url = f"/api/projects/{project['id']}"
+    data = payload(project)
+    data["draft"]["sections"][0]["content"] = "BẢN ĐÃ SỬA: lab coach hướng dẫn bài lab."
+    saved = client.put(url, json=data).json()
+
+    def scan(payload):
+        return {"status": "issues", "issues": [{
+            "draft_span_id": next(k for k, v in payload["draft_spans"].items()
+                                  if v["text"].startswith("BẢN ĐÃ SỬA")),
+            "author_span_id": "a0", "explanation": "Test only", "suggestion": "Test only",
+        }]}
+
+    def approve(payload):
+        return {"verdict": "supported", "reason": "Test only",
+                "draft_span_id": next(k for k, v in payload["draft_spans"].items()
+                                      if v["text"].startswith("BẢN ĐÃ SỬA")),
+                "author_span_id": "a0"}
+
+    provider = ScriptedProvider([scan, approve])
+    monkeypatch.setattr(routes, "get_story_generation_service",
+                        lambda: create_story_generation_service(provider))
+    response = client.post(f"{url}/review", json={"revision": saved["revision"]})
+    assert response.status_code == 200, response.text
+    reviewed = response.json()
+    check = reviewed["feedback"]["fidelity"]["checks"][0]
+    assert check["section_index"] == 0
+    assert check["section_text"] == data["draft"]["sections"][0]["content"]
+    assert check["draft_quote"] == check["section_text"]
+    assert reviewed["feedback_is_current"]
+    assert reviewed["versions"][0]["feedback"] == old_feedback
+    assert client.get(url).json()["feedback"] == reviewed["feedback"]

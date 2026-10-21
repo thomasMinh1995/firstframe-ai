@@ -7,15 +7,16 @@ assert.equal(render(HighlightedQuote, {text:'🙂 A. quyết định pass. Sau �
 assert.equal(render(HighlightedQuote, {text:'Lặp. Lặp.', quote:'Lặp.'}), 'Lặp. Lặp.');
 assert.equal(render(HighlightedQuote, {text:'Đã sửa rồi.', quote:'pass'}), 'Đã sửa rồi.');
 assert.ok(render(HighlightedQuote, {text:'<script>x</script>', quote:'<script>x</script>'}).includes('&lt;script&gt;'));
-const report = {status:'unverified', withheld_count:1, checks:[{kind:'fidelity', section_index:0, section_title:'Middle', section_text:'Bản cũ: quyết định pass.', draft_quote:'quyết định pass.', author_quote:'Kết mở.', explanation:'Cần đối chiếu.', suggestion:'KHÔNG HIỂN THỊ', suggestion_status:'unverified'}]};
+const report = {status:'unverified', withheld_count:1, checks:[{kind:'fidelity', section_index:0, section_title:'Middle', section_text:'Bản cũ: quyết định pass.', draft_quote:'quyết định pass.', author_quote:'Kết mở.', explanation:'Cần đối chiếu.', suggestion:'KHÔNG HIỂN THỊ', suggestion_status:'unverified', verification_note:'Chưa đủ căn cứ.'}]};
 const html=render(FidelityPanel,{report,uiLanguage:'vi'});
 assert.ok(html.includes('<mark>quyết định pass.</mark>'));
 assert.ok(html.includes('Phần giữa'));
 assert.ok(html.includes('bản chụp'));
 assert.ok(html.includes('Nhận xét chưa xác minh'));
 assert.ok(!html.includes('KHÔNG HIỂN THỊ'));
+assert.ok(html.includes('Chưa đủ căn cứ.'));
 assert.equal(render(FidelityPanel,{report:null,uiLanguage:'vi'}),'');
-console.log('Fidelity rendering: 10 assertions passed');
+console.log('Fidelity rendering: 11 assertions passed');
 
 const {isFidelityReport} = require(require('node:path').join(require('node:path').dirname(process.argv[2]), 'apiClient.js'));
 assert.equal(isFidelityReport(report), true);

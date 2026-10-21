@@ -235,26 +235,28 @@ def audit_suggestions(
             drafts,
         )
         check = cited_check(evidence, draft, author) if evidence is not None else None
-        if item.verdict != "supported" or check is None:
-            continue
-        if "section_index" in candidate and (
-            check.section_index != candidate["section_index"]
-            or check.draft_quote != candidate["draft_quote"]
-            or check.author_quote != candidate["author_quote"]
-        ):
+        original = next((c.model_copy(deep=True) for c in checks if (
+            c.section_index == candidate.get("section_index")
+            and c.draft_quote == candidate.get("draft_quote")
+            and c.author_quote == candidate.get("author_quote")
+        )), None)
+        same_evidence = "section_index" not in candidate or (check is not None and (
+            check.section_index == candidate["section_index"]
+            and check.draft_quote == candidate["draft_quote"]
+            and check.author_quote == candidate["author_quote"]
+        ))
+        if item.verdict != "supported" or check is None or not same_evidence:
+            # A rejected allegation is not an unresolved finding. Keep it only in the dataset.
+            if original is not None and item.verdict != "contradicted":
+                if item.verdict == "uncertain":
+                    original.verification_note = item.reason
+                approved.append(original)
             continue
         check.explanation = candidate["explanation"]
         check.suggestion = candidate["suggestion"]
         check.suggestion_status = "supported"
         check.verification_note = item.reason
         approved.append(check)
-    # Keep original evidence visible when its proposed fix could not be verified.
-    for check in checks:
-        if not any(
-            a.section_index == check.section_index and a.draft_quote == check.draft_quote
-            for a in approved
-        ):
-            approved.append(check)
     withheld = len(candidates) - sum(c.suggestion_status == "supported" for c in approved)
     return FidelityReport(
         status="unverified" if withheld else "issues", checks=approved, withheld_count=withheld

@@ -7,3 +7,5 @@ Mỗi lỗi chọn draft_span_id từ draft_spans và author_span_id từ author
 Chỉ tối đa ba mâu thuẫn rõ ràng. Không chấm nghệ thuật, không yêu cầu thêm chi tiết cho đủ. status=issues nếu có mâu thuẫn có dẫn chứng; clear nếu không thấy; uncertain nếu không thể đối chiếu. issues=[] khi clear. Chỉ trả JSON theo schema.
 
 Trong author_context, question chỉ là câu hỏi làm rõ, không phải quyết định tác giả. Chỉ câu trả lời mới là lựa chọn; câu trả lời để quyết định sau vẫn để mở. author_spans chỉ chứa nội dung có thể trích dẫn của tác giả; dùng ngữ cảnh hỏi–đáp để hiểu câu trả lời ngắn.
+
+Phân biệt tương đương với mâu thuẫn: hai câu diễn đạt cùng một ý không phải lỗi. Mâu thuẫn cần hai mệnh đề không thể cùng đúng trong ngữ cảnh; explanation nêu rõ tác giả khẳng định gì và bản thảo khẳng định ngược lại gì. Nếu chỉ khác cách chia đoạn, mức độ chi tiết hoặc nhấn mạnh, không báo lỗi tính trung thành. Đọc cả các phần kể chuyện trước khi chọn tối đa ba lỗi, không dừng ở ba phần đầu.

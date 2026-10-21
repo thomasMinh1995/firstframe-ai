@@ -118,9 +118,9 @@ Return strict JSON only, without Markdown or prose outside it. Exactly these fie
     "ending": 4,
     "production_feasibility": 4
   },
-  "strengths": ["A specific, anchored strength and its effect."],
-  "weaknesses": ["An anchored issue and its effect relative to intent."],
-  "suggestions": ["A matching, anchored next revision or decision."]
+  "strengths": [],
+  "weaknesses": [],
+  "suggestions": []
 }
 ```
 
@@ -129,3 +129,5 @@ language, retaining supplied section titles as anchors. Keep strengths, weakness
 and suggestions as arrays of plain strings, not nested objects. Suggestions and
 weaknesses must have equal lengths and correspond by index. Be direct, respectful,
 and concise; explain craft in language a first-time writer can act on.
+
+Empty arrays above illustrate types, not a verdict. Write your own grounded observations; never copy instructional placeholders as feedback.

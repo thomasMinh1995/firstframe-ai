@@ -24,8 +24,8 @@ trước; không thay timeout mỗi request hoặc thêm phụ thuộc.
 
 Nguồn trích sai/không rõ, audit từ chối hoặc không đủ căn cứ → `unverified`.
 Gợi ý chưa qua kiểm tra không được hiển thị, điểm và kết luận passed cũng không
-được trình bày như đã duyệt. Quan sát ban đầu có trích dẫn đúng chữ nhưng chưa
-xác minh vẫn hiện với nhãn **Nhận xét chưa xác minh** để tác giả tự đối chiếu.
+được trình bày như đã duyệt. Quan sát bị audit bác bỏ không còn hiển thị. Quan sát có trích dẫn đúng chữ nhưng chưa
+đủ căn cứ vẫn hiện với nhãn **Nhận xét chưa xác minh** để tác giả tự đối chiếu.
 `clear` chỉ có nghĩa model chưa tìm thấy mâu thuẫn, không phải chứng nhận chất lượng.
 
 ## Phiên bản, lưu trữ và tương thích
@@ -114,3 +114,74 @@ Một trích dẫn lặp trong cùng phần bị coi là không xác định, kh
 Cơ chế hiện chưa phát hiện mọi trường hợp bỏ mất vai trò/kỷ niệm, chưa chứng minh
 chống mọi prompt injection, và dùng cùng model cho scan/audit không phải đánh giá
 độc lập về năng lực. Cần giữ kiểm thử đối chứng và chưa cho PR chuyển sang ready.
+
+
+## Review tiếp theo trên PR #18
+
+Đã đọc scan → audit → API lưu project → feedback/lịch sử → giao diện và ba bản
+raw Qwen. Phạm vi tải: MVP local một người dùng; không benchmark tải đồng thời.
+
+### Phát hiện và sửa
+
+1. **P2 — Nhận xét bị bác vẫn hiện như chưa xác minh.** `audit_suggestions` bỏ
+   verdict/reason rồi thêm lại mọi quan sát scan không được duyệt. Trên ca đã sửa
+   đầy đủ, cả ba audit trả contradicted nhưng giao diện vẫn dẫn tác giả về ba
+   “lỗi” đó. Nay loại nhận xét bị bác khỏi cards (raw vẫn nằm trong dataset), giữ
+   trạng thái toàn báo cáo unverified, không suy ra bản thảo đã đúng. Với uncertain,
+   giữ lý do audit để người dùng biết điều chưa đủ căn cứ. Ghép bằng cả phần,
+   trích đoạn bản thảo và trích ý đồ, tránh gộp hai nhận xét cùng đoạn khác ý đồ.
+2. **P2 — Prompt tiếng Anh chứa lời góp ý mẫu có thể bị chép nguyên.** Ca partial_en
+   cũ chép đúng ba câu “A specific, anchored strength…”, “An anchored issue…” và
+   “A matching, anchored next revision…”. Đã đổi các mảng minh họa thành rỗng và
+   yêu cầu nội dung có căn cứ. Kiểm tra số cặp vẫn giữ nguyên; không đoán cách ghép
+   khi model trả sai. Ca cũ có hai weaknesses/một suggestion nên bị chặn là đúng.
+3. **P1 còn mở — Có chữ trích đúng nhưng suy luận sai.** partial_vi cũ nhầm việc
+   tóm tắt/chia đoạn là mâu thuẫn, bỏ qua Middle; corrected_vi coi hai cách nói
+   “học tiếp dù kết quả ra sao” là khác ý. Model còn trộn điều tác giả nói với điều
+   nằm trong bản thảo. Đã làm rõ trong prompt: phải có hai mệnh đề trái nhau, không
+   bắt lỗi cách diễn đạt hay nhấn mạnh; đọc toàn bản trước khi chọn ba lỗi. Đây là
+   giảm nhập nhằng chỉ dẫn, chưa phải cách khắc phục chắc chắn năng lực model.
+
+### Replay sau sửa
+
+[Raw ba ca mới](../../demo/evaluations/fidelity-review-2026-10-21.jsonl), cùng input,
+qwen2.5:3b, temperature 0.3, không seed. Đây là một lượt quan sát, không chứng minh
+độ ổn định hoặc quan hệ nhân quả giữa đổi prompt và kết quả.
+
+| Ca | Kết quả mới |
+| --- | --- |
+| partial_vi | unverified, 2 gợi ý bị bác không còn cards. Còn 1 gợi ý được audit supported: trích đúng câu pass ở Middle nhưng giải thích lệch sang lab coach, không xử lý lỗi quyền quyết định tuyển dụng; reason còn bằng tiếng Anh. Chưa đạt. |
+| partial_en | unverified, 3 audit contradicted, không còn cards/gợi ý. Không tới critic trong lượt này nên không dùng ca này để chứng minh prompt critic đã tốt. Chưa đạt. |
+| corrected_vi | unverified, 2 audit contradicted bị loại; 1 supported chọn nguồn khác candidate nên backend giữ như quan sát chưa xác minh, không hiện gợi ý. Scan vẫn báo sai. Chưa đạt. |
+
+Cả ba không có điểm/passed đã duyệt. **Không được diễn giải rằng mọi góp ý sai
+đã bị chặn**: partial_vi cho thấy cùng model vẫn có thể tự duyệt sai. Bộ kiểm tra
+chuỗi chỉ chứng minh nguồn và vị trí highlight, không chứng minh quan hệ ý nghĩa.
+Cần tiếp tục giữ Draft; chưa merge hoặc dùng kết quả làm dữ liệu huấn luyện đã duyệt.
+
+### Kiểm tra dữ liệu và giao diện
+
+- 232 tests backend đạt, Ruff và diff-check đạt; thêm hồi quy cho audit bị bác,
+  lý do uncertain, review lại đúng bản sửa và giữ feedback lịch sử khi mở lại.
+- 15 assertions frontend đạt; production build đạt. Literal highlight giữ escape
+  HTML, từ Anh–Việt và không đoán vị trí khi một trích dẫn trùng nhiều lần.
+- UI thử riêng 3018/8018, database tạm, feedback từ bản ghi pilot để kiểm tra UI
+  (không dùng pilot làm kết quả nghiệm thu ngữ nghĩa). Sửa Middle rồi đổi VI → EN:
+  chữ chưa lưu còn nguyên, feedback báo cũ, highlight vẫn thuộc snapshot cũ.
+  Server chỉ có hai GET, không PUT/review. Hoàn nguyên màn hình và dừng server.
+- Chưa thấy lỗi mất nháp trong luồng này. Nút review lưu nháp trước rồi mới gọi AI;
+  khi timeout, test xác nhận draft đã lưu và feedback cũ vẫn còn.
+- Không sửa checkout dev có thay đổi khác hoặc dự án thật trên cổng 3001.
+
+![Bản chưa lưu còn nguyên sau đổi ngôn ngữ](assets/pr18-review-unsaved.png)
+
+Chưa kiểm tra model khác, tải đồng thời hoặc mọi dạng lỗi ngữ nghĩa. Các giới hạn
+về độ chính xác và ngôn ngữ reason là blocker nghiệm thu, không che bằng fixture giả.
+
+Kiểm tra riêng critic tiếng Anh sau sửa prompt (vì replay mới chưa tới critic):
+[raw probe](../../demo/evaluations/fidelity-review-critic-2026-10-21.json).
+Không còn chép ba câu placeholder, số cặp là 3/3. Tuy nhiên model chép các đoạn
+bản thảo vào cả weaknesses/suggestions, không giải thích bằng tiếng Anh và lặp
+lại câu sai pass. **Probe này cũng chưa đạt**, không đi qua audit và không phải
+phản hồi đã duyệt. Bỏ câu mẫu sửa được nguồn gây sao chép đó, chưa sửa được toàn
+bộ chất lượng critic trên model 3B.

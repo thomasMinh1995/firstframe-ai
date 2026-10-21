@@ -51,7 +51,7 @@ export function FidelityPanel({ report, uiLanguage }: {
       <p><strong>{vi ? (check.suggestion_status === "supported" ? "Điểm cần đối chiếu: " : "Nhận xét chưa xác minh: ") : (check.suggestion_status === "supported" ? "Compare: " : "Unverified observation: ")}</strong>{check.explanation}</p>
       {check.suggestion_status === "supported" && check.suggestion
         ? <><p><strong>{vi ? "Gợi ý đã qua bước AI đối chiếu ý đồ" : "Suggestion checked against author intent by AI"}</strong></p><p>{check.suggestion}</p><p>{check.verification_note}</p></>
-        : <p>{vi ? "Chưa có gợi ý sửa được xác minh cho đoạn này." : "No verified revision suggestion for this passage."}</p>}
+        : <><p>{vi ? "Chưa có gợi ý sửa được xác minh cho đoạn này." : "No verified revision suggestion for this passage."}</p>{check.verification_note && <p>{check.verification_note}</p>}</>}
     </article>)}
   </section>;
 }
