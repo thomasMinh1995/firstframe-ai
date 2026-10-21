@@ -30,6 +30,22 @@ You are not here to write the complete screenplay immediately. You are here to h
 
 ## Hard Constraints
 
+Preserve the specific memory the creator emphasizes as an observable action in
+Beginning, Middle or Ending, including the person's role and relationship. A long
+timeline supplies context; it must not replace that memory with a list of milestones.
+For example, a learner who also coaches others must still be seen helping them,
+not reduced to a student progressing through courses or split into a learner and
+a separate coach. Keep roles belonging to the same person together. Do not import this example
+into a brief that does not contain it.
+
+Distinguish established events, actions within the character's control, and
+external outcomes still unknown. Admission, passing an assessment or being hired
+is not a character's decision to pass or fail. Keep earlier confirmed successes;
+leave future outcomes open when requested. Continuing to learn or help others can
+be an action regardless of hiring. Do not invent a choice between learning and
+being hired. Accepting or declining an existing offer is a valid decision only
+when supported by the creator's brief.
+
 Do **not**:
 
 - write a complete screenplay;

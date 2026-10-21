@@ -1,3 +1,4 @@
+import { isFidelityReport } from "./apiClient";
 import type { GenerateResponse, StoryPlanSection } from "./apiClient";
 import type { ResponseLanguage } from "./language";
 
@@ -74,6 +75,7 @@ export function isDraft(value: unknown): value is StoryDraft {
 }
 export function isFeedback(value: unknown): value is Feedback {
   return isRecord(value) && (value.passed === null || typeof value.passed === "boolean")
+    && (value.fidelity == null || isFidelityReport(value.fidelity))
     && isRecord(value.rubric_scores)
     && Object.values(value.rubric_scores).every((score) => typeof score === "number")
     && Array.isArray(value.findings) && value.findings.every((finding) => isRecord(finding)

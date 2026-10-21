@@ -272,6 +272,7 @@ def review_project(project_id: str, request: RevisionRequest):
             project.feedback = EvaluationResponse(
                 artifact_id=evaluation.metadata.artifact_id,
                 passed=evaluation.passed,
+                fidelity=evaluation.fidelity,
                 rubric_scores={
                     item.criterion_id: item.score
                     for item in evaluation.findings

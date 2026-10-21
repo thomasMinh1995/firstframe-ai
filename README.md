@@ -365,3 +365,28 @@ this updated app on the receiving machine; version 1 packages remain supported.
 The subsequent [multi-scenario Qwen critic evaluation](docs/evaluations/qwen-critic-2026-10-21.md)
 records 24 primary outputs and rejected pilots. The candidate is benchmark-only;
 it was not enabled because author-intent and issue/suggestion errors remained.
+
+The [author-memory and external-outcome evaluation](docs/evaluations/author-memory-2026-10-21.md)
+records the candidate safeguards for preserving the creator's coaching role and
+open hiring outcome. This candidate is **not acceptance-tested successfully** on
+Qwen 2.5 3B: prompt/rubric changes are under review, not a guarantee of fidelity.
+
+### Author-intent checks and quoted evidence (PR #18 candidate)
+
+Before feedback, FirstFrame checks the current draft against the creator's brief.
+It resolves AI-selected passage IDs to exact source text, then checks each proposed
+revision separately. The feedback panel highlights both the author's words and
+the cited passage within the reviewed section. These are frozen review snapshots;
+editing the draft or changing output language does not move the highlights into
+unsaved text. Old projects remain readable without a fidelity report.
+
+Invalid evidence, uncertain checks or rejected suggestions produce an explicit
+unverified status, with no unverified revision or score presented as approved.
+A review can now make up to five sequential model calls. This checks evidence
+mechanically, but AI judgments can still be wrong. **Qwen 2.5 3B has not passed
+semantic acceptance testing; keep this PR Draft.** See the
+[implementation and test report](docs/evaluations/fidelity-check-2026-10-21.md).
+The [v2 contract and general acceptance suite](docs/evaluations/fidelity-contract-v2.md)
+separate source compatibility, support for the concern, and alignment of the repair.
+The 24-case VI/EN suite uses proposed PO-review labels, with separate development
+and holdout families; it is not a certification of model accuracy.

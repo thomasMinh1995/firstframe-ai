@@ -98,9 +98,9 @@ def test_reasoning_and_evaluation_edits_replay_and_survive_reexport(demo_exports
     edited = save_outputs(client, analysis, {"0": output}).json()
     assert annotate(client, edited, status="approved", use_for_demo=True).status_code == 200
     plan = detail(client, "plan")
-    feedback = copy.deepcopy(plan["recording"]["steps"][1]["output"])
+    feedback = copy.deepcopy(plan["recording"]["steps"][2]["output"])
     feedback["suggestions"] = ["Góp ý đã chỉnh"]
-    edited = save_outputs(client, plan, {"1": feedback}).json()
+    edited = save_outputs(client, plan, {"2": feedback}).json()
     assert (
         annotate(
             client, edited, status="approved", use_for_demo=True, use_for_training=True
@@ -117,10 +117,11 @@ def test_reasoning_and_evaluation_edits_replay_and_survive_reexport(demo_exports
     assert any(
         item["message"] == "Góp ý đã chỉnh" for item in scenario["steps"][4]["feedback"]["findings"]
     )
+    assert scenario["steps"][4]["feedback"]["fidelity"] is None
     rows = [
         json.loads(line) for line in client.get("/api/datasets/training.jsonl").text.splitlines()
     ]
-    assert [row["output_source"] for row in rows] == ["model", "human_corrected"]
+    assert [row["output_source"] for row in rows] == ["model", "model", "human_corrected"]
 
 
 def test_invalid_edits_restoration_and_stale_fingerprints(demo_exports):
@@ -128,9 +129,9 @@ def test_invalid_edits_restoration_and_stale_fingerprints(demo_exports):
     sample = detail(client, "plan")
     for edits in [{"99": {}}, {"-1": {}}, {"00": {}}, {"0": {"wrong": "shape"}}]:
         assert save_outputs(client, sample, edits).status_code == 422
-    feedback = copy.deepcopy(sample["recording"]["steps"][1]["output"])
+    feedback = copy.deepcopy(sample["recording"]["steps"][2]["output"])
     feedback["rubric_scores"]["character"] = 99
-    assert save_outputs(client, sample, {"1": feedback}).status_code == 422
+    assert save_outputs(client, sample, {"2": feedback}).status_code == 422
     edited = save_outputs(client, sample, {"0": corrected_plan(sample)}).json()
     assert annotate(client, edited, status="approved", use_for_training=True).status_code == 200
     approved = detail(client, "plan")
@@ -152,9 +153,9 @@ def test_legacy_generate_and_review_rounds_support_editorial_outputs(demo_export
     client, project, _ = demo_exports
     add_review(client, project)
     sample = detail(client, "review")
-    evaluation = copy.deepcopy(sample["recording"]["steps"][0]["output"])
+    evaluation = copy.deepcopy(sample["recording"]["steps"][1]["output"])
     evaluation["suggestions"] = ["Phản hồi lượt sửa đã được biên tập"]
-    edited = save_outputs(client, sample, {"0": evaluation}).json()
+    edited = save_outputs(client, sample, {"1": evaluation}).json()
     assert annotate(client, edited, status="approved").status_code == 200
     response = client.post("/api/generate", json={"idea": "A mother waits by the window."})
     assert response.status_code == 200

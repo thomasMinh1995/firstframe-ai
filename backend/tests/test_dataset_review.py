@@ -78,7 +78,7 @@ def test_training_only_selected_approved_steps_with_provenance_and_feedback(demo
     store.export()
     response = client.get("/api/datasets/training.jsonl")
     rows = [json.loads(line) for line in response.text.splitlines()]
-    assert len(rows) == 2
+    assert len(rows) == 4
     source = next(record for record in store.records() if record["run_id"] == sample["run_id"])
     for row, step in zip(rows, source["steps"], strict=True):
         assert row["provider"] == "fake" and row["model"] == "fake-model"

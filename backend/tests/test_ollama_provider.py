@@ -9,6 +9,7 @@ from app.application.ai_provider import (
     ProviderTimeoutError,
     StructuredRequest,
 )
+from app.application.fidelity import SpanScan, SuggestionAudit
 from app.infrastructure.ollama_provider import OllamaProvider, OllamaProviderConfig
 
 
@@ -150,7 +151,7 @@ def test_project_workflow_uses_local_fallback_and_preserves_edits(tmp_path, monk
     )
     fake = FakeProvider()
     models = {
-        model.__name__: model for model in (_ReasoningOutput, _PlanningOutput, _EvaluationOutput)
+        model.__name__: model for model in (_ReasoningOutput, _PlanningOutput, SpanScan, _EvaluationOutput, SuggestionAudit)
     }
 
     def post(url, **kwargs):

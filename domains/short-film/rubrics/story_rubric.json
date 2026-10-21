@@ -17,7 +17,7 @@
       {
         "name": "Story Clarity",
         "description": "How clearly the story communicates its premise, central situation, and progression.",
-        "evaluation_guidance": "Look for a focused premise, understandable setup, clear beginning-middle-ending movement, and a story question the audience can follow.",
+        "evaluation_guidance": "First compare the draft with the creator's stated memory, roles, established facts and intentional unknowns. Preserve the same person's roles and the concrete action at the heart of the memory. Then assess whether the audience can follow the situation and progression.",
         "score_range": {
           "min": 1,
           "max": 5
@@ -32,16 +32,16 @@
       {
         "name": "Character",
         "description": "How well the protagonist is defined through motivation, behavior, and choice.",
-        "evaluation_guidance": "Assess whether the protagonist has a visible want, an emotional need, a reason to act now, and a meaningful choice that reveals character.",
+        "evaluation_guidance": "Assess behavior, relationships and voluntary actions appropriate to the creator's form. Distinguish actions the person controls from results decided by others: being hired or passing an assessment is not a choice to pass or fail. Choosing to accept or decline an existing offer is different. A quiet film need not invent a major decision.",
         "score_range": {
           "min": 1,
           "max": 5
         },
         "common_mistakes": [
-          "The protagonist is passive throughout the story.",
+          "The draft replaces the creator's active role or meaningful behavior with unrelated milestones.",
           "The character wants something vague or invisible.",
           "Motivation is explained but not dramatized.",
-          "The protagonist does not make a meaningful choice."
+          "An externally decided outcome is incorrectly presented as the protagonist's voluntary choice."
         ]
       },
       {
@@ -76,8 +76,8 @@
       },
       {
         "name": "Ending",
-        "description": "How well the ending resolves, reframes, or completes the short film's central question.",
-        "evaluation_guidance": "Assess whether the ending feels earned, expresses the emotional turn, avoids over-explanation, and leaves the audience with a strong final image or action.",
+        "description": "How well the final image or action supports the creator's intended effect, including an open ending.",
+        "evaluation_guidance": "Respect deliberately unknown outcomes. A final action can show continued learning or helping others without revealing an external result. Do not demand a hiring or exam result to close the story, and do not reopen earlier outcomes already established in the brief. Check earlier sections for contradictions even when the ending itself is faithful.",
         "score_range": {
           "min": 1,
           "max": 5
@@ -85,7 +85,7 @@
         "common_mistakes": [
           "The ending arrives abruptly without setup.",
           "The ending explains the theme through dialogue instead of dramatizing it.",
-          "The final moment does not connect to the protagonist's choice.",
+          "The final moment contradicts the creator's chosen ambiguity or the character's established behavior.",
           "The story continues too long after the emotional turn has landed."
         ]
       },

@@ -1,6 +1,7 @@
 "use client";
 
 import { AnalysisNote, GenerateResponse, StoryPlanSection } from "./apiClient";
+import { FidelityPanel } from "./FidelityPanel";
 import type { UiLanguage } from "./language";
 import { rubricLabels } from "./storyLabels";
 import type { ReactNode } from "react";
@@ -118,17 +119,18 @@ export function StoryFeedback({ evaluation, uiLanguage }: {
       icon="✍️" delayClass="reveal-1">
       <p>{uiLanguage === "vi" ? "Đây là gợi ý tham khảo. Bạn quyết định điều gì phù hợp với câu chuyện của mình."
         : "These are suggestions. You decide what fits your story."}</p>
-      <div className="feedback-grid">
+      <FidelityPanel report={evaluation.fidelity} uiLanguage={uiLanguage} />
+      {(!evaluation.fidelity || evaluation.fidelity.status === "clear") && <div className="feedback-grid">
         <SectionList title={copy.strengths} items={shaped.strengths} emptyText={copy.emptyStrengths} />
         <SectionList title={copy.weaknesses} items={shaped.weaknesses} emptyText={copy.emptyWeaknesses} />
         <SectionList title={copy.suggestions} items={shaped.suggestions} emptyText={copy.emptySuggestions} />
-      </div>
-      <details className="rubric-details">
+      </div>}
+      {shaped.scores.length > 0 && <details className="rubric-details">
         <summary>{uiLanguage === "vi" ? "Xem điểm tham khảo" : "Reference scores"}</summary>
         <div className="scores">{shaped.scores.map((score) => <span key={score.label}>
           {score.label}: {score.value}/5
         </span>)}</div>
-      </details>
+      </details>}
     </ReportCard>
   );
 }
@@ -175,7 +177,9 @@ export function StoryResultCards({ result, uiLanguage }: StoryResultCardsProps) 
       <ReportCard eyebrow={copy.evaluation} title={copy.evaluationTitle} icon="⭐" delayClass="reveal-3">
         <div className="evaluation-summary">
           <span className={result.evaluation.passed ? "result-pill is-pass" : "result-pill"}>
-            {result.evaluation.passed ? copy.ready : copy.needsRevision}
+            {result.evaluation.fidelity?.status === "unverified"
+              ? (uiLanguage === "vi" ? "Chưa xác minh" : "Unverified")
+              : result.evaluation.passed ? copy.ready : copy.needsRevision}
           </span>
         </div>
 
@@ -195,6 +199,7 @@ export function StoryResultCards({ result, uiLanguage }: StoryResultCardsProps) 
           </div>
         ) : null}
 
+        <FidelityPanel report={result.evaluation.fidelity} uiLanguage={uiLanguage} />
         <div className="feedback-grid">
           <SectionList
             title={copy.strengths}

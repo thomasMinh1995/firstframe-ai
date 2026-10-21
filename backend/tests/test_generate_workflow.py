@@ -27,10 +27,26 @@ class FakeProvider:
 
     def __init__(self) -> None:
         self.requests: list[StructuredRequest] = []
+        # Legacy stage assertions stay separate; dataset tests assert the complete call order.
+        self.fidelity_requests: list[StructuredRequest] = []
 
     def request_structured(self, request: StructuredRequest) -> StructuredResult:
-        self.requests.append(request)
         response_model = request.response_model
+        if response_model.__name__ in {"SpanScan", "SuggestionAudit"}:
+            self.fidelity_requests.append(request)
+            payload = json.loads(request.input_text)
+            if response_model.__name__ == "SpanScan":
+                output = response_model(status="clear", issues=[])
+            else:
+                output = response_model(
+                    draft_span_id=next(iter(payload["draft_spans"])),
+                    author_span_id=next(iter(payload["author_spans"])),
+                    relation="compatible", relation_reason="Test relation",
+                    concern="supported", concern_reason="Test concern",
+                    revision="aligned", revision_reason="Test revision",
+                )
+            return StructuredResult(output=output, model="fake-model", response_id="fake-fidelity")
+        self.requests.append(request)
         if response_model.__name__ == "_ReasoningOutput":
             output = response_model(
                 summary="The idea has a clear emotional center.",

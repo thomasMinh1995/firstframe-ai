@@ -1,5 +1,6 @@
 from pydantic import BaseModel, ConfigDict, Field
 
+from app.application.fidelity import FidelityReport
 from app.application.language import ResponseLanguage
 from app.application.workflow import DEFAULT_DOMAIN_ID
 
@@ -66,6 +67,7 @@ class EvaluationResponse(BaseModel):
     model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
 
     artifact_id: str
+    fidelity: FidelityReport | None = None
     passed: bool | None = None
     rubric_scores: dict[str, int] = Field(default_factory=dict)
     findings: list[EvaluationFindingResponse] = Field(default_factory=list)

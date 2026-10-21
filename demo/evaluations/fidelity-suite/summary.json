@@ -1,0 +1,113 @@
+{
+  "counts": {
+    "all": {
+      "cases": 24,
+      "errors_or_missing": 0,
+      "scan_label_and_anchor_matches": 11,
+      "conflict_matches": 10,
+      "conflict_cases": 10,
+      "compatible_matches": 0,
+      "compatible_cases": 12,
+      "false_conflicts": 12,
+      "valid_repairs_approved": 0,
+      "valid_repair_cases": 7,
+      "unsafe_approvals": 0,
+      "all_label_matches": 3,
+      "audit_dimensions": {
+        "relation": 10,
+        "concern": 10,
+        "revision": 13
+      }
+    },
+    "development": {
+      "cases": 16,
+      "errors_or_missing": 0,
+      "scan_label_and_anchor_matches": 8,
+      "conflict_matches": 8,
+      "conflict_cases": 8,
+      "compatible_matches": 0,
+      "compatible_cases": 8,
+      "false_conflicts": 8,
+      "valid_repairs_approved": 0,
+      "valid_repair_cases": 6,
+      "unsafe_approvals": 0,
+      "all_label_matches": 2,
+      "audit_dimensions": {
+        "relation": 8,
+        "concern": 8,
+        "revision": 10
+      }
+    },
+    "holdout": {
+      "cases": 8,
+      "errors_or_missing": 0,
+      "scan_label_and_anchor_matches": 3,
+      "conflict_matches": 2,
+      "conflict_cases": 2,
+      "compatible_matches": 0,
+      "compatible_cases": 4,
+      "false_conflicts": 4,
+      "valid_repairs_approved": 0,
+      "valid_repair_cases": 1,
+      "unsafe_approvals": 0,
+      "all_label_matches": 1,
+      "audit_dimensions": {
+        "relation": 2,
+        "concern": 2,
+        "revision": 3
+      }
+    }
+  },
+  "provisional_gates": {
+    "complete_without_errors": true,
+    "conflict_label_recall_90pct": true,
+    "compatible_label_accuracy_90pct": false,
+    "valid_repair_acceptance_90pct": false,
+    "no_unsafe_approval": true
+  },
+  "acceptance": "failed_provisional_gates",
+  "note": "Classification and source matching only; reasons can still be wrong.",
+  "mechanical_replay_matches": 24,
+  "integration": [
+    {
+      "case": "general_integration_boat-role-conflict",
+      "status": "unverified",
+      "approved": 0,
+      "dataset_workflow_complete": false,
+      "run_status": "completed",
+      "error_type": null
+    },
+    {
+      "case": "general_integration_boat-role-control",
+      "status": "unverified",
+      "approved": 0,
+      "dataset_workflow_complete": false,
+      "run_status": "completed",
+      "error_type": null
+    },
+    {
+      "case": "general_integration_open-letter-conflict",
+      "status": "unverified",
+      "approved": 0,
+      "dataset_workflow_complete": false,
+      "run_status": "completed",
+      "error_type": null
+    },
+    {
+      "case": "general_integration_open-letter-control",
+      "status": "unverified",
+      "approved": 0,
+      "dataset_workflow_complete": false,
+      "run_status": "completed",
+      "error_type": null
+    }
+  ],
+  "audit_label_combinations": [
+    {
+      "relation": "contradictory",
+      "concern": "supported",
+      "revision": "violates",
+      "count": 24
+    }
+  ]
+}

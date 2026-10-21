@@ -71,6 +71,7 @@ class EvaluationArtifact:
     source_planning_id: str
     findings: tuple[EvaluationFinding, ...] = field(default_factory=tuple)
     passed: bool | None = None
+    fidelity: dict[str, object] | None = None
 
 
 @dataclass(frozen=True)
