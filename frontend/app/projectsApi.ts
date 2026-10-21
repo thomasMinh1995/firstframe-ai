@@ -1,8 +1,10 @@
 import type { GenerateResponse, StoryPlanSection } from "./apiClient";
+import type { ResponseLanguage } from "./language";
 
 export type StoryDraft = { title: string; logline: string; sections: StoryPlanSection[] };
 export type Feedback = GenerateResponse["evaluation"];
 export type ClarificationVersion = {
+  response_language: ResponseLanguage;
   id: string; created_at: string; idea: string; constraints: string[]; answers: string[];
   questions: string[];
 };
@@ -10,6 +12,7 @@ export type DraftVersion = ClarificationVersion & {
   draft: StoryDraft; feedback: Feedback | null;
 };
 export type Project = {
+  response_language: ResponseLanguage;
   id: string; revision: number; updated_at: string; title: string; idea: string;
   constraints: string[]; analysis: (GenerateResponse["analysis"] & { artifact_id: string }) | null; answers: string[];
   draft: StoryDraft | null; feedback: Feedback | null; feedback_is_current: boolean;
@@ -49,7 +52,8 @@ export async function projectRequest(path: string, method = "GET", body?: unknow
   return data;
 }
 export function editableProject(project: Project) {
-  return { revision: project.revision, title: project.title, idea: project.idea,
+  return { revision: project.revision, response_language: project.response_language,
+    title: project.title, idea: project.idea,
     constraints: project.constraints, answers: project.answers, draft: project.draft };
 }
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -79,7 +83,8 @@ export function isFeedback(value: unknown): value is Feedback {
 function isProject(value: unknown): value is Project {
   if (!isSummary(value) || !isRecord(value)) return false;
   const analysis = value.analysis;
-  return Number.isInteger(value.revision) && typeof value.idea === "string"
+  return ["auto", "vi", "en"].includes(String(value.response_language))
+    && Number.isInteger(value.revision) && typeof value.idea === "string"
     && strings(value.constraints) && strings(value.answers)
     && (analysis === null || (isRecord(analysis) && typeof analysis.artifact_id === "string" && typeof analysis.summary === "string"
       && strings(analysis.missing_information) && Array.isArray(analysis.notes)))

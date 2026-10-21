@@ -2,6 +2,7 @@
 
 import { AnalysisNote, GenerateResponse, StoryPlanSection } from "./apiClient";
 import type { UiLanguage } from "./language";
+import { rubricLabels } from "./storyLabels";
 import type { ReactNode } from "react";
 
 type StoryResultCardsProps = {
@@ -70,7 +71,7 @@ const resultCopy = {
     emotionalCore: "Lõi cảm xúc",
     missingInformation: "Thông tin còn thiếu",
     opportunities: "Cơ hội phát triển",
-    storyPlan: "Story Plan",
+    storyPlan: "Bản phát triển",
     storyPlanTitle: "Bản phát triển đầu tiên",
     workingTitle: "Tên tạm thời",
     evaluation: "Đánh giá",
@@ -85,12 +86,12 @@ const resultCopy = {
     emptyStrengths: "Chưa có điểm mạnh.",
     emptyWeaknesses: "Chưa có điểm yếu.",
     emptySuggestions: "Chưa có gợi ý cải thiện.",
-    noLogline: "Chưa có logline.",
+    noLogline: "Chưa có tóm tắt câu chuyện.",
     untitled: "Phim ngắn chưa đặt tên",
     notReturned: "Chưa có nội dung.",
     sectionLabels: {
       workingTitle: "Tên tạm thời",
-      logline: "Logline",
+      logline: "Tóm tắt một câu",
       theme: "Chủ đề",
       characters: "Nhân vật",
       conflict: "Xung đột",
@@ -111,7 +112,7 @@ export function StoryFeedback({ evaluation, uiLanguage }: {
   uiLanguage: UiLanguage;
 }) {
   const copy = resultCopy[uiLanguage];
-  const shaped = shapeEvaluation({ evaluation });
+  const shaped = shapeEvaluation({ evaluation }, uiLanguage);
   return (
     <ReportCard eyebrow={copy.evaluation} title={uiLanguage === "vi" ? "Góp ý cho lần sửa tiếp theo" : copy.evaluationTitle}
       icon="✍️" delayClass="reveal-1">
@@ -136,7 +137,7 @@ export function StoryResultCards({ result, uiLanguage }: StoryResultCardsProps) 
   const copy = resultCopy[uiLanguage];
   const analysis = shapeAnalysis(result);
   const storyPlan = shapeStoryPlan(result, copy);
-  const evaluation = shapeEvaluation(result);
+  const evaluation = shapeEvaluation(result, uiLanguage);
 
   return (
     <div className="results report-stack">
@@ -179,7 +180,7 @@ export function StoryResultCards({ result, uiLanguage }: StoryResultCardsProps) 
         </div>
 
         {evaluation.scores.length > 0 ? (
-          <div className="score-grid" aria-label="Rubric scores">
+          <div className="score-grid" aria-label={uiLanguage === "vi" ? "Điểm tham khảo" : "Rubric scores"}>
             {evaluation.scores.map((score) => (
               <article key={score.label} className="score-card">
                 <div className="score-row">
@@ -319,10 +320,10 @@ function shapeStoryPlan(result: GenerateResponse, copy: ResultCopy) {
   });
 }
 
-function shapeEvaluation(result: Pick<GenerateResponse, "evaluation">) {
+function shapeEvaluation(result: Pick<GenerateResponse, "evaluation">, uiLanguage: UiLanguage) {
   return {
     scores: Object.entries(result.evaluation.rubric_scores).map(([criterion, value]) => ({
-      label: formatLabel(criterion),
+      label: uiLanguage === "vi" ? rubricLabels[criterion] ?? criterion : formatLabel(criterion),
       value,
     })),
     strengths: result.evaluation.findings

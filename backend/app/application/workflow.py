@@ -13,6 +13,7 @@ from app.application.ai_provider import StructuredProvider, StructuredRequest
 from app.application.dataset import recording_provider
 from app.application.example_loader import DomainExample, ExampleLoader
 from app.application.knowledge_loader import KnowledgeLoader
+from app.application.language import ResponseLanguage, resolve_response_language
 from app.application.prompt_loader import PromptLoader
 from app.core.artifacts import (
     ArtifactKind,
@@ -385,12 +386,19 @@ class StoryGenerationService:
         idea_text: str,
         constraints: tuple[Constraint, ...] = (),
         answers: tuple[tuple[str, str], ...] = (),
+        response_language: ResponseLanguage = "auto",
     ) -> ReasoningArtifact:
         return self._harness.analyze(
             IdeaArtifact(
                 metadata=_metadata(DEFAULT_DOMAIN_ID, "idea"),
                 text=idea_text,
-                constraints=constraints,
+                constraints=(
+                    *constraints,
+                    Constraint(
+                        name="target_response_language",
+                        value=resolve_response_language(idea_text, response_language),
+                    ),
+                ),
                 clarifications=answers,
             )
         )
@@ -400,6 +408,7 @@ class StoryGenerationService:
         idea_text: str,
         answers: tuple[tuple[str, str], ...],
         constraints: tuple[Constraint, ...] = (),
+        response_language: ResponseLanguage = "auto",
     ) -> HarnessRun:
         return self._harness.plan(
             _LLMReasoningArtifact(
@@ -410,7 +419,7 @@ class StoryGenerationService:
                     ReasoningNote(label="Original idea", content=idea_text),
                     ReasoningNote(
                         label="Target response language",
-                        content=_detect_response_language(idea_text),
+                        content=resolve_response_language(idea_text, response_language),
                     ),
                     ReasoningNote(
                         label="Creator constraints",
@@ -433,6 +442,7 @@ class StoryGenerationService:
         logline: str,
         sections: tuple[PlanSection, ...],
         creator_context: str,
+        response_language: ResponseLanguage = "auto",
     ) -> EvaluationArtifact:
         return self._harness.review(
             _LLMPlanningArtifact(
@@ -441,7 +451,7 @@ class StoryGenerationService:
                 title=title,
                 logline=logline,
                 sections=sections,
-                target_response_language=_detect_response_language(idea_text),
+                target_response_language=resolve_response_language(idea_text, response_language),
                 creator_context=creator_context,
             )
         )
@@ -451,8 +461,9 @@ class StoryGenerationService:
         idea_text: str,
         domain_id: str = DEFAULT_DOMAIN_ID,
         constraints: tuple[Constraint, ...] = (),
+        response_language: ResponseLanguage = "auto",
     ) -> HarnessRun:
-        target_response_language = _detect_response_language(idea_text)
+        target_response_language = resolve_response_language(idea_text, response_language)
         idea = IdeaArtifact(
             metadata=_metadata(domain_id, "idea"),
             text=idea_text,
@@ -532,27 +543,7 @@ def _target_response_language(idea: IdeaArtifact) -> str:
 
 
 def _detect_response_language(text: str) -> str:
-    normalized = text.lower()
-    has_vietnamese_diacritics = any(
-        character in normalized
-        for character in "ăâđêôơưáàảãạấầẩẫậắằẳẵặéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵ"
-    )
-    common_vietnamese_words = (
-        "một",
-        "người",
-        "câu chuyện",
-        "gia đình",
-        "cha",
-        "mẹ",
-        "con",
-        "trước khi",
-        "rời",
-        "việt nam",
-        "muốn",
-    )
-    if has_vietnamese_diacritics or any(word in normalized for word in common_vietnamese_words):
-        return "Vietnamese"
-    return "English"
+    return resolve_response_language(text)
 
 
 def _is_vietnamese_language(language: str) -> bool:

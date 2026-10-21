@@ -79,6 +79,33 @@ is conservatively marked outdated.
 
 This is a local, single-user MVP without authentication. Keep the backend bound to localhost. AI actions use OpenAI when `OPENAI_API_KEY` is configured, otherwise a running Ollama server and an installed chat model. Project saving and reopening work without either provider.
 
+### Output language and interface labels
+
+FirstFrame supports Vietnamese and English AI output. The backend makes the same
+language decision for clarification, planning, review and `/api/generate`; the
+frontend does not guess independently. Automatic detection matches whole words
+after Unicode normalization. It needs at least two distinct known words and more
+than twice as many matching words as the other language. A substring such as `con`
+inside `concert`, an accent, or a proper name alone is insufficient evidence.
+
+For uncertain, short, unaccented or balanced bilingual ideas, automatic mode asks
+the creator to select **Tiếng Việt** or **English** before any model call (HTTP 422).
+This is a conservative heuristic, not a general language identifier: French and
+other unsupported inputs should use an explicit supported output choice. Mixed
+author terminology such as `lab coach`, `build phase` and names remains allowed.
+
+The output choice is saved per project and recorded with versions. Changing it
+keeps unsaved text in the editor and does not save, call AI or translate existing
+content automatically. The next AI action saves pending edits and uses the choice;
+feedback for a different explicit choice is marked outdated. Existing projects
+default to automatic mode without rewriting their data or invalidating compatible
+automatic-mode feedback. Legacy clients that omit the field preserve a saved
+explicit choice. The interface remains Vietnamese regardless of AI output language;
+display labels do not rename JSON keys, rewrite author text or translate quotations.
+
+See the [language detection and UI checks](docs/evaluations/language-detection-ui-2026-10-21.md)
+for regression cases and real Ollama review evidence.
+
 ## Architecture At A Glance
 
 ```text

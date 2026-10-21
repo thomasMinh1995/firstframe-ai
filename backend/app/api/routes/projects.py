@@ -24,6 +24,7 @@ from app.application.ai_provider import (
     ProviderTimeoutError,
 )
 from app.application.dataset import capture_workflow
+from app.application.language import LanguageSelectionRequired
 from app.application.project_store import ProjectConflict, ProjectNotFound, ProjectStore
 from app.core.artifacts import Constraint, PlanSection
 
@@ -40,6 +41,8 @@ def project_errors():
         yield
     except ProjectNotFound as error:
         raise HTTPException(404, "Project not found.") from error
+    except LanguageSelectionRequired as error:
+        raise HTTPException(422, str(error)) from error
     except ProjectConflict as error:
         raise HTTPException(
             409, "Dự án đã thay đổi ở cửa sổ khác. Hãy tải bản sao trước khi mở lại dự án."
@@ -82,6 +85,7 @@ def constraints_for(project: ProjectResponse) -> tuple[Constraint, ...]:
 def add_version(project: ProjectResponse) -> None:
     if project.draft is not None:
         version = DraftVersion(
+            response_language=project.response_language,
             id=str(uuid4()),
             created_at=datetime.now(UTC).isoformat(),
             idea=project.idea,
@@ -105,6 +109,7 @@ def archive_clarifications(project: ProjectResponse, answers: list[str] | None =
     if not clarifications:
         return
     version = ClarificationVersion(
+        response_language=project.response_language,
         id=str(uuid4()),
         created_at=datetime.now(UTC).isoformat(),
         idea=project.idea,
@@ -147,10 +152,16 @@ def update_project(project_id: str, request: ProjectUpdate):
         brief_changed = project.idea != request.idea or project.constraints != request.constraints
         if brief_changed:
             archive_clarifications(project, request.answers)
-        if project.draft != request.draft:
+        language_changed = (
+            "response_language" in request.model_fields_set
+            and project.response_language != request.response_language
+        )
+        if project.draft != request.draft or language_changed:
             add_version(project)
         for key in ("title", "idea", "constraints", "draft"):
             setattr(project, key, getattr(request, key))
+        if "response_language" in request.model_fields_set:
+            project.response_language = request.response_language
         if brief_changed:
             project.analysis = None
             project.answers = []
@@ -169,7 +180,8 @@ def analyze_project(project_id: str, request: RevisionRequest):
         with capture_workflow("analyze", dataset_snapshot(project)) as dataset:
             known_answers = project.creator_answers()
             reasoning = get_story_generation_service().analyze(
-                project.idea, constraints_for(project), answers=known_answers
+                project.idea, constraints_for(project), answers=known_answers,
+                response_language=project.response_language,
             )
             previous_answers = dict(known_answers)
             archive_clarifications(project)
@@ -198,7 +210,7 @@ def plan_project(project_id: str, request: RevisionRequest):
     with project_errors():
         project = load_project(project_id, request.revision)
         if project.analysis is None:
-            raise HTTPException(422, "Hãy làm rõ ý tưởng trước khi tạo story plan.")
+            raise HTTPException(422, "Hãy làm rõ ý tưởng trước khi tạo bản phát triển.")
         questions = project.analysis.missing_information
         if len(questions) != len(project.answers) or any(
             not answer.strip() for answer in project.answers
@@ -206,7 +218,8 @@ def plan_project(project_id: str, request: RevisionRequest):
             raise HTTPException(422, "Hãy trả lời hoặc chọn để quyết định sau cho từng câu hỏi.")
         with capture_workflow("plan", dataset_snapshot(project)) as dataset:
             run = get_story_generation_service().plan(
-                project.idea, project.creator_answers(), constraints_for(project)
+                project.idea, project.creator_answers(), constraints_for(project),
+                response_language=project.response_language,
             )
             generated = _to_response(run)
             add_version(project)
@@ -228,7 +241,7 @@ def review_project(project_id: str, request: RevisionRequest):
     with project_errors():
         project = load_project(project_id, request.revision)
         if project.draft is None:
-            raise HTTPException(422, "Chưa có story plan để nhận phản hồi.")
+            raise HTTPException(422, "Chưa có bản phát triển để nhận phản hồi.")
         if not any(section.content.strip() for section in project.draft.sections):
             raise HTTPException(422, "Hãy viết ít nhất một phần trước khi nhận phản hồi.")
         with capture_workflow("review", dataset_snapshot(project)) as dataset:
@@ -254,6 +267,7 @@ def review_project(project_id: str, request: RevisionRequest):
                     for i, section in enumerate(project.draft.sections)
                 ),
                 json.dumps(context, ensure_ascii=False),
+                response_language=project.response_language,
             )
             project.feedback = EvaluationResponse(
                 artifact_id=evaluation.metadata.artifact_id,

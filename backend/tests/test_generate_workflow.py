@@ -270,6 +270,7 @@ def test_generate_endpoint_returns_structured_response(monkeypatch) -> None:
 
     assert response.status_code == 200
     body = response.json()
+    assert body["analysis"]["summary"] == "The idea has a clear emotional center."
     assert body["analysis"]["missing_information"]
     assert body["story_plan"]["title"] == "Before She Leaves"
     assert body["story_plan"]["sections"]

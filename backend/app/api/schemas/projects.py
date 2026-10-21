@@ -4,6 +4,7 @@ from typing import Annotated
 from pydantic import BaseModel, ConfigDict, Field, computed_field
 
 from app.api.schemas.story import AnalysisResponse, EvaluationResponse
+from app.application.language import ResponseLanguage
 
 ShortText = Annotated[str, Field(max_length=2000)]
 
@@ -31,6 +32,7 @@ class RevisionRequest(BaseModel):
 
 
 class ProjectUpdate(RevisionRequest):
+    response_language: ResponseLanguage = "auto"
     title: str = Field(min_length=1, max_length=200)
     idea: str = Field(max_length=5000)
     constraints: list[ShortText] = Field(max_length=20)
@@ -39,6 +41,7 @@ class ProjectUpdate(RevisionRequest):
 
 
 class ClarificationVersion(BaseModel):
+    response_language: ResponseLanguage = "auto"
     id: str
     created_at: str
     idea: str
@@ -54,6 +57,7 @@ class DraftVersion(ClarificationVersion):
 
 
 class ProjectResponse(BaseModel):
+    response_language: ResponseLanguage = "auto"
     id: str
     revision: int = 0
     updated_at: str
@@ -79,6 +83,9 @@ class ProjectResponse(BaseModel):
         return json.dumps(
             {
                 "idea": self.idea,
+                # Auto was implicit in older saved projects and frozen demo recordings.
+                **({"response_language": self.response_language}
+                   if self.response_language != "auto" else {}),
                 "constraints": self.constraints,
                 "answers": self.answers,
                 "questions": self.analysis.missing_information if self.analysis else [],
