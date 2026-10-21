@@ -1,0 +1,28 @@
+[
+  {
+    "id": "repair-shop",
+    "language": "en",
+    "idea": "An observational short follows an adult bicycle mechanic closing her repair shop after a rainy day. She cleans her tools, notices one unfinished wheel, and leaves it for tomorrow.",
+    "constraints": [
+      "One performer, one shop, no dialogue. No relatives or departure story. Keep an ordinary open ending."
+    ],
+    "answers": [],
+    "review_checks": [
+      "No imported family, airport, passport, keychain or forgiveness story.",
+      "Keep one mechanic and the unfinished wheel; no forced reunion or resolution."
+    ]
+  },
+  {
+    "id": "author-family",
+    "language": "vi",
+    "idea": "Linh cùng cha chia tay ở sân bay. Linh trả lại chiếc móc khóa rồi đi qua cửa kiểm soát.",
+    "constraints": [
+      "Giữ tên Linh, quan hệ cha con, sân bay và móc khóa. Không cần tha thứ hay ôm nhau."
+    ],
+    "answers": [],
+    "review_checks": [
+      "Author-owned Linh, father, airport and keychain must remain available.",
+      "Do not force forgiveness or remove legitimate details with a blacklist."
+    ]
+  }
+]

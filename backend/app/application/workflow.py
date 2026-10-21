@@ -11,7 +11,6 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from app.application.ai_provider import StructuredProvider, StructuredRequest
 from app.application.dataset import recording_provider
-from app.application.example_loader import DomainExample, ExampleLoader
 from app.application.knowledge_loader import KnowledgeLoader
 from app.application.language import ResponseLanguage, resolve_response_language
 from app.application.prompt_loader import PromptLoader
@@ -39,7 +38,6 @@ from app.core.harness import EvaluationLayer, PlanningLayer, ReasoningLayer
 from app.infrastructure.provider_factory import create_provider
 
 DEFAULT_DOMAIN_ID = "short-film"
-MAX_PLANNING_EXAMPLES = 3
 OutputT = TypeVar("OutputT", bound=BaseModel)
 
 
@@ -262,24 +260,27 @@ class LLMPlanningLayer(PlanningLayer):
         provider: StructuredProvider,
         prompt_loader: PromptLoader,
         knowledge_loader: KnowledgeLoader,
-        example_loader: ExampleLoader,
         *,
         compact_context: bool = False,
     ) -> None:
         self._provider = provider
         self._prompt_loader = prompt_loader
         self._knowledge_loader = knowledge_loader
-        self._example_loader = example_loader
         self._compact_context = compact_context
 
     def plan(self, reasoning: ReasoningArtifact, domain: DomainPlugin) -> PlanningArtifact:
+        # Only craft definitions/rules belong here; worked stories supply competing facts.
         knowledge = {
-            "film_glossary": self._knowledge_loader.load("film_glossary", domain),
-            "film_rules": self._knowledge_loader.load("film_rules", domain),
-            "story_patterns": self._knowledge_loader.load("story_patterns", domain),
+            "film_glossary": [
+                {key: entry[key] for key in ("term", "simple_definition", "why_it_matters")}
+                for entry in self._knowledge_loader.load("film_glossary", domain)["glossary"]
+            ],
+            "film_rules": [
+                {key: entry[key] for key in ("rule", "guidance")}
+                for entry in self._knowledge_loader.load("film_rules", domain)["rules"]
+            ],
         }
-        examples = self._example_loader.load(domain, limit=MAX_PLANNING_EXAMPLES)
-        input_text = _reasoning_input(reasoning, knowledge, examples)
+        input_text = _reasoning_input(reasoning, knowledge)
         if self._compact_context:
             input_text = compact_qwen_planning_input(input_text)
         result = self._provider.request_structured(
@@ -484,7 +485,6 @@ def create_story_generation_service(
     qwen_profile = metadata.provider == "ollama" and metadata.model == "qwen2.5:3b"
     prompt_loader = PromptLoader(variant="ollama-qwen2.5-3b" if qwen_profile else None)
     knowledge_loader = KnowledgeLoader()
-    example_loader = ExampleLoader()
     registry = DomainRegistry(
         [
             StaticDomainPlugin(
@@ -515,7 +515,6 @@ def create_story_generation_service(
             selected_provider,
             prompt_loader,
             knowledge_loader,
-            example_loader,
             compact_context=qwen_profile,
         ),
         # Compact critic trials broke intent/feedback pairing; retain its full prompt and context.
@@ -607,7 +606,6 @@ def _idea_input(idea: IdeaArtifact) -> str:
 def _reasoning_input(
     reasoning: ReasoningArtifact,
     knowledge: dict[str, object],
-    examples: tuple[DomainExample, ...],
 ) -> str:
     notes = "\n".join(f"- {note.label}: {note.content}" for note in reasoning.notes)
     questions = "\n".join(f"- {question}" for question in reasoning.open_questions)
@@ -617,8 +615,7 @@ def _reasoning_input(
         f"Creator intent and decisions:\n{getattr(reasoning, 'creator_context', '')}\n\n"
         f"Reasoning notes:\n{notes}\n\n"
         f"Missing information / mentor questions:\n{questions or '- None'}\n\n"
-        f"Short-film domain knowledge:\n{json.dumps(knowledge, ensure_ascii=False)}\n\n"
-        f"Reusable domain examples:\n{json.dumps(_example_payloads(examples), ensure_ascii=False)}"
+        f"Short-film domain knowledge:\n{json.dumps(knowledge, ensure_ascii=False)}"
     )
 
 
@@ -626,19 +623,6 @@ def compact_qwen_planning_input(input_text: str) -> str:
     # Keep every author decision and AI note; encyclopedic references distract this small model.
     context, separator, _ = input_text.partition("\n\nShort-film domain knowledge:\n")
     return context if separator else input_text
-
-
-def _example_payloads(examples: tuple[DomainExample, ...]) -> list[dict[str, object]]:
-    return [
-        {
-            "source_id": example.source_id,
-            "theme": example.theme,
-            "genre": example.genre,
-            "user_idea": example.user_idea,
-            "example": example.payload,
-        }
-        for example in examples
-    ]
 
 
 def _structured_plan_sections(story_plan: _StructuredStoryPlanOutput) -> list[PlanSection]:

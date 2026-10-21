@@ -51,7 +51,7 @@ def test_prompt_profile_keeps_context_schema_and_recorded_effective_prompt(
         assert step["request"]["effective_instructions"] == strict_json_instructions(request)
         assert step["request"]["response_schema"] == request.response_model.model_json_schema()
         if request.stage == "planning":
-            assert ("Reusable domain examples:" in request.input_text) is not profile
+            assert "Reusable domain examples:" not in request.input_text
             assert ("Short-film domain knowledge:" in request.input_text) is not profile
         if request.stage == "evaluation":
             assert "Short-film story rubric:" in request.input_text

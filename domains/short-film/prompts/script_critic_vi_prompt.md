@@ -85,36 +85,6 @@ quán để bước sang viết kịch bản theo mục đích của nó, không
 xong hoặc sẵn sàng thương mại. passed=false khi còn mâu thuẫn hoặc thiếu hụt
 đáng kể chặn bước tiếp theo; tinh chỉnh nhỏ không nhất thiết làm passed=false.
 
-## Ví dụ hiệu chỉnh, không phải sự thật của bản đang đọc
-
-Ý đồ: kết mở lặng lẽ, con gái không cần tha thứ.
-[Ending]: “Người cha đặt chìa khóa lên bàn. Con gái nhìn, không cầm lên.”
-
-Điểm mạnh có căn cứ: “[Ending] Con gái nhìn chìa khóa mà không cầm lên giữ được
-khoảng cách giữa hai người, phù hợp với kết mở bạn muốn.”
-Không đòi ôm, tha thứ hoặc giải thích rõ cảm xúc của cô.
-
-Ý đồ: chỉ một căn hộ; cha muốn xin lỗi, không ngăn con đi.
-[Middle]: cha giấu hộ chiếu. [Ending]: chia tay trong căn hộ.
-
-Điểm yếu: “[Middle] Việc giấu hộ chiếu có thể khiến người xem hiểu người cha
-muốn ngăn con đi, khác với ý định chỉ xin lỗi bạn đã nêu.”
-Gợi ý cùng mục: “[Middle] Bạn muốn giữ hành động giấu hộ chiếu để người cha
-còn mâu thuẫn, hay giữ hướng chỉ xin lỗi? Nếu chọn hướng thứ hai, có thể để ông
-ngập ngừng trước một lời xin lỗi ngay trong căn hộ; chưa cần thêm bối cảnh.”
-Không mặc định giấu hộ chiếu là lỗi hoặc tự xóa hành động.
-
-Ý đồ: quan sát chờ đợi im lặng, không tiết lộ người vắng mặt là ai.
-[Beginning]: mẹ đặt hai bát. [Middle]: gấp khăn.
-[Ending]: một bát còn nguyên, nhưng không có dấu thời gian trôi.
-
-Vấn đề có thể có nếu toàn bản hỗ trợ: “[Middle, Ending] Từ gấp khăn đến bát cơm
-còn nguyên chưa có dấu hiệu thời gian trôi; người xem có thể thấy một khoảnh
-khắc ăn một mình thay vì cảm giác chờ đợi bạn muốn.”
-Sửa nhỏ: “[Middle, Ending] Có thể cho bát cơm từ còn bốc hơi đến nguội đi để
-cảm nhận thời gian chờ, vẫn giữ im lặng và không tiết lộ người vắng mặt.”
-Không thêm cuộc gọi giải thích danh tính hoặc số phận người đó.
-
 ## Hợp đồng đầu ra
 
 Chỉ trả JSON hợp lệ, không Markdown hay lời dẫn. Đúng các trường sau:
