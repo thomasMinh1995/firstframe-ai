@@ -33,47 +33,60 @@ export async function streamProjectOperation(
   onProgress: (event: ProgressEvent) => void, language: UiLanguage = "vi",
 ): Promise<Project> {
   const copy = progressCopy[language];
-  const response = await fetch(`${baseUrl}/api/projects/${project.id}/${kind}/stream`, {
-    method: "POST", headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ revision: project.revision }),
-  }).catch(() => { throw new Error(copy.connectionError); });
-  if (!response.ok || !response.body) throw new Error(copy.startError);
-  const reader = response.body.getReader();
-  const decoder = new TextDecoder();
-  let pending = "";
+  // Backend heartbeats arrive every 15s. A silent connection must not lock the editor forever.
+  const controller = new AbortController();
+  let timer = setTimeout(() => controller.abort(), 45_000);
   try {
-    while (true) {
-      const { value, done } = await reader.read().catch(() => { throw new Error(copy.connectionError); });
-      pending += decoder.decode(value, { stream: !done });
-      const lines = pending.split("\n");
-      pending = lines.pop() ?? "";
-      if (done && pending.trim()) lines.push(pending);
-      for (const line of lines) {
-        if (!line.trim()) continue;
-        const event = JSON.parse(line);
-        if (event.type === "error") throw new Error(event.detail);
-        if (event.type === "progress") {
-          if (typeof event.stage !== "string" || !["active", "completed", "failed"].includes(event.status)) {
-            throw new Error(copy.invalid);
+    const response = await fetch(`${baseUrl}/api/projects/${project.id}/${kind}/stream`, {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ revision: project.revision }), signal: controller.signal,
+    }).catch(() => { throw new Error(copy.connectionError); });
+    if (!response.ok || !response.body) throw new Error(copy.startError);
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let pending = "";
+    try {
+      while (true) {
+        const { value, done } = await reader.read().catch(() => { throw new Error(copy.connectionError); });
+        clearTimeout(timer);
+        timer = setTimeout(() => controller.abort(), 45_000);
+        pending += decoder.decode(value, { stream: !done });
+        const lines = pending.split("\n");
+        pending = lines.pop() ?? "";
+        if (done && pending.trim()) lines.push(pending);
+        for (const line of lines) {
+          if (!line.trim()) continue;
+          let event: unknown;
+          try { event = JSON.parse(line); } catch { throw new Error(copy.invalid); }
+          if (!isRecord(event) || !["progress", "result", "error"].includes(String(event.type))) throw new Error(copy.invalid);
+          if (event.type === "error") throw new Error(typeof event.detail === "string" ? event.detail : copy.invalid);
+          if (event.type === "progress") {
+            if (typeof event.stage !== "string" || !event.stage || typeof event.status !== "string"
+              || !["active", "completed", "failed"].includes(event.status)) {
+              throw new Error(copy.invalid);
+            }
+            onProgress({ stage: event.stage, status: event.status as ProgressEvent["status"] });
           }
-          onProgress(event);
+          if (event.type === "result") {
+            if (!isProject(event.project) || event.project.id !== project.id) throw new Error(copy.invalid);
+            return event.project;
+          }
         }
-        if (event.type === "result") {
-          if (!isProject(event.project) || event.project.id !== project.id) throw new Error(copy.invalid);
-          return event.project;
-        }
+        if (done) break;
       }
-      if (done) break;
-    }
-  } finally { reader.releaseLock(); }
-  throw new Error(copy.connectionError);
+    } finally { reader.releaseLock(); }
+    throw new Error(copy.connectionError);
+  } finally {
+    clearTimeout(timer);
+    controller.abort();
+  }
 }
 
 async function request(path: string, method = "GET", body?: unknown): Promise<unknown> {
   let response: Response;
   try {
     response = await fetch(`${baseUrl}/api/projects${path}`, {
-      method, headers: body === undefined ? undefined : { "Content-Type": "application/json" },
+      method, signal: AbortSignal.timeout(45_000), headers: body === undefined ? undefined : { "Content-Type": "application/json" },
       body: body === undefined ? undefined : JSON.stringify(body), cache: "no-store",
     });
   } catch {

@@ -53,3 +53,27 @@ NODE_PATH="$PWD/node_modules" node tests/progress.cjs /tmp/firstframe-progress-t
 
 Checklist PO: thử cả ba thao tác; xác nhận chỉ bước thực chạy xuất hiện, audit lặp không
 đè lượt trước, đổi ngôn ngữ không sửa nội dung; thử lỗi trước/sau khi lưu và mở lại dự án.
+
+## Review PR #19 — xử lý mất kết nối và sửa tiếp sau lỗi
+
+Các lỗi đã sửa:
+
+1. Kết nối không trả thêm dữ liệu nhưng chưa đóng khiến UI chờ vô hạn và khóa editor.
+   Fetch/lưu có deadline 45 giây; stream dùng deadline im lặng 45 giây, reset bởi
+   mọi chunk kể cả heartbeat 15 giây. Đây không phải giới hạn tổng thời gian chạy AI.
+   Abort chỉ dừng chờ phía trình duyệt, không khẳng định backend đã dừng.
+2. Sau lỗi AI hoặc hoàn tất, người dùng có thể sửa tiếp. Bảng tiến trình trước đây
+   vẫn hướng dẫn mở lại dự án hoặc nói kết quả đã lưu mà không xét các thay đổi mới.
+   Giờ trạng thái dirty được truyền vào bảng: nhắc lưu/tải JSON trước khi mở lại,
+   và phân biệt kết quả lần chạy trước với các thay đổi mới chưa lưu.
+3. Stream JSON hỏng/null hoặc event không hợp lệ có thể hiện lỗi JavaScript thô.
+   Giờ kiểm tra envelope/type/status và trả thông báo lỗi dữ liệu rõ ràng, giữ editor.
+
+Kiểm chứng sau review: 220 test backend trên nhánh PR; 271 test khi ghép PR #18;
+production build và frontend regression checks pass. Có thêm test deadline bằng
+đồng hồ điều khiển, heartbeat reset, timeout bước lưu, envelope hỏng, dirty sau lỗi
+và sau thành công. Test đóng stream kiểm tra backend vẫn lưu khi revision không đổi,
+nhưng không ghi đè khi người dùng đã lưu phiên bản mới hơn.
+Browser kiểm tra lại: AI lỗi → sửa nội dung có lab coach → đổi Việt/Anh vẫn giữ
+bản chưa lưu, hướng dẫn bảo vệ bản nháp cập nhật đúng. Không dùng model thật để
+nghiệm thu chất lượng AI trong review UX này.

@@ -662,3 +662,49 @@ def test_stream_revision_conflict_does_not_overwrite_newer_content(project_clien
     assert events[-1]["type"] == "error"
     assert client.get(url).json() == latest
     assert provider.requests == []
+
+
+def test_stream_disconnect_finishes_saving_without_overwriting_newer_edits(project_client, monkeypatch):
+    """A dropped stream must not cancel work or bypass optimistic revision checks."""
+    import asyncio
+    import threading
+
+    from app.api.schemas.projects import RevisionRequest
+
+    client, provider = project_client
+    project = start_project(client)
+    url = f"/api/projects/{project['id']}"
+    original = provider.request_structured
+    release = threading.Event()
+
+    def delayed(request):
+        assert release.wait(timeout=5)
+        return original(request)
+
+    monkeypatch.setattr(provider, "request_structured", delayed)
+
+    async def disconnected(change_content):
+        response = await project_routes.stream_project_operation(
+            project["id"], "analyze", RevisionRequest(revision=project["revision"])
+        )
+        iterator = response.body_iterator
+        first = json.loads(await anext(iterator))
+        assert first["stage"] == "reasoning" and first["status"] == "active"
+        if change_content:
+            data = payload(project)
+            data["idea"] += " Bản mới chưa gửi cho AI: lab coach."
+            latest = client.put(url, json=data).json()
+        else:
+            latest = None
+        release.set()
+        await asyncio.wait_for(iterator.aclose(), timeout=5)
+        return latest
+
+    asyncio.run(disconnected(False))
+    project = client.get(url).json()
+    assert project["analysis"] is not None
+    assert len(provider.requests) == 1
+    release.clear()
+    latest = asyncio.run(disconnected(True))
+    assert client.get(url).json() == latest
+    assert len(provider.requests) == 2

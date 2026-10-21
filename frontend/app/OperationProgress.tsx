@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import type { UiLanguage } from "./language";
 import { progressCopy, type OperationStep } from "./progressState";
 
-export function OperationProgress({ steps, failed, timing, language }: {
-  steps: OperationStep[]; failed: boolean; language: UiLanguage;
+export function OperationProgress({ steps, failed, timing, language, dirty = false }: {
+  steps: OperationStep[]; failed: boolean; language: UiLanguage; dirty?: boolean;
   timing: { kind: "analyze" | "plan" | "review"; startedAt: number; finishedAt: number | null };
 }) {
   const [now, setNow] = useState(timing.startedAt);
@@ -24,8 +24,8 @@ export function OperationProgress({ steps, failed, timing, language }: {
     <p className="thinking-state" role="timer" aria-live="off">
       {copy[timing.kind]} · {timing.finishedAt === null ? copy.running : failed ? copy.stopped : copy.elapsed} {duration}
     </p>
-    <p role="status" aria-live="polite">{failed ? (prepared ? copy.error : copy.prepareError)
-      : completed ? copy.saved : active ? copy.stages[active.stage] ?? copy.other : copy.preparing}</p>
+    <p role="status" aria-live="polite">{failed ? (dirty ? copy.unsavedError : prepared ? copy.error : copy.prepareError)
+      : completed ? (dirty ? copy.savedWithEdits : copy.saved) : active ? copy.stages[active.stage] ?? copy.other : copy.preparing}</p>
     <ol className="thinking-timeline">
       {steps.map((step, index) => <li key={`${step.stage}-${step.occurrence}`}
         className={`thinking-step${step.status === "completed" ? " is-complete" : ""}${step.status === "active" ? " is-active" : ""}`}>

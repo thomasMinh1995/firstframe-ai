@@ -146,7 +146,7 @@ export default function Home() {
         <p className="storage-note">Dự án được lưu cục bộ trên máy này. Chưa có đồng bộ tài khoản.</p>
       </nav>
       {!!steps.length && operationTiming && <OperationProgress steps={steps} failed={operationFailed}
-        timing={operationTiming} language={progressLanguage(project?.response_language ?? "auto")} />}
+        timing={operationTiming} dirty={dirty} language={progressLanguage(project?.response_language ?? "auto")} />}
       {busy && !steps.length && <p className="operation-status" role="status">{busy}</p>}
       {error && <p className="error" role="alert">{error}</p>}
       {notice && <p className="operation-status" role="status">{notice}</p>}
