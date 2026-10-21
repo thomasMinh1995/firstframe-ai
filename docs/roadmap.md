@@ -118,6 +118,19 @@ Automated tests cover the question gate, persistence across app instances, revie
 
 **Validation:** Saved context must match AI input; feedback artifacts, snapshots and targets must remain paired. Validate quotations against each target field, not the whole draft. Navigation preserves all unsaved text, including project-name-only edits, and uncertain save results must not trigger a reload or retry that overwrites buffers. Automated contract/UI tests and a real-model beginner pilot are required during implementation; transport tests alone do not establish feedback quality.
 
+## New-User Onboarding Tour — Planned
+
+- Guide beginners through six steps in three stages: starting a project, clarifying their choices, and editing/reviewing a story plan.
+- Show each step only when its target exists; pause for real user actions and preserve all unsaved edits.
+- Support dismissing, resuming, replaying, mobile layouts, keyboard navigation, and browser-local progress.
+- Keep tour navigation independent of project writes and AI calls.
+
+**User outcome:** A beginner knows what to do next and how to save, revise, and return to a story project.
+
+**Status:** Planning only. See [Feature #22](https://github.com/thomasMinh1995/firstframe-ai/issues/22) and the [implementation plan](plans/new-user-tour.md). This tour supports Milestone 1 and does not require the later screenplay features.
+
+**Validation:** Cover empty and existing projects, conditional questions/drafts, failures, reloads, and project switches. Verify focus and positioning in a browser, and confirm tour controls preserve the full buffer without making save or AI requests.
+
 ## Milestone 2: Build an Editable Scene Outline
 
 - Develop the selected story plan into an ordered list of scenes.
