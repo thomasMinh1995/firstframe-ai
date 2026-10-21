@@ -13,6 +13,7 @@ from app.application.ai_provider import StructuredProvider, StructuredRequest
 from app.application.dataset import recording_provider
 from app.application.example_loader import DomainExample, ExampleLoader
 from app.application.knowledge_loader import KnowledgeLoader
+from app.application.language import ResponseLanguage, resolve_response_language
 from app.application.prompt_loader import PromptLoader
 from app.core.artifacts import (
     ArtifactKind,
@@ -385,12 +386,19 @@ class StoryGenerationService:
         idea_text: str,
         constraints: tuple[Constraint, ...] = (),
         answers: tuple[tuple[str, str], ...] = (),
+        response_language: ResponseLanguage = "auto",
     ) -> ReasoningArtifact:
         return self._harness.analyze(
             IdeaArtifact(
                 metadata=_metadata(DEFAULT_DOMAIN_ID, "idea"),
                 text=idea_text,
-                constraints=constraints,
+                constraints=(
+                    *constraints,
+                    Constraint(
+                        name="target_response_language",
+                        value=resolve_response_language(idea_text, response_language),
+                    ),
+                ),
                 clarifications=answers,
             )
         )
@@ -400,6 +408,7 @@ class StoryGenerationService:
         idea_text: str,
         answers: tuple[tuple[str, str], ...],
         constraints: tuple[Constraint, ...] = (),
+        response_language: ResponseLanguage = "auto",
     ) -> HarnessRun:
         return self._harness.plan(
             _LLMReasoningArtifact(
@@ -410,7 +419,7 @@ class StoryGenerationService:
                     ReasoningNote(label="Original idea", content=idea_text),
                     ReasoningNote(
                         label="Target response language",
-                        content=_detect_response_language(idea_text),
+                        content=resolve_response_language(idea_text, response_language),
                     ),
                     ReasoningNote(
                         label="Creator constraints",
@@ -433,6 +442,7 @@ class StoryGenerationService:
         logline: str,
         sections: tuple[PlanSection, ...],
         creator_context: str,
+        response_language: ResponseLanguage = "auto",
     ) -> EvaluationArtifact:
         return self._harness.review(
             _LLMPlanningArtifact(
@@ -441,7 +451,7 @@ class StoryGenerationService:
                 title=title,
                 logline=logline,
                 sections=sections,
-                target_response_language=_detect_response_language(idea_text),
+                target_response_language=resolve_response_language(idea_text, response_language),
                 creator_context=creator_context,
             )
         )
@@ -451,8 +461,9 @@ class StoryGenerationService:
         idea_text: str,
         domain_id: str = DEFAULT_DOMAIN_ID,
         constraints: tuple[Constraint, ...] = (),
+        response_language: ResponseLanguage = "auto",
     ) -> HarnessRun:
-        target_response_language = _detect_response_language(idea_text)
+        target_response_language = resolve_response_language(idea_text, response_language)
         idea = IdeaArtifact(
             metadata=_metadata(domain_id, "idea"),
             text=idea_text,
@@ -532,27 +543,7 @@ def _target_response_language(idea: IdeaArtifact) -> str:
 
 
 def _detect_response_language(text: str) -> str:
-    normalized = text.lower()
-    has_vietnamese_diacritics = any(
-        character in normalized
-        for character in "ăâđêôơưáàảãạấầẩẫậắằẳẵặéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵ"
-    )
-    common_vietnamese_words = (
-        "một",
-        "người",
-        "câu chuyện",
-        "gia đình",
-        "cha",
-        "mẹ",
-        "con",
-        "trước khi",
-        "rời",
-        "việt nam",
-        "muốn",
-    )
-    if has_vietnamese_diacritics or any(word in normalized for word in common_vietnamese_words):
-        return "Vietnamese"
-    return "English"
+    return resolve_response_language(text)
 
 
 def _is_vietnamese_language(language: str) -> bool:
@@ -594,13 +585,20 @@ def _creator_input(
     )
 
 
+def _story_language_header(target_language: str) -> str:
+    return (
+        f"Target response language: {target_language}\n"
+        "Write new narrative, explanations and questions in the target language, even when "
+        "the brief uses another language. Keep author terms, names and verbatim source "
+        "quotations in their original language. Preserve JSON field names in English.\n\n"
+    )
+
+
 def _idea_input(idea: IdeaArtifact) -> str:
     target_language = _target_response_language(idea)
     return (
         f"Domain ID: {idea.metadata.domain_id}\n\n"
-        f"Target response language: {target_language}\n"
-        "All generated JSON string values must use this language. Preserve JSON field names "
-        "in English.\n\n"
+        f"{_story_language_header(target_language)}"
         f"Creator brief (JSON data):\n"
         f"{_creator_input(idea.text, idea.constraints, idea.clarifications)}"
     )
@@ -615,9 +613,7 @@ def _reasoning_input(
     questions = "\n".join(f"- {question}" for question in reasoning.open_questions)
     target_language = _find_note(reasoning, "Target response language")
     return (
-        f"Target response language: {target_language}\n"
-        "All generated JSON string values must use this language. Preserve JSON field names "
-        "in English.\n\n"
+        f"{_story_language_header(target_language)}"
         f"Creator intent and decisions:\n{getattr(reasoning, 'creator_context', '')}\n\n"
         f"Reasoning notes:\n{notes}\n\n"
         f"Missing information / mentor questions:\n{questions or '- None'}\n\n"

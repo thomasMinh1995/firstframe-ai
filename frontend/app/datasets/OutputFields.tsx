@@ -2,7 +2,7 @@
 
 const labels: Record<string, string> = {
   summary: "Tóm tắt", notes: "Ghi nhận", label: "Nhãn", content: "Nội dung", missing_information: "Câu hỏi làm rõ",
-  story_plan: "Bản phát triển", working_title: "Tên tác phẩm", title: "Tên", logline: "Logline", text: "Nội dung",
+  story_plan: "Bản phát triển", working_title: "Tên tác phẩm", title: "Tên", logline: "Tóm tắt một câu", text: "Nội dung",
   characters: "Nhân vật", protagonist: "Nhân vật chính", supporting_characters: "Nhân vật phụ",
   antagonist_or_obstacle: "Đối lực / trở ngại", conflict: "Xung đột", external: "Bên ngoài", internal: "Nội tâm", stakes: "Điều có thể mất",
   beginning: "Mở đầu", setup: "Bối cảnh", key_event: "Sự kiện chính", middle: "Phát triển", escalation: "Leo thang",

@@ -164,7 +164,7 @@ def _initial_steps(root: Recording, records: dict[str, Recording]) -> list[DemoS
         )
         feedback, answers = output.evaluation, []
         analysis_record = root
-        answer_description = "Luồng này đã tạo plan trực tiếp; không có câu trả lời tác giả riêng."
+        answer_description = "Luồng này đã tạo bản phát triển trực tiếp; không có câu trả lời tác giả riêng."
     else:
         before, after = _project_pair(root)
         idea, constraints, analysis = before.idea, before.constraints, before.analysis
@@ -175,7 +175,7 @@ def _initial_steps(root: Recording, records: dict[str, Recording]) -> list[DemoS
         ]
         answer_description = "Các lựa chọn tác giả đã gửi khi tạo bản phát triển này."
         if not answers:
-            answer_description = "Brief không có câu trả lời làm rõ riêng trong bản ghi này."
+            answer_description = "Ý tưởng này không có câu trả lời làm rõ riêng trong bản ghi."
         for candidate in records.values():
             if candidate.operation != "analyze" or candidate.project_id != root.project_id:
                 continue

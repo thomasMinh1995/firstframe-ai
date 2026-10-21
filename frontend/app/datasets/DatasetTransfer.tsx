@@ -71,7 +71,7 @@ export default function DatasetTransfer({disabled, onBusy, onImported}: {
     <p>Gói gồm bản ghi gốc, provider/model, góp ý, bản sửa, toàn bộ lịch sử và lựa chọn demo/train.
       Máy nhận nhập file rồi chạy demo local, không gọi OpenAI hay Ollama.</p>
     <button className="secondary" disabled={disabled || busy} onClick={exportFile}>Xuất gói dataset đã duyệt</button>
-    <p>Chỉ xuất mẫu tốt đã duyệt. Để phát lại demo đủ ngữ cảnh, duyệt và chọn cả mẫu phân tích, tạo plan và các lượt sửa muốn dùng.</p>
+    <p>Chỉ xuất mẫu tốt đã duyệt. Để phát lại demo đủ ngữ cảnh, duyệt và chọn cả mẫu phân tích, tạo bản phát triển và các lượt sửa muốn dùng.</p>
     <label htmlFor="dataset-bundle-file">Nhập gói từ máy khác (.json, tối đa 25 MiB)</label>
     <input ref={fileInput} id="dataset-bundle-file" type="file" accept=".json,application/json" disabled={disabled || busy}
       onChange={(event) => selectFile(event.target.files?.[0])} />

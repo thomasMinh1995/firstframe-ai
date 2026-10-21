@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { StoryFeedback } from "./StoryResultCards";
 import { sectionLabels } from "./storyLabels";
+import { responseLanguageLabels, type ResponseLanguage } from "./language";
 import {
   editableProject, listProjects, projectRequest,
   type Project, type ProjectSummary, type StoryDraft,
@@ -20,9 +21,11 @@ export default function Home() {
   const briefChanged = project !== null && saved !== null && (project.idea !== saved.idea
     || JSON.stringify(project.constraints) !== JSON.stringify(saved.constraints));
   const feedbackChanged = project !== null && saved !== null && JSON.stringify({
+    response_language: project.response_language,
     idea: project.idea, constraints: project.constraints, answers: project.answers, draft: project.draft,
     questions: project.analysis?.missing_information ?? [],
   }) !== JSON.stringify({
+    response_language: saved.response_language,
     idea: saved.idea, constraints: saved.constraints, answers: saved.answers, draft: saved.draft,
     questions: saved.analysis?.missing_information ?? [],
   });
@@ -73,7 +76,7 @@ export default function Home() {
       const next = await persist();
       if (!next) return;
       accept(await projectRequest(`/${next.id}/${kind}`, "POST", { revision: next.revision }));
-      setNotice(kind === "analyze" ? "Hãy trả lời các câu hỏi trước khi tạo story plan."
+      setNotice(kind === "analyze" ? "Hãy trả lời các câu hỏi trước khi tạo bản phát triển."
         : kind === "plan" ? "Đã tạo và lưu bản phát triển. Bạn có thể sửa trực tiếp bên dưới."
           : "Đã lưu phản hồi và phiên bản cho đúng nội dung hiện tại.");
     });
@@ -97,7 +100,7 @@ export default function Home() {
         <h1>FirstFrame</h1>
         <p className="tagline">Từng bước phát triển câu chuyện bạn muốn kể.</p>
         <p className="summary">Bắt đầu bằng ý tưởng, làm rõ những lựa chọn rồi cùng sửa bản phát triển.
-          Phiên bản này hỗ trợ story plan; viết kịch bản theo cảnh sẽ đến sau.</p>
+          Viết kịch bản theo cảnh sẽ đến sau.</p>
         <a className="demo-entry secondary" href="/demo">Xem demo local từ kịch bản có sẵn</a>
         <a className="demo-entry secondary" href="/datasets">Đánh giá chất lượng dataset</a>
       </header>
@@ -140,6 +143,16 @@ export default function Home() {
             <label htmlFor="project-title">Tên dự án</label>
             <input id="project-title" maxLength={200} value={project.title}
               onChange={(event) => setProject({ ...project, title: event.target.value })} />
+            <label htmlFor="response-language">Ngôn ngữ đầu ra</label>
+            <select id="response-language" value={project.response_language} onChange={(event) =>
+              setProject({ ...project, response_language: event.target.value as ResponseLanguage })}>
+              {Object.entries(responseLanguageLabels).map(([value, label]) =>
+                <option key={value} value={value}>{label}</option>)}
+            </select>
+            <p className="storage-note">Hỗ trợ tiếng Việt và tiếng Anh. Với ý tưởng quá ngắn,
+              không dấu hoặc chưa rõ ngôn ngữ, hãy chọn ngôn ngữ đầu ra.
+              Lựa chọn áp dụng cho lần làm rõ, phát triển hoặc góp ý tiếp theo;
+              không tự dịch bản đang viết hay gọi AI. Thuật ngữ như lab coach có thể giữ nguyên.</p>
             <label htmlFor="idea">Ý tưởng, kỷ niệm hoặc tình huống của bạn</label>
             <textarea id="idea" maxLength={5000} value={project.idea} rows={5}
               placeholder="Điều gì khiến bạn muốn kể câu chuyện này?"
@@ -150,7 +163,7 @@ export default function Home() {
               placeholder="Mỗi dòng một ý, ví dụ: kết thúc mở; hai nhân vật; chỉ một căn nhà."
               onChange={(event) => setProject({ ...project, constraints: event.target.value.split("\n") })} />
             {briefChanged && (project.analysis || project.draft) && <p className="form-message">Ý tưởng đã thay đổi. Làm rõ lại trước khi tạo
-              plan mới; bản thảo và câu trả lời trước đó sẽ được giữ trong lịch sử.</p>}
+              bản phát triển mới; bản thảo và câu trả lời trước đó sẽ được giữ trong lịch sử.</p>}
             {(!project.analysis || briefChanged) && <button disabled={!project.idea.trim()}
               onClick={() => action("analyze")}>Cùng làm rõ ý tưởng</button>}
           </section>
@@ -158,7 +171,7 @@ export default function Home() {
             <h2>2. Những lựa chọn của bạn</h2>
             <p className="preserve-lines">{project.analysis.summary}</p>
             {!project.analysis.missing_information.length && <p>Ý tưởng đã đủ rõ cho một bản phát triển.
-              Bạn quyết định khi nào bắt đầu tạo plan.</p>}
+              Bạn quyết định khi nào bắt đầu tạo bản phát triển.</p>}
             {project.analysis.missing_information.map((question, index) => (
               <div className="question-block" key={`${project.analysis?.artifact_id}-${index}`}>
                 <label htmlFor={`answer-${index}`}>{question}</label>
@@ -176,7 +189,7 @@ export default function Home() {
             ))}
             <button disabled={project.analysis.missing_information.some((_, i) => !project.answers[i]?.trim())}
               onClick={() => action("plan")}>
-              {project.draft ? "Tạo lại story plan (giữ phiên bản cũ)" : "Phát triển story plan từ lựa chọn của tôi"}
+              {project.draft ? "Tạo lại bản phát triển (giữ phiên bản cũ)" : "Tạo bản phát triển từ lựa chọn của tôi"}
             </button>
           </section>}
           {project.draft && <section className="panel form-stack">
@@ -216,13 +229,14 @@ export default function Home() {
         </section>}
         {!!project.versions.length && <section className="panel version-history">
           <h2>Các phiên bản đã giữ</h2>
-          <p>Dùng lại một bản chỉ thay nội dung story plan; ý tưởng và câu trả lời hiện tại được giữ.
+          <p>Khôi phục chỉ thay bản phát triển; ý tưởng và câu trả lời hiện tại được giữ.
             Nhận phản hồi mới sau khi khôi phục.</p>
           {[...project.versions].reverse().map((version, index) => <details key={version.id}>
             <summary>Bản {project.versions.length - index} · {new Date(version.created_at).toLocaleString("vi-VN")}
               {version.feedback ? " · Có phản hồi" : " · Bản lưu trước khi tạo lại"}</summary>
             <p className="preserve-lines">{version.draft.title}{"\n"}{version.draft.logline}</p>
             <p className="preserve-lines">Ý tưởng của bản này: {version.idea}</p>
+            <p>Ngôn ngữ đầu ra: {responseLanguageLabels[version.response_language ?? "auto"]}</p>
             <PastAnswers questions={version.questions} answers={version.answers} />
             {version.draft.sections.map((section, i) => <div key={i}>
               <h3>{sectionLabels[section.title] ?? section.title}</h3>
@@ -235,8 +249,8 @@ export default function Home() {
               accept(await projectRequest(`/${next.id}`, "PUT", {
                 ...editableProject(next), draft: version.draft,
               }));
-              setNotice("Đã dùng lại nội dung story plan. Các phiên bản trước vẫn được giữ.");
-            })}>Dùng lại story plan này</button>
+              setNotice("Đã dùng lại nội dung bản phát triển. Các phiên bản trước vẫn được giữ.");
+            })}>Dùng lại bản phát triển này</button>
           </details>)}
         </section>}
       </>}

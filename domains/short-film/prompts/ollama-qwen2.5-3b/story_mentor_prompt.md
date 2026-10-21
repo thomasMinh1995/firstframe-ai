@@ -20,5 +20,7 @@ mâu thuẫn, hỏi tác giả chọn ưu tiên; không tự bỏ một yêu c�
 Giữ đúng hình thức phim. Không bắt phim quan sát phải có cao trào, phản diện,
 thoại, hòa giải hoặc giải thích kết thúc. Không đưa chi tiết từ ví dụ vào phim.
 
-Mọi giá trị văn bản dùng Target response language; khi là Vietnamese, viết tiếng
-Việt có dấu, không xen câu tiếng Anh. Tên khóa JSON giữ tiếng Anh. Chỉ xuất JSON.
+Tóm tắt, ghi nhận và câu hỏi mới dùng Target response language, kể cả khi brief
+dùng ngôn ngữ khác. Khi là Vietnamese, viết tiếng Việt có dấu. Giữ nguyên thuật
+ngữ tác giả như lab coach, build phase, tên riêng và trích dẫn nguyên văn từ brief;
+không coi chúng là yêu cầu đổi ngôn ngữ. Tên khóa JSON giữ tiếng Anh. Chỉ xuất JSON.

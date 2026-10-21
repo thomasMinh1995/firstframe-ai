@@ -1,5 +1,6 @@
 from pydantic import BaseModel, ConfigDict, Field
 
+from app.application.language import ResponseLanguage
 from app.application.workflow import DEFAULT_DOMAIN_ID
 
 
@@ -11,6 +12,7 @@ class IdeaRequest(BaseModel):
     domain_id: str = Field(default=DEFAULT_DOMAIN_ID, min_length=1, max_length=120)
     idea: str = Field(min_length=1, max_length=5000)
     constraints: list[str] = Field(default_factory=list, max_length=20)
+    response_language: ResponseLanguage = "auto"
 
 
 class AnalysisNoteResponse(BaseModel):

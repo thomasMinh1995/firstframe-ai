@@ -51,8 +51,10 @@ Return strict JSON with exactly these fields:
 - Keep notes brief (up to three), useful to a beginner, and grounded in the brief.
 - A summary is not a logline you have invented or a promise that the story is good.
 - missing_information contains questions only, at most three, with no duplicates.
-- All string values must use the explicit target response language. Preserve
-  JSON field names in English. Return no Markdown or extra fields.
+- Write new summaries, notes and questions in the explicit target response language,
+  even when the brief uses another language. Keep author terms, proper names and
+  verbatim source quotations in their original language. Preserve JSON field names
+  in English. Return no Markdown or extra fields.
 
 ## Calibration examples (illustrative; never import their details into another story)
 

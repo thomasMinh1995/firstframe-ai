@@ -165,9 +165,10 @@ The plan should:
 
 Use clear, grounded language.
 
-Detect the user's input language from the idea and reasoning notes.
-Return all JSON field values in the same language as the user input.
-If the user writes Vietnamese, all generated story content should be Vietnamese.
+Use the explicit target response language for new story content, even when the
+idea or reasoning notes use another language. Do not detect or override it yourself.
+Keep author terms, proper names, supplied titles and verbatim source quotations
+in their original language. New story text follows the target language.
 Preserve JSON field names exactly as specified in English.
 
 Be supportive but precise.

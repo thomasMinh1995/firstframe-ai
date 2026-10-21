@@ -496,3 +496,84 @@ def test_existing_database_records_keep_their_drafts_and_feedback(project_client
     assert reopened["clarifications"] == {}
     assert reopened["versions"][0]["questions"] == []
     assert store.get(project["id"]) == stored
+
+
+def test_unknown_language_is_saved_but_requires_selection_before_ai(project_client):
+    client, provider = project_client
+    project = client.post("/api/projects").json()
+    url = f"/api/projects/{project['id']}"
+    data = payload(project)
+    data["idea"] = "Une étudiante apprend à faire confiance à son équipe."
+    project = client.put(url, json=data).json()
+    response = client.post(f"{url}/analyze", json={"revision": project["revision"]})
+    assert response.status_code == 422
+    assert "chọn ngôn ngữ" in response.json()["detail"]
+    assert client.get(url).json() == project
+    assert provider.requests == []
+    data = payload(project)
+    data["response_language"] = "vi"
+    project = client.put(url, json=data).json()
+    project = develop_project(client, project)
+    for request in provider.requests:
+        assert "Target response language: Vietnamese" in request.input_text
+    assert project["response_language"] == "vi"
+
+
+def test_language_change_preserves_buffer_answers_versions_and_legacy_clients(project_client):
+    client, provider = project_client
+    project = develop_project(client, start_project(client))
+    url = f"/api/projects/{project['id']}"
+    data = payload(project)
+    data["response_language"] = "en"
+    data["title"] = "Tên đang sửa"
+    data["draft"]["sections"][5]["content"] = 'Bản đang sửa: lab coach nói "Keep learning."'
+    call_count = len(provider.requests)
+    saved = client.put(url, json=data).json()
+    assert len(provider.requests) == call_count
+    assert saved["draft"] == data["draft"]
+    assert saved["title"] == data["title"]
+    assert saved["analysis"] == project["analysis"]
+    assert saved["answers"] == project["answers"]
+    assert saved["clarification_history"] == project["clarification_history"]
+    assert saved["feedback"] == project["feedback"]
+    assert saved["feedback_is_current"] is False
+    assert saved["versions"][0]["response_language"] == "auto"
+    assert client.get(url).json() == saved
+    # An older client does not send this field; it must not reset the saved choice.
+    legacy_payload = payload(saved)
+    saved = client.put(url, json=legacy_payload).json()
+    assert saved["response_language"] == "en"
+    reviewed = client.post(f"{url}/review", json={"revision": saved["revision"]}).json()
+    assert "Target response language: English" in provider.requests[-1].input_text
+    assert reviewed["draft"] == data["draft"]
+    assert reviewed["response_language"] == "en"
+    assert reviewed["feedback_is_current"] is True
+    assert reviewed["versions"][-1]["response_language"] == "en"
+
+
+def test_legacy_auto_language_keeps_recorded_content_key_and_reopens_without_writes(project_client):
+    client, _ = project_client
+    project = develop_project(client, start_project(client))
+    store = project_routes.get_project_store()
+    legacy = store.get(project["id"])
+    legacy.pop("response_language")
+    for version in legacy["versions"]:
+        version.pop("response_language")
+    stored = store.save(legacy, project["revision"])
+    reopened = client.get(f"/api/projects/{project['id']}").json()
+    assert reopened["response_language"] == "auto"
+    assert reopened["feedback_is_current"] is True
+    assert reopened["draft"] == project["draft"]
+    assert reopened["feedback"] == project["feedback"]
+    assert store.get(project["id"]) == stored
+
+
+def test_generate_language_selection_and_invalid_choices(project_client):
+    client, provider = project_client
+    response = client.post("/api/generate", json={"idea": "AI"})
+    assert response.status_code == 422
+    assert provider.requests == []
+    response = client.post("/api/generate", json={"idea": "AI", "response_language": "en"})
+    assert response.status_code == 200
+    assert all("Target response language: English" in r.input_text for r in provider.requests)
+    assert client.post("/api/generate", json={"idea": "AI", "response_language": "fr"}).status_code == 422

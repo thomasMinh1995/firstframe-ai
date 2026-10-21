@@ -85,9 +85,9 @@ export default function DemoPage() {
     {error && <p className="error" role="alert">{error}</p>}
     {!busy && !error && !items.length && <section className="panel empty-project">
       <h2>Chưa có workflow hoàn chỉnh để phát lại</h2>
-      <p>Hãy xuất một lượt tạo plan thành công rồi tải lại danh sách.
+      <p>Hãy xuất một lượt tạo bản phát triển thành công rồi tải lại danh sách.
         Các bản ghi lỗi hoặc chưa hoàn tất không xuất hiện ở đây.
-        Khi lọc demo đã duyệt, hãy chọn các mẫu phân tích và tạo plan liên quan trong trang đánh giá dataset.</p>
+        Khi lọc demo đã duyệt, hãy chọn các mẫu phân tích và tạo bản phát triển liên quan trong trang đánh giá dataset.</p>
     </section>}
 
     {!busy && scenario && step && <>
