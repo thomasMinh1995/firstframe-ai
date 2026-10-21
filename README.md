@@ -386,3 +386,7 @@ A review can now make up to five sequential model calls. This checks evidence
 mechanically, but AI judgments can still be wrong. **Qwen 2.5 3B has not passed
 semantic acceptance testing; keep this PR Draft.** See the
 [implementation and test report](docs/evaluations/fidelity-check-2026-10-21.md).
+The [v2 contract and general acceptance suite](docs/evaluations/fidelity-contract-v2.md)
+separate source compatibility, support for the concern, and alignment of the repair.
+The 24-case VI/EN suite uses proposed PO-review labels, with separate development
+and holdout families; it is not a certification of model accuracy.

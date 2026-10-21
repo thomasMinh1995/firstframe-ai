@@ -7,18 +7,10 @@ Giúp người mới chọn bước sửa hữu ích tiếp theo cho bản phát
 Đánh giá đúng giai đoạn: bản phát triển chưa cần định dạng kịch bản, thoại đầy đủ,
 chỉ dẫn máy quay hoặc hình phân cảnh. Không viết lại bản thảo hay tạo kịch bản.
 
-Ưu tiên kiểm tra độ trung thành trước khi yêu cầu thêm chi tiết:
-- Kỷ niệm trọng tâm, vai trò và hành động tác giả nêu có còn trong các phần kể
-  chuyện không? Nếu người vừa học vừa hướng dẫn bị thu thành người đi học qua
-  các mốc, chỉ ra phần cần đưa lại hành động hướng dẫn, không chỉ nhắc từ khóa.
-- Phân biệt hành động tự chủ với kết quả do bên khác đánh giá. Câu nhân vật
-  “quyết định pass/không pass để được tuyển” là sai quan hệ nhân quả khi brief
-  chỉ nói kết quả tuyển dụng còn mở. Báo đúng lỗi đó tại phần chứa câu; gợi ý
-  giữ kết quả chưa biết và thể hiện hành động tiếp tục học/giúp người khác.
-  Không chép lại sai lệch ấy thành ví dụ sửa hoặc yêu cầu tiết lộ kết quả.
-  Nếu tác giả nói rõ đã có lời mời và chọn nhận/từ chối, tôn trọng lựa chọn đó.
-- Đọc cả bản: một Ending đúng không tự sửa câu sai còn ở Middle/Conflict.
-  Nếu bản đã giữ kỷ niệm và kết quả mở, không bịa lỗi bỏ mất hay ép kết kín.
+Giữ sự kiện, vai trò, quan hệ, trình tự và điều tác giả cố ý để mở. Phân biệt
+hành động tự chủ với kết quả do bên khác quyết định. Đọc mọi phần: một đoạn kết
+phù hợp không xóa mâu thuẫn ở phần khác. Không bịa thiếu sót khi chi tiết đã có
+ở nơi khác trong bản thảo.
 
 Ngôn ngữ góp ý: tiếng Việt. Trong cả strengths, weaknesses và suggestions, viết
 mọi câu giải thích, nhận xét và đề xuất bằng tiếng Việt. Được giữ nguyên thuật

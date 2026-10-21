@@ -1,0 +1,880 @@
+{
+  "schema_version": 1,
+  "label_status": "proposed_for_PO_review",
+  "cases": [
+    {
+      "id": "boat-role-conflict",
+      "family": "boat-role",
+      "split": "development",
+      "language": "vi",
+      "author": {
+        "idea": "Mai lái đò, còn em trai là hành khách.",
+        "constraints": [],
+        "clarifications": []
+      },
+      "draft": {
+        "title": "",
+        "logline": "",
+        "sections": [
+          {
+            "title": "Scene",
+            "content": "Em trai lái đò; Mai chỉ là hành khách."
+          }
+        ]
+      },
+      "candidate": {
+        "section_index": 0,
+        "draft_quote": "Em trai lái đò; Mai chỉ là hành khách.",
+        "author_quote": "Mai lái đò, còn em trai là hành khách.",
+        "explanation": "Bản thảo đổi người lái đò từ Mai sang em trai.",
+        "suggestion": "Để Mai lái đò và em trai là hành khách."
+      },
+      "expected": {
+        "scan": "issues",
+        "relation": "contradictory",
+        "concern": "supported",
+        "revision": "aligned",
+        "allow_revision": true
+      },
+      "rationale": "The conflicting version explicitly reverses the stated fact or constraint; the control preserves it. Candidate claims a contradiction in both versions."
+    },
+    {
+      "id": "boat-role-control",
+      "family": "boat-role",
+      "split": "development",
+      "language": "vi",
+      "author": {
+        "idea": "Mai lái đò, còn em trai là hành khách.",
+        "constraints": [],
+        "clarifications": []
+      },
+      "draft": {
+        "title": "",
+        "logline": "",
+        "sections": [
+          {
+            "title": "Scene",
+            "content": "Mai chèo đò chở em trai."
+          }
+        ]
+      },
+      "candidate": {
+        "section_index": 0,
+        "draft_quote": "Mai chèo đò chở em trai.",
+        "author_quote": "Mai lái đò, còn em trai là hành khách.",
+        "explanation": "Bản thảo đổi người lái đò từ Mai sang em trai.",
+        "suggestion": "Đổi vai: em trai lái đò, Mai là hành khách."
+      },
+      "expected": {
+        "scan": "clear",
+        "relation": "compatible",
+        "concern": "unsupported",
+        "revision": "violates",
+        "allow_revision": false
+      },
+      "rationale": "The conflicting version explicitly reverses the stated fact or constraint; the control preserves it. Candidate claims a contradiction in both versions."
+    },
+    {
+      "id": "bakery-order-conflict",
+      "family": "bakery-order",
+      "split": "development",
+      "language": "vi",
+      "author": {
+        "idea": "Lan giao bánh xong mới mở cửa hàng.",
+        "constraints": [],
+        "clarifications": []
+      },
+      "draft": {
+        "title": "",
+        "logline": "",
+        "sections": [
+          {
+            "title": "Scene",
+            "content": "Lan mở cửa hàng rồi mới đi giao bánh."
+          }
+        ]
+      },
+      "candidate": {
+        "section_index": 0,
+        "draft_quote": "Lan mở cửa hàng rồi mới đi giao bánh.",
+        "author_quote": "Lan giao bánh xong mới mở cửa hàng.",
+        "explanation": "Bản thảo đảo thứ tự mở cửa và giao bánh.",
+        "suggestion": "Giữ thứ tự mở cửa trước, giao bánh sau."
+      },
+      "expected": {
+        "scan": "issues",
+        "relation": "contradictory",
+        "concern": "supported",
+        "revision": "violates",
+        "allow_revision": false
+      },
+      "rationale": "The conflicting version explicitly reverses the stated fact or constraint; the control preserves it. Candidate claims a contradiction in both versions. The supplied repair retains the contradiction and must be rejected."
+    },
+    {
+      "id": "bakery-order-control",
+      "family": "bakery-order",
+      "split": "development",
+      "language": "vi",
+      "author": {
+        "idea": "Lan giao bánh xong mới mở cửa hàng.",
+        "constraints": [],
+        "clarifications": []
+      },
+      "draft": {
+        "title": "",
+        "logline": "",
+        "sections": [
+          {
+            "title": "Scene",
+            "content": "Giao bánh xong, Lan mở cửa hàng."
+          }
+        ]
+      },
+      "candidate": {
+        "section_index": 0,
+        "draft_quote": "Giao bánh xong, Lan mở cửa hàng.",
+        "author_quote": "Lan giao bánh xong mới mở cửa hàng.",
+        "explanation": "Bản thảo đảo thứ tự mở cửa và giao bánh.",
+        "suggestion": "Cho Lan mở cửa hàng trước khi giao bánh."
+      },
+      "expected": {
+        "scan": "clear",
+        "relation": "compatible",
+        "concern": "unsupported",
+        "revision": "violates",
+        "allow_revision": false
+      },
+      "rationale": "The conflicting version explicitly reverses the stated fact or constraint; the control preserves it. Candidate claims a contradiction in both versions."
+    },
+    {
+      "id": "exam-outcome-conflict",
+      "family": "exam-outcome",
+      "split": "development",
+      "language": "en",
+      "author": {
+        "idea": "The jury decides whether Noor wins; Noor can only choose whether to enter.",
+        "constraints": [],
+        "clarifications": []
+      },
+      "draft": {
+        "title": "",
+        "logline": "",
+        "sections": [
+          {
+            "title": "Scene",
+            "content": "Noor decides that she wins the jury prize."
+          }
+        ]
+      },
+      "candidate": {
+        "section_index": 0,
+        "draft_quote": "Noor decides that she wins the jury prize.",
+        "author_quote": "The jury decides whether Noor wins; Noor can only choose whether to enter.",
+        "explanation": "The draft gives Noor control over the jury decision.",
+        "suggestion": "Let Noor decide to enter and leave the award decision to the jury."
+      },
+      "expected": {
+        "scan": "issues",
+        "relation": "contradictory",
+        "concern": "supported",
+        "revision": "aligned",
+        "allow_revision": true
+      },
+      "rationale": "The conflicting version explicitly reverses the stated fact or constraint; the control preserves it. Candidate claims a contradiction in both versions."
+    },
+    {
+      "id": "exam-outcome-control",
+      "family": "exam-outcome",
+      "split": "development",
+      "language": "en",
+      "author": {
+        "idea": "The jury decides whether Noor wins; Noor can only choose whether to enter.",
+        "constraints": [],
+        "clarifications": []
+      },
+      "draft": {
+        "title": "",
+        "logline": "",
+        "sections": [
+          {
+            "title": "Scene",
+            "content": "Noor enters and waits for the jury to decide the winner."
+          }
+        ]
+      },
+      "candidate": {
+        "section_index": 0,
+        "draft_quote": "Noor enters and waits for the jury to decide the winner.",
+        "author_quote": "The jury decides whether Noor wins; Noor can only choose whether to enter.",
+        "explanation": "The draft gives Noor control over the jury decision.",
+        "suggestion": "Let Noor decide that she wins the jury prize."
+      },
+      "expected": {
+        "scan": "clear",
+        "relation": "compatible",
+        "concern": "unsupported",
+        "revision": "violates",
+        "allow_revision": false
+      },
+      "rationale": "The conflicting version explicitly reverses the stated fact or constraint; the control preserves it. Candidate claims a contradiction in both versions."
+    },
+    {
+      "id": "open-letter-conflict",
+      "family": "open-letter",
+      "split": "development",
+      "language": "vi",
+      "author": {
+        "idea": "Phim kết thúc trước khi Huy mở thư; người xem không biết nội dung thư.",
+        "constraints": [],
+        "clarifications": []
+      },
+      "draft": {
+        "title": "",
+        "logline": "",
+        "sections": [
+          {
+            "title": "Scene",
+            "content": "Huy mở thư, đọc to toàn bộ nội dung rồi phim kết thúc."
+          }
+        ]
+      },
+      "candidate": {
+        "section_index": 0,
+        "draft_quote": "Huy mở thư, đọc to toàn bộ nội dung rồi phim kết thúc.",
+        "author_quote": "Phim kết thúc trước khi Huy mở thư; người xem không biết nội dung thư.",
+        "explanation": "Bản thảo tiết lộ nội dung thư trước khi kết thúc.",
+        "suggestion": "Kết phim khi lá thư vẫn chưa được mở."
+      },
+      "expected": {
+        "scan": "issues",
+        "relation": "contradictory",
+        "concern": "supported",
+        "revision": "aligned",
+        "allow_revision": true
+      },
+      "rationale": "The conflicting version explicitly reverses the stated fact or constraint; the control preserves it. Candidate claims a contradiction in both versions."
+    },
+    {
+      "id": "open-letter-control",
+      "family": "open-letter",
+      "split": "development",
+      "language": "vi",
+      "author": {
+        "idea": "Phim kết thúc trước khi Huy mở thư; người xem không biết nội dung thư.",
+        "constraints": [],
+        "clarifications": []
+      },
+      "draft": {
+        "title": "",
+        "logline": "",
+        "sections": [
+          {
+            "title": "Scene",
+            "content": "Huy đặt lá thư chưa mở xuống bàn; phim kết thúc."
+          }
+        ]
+      },
+      "candidate": {
+        "section_index": 0,
+        "draft_quote": "Huy đặt lá thư chưa mở xuống bàn; phim kết thúc.",
+        "author_quote": "Phim kết thúc trước khi Huy mở thư; người xem không biết nội dung thư.",
+        "explanation": "Bản thảo tiết lộ nội dung thư trước khi kết thúc.",
+        "suggestion": "Cho Huy đọc to nội dung thư trước khi kết phim."
+      },
+      "expected": {
+        "scan": "clear",
+        "relation": "compatible",
+        "concern": "unsupported",
+        "revision": "violates",
+        "allow_revision": false
+      },
+      "rationale": "The conflicting version explicitly reverses the stated fact or constraint; the control preserves it. Candidate claims a contradiction in both versions."
+    },
+    {
+      "id": "siblings-conflict",
+      "family": "siblings",
+      "split": "development",
+      "language": "en",
+      "author": {
+        "idea": "Ada and Ben are siblings, not spouses.",
+        "constraints": [],
+        "clarifications": []
+      },
+      "draft": {
+        "title": "",
+        "logline": "",
+        "sections": [
+          {
+            "title": "Scene",
+            "content": "Ada introduces Ben as her husband."
+          }
+        ]
+      },
+      "candidate": {
+        "section_index": 0,
+        "draft_quote": "Ada introduces Ben as her husband.",
+        "author_quote": "Ada and Ben are siblings, not spouses.",
+        "explanation": "The draft changes their sibling relationship to marriage.",
+        "suggestion": "Keep Ada and Ben married."
+      },
+      "expected": {
+        "scan": "issues",
+        "relation": "contradictory",
+        "concern": "supported",
+        "revision": "violates",
+        "allow_revision": false
+      },
+      "rationale": "The conflicting version explicitly reverses the stated fact or constraint; the control preserves it. Candidate claims a contradiction in both versions. The supplied repair retains the contradiction and must be rejected."
+    },
+    {
+      "id": "siblings-control",
+      "family": "siblings",
+      "split": "development",
+      "language": "en",
+      "author": {
+        "idea": "Ada and Ben are siblings, not spouses.",
+        "constraints": [],
+        "clarifications": []
+      },
+      "draft": {
+        "title": "",
+        "logline": "",
+        "sections": [
+          {
+            "title": "Scene",
+            "content": "Ada introduces Ben as her brother."
+          }
+        ]
+      },
+      "candidate": {
+        "section_index": 0,
+        "draft_quote": "Ada introduces Ben as her brother.",
+        "author_quote": "Ada and Ben are siblings, not spouses.",
+        "explanation": "The draft changes their sibling relationship to marriage.",
+        "suggestion": "Make Ada and Ben spouses."
+      },
+      "expected": {
+        "scan": "clear",
+        "relation": "compatible",
+        "concern": "unsupported",
+        "revision": "violates",
+        "allow_revision": false
+      },
+      "rationale": "The conflicting version explicitly reverses the stated fact or constraint; the control preserves it. Candidate claims a contradiction in both versions."
+    },
+    {
+      "id": "dialogue-limit-conflict",
+      "family": "dialogue-limit",
+      "split": "development",
+      "language": "vi",
+      "author": {
+        "idea": "Phim không có lời thoại; cảm xúc thể hiện bằng hành động.",
+        "constraints": [],
+        "clarifications": []
+      },
+      "draft": {
+        "title": "",
+        "logline": "",
+        "sections": [
+          {
+            "title": "Scene",
+            "content": "Nhân vật nói thành tiếng: Tôi nhớ mẹ."
+          }
+        ]
+      },
+      "candidate": {
+        "section_index": 0,
+        "draft_quote": "Nhân vật nói thành tiếng: Tôi nhớ mẹ.",
+        "author_quote": "Phim không có lời thoại; cảm xúc thể hiện bằng hành động.",
+        "explanation": "Bản thảo thêm lời thoại trái giới hạn tác giả.",
+        "suggestion": "Thay câu nói bằng hành động vuốt chiếc khăn trong im lặng."
+      },
+      "expected": {
+        "scan": "issues",
+        "relation": "contradictory",
+        "concern": "supported",
+        "revision": "aligned",
+        "allow_revision": true
+      },
+      "rationale": "The conflicting version explicitly reverses the stated fact or constraint; the control preserves it. Candidate claims a contradiction in both versions."
+    },
+    {
+      "id": "dialogue-limit-control",
+      "family": "dialogue-limit",
+      "split": "development",
+      "language": "vi",
+      "author": {
+        "idea": "Phim không có lời thoại; cảm xúc thể hiện bằng hành động.",
+        "constraints": [],
+        "clarifications": []
+      },
+      "draft": {
+        "title": "",
+        "logline": "",
+        "sections": [
+          {
+            "title": "Scene",
+            "content": "Nhân vật vuốt chiếc khăn của mẹ rồi im lặng."
+          }
+        ]
+      },
+      "candidate": {
+        "section_index": 0,
+        "draft_quote": "Nhân vật vuốt chiếc khăn của mẹ rồi im lặng.",
+        "author_quote": "Phim không có lời thoại; cảm xúc thể hiện bằng hành động.",
+        "explanation": "Bản thảo thêm lời thoại trái giới hạn tác giả.",
+        "suggestion": "Thêm lời thoại thành tiếng: Tôi nhớ mẹ."
+      },
+      "expected": {
+        "scan": "clear",
+        "relation": "compatible",
+        "concern": "unsupported",
+        "revision": "violates",
+        "allow_revision": false
+      },
+      "rationale": "The conflicting version explicitly reverses the stated fact or constraint; the control preserves it. Candidate claims a contradiction in both versions."
+    },
+    {
+      "id": "paraphrase-conflict",
+      "family": "paraphrase",
+      "split": "development",
+      "language": "vi",
+      "author": {
+        "idea": "An tiếp tục vẽ dù có bán được tranh hay không.",
+        "constraints": [],
+        "clarifications": []
+      },
+      "draft": {
+        "title": "",
+        "logline": "",
+        "sections": [
+          {
+            "title": "Scene",
+            "content": "An chỉ tiếp tục vẽ nếu bán được tranh."
+          }
+        ]
+      },
+      "candidate": {
+        "section_index": 0,
+        "draft_quote": "An chỉ tiếp tục vẽ nếu bán được tranh.",
+        "author_quote": "An tiếp tục vẽ dù có bán được tranh hay không.",
+        "explanation": "Bản thảo biến việc vẽ thành điều phụ thuộc bán tranh.",
+        "suggestion": "Để An vẽ tiếp bất kể có bán được tranh."
+      },
+      "expected": {
+        "scan": "issues",
+        "relation": "contradictory",
+        "concern": "supported",
+        "revision": "aligned",
+        "allow_revision": true
+      },
+      "rationale": "The conflicting version explicitly reverses the stated fact or constraint; the control preserves it. Candidate claims a contradiction in both versions."
+    },
+    {
+      "id": "paraphrase-control",
+      "family": "paraphrase",
+      "split": "development",
+      "language": "vi",
+      "author": {
+        "idea": "An tiếp tục vẽ dù có bán được tranh hay không.",
+        "constraints": [],
+        "clarifications": []
+      },
+      "draft": {
+        "title": "",
+        "logline": "",
+        "sections": [
+          {
+            "title": "Scene",
+            "content": "Bán được tranh hay không, An vẫn vẽ."
+          }
+        ]
+      },
+      "candidate": {
+        "section_index": 0,
+        "draft_quote": "Bán được tranh hay không, An vẫn vẽ.",
+        "author_quote": "An tiếp tục vẽ dù có bán được tranh hay không.",
+        "explanation": "Bản thảo biến việc vẽ thành điều phụ thuộc bán tranh.",
+        "suggestion": "Để An chỉ vẽ tiếp nếu bán được tranh."
+      },
+      "expected": {
+        "scan": "clear",
+        "relation": "compatible",
+        "concern": "unsupported",
+        "revision": "violates",
+        "allow_revision": false
+      },
+      "rationale": "The conflicting version explicitly reverses the stated fact or constraint; the control preserves it. Candidate claims a contradiction in both versions."
+    },
+    {
+      "id": "mixed-terms-conflict",
+      "family": "mixed-terms",
+      "split": "development",
+      "language": "vi",
+      "author": {
+        "idea": "Linh là sound designer, phụ trách âm thanh chứ không phụ trách trang phục.",
+        "constraints": [],
+        "clarifications": []
+      },
+      "draft": {
+        "title": "",
+        "logline": "",
+        "sections": [
+          {
+            "title": "Scene",
+            "content": "Linh chỉ phụ trách trang phục, không làm âm thanh."
+          }
+        ]
+      },
+      "candidate": {
+        "section_index": 0,
+        "draft_quote": "Linh chỉ phụ trách trang phục, không làm âm thanh.",
+        "author_quote": "Linh là sound designer, phụ trách âm thanh chứ không phụ trách trang phục.",
+        "explanation": "Bản thảo đổi công việc của Linh sang trang phục.",
+        "suggestion": "Giữ Linh là sound designer làm âm thanh."
+      },
+      "expected": {
+        "scan": "issues",
+        "relation": "contradictory",
+        "concern": "supported",
+        "revision": "aligned",
+        "allow_revision": true
+      },
+      "rationale": "The conflicting version explicitly reverses the stated fact or constraint; the control preserves it. Candidate claims a contradiction in both versions."
+    },
+    {
+      "id": "mixed-terms-control",
+      "family": "mixed-terms",
+      "split": "development",
+      "language": "vi",
+      "author": {
+        "idea": "Linh là sound designer, phụ trách âm thanh chứ không phụ trách trang phục.",
+        "constraints": [],
+        "clarifications": []
+      },
+      "draft": {
+        "title": "",
+        "logline": "",
+        "sections": [
+          {
+            "title": "Scene",
+            "content": "Linh làm sound designer và thu tiếng mưa."
+          }
+        ]
+      },
+      "candidate": {
+        "section_index": 0,
+        "draft_quote": "Linh làm sound designer và thu tiếng mưa.",
+        "author_quote": "Linh là sound designer, phụ trách âm thanh chứ không phụ trách trang phục.",
+        "explanation": "Bản thảo đổi công việc của Linh sang trang phục.",
+        "suggestion": "Đổi Linh thành người chỉ phụ trách trang phục."
+      },
+      "expected": {
+        "scan": "clear",
+        "relation": "compatible",
+        "concern": "unsupported",
+        "revision": "violates",
+        "allow_revision": false
+      },
+      "rationale": "The conflicting version explicitly reverses the stated fact or constraint; the control preserves it. Candidate claims a contradiction in both versions."
+    },
+    {
+      "id": "offer-choice-conflict",
+      "family": "offer-choice",
+      "split": "holdout",
+      "language": "en",
+      "author": {
+        "idea": "Rae already has a job offer and chooses to decline it.",
+        "constraints": [],
+        "clarifications": []
+      },
+      "draft": {
+        "title": "",
+        "logline": "",
+        "sections": [
+          {
+            "title": "Scene",
+            "content": "Rae accepts the job offer."
+          }
+        ]
+      },
+      "candidate": {
+        "section_index": 0,
+        "draft_quote": "Rae accepts the job offer.",
+        "author_quote": "Rae already has a job offer and chooses to decline it.",
+        "explanation": "The draft changes Rae's choice from declining to accepting.",
+        "suggestion": "Let Rae decline the existing offer."
+      },
+      "expected": {
+        "scan": "issues",
+        "relation": "contradictory",
+        "concern": "supported",
+        "revision": "aligned",
+        "allow_revision": true
+      },
+      "rationale": "The conflicting version explicitly reverses the stated fact or constraint; the control preserves it. Candidate claims a contradiction in both versions."
+    },
+    {
+      "id": "offer-choice-control",
+      "family": "offer-choice",
+      "split": "holdout",
+      "language": "en",
+      "author": {
+        "idea": "Rae already has a job offer and chooses to decline it.",
+        "constraints": [],
+        "clarifications": []
+      },
+      "draft": {
+        "title": "",
+        "logline": "",
+        "sections": [
+          {
+            "title": "Scene",
+            "content": "Rae turns down the job offer."
+          }
+        ]
+      },
+      "candidate": {
+        "section_index": 0,
+        "draft_quote": "Rae turns down the job offer.",
+        "author_quote": "Rae already has a job offer and chooses to decline it.",
+        "explanation": "The draft changes Rae's choice from declining to accepting.",
+        "suggestion": "Let Rae accept the offer."
+      },
+      "expected": {
+        "scan": "clear",
+        "relation": "compatible",
+        "concern": "unsupported",
+        "revision": "violates",
+        "allow_revision": false
+      },
+      "rationale": "The conflicting version explicitly reverses the stated fact or constraint; the control preserves it. Candidate claims a contradiction in both versions."
+    },
+    {
+      "id": "single-location-conflict",
+      "family": "single-location",
+      "split": "holdout",
+      "language": "en",
+      "author": {
+        "idea": "Every scene takes place inside the kitchen.",
+        "constraints": [],
+        "clarifications": []
+      },
+      "draft": {
+        "title": "",
+        "logline": "",
+        "sections": [
+          {
+            "title": "Scene",
+            "content": "The next scene takes place on a beach."
+          }
+        ]
+      },
+      "candidate": {
+        "section_index": 0,
+        "draft_quote": "The next scene takes place on a beach.",
+        "author_quote": "Every scene takes place inside the kitchen.",
+        "explanation": "The draft moves a scene outside the kitchen.",
+        "suggestion": "Keep the beach scene."
+      },
+      "expected": {
+        "scan": "issues",
+        "relation": "contradictory",
+        "concern": "supported",
+        "revision": "violates",
+        "allow_revision": false
+      },
+      "rationale": "The conflicting version explicitly reverses the stated fact or constraint; the control preserves it. Candidate claims a contradiction in both versions. The supplied repair retains the contradiction and must be rejected."
+    },
+    {
+      "id": "single-location-control",
+      "family": "single-location",
+      "split": "holdout",
+      "language": "en",
+      "author": {
+        "idea": "Every scene takes place inside the kitchen.",
+        "constraints": [],
+        "clarifications": []
+      },
+      "draft": {
+        "title": "",
+        "logline": "",
+        "sections": [
+          {
+            "title": "Scene",
+            "content": "The next scene remains inside the kitchen."
+          }
+        ]
+      },
+      "candidate": {
+        "section_index": 0,
+        "draft_quote": "The next scene remains inside the kitchen.",
+        "author_quote": "Every scene takes place inside the kitchen.",
+        "explanation": "The draft moves a scene outside the kitchen.",
+        "suggestion": "Move the next scene to a beach."
+      },
+      "expected": {
+        "scan": "clear",
+        "relation": "compatible",
+        "concern": "unsupported",
+        "revision": "violates",
+        "allow_revision": false
+      },
+      "rationale": "The conflicting version explicitly reverses the stated fact or constraint; the control preserves it. Candidate claims a contradiction in both versions."
+    },
+    {
+      "id": "later-choice",
+      "family": "later-choice",
+      "split": "holdout",
+      "language": "vi",
+      "author": {
+        "idea": "Kết phim trước khi chiếc hộp được mở.",
+        "constraints": [],
+        "clarifications": [
+          {
+            "question": "Bạn có đổi ý về kết thúc không?",
+            "answer": "Tôi đổi ý: kết phim sau khi chiếc hộp đã mở."
+          }
+        ]
+      },
+      "draft": {
+        "title": "",
+        "logline": "",
+        "sections": [
+          {
+            "title": "Ending",
+            "content": "Chiếc hộp mở ra rồi phim kết thúc."
+          }
+        ]
+      },
+      "candidate": {
+        "section_index": 0,
+        "draft_quote": "Chiếc hộp mở ra rồi phim kết thúc.",
+        "author_quote": "Tôi đổi ý: kết phim sau khi chiếc hộp đã mở.",
+        "explanation": "Bản thảo trái lựa chọn đã chốt của tác giả.",
+        "suggestion": "Bắt buộc thay kết thúc theo một phương án khác."
+      },
+      "expected": {
+        "scan": "clear",
+        "relation": "compatible",
+        "concern": "unsupported",
+        "revision": "uncertain",
+        "allow_revision": false
+      },
+      "rationale": "The explicit later answer replaces the earlier ending."
+    },
+    {
+      "id": "deferred-choice",
+      "family": "deferred-choice",
+      "split": "holdout",
+      "language": "vi",
+      "author": {
+        "idea": "Nhân vật tìm thấy chiếc hộp.",
+        "constraints": [],
+        "clarifications": [
+          {
+            "question": "Chiếc hộp có chứa ảnh không?",
+            "answer": "Chưa quyết định."
+          }
+        ]
+      },
+      "draft": {
+        "title": "",
+        "logline": "",
+        "sections": [
+          {
+            "title": "Ending",
+            "content": "Nhân vật cầm chiếc hộp; phim không cho thấy bên trong."
+          }
+        ]
+      },
+      "candidate": {
+        "section_index": 0,
+        "draft_quote": "Nhân vật cầm chiếc hộp; phim không cho thấy bên trong.",
+        "author_quote": "Chưa quyết định.",
+        "explanation": "Bản thảo trái lựa chọn đã chốt của tác giả.",
+        "suggestion": "Bắt buộc thay kết thúc theo một phương án khác."
+      },
+      "expected": {
+        "scan": "clear",
+        "relation": "compatible",
+        "concern": "unsupported",
+        "revision": "uncertain",
+        "allow_revision": false
+      },
+      "rationale": "A deferred answer is not a commitment to reveal a photo."
+    },
+    {
+      "id": "conflicting-intent",
+      "family": "conflicting-intent",
+      "split": "holdout",
+      "language": "vi",
+      "author": {
+        "idea": "Cửa phải đóng ở cảnh cuối. Cửa phải mở ở cảnh cuối.",
+        "constraints": [],
+        "clarifications": []
+      },
+      "draft": {
+        "title": "",
+        "logline": "",
+        "sections": [
+          {
+            "title": "Ending",
+            "content": "Cửa đóng ở cảnh cuối."
+          }
+        ]
+      },
+      "candidate": {
+        "section_index": 0,
+        "draft_quote": "Cửa đóng ở cảnh cuối.",
+        "author_quote": "Cửa phải mở ở cảnh cuối.",
+        "explanation": "Bản thảo trái lựa chọn đã chốt của tác giả.",
+        "suggestion": "Bắt buộc thay kết thúc theo một phương án khác."
+      },
+      "expected": {
+        "scan": "uncertain",
+        "relation": "uncertain",
+        "concern": "uncertain",
+        "revision": "uncertain",
+        "allow_revision": false
+      },
+      "rationale": "No precedence resolves the conflicting author constraints."
+    },
+    {
+      "id": "missing-intent",
+      "family": "missing-intent",
+      "split": "holdout",
+      "language": "vi",
+      "author": {
+        "idea": "",
+        "constraints": [],
+        "clarifications": []
+      },
+      "draft": {
+        "title": "",
+        "logline": "",
+        "sections": [
+          {
+            "title": "Ending",
+            "content": "Một người ngồi nhìn biển."
+          }
+        ]
+      },
+      "candidate": {
+        "section_index": 0,
+        "draft_quote": "Một người ngồi nhìn biển.",
+        "author_quote": "",
+        "explanation": "Bản thảo trái lựa chọn đã chốt của tác giả.",
+        "suggestion": "Bắt buộc thay kết thúc theo một phương án khác."
+      },
+      "expected": {
+        "scan": "uncertain",
+        "relation": "uncertain",
+        "concern": "uncertain",
+        "revision": "uncertain",
+        "allow_revision": false
+      },
+      "rationale": "No author intent supports a fidelity judgment."
+    }
+  ]
+}

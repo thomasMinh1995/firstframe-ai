@@ -3,20 +3,10 @@
 ## Task and authority
 
 Help a beginner make the next useful revision to their short-film story plan.
-Check fidelity before asking for more detail. Is the creator's central memory,
-role and concrete action present in the narrative sections, or replaced by a
-timeline? Keep roles belonging to the same person together. If a learner who also coaches others is reduced to a student passing
-milestones, anchor a suggestion to restore the coaching action, not just its name.
-Do not import coaching into unrelated stories.
-
-Separate voluntary actions from externally decided outcomes. A character cannot
-"decide to pass/fail to be hired" when the brief leaves the hiring outcome open.
-Flag this causal error where it occurs; suggest an action within their control
-without revealing the outcome. Never repeat the error as a proposed revision.
-An explicit choice to accept or decline an existing offer is different and must
-be respected. Check the whole draft: a corrected Ending does not fix a remaining
-error in Middle or Conflict. If the memory and open outcome are already preserved,
-do not invent their absence or require closure.
+Preserve the creator's stated facts, roles, relationships, event order and open
+questions. Distinguish a character's voluntary actions from outcomes decided
+by others. Check every section: a compatible ending does not erase a conflicting
+statement elsewhere. Do not invent omissions when details appear in another part.
 
 Read the current draft against the supplied creator intent, decisions, constraints,
 and short-film rubric. Evaluate the stage actually supplied: a story plan does

@@ -38,12 +38,19 @@ class SpanScan(BaseModel):
     issues: list[SpanIssue] = Field(max_length=3)
 
 
-class SuggestionAudit(BaseModel):
-    model_config = ConfigDict(extra="forbid")
+class FidelityAssessment(BaseModel):
+    model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
+    relation: Literal["contradictory", "compatible", "uncertain"]
+    relation_reason: str = Field(min_length=1)
+    concern: Literal["supported", "unsupported", "uncertain"]
+    concern_reason: str = Field(min_length=1)
+    revision: Literal["aligned", "violates", "uncertain"]
+    revision_reason: str = Field(min_length=1)
+
+
+class SuggestionAudit(FidelityAssessment):
     draft_span_id: str
     author_span_id: str
-    verdict: Literal["supported", "contradicted", "uncertain"]
-    reason: str
 
 
 class FidelityCheck(BaseModel):
@@ -58,6 +65,7 @@ class FidelityCheck(BaseModel):
     suggestion: str | None
     suggestion_status: Literal["supported", "unverified"]
     verification_note: str | None = None
+    assessment: FidelityAssessment | None = None
 
 
 class FidelityReport(BaseModel):
@@ -219,6 +227,7 @@ def audit_suggestions(
                     "author_spans": authors,
                     "draft_spans": drafts,
                     "candidate": candidate,
+                    "kind": "fidelity" if "section_index" in candidate else "craft",
                 },
                 SuggestionAudit,
                 "fidelity_audit",
@@ -245,17 +254,31 @@ def audit_suggestions(
             and check.draft_quote == candidate["draft_quote"]
             and check.author_quote == candidate["author_quote"]
         ))
-        if item.verdict != "supported" or check is None or not same_evidence:
-            # A rejected allegation is not an unresolved finding. Keep it only in the dataset.
-            if original is not None and item.verdict != "contradicted":
-                if item.verdict == "uncertain":
-                    original.verification_note = item.reason
-                approved.append(original)
+        is_fidelity = "section_index" in candidate
+        rejected_concern = item.concern == "unsupported" or (
+            is_fidelity and item.relation == "compatible"
+        )
+        supported = (
+            item.concern == "supported"
+            and item.revision == "aligned"
+            and (item.relation == "contradictory" if is_fidelity
+                 else item.relation != "uncertain")
+        )
+        assessment = FidelityAssessment.model_validate(
+            item.model_dump(exclude={"draft_span_id", "author_span_id"})
+        )
+        if not supported or check is None or not same_evidence:
+            # A bad repair must not erase a valid concern; an unsupported concern is withheld.
+            observation = original or (check if item.concern == "supported" else None)
+            if observation is not None and not rejected_concern:
+                if check is not None and same_evidence:
+                    observation.assessment = assessment
+                approved.append(observation)
             continue
         check.explanation = candidate["explanation"]
         check.suggestion = candidate["suggestion"]
         check.suggestion_status = "supported"
-        check.verification_note = item.reason
+        check.assessment = assessment
         approved.append(check)
     withheld = len(candidates) - sum(c.suggestion_status == "supported" for c in approved)
     return FidelityReport(

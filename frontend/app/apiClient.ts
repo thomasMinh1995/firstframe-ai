@@ -110,6 +110,12 @@ export function isFidelityReport(value: unknown): value is FidelityReport {
       && ["section_title", "section_text", "draft_quote", "author_quote", "explanation"]
         .every((key) => typeof check[key] === "string")
       && (check.suggestion === null || typeof check.suggestion === "string")
+      && (check.assessment == null || (isRecord(check.assessment)
+        && ["contradictory", "compatible", "uncertain"].includes(String(check.assessment.relation))
+        && ["supported", "unsupported", "uncertain"].includes(String(check.assessment.concern))
+        && ["aligned", "violates", "uncertain"].includes(String(check.assessment.revision))
+        && ["relation_reason", "concern_reason", "revision_reason"]
+          .every(key => typeof (check.assessment as Record<string, unknown>)[key] === "string")))
       && (check.verification_note == null || typeof check.verification_note === "string")
       && ["supported", "unverified"].includes(String(check.suggestion_status)));
 }

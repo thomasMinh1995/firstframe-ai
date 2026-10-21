@@ -1,5 +1,8 @@
 # Kiểm tra tính trung thành và highlight — PR #18
 
+**Cập nhật mới nhất:** [hợp đồng v2 và bộ nghiệm thu tổng quát](fidelity-contract-v2.md).
+Các kết quả bên dưới là lịch sử của hợp đồng v1, không phải kết quả v2.
+
 **Đã triển khai luồng và giao diện; chưa đạt nghiệm thu ngữ nghĩa trên Qwen 2.5 3B.**
 PR vẫn cần giữ Draft. Trích dẫn đúng chữ không chứng minh nhận xét đúng nghĩa.
 

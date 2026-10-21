@@ -41,7 +41,9 @@ class FakeProvider:
                 output = response_model(
                     draft_span_id=next(iter(payload["draft_spans"])),
                     author_span_id=next(iter(payload["author_spans"])),
-                    verdict="supported", reason="Test double approval",
+                    relation="compatible", relation_reason="Test relation",
+                    concern="supported", concern_reason="Test concern",
+                    revision="aligned", revision_reason="Test revision",
                 )
             return StructuredResult(output=output, model="fake-model", response_id="fake-fidelity")
         self.requests.append(request)

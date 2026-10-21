@@ -1,6 +1,15 @@
 import { sectionLabels } from "./storyLabels";
 import type { UiLanguage } from "./language";
 
+export type FidelityAssessment = {
+  relation: "contradictory" | "compatible" | "uncertain";
+  relation_reason: string;
+  concern: "supported" | "unsupported" | "uncertain";
+  concern_reason: string;
+  revision: "aligned" | "violates" | "uncertain";
+  revision_reason: string;
+};
+
 export type FidelityReport = {
   status: "clear" | "issues" | "unverified";
   withheld_count: number;
@@ -14,6 +23,7 @@ export type FidelityReport = {
     explanation: string;
     suggestion: string | null;
     verification_note?: string | null;
+    assessment?: FidelityAssessment | null;
     suggestion_status: "supported" | "unverified";
   }>;
 };
@@ -49,8 +59,16 @@ export function FidelityPanel({ report, uiLanguage }: {
         <blockquote><HighlightedQuote text={check.section_text} quote={check.draft_quote} /></blockquote>
       </details>
       <p><strong>{vi ? (check.suggestion_status === "supported" ? "Điểm cần đối chiếu: " : "Nhận xét chưa xác minh: ") : (check.suggestion_status === "supported" ? "Compare: " : "Unverified observation: ")}</strong>{check.explanation}</p>
+      {check.assessment && <dl>
+        <dt>{vi ? "Hai trích dẫn có mâu thuẫn?" : "Do the quotations conflict?"}</dt>
+        <dd>{({contradictory: vi ? "Có mâu thuẫn" : "Contradictory", compatible: vi ? "Tương thích" : "Compatible", uncertain: vi ? "Chưa đủ căn cứ" : "Uncertain"})[check.assessment.relation]} — {check.assessment.relation_reason}</dd>
+        <dt>{vi ? "Nhận xét có căn cứ?" : "Is the concern supported?"}</dt>
+        <dd>{({supported: vi ? "Có căn cứ" : "Supported", unsupported: vi ? "Không có căn cứ" : "Unsupported", uncertain: vi ? "Chưa đủ căn cứ" : "Uncertain"})[check.assessment.concern]} — {check.assessment.concern_reason}</dd>
+        <dt>{vi ? "Gợi ý có giữ ý đồ?" : "Does the revision preserve intent?"}</dt>
+        <dd>{({aligned: vi ? "Giữ ý đồ" : "Aligned", violates: vi ? "Trái ý đồ" : "Violates intent", uncertain: vi ? "Chưa đủ căn cứ" : "Uncertain"})[check.assessment.revision]} — {check.assessment.revision_reason}</dd>
+      </dl>}
       {check.suggestion_status === "supported" && check.suggestion
-        ? <><p><strong>{vi ? "Gợi ý đã qua bước AI đối chiếu ý đồ" : "Suggestion checked against author intent by AI"}</strong></p><p>{check.suggestion}</p><p>{check.verification_note}</p></>
+        ? <><p><strong>{vi ? "AI đánh giá gợi ý phù hợp — cần tác giả đối chiếu" : "AI considers this suggestion aligned — author review needed"}</strong></p><p>{check.suggestion}</p><p>{check.verification_note}</p></>
         : <><p>{vi ? "Chưa có gợi ý sửa được xác minh cho đoạn này." : "No verified revision suggestion for this passage."}</p>{check.verification_note && <p>{check.verification_note}</p>}</>}
     </article>)}
   </section>;

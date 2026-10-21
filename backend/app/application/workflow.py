@@ -356,9 +356,15 @@ class LLMEvaluationLayer(EvaluationLayer):
             )
             if not scan.issues:
                 for check in report.checks:
-                    check.kind = "craft"
+                    check.kind = "fidelity" if (
+                        check.assessment is not None
+                        and check.assessment.relation == "contradictory"
+                        and check.assessment.concern == "supported"
+                    ) else "craft"
                 if report.status != "unverified":
-                    report.status = "clear"
+                    report.status = "issues" if any(
+                        check.kind == "fidelity" for check in report.checks
+                    ) else "clear"
         else:
             report = FidelityReport(status="clear", checks=[])
         return self._result(planning, report, output)
