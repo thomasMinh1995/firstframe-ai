@@ -1,37 +1,25 @@
+import json
 import logging
 import os
-import json
 from dataclasses import dataclass
 from json import JSONDecodeError
-from typing import TypeVar
 
 from dotenv import load_dotenv
 from openai import APIConnectionError, APIError, APITimeoutError, OpenAI, OpenAIError
-from pydantic import BaseModel, ValidationError
+from pydantic import ValidationError
 
+from app.application.ai_provider import (
+    MalformedProviderResponseError,
+    MissingProviderConfigurationError,
+    ProviderMetadata,
+    ProviderRequestError,
+    ProviderTimeoutError,
+    StructuredRequest,
+    StructuredResult,
+    strict_json_instructions,
+)
 
 logger = logging.getLogger(__name__)
-StructuredResponseT = TypeVar("StructuredResponseT", bound=BaseModel)
-
-
-class ProviderError(Exception):
-    """Base class for provider-independent failures."""
-
-
-class MissingProviderConfigurationError(ProviderError):
-    """Raised when required provider configuration is missing."""
-
-
-class ProviderTimeoutError(ProviderError):
-    """Raised when the provider request times out."""
-
-
-class ProviderRequestError(ProviderError):
-    """Raised when the provider request fails."""
-
-
-class MalformedProviderResponseError(ProviderError):
-    """Raised when the provider does not return the requested structured shape."""
 
 
 @dataclass(frozen=True)
@@ -40,20 +28,6 @@ class OpenAIProviderConfig:
     model: str
     temperature: float
     timeout_seconds: float = 45.0
-
-
-@dataclass(frozen=True)
-class OpenAIStructuredRequest:
-    instructions: str
-    input_text: str
-    response_model: type[StructuredResponseT]
-
-
-@dataclass(frozen=True)
-class OpenAIStructuredResult:
-    output: BaseModel
-    model: str
-    response_id: str | None = None
 
 
 class OpenAIProvider:
@@ -66,6 +40,17 @@ class OpenAIProvider:
     def __init__(self, config: OpenAIProviderConfig, client: OpenAI | None = None) -> None:
         self._config = config
         self._client = client or OpenAI(api_key=config.api_key, timeout=config.timeout_seconds)
+
+    @property
+    def metadata(self) -> ProviderMetadata:
+        return ProviderMetadata(
+            "openai",
+            self._config.model,
+            {
+                "temperature": self._config.temperature,
+                "timeout_seconds": self._config.timeout_seconds,
+            },
+        )
 
     @classmethod
     def from_env(cls) -> "OpenAIProvider":
@@ -90,9 +75,7 @@ class OpenAIProvider:
             )
         )
 
-    def request_structured(
-        self, request: OpenAIStructuredRequest
-    ) -> OpenAIStructuredResult:
+    def request_structured(self, request: StructuredRequest) -> StructuredResult:
         provider_method = "responses.create"
         logger.info(
             "Sending structured OpenAI request with model=%s method=%s",
@@ -102,7 +85,7 @@ class OpenAIProvider:
         try:
             response = self._client.responses.create(
                 model=self._config.model,
-                instructions=_strict_json_instructions(request),
+                instructions=strict_json_instructions(request),
                 input=request.input_text,
                 temperature=self._config.temperature,
             )
@@ -141,24 +124,18 @@ class OpenAIProvider:
                 _safe_preview(raw_output),
             )
             raise MalformedProviderResponseError(
-                "The AI provider returned an invalid structured response."
+                "The AI provider returned an invalid structured response.", raw_output=raw_output
             ) from error
 
-        return OpenAIStructuredResult(
+        actual_model = getattr(response, "model", None)
+        return StructuredResult(
             output=parsed_output,
-            model=self._config.model,
+            model=actual_model
+            if isinstance(actual_model, str) and actual_model
+            else self._config.model,
             response_id=getattr(response, "id", None),
+            raw_output=raw_output,
         )
-
-
-def _strict_json_instructions(request: OpenAIStructuredRequest) -> str:
-    schema = request.response_model.model_json_schema()
-    return (
-        f"{request.instructions}\n\n"
-        "Return strict JSON only. Do not wrap the response in markdown. Do not include "
-        "explanatory text before or after the JSON. The JSON must conform to this schema:\n"
-        f"{json.dumps(schema, ensure_ascii=False)}"
-    )
 
 
 def _extract_output_text(response: object) -> str | None:
@@ -186,8 +163,7 @@ def _extract_output_text(response: object) -> str | None:
 
 def _log_provider_exception(method: str, model: str, error: Exception) -> None:
     logger.warning(
-        "OpenAI provider request failed model=%s method=%s exception_class=%s "
-        "exception_message=%s",
+        "OpenAI provider request failed model=%s method=%s exception_class=%s exception_message=%s",
         model,
         method,
         error.__class__.__name__,

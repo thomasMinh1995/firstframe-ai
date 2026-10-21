@@ -17,14 +17,15 @@ from app.api.schemas.projects import (
     StoryDraft,
 )
 from app.api.schemas.story import AnalysisNoteResponse, AnalysisResponse, EvaluationResponse
-from app.application.project_store import ProjectConflict, ProjectNotFound, ProjectStore
-from app.core.artifacts import Constraint, PlanSection
-from app.infrastructure.openai_provider import (
+from app.application.ai_provider import (
     MalformedProviderResponseError,
     MissingProviderConfigurationError,
     ProviderRequestError,
     ProviderTimeoutError,
 )
+from app.application.dataset import capture_workflow
+from app.application.project_store import ProjectConflict, ProjectNotFound, ProjectStore
+from app.core.artifacts import Constraint, PlanSection
 
 router = APIRouter(prefix="/api/projects", tags=["projects"])
 
@@ -44,7 +45,9 @@ def project_errors():
             409, "Dự án đã thay đổi ở cửa sổ khác. Hãy tải bản sao trước khi mở lại dự án."
         ) from error
     except MissingProviderConfigurationError as error:
-        raise HTTPException(503, "Chưa cấu hình OPENAI_API_KEY cho backend.") from error
+        raise HTTPException(
+            503, "Chưa cấu hình AI hoặc chưa cài model Ollama. Hãy kiểm tra cấu hình backend."
+        ) from error
     except ProviderTimeoutError as error:
         raise HTTPException(
             504, "AI phản hồi quá lâu. Nội dung đã lưu vẫn được giữ; hãy thử lại."
@@ -63,6 +66,10 @@ def load_project(project_id: str, revision: int | None = None) -> ProjectRespons
 def save_project(project: ProjectResponse) -> ProjectResponse:
     data = project.model_dump(exclude={"feedback_is_current"})
     return ProjectResponse.model_validate(get_project_store().save(data, project.revision))
+
+
+def dataset_snapshot(project: ProjectResponse) -> dict[str, object]:
+    return project.model_dump(mode="json", exclude={"versions", "clarification_history"})
 
 
 def constraints_for(project: ProjectResponse) -> tuple[Constraint, ...]:
@@ -159,28 +166,31 @@ def analyze_project(project_id: str, request: RevisionRequest):
         project = load_project(project_id, request.revision)
         if not project.idea.strip():
             raise HTTPException(422, "Hãy nhập ý tưởng trước khi bắt đầu.")
-        known_answers = project.creator_answers()
-        reasoning = get_story_generation_service().analyze(
-            project.idea, constraints_for(project), answers=known_answers
-        )
-        previous_answers = dict(known_answers)
-        archive_clarifications(project)
-        project.clarifications = previous_answers
-        project.analysis = AnalysisResponse(
-            artifact_id=reasoning.metadata.artifact_id,
-            summary=next(
-                (note.content for note in reasoning.notes if note.label == "Analysis summary"), ""
-            ),
-            notes=[
-                AnalysisNoteResponse(label=note.label, content=note.content)
-                for note in reasoning.notes
-            ],
-            missing_information=list(reasoning.open_questions[:3]),
-        )
-        project.answers = [
-            previous_answers.get(question, "") for question in project.analysis.missing_information
-        ]
-        return save_project(project)
+        with capture_workflow("analyze", dataset_snapshot(project)) as dataset:
+            known_answers = project.creator_answers()
+            reasoning = get_story_generation_service().analyze(
+                project.idea, constraints_for(project), answers=known_answers
+            )
+            previous_answers = dict(known_answers)
+            archive_clarifications(project)
+            project.clarifications = previous_answers
+            project.analysis = AnalysisResponse(
+                artifact_id=reasoning.metadata.artifact_id,
+                summary=next(
+                    (note.content for note in reasoning.notes if note.label == "Analysis summary"), ""
+                ),
+                notes=[
+                    AnalysisNoteResponse(label=note.label, content=note.content)
+                    for note in reasoning.notes
+                ],
+                missing_information=list(reasoning.open_questions[:3]),
+            )
+            project.answers = [
+                previous_answers.get(question, "") for question in project.analysis.missing_information
+            ]
+            saved = save_project(project)
+            dataset.complete(dataset_snapshot(saved))
+            return saved
 
 
 @router.post("/{project_id}/plan", response_model=ProjectResponse)
@@ -194,20 +204,23 @@ def plan_project(project_id: str, request: RevisionRequest):
             not answer.strip() for answer in project.answers
         ):
             raise HTTPException(422, "Hãy trả lời hoặc chọn để quyết định sau cho từng câu hỏi.")
-        run = get_story_generation_service().plan(
-            project.idea, project.creator_answers(), constraints_for(project)
-        )
-        generated = _to_response(run)
-        add_version(project)
-        project.draft = StoryDraft(
-            title=generated.story_plan.title or "Phim ngắn chưa đặt tên",
-            logline=generated.story_plan.logline or "",
-            sections=[section.model_dump() for section in generated.story_plan.sections],
-        )
-        project.feedback = generated.evaluation
-        project.reviewed_content = project.content_key()
-        add_version(project)
-        return save_project(project)
+        with capture_workflow("plan", dataset_snapshot(project)) as dataset:
+            run = get_story_generation_service().plan(
+                project.idea, project.creator_answers(), constraints_for(project)
+            )
+            generated = _to_response(run)
+            add_version(project)
+            project.draft = StoryDraft(
+                title=generated.story_plan.title or "Phim ngắn chưa đặt tên",
+                logline=generated.story_plan.logline or "",
+                sections=[section.model_dump() for section in generated.story_plan.sections],
+            )
+            project.feedback = generated.evaluation
+            project.reviewed_content = project.content_key()
+            add_version(project)
+            saved = save_project(project)
+            dataset.complete(dataset_snapshot(saved))
+            return saved
 
 
 @router.post("/{project_id}/review", response_model=ProjectResponse)
@@ -218,39 +231,42 @@ def review_project(project_id: str, request: RevisionRequest):
             raise HTTPException(422, "Chưa có story plan để nhận phản hồi.")
         if not any(section.content.strip() for section in project.draft.sections):
             raise HTTPException(422, "Hãy viết ít nhất một phần trước khi nhận phản hồi.")
-        context = {
-            "idea": project.idea,
-            "constraints": project.constraints,
-            "clarifications": [
-                {"question": question, "answer": answer}
-                for question, answer in project.creator_answers()
-            ],
-        }
-        evaluation = get_story_generation_service().review(
-            project.idea,
-            project.draft.title,
-            project.draft.logline,
-            tuple(
-                PlanSection(
-                    section_id=f"section-{i}",
-                    title=section.title,
-                    purpose=section.purpose,
-                    content=section.content,
-                )
-                for i, section in enumerate(project.draft.sections)
-            ),
-            json.dumps(context, ensure_ascii=False),
-        )
-        project.feedback = EvaluationResponse(
-            artifact_id=evaluation.metadata.artifact_id,
-            passed=evaluation.passed,
-            rubric_scores={
-                item.criterion_id: item.score
-                for item in evaluation.findings
-                if item.score is not None
-            },
-            findings=[item.__dict__ for item in evaluation.findings],
-        )
-        project.reviewed_content = project.content_key()
-        add_version(project)
-        return save_project(project)
+        with capture_workflow("review", dataset_snapshot(project)) as dataset:
+            context = {
+                "idea": project.idea,
+                "constraints": project.constraints,
+                "clarifications": [
+                    {"question": question, "answer": answer}
+                    for question, answer in project.creator_answers()
+                ],
+            }
+            evaluation = get_story_generation_service().review(
+                project.idea,
+                project.draft.title,
+                project.draft.logline,
+                tuple(
+                    PlanSection(
+                        section_id=f"section-{i}",
+                        title=section.title,
+                        purpose=section.purpose,
+                        content=section.content,
+                    )
+                    for i, section in enumerate(project.draft.sections)
+                ),
+                json.dumps(context, ensure_ascii=False),
+            )
+            project.feedback = EvaluationResponse(
+                artifact_id=evaluation.metadata.artifact_id,
+                passed=evaluation.passed,
+                rubric_scores={
+                    item.criterion_id: item.score
+                    for item in evaluation.findings
+                    if item.score is not None
+                },
+                findings=[item.__dict__ for item in evaluation.findings],
+            )
+            project.reviewed_content = project.content_key()
+            add_version(project)
+            saved = save_project(project)
+            dataset.complete(dataset_snapshot(saved))
+            return saved

@@ -10,15 +10,15 @@ from app.api.schemas import (
     StoryPlanResponse,
     StoryPlanSectionResponse,
 )
-from app.application.workflow import HarnessRun, create_story_generation_service
-from app.core.artifacts import Constraint
-from app.infrastructure.openai_provider import (
+from app.application.ai_provider import (
     MalformedProviderResponseError,
     MissingProviderConfigurationError,
     ProviderRequestError,
     ProviderTimeoutError,
 )
-
+from app.application.dataset import capture_workflow
+from app.application.workflow import HarnessRun, create_story_generation_service
+from app.core.artifacts import Constraint
 
 router = APIRouter(prefix="/api", tags=["generation"])
 
@@ -26,14 +26,18 @@ router = APIRouter(prefix="/api", tags=["generation"])
 @router.post("/generate", response_model=GenerateResponse)
 def generate(request: IdeaRequest) -> GenerateResponse:
     try:
-        run = get_story_generation_service().generate(
-            idea_text=request.idea,
-            domain_id=request.domain_id,
-            constraints=tuple(
-                Constraint(name=f"constraint-{index + 1}", value=constraint)
-                for index, constraint in enumerate(request.constraints)
-            ),
-        )
+        with capture_workflow("generate", request.model_dump(mode="json")) as dataset:
+            run = get_story_generation_service().generate(
+                idea_text=request.idea,
+                domain_id=request.domain_id,
+                constraints=tuple(
+                    Constraint(name=f"constraint-{index + 1}", value=constraint)
+                    for index, constraint in enumerate(request.constraints)
+                ),
+            )
+            response = _to_response(run)
+            dataset.complete(response.model_dump(mode="json"))
+            return response
     except MissingProviderConfigurationError as error:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
@@ -49,7 +53,6 @@ def generate(request: IdeaRequest) -> GenerateResponse:
             status_code=status.HTTP_502_BAD_GATEWAY,
             detail="AI provider failed to generate a structured response.",
         ) from error
-    return _to_response(run)
 
 
 def get_story_generation_service():

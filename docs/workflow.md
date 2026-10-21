@@ -93,7 +93,7 @@ The Reasoning Layer:
 - produces mentor-style notes/questions;
 - returns a `ReasoningArtifact`.
 
-Current implementation: OpenAI-backed structured response using `story_mentor_prompt.md`.
+Current implementation: OpenAI or local Ollama structured response using `story_mentor_prompt.md`.
 The mentor asks zero to three questions about consequential unresolved choices,
 grounded in the creator's brief rather than a mandatory story template.
 
@@ -105,7 +105,7 @@ The Planning Layer:
 - loads short-film knowledge files;
 - loads a small set of local examples;
 - uses the reasoning artifact as input;
-- requests a structured `story_plan` object from OpenAI;
+- requests a structured `story_plan` object from the selected provider;
 - validates the result with `_PlanningOutput`;
 - maps it into a `PlanningArtifact`.
 

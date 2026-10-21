@@ -2,9 +2,9 @@
 
 This document records the canonical structured-output contracts used by the Short Film domain.
 
-The runtime source of truth is the Pydantic response model passed to `OpenAIProvider`.
+The runtime source of truth is the Pydantic response model passed to `StructuredProvider`.
 `domains/short-film/output_schema.json` mirrors the same field inventory for domain-level review.
-The provider appends `model_json_schema()` to each OpenAI request as the effective response format.
+Both adapters append `model_json_schema()` to instructions. Ollama additionally supplies the schema in the native API `format` field. The OpenAI request remains prompt-based JSON, with local Pydantic validation.
 
 ## Planning Contract
 
@@ -58,10 +58,10 @@ The provider appends `model_json_schema()` to each OpenAI request as the effecti
 | `mentor_questions` | None | Removed |
 | `filmability` | None | Removed |
 
-## OpenAI Response Format
+## Provider Response Format
 
-`OpenAIProvider` receives an `OpenAIStructuredRequest` with a Pydantic `response_model`.
-It sends strict JSON instructions plus `response_model.model_json_schema()` to OpenAI.
+`OpenAIProvider` receives an `StructuredRequest` with a Pydantic `response_model`.
+Both receive the same input and instructions and validate against `response_model`. Ollama uses native structured output; both expose `StructuredResult` to the workflow.
 
 Current mappings:
 

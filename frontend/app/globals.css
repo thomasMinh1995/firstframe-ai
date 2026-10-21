@@ -589,6 +589,36 @@ button:disabled {
   gap: 12px;
 }
 
+.demo-entry {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-weight: 700;
+  text-decoration: none;
+}
+.demo-entry:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.demo-picker-row, .demo-controls, .demo-badges { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.demo-picker-row select { flex: 1; min-width: 200px; }
+.demo-overview { margin-top: 20px; }
+.demo-overview h2 { margin-top: 18px; }
+.demo-source { color: var(--muted); overflow-wrap: anywhere; font-size: 0.9rem; }
+.demo-overview progress { width: 100%; height: 10px; accent-color: var(--accent); }
+.demo-steps ol { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; margin: 20px 0; padding: 0; }
+.demo-step { display: flex; align-items: center; gap: 8px; text-align: left; padding: 10px 14px; }
+.demo-step.is-current { box-shadow: 0 0 0 2px var(--foreground); }
+.demo-step span { font-size: 0.8rem; }
+.demo-controls { margin: 18px 0; justify-content: space-between; }
+.demo-controls p { margin: 0; }
+.demo-content { margin-top: 20px; }
+.demo-answers { display: grid; gap: 16px; }
+@media (max-width: 600px) {
+  .demo-picker-row select { flex-basis: 100%; }
+  .demo-controls button { flex-grow: 1; }
+  .demo-steps li { flex: 1 1 45%; }
+  .demo-step { width: 100%; height: 100%; }
+}
+
 .project-toolbar select {
   flex: 1;
   min-width: 180px;
@@ -680,3 +710,22 @@ input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-
     -webkit-line-clamp: 4;
   }
 }
+
+.dataset-json { white-space: pre-wrap; overflow-wrap: anywhere; font-size: .85rem; line-height: 1.6; max-height: 36rem; overflow-y: auto; }
+.review-choice { display: flex; align-items: center; gap: .65rem; }
+.review-choice input { width: auto; flex: 0 0 auto; }
+
+.output-fields { border-left: 2px solid var(--border, #ddd); padding-left: 1rem; }
+.output-fields textarea, .output-fields input[type="number"] { display: block; width: 100%; margin-top: .4rem; }
+
+.output-fields textarea { min-height: 5rem; }
+
+.output-compare-selectors { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.output-compare-selectors select { display: block; width: 100%; margin-top: .5rem; }
+.output-change { border-top: 1px solid #ddd; padding-top: 1rem; }
+.output-change h3 { overflow-wrap: anywhere; }
+.output-version-list { line-height: 1.8; }
+@media (max-width: 640px) { .output-compare-selectors { grid-template-columns: 1fr; } }
+
+.output-change .output-compare-selectors > div { padding: .75rem; border-radius: .5rem; background: #fff4f1; }
+.output-change .output-compare-selectors > div + div { background: #edf7f1; }
