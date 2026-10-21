@@ -78,14 +78,49 @@ def test_repetition_screening_ignores_json_keys_and_section_anchors():
     assert repeated["repeated_4gram_fraction"] == 0.5
 
 
-@pytest.mark.parametrize("experimental", [False, True])
+@pytest.mark.parametrize(
+    ("input_text", "reason"),
+    [
+        ("", "missing its target response language"),
+        ("Target response language: ", "missing its target response language"),
+        ("Target response language: English", "missing its creator-context boundary"),
+    ],
+)
+def test_critic_replay_rejects_missing_language_or_context(
+    tmp_path, monkeypatch, input_text, reason
+):
+    source = Path(__file__).resolve().parents[2] / "demo/evaluations/critic-cases-2026-10-21.jsonl"
+    fixture = json.loads(source.read_text().splitlines()[0])
+    fixture["steps"][0]["request"]["input_text"] = input_text
+    malformed = tmp_path / "missing-language.json"
+    malformed.write_text(json.dumps(fixture))
+    monkeypatch.setattr(
+        "scripts.compare_ollama_prompts.httpx.post",
+        lambda *args, **kwargs: pytest.fail("Invalid replay must not call Ollama"),
+    )
+    with pytest.raises(ValueError, match=reason):
+        compare(malformed, tmp_path / "output.json", [42], "http://127.0.0.1:11434")
+
+
+@pytest.mark.parametrize(
+    ("experimental", "language"),
+    [(False, "Vietnamese"), (False, "English"), (True, "Vietnamese")],
+)
 def test_six_critic_scenarios_replay_both_variants_without_losing_author_or_draft(
-    tmp_path, monkeypatch, experimental
+    tmp_path, monkeypatch, experimental, language
 ):
     from app.application.workflow import _EvaluationOutput
 
     source = Path(__file__).resolve().parents[2] / "demo/evaluations/critic-cases-2026-10-21.jsonl"
     fixtures = [json.loads(line) for line in source.read_text().splitlines()]
+    if language == "English":
+        for fixture in fixtures:
+            request = fixture["steps"][0]["request"]
+            request["input_text"] = request["input_text"].replace(
+                "Target response language: Vietnamese", "Target response language: English", 1
+            )
+        source = tmp_path / "english-cases.jsonl"
+        source.write_text("\n".join(json.dumps(fixture) for fixture in fixtures))
     output = _EvaluationOutput(
         passed=True,
         rubric_scores=dict.fromkeys(
@@ -138,8 +173,14 @@ def test_six_critic_scenarios_replay_both_variants_without_losing_author_or_draf
             value, _ = json.JSONDecoder().raw_decode(original.split(marker, 1)[1])
             assert json.dumps(value, ensure_ascii=False) in after["input_text"]
         assert fixture["expected_behavior"] not in after["input_text"]
-        assert (after["instructions"] != before["instructions"]) is experimental
+        assert after["instructions"] != before["instructions"]
         if not experimental:
-            assert after["input_text"] == before["input_text"]
+            if language == "Vietnamese":
+                assert "Ngôn ngữ góp ý: tiếng Việt" in after["instructions"]
+            else:
+                assert "Use the explicit target response language" in after["instructions"]
+            assert "new revision examples in the target language" in after["input_text"]
+            boundary = "Creator intent and decisions:\n"
+            assert after["input_text"].split(boundary, 1)[1] == original.split(boundary, 1)[1]
         assert before["feedback_pairs_valid"] is True
         assert after["feedback_pairs_valid"] is True

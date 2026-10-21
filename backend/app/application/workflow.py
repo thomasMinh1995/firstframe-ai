@@ -316,9 +316,11 @@ class LLMEvaluationLayer(EvaluationLayer):
     def evaluate(self, planning: PlanningArtifact, domain: DomainPlugin) -> EvaluationArtifact:
         rubric = self._knowledge_loader.load_rubric("story_rubric", domain)
         target_language = getattr(planning, "target_response_language", "English")
+        # Small local models copy the critic's English examples despite a Vietnamese input header.
+        prompt_name = "script_critic_vi" if _is_vietnamese_language(target_language) else "script_critic"
         result = self._provider.request_structured(
             StructuredRequest(
-                instructions=self._prompt_loader.load("script_critic", domain),
+                instructions=self._prompt_loader.load(prompt_name, domain),
                 input_text=_evaluation_input(planning, rubric),
                 response_model=_EvaluationOutput,
                 stage="evaluation",
@@ -775,13 +777,21 @@ def _planning_input(planning: PlanningArtifact) -> str:
     )
 
 
+def _feedback_language_header(target_language: str) -> str:
+    return (
+        f"Target response language: {target_language}\n"
+        "Write explanations and new revision examples in the target language, even when the "
+        "draft uses another language. Keep author terms, names, section anchors and verbatim "
+        "quotations from the CURRENT draft in their original language. Newly invented examples "
+        "are not quotations from the draft. Preserve JSON field names in English.\n\n"
+    )
+
+
 def _evaluation_input(planning: PlanningArtifact, rubric: object) -> str:
     target_language = getattr(planning, "target_response_language", "English")
     return (
-        f"Target response language: {target_language}\n"
-        "All generated JSON string values must use this language. Preserve JSON field names "
-        "in English.\n\n"
-        f"Creator intent and decisions:\n{getattr(planning, 'creator_context', '')}\n\n"
+        _feedback_language_header(target_language)
+        + f"Creator intent and decisions:\n{getattr(planning, 'creator_context', '')}\n\n"
         f"Current draft (JSON data):\n{_planning_input(planning)}\n\n"
         f"Short-film story rubric:\n{json.dumps(rubric, ensure_ascii=False)}"
     )

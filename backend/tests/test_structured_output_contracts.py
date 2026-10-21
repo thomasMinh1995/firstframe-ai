@@ -5,9 +5,6 @@ import pytest
 from pydantic import ValidationError
 
 from app.application.workflow import (
-    _EvaluationOutput,
-    _PlanningOutput,
-    _StructuredStoryPlanOutput,
     Beginning,
     Characters,
     Conflict,
@@ -20,8 +17,10 @@ from app.application.workflow import (
     Tone,
     VisualStyle,
     WorkingTitle,
+    _EvaluationOutput,
+    _PlanningOutput,
+    _StructuredStoryPlanOutput,
 )
-
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DOMAIN_ROOT = REPO_ROOT / "domains" / "short-film"
@@ -62,9 +61,10 @@ def test_story_planner_prompt_mentions_every_planning_schema_field() -> None:
             assert f'"{field}"' in prompt
 
 
-def test_script_critic_prompt_mentions_every_evaluation_schema_field() -> None:
+@pytest.mark.parametrize("name", ["script_critic_prompt.md", "script_critic_vi_prompt.md"])
+def test_script_critic_prompt_mentions_every_evaluation_schema_field(name) -> None:
     schema = _load_output_schema()
-    prompt = _read_prompt("script_critic_prompt.md")
+    prompt = _read_prompt(name)
 
     for field in schema["evaluation"]["root_fields"]:
         assert f'"{field}"' in prompt
