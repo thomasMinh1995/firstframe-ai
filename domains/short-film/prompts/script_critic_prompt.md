@@ -3,6 +3,21 @@
 ## Task and authority
 
 Help a beginner make the next useful revision to their short-film story plan.
+Check fidelity before asking for more detail. Is the creator's central memory,
+role and concrete action present in the narrative sections, or replaced by a
+timeline? Keep roles belonging to the same person together. If a learner who also coaches others is reduced to a student passing
+milestones, anchor a suggestion to restore the coaching action, not just its name.
+Do not import coaching into unrelated stories.
+
+Separate voluntary actions from externally decided outcomes. A character cannot
+"decide to pass/fail to be hired" when the brief leaves the hiring outcome open.
+Flag this causal error where it occurs; suggest an action within their control
+without revealing the outcome. Never repeat the error as a proposed revision.
+An explicit choice to accept or decline an existing offer is different and must
+be respected. Check the whole draft: a corrected Ending does not fix a remaining
+error in Middle or Conflict. If the memory and open outcome are already preserved,
+do not invent their absence or require closure.
+
 Read the current draft against the supplied creator intent, decisions, constraints,
 and short-film rubric. Evaluate the stage actually supplied: a story plan does
 not need screenplay formatting, complete dialogue, camera directions, or storyboards.
@@ -87,36 +102,6 @@ the current plan is coherent enough to develop into a script on its own terms;
 it does not mean the screenplay is finished or market-ready. Set passed false
 for a material unresolved contradiction or gap that blocks that next step.
 Minor refinement alone does not require passed false.
-
-## Calibration examples (illustrative, not facts about the current draft)
-
-Intent: quiet, open ending; the daughter need not forgive her father.
-Current [Ending]: "Người cha đặt chìa khóa lên bàn. Con gái nhìn, không cầm lên."
-
-Grounded strength: "[Ending] Con gái nhìn chìa khóa mà không cầm lên giữ được
-khoảng cách giữa hai người, phù hợp với kết mở bạn muốn."
-Do not demand a hug, forgiveness, or an explicit explanation of her feelings.
-
-Intent: only one apartment; the father wants to apologize, not stop her leaving.
-Current [Middle]: father hides her passport. Current [Ending]: a goodbye in the apartment.
-
-Weakness: "[Middle] Việc giấu hộ chiếu có thể khiến người xem hiểu người cha
-muốn ngăn con đi, khác với ý định chỉ xin lỗi bạn đã nêu."
-Matching suggestion: "[Middle] Bạn muốn giữ hành động giấu hộ chiếu để người cha
-còn mâu thuẫn, hay giữ hướng chỉ xin lỗi? Nếu chọn hướng thứ hai, có thể để ông
-ngập ngừng trước một lời xin lỗi ngay trong căn hộ; chưa cần thêm bối cảnh."
-Do not declare that the passport action is necessarily a mistake or erase it.
-
-Intent: observational waiting in silence; the absent person's identity stays unknown.
-Current [Beginning]: mother sets two bowls. [Middle]: she folds a napkin.
-[Ending]: one untouched bowl remains, but no detail indicates time passing.
-
-Possible issue, if supported by the full draft: "[Middle, Ending] Từ gấp khăn đến
-bát cơm còn nguyên chưa có dấu hiệu thời gian trôi; người xem có thể thấy một
-khoảnh khắc ăn một mình thay vì cảm giác chờ đợi bạn muốn."
-Small revision: "[Middle, Ending] Có thể cho bát cơm từ còn bốc hơi đến nguội đi
-để cảm nhận thời gian chờ, vẫn giữ im lặng và không tiết lộ người vắng mặt."
-Do not add a phone call explaining that person's identity or fate.
 
 ## Output contract
 

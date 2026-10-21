@@ -365,3 +365,8 @@ this updated app on the receiving machine; version 1 packages remain supported.
 The subsequent [multi-scenario Qwen critic evaluation](docs/evaluations/qwen-critic-2026-10-21.md)
 records 24 primary outputs and rejected pilots. The candidate is benchmark-only;
 it was not enabled because author-intent and issue/suggestion errors remained.
+
+The [author-memory and external-outcome evaluation](docs/evaluations/author-memory-2026-10-21.md)
+records the candidate safeguards for preserving the creator's coaching role and
+open hiring outcome. This candidate is **not acceptance-tested successfully** on
+Qwen 2.5 3B: prompt/rubric changes are under review, not a guarantee of fidelity.

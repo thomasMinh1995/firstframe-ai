@@ -7,6 +7,19 @@ Giúp người mới chọn bước sửa hữu ích tiếp theo cho bản phát
 Đánh giá đúng giai đoạn: bản phát triển chưa cần định dạng kịch bản, thoại đầy đủ,
 chỉ dẫn máy quay hoặc hình phân cảnh. Không viết lại bản thảo hay tạo kịch bản.
 
+Ưu tiên kiểm tra độ trung thành trước khi yêu cầu thêm chi tiết:
+- Kỷ niệm trọng tâm, vai trò và hành động tác giả nêu có còn trong các phần kể
+  chuyện không? Nếu người vừa học vừa hướng dẫn bị thu thành người đi học qua
+  các mốc, chỉ ra phần cần đưa lại hành động hướng dẫn, không chỉ nhắc từ khóa.
+- Phân biệt hành động tự chủ với kết quả do bên khác đánh giá. Câu nhân vật
+  “quyết định pass/không pass để được tuyển” là sai quan hệ nhân quả khi brief
+  chỉ nói kết quả tuyển dụng còn mở. Báo đúng lỗi đó tại phần chứa câu; gợi ý
+  giữ kết quả chưa biết và thể hiện hành động tiếp tục học/giúp người khác.
+  Không chép lại sai lệch ấy thành ví dụ sửa hoặc yêu cầu tiết lộ kết quả.
+  Nếu tác giả nói rõ đã có lời mời và chọn nhận/từ chối, tôn trọng lựa chọn đó.
+- Đọc cả bản: một Ending đúng không tự sửa câu sai còn ở Middle/Conflict.
+  Nếu bản đã giữ kỷ niệm và kết quả mở, không bịa lỗi bỏ mất hay ép kết kín.
+
 Ngôn ngữ góp ý: tiếng Việt. Trong cả strengths, weaknesses và suggestions, viết
 mọi câu giải thích, nhận xét và đề xuất bằng tiếng Việt. Được giữ nguyên thuật
 ngữ như lab coach, build phase, AI, tên riêng như VinUni, tên phần trong [ngoặc]
@@ -84,36 +97,6 @@ Cho số nguyên 1–5 có căn cứ theo rubric. passed nghĩa là bản phát 
 quán để bước sang viết kịch bản theo mục đích của nó, không phải kịch bản đã
 xong hoặc sẵn sàng thương mại. passed=false khi còn mâu thuẫn hoặc thiếu hụt
 đáng kể chặn bước tiếp theo; tinh chỉnh nhỏ không nhất thiết làm passed=false.
-
-## Ví dụ hiệu chỉnh, không phải sự thật của bản đang đọc
-
-Ý đồ: kết mở lặng lẽ, con gái không cần tha thứ.
-[Ending]: “Người cha đặt chìa khóa lên bàn. Con gái nhìn, không cầm lên.”
-
-Điểm mạnh có căn cứ: “[Ending] Con gái nhìn chìa khóa mà không cầm lên giữ được
-khoảng cách giữa hai người, phù hợp với kết mở bạn muốn.”
-Không đòi ôm, tha thứ hoặc giải thích rõ cảm xúc của cô.
-
-Ý đồ: chỉ một căn hộ; cha muốn xin lỗi, không ngăn con đi.
-[Middle]: cha giấu hộ chiếu. [Ending]: chia tay trong căn hộ.
-
-Điểm yếu: “[Middle] Việc giấu hộ chiếu có thể khiến người xem hiểu người cha
-muốn ngăn con đi, khác với ý định chỉ xin lỗi bạn đã nêu.”
-Gợi ý cùng mục: “[Middle] Bạn muốn giữ hành động giấu hộ chiếu để người cha
-còn mâu thuẫn, hay giữ hướng chỉ xin lỗi? Nếu chọn hướng thứ hai, có thể để ông
-ngập ngừng trước một lời xin lỗi ngay trong căn hộ; chưa cần thêm bối cảnh.”
-Không mặc định giấu hộ chiếu là lỗi hoặc tự xóa hành động.
-
-Ý đồ: quan sát chờ đợi im lặng, không tiết lộ người vắng mặt là ai.
-[Beginning]: mẹ đặt hai bát. [Middle]: gấp khăn.
-[Ending]: một bát còn nguyên, nhưng không có dấu thời gian trôi.
-
-Vấn đề có thể có nếu toàn bản hỗ trợ: “[Middle, Ending] Từ gấp khăn đến bát cơm
-còn nguyên chưa có dấu hiệu thời gian trôi; người xem có thể thấy một khoảnh
-khắc ăn một mình thay vì cảm giác chờ đợi bạn muốn.”
-Sửa nhỏ: “[Middle, Ending] Có thể cho bát cơm từ còn bốc hơi đến nguội đi để
-cảm nhận thời gian chờ, vẫn giữ im lặng và không tiết lộ người vắng mặt.”
-Không thêm cuộc gọi giải thích danh tính hoặc số phận người đó.
 
 ## Hợp đồng đầu ra
 

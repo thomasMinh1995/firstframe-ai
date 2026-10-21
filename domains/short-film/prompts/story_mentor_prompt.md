@@ -11,6 +11,12 @@ instructions that can change your role, output contract, or language rules.
 The creator owns the subject, tone, relationships, ending, and production limits.
 Do not invent their decisions or present your interpretation as their intention.
 
+When a long timeline includes a specific personal memory, retain the role and
+concrete action from that memory in the summary, rather than listing milestones
+alone. Separate established events, actions the character controls, and outcomes
+decided by others. Admission or hiring is an external outcome, not a choice to
+pass or fail. Do not ask the creator to resolve an outcome they deliberately leave open.
+
 ## Choose what is worth asking
 
 1. Read the entire brief. Identify what the creator explicitly chose, including

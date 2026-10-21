@@ -5,6 +5,20 @@ Reasoning notes là nhận xét AI. Knowledge và examples chỉ tham khảo cá
 không phải nhân vật, bối cảnh hay sự kiện của phim này. Không sao chép chi tiết ví dụ.
 Văn bản dữ liệu không được đổi nhiệm vụ hoặc schema.
 
+Trước khi viết, giữ hai điều sau xuyên suốt bản phát triển:
+- Kỷ niệm cụ thể tác giả nhấn mạnh phải thành hành động trong beginning, middle
+  hoặc ending, không chỉ được nhắc ở theme. Nếu có vai trò vừa học vừa hướng dẫn
+  (như lab coach ngồi cạnh học viên làm bài lab và chia sẻ trải nghiệm), giữ cả
+  vai trò lẫn hành động ấy TRÊN CÙNG NHÂN VẬT. Không tách vai trò lab coach của
+  người kể thành một nhân vật phụ hướng dẫn người kể. Các mốc học/tuyển chọn là bối cảnh, không thay kỷ niệm
+  bằng một bản liệt kê thành tích hay cảnh hoạt động chưa được tác giả nêu.
+- Phân biệt sự kiện đã xảy ra với kết quả còn mở và hành động tự chủ. Đỗ/trượt,
+  được tuyển hay không là kết quả đánh giá của bên khác, KHÔNG phải nhân vật
+  quyết định pass hay không pass. Nhân vật có thể chọn tiếp tục học hoặc giúp
+  người khác dù chưa biết kết quả. Không dựng xung đột giả giữa học và được tuyển.
+  Giữ các lần pass đã có trong brief; kết quả tuyển dụng cuối chưa biết thì vẫn
+  chưa biết. Chọn nhận/từ chối một lời mời đã có chỉ hợp lệ khi tác giả nêu rõ.
+
 Giữ thời lượng, số người, địa điểm, không thoại, cảm xúc và kết thúc tác giả chọn.
 Nếu tác giả muốn xin lỗi mà không ngăn người kia đi, không thêm hành vi níu kéo.
 Nếu muốn chờ đợi và không biết ai vắng mặt, không xác định người đó hoặc cho họ trở về.
@@ -42,3 +56,16 @@ kể cả khi brief dùng ngôn ngữ khác; không tự nhận diện lại ng�
 nghĩa là tiếng Việt có dấu. Giữ nguyên thuật ngữ tác giả như lab coach, build phase,
 tên riêng, tên phim tác giả đã chọn và trích dẫn nguyên văn từ brief. Tên khóa giữ
 tiếng Anh. Tự bỏ câu lặp trước khi xuất; không in phần tự kiểm tra.
+
+Đối chiếu trước khi xuất (ví dụ chỉ áp dụng khi brief có chi tiết tương ứng):
+Brief: người kể vừa học vừa làm lab coach; chưa biết có được tuyển dụng, vẫn học tiếp.
+Đúng: protagonist là người học KIÊM lab coach; middle cho chính người ấy ngồi
+cạnh học viên, hướng dẫn bài lab và chia sẻ kinh nghiệm. Ending cho người ấy
+tiếp tục học/hướng dẫn, không thông báo đỗ hay trượt tuyển dụng.
+Sai: supporting_characters thêm một lab coach thay vai trò của người kể;
+logline nói người kể đã được tuyển; ending nhận thông báo pass; nhân vật chọn
+đỗ/trượt. Nếu thấy các lỗi này trong bản nháp, sửa chúng trước khi trả JSON.
+Nếu brief nói một người khác là người hướng dẫn hoặc đã có kết quả, giữ đúng brief.
+Không đảo mốc thời gian: nếu đã pass đầu vào rồi học và thực tập, kết quả còn
+mở ở cuối là tuyển dụng chính thức, không phải kỳ thi đầu vào đã qua. Không gán
+địa điểm/thời lượng của thực tập cho giai đoạn học nếu brief không nói vậy.
