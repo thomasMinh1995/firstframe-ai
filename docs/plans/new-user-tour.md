@@ -38,15 +38,40 @@ chọn cho người muốn xem trước workflow mà chưa gọi AI.
 | Bước / chặng | Vùng hướng dẫn | Nội dung dự kiến và điểm thực hành |
 | --- | --- | --- |
 | 1 / Bắt đầu | Nút Dự án mới | “Tạo không gian riêng cho câu chuyện của bạn. Bạn có thể lưu và quay lại viết tiếp.” Chưa có dự án thì dừng để người dùng tự tạo. |
-| 2 / Bắt đầu | Ý tưởng và điều muốn giữ | “Bắt đầu bằng một tình huống hoặc kỷ niệm. Ghi thêm điều bạn muốn giữ, như kết thúc mở hoặc chỉ có hai nhân vật.” Dừng để nhập; không tự điền hoặc lưu. |
+| 2 / Bắt đầu | Ý tưởng và điều muốn giữ | “Kể một tình huống hoặc kỷ niệm, kèm điều bạn muốn giữ. Dùng Lưu thay đổi để quay lại viết tiếp, kể cả khi chưa chạy AI.” Cho nhập tại bước này; không tự điền hoặc lưu. |
 | 3 / Bắt đầu | Ngôn ngữ đầu ra và Cùng làm rõ ý tưởng | “Chọn ngôn ngữ cho nội dung AI, rồi cùng làm rõ những lựa chọn sáng tác.” Giải thích chọn ngôn ngữ không tự dịch nội dung đã có. Người dùng tự bấm làm rõ; thao tác hiện có sẽ lưu trước khi gọi AI. |
 | 4 / Làm rõ | Những lựa chọn của bạn và nút tạo bản phát triển | “Trả lời theo ý bạn. Nếu chưa chắc, chọn Để quyết định sau trước khi tạo bản phát triển.” Người dùng tự trả lời và tạo bản phát triển. |
 | 5 / Viết và sửa | Bản phát triển đang làm việc | “Đây là bản để bạn tiếp tục viết. Bạn có thể sửa tên phim, tóm tắt và từng phần câu chuyện.” Nêu đây là bản phát triển, chưa phải kịch bản theo cảnh hoàn chỉnh. |
-| 6 / Viết và sửa | Nhận phản hồi, vùng phản hồi nếu có và thanh lưu | “Xin góp ý cho bản hiện tại rồi tự quyết định cách sửa. Lưu thay đổi trước khi rời đi.” Giải thích nhận phản hồi sẽ lưu trước khi gọi AI; sửa tiếp khiến góp ý cũ thuộc bản trước. |
+| 6 / Viết và sửa | Thanh lưu | “Nhận phản hồi trên bản hiện tại sẽ lưu bản này trước khi gửi AI; bạn tự quyết định cách sửa. Sau khi sửa tiếp, phản hồi cũ thuộc bản trước — hãy lưu thay đổi trước khi rời đi.” Không yêu cầu có feedback hoặc chạy review để kết thúc hướng dẫn. |
 
-Mỗi thẻ có tiêu đề, một hoặc hai câu và một thao tác tiếp theo. Khi cần giải
-thích nhiều vùng cách xa nhau, spotlight lần lượt từng vùng; không mở rộng
-một khung lớn che toàn bộ form. Không dùng điểm AI làm điều kiện hoàn thành.
+Mỗi thẻ có tiêu đề, một hoặc hai câu và đúng một vùng spotlight. Các control
+được nhắc thêm chỉ là nội dung giải thích, không tạo bước con hoặc spotlight
+tự chạy. Không dùng điểm AI làm điều kiện hoàn thành.
+
+### Anchor và nơi trả focus
+
+Các giá trị dưới đây là `data-tour` cần bổ sung, đồng thời là ID bước ổn định.
+Chỉ anchor duy nhất, đã mount, còn kết nối DOM và có kích thước mới được dùng.
+Điều kiện chung để mở overlay là tải workspace thành công và `busy === null`.
+
+| Bước / ID | Phần tử làm spotlight | Điều kiện bổ sung | Focus sau khi chọn Thực hành |
+| --- | --- | --- | --- |
+| 1 / `new-project` | Nút Dự án mới | Luôn có trên workspace đã tải | Chính nút này; nếu đã có dự án, copy nhắc nút thật sẽ lưu dự án đang mở trước khi tạo dự án khác |
+| 2 / `idea` | Ô `#idea` | Có project | `#idea`; thẻ nhắc ô điều muốn giữ ở bên dưới |
+| 3 / `language` | Select `#response-language` | Có project | `#idea` nếu ý tưởng trống; nếu không, nút làm rõ khi nó hiện và enabled; nếu đã có analysis hợp lệ thì focus select |
+| 4 / `choices` | Tiêu đề Những lựa chọn của bạn | Có analysis và `!briefChanged` | Câu trả lời trống đầu tiên; nếu đã đủ câu trả lời hoặc không có câu hỏi, focus nút tạo bản phát triển |
+| 5 / `draft` | Tiêu đề Bản phát triển đang làm việc | Có draft | `#draft-logline`; không phụ thuộc số phần trong draft |
+| 6 / `save` | `.save-toolbar` | Có draft và project | Không có nút Thực hành ở bước cuối; dùng Hoàn tất hướng dẫn |
+
+Các tiêu đề/vùng không phải control có `tabIndex=-1` để làm focus dự phòng.
+Không spotlight toàn bộ panel draft dài hơn viewport. Thanh lưu có thể được
+highlight dù nút Lưu thay đổi đang disabled vì không có sửa mới; giải thích
+“Đã lưu” và tuyệt đối không bật nút để phục vụ tour. Khi hoàn tất, focus nút
+Lưu thay đổi nếu enabled, nếu không focus vùng trạng thái lưu.
+
+Không tìm được anchor dù điều kiện dữ liệu cho phép: đóng overlay, chuyển
+`paused`, hiện nhắc “Chưa thể mở bước này” cạnh nút hướng dẫn, cho thử lại
+hoặc bỏ qua. Không poll vô hạn, không dùng tọa độ cũ hoặc tự đánh dấu hoàn tất.
 
 ## Khởi động, thực hành và tiếp tục
 
@@ -65,50 +90,104 @@ một khung lớn che toàn bộ form. Không dùng điểm AI làm điều ki�
 
 ### Điều hướng và điểm dừng thực hành
 
-- Thẻ có “Trước”, “Tiếp”, “Bỏ qua”, nút đóng và số bước của toàn luồng.
-  Ở bước cuối dùng “Hoàn tất hướng dẫn”.
-- “Tiếp” và “Trước” chỉ chuyển giữa các bước có vùng đích hợp lệ.
-  Không dùng nút tour để gọi `persist()`, `action()`, tạo dự án hoặc khôi phục phiên bản.
-- Tại bước cần dữ liệu chưa có, dùng “Thực hành” thay cho việc nhảy tới
-  phần chưa xuất hiện. Thao tác này đóng overlay, trả focus về control
-  thích hợp và giữ bước tiếp theo đang chờ.
-- Người dùng thao tác qua các nút thật của workspace. Việc nhập, lưu,
-  phân tích, tạo bản phát triển và review giữ nguyên quy tắc hiện có.
-- Trong cùng phiên tour, chỉ gợi ý tiếp tục chặng sau khi thao tác thành
-  công, đúng dự án, ứng dụng hết bận và vùng đích đã render. Hiện nút
-  “Tiếp tục hướng dẫn”; không tự bật thẻ che nội dung vừa trả về.
-- Reload hoặc rời trang giữa chừng: khi quay lại, hiện lựa chọn tiếp tục,
-  không tự mở spotlight hoặc chạy lại tác vụ AI đang chờ.
-- Đổi dự án: đóng overlay, bỏ trạng thái chờ của dự án trước và yêu cầu
-  chủ động tiếp tục trên dự án mới. Kết quả đến muộn không được mở lại tour.
+- Thẻ có “Trước”, “Bỏ qua”, nút đóng và nhãn “Bước N/6”. Số N là vị trí
+  cố định của bước, không phải tỷ lệ công việc đã hoàn thành. Trước đi tới
+  bước khả dụng gần nhất; tại bước 1 thì disabled. Không che bước chưa xem
+  bằng cách tự tính nó là đã hoàn thành khi vào từ bước 4 hoặc 5.
+- Bước 1–5 có “Thực hành” để đóng overlay và focus theo bảng anchor.
+  Nút “Tiếp” chỉ hiện khi đích trong bảng dưới khả dụng; ở điểm chờ dữ liệu
+  thì Thực hành là CTA chính. Bước 6 có “Hoàn tất hướng dẫn”.
+- Khi overlay đóng để thực hành, một thanh nhỏ cạnh nút Hướng dẫn sử dụng
+  cho phép “Tiếp tục hướng dẫn” và “Bỏ qua”. Không dùng `notice` hiện có:
+  `useEffect` theo `dirty` đang xóa notice khi người dùng gõ. Nút/thanh tour
+  đặt ngoài fieldset bị disabled khi busy để Bỏ qua vẫn hoạt động.
+- Không nút tour nào gọi `persist()`, `action()`, tạo dự án hoặc khôi phục
+  phiên bản. Tác giả thao tác qua nút thật; quy tắc lưu trước AI vẫn giữ nguyên.
+
+| Bước đang xem | Tiếp khi xem | Sau Thực hành, khi nào cho tiếp tục? |
+| --- | --- | --- |
+| 1 | Bước 2 nếu đã có project; không có thì chỉ Thực hành | Khi tạo được project qua nút thật. Tạo thành công từ bước 1 là ngoại lệ có chủ đích cho quy tắc đổi dự án: gắn tour với ID mới rồi cho tiếp tục bước 2 |
+| 2 | Bước 3, kể cả ý tưởng trống | Ngay khi đã đóng overlay: cho tiếp tục bước 3 bằng click, không cần thay chữ hoặc lưu; nút làm rõ thật vẫn kiểm tra ý tưởng như hiện tại |
+| 3 | Bước 4 nếu analysis hợp lệ; nếu chưa thì chỉ Thực hành | Chờ kết quả analyze thành công được chấp nhận; sau đó cho tiếp tục bước 4. Nếu analysis đã hợp lệ, cho tiếp tục ngay, không gọi analyze lại |
+| 4 | Bước 5 nếu draft đã tồn tại; nếu chưa thì chỉ Thực hành | Chờ plan thành công nếu chưa có draft. Nếu đã có draft, cho xem bước 5 ngay và ghi rõ đây là bản đã có, không xác nhận bản vừa được tạo lại |
+| 5 | Bước 6 | Ngay khi đóng overlay: cho tiếp tục bước 6 bằng click, không yêu cầu sửa, lưu hay review |
+| 6 | Hoàn tất hướng dẫn | Ghi completed; không chạy save/review và không chờ feedback |
+
+Không tự mở overlay khi thao tác kết thúc. “Tiếp tục” luôn kiểm tra lại đích
+và `busy` tại thời điểm click. Với mọi nút Tiếp/Tiếp tục định vào bước 4–6,
+nếu analysis không còn hợp lệ thì trở về bước 2 trước, kể cả draft vẫn tồn tại.
+Khi đang bận, thanh thực hành vẫn cho Bỏ qua nhưng tắt Tiếp tục; không hủy
+request đang chạy. Lỗi chuyển về `paused` tại bước thực hành, không tự tiến
+bước. Người dùng có thể tiếp tục xem bước đó
+hoặc tự thử lại bằng nút thật; tour không giữ họ trong trạng thái chờ vô hạn.
+
+Reload/rời trang hủy lượt chờ trong bộ nhớ. Khi quay lại chỉ mời tiếp tục
+theo dữ liệu đã đọc, không phát lại tác vụ. Đổi/tạo dự án ngoài ngoại lệ bước
+1 làm tour paused, bỏ lượt chờ cũ ngay từ lúc người dùng chọn thao tác;
+nếu chuyển thất bại vẫn giữ buffer và chỉ mở lại khi người dùng yêu cầu.
 
 ### Dữ liệu có điều kiện và mở lại
 
-- Chưa có dự án: bắt đầu từ bước 1.
-- Có dự án, chưa có analysis hợp lệ: bắt đầu tại bước 2.
-- Có analysis hợp lệ, chưa có draft: bắt đầu tại bước 4.
-- Có draft: bắt đầu tại bước 5; bước 6 vẫn giải thích được khi chưa có feedback.
-- Có analysis nhưng không có câu hỏi: bước 4 nói rõ có thể tạo bản phát
-  triển ngay, không yêu cầu trả lời câu hỏi không tồn tại.
-- Khi brief đang sửa khiến phần lựa chọn bị ẩn, không dùng analysis cũ
-  để dẫn tới bước 4; đưa người dùng về bước 2–3 khi họ chọn tiếp tục.
-- Nếu nút làm rõ không hiện vì analysis vẫn hợp lệ, bỏ bước 3 khi điều
-  hướng lại và dẫn tới bước 4; không yêu cầu chạy AI lần nữa để xem tour.
-- “Trước” chỉ đi tới phần còn khả dụng; nếu vùng đích biến mất thì tạm
-  dừng, không vẽ spotlight ở tọa độ cũ hoặc âm thầm đánh dấu đã xem.
-- Hoàn thành nghĩa là đã xem phần kết của hướng dẫn khả dụng, không
-  chứng nhận đã tạo draft, đã review hoặc đã hoàn thành câu chuyện.
+“Analysis hợp lệ” trong tour nghĩa là đúng điều kiện UI đang dùng:
+`project.analysis !== null && !briefChanged`; tour không tự đánh giá nội dung AI.
+Khi chọn bắt đầu/xem lại hoặc chuyển dự án, chọn điểm vào theo thứ tự:
+
+1. Không có project: bước 1.
+2. Có project nhưng brief đang sửa hoặc thiếu analysis: bước 2, kể cả có draft cũ.
+3. Analysis hợp lệ nhưng thiếu draft: bước 4.
+4. Analysis hợp lệ và có draft: bước 5, kể cả chưa có feedback.
+
+Khi đang waiting, Tiếp tục dùng bảng chuyển bước; khi paused hoặc mở lại sau
+reload cùng dự án, ưu tiên bước đã lưu nếu còn khả dụng, nếu không thì dùng
+thứ tự trên. Riêng briefChanged hoặc thiếu analysis ưu tiên
+bước 2 trước tiến độ cũ ở bước 4–6. Ví dụ đang ở bước 5 rồi đổi ý tưởng:
+mở lại phải hướng dẫn làm rõ, không dẫn thẳng tới draft cũ vẫn còn trên UI.
+Sau reload không suy đoán một tác vụ thành công từ việc có draft sẵn; mở lại
+chỉ để giải thích dữ liệu đang đọc, không phát thông báo “vừa tạo thành công”.
+
+Bước 3 vẫn khả dụng với analysis hợp lệ vì anchor là select ngôn ngữ;
+copy lúc này nhắc có thể tiếp tục xem lựa chọn mà không chạy lại AI.
+Nếu không có câu hỏi, bước 4 nói rõ có thể tạo bản phát triển ngay.
+Nếu có draft từ trước, bước 4 dùng đúng nhãn tạo lại/giữ phiên bản cũ hiện có.
+Không tự bấm nút tạo lại để xem bước 5.
+
+Chỉ bấm Hoàn tất ở bước 6 mới ghi completed. Thoát trước đó là dismissed,
+kể cả người dùng đã tự làm hết workflow. Completed chỉ xác nhận đã kết thúc
+lượt hướng dẫn, không chứng nhận đã xem đủ sáu bước hoặc hoàn thành câu chuyện.
 
 ## Trạng thái và lưu tiến độ
 
-Dùng một record `localStorage` với key `firstframe:onboarding`, chứa version,
-trạng thái (`active`, `waiting`, `paused`, `dismissed`, `completed`),
-ID bước ổn định và ID dự án nếu bước đang chờ gắn với dự án.
+Dùng một record `localStorage` với key `firstframe:onboarding`, chứa
+`version: 1`, `status`, `stepId` (sáu ID trong bảng anchor) và `projectId`
+(ID hiện tại, hoặc null trước khi tạo). Trạng thái được định nghĩa như sau:
+
+| Trạng thái | Ý nghĩa / cách vào |
+| --- | --- |
+| Chưa có record | Chưa tương tác lời mời; chỉ xét mời tự động sau tải workspace thành công |
+| `active` | Overlay đang mở do người dùng chọn Bắt đầu/Tiếp tục/Xem lại |
+| `waiting` | Đã chọn Thực hành; giữ bước xuất phát, thanh tiếp tục tra bảng chuyển bước bằng dữ liệu hiện tại |
+| `paused` | Gián đoạn do reload, lỗi, đổi dự án hoặc mất anchor; giữ bước để chủ động mở lại |
+| `dismissed` | Đóng, Escape, Bỏ qua từ lời mời/thẻ/thanh thực hành; không tự nhắc lại |
+| `completed` | Bấm Hoàn tất ở bước 6; chỉ mở lại qua nút hướng dẫn |
+
+Nếu đóng lời mời trước bước 1, ghi dismissed với `stepId: new-project`.
+Lưu theo thay đổi bước/trạng thái/dự án, không ghi theo mỗi ký tự hoặc mỗi
+lần cuộn. Lượt request đang chờ chỉ nằm trong bộ nhớ, không đưa vào storage.
 
 Đọc storage sau khi mount để tránh lệch hydration. Kiểm tra cấu trúc và
 giá trị trước khi dùng; record hỏng thì bỏ qua an toàn. Khi không đọc/ghi
 được storage, tour vẫn chạy bằng state trong phiên, không chặn workspace.
-Sau reload, `active`/`waiting` chỉ tạo lời nhắc tiếp tục, không tự khởi chạy.
+Nếu đọc thất bại thì chỉ mở thủ công vì chưa biết lựa chọn trước đó.
+Sau reload, `active`/`waiting` được coi là paused; không phục hồi lượt request.
+MVP chỉ ghi/đọc schema version 1. Với version khác hoặc record hỏng, không
+tự bật lời mời; chỉ để nút hướng dẫn hoạt động và ghi record v1 khi người dùng
+chủ động mở/bỏ qua. Version nội dung tương lai phải giữ lựa chọn đã đóng hoặc
+hoàn thành; chưa xây hệ thống migration cho phiên bản chưa tồn tại.
+
+Khi tab khác ghi dismissed/completed, tab hiện tại đóng overlay/thanh nhắc và
+bỏ lượt chờ qua sự kiện storage. Kết quả request cũ không được ghi đè lựa chọn
+này. Xóa storage khi tab đang mở cũng không tự bật lại lời mời trong phiên đó;
+không cần đồng bộ bước đang xem giữa các tab.
 
 Không lưu ý tưởng, câu trả lời, bản thảo hoặc phản hồi trong record tour.
 Tiến độ thuộc trình duyệt, không phải bằng chứng nhận diện người dùng.
@@ -128,9 +207,56 @@ Tiến độ thuộc trình duyệt, không phải bằng chứng nhận diện 
 - Dialog có nhãn/description, focus nằm trong thẻ khi mở; Tab/Shift+Tab
   hoạt động đúng, Escape đóng và trả focus về nút mở hoặc vùng thực hành.
   Không để nền nhận focus trong khi overlay đang mở.
+- Render dialog ngoài cây nền bị inert. Đóng thông thường trả focus về nút
+  mở; Thực hành/Hoàn tất dùng bảng anchor. Nếu đích focus bị tháo hoặc disabled,
+  dùng tiêu đề workspace có tabIndex=-1; không focus control đã mất.
 - Tôn trọng giảm chuyển động; hướng dẫn không phụ thuộc riêng vào màu.
-- Không mở tour trong lúc `busy`, không che lỗi hoặc tiến trình AI.
-  Nếu phát sinh lỗi, ưu tiên thông báo hiện có và tạm dừng hướng dẫn.
+- Không mở tour trong lúc `busy`. Nếu phát sinh lỗi, đóng overlay và ưu tiên
+  thông báo hiện có; lỗi không được xóa bởi nút tour. Khi hết bận, người dùng
+  vẫn có thể chủ động xem hướng dẫn để sửa đầu vào dù `error` còn tồn tại
+  (ví dụ lỗi 422 cần chọn ngôn ngữ); lỗi chỉ chặn lời mời tự động, không khóa trợ giúp.
+- Nếu viewport quá thấp hoặc zoom lớn khiến thẻ và spotlight không cùng vừa,
+  dùng dialog cuộn được trong viewport, bỏ spotlight/mũi tên tạm thời và nêu
+  tên vùng đích bằng chữ. Sau Thực hành mới cuộn/focus input; không cố giữ
+  bàn phím ảo mở cùng thẻ. Dọn inert/scroll lock/listener khi đóng hoặc unmount.
+
+### Sự kiện tích hợp với workspace
+
+`page.tsx` chưa có tín hiệu tour hoặc cờ tải thành công riêng. Khi triển khai,
+thêm `workspaceLoadState` (loading/ready/error); chỉ ready sau cả listProjects
+và mở dự án cuối thành công, hoặc sau thao tác mở/tạo dự án được xác nhận.
+`busy === null` không đủ vì finally của lần tải lỗi cũng đặt busy về null.
+Lời mời tự động còn cần danh sách đã tải thành công và rỗng; tạo/mở thủ công
+sau lỗi tải không tự chứng minh danh sách rỗng.
+
+Chỉ phát tín hiệu tour tại các điểm sau, không thêm event bus hoặc API mới:
+
+- `project-created`: sau POST tạo dự án trả project hợp lệ và đã được chấp nhận.
+  Không phát từ PUT lưu dự án cũ chạy trước POST.
+- `analysis-succeeded` / `plan-succeeded`: sau `streamProjectOperation`
+  trả result hợp lệ và được workspace chấp nhận; lấy ID từ result.
+  Không phát từ event progress, `accept()` dùng chung hoặc chỉ vì `busy` vừa hết.
+- Lưu/review không có tín hiệu tiến bước; bước 2 và 5 dùng thao tác Tiếp tục
+  của người dùng. `run()` hiện bắt lỗi rồi resolve nên không dùng
+  `await run(...)` làm bằng chứng thao tác thành công.
+
+Trong bộ nhớ, mỗi lượt thực hành chờ create/analyze/plan giữ loại thao tác,
+ID dự án lúc bắt đầu (null cho tạo lần đầu), token phiên tour và token lượt
+request thật. Analyze/plan phải trả đúng ID dự án. Create phải khớp lượt POST
+và ngữ cảnh bắt đầu, rồi gắn tour với ID mới trả về; không so ID mới với ID cũ.
+Đóng/bỏ qua/đổi dự án/unmount hủy hiệu lực token; mở tour lại tạo phiên mới
+nên kết quả phiên cũ không đánh dấu bước mới thành công. Khi nhận tín hiệu,
+đợi hết busy rồi kiểm tra lại anchor để
+hiện nút Tiếp tục. Đây là kiểm tra cho tour, không tự gọi accept hoặc sửa luồng
+lưu/nhận kết quả của workspace.
+
+Kết quả không có tín hiệu phù hợp vẫn có thể làm dữ liệu hiện tại thay đổi.
+Tour chỉ cho chủ động mở lại theo dữ liệu đó; không ghi nhận request cũ là
+thành công của lượt thực hành mới hoặc tự đánh thức một tour đã đóng.
+Trong waiting, chỉ bật Tiếp tục sang chặng cần dữ liệu nếu đích đã khả dụng
+ngay lúc chọn Thực hành hoặc đã nhận đúng tín hiệu của lượt chờ. Không dùng
+effect theo riêng sự xuất hiện của analysis/draft để suy ra thành công.
+Bước 2 và 5 không cần tín hiệu request; quy tắc này chỉ áp dụng điểm chờ 1/3/4.
 
 ## Bảo toàn dữ liệu và lỗi
 
@@ -149,7 +275,7 @@ recording hoặc sửa cơ chế xử lý kết quả đến muộn của worksp
 
 | Thành phần | Thay đổi dự kiến |
 | --- | --- |
-| `frontend/app/page.tsx` | Nút hướng dẫn; anchor ổn định; truyền trạng thái đã tải/busy/dự án/briefChanged và kết quả thao tác đã được chấp nhận |
+| `frontend/app/page.tsx` | Nút/thanh hướng dẫn độc lập notice; anchor; trạng thái tải tường minh; tín hiệu create/analyze/plan tại đúng điểm thành công và token lượt thao tác |
 | `frontend/app/OnboardingTour.tsx` — mới | Overlay, spotlight, dialog, điều hướng, scroll, focus và xử lý viewport |
 | `frontend/app/onboardingState.ts` — mới | Nội dung sáu bước, chọn bước khả dụng, chuyển trạng thái, đọc/ghi tiến độ có kiểm tra |
 | `frontend/app/globals.css` | Style tour theo giao diện hiện có; mobile và reduced motion |
@@ -186,6 +312,20 @@ phạm vi. Không cần thay đổi backend hay gọi model thật để kiểm 
 - [ ] Desktop/mobile, cuộn/resize, bàn phím ảo và nội dung dài không làm thẻ tràn hoặc che vùng thực hành.
 - [ ] Dùng được với bàn phím và trình đọc màn hình; focus được giữ/trả đúng, giảm chuyển động được tôn trọng.
 - [ ] Nội dung phân biệt bản phát triển với screenplay, và phản hồi cũ với phản hồi cho bản hiện tại.
+
+Các ca chuyển bước bắt buộc khi triển khai:
+
+| Tình huống | Kết quả cần chứng minh |
+| --- | --- |
+| Thực hành bước 1, POST thành công từ project=null | Gắn ID mới, cho bấm tiếp tới bước 2; không bị quy tắc đổi dự án hủy nhầm |
+| Thực hành bước 2/5 rồi chỉ gõ, không lưu; hoặc không sửa chữ | Có nút tiếp tới 3/6; giữ toàn bộ buffer, không chờ API và không tự lưu |
+| Có draft cũ, đổi brief; hoặc đã lưu brief mới làm analysis=null | Tiếp/mở lại từ 4–6 về bước 2; không lấy sự tồn tại của draft làm bằng chứng plan thành công |
+| PUT trong persist thành công, analyze/plan sau đó lỗi; hoặc nhận progress completed nhưng chưa có result | Không phát tín hiệu thành công; ở paused tại bước thực hành, giữ lỗi/bản sửa và có thể xem lại hướng dẫn |
+| Đóng tour A rồi mở tour B trước khi request A trả về | Kết quả A không tiến bước hoặc tự mở/đánh thức B; chỉ chủ động đọc trạng thái hiện tại |
+| Tab khác ghi dismissed/completed trong lúc đang chờ | Đóng thẻ/thanh nhắc, bỏ token; callback cũ không ghi đè trạng thái terminal |
+| Auto language gây 422, error còn trên workspace | Khi hết busy vẫn mở được trợ giúp/ngôn ngữ bằng thao tác chủ động; tour không xóa error hoặc retry |
+| Không có câu hỏi, draft không có section, chưa có feedback, nút lưu disabled | Focus đúng các đích dự phòng, bước 6 hoàn tất được mà không cần gọi AI |
+| Anchor mất, record hỏng/version lạ, viewport thấp/zoom lớn | Không spotlight tọa độ cũ hoặc tự bật lại; có đường mở thủ công, dialog cuộn và focus dự phòng |
 
 ## Kiểm chứng khi triển khai
 
