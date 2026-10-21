@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 
 import httpx
 import pytest
@@ -75,3 +76,70 @@ def test_repetition_screening_ignores_json_keys_and_section_anchors():
     assert indicators({"story": ["[Middle] Mẹ im lặng."]})["english_marker_hits"] == 0
     repeated = indicators(["Mẹ đặt bát xuống bàn.", "Mẹ đặt bát xuống bàn."])
     assert repeated["repeated_4gram_fraction"] == 0.5
+
+
+@pytest.mark.parametrize("experimental", [False, True])
+def test_six_critic_scenarios_replay_both_variants_without_losing_author_or_draft(
+    tmp_path, monkeypatch, experimental
+):
+    from app.application.workflow import _EvaluationOutput
+
+    source = Path(__file__).resolve().parents[2] / "demo/evaluations/critic-cases-2026-10-21.jsonl"
+    fixtures = [json.loads(line) for line in source.read_text().splitlines()]
+    output = _EvaluationOutput(
+        passed=True,
+        rubric_scores=dict.fromkeys(
+            [
+                "story_clarity",
+                "character",
+                "conflict",
+                "emotional_impact",
+                "ending",
+                "production_feasibility",
+            ],
+            4,
+        ),
+        strengths=["[Beginning] Tình huống rõ."],
+        weaknesses=[],
+        suggestions=[],
+    )
+    calls = []
+
+    def post(url, **kwargs):
+        calls.append(kwargs["json"])
+        return httpx.Response(
+            200,
+            request=httpx.Request("POST", url),
+            json={
+                "done": True,
+                "model": "qwen2.5:3b",
+                "message": {"content": output.model_dump_json()},
+            },
+        )
+
+    monkeypatch.setattr("scripts.compare_ollama_prompts.httpx.post", post)
+    report = compare(
+        source,
+        tmp_path / "result.json",
+        [42],
+        "http://127.0.0.1:11434",
+        ["evaluation"],
+        experimental_critic=experimental,
+    )
+    assert len(fixtures) == 6
+    assert len(calls) == len(report["runs"]) == 12
+    for fixture, before, after in zip(
+        fixtures, report["runs"][::2], report["runs"][1::2], strict=True
+    ):
+        original = fixture["steps"][0]["request"]["input_text"]
+        assert before["input_text"] == original
+        assert before["response_schema"] == after["response_schema"]
+        for marker in ("Creator intent and decisions:\n", "Current draft (JSON data):\n"):
+            value, _ = json.JSONDecoder().raw_decode(original.split(marker, 1)[1])
+            assert json.dumps(value, ensure_ascii=False) in after["input_text"]
+        assert fixture["expected_behavior"] not in after["input_text"]
+        assert (after["instructions"] != before["instructions"]) is experimental
+        if not experimental:
+            assert after["input_text"] == before["input_text"]
+        assert before["feedback_pairs_valid"] is True
+        assert after["feedback_pairs_valid"] is True

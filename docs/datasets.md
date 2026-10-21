@@ -426,3 +426,18 @@ quality guarantee. The final planner still invents some emotional/relationship
 pressure and has awkward wording; one camera description is ambiguous. Human
 review remains necessary. No samples were automatically approved. Timings are
 recorded for inspection but hardware load and prompt caching were not controlled.
+
+### Multi-scenario critic experiments, 2026-10-21
+
+A subsequent comparison used six synthetic Vietnamese request fixtures and seeds
+42/73 (24 primary outputs), with full raw evidence and rejected pilots saved in
+`demo/evaluations/qwen2.5-3b-critic-2026-10-21.json`. The candidate reduced repetition
+but did not improve structural feedback pairing (6/12 on each side) and still
+missed author/production constraints. It was **rejected and is not enabled**.
+The application continues using its original critic, with its existing limitations.
+
+See [the critic evaluation report](evaluations/qwen-critic-2026-10-21.md) for the
+per-scenario results, limits and rerun command. `--experimental-critic` is an
+explicit benchmark-only flag; normal comparisons use the active critic. The
+request-only fixtures are not approved workflow bundles and cannot be used as
+training/demo exports. No project or review database was modified.

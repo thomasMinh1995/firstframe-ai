@@ -319,3 +319,7 @@ After resolving an import conflict, open “Nhánh xung đột đã lưu” on t
 compare or use a preserved branch again. Using a saved branch requires review
 again before demo/train. Packages with branches use schema version 2 and require
 this updated app on the receiving machine; version 1 packages remain supported.
+
+The subsequent [multi-scenario Qwen critic evaluation](docs/evaluations/qwen-critic-2026-10-21.md)
+records 24 primary outputs and rejected pilots. The candidate is benchmark-only;
+it was not enabled because author-intent and issue/suggestion errors remained.
