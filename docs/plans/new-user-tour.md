@@ -1,8 +1,8 @@
 # Kế hoạch: Tour hướng dẫn người dùng mới
 
-- Trạng thái: đề xuất; chưa triển khai.
+- Trạng thái: đã triển khai MVP frontend trên nhánh `codex/new-user-tour`; chờ review và pilot người mới.
 - Issue: [Feature #22](https://github.com/thomasMinh1995/firstframe-ai/issues/22).
-- Phạm vi hiện tại: tài liệu kế hoạch và issue theo dõi; chưa thay đổi runtime hoặc dependency.
+- Kiểm chứng và cách chạy: [Tour người dùng mới](../testing/new-user-tour.md).
 
 ## Mục tiêu và bối cảnh
 
@@ -222,8 +222,7 @@ Tiến độ thuộc trình duyệt, không phải bằng chứng nhận diện 
 
 ### Sự kiện tích hợp với workspace
 
-`page.tsx` chưa có tín hiệu tour hoặc cờ tải thành công riêng. Khi triển khai,
-thêm `workspaceLoadState` (loading/ready/error); chỉ ready sau cả listProjects
+`page.tsx` cung cấp `workspaceLoadState` (loading/ready/error); chỉ ready sau cả listProjects
 và mở dự án cuối thành công, hoặc sau thao tác mở/tạo dự án được xác nhận.
 `busy === null` không đủ vì finally của lần tải lỗi cũng đặt busy về null.
 Lời mời tự động còn cần danh sách đã tải thành công và rỗng; tạo/mở thủ công
@@ -293,7 +292,7 @@ tiếp tục ở nơi hiện có; tour chỉ nhận dữ liệu cần cho hướ
 3. Kết nối ba chặng, điều kiện dữ liệu và lưu tiến độ: 1 ngày.
 4. Kiểm thử, sửa lỗi và thử với người mới: 0,5–1 ngày.
 
-Ước lượng 3–4 ngày công triển khai, chưa tính chờ người thử hoặc thay đổi
+Ước lượng ban đầu: 3–4 ngày công triển khai, chưa tính chờ người thử hoặc thay đổi
 phạm vi. Không cần thay đổi backend hay gọi model thật để kiểm tra logic tour.
 
 ## Tiêu chí nghiệm thu

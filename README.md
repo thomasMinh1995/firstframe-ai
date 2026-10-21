@@ -46,6 +46,7 @@ Filming preparation, shooting, editing, screenings, and feature-film or televisi
 
 ## Current MVP
 
+- Optional six-step onboarding tour with practice breaks, replay, and browser-local progress; tour navigation preserves unsaved text and makes no AI or project-write requests
 - Local SQLite project storage, project selection, and explicit save controls
 - Up to three clarification questions before story-plan generation, with an explicit option to defer a decision
 - Editable story plans and feedback tied to the exact reviewed content
