@@ -53,6 +53,52 @@ def develop_project(client, project):
     return response.json()
 
 
+def test_stream_reports_actual_steps_and_returns_saved_project(project_client, monkeypatch):
+    client, provider = project_client
+    stages = []
+    original = provider.request_structured
+
+    def record(request):
+        stages.append(request.stage)
+        return original(request)
+
+    monkeypatch.setattr(provider, "request_structured", record)
+    project = start_project(client)
+    url = f"/api/projects/{project['id']}"
+    response = client.post(f"{url}/analyze/stream", json={"revision": project["revision"]})
+    events = [json.loads(line) for line in response.text.splitlines() if line.strip()]
+    assert [(event["stage"], event["status"]) for event in events[:-1]] == [
+        ("reasoning", "active"), ("reasoning", "completed"),
+        ("saving", "active"), ("saving", "completed"),
+    ]
+    project = events[-1]["project"]
+    assert events[-1]["type"] == "result"
+    assert client.get(url).json() == project
+    data = payload(project)
+    data["answers"] = ["She leaves tomorrow", "He wants to apologize, not stop her"]
+    project = client.put(url, json=data).json()
+    response = client.post(f"{url}/plan/stream", json={"revision": project["revision"]})
+    events = [json.loads(line) for line in response.text.splitlines() if line.strip()]
+    expected = [(stage, status) for stage in stages[1:]
+                for status in ("active", "completed")]
+    expected += [("saving", "active"), ("saving", "completed")]
+    assert [(event["stage"], event["status"]) for event in events[:-1]] == expected
+    assert events[-1]["project"]["draft"] is not None
+    assert provider.requests[1].stage == "planning"
+
+
+
+def test_stream_returns_validation_error_without_model_call(project_client):
+    client, provider = project_client
+    project = start_project(client)
+    response = client.post(f"/api/projects/{project['id']}/plan/stream",
+                           json={"revision": project["revision"]})
+    events = [json.loads(line) for line in response.text.splitlines() if line.strip()]
+    assert len(events) == 1
+    assert events[0]["type"] == "error"
+    assert provider.requests == []
+
+
 def test_questions_gate_generation_and_review_uses_the_saved_edited_draft(project_client):
     client, provider = project_client
     project = start_project(client)
@@ -577,3 +623,42 @@ def test_generate_language_selection_and_invalid_choices(project_client):
     assert response.status_code == 200
     assert all("Target response language: English" in r.input_text for r in provider.requests)
     assert client.post("/api/generate", json={"idea": "AI", "response_language": "fr"}).status_code == 422
+
+
+def test_stream_review_failure_preserves_saved_edits_and_previous_feedback(project_client, monkeypatch):
+    client, provider = project_client
+    project = develop_project(client, start_project(client))
+    url = f"/api/projects/{project['id']}"
+    previous_feedback = project["feedback"]
+    data = payload(project)
+    data["draft"]["sections"][0]["content"] = "Bản mới: lab coach vẫn hướng dẫn học viên."
+    data["response_language"] = "en"
+    project = client.put(url, json=data).json()
+    before = client.get(url).json()
+
+    def fail(request):
+        raise MissingProviderConfigurationError("Model unavailable")
+
+    monkeypatch.setattr(provider, "request_structured", fail)
+    response = client.post(f"{url}/review/stream", json={"revision": project["revision"]})
+    events = [json.loads(line) for line in response.text.splitlines() if line.strip()]
+    assert events[-1]["type"] == "error"
+    assert any(event.get("status") == "failed" for event in events)
+    assert client.get(url).json() == before
+    assert before["feedback"] == previous_feedback
+    assert before["response_language"] == "en"
+    assert before["draft"]["sections"][0]["content"] == data["draft"]["sections"][0]["content"]
+
+
+def test_stream_revision_conflict_does_not_overwrite_newer_content(project_client):
+    client, provider = project_client
+    project = start_project(client)
+    url = f"/api/projects/{project['id']}"
+    data = payload(project)
+    data["idea"] += " lab coach"
+    latest = client.put(url, json=data).json()
+    response = client.post(f"{url}/analyze/stream", json={"revision": project["revision"]})
+    events = [json.loads(line) for line in response.text.splitlines() if line.strip()]
+    assert events[-1]["type"] == "error"
+    assert client.get(url).json() == latest
+    assert provider.requests == []

@@ -1,4 +1,6 @@
 import type { GenerateResponse, StoryPlanSection } from "./apiClient";
+import { progressCopy } from "./progressState";
+import type { UiLanguage } from "./language";
 import type { ResponseLanguage } from "./language";
 
 export type StoryDraft = { title: string; logline: string; sections: StoryPlanSection[] };
@@ -21,6 +23,51 @@ export type Project = {
 };
 export type ProjectSummary = Pick<Project, "id" | "title" | "updated_at">;
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
+
+export type ProgressEvent = {
+  stage: string; status: "active" | "completed" | "failed";
+};
+
+export async function streamProjectOperation(
+  project: Project, kind: "analyze" | "plan" | "review",
+  onProgress: (event: ProgressEvent) => void, language: UiLanguage = "vi",
+): Promise<Project> {
+  const copy = progressCopy[language];
+  const response = await fetch(`${baseUrl}/api/projects/${project.id}/${kind}/stream`, {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ revision: project.revision }),
+  }).catch(() => { throw new Error(copy.connectionError); });
+  if (!response.ok || !response.body) throw new Error(copy.startError);
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let pending = "";
+  try {
+    while (true) {
+      const { value, done } = await reader.read().catch(() => { throw new Error(copy.connectionError); });
+      pending += decoder.decode(value, { stream: !done });
+      const lines = pending.split("\n");
+      pending = lines.pop() ?? "";
+      if (done && pending.trim()) lines.push(pending);
+      for (const line of lines) {
+        if (!line.trim()) continue;
+        const event = JSON.parse(line);
+        if (event.type === "error") throw new Error(event.detail);
+        if (event.type === "progress") {
+          if (typeof event.stage !== "string" || !["active", "completed", "failed"].includes(event.status)) {
+            throw new Error(copy.invalid);
+          }
+          onProgress(event);
+        }
+        if (event.type === "result") {
+          if (!isProject(event.project) || event.project.id !== project.id) throw new Error(copy.invalid);
+          return event.project;
+        }
+      }
+      if (done) break;
+    }
+  } finally { reader.releaseLock(); }
+  throw new Error(copy.connectionError);
+}
 
 async function request(path: string, method = "GET", body?: unknown): Promise<unknown> {
   let response: Response;

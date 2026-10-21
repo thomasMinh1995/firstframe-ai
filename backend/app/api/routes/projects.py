@@ -1,10 +1,14 @@
+import asyncio
 import json
+import logging
 from contextlib import contextmanager
 from datetime import UTC, datetime
 from pathlib import Path
+from typing import Literal
 from uuid import uuid4
 
 from fastapi import APIRouter, HTTPException
+from fastapi.responses import StreamingResponse
 
 from app.api.routes.generate import _to_response, get_story_generation_service
 from app.api.schemas.projects import (
@@ -25,10 +29,56 @@ from app.application.ai_provider import (
 )
 from app.application.dataset import capture_workflow
 from app.application.language import LanguageSelectionRequired
+from app.application.progress import progress_listener, report_progress
 from app.application.project_store import ProjectConflict, ProjectNotFound, ProjectStore
 from app.core.artifacts import Constraint, PlanSection
 
 router = APIRouter(prefix="/api/projects", tags=["projects"])
+
+
+@router.post("/{project_id}/{operation}/stream")
+async def stream_project_operation(
+    project_id: str, operation: Literal["analyze", "plan", "review"], request: RevisionRequest
+):
+    events: asyncio.Queue = asyncio.Queue()
+    loop = asyncio.get_running_loop()
+
+    def work():
+        def publish(event):
+            loop.call_soon_threadsafe(events.put_nowait, event)
+
+        token = progress_listener.set(publish)
+        try:
+            handler = {"analyze": analyze_project, "plan": plan_project, "review": review_project}
+            result = handler[operation](project_id, request)
+            publish({"type": "result", "project": result.model_dump(mode="json")})
+        except HTTPException as error:
+            publish({"type": "error", "detail": error.detail})
+        except Exception:
+            logging.getLogger(__name__).exception("Streamed project operation failed")
+            publish({"type": "error", "detail": "Không hoàn tất được thao tác. Hãy mở lại dự án để kiểm tra nội dung đã lưu."})
+        finally:
+            progress_listener.reset(token)
+
+    async def stream():
+        task = asyncio.create_task(asyncio.to_thread(work))
+        try:
+            while True:
+                try:
+                    event = await asyncio.wait_for(events.get(), timeout=15)
+                except TimeoutError:
+                    yield "\n"
+                    continue
+                yield json.dumps(event, ensure_ascii=False) + "\n"
+                if event["type"] in {"result", "error"}:
+                    break
+        finally:
+            # The existing operation finishes saving even if the browser disconnects.
+            await asyncio.shield(task)
+
+    return StreamingResponse(stream(), media_type="application/x-ndjson", headers={
+        "Cache-Control": "no-cache", "X-Accel-Buffering": "no",
+    })
 
 
 def get_project_store() -> ProjectStore:
@@ -67,8 +117,11 @@ def load_project(project_id: str, revision: int | None = None) -> ProjectRespons
 
 
 def save_project(project: ProjectResponse) -> ProjectResponse:
+    report_progress("saving", "active")
     data = project.model_dump(exclude={"feedback_is_current"})
-    return ProjectResponse.model_validate(get_project_store().save(data, project.revision))
+    saved = ProjectResponse.model_validate(get_project_store().save(data, project.revision))
+    report_progress("saving", "completed")
+    return saved
 
 
 def dataset_snapshot(project: ProjectResponse) -> dict[str, object]:
