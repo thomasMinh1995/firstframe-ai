@@ -15,7 +15,11 @@ from app.application.ai_provider import (
     strict_json_instructions,
 )
 from app.application.dataset_corrections import OUTPUT_MODELS
-from app.application.workflow import _EvaluationOutput, compact_qwen_planning_input
+from app.application.workflow import (
+    _EvaluationOutput,
+    _is_vietnamese_language,
+    compact_qwen_planning_input,
+)
 
 PROMPTS = Path(__file__).resolve().parents[2] / "domains/short-film/prompts/ollama-qwen2.5-3b"
 CRITIC_CANDIDATE = (
@@ -136,7 +140,7 @@ def compare(
         "seeds": seeds,
         "experimental_critic": experimental_critic,
         "source_sha256": hashlib.sha256(dataset.read_bytes()).hexdigest(),
-        "scope": "Paired step replay: same author context/draft/schema/seeds; after planning omits long domain references. Experimental critic changes prompt and uses a compact rubric only when explicitly enabled. Not an end-to-end quality score.",
+        "scope": "Paired step replay: same author context/draft/schema/seeds; after planning omits long domain references; after evaluation selects the full target-language critic prompt. Experimental critic changes prompt and uses a compact rubric only when explicitly enabled. Not an end-to-end quality score.",
         "runs": [],
     }
     for record in records:
@@ -154,10 +158,19 @@ def compare(
                 )
             prompt_path = PROMPTS / f"{NAMES[stage]}_prompt.md"
             if stage == "evaluation":
+                language_header = request["input_text"].split("\n", 1)[0]
+                prefix = "Target response language: "
+                if not language_header.startswith(prefix):
+                    raise ValueError("Evaluation input is missing its target response language.")
+                critic_name = (
+                    "script_critic_vi"
+                    if _is_vietnamese_language(language_header.removeprefix(prefix))
+                    else "script_critic"
+                )
                 prompt_path = (
                     CRITIC_CANDIDATE
                     if experimental_critic
-                    else PROMPTS.parent / f"{NAMES[stage]}_prompt.md"
+                    else PROMPTS.parent / f"{critic_name}_prompt.md"
                 )
             candidate = StructuredRequest(
                 instructions=prompt_path.read_text(encoding="utf-8").strip(),

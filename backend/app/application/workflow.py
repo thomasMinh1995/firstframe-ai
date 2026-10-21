@@ -316,9 +316,11 @@ class LLMEvaluationLayer(EvaluationLayer):
     def evaluate(self, planning: PlanningArtifact, domain: DomainPlugin) -> EvaluationArtifact:
         rubric = self._knowledge_loader.load_rubric("story_rubric", domain)
         target_language = getattr(planning, "target_response_language", "English")
+        # Small local models copy the critic's English examples despite a Vietnamese input header.
+        prompt_name = "script_critic_vi" if _is_vietnamese_language(target_language) else "script_critic"
         result = self._provider.request_structured(
             StructuredRequest(
-                instructions=self._prompt_loader.load("script_critic", domain),
+                instructions=self._prompt_loader.load(prompt_name, domain),
                 input_text=_evaluation_input(planning, rubric),
                 response_model=_EvaluationOutput,
                 stage="evaluation",

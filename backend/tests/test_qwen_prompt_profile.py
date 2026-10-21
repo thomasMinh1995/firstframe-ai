@@ -42,7 +42,10 @@ def test_prompt_profile_keeps_context_schema_and_recorded_effective_prompt(
         strict=True,
     ):
         expected_root = root.parent if profile and request.stage == "evaluation" else root
-        assert request.instructions == (expected_root / f"{name}_prompt.md").read_text().strip()
+        if request.stage == "evaluation":
+            name = "script_critic_vi"
+        base_prompt = (expected_root / f"{name}_prompt.md").read_text().strip()
+        assert request.instructions == base_prompt
         assert "Target response language: Vietnamese" in request.input_text
         assert "Một căn bếp" in request.input_text
         assert step["request"]["effective_instructions"] == strict_json_instructions(request)
