@@ -6,26 +6,29 @@ from fastapi.testclient import TestClient
 from pydantic import ValidationError
 
 from app.api.routes import generate as generate_route
+from app.application.ai_provider import (
+    MissingProviderConfigurationError,
+    ProviderMetadata,
+    ProviderTimeoutError,
+    StructuredRequest,
+    StructuredResult,
+)
 from app.application.workflow import (
     _PlanningOutput,
     _ReasoningOutput,
     create_story_generation_service,
 )
 from app.core.artifacts import Constraint
-from app.infrastructure.openai_provider import (
-    MissingProviderConfigurationError,
-    OpenAIStructuredRequest,
-    OpenAIStructuredResult,
-    ProviderTimeoutError,
-)
 from app.main import create_app
 
 
 class FakeProvider:
-    def __init__(self) -> None:
-        self.requests: list[OpenAIStructuredRequest] = []
+    metadata = ProviderMetadata("fake", "fake-model")
 
-    def request_structured(self, request: OpenAIStructuredRequest) -> OpenAIStructuredResult:
+    def __init__(self) -> None:
+        self.requests: list[StructuredRequest] = []
+
+    def request_structured(self, request: StructuredRequest) -> StructuredResult:
         self.requests.append(request)
         response_model = request.response_model
         if response_model.__name__ == "_ReasoningOutput":
@@ -107,7 +110,7 @@ class FakeProvider:
                 weaknesses=["The daughter needs a sharper personal objective."],
                 suggestions=["Clarify the exact departure deadline."],
             )
-        return OpenAIStructuredResult(
+        return StructuredResult(
             output=output, model="fake-model", response_id="fake-response"
         )
 
@@ -146,7 +149,7 @@ def test_planning_output_rejects_obsolete_section_content_contract() -> None:
 
 def test_harness_calls_provider_through_runtime_layers() -> None:
     provider = FakeProvider()
-    service = create_story_generation_service(provider=provider)  # type: ignore[arg-type]
+    service = create_story_generation_service(provider=provider)
 
     run = service.generate(
         "A retired father wants to meet his daughter one last time before she leaves Vietnam."
@@ -181,7 +184,7 @@ def test_harness_calls_provider_through_runtime_layers() -> None:
 
 def test_harness_passes_detected_language_to_all_provider_steps() -> None:
     provider = FakeProvider()
-    service = create_story_generation_service(provider=provider)  # type: ignore[arg-type]
+    service = create_story_generation_service(provider=provider)
 
     service.generate("Một người cha về hưu muốn gặp con gái trước khi cô rời Việt Nam.")
 
@@ -201,7 +204,7 @@ def test_harness_passes_detected_language_to_all_provider_steps() -> None:
 )
 def test_mentor_receives_exact_brief_as_data_separate_from_instructions(idea) -> None:
     provider = FakeProvider()
-    service = create_story_generation_service(provider=provider)  # type: ignore[arg-type]
+    service = create_story_generation_service(provider=provider)
     constraints = (Constraint(name="location", value="Chỉ một căn bếp"),)
 
     service.analyze(idea, constraints)
@@ -216,7 +219,7 @@ def test_mentor_receives_exact_brief_as_data_separate_from_instructions(idea) ->
 
 def test_initial_critic_context_keeps_author_constraints_without_promoting_ai_analysis() -> None:
     provider = FakeProvider()
-    service = create_story_generation_service(provider=provider)  # type: ignore[arg-type]
+    service = create_story_generation_service(provider=provider)
     idea = "Một người cha muốn xin lỗi con gái, không cần được tha thứ."
     constraints = (Constraint(name="location", value="Only one apartment"),)
 
@@ -250,8 +253,8 @@ def test_reasoning_output_allows_no_questions_but_rejects_more_than_three() -> N
 def test_generate_endpoint_returns_structured_response(monkeypatch) -> None:
     provider = FakeProvider()
     monkeypatch.setattr(
-        "app.application.workflow.OpenAIProvider.from_env",
-        classmethod(lambda cls: provider),
+        "app.application.workflow.create_provider",
+        lambda: provider,
     )
     client = TestClient(create_app())
 

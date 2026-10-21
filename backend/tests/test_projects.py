@@ -6,8 +6,8 @@ from fastapi.testclient import TestClient
 from test_generate_workflow import FakeProvider
 
 from app.api.routes import projects as project_routes
+from app.application.ai_provider import MissingProviderConfigurationError
 from app.application.project_store import ProjectStore
-from app.infrastructure.openai_provider import MissingProviderConfigurationError
 from app.main import create_app
 
 
@@ -17,7 +17,7 @@ def project_client(tmp_path, monkeypatch):
     monkeypatch.setattr(project_routes, "get_project_store", lambda: ProjectStore(store_path))
     provider = FakeProvider()
     monkeypatch.setattr(
-        "app.application.workflow.OpenAIProvider.from_env", classmethod(lambda cls: provider)
+        "app.application.workflow.create_provider", lambda: provider
     )
     return TestClient(create_app()), provider
 

@@ -2,7 +2,7 @@
 
 FirstFrame AI is built around a **Creative Reasoning Harness**: a small AI workflow engine that turns a vague creative idea into structured artifacts through Reasoning, Planning, and Evaluation.
 
-The current MVP supports Short Film Story Development and uses OpenAI behind an infrastructure adapter. The architecture is intentionally broader than the demo domain so future creative domains can reuse the same Harness.
+The current MVP supports Short Film Story Development and uses OpenAI or local Ollama behind a shared provider contract. The architecture is intentionally broader than the demo domain so future creative domains can reuse the same Harness.
 
 ## System Overview
 
@@ -31,7 +31,7 @@ Domain Intelligence Pack
   |-- ExampleLoader
   |
   v
-OpenAIProvider
+StructuredProvider (OpenAI or Ollama)
   |
   v
 Pydantic Structured Output Validation
@@ -56,6 +56,7 @@ Controllers do not call OpenAI directly. They call the application workflow and 
 `backend/app/application/` contains the current executable runtime:
 
 - `workflow.py`: concrete Harness composition and layer implementations
+- `ai_provider.py`: provider-independent request/result types, protocol, and errors
 - `prompt_loader.py`: loads Markdown prompts from the active domain
 - `knowledge_loader.py`: loads knowledge and rubric JSON
 - `example_loader.py`: loads local few-shot example JSON
@@ -83,6 +84,12 @@ Core does not import FastAPI, OpenAI, frontend code, or domain JSON files.
 - parses JSON with `json.loads`
 - validates with Pydantic models
 - maps provider failures to provider-independent exceptions
+
+`ollama_provider.py` sends the same context to local `/api/chat` with a JSON Schema
+in `format`, then validates the completed response with Pydantic.
+`provider_factory.py` selects OpenAI for a non-empty key and Ollama otherwise;
+`AI_PROVIDER=openai|ollama` overrides automatic selection. Model generation failures
+do not cause an automatic switch.
 
 ## Frontend
 
@@ -115,7 +122,7 @@ The Harness owns workflow order. The domain owns creative knowledge. The provide
 
 Planning and evaluation responses are validated against Pydantic models in `workflow.py`.
 
-The provider sends each model's JSON Schema to OpenAI. The domain-level `output_schema.json` mirrors the field inventory for documentation and tests.
+The adapters use each response model's JSON Schema: OpenAI includes it in instructions; Ollama also enforces it through `format`. The domain-level `output_schema.json` mirrors the field inventory for documentation and tests.
 
 This reduces prompt/schema drift and keeps the API response stable.
 
@@ -133,7 +140,7 @@ The project emphasizes:
 
 ## Current Limitations
 
-- OpenAI is the only implemented provider.
+- OpenAI and local Ollama are implemented; other providers are not integrated.
 - Domain registration is static for the MVP.
 - No streaming, persistence, authentication, or deployment automation yet.
 - The Reasoning Layer still uses inline instructions rather than a domain prompt file.
