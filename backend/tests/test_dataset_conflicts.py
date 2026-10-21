@@ -176,7 +176,7 @@ def test_atomic_failure_does_not_lose_active_history_or_create_archives(
     assert post(client, "import", raw).status_code == 200
     plan = detail(client, "plan")
     plan = save_outputs(
-        client, plan, {"0": corrected_plan(plan), "1": plan["recording"]["steps"][1]["output"]}
+        client, plan, {"0": corrected_plan(plan), "2": plan["recording"]["steps"][2]["output"]}
     ).json()
     # Ensure an actual difference even if the first correction matched the package.
     assert annotate(client, plan, feedback="Local feedback").status_code == 200

@@ -12,6 +12,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from app.application.ai_provider import StructuredProvider, StructuredRequest
 from app.application.dataset import recording_provider
 from app.application.example_loader import DomainExample, ExampleLoader
+from app.application.fidelity import FidelityReport, audit_suggestions, scan_fidelity
 from app.application.knowledge_loader import KnowledgeLoader
 from app.application.language import ResponseLanguage, resolve_response_language
 from app.application.prompt_loader import PromptLoader
@@ -315,24 +316,64 @@ class LLMEvaluationLayer(EvaluationLayer):
         self._knowledge_loader = knowledge_loader
 
     def evaluate(self, planning: PlanningArtifact, domain: DomainPlugin) -> EvaluationArtifact:
-        rubric = self._knowledge_loader.load_rubric("story_rubric", domain)
-        target_language = getattr(planning, "target_response_language", "English")
-        # Small local models copy the critic's English examples despite a Vietnamese input header.
-        prompt_name = "script_critic_vi" if _is_vietnamese_language(target_language) else "script_critic"
-        result = self._provider.request_structured(
-            StructuredRequest(
+        language = getattr(planning, "target_response_language", "English")
+        draft = json.loads(_planning_input(planning))
+        raw_author = getattr(planning, "creator_context", "")
+        try:
+            author = json.loads(raw_author or "{}")
+        except ValueError:
+            author = {"creator_context": raw_author}
+        if not author:
+            report = FidelityReport(status="unverified", checks=[])
+            return self._result(planning, report)
+        scan, checks = scan_fidelity(
+            self._provider, self._prompt_loader.load("fidelity", domain), draft, author, language,
+        )
+        if scan.status == "uncertain":
+            return self._result(planning, FidelityReport(status="unverified", checks=checks))
+        output = None
+        if scan.issues:
+            candidates = [issue.model_dump() for issue in scan.issues]
+        else:
+            rubric = self._knowledge_loader.load_rubric("story_rubric", domain)
+            prompt_name = "script_critic_vi" if _is_vietnamese_language(language) else "script_critic"
+            result = self._provider.request_structured(StructuredRequest(
                 instructions=self._prompt_loader.load(prompt_name, domain),
                 input_text=_evaluation_input(planning, rubric),
-                response_model=_EvaluationOutput,
-                stage="evaluation",
+                response_model=_EvaluationOutput, stage="evaluation",
+            ))
+            output = _expect_output(result.output, _EvaluationOutput)
+            if len(output.weaknesses) != len(output.suggestions) or len(output.suggestions) > 3:
+                return self._result(planning, FidelityReport(
+                    status="unverified", checks=[], withheld_count=len(output.suggestions),
+                ))
+            candidates = [{"explanation": weakness, "suggestion": suggestion}
+                          for weakness, suggestion in zip(output.weaknesses, output.suggestions)]
+        if candidates:
+            report = audit_suggestions(
+                self._provider, self._prompt_loader.load("fidelity_audit", domain),
+                draft, author, language, candidates, checks,
             )
-        )
-        output = _expect_output(result.output, _EvaluationOutput)
+            if not scan.issues:
+                for check in report.checks:
+                    check.kind = "craft"
+                if report.status != "unverified":
+                    report.status = "clear"
+        else:
+            report = FidelityReport(status="clear", checks=[])
+        return self._result(planning, report, output)
+
+    def _result(self, planning: PlanningArtifact, report: FidelityReport,
+                output: _EvaluationOutput | None = None) -> EvaluationArtifact:
+        # Unverified criticism must not appear as a score or an approved revision.
+        findings = []
+        if output is not None and report.status == "clear":
+            findings = list(_evaluation_findings(output, getattr(planning, "target_response_language", "English")))
         return EvaluationArtifact(
             metadata=_metadata(planning.metadata.domain_id, "evaluation"),
             source_planning_id=planning.metadata.artifact_id,
-            passed=output.passed,
-            findings=tuple(_evaluation_findings(output, target_language)),
+            passed=output.passed if output is not None and report.status == "clear" else None,
+            findings=tuple(findings), fidelity=report.model_dump(),
         )
 
 

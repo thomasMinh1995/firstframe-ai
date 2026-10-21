@@ -37,7 +37,7 @@ def test_prompt_profile_keeps_context_schema_and_recorded_effective_prompt(
         root /= "ollama-qwen2.5-3b"
     for request, step, name in zip(
         provider.requests,
-        record["steps"],
+        [step for step in record["steps"] if step["stage"] in {"reasoning", "planning", "evaluation"}],
         ("story_mentor", "story_planner", "script_critic"),
         strict=True,
     ):

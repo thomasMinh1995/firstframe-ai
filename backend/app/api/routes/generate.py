@@ -91,6 +91,7 @@ def _to_response(run: HarnessRun) -> GenerateResponse:
         evaluation=EvaluationResponse(
             artifact_id=run.evaluation.metadata.artifact_id,
             passed=run.evaluation.passed,
+            fidelity=run.evaluation.fidelity,
             rubric_scores={
                 finding.criterion_id: finding.score
                 for finding in run.evaluation.findings

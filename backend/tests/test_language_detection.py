@@ -1,3 +1,4 @@
+import json
 import unicodedata
 
 import pytest
@@ -56,6 +57,11 @@ def test_explicit_language_reaches_every_workflow_step_without_changing_the_inpu
     service.review(idea, "VinUni", "build phase", draft, idea, response_language=choice)
     service.generate(idea, response_language=choice)
     assert len(provider.requests) == 7
+    assert provider.fidelity_requests
+    for request in provider.fidelity_requests:
+        context = json.loads(request.input_text)
+        assert context["response_language"] == expected
+        assert idea in json.dumps(context["author_context"], ensure_ascii=False)
     for request in provider.requests:
         assert f"Target response language: {expected}" in request.input_text
         assert idea in request.input_text

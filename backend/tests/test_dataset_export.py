@@ -16,6 +16,7 @@ from test_projects import develop_project, payload, start_project
 from app.api.routes import projects as routes
 from app.application.ai_provider import ProviderTimeoutError, StructuredRequest
 from app.application.dataset import DatasetStore, capture_workflow, recording_provider
+from app.application.fidelity import SpanScan, SuggestionAudit
 from app.application.project_store import ProjectStore
 from app.application.workflow import _EvaluationOutput, _PlanningOutput, _ReasoningOutput
 from app.infrastructure.ollama_provider import OllamaProvider, OllamaProviderConfig
@@ -44,7 +45,7 @@ def test_records_real_adapter_identity_and_actual_model(
     backend, monkeypatch, local_dataset_directory
 ):
     fake = FakeProvider()
-    models = [_ReasoningOutput, _PlanningOutput, _EvaluationOutput]
+    models = [_ReasoningOutput, _PlanningOutput, SpanScan, _EvaluationOutput, SuggestionAudit]
     actual_model = "gpt-resolved-snapshot" if backend == "openai" else "qwen-local:latest"
     monkeypatch.setenv("AI_PROVIDER", "misleading-env-value")
     if backend == "openai":
@@ -104,7 +105,7 @@ def test_records_real_adapter_identity_and_actual_model(
     assert record["review_status"] == "unreviewed" and record["human_feedback"] is None
     assert record["models_used"] == [{"provider": backend, "model": actual_model}]
     assert record["output"] == response.json()
-    assert [step["stage"] for step in record["steps"]] == ["reasoning", "planning", "evaluation"]
+    assert [step["stage"] for step in record["steps"]] == ["reasoning", "planning", "fidelity", "evaluation", "fidelity_audit"]
     for step in record["steps"]:
         assert step["provider"] == backend
         assert step["requested_model"] == "requested-alias"
@@ -115,7 +116,7 @@ def test_records_real_adapter_identity_and_actual_model(
         assert step["request"]["response_schema"]
         assert len(step["request"]["prompt_sha256"]) == 64
     assert "Short-film domain knowledge" in record["steps"][1]["request"]["input_text"]
-    assert "Short-film story rubric" in record["steps"][2]["request"]["input_text"]
+    assert "Short-film story rubric" in record["steps"][3]["request"]["input_text"]
     serialized = json.dumps(record, ensure_ascii=False)
     assert "secret-api-key-not-for-export" not in serialized
     assert "misleading-env-value" not in serialized
@@ -136,7 +137,7 @@ def test_project_exports_linked_rounds_and_exact_edited_draft(
     assert plan["output_revision"] == project["revision"]
     assert plan["input_revision"] + 1 == plan["output_revision"]
     assert plan["input"]["answers"] == project["answers"]
-    assert [step["stage"] for step in plan["steps"]] == ["planning", "evaluation"]
+    assert [step["stage"] for step in plan["steps"]] == ["planning", "fidelity", "evaluation", "fidelity_audit"]
     assert "versions" not in plan["output"]
     data = payload(project)
     data["draft"]["sections"][-1]["content"] = "EDITED: Mẹ đặt chiếc thìa xuống."
@@ -171,9 +172,9 @@ def test_failed_critic_keeps_successful_planning_but_does_not_export_as_complete
     record = DatasetStore(local_dataset_directory).records()[-1]
     assert record["status"] == "failed" and record["workflow_complete"] is False
     assert record["output"] is None
-    assert [step["status"] for step in record["steps"]] == ["completed", "failed"]
+    assert [step["status"] for step in record["steps"]] == ["completed", "completed", "failed"]
     assert record["steps"][0]["output"]["story_plan"]
-    assert record["steps"][1]["error_type"] == "ProviderTimeoutError"
+    assert record["steps"][2]["error_type"] == "ProviderTimeoutError"
     assert "secret diagnostic" not in json.dumps(record)
     assert client.get(url).json() == project
     assert exported(DatasetStore(local_dataset_directory))[-1] == record

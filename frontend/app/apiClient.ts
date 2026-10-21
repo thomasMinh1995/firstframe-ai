@@ -1,3 +1,4 @@
+import type { FidelityReport } from "./FidelityPanel";
 import type { ResponseLanguage } from "./language";
 
 export type AnalysisNote = {
@@ -30,6 +31,7 @@ export type GenerateResponse = {
     sections: StoryPlanSection[];
   };
   evaluation: {
+    fidelity?: FidelityReport | null;
     passed: boolean | null;
     rubric_scores: Record<string, number>;
     findings: EvaluationFinding[];
@@ -90,10 +92,24 @@ function isGenerateResponse(value: unknown): value is GenerateResponse {
     Array.isArray(storyPlan.sections) &&
     isRecord(evaluation) &&
     isRecord(evaluation.rubric_scores) &&
-    Array.isArray(evaluation.findings)
+    Array.isArray(evaluation.findings) &&
+    (evaluation.fidelity == null || isFidelityReport(evaluation.fidelity))
   );
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
+}
+
+export function isFidelityReport(value: unknown): value is FidelityReport {
+  return isRecord(value) && ["clear", "issues", "unverified"].includes(String(value.status))
+    && Number.isInteger(value.withheld_count) && Number(value.withheld_count) >= 0
+    && Array.isArray(value.checks) && value.checks.every((check) => isRecord(check)
+      && ["fidelity", "craft"].includes(String(check.kind))
+      && Number.isInteger(check.section_index) && Number(check.section_index) >= -2
+      && ["section_title", "section_text", "draft_quote", "author_quote", "explanation"]
+        .every((key) => typeof check[key] === "string")
+      && (check.suggestion === null || typeof check.suggestion === "string")
+      && (check.verification_note == null || typeof check.verification_note === "string")
+      && ["supported", "unverified"].includes(String(check.suggestion_status)));
 }
