@@ -95,3 +95,22 @@ Thời gian có cả xử lý prompt/nạp model, không có seed cố định v
 đo lặp. Không suy ra tăng tốc hay mức cải thiện chất lượng tổng thể từ bảng.
 Không kiểm thử UI/mất kết nối trong PR này; API lưu dự án không thay đổi.
 PR #18 vẫn mở, không được merge hay đưa vào nhánh này.
+
+## Review PR #20: ranh giới ngữ cảnh và kiểm chứng bằng chứng
+
+Phát hiện: profile 3B từng dùng `partition` trên chuỗi tiêu đề tham khảo. Khi
+câu trả lời chứa `\n\nShort-film domain knowledge:\n`, phần ghi chú phía sau
+bị cắt nhầm (bản JSON ngữ cảnh tác giả ở phía trước vẫn còn). Runtime nay chọn
+có/không có phần tham khảo khi dựng chuỗi, không tìm tiêu đề trong văn bản tác
+giả. 3B cũng không nạp glossary/rules không sử dụng. Helper replay cũ chọn
+ranh giới cuối cùng do bộ dựng ngữ cảnh thêm sau ghi chú.
+
+Test hồi quy tái hiện lỗi trước sửa và đạt sau sửa. Test giữ nguyên chi tiết
+tác giả chạy trên cả 3B/7B và VI/EN. Bộ backend sau review: 235 tests đạt.
+
+`test_reference_isolation_evidence.py` dựng lại request từ hai fixture và
+phát lại đầu ra đã lưu: hash input/instructions của cả tám lời gọi khớp với
+bằng chứng công bố, đầu ra vẫn hợp lệ với schema hiện tại. Do đó bảng thời
+gian phía trên vẫn là số đo lịch sử, không được trình bày là lượt chạy mới.
+Không gọi lại Ollama trong lượt review này; không suy ra chất lượng đầu ra
+cho trường hợp tiêu đề trùng chỉ từ test đường truyền dữ liệu.

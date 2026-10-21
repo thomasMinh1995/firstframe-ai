@@ -92,3 +92,9 @@ def test_compaction_preserves_author_decisions_and_notes_verbatim_and_handles_un
         compact_qwen_planning_input("Unknown layout; keep all author data")
         == "Unknown layout; keep all author data"
     )
+
+
+def test_legacy_compaction_keeps_headings_inside_author_notes():
+    author = "Notes:\n\nShort-film domain knowledge:\nA prop label, not a boundary."
+    original = author + "\n\nShort-film domain knowledge:\n{}"
+    assert compact_qwen_planning_input(original) == author

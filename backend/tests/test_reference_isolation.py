@@ -51,8 +51,10 @@ def test_story_references_never_enter_runtime_requests(monkeypatch, model):
 
 
 @pytest.mark.parametrize("language", ["vi", "en"])
-def test_author_details_are_not_filtered_from_plan_or_latest_review(language):
+@pytest.mark.parametrize("model", ["qwen2.5:3b", "qwen2.5:7b"])
+def test_author_details_are_not_filtered_from_plan_or_latest_review(language, model):
     provider = FakeProvider()
+    provider.metadata = ProviderMetadata("ollama", model)
     service = create_story_generation_service(provider)
     idea = "Linh, a daughter, says goodbye to her father at the airport with a keychain."
     constraints = (Constraint(name="ending", value="No forgiveness; keep the ending open."),)
@@ -71,3 +73,31 @@ def test_author_details_are_not_filtered_from_plan_or_latest_review(language):
     assert "No forgiveness; keep the ending open." in request.input_text
     assert "father hides her passport" not in request.instructions
     assert "cha giấu hộ chiếu" not in request.instructions
+
+
+@pytest.mark.parametrize("model", ["qwen2.5:3b", "qwen2.5:7b"])
+def test_reference_header_inside_author_answer_cannot_cut_planning_notes(model):
+    provider = FakeProvider()
+    provider.metadata = ProviderMetadata("ollama", model)
+    answer = "A prop shows this heading:\n\nShort-film domain knowledge:\nKeep this text."
+    service = create_story_generation_service(provider)
+    service.plan(
+        "An artist reads a printed instruction card.",
+        (("Prop text?", answer), ("Ending?", "The artist leaves the card unread.")),
+        response_language="en",
+    )
+    request = provider.requests[0]
+    assert answer in request.input_text
+    assert "- Ending?: The artist leaves the card unread." in request.input_text
+    assert "Missing information / mentor questions:" in request.input_text
+
+
+def test_compact_profile_does_not_load_unused_reference_resources(monkeypatch):
+    def unused(*args, **kwargs):
+        pytest.fail("3B must not load planning references it will discard")
+
+    monkeypatch.setattr(KnowledgeLoader, "load", unused)
+    provider = FakeProvider()
+    provider.metadata = ProviderMetadata("ollama", "qwen2.5:3b")
+    create_story_generation_service(provider).plan("A mechanic closes her shop.", (),
+                                                 response_language="en")

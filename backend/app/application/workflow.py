@@ -269,20 +269,20 @@ class LLMPlanningLayer(PlanningLayer):
         self._compact_context = compact_context
 
     def plan(self, reasoning: ReasoningArtifact, domain: DomainPlugin) -> PlanningArtifact:
-        # Only craft definitions/rules belong here; worked stories supply competing facts.
-        knowledge = {
-            "film_glossary": [
-                {key: entry[key] for key in ("term", "simple_definition", "why_it_matters")}
-                for entry in self._knowledge_loader.load("film_glossary", domain)["glossary"]
-            ],
-            "film_rules": [
-                {key: entry[key] for key in ("rule", "guidance")}
-                for entry in self._knowledge_loader.load("film_rules", domain)["rules"]
-            ],
-        }
+        knowledge = None
+        if not self._compact_context:
+            # Only craft guidance belongs here; worked stories supply competing facts.
+            knowledge = {
+                "film_glossary": [
+                    {key: entry[key] for key in ("term", "simple_definition", "why_it_matters")}
+                    for entry in self._knowledge_loader.load("film_glossary", domain)["glossary"]
+                ],
+                "film_rules": [
+                    {key: entry[key] for key in ("rule", "guidance")}
+                    for entry in self._knowledge_loader.load("film_rules", domain)["rules"]
+                ],
+            }
         input_text = _reasoning_input(reasoning, knowledge)
-        if self._compact_context:
-            input_text = compact_qwen_planning_input(input_text)
         result = self._provider.request_structured(
             StructuredRequest(
                 instructions=self._prompt_loader.load("story_planner", domain),
@@ -605,23 +605,26 @@ def _idea_input(idea: IdeaArtifact) -> str:
 
 def _reasoning_input(
     reasoning: ReasoningArtifact,
-    knowledge: dict[str, object],
+    knowledge: dict[str, object] | None,
 ) -> str:
     notes = "\n".join(f"- {note.label}: {note.content}" for note in reasoning.notes)
     questions = "\n".join(f"- {question}" for question in reasoning.open_questions)
     target_language = _find_note(reasoning, "Target response language")
-    return (
+    context = (
         f"{_story_language_header(target_language)}"
         f"Creator intent and decisions:\n{getattr(reasoning, 'creator_context', '')}\n\n"
         f"Reasoning notes:\n{notes}\n\n"
-        f"Missing information / mentor questions:\n{questions or '- None'}\n\n"
-        f"Short-film domain knowledge:\n{json.dumps(knowledge, ensure_ascii=False)}"
+        f"Missing information / mentor questions:\n{questions or '- None'}"
     )
+    if knowledge is not None:
+        context += f"\n\nShort-film domain knowledge:\n{json.dumps(knowledge, ensure_ascii=False)}"
+    return context
 
 
 def compact_qwen_planning_input(input_text: str) -> str:
-    # Keep every author decision and AI note; encyclopedic references distract this small model.
-    context, separator, _ = input_text.partition("\n\nShort-film domain knowledge:\n")
+    # Legacy replay helper: serialized reference JSON follows the LAST heading.
+    # Runtime planning omits references structurally, without scanning author text.
+    context, separator, _ = input_text.rpartition("\n\nShort-film domain knowledge:\n")
     return context if separator else input_text
 
 
