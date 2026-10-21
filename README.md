@@ -167,9 +167,11 @@ contracts. `ollama / qwen2.5:3b` uses compact prompts for Vietnamese output unde
 `domains/short-film/prompts/ollama-qwen2.5-3b/`; its planning input retains all author
 context and reasoning notes but omits the long domain knowledge and example library.
 The critic keeps its full current draft, author context and rubric. Vietnamese
-feedback uses the full Vietnamese critic prompt; English uses the existing prompt.
+feedback uses the full Vietnamese critic prompt; English uses the English prompt.
 Author terms such as `lab coach`, proper names, section anchors and exact quotations
 may remain in their original language while explanations follow the target language.
+New revision examples follow the feedback language even inside quotation marks;
+the quotation exception only applies to text actually present in the current draft.
 This does not require pure Vietnamese or translate the author's draft.
 The critic is not compacted:
 the experimental compact critic regressed on intent and feedback pairing and was

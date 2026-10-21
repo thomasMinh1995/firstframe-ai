@@ -777,13 +777,21 @@ def _planning_input(planning: PlanningArtifact) -> str:
     )
 
 
+def _feedback_language_header(target_language: str) -> str:
+    return (
+        f"Target response language: {target_language}\n"
+        "Write explanations and new revision examples in the target language, even when the "
+        "draft uses another language. Keep author terms, names, section anchors and verbatim "
+        "quotations from the CURRENT draft in their original language. Newly invented examples "
+        "are not quotations from the draft. Preserve JSON field names in English.\n\n"
+    )
+
+
 def _evaluation_input(planning: PlanningArtifact, rubric: object) -> str:
     target_language = getattr(planning, "target_response_language", "English")
     return (
-        f"Target response language: {target_language}\n"
-        "All generated JSON string values must use this language. Preserve JSON field names "
-        "in English.\n\n"
-        f"Creator intent and decisions:\n{getattr(planning, 'creator_context', '')}\n\n"
+        _feedback_language_header(target_language)
+        + f"Creator intent and decisions:\n{getattr(planning, 'creator_context', '')}\n\n"
         f"Current draft (JSON data):\n{_planning_input(planning)}\n\n"
         f"Short-film story rubric:\n{json.dumps(rubric, ensure_ascii=False)}"
     )

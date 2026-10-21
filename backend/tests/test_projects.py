@@ -125,6 +125,61 @@ def test_stale_save_cannot_overwrite_another_windows_work(project_client):
     assert client.get(url).json()["title"] == "Saved in another window"
 
 
+@pytest.mark.parametrize(
+    ("idea", "policy"),
+    [
+        (
+            "Một lab coach giúp học viên làm bài build phase tại VinUni; kết quả tuyển dụng để mở.",
+            "Ngôn ngữ góp ý: tiếng Việt",
+        ),
+        (
+            "A young tutor helps a learner finish an AI exercise. Her job result stays unknown.",
+            "Use the explicit target response language for feedback",
+        ),
+    ],
+)
+def test_review_after_brief_and_draft_edits_keeps_terms_language_and_project_source(
+    project_client, idea, policy
+):
+    client, provider = project_client
+    project = develop_project(client, start_project(client))
+    original_draft = deepcopy(project["draft"])
+    other = start_project(client)
+    url = f"/api/projects/{project['id']}"
+    data = payload(project)
+    data["idea"] = idea
+    data["draft"]["title"] = "lab coach tại VinUni"
+    data["draft"]["sections"][5]["content"] = (
+        'BẢN ĐÃ SỬA: Lab coach tắt thư tuyển dụng, giúp học viên làm bài build phase. '
+        'Dòng ghi chú là "Keep learning. / Cứ học tiếp."'
+    )
+    saved = client.put(url, json=data).json()
+    assert saved["feedback_is_current"] is False
+    response = client.post(f"{url}/review", json={"revision": saved["revision"]})
+    assert response.status_code == 200, response.text
+    reviewed = response.json()
+    request = provider.requests[-1]
+    assert policy in request.instructions
+    draft, _ = json.JSONDecoder().raw_decode(
+        request.input_text.split("Current draft (JSON data):\n", 1)[1]
+    )
+    assert draft == {
+        "title": saved["draft"]["title"],
+        "logline": saved["draft"]["logline"],
+        "sections": [
+            {"title": section["title"], "content": section["content"]}
+            for section in saved["draft"]["sections"]
+        ],
+    }
+    assert "He gives Linh his blessing at the airport curb." not in request.input_text
+    assert reviewed["draft"] == saved["draft"]
+    assert reviewed["feedback_is_current"] is True
+    assert reviewed["feedback"]["artifact_id"] != project["feedback"]["artifact_id"]
+    assert any(version["draft"] == original_draft for version in reviewed["versions"])
+    assert client.get(url).json() == reviewed
+    assert client.get(f"/api/projects/{other['id']}").json() == other
+
+
 def test_failed_review_preserves_edited_draft_and_old_feedback(project_client, monkeypatch):
     client, _ = project_client
     project = develop_project(client, start_project(client))

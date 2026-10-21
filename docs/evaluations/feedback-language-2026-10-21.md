@@ -1,12 +1,15 @@
 # Issue #14: ngôn ngữ góp ý với Qwen 2.5 3B
 
 Ngày kiểm thử: 21/10/2026. Nhánh sửa xuất phát từ `dev` tại `80495d2`.
+Kết quả ban đầu dưới đây thuộc `59923a2`; phần **Review PR #16** ghi kết quả
+sau khi phát hiện và sửa thêm lỗi với bản thảo khác ngôn ngữ.
 
 ## Thay đổi
 
 Critic chọn prompt tiếng Việt đầy đủ khi ngôn ngữ đích là Vietnamese; các lượt
 tiếng Anh giữ prompt hiện có. Cùng đường chọn này phục vụ góp ý sau tạo bản phát
-triển, `/api/generate` và review bản đã sửa. Không rút gọn rubric, ngữ cảnh tác
+triển, `/api/generate` và review bản đã sửa. Sau review, cả hai prompt làm rõ
+ngoại lệ trích dẫn và ngôn ngữ của ví dụ sửa mới. Không rút gọn rubric, ngữ cảnh tác
 giả hay bản thảo; không thêm lượt AI dịch lại, thử lại hoặc sửa nội dung tác giả.
 
 Prompt Việt giữ các yêu cầu về bằng chứng, quyền quyết định của tác giả, cặp
@@ -43,7 +46,7 @@ giữ input, schema, effective prompt/hash, raw output, tham số mô hình và 
 kiểm tra API. Đây là dữ liệu hồi quy chưa duyệt chất lượng, không tự dùng làm
 demo hoặc training.
 
-## Kết quả
+## Kết quả ban đầu tại 59923a2
 
 | Nhóm | Đúng ngôn ngữ diễn giải trong mẫu thử |
 | --- | --- |
@@ -106,3 +109,46 @@ PYTHONPATH=backend backend/.venv/bin/python backend/scripts/compare_ollama_promp
 Script chọn prompt critic theo ngôn ngữ đích như runtime, giữ nguyên fixture
 và schema, không ghi kho dự án hoặc duyệt dataset. Các chỉ số marker/cặp cấu
 trúc trong script chỉ để sàng lọc; cần đọc output để kết luận ngôn ngữ và ý nghĩa.
+
+## Review PR #16
+
+Tìm được một lỗi ở ca chưa có trong bộ thử ban đầu: tác giả cần góp ý Việt nhưng
+bản thảo viết bằng Anh. Qwen viết đề xuất mới bằng Anh trong ngoặc kép, chẳng
+hạn “She watches the learner struggle with the exercise.”. Câu này không có
+trong draft, nên không thuộc ngoại lệ giữ nguyên trích dẫn. Lượt khác còn chép
+nguyên lời mô tả mẫu “Chi tiết cụ thể và hiệu quả cần giữ.” thành điểm mạnh.
+
+Cũng có mâu thuẫn trong chỉ dẫn: đầu vào yêu cầu mọi chuỗi JSON cùng ngôn ngữ,
+trong khi system prompt cho giữ thuật ngữ, tên phần và trích dẫn khác ngôn ngữ.
+Đã sửa:
+
+- Cả hai prompt phân biệt câu trích có thật trong bản hiện tại với ví dụ sửa
+  mới. Ví dụ mới theo ngôn ngữ góp ý dù nằm trong ngoặc kép.
+- Runtime và script phát lại dùng chung phần chỉ dẫn ngôn ngữ, cho giữ nguyên
+  thuật ngữ/tên/trích dẫn; script chỉ đổi phần chỉ dẫn, giữ nguyên toàn bộ ngữ
+  cảnh tác giả, draft và rubric. Từ chối fixture thiếu ngôn ngữ hoặc ranh giới dữ liệu.
+- Mẫu JSON của prompt Việt dùng mảng rỗng để tránh mồi sao chép câu khuôn mẫu;
+  vẫn yêu cầu chỉ ra vấn đề thật, không bắt mảng phải rỗng.
+- Thêm hai test API đổi brief và sửa draft với thuật ngữ/trích dẫn Anh–Việt:
+  kiểm tra prompt đúng ngôn ngữ, draft gửi đi khớp chính xác bản vừa lưu, phản
+  hồi có ID mới, mở lại khớp, giữ phiên bản cũ và không đổi dự án khác.
+
+Sau sửa: **188 test backend đạt**, Ruff và `git diff --check` đạt. Bốn lượt Qwen
+thật trên hai ca bản thảo khác ngôn ngữ giữ đúng ngôn ngữ diễn giải/ví dụ mới;
+một lượt góp ý Anh giữ nguyên câu “Cứ học tiếp.” khi trích dẫn. Phát lại tám lượt
+Việt/Anh ban đầu với seed 42/73 cũng giữ đúng ngôn ngữ. Tổng **12/12 đầu ra trong
+mẫu sau review**; không cộng chúng vào 18 lượt trước để che ca lỗi mới tìm thấy.
+
+[Bằng chứng trước/sau review](../../demo/evaluations/feedback-language-review-2026-10-21.json)
+giữ cả đầu ra lỗi. Hai ca mới lặp hai lần trước/sau, không cố định seed, nên
+không dùng để đo mức tăng chất lượng. Tám ca phát lại có seed cố định. Các lỗi
+góp ý về ý nghĩa, cặp lệch và việc ép kết đóng vẫn còn; không đánh dấu chúng đã sửa.
+
+Chạy lại hai ca bản thảo khác ngôn ngữ:
+
+```bash
+PYTHONPATH=backend backend/.venv/bin/python backend/scripts/compare_ollama_prompts.py \
+  --dataset demo/evaluations/feedback-language-mixed-drafts-2026-10-21.jsonl \
+  --output /tmp/feedback-language-mixed-drafts-new.json \
+  --seeds 42 73 --stages evaluation --variants after
+```

@@ -49,6 +49,10 @@ def test_feedback_system_language_covers_generate_plan_and_review_without_editin
         assert "strengths, weaknesses" in request.instructions
         assert "suggestions" in request.instructions
         assert f"Target response language: {language}" in request.input_text
+        assert "new revision examples in the target language" in request.input_text
+        assert "quotations from the CURRENT draft in their original language" in request.input_text
+        assert "Newly invented examples are not quotations" in request.input_text
+        assert "All generated JSON string values must use this language" not in request.input_text
         assert idea in request.input_text
         assert constraints[0].value in request.input_text
         assert idea not in request.instructions
@@ -62,3 +66,10 @@ def test_feedback_system_language_covers_generate_plan_and_review_without_editin
     )
     assert draft["title"] == "lab coach"
     assert draft["sections"] == [{"title": "Ending", "content": draft_text}]
+    if language == "Vietnamese":
+        assert "Ví dụ sửa mới\ncũng phải bằng tiếng Việt" in review.instructions
+        assert '"strengths": []' in review.instructions
+        assert "[Tên phần thật]" not in review.instructions
+    else:
+        assert "New revision examples must use the" in review.instructions
+        assert "Never translate a source quotation and present it as verbatim" in review.instructions
