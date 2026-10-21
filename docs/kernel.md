@@ -2,7 +2,7 @@
 
 The Creative Reasoning Harness is the reusable runtime boundary inside FirstFrame AI.
 
-It is small by design: the kernel defines contracts and layer responsibilities, while the application layer composes concrete OpenAI-backed implementations for the current MVP.
+It is small by design: the kernel defines contracts and layer responsibilities, while the application layer composes concrete LLM-backed implementations for the current MVP.
 
 ## Core Contracts
 
@@ -83,10 +83,10 @@ The current application composes:
 
 - `DomainRegistry`
 - static short-film domain metadata
-- `OpenAIReasoningLayer`
-- `OpenAIPlanningLayer`
-- `OpenAIEvaluationLayer`
-- `OpenAIProvider`
+- `LLMReasoningLayer`
+- `LLMPlanningLayer`
+- `LLMEvaluationLayer`
+- `StructuredProvider` selected by `create_provider()` (OpenAI or Ollama)
 - prompt, knowledge, rubric, and example loaders
 
 This composition lives in `backend/app/application/workflow.py`.
@@ -107,7 +107,7 @@ The short-film domain currently provides assets from `domains/short-film/`:
 
 The kernel does not import OpenAI.
 
-OpenAI is used through `OpenAIProvider`, which receives structured requests and returns validated Pydantic objects. Provider-specific exceptions are converted into provider-independent errors.
+The workflow depends on `StructuredProvider` from `application/ai_provider.py`. `create_provider()` selects OpenAI when a key exists, otherwise Ollama; `AI_PROVIDER` can explicitly select either. Both adapters receive the same structured requests and return validated Pydantic objects. Provider-specific exceptions are converted into provider-independent errors.
 
 ## Why The Kernel Matters
 
@@ -121,7 +121,7 @@ The kernel is what makes FirstFrame AI an early AI framework rather than a singl
 
 ## Current Limitations
 
-- Runtime implementations are currently OpenAI-backed only.
+- Runtime providers are OpenAI and local Ollama.
 - Plugin discovery is static for the MVP.
 - Reasoning instructions are inline rather than loaded from a domain prompt file.
 - No persistence or cross-request memory exists yet.

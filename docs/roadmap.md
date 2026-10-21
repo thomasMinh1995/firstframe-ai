@@ -103,6 +103,21 @@ Automated tests cover the question gate, persistence across app instances, revie
 
 **Validation:** Exporting historical version A while working on B produces A's content, excludes AI feedback from the document and PDF metadata, and preserves B's unsaved buffer. Late responses and retries cannot overwrite edits or silently select a newer revision. Vietnamese text and multi-page layout must be visually verified during implementation.
 
+## Milestone 1.2: Visible Author Intent and Feedback-to-Edit Flow — P0, Planned
+
+- Show the effective saved author context, including retained clarifications, without promoting AI analysis or proposals into author decisions.
+- Distinguish saved context, unsaved edits, and the context of historical feedback.
+- Bind every feedback item, including stale feedback on the main screen, to its immutable author-context/draft snapshot; never replace its source with the current intent.
+- Pair each revision priority with evidence, its effect on the intended experience, and a next step; link to validated targets in the reviewed draft.
+- Let the creator focus the relevant field and revise manually. Navigation never saves, rewrites, restores a draft, or calls AI.
+- Keep stale feedback readable without applying its navigation to a different draft; preserve buffers on conflicts, failures, and late responses.
+
+**User outcome:** The beginner can explain the intent being used, choose a useful revision, and complete a focused story-plan revision round while retaining creative control.
+
+**Status:** Planning only; no implementation is delivered by the planning PR. See [P0 #7](https://github.com/thomasMinh1995/firstframe-ai/issues/7) and the [implementation plan](plans/p0-author-intent-revision-flow.md). This P0 can proceed independently of PDF export in Milestone 1.1; merging the plan does not close the feature issue.
+
+**Validation:** Saved context must match AI input; feedback artifacts, snapshots and targets must remain paired. Validate quotations against each target field, not the whole draft. Navigation preserves all unsaved text, including project-name-only edits, and uncertain save results must not trigger a reload or retry that overwrites buffers. Automated contract/UI tests and a real-model beginner pilot are required during implementation; transport tests alone do not establish feedback quality.
+
 ## Milestone 2: Build an Editable Scene Outline
 
 - Develop the selected story plan into an ordered list of scenes.

@@ -5,6 +5,7 @@ pydantic~=2.13
 
 # AI provider client
 openai~=2.0
+httpx~=0.28
 
 # Configuration
 python-dotenv~=1.2

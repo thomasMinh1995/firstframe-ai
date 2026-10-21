@@ -62,13 +62,13 @@ function isSummary(value: unknown): value is ProjectSummary & Record<string, unk
   return isRecord(value) && typeof value.id === "string" && typeof value.title === "string"
     && typeof value.updated_at === "string";
 }
-function isDraft(value: unknown): value is StoryDraft {
+export function isDraft(value: unknown): value is StoryDraft {
   return isRecord(value) && typeof value.title === "string" && typeof value.logline === "string"
     && Array.isArray(value.sections) && value.sections.every((section) => isRecord(section)
       && typeof section.title === "string" && typeof section.purpose === "string"
       && typeof section.content === "string");
 }
-function isFeedback(value: unknown): value is Feedback {
+export function isFeedback(value: unknown): value is Feedback {
   return isRecord(value) && (value.passed === null || typeof value.passed === "boolean")
     && isRecord(value.rubric_scores)
     && Object.values(value.rubric_scores).every((score) => typeof score === "number")

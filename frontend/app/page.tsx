@@ -2,16 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { StoryFeedback } from "./StoryResultCards";
+import { sectionLabels } from "./storyLabels";
 import {
   editableProject, listProjects, projectRequest,
   type Project, type ProjectSummary, type StoryDraft,
 } from "./projectsApi";
-
-const sectionLabels: Record<string, string> = {
-  "Core idea": "Ý tưởng chính", "Main character": "Nhân vật", "Main conflict": "Xung đột",
-  Beginning: "Mở đầu", Middle: "Phần giữa", Ending: "Kết thúc", Theme: "Chủ đề",
-  "Visual Style": "Phong cách hình ảnh", Tone: "Tông cảm xúc", "Production Notes": "Giới hạn thực hiện",
-};
 
 export default function Home() {
   const [projects, setProjects] = useState<ProjectSummary[]>([]);
@@ -103,6 +98,8 @@ export default function Home() {
         <p className="tagline">Từng bước phát triển câu chuyện bạn muốn kể.</p>
         <p className="summary">Bắt đầu bằng ý tưởng, làm rõ những lựa chọn rồi cùng sửa bản phát triển.
           Phiên bản này hỗ trợ story plan; viết kịch bản theo cảnh sẽ đến sau.</p>
+        <a className="demo-entry secondary" href="/demo">Xem demo local từ kịch bản có sẵn</a>
+        <a className="demo-entry secondary" href="/datasets">Đánh giá chất lượng dataset</a>
       </header>
       <nav className="project-toolbar panel" aria-label="Dự án">
         <label htmlFor="project-picker">Dự án của bạn</label>

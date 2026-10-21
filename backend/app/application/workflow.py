@@ -9,6 +9,8 @@ from uuid import uuid4
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from app.application.ai_provider import StructuredProvider, StructuredRequest
+from app.application.dataset import recording_provider
 from app.application.example_loader import DomainExample, ExampleLoader
 from app.application.knowledge_loader import KnowledgeLoader
 from app.application.prompt_loader import PromptLoader
@@ -33,7 +35,7 @@ from app.core.domains import (
     DomainResourceCatalog,
 )
 from app.core.harness import EvaluationLayer, PlanningLayer, ReasoningLayer
-from app.infrastructure.openai_provider import OpenAIProvider, OpenAIStructuredRequest
+from app.infrastructure.provider_factory import create_provider
 
 DEFAULT_DOMAIN_ID = "short-film"
 MAX_PLANNING_EXAMPLES = 3
@@ -178,7 +180,7 @@ _PlanningOutput.model_rebuild()
 
 
 @dataclass(frozen=True)
-class _OpenAIPlanningArtifact(PlanningArtifact):
+class _LLMPlanningArtifact(PlanningArtifact):
     title: str | None = None
     logline: str | None = None
     target_response_language: str = "English"
@@ -219,26 +221,27 @@ class HarnessRun:
 
 
 @dataclass(frozen=True)
-class _OpenAIReasoningArtifact(ReasoningArtifact):
+class _LLMReasoningArtifact(ReasoningArtifact):
     creator_context: str = ""
 
 
-class OpenAIReasoningLayer(ReasoningLayer):
-    def __init__(self, provider: OpenAIProvider, prompt_loader: PromptLoader) -> None:
+class LLMReasoningLayer(ReasoningLayer):
+    def __init__(self, provider: StructuredProvider, prompt_loader: PromptLoader) -> None:
         self._provider = provider
         self._prompt_loader = prompt_loader
 
     def reason(self, idea: IdeaArtifact, domain: DomainPlugin) -> ReasoningArtifact:
         target_language = _target_response_language(idea)
         result = self._provider.request_structured(
-            OpenAIStructuredRequest(
+            StructuredRequest(
                 instructions=self._prompt_loader.load("story_mentor", domain),
                 input_text=_idea_input(idea),
                 response_model=_ReasoningOutput,
+                stage="reasoning",
             )
         )
         output = _expect_output(result.output, _ReasoningOutput)
-        return _OpenAIReasoningArtifact(
+        return _LLMReasoningArtifact(
             metadata=_metadata(idea.metadata.domain_id, "reasoning"),
             source_idea_id=idea.metadata.artifact_id,
             creator_context=_creator_input(idea.text, idea.constraints, idea.clarifications),
@@ -252,18 +255,21 @@ class OpenAIReasoningLayer(ReasoningLayer):
         )
 
 
-class OpenAIPlanningLayer(PlanningLayer):
+class LLMPlanningLayer(PlanningLayer):
     def __init__(
         self,
-        provider: OpenAIProvider,
+        provider: StructuredProvider,
         prompt_loader: PromptLoader,
         knowledge_loader: KnowledgeLoader,
         example_loader: ExampleLoader,
+        *,
+        compact_context: bool = False,
     ) -> None:
         self._provider = provider
         self._prompt_loader = prompt_loader
         self._knowledge_loader = knowledge_loader
         self._example_loader = example_loader
+        self._compact_context = compact_context
 
     def plan(self, reasoning: ReasoningArtifact, domain: DomainPlugin) -> PlanningArtifact:
         knowledge = {
@@ -272,16 +278,20 @@ class OpenAIPlanningLayer(PlanningLayer):
             "story_patterns": self._knowledge_loader.load("story_patterns", domain),
         }
         examples = self._example_loader.load(domain, limit=MAX_PLANNING_EXAMPLES)
+        input_text = _reasoning_input(reasoning, knowledge, examples)
+        if self._compact_context:
+            input_text = compact_qwen_planning_input(input_text)
         result = self._provider.request_structured(
-            OpenAIStructuredRequest(
+            StructuredRequest(
                 instructions=self._prompt_loader.load("story_planner", domain),
-                input_text=_reasoning_input(reasoning, knowledge, examples),
+                input_text=input_text,
                 response_model=_PlanningOutput,
+                stage="planning",
             )
         )
         output = _expect_output(result.output, _PlanningOutput)
         story_plan = output.story_plan
-        return _OpenAIPlanningArtifact(
+        return _LLMPlanningArtifact(
             metadata=_metadata(reasoning.metadata.domain_id, "planning"),
             source_reasoning_id=reasoning.metadata.artifact_id,
             title=story_plan.working_title.title,
@@ -292,10 +302,10 @@ class OpenAIPlanningLayer(PlanningLayer):
         )
 
 
-class OpenAIEvaluationLayer(EvaluationLayer):
+class LLMEvaluationLayer(EvaluationLayer):
     def __init__(
         self,
-        provider: OpenAIProvider,
+        provider: StructuredProvider,
         prompt_loader: PromptLoader,
         knowledge_loader: KnowledgeLoader,
     ) -> None:
@@ -306,11 +316,14 @@ class OpenAIEvaluationLayer(EvaluationLayer):
     def evaluate(self, planning: PlanningArtifact, domain: DomainPlugin) -> EvaluationArtifact:
         rubric = self._knowledge_loader.load_rubric("story_rubric", domain)
         target_language = getattr(planning, "target_response_language", "English")
+        # Small local models copy the critic's English examples despite a Vietnamese input header.
+        prompt_name = "script_critic_vi" if _is_vietnamese_language(target_language) else "script_critic"
         result = self._provider.request_structured(
-            OpenAIStructuredRequest(
-                instructions=self._prompt_loader.load("script_critic", domain),
+            StructuredRequest(
+                instructions=self._prompt_loader.load(prompt_name, domain),
                 input_text=_evaluation_input(planning, rubric),
                 response_model=_EvaluationOutput,
+                stage="evaluation",
             )
         )
         output = _expect_output(result.output, _EvaluationOutput)
@@ -389,7 +402,7 @@ class StoryGenerationService:
         constraints: tuple[Constraint, ...] = (),
     ) -> HarnessRun:
         return self._harness.plan(
-            _OpenAIReasoningArtifact(
+            _LLMReasoningArtifact(
                 metadata=_metadata(DEFAULT_DOMAIN_ID, "reasoning"),
                 source_idea_id=str(uuid4()),
                 creator_context=_creator_input(idea_text, constraints, answers),
@@ -422,7 +435,7 @@ class StoryGenerationService:
         creator_context: str,
     ) -> EvaluationArtifact:
         return self._harness.review(
-            _OpenAIPlanningArtifact(
+            _LLMPlanningArtifact(
                 metadata=_metadata(DEFAULT_DOMAIN_ID, "planning"),
                 source_reasoning_id=str(uuid4()),
                 title=title,
@@ -452,10 +465,13 @@ class StoryGenerationService:
 
 
 def create_story_generation_service(
-    provider: OpenAIProvider | None = None,
+    provider: StructuredProvider | None = None,
 ) -> StoryGenerationService:
-    openai_provider = provider or OpenAIProvider.from_env()
-    prompt_loader = PromptLoader()
+    selected_provider = provider if provider is not None else create_provider()
+    selected_provider = recording_provider(selected_provider)
+    metadata = selected_provider.metadata
+    qwen_profile = metadata.provider == "ollama" and metadata.model == "qwen2.5:3b"
+    prompt_loader = PromptLoader(variant="ollama-qwen2.5-3b" if qwen_profile else None)
     knowledge_loader = KnowledgeLoader()
     example_loader = ExampleLoader()
     registry = DomainRegistry(
@@ -483,14 +499,18 @@ def create_story_generation_service(
     )
     harness = CreativeReasoningHarness(
         domains=registry,
-        reasoning_layer=OpenAIReasoningLayer(openai_provider, prompt_loader),
-        planning_layer=OpenAIPlanningLayer(
-            openai_provider,
+        reasoning_layer=LLMReasoningLayer(selected_provider, prompt_loader),
+        planning_layer=LLMPlanningLayer(
+            selected_provider,
             prompt_loader,
             knowledge_loader,
             example_loader,
+            compact_context=qwen_profile,
         ),
-        evaluation_layer=OpenAIEvaluationLayer(openai_provider, prompt_loader, knowledge_loader),
+        # Compact critic trials broke intent/feedback pairing; retain its full prompt and context.
+        evaluation_layer=LLMEvaluationLayer(
+            selected_provider, PromptLoader() if qwen_profile else prompt_loader, knowledge_loader
+        ),
     )
     return StoryGenerationService(harness)
 
@@ -604,6 +624,12 @@ def _reasoning_input(
         f"Short-film domain knowledge:\n{json.dumps(knowledge, ensure_ascii=False)}\n\n"
         f"Reusable domain examples:\n{json.dumps(_example_payloads(examples), ensure_ascii=False)}"
     )
+
+
+def compact_qwen_planning_input(input_text: str) -> str:
+    # Keep every author decision and AI note; encyclopedic references distract this small model.
+    context, separator, _ = input_text.partition("\n\nShort-film domain knowledge:\n")
+    return context if separator else input_text
 
 
 def _example_payloads(examples: tuple[DomainExample, ...]) -> list[dict[str, object]]:
@@ -751,13 +777,21 @@ def _planning_input(planning: PlanningArtifact) -> str:
     )
 
 
+def _feedback_language_header(target_language: str) -> str:
+    return (
+        f"Target response language: {target_language}\n"
+        "Write explanations and new revision examples in the target language, even when the "
+        "draft uses another language. Keep author terms, names, section anchors and verbatim "
+        "quotations from the CURRENT draft in their original language. Newly invented examples "
+        "are not quotations from the draft. Preserve JSON field names in English.\n\n"
+    )
+
+
 def _evaluation_input(planning: PlanningArtifact, rubric: object) -> str:
     target_language = getattr(planning, "target_response_language", "English")
     return (
-        f"Target response language: {target_language}\n"
-        "All generated JSON string values must use this language. Preserve JSON field names "
-        "in English.\n\n"
-        f"Creator intent and decisions:\n{getattr(planning, 'creator_context', '')}\n\n"
+        _feedback_language_header(target_language)
+        + f"Creator intent and decisions:\n{getattr(planning, 'creator_context', '')}\n\n"
         f"Current draft (JSON data):\n{_planning_input(planning)}\n\n"
         f"Short-film story rubric:\n{json.dumps(rubric, ensure_ascii=False)}"
     )

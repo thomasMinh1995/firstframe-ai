@@ -48,7 +48,7 @@ Reason:
 
 ## 5. Keep Provider Logic In Infrastructure
 
-OpenAI calls live in `OpenAIProvider`, not controllers or core contracts.
+Provider calls live in `OpenAIProvider` and `OllamaProvider`, not controllers or core contracts. The workflow depends on `StructuredProvider`; a factory selects the adapter from configuration.
 
 Reason:
 

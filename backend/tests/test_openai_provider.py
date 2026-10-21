@@ -5,15 +5,14 @@ import pytest
 from openai import APIConnectionError, APITimeoutError
 from pydantic import BaseModel
 
-from app.infrastructure.openai_provider import (
+from app.application.ai_provider import (
     MalformedProviderResponseError,
     MissingProviderConfigurationError,
-    OpenAIProvider,
-    OpenAIProviderConfig,
-    OpenAIStructuredRequest,
     ProviderRequestError,
     ProviderTimeoutError,
+    StructuredRequest,
 )
+from app.infrastructure.openai_provider import OpenAIProvider, OpenAIProviderConfig
 
 
 class DemoResponse(BaseModel):
@@ -48,7 +47,7 @@ def test_provider_sends_structured_request_and_parses_valid_json_output() -> Non
     )
 
     result = provider.request_structured(
-        OpenAIStructuredRequest(
+        StructuredRequest(
             instructions="Return a structured response.",
             input_text="A seed idea.",
             response_model=DemoResponse,
@@ -80,7 +79,7 @@ def test_provider_maps_timeout_to_provider_error() -> None:
 
     with pytest.raises(ProviderTimeoutError):
         provider.request_structured(
-            OpenAIStructuredRequest(
+            StructuredRequest(
                 instructions="Return a structured response.",
                 input_text="A seed idea.",
                 response_model=DemoResponse,
@@ -99,7 +98,7 @@ def test_provider_maps_openai_exception_to_provider_error() -> None:
 
     with pytest.raises(ProviderRequestError):
         provider.request_structured(
-            OpenAIStructuredRequest(
+            StructuredRequest(
                 instructions="Return a structured response.",
                 input_text="A seed idea.",
                 response_model=DemoResponse,
@@ -116,7 +115,7 @@ def test_provider_rejects_invalid_json_output() -> None:
 
     with pytest.raises(MalformedProviderResponseError):
         provider.request_structured(
-            OpenAIStructuredRequest(
+            StructuredRequest(
                 instructions="Return a structured response.",
                 input_text="A seed idea.",
                 response_model=DemoResponse,
@@ -133,7 +132,7 @@ def test_provider_rejects_json_that_does_not_match_schema() -> None:
 
     with pytest.raises(MalformedProviderResponseError):
         provider.request_structured(
-            OpenAIStructuredRequest(
+            StructuredRequest(
                 instructions="Return a structured response.",
                 input_text="A seed idea.",
                 response_model=DemoResponse,
