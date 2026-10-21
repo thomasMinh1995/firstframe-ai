@@ -102,12 +102,16 @@ grounded in the creator's brief rather than a mandatory story template.
 The Planning Layer:
 
 - loads `story_planner_prompt.md`;
-- loads short-film knowledge files;
-- loads a small set of local examples;
+- selects definitions and craft guidance from short-film knowledge files;
+- excludes worked stories, beginner examples and plot-pattern templates from live context;
 - uses the reasoning artifact as input;
 - requests a structured `story_plan` object from the selected provider;
 - validates the result with `_PlanningOutput`;
 - maps it into a `PlanningArtifact`.
+
+The compact 3B profile still omits the knowledge block. Author facts and answers are never
+filtered; narrative examples remain available offline for review and evaluation.
+See [reference isolation](testing/reference-isolation.md) for tests and limitations.
 
 Planning fields include working title, logline, characters, conflict, beginning, middle, ending, theme, visual style, tone, and production notes.
 

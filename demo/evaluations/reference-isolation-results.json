@@ -1,0 +1,378 @@
+{
+  "base_commit": "013fbcc8f0a745c3f9d0072581cb1b76dd5463ca",
+  "date": "2026-10-21",
+  "parameters": {
+    "temperature": 0.3,
+    "num_ctx": 16384,
+    "timeout_seconds": 180
+  },
+  "method": "One live planner+critic run per case/model. Outputs manually inspected; not a fidelity benchmark or statistical pass rate.",
+  "runs": [
+    {
+      "model": "qwen2.5:3b",
+      "case_id": "repair-shop",
+      "status": "completed",
+      "steps": [
+        {
+          "stage": "planning",
+          "seconds": 15.703,
+          "input_sha256": "5d399bda4d8df51a06c6c640be5adc0b84c3e4f4e261c71bc78638766607325c",
+          "instructions_sha256": "926dcfb71675f35982c28b662e495c53343218ae344c3f6a11df48c02de2a4b8",
+          "output": {
+            "story_plan": {
+              "working_title": {
+                "title": "Shop Closing"
+              },
+              "logline": {
+                "text": "An adult bicycle mechanic leaves one unfinished wheel for tomorrow, observed by a single performer in her shop."
+              },
+              "characters": {
+                "protagonist": "Jane, the adult bicycle mechanic",
+                "supporting_characters": [],
+                "antagonist_or_obstacle": null
+              },
+              "conflict": {
+                "external": "None",
+                "internal": null,
+                "stakes": null
+              },
+              "beginning": {
+                "setup": "It's a rainy day, and Jane, an adult bicycle mechanic, is closing her repair shop.",
+                "key_event": "Jane notices one unfinished wheel while cleaning her tools."
+              },
+              "middle": {
+                "escalation": "Jane decides to leave the unfinished wheel for tomorrow.",
+                "turning_point": null
+              },
+              "ending": {
+                "resolution": "Jane leaves the shop, leaving the unfinished wheel behind.",
+                "final_image": "The camera captures Jane walking away from the shop with a thoughtful look on her face."
+              },
+              "theme": {
+                "statement": "Ordinary moments and unexpected decisions in everyday life."
+              },
+              "visual_style": {
+                "description": "Observational style, minimal movement, focus on details.",
+                "visual_motifs": []
+              },
+              "tone": {
+                "description": "Neutral, observational"
+              },
+              "production_notes": {
+                "notes": "Focus on the mechanic's actions and thoughts without dialogue. No relatives or departure story is needed.",
+                "locations": [
+                  "Bicycle repair shop"
+                ],
+                "cast_size": "1"
+              }
+            }
+          }
+        },
+        {
+          "stage": "evaluation",
+          "seconds": 12.933,
+          "input_sha256": "982d1dd1be7b4e2409a0abc0ceb0703d62dbf796f7901b4ba3aa237b4a9681b9",
+          "instructions_sha256": "fe2066114f60627f93449aadb392944ff9d62a461ad851a1c8755c449a03d234",
+          "output": {
+            "passed": false,
+            "rubric_scores": {
+              "story_clarity": 3,
+              "character": 2,
+              "conflict": 2,
+              "emotional_impact": 2,
+              "ending": 2,
+              "production_feasibility": 4
+            },
+            "strengths": [
+              "A specific, anchored strength and its effect."
+            ],
+            "weaknesses": [
+              "The Core idea section does not provide a clear situation or progression.",
+              "The Main character section is missing Jane's motivations and choices."
+            ],
+            "suggestions": [
+              "Expand the Core idea to include how Jane decides to leave the unfinished wheel for tomorrow, emphasizing her thought process and reasoning.",
+              "Add more details about Jane's background, such as her experience with bicycle repair and why she chose this career path. This will help flesh out her character."
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "model": "qwen2.5:3b",
+      "case_id": "author-family",
+      "status": "completed",
+      "steps": [
+        {
+          "stage": "planning",
+          "seconds": 20.313,
+          "input_sha256": "61205a62ddf42223bf241091e4248929f923d4d9b98cebed2c7bea3f5220e4a4",
+          "instructions_sha256": "926dcfb71675f35982c28b662e495c53343218ae344c3f6a11df48c02de2a4b8",
+          "output": {
+            "story_plan": {
+              "working_title": {
+                "title": "Tái Tăm"
+              },
+              "logline": {
+                "text": "Linh và cha chia tay tại sân bay, Linh trả lại móc khóa trước khi đi qua cửa kiểm soát."
+              },
+              "characters": {
+                "protagonist": "Linh",
+                "supporting_characters": [],
+                "antagonist_or_obstacle": null
+              },
+              "conflict": {
+                "external": "Sức ép từ việc chia tay và quay trở lại móc khóa.",
+                "internal": null,
+                "stakes": "Linh muốn giữ mối quan hệ với cha, nhưng cũng không muốn làm lộ bí mật."
+              },
+              "beginning": {
+                "setup": "Ở sân bay, Linh đứng đợi chuyến bay của mình.",
+                "key_event": "Linh và cha cùng nhau đi qua cửa kiểm soát hành lý rồi chia tay tại hành lang bên ngoài."
+              },
+              "middle": {
+                "escalation": "Linh nhìn lại lần cuối vào chiếc móc khóa mà cha đã tặng cho cô, sau đó quay người đi.",
+                "turning_point": null
+              },
+              "ending": {
+                "resolution": "Linh rời sân bay với chiếc móc khóa trong tay, không nói lời nào với cha.",
+                "final_image": "Linh bước ra khỏi cửa kiểm soát hành lý với chiếc móc khóa trên tay."
+              },
+              "theme": {
+                "statement": "Bí mật và sự chia sẻ khó khăn giữa người thân."
+              },
+              "visual_style": {
+                "description": "Quay chậm, sử dụng ánh sáng dịu nhẹ để tạo cảm giác ấm áp.",
+                "visual_motifs": [
+                  "Chiếc móc khóa",
+                  "Hành lang sân bay"
+                ]
+              },
+              "tone": {
+                "description": "Đơn giản và chân thực."
+              },
+              "production_notes": {
+                "notes": "Giữ nguyên thời lượng, số người và địa điểm như đã đề cập.",
+                "locations": [
+                  "Sân bay quốc tế"
+                ],
+                "cast_size": "2"
+              }
+            }
+          }
+        },
+        {
+          "stage": "evaluation",
+          "seconds": 28.936,
+          "input_sha256": "7851965f4176e546c673365350fbe97c3a01e8e58d3b90da81841a32aedb98d8",
+          "instructions_sha256": "f991313709973f16471c82f40ef08de2349f04f3abdd54d699e1983d3874e25b",
+          "output": {
+            "passed": false,
+            "rubric_scores": {
+              "story_clarity": 3,
+              "character": 2,
+              "conflict": 3,
+              "emotional_impact": 2,
+              "ending": 2,
+              "production_feasibility": 3
+            },
+            "strengths": [],
+            "weaknesses": [
+              "Tên phần 'Core idea' chưa rõ ràng và thiếu chi tiết về hành trình của Linh và cha trong quá khứ.",
+              "Phần 'Character' cần thêm chi tiết về mối quan hệ giữa Linh và cha, đặc biệt là sự thay đổi cảm xúc và lựa chọn của họ.",
+              "Phần 'Conflict' có thể cải thiện bằng cách làm rõ hơn sức ép từ việc chia tay và quay lại móc khóa.",
+              "Phần 'Ending' cần thêm chi tiết về hành động hoặc hình ảnh cuối cùng để kết thúc hiệu quả.",
+              "Phần 'Production Feasibility' cần đảm bảo rằng nhân vật có thể được diễn đạt với số lượng ít nhất của nhân viên và địa điểm."
+            ],
+            "suggestions": [
+              "[Core idea] Nêu rõ hơn mối quan hệ giữa Linh và cha, đặc biệt là những thay đổi cảm xúc và lựa chọn của họ trong quá khứ.",
+              "[Character] Thêm chi tiết về hành vi và lựa chọn của Linh khi nhìn lại móc khóa và quyết định rời sân bay.",
+              "[Conflict] Cải thiện phần này bằng cách làm rõ hơn sức ép từ việc chia tay và quay lại móc khóa, ví dụ: Linh cảm thấy áp lực phải giữ bí mật cho cha.",
+              "[Ending] Thêm chi tiết về hành động hoặc hình ảnh cuối cùng để kết thúc hiệu quả, ví dụ: Linh đưa móc khóa đến một địa điểm đặc biệt mà họ đã chia sẻ trong quá khứ.",
+              "[Production Feasibility] Đảm bảo rằng nhân vật có thể được diễn đạt với số lượng ít nhất của nhân viên và địa điểm, ví dụ: Sử dụng quay chậm để mô tả cảm giác ấm áp ở sân bay."
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "model": "qwen2.5:7b",
+      "case_id": "repair-shop",
+      "status": "completed",
+      "steps": [
+        {
+          "stage": "planning",
+          "seconds": 86.121,
+          "input_sha256": "1a6db814b0c93b26c2194266809f70cdf9d9ec2c0babe93aa36280d92b20ab3b",
+          "instructions_sha256": "bc1edd9efa4ba3713554be5beede105e1b0d07db2d7742c920db9cda87bd6cb3",
+          "output": {
+            "story_plan": {
+              "working_title": {
+                "title": "The Last Wheel"
+              },
+              "logline": {
+                "text": "An adult bicycle mechanic closes her shop after a rainy day, leaving an unfinished wheel for tomorrow."
+              },
+              "characters": {
+                "protagonist": "A dedicated adult bicycle mechanic",
+                "supporting_characters": [],
+                "antagonist_or_obstacle": null
+              },
+              "conflict": {
+                "external": "The rain forces her to close the shop early, leaving an unfinished wheel.",
+                "internal": null,
+                "stakes": null
+              },
+              "beginning": {
+                "setup": "A rainy day in a small town. Inside a cozy bicycle repair shop, our protagonist works diligently on her last customer's bike.",
+                "key_event": "As the rain intensifies and the shop's closing time approaches, she notices an unfinished wheel."
+              },
+              "middle": {
+                "escalation": "She carefully cleans her tools and workspace, trying to finish the job before closing. The clock ticks closer to the end of business hours.",
+                "turning_point": null
+              },
+              "ending": {
+                "resolution": "She decides to leave the wheel for tomorrow, placing it neatly on a shelf with a note to herself.",
+                "final_image": "The shop is now closed, and she stands by her workbench, looking at the unfinished wheel with a mix of determination and resignation."
+              },
+              "theme": {
+                "statement": "Even in the face of obstacles, one must find closure and move forward."
+              },
+              "visual_style": {
+                "description": null,
+                "visual_motifs": [
+                  "Clean tools",
+                  "Neatly arranged bikes"
+                ]
+              },
+              "tone": {
+                "description": "Observational and contemplative"
+              },
+              "production_notes": {
+                "notes": "The film should focus on the protagonist's actions and the environment of the shop. The visual motifs can help create a sense of order and routine.",
+                "locations": [
+                  "A small, cozy bicycle repair shop"
+                ],
+                "cast_size": null
+              }
+            }
+          }
+        },
+        {
+          "stage": "evaluation",
+          "seconds": 39.245,
+          "input_sha256": "c22848c907f6eefd6823d51b240a1d3fc1bc802334d7ffec4cab47fd2ca36150",
+          "instructions_sha256": "fe2066114f60627f93449aadb392944ff9d62a461ad851a1c8755c449a03d234",
+          "output": {
+            "passed": true,
+            "rubric_scores": {
+              "story_clarity": 4,
+              "character": 4,
+              "conflict": 4,
+              "emotional_impact": 4,
+              "ending": 4,
+              "production_feasibility": 4
+            },
+            "strengths": [
+              "The core idea is clear and focused, providing a strong premise for the short film.",
+              "The visual style and tone are well-defined and appropriate for an observational and contemplative approach."
+            ],
+            "weaknesses": [],
+            "suggestions": []
+          }
+        }
+      ]
+    },
+    {
+      "model": "qwen2.5:7b",
+      "case_id": "author-family",
+      "status": "completed",
+      "steps": [
+        {
+          "stage": "planning",
+          "seconds": 93.512,
+          "input_sha256": "a88aaa4e5b7a22da6f8dd084740e7f7e38fa3071a510b315d336fec51a6c8743",
+          "instructions_sha256": "bc1edd9efa4ba3713554be5beede105e1b0d07db2d7742c920db9cda87bd6cb3",
+          "output": {
+            "story_plan": {
+              "working_title": {
+                "title": "Linh và Sân Bay"
+              },
+              "logline": {
+                "text": "Linh phải từ biệt cha tại sân bay, trả lại chiếc móc khóa quen thuộc, và bước qua cửa kiểm soát."
+              },
+              "characters": {
+                "protagonist": "Linh",
+                "supporting_characters": [
+                  "cha của Linh"
+                ],
+                "antagonist_or_obstacle": null
+              },
+              "conflict": {
+                "external": "Từ biệt cha tại sân bay",
+                "internal": null,
+                "stakes": "Giữ gìn mối quan hệ với cha và đối mặt với sự xa cách"
+              },
+              "beginning": {
+                "setup": "Linh chuẩn bị đi du học, gặp lại cha sau một thời gian dài không gặp. Cha Linh đưa cho cô chiếc móc khóa làm kỷ niệm.",
+                "key_event": null
+              },
+              "middle": {
+                "escalation": "Cha của Linh nói rằng họ cần phải chia tay để mỗi người có cuộc sống riêng, và Linh cảm thấy đau khổ khi chấp nhận điều này.",
+                "turning_point": "Linh quyết định trả lại chiếc móc khóa quen thuộc và đi qua cửa kiểm soát."
+              },
+              "ending": {
+                "resolution": "Linh từ biệt cha tại sân bay, giữ gìn kỷ niệm nhưng hiểu rằng họ cần phải tự lập.",
+                "final_image": "Linh bước qua cửa kiểm soát, nhìn về phía sau với nỗi buồn nhưng cũng có chút hy vọng."
+              },
+              "theme": {
+                "statement": "Đôi khi, để trưởng thành, chúng ta phải từ biệt những người và kỷ niệm quan trọng nhất trong cuộc đời mình."
+              },
+              "visual_style": {
+                "description": null,
+                "visual_motifs": [
+                  "móc khóa",
+                  "sân bay"
+                ]
+              },
+              "tone": {
+                "description": "Nỗi buồn nhẹ nhàng nhưng kiên định"
+              },
+              "production_notes": {
+                "notes": "Sân bay là địa điểm quen thuộc, dễ dàng tạo ra nhiều hình ảnh biểu cảm. Linh chỉ cần một nhân vật phụ là cha để tăng thêm sự chân thực.",
+                "locations": [
+                  "sân bay"
+                ],
+                "cast_size": null
+              }
+            }
+          }
+        },
+        {
+          "stage": "evaluation",
+          "seconds": 44.079,
+          "input_sha256": "2e656fb05a4ed804ff9a821a5dc3293465b276493bb15a6b71d2f43d808532d3",
+          "instructions_sha256": "f991313709973f16471c82f40ef08de2349f04f3abdd54d699e1983d3874e25b",
+          "output": {
+            "passed": true,
+            "rubric_scores": {
+              "story_clarity": 4,
+              "character": 4,
+              "conflict": 4,
+              "emotional_impact": 4,
+              "ending": 4,
+              "production_feasibility": 4
+            },
+            "strengths": [
+              "Cốt truyện rõ ràng và tập trung, truyền tải được tình huống chính và sự tiếp nối.",
+              "Nhân vật Linh có động cơ rõ ràng và quyết định đáng nhớ."
+            ],
+            "weaknesses": [],
+            "suggestions": []
+          }
+        }
+      ]
+    }
+  ],
+  "data_scope": "Only synthetic repair-shop and author-family fixtures; no user project payloads."
+}

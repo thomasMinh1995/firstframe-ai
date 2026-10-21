@@ -166,10 +166,9 @@ def test_harness_calls_provider_through_runtime_layers() -> None:
     assert "Short-film domain knowledge" in provider.requests[1].input_text
     assert "film_glossary" in provider.requests[1].input_text
     assert "film_rules" in provider.requests[1].input_text
-    assert "story_patterns" in provider.requests[1].input_text
-    assert "Reusable domain examples" in provider.requests[1].input_text
-    assert "source_id" in provider.requests[1].input_text
-    assert "user_idea" in provider.requests[1].input_text
+    assert "story_patterns" not in provider.requests[1].input_text
+    assert "Reusable domain examples" not in provider.requests[1].input_text
+    assert "beginner_example" not in provider.requests[1].input_text
     assert "Short-film story rubric" in provider.requests[2].input_text
     assert "Story Clarity" in provider.requests[2].input_text
     assert "Production Feasibility" in provider.requests[2].input_text

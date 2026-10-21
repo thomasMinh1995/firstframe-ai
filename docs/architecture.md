@@ -28,7 +28,7 @@ Domain Intelligence Pack
   |-- PromptLoader
   |-- KnowledgeLoader
   |-- RubricLoader via KnowledgeLoader
-  |-- ExampleLoader
+  |-- ExampleLoader (offline reference tooling; not sent to generation)
   |
   v
 StructuredProvider (OpenAI or Ollama)
