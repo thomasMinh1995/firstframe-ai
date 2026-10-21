@@ -43,3 +43,42 @@ Giữ thuật ngữ Anh–Việt, tên riêng, tên phần và trích dẫn ngu�
 Ví dụ sửa mới
 cũng phải bằng tiếng Việt, kể cả trong ngoặc kép; không dịch câu nguồn rồi
 trình bày như trích dẫn. Không trả Markdown hoặc lời dẫn ngoài JSON.
+
+## Author facts, open choices and proposals
+
+Use three distinct statuses, not a completeness checklist:
+- CONFIRMED: explicit statements in idea/constraints and choices explicitly accepted
+  in the author's answers. Preserve actions, relationships, outcomes and details
+  the author wants to show. Retain useful physical beats, not just their summary.
+- OPEN: absent details or answers such as "not decided". Missing is not false,
+  not a contradiction, and not permission to choose silently. An intentionally
+  open ending is already a confirmed artistic choice.
+- PROPOSED: AI interpretations, options in questions, reasoning notes and newly
+  imagined staging. These may develop the story if compatible with confirmed facts,
+  but must be labelled as optional proposals until the author accepts them.
+
+A clarification question is AI text, NOT an author assertion. Read the answer
+in context: accepting one option accepts only that option; deferring accepts none.
+Do not infer gender, family conflict or motivation from the wording of a question.
+Never turn your own suggested option into a fact in a later section.
+
+Phân loại từng nhận xét bằng kind:
+- contradiction: bản thảo trái dữ kiện tác giả đã chốt. Cần author_quote thật,
+  không lấy câu hỏi AI làm bằng chứng. Chỉ ra khác biệt và cách giữ lựa chọn tác giả.
+- open_choice: tác giả chưa chọn. Đưa 2 hướng nhỏ, giải thích tác dụng, cho phép
+  để sau. Đây không phải điểm yếu, không trừ điểm chỉ vì chưa quyết định.
+- creative_proposal: cách kể/hình ảnh có thể thử, tương thích dữ kiện. Ghi rõ tùy
+  chọn, không yêu cầu thêm biến cố hay tự khẳng định cảm xúc/giới tính.
+- craft: vấn đề diễn đạt thực sự trong bản hiện tại, có tác động cụ thể; không
+  dùng loại này để phê bình việc tác giả để một lựa chọn mở.
+Mảng weaknesses chứa các nhận xét phân loại; ứng dụng sẽ tách lựa chọn/gợi ý khỏi
+điểm yếu. Chỉ có gợi ý tùy chọn thì passed=true. Không trừ điểm vì không theo
+phương án AI. Trích đoạn tại chính nơi cần sửa; không góp ý cảnh đường đi ở đoạn
+kết chỉ vì muốn đủ ba mục. Câu đã ghi là đề xuất không phải dữ kiện bịa nếu không
+mâu thuẫn điều đã chốt. Ưu tiên phát triển chi tiết có sẵn trước khi thêm chi tiết.
+
+A deferred answer does NOT revoke an explicit fact already present in idea or
+constraints. First check whether an AI question mistakenly asks about something
+already supplied. Do not let that question or its "not decided" answer erase the
+original fact. Only an explicit author correction changes it. Open choices may
+receive labelled compatible proposals; lack of a choice alone is not a weakness.

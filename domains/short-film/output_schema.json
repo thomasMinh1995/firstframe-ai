@@ -95,8 +95,21 @@
       "section",
       "quote",
       "reason",
+      "kind",
       "author_quote",
       "suggestion"
     ]
+  },
+  "guided_reasoning": {
+    "root_fields": [
+      "summary",
+      "notes",
+      "missing_information"
+    ],
+    "question_fields": [
+      "question",
+      "options"
+    ],
+    "options_per_question": 2
   }
 }

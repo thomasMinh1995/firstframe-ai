@@ -31,7 +31,7 @@ class FakeProvider:
     def request_structured(self, request: StructuredRequest) -> StructuredResult:
         self.requests.append(request)
         response_model = request.response_model
-        if response_model.__name__ == "_ReasoningOutput":
+        if response_model.__name__ in {"_ReasoningOutput", "_GuidedReasoningOutput"}:
             output = response_model(
                 summary="The idea has a clear emotional center.",
                 notes=[
@@ -41,8 +41,9 @@ class FakeProvider:
                     }
                 ],
                 missing_information=[
-                    "Why is this the last chance to meet?",
-                    "What unresolved truth must be spoken?",
+                    {"question": question, "options": ["Quiet observation", "Playful warmth"]}
+                    if response_model.__name__ == "_GuidedReasoningOutput" else question
+                    for question in ["Why is this the last chance to meet?", "What unresolved truth must be spoken?"]
                 ],
             )
         elif response_model.__name__ == "_PlanningOutput":
@@ -159,7 +160,7 @@ def test_harness_calls_provider_through_runtime_layers() -> None:
 
     assert len(provider.requests) == 3
     assert [request.response_model.__name__ for request in provider.requests] == [
-        "_ReasoningOutput",
+        "_GuidedReasoningOutput",
         "_PlanningOutput",
         "_GroundedEvaluationOutput",
     ]
@@ -214,7 +215,7 @@ def test_mentor_receives_exact_brief_as_data_separate_from_instructions(idea) ->
     request = provider.requests[0]
     brief = json.loads(request.input_text.split("Creator brief (JSON data):\n", 1)[1])
     assert brief == {"idea": idea, "constraints": ["Chỉ một căn bếp"], "clarifications": []}
-    assert "FirstFrame AI Short Film Story Mentor Prompt" in request.instructions
+    assert "FirstFrame Short Film Creative Mentor" in request.instructions
     assert idea not in request.instructions
 
 

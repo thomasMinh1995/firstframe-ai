@@ -18,6 +18,7 @@ from app.application.dataset_corrections import OUTPUT_MODELS
 from app.application.workflow import (
     _EvaluationOutput,
     _feedback_language_header,
+    _GuidedReasoningOutput,
     _is_vietnamese_language,
     compact_qwen_planning_input,
 )
@@ -151,7 +152,7 @@ def compare(
             stage = step["stage"]
             if stages and stage not in stages:
                 continue
-            model = OUTPUT_MODELS[stage]
+            model = _GuidedReasoningOutput if stage == "reasoning" else OUTPUT_MODELS[stage]
             request = step["request"]
             if request["response_schema"] != model.model_json_schema():
                 raise ValueError(

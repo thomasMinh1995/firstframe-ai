@@ -10,8 +10,10 @@ from app.application.workflow import (
     _EvaluationOutput,
     _format_grounded_evaluation,
     _GroundedEvaluationOutput,
+    _GuidedReasoningOutput,
     _PlanningOutput,
     _ReasoningOutput,
+    _render_questions,
     _structured_plan_sections,
 )
 
@@ -37,7 +39,15 @@ def validate_corrections(
                 and step.get("request", {}).get("response_schema", {}).get("title")
                 == "_GroundedEvaluationOutput"):
             model = _GroundedEvaluationOutput
-        validated = model.model_validate(output, strict=True).model_dump(mode="json")
+        if (step.get("stage") == "reasoning"
+                and step.get("request", {}).get("response_schema", {}).get("title")
+                == "_GuidedReasoningOutput"):
+            model = _GuidedReasoningOutput
+        validated = model.model_validate(output, strict=True).model_dump(mode="json", exclude_unset=True)
+        if model is _GroundedEvaluationOutput:
+            for original, item in zip(output.get("weaknesses", []), validated["weaknesses"], strict=True):
+                if "kind" not in original:
+                    item.pop("kind", None)
         if validated != step.get("output"):
             result[key] = validated
     return result
@@ -58,7 +68,15 @@ def apply_demo_corrections(
         }
         edited = False
         if step.analysis is not None and "reasoning" in edits:
-            output = _ReasoningOutput.model_validate(edits["reasoning"])
+            recorded = next(item for item in samples[source]["steps"] if item["stage"] == "reasoning")
+            request = recorded.get("request", {})
+            if request.get("response_schema", {}).get("title") == "_GuidedReasoningOutput":
+                guided = _GuidedReasoningOutput.model_validate(edits["reasoning"])
+                language = "Vietnamese" if "Target response language: Vietnamese" in request.get("input_text", "") else "English"
+                output = _ReasoningOutput(summary=guided.summary, notes=guided.notes,
+                                          missing_information=_render_questions(guided, language))
+            else:
+                output = _ReasoningOutput.model_validate(edits["reasoning"])
             step.analysis = type(step.analysis).model_validate(
                 {
                     **step.analysis.model_dump(),
@@ -92,7 +110,9 @@ def apply_demo_corrections(
             if (evaluation_step.get("request", {}).get("response_schema", {}).get("title")
                     == "_GroundedEvaluationOutput"):
                 evaluation = _format_grounded_evaluation(
-                    _GroundedEvaluationOutput.model_validate(edits["evaluation"])
+                    _GroundedEvaluationOutput.model_validate(edits["evaluation"]),
+                    "Vietnamese" if "Target response language: Vietnamese" in
+                    evaluation_step.get("request", {}).get("input_text", "") else "English",
                 )
             else:
                 evaluation = _EvaluationOutput.model_validate(edits["evaluation"])

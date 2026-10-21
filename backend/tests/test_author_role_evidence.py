@@ -1,4 +1,4 @@
-"""Replay synthetic evidence to bind its results to current prompts, not score quality."""
+"""Replay initial PR21 outputs against the validator, not current model quality."""
 import hashlib
 import json
 from pathlib import Path
@@ -9,7 +9,6 @@ from app.application.ai_provider import (
     MalformedProviderResponseError,
     ProviderMetadata,
     StructuredResult,
-    strict_json_instructions,
 )
 from app.application.workflow import create_story_generation_service
 from app.core.artifacts import Constraint, PlanSection
@@ -20,7 +19,7 @@ EVIDENCE = json.loads((ROOT / "author-role-results.json").read_text())
 
 
 @pytest.mark.parametrize("record", EVIDENCE, ids=lambda row: row["case_id"])
-def test_current_requests_replay_published_evidence(record):
+def test_initial_pr21_evidence_still_rejects_invalid_quotes(record):
     class RecordedProvider:
         metadata = ProviderMetadata("ollama", record["model"], record["parameters"])
 
@@ -31,7 +30,7 @@ def test_current_requests_replay_published_evidence(record):
             step = record["steps"][self.index]
             self.index += 1
             assert hashlib.sha256(request.input_text.encode()).hexdigest() == step["input_sha256"]
-            assert hashlib.sha256(strict_json_instructions(request).encode()).hexdigest() == step["instructions_sha256"]
+            # Recorded prompt hashes belong to commit 5095699; prompts now include creative choices.
             return StructuredResult(output=request.response_model.model_validate(step["output"]),
                                     model=record["model"])
 

@@ -141,8 +141,8 @@ def test_project_workflow_uses_local_fallback_and_preserves_edits(tmp_path, monk
     from app.application.project_store import ProjectStore
     from app.application.workflow import (
         _GroundedEvaluationOutput,
+        _GuidedReasoningOutput,
         _PlanningOutput,
-        _ReasoningOutput,
     )
     from app.main import create_app
 
@@ -154,7 +154,7 @@ def test_project_workflow_uses_local_fallback_and_preserves_edits(tmp_path, monk
     )
     fake = FakeProvider()
     models = {
-        model.__name__: model for model in (_ReasoningOutput, _PlanningOutput, _GroundedEvaluationOutput)
+        model.__name__: model for model in (_GuidedReasoningOutput, _PlanningOutput, _GroundedEvaluationOutput)
     }
 
     def post(url, **kwargs):

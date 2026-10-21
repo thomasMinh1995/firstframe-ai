@@ -4,10 +4,10 @@ import json
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import TypeVar
+from typing import Annotated, Literal, TypeVar
 from uuid import uuid4
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from app.application.ai_provider import (
     MalformedProviderResponseError,
@@ -60,6 +60,25 @@ class _ReasoningOutput(BaseModel):
     missing_information: list[str] = Field(default_factory=list, max_length=3)
 
 
+class _GuidedQuestion(BaseModel):
+    model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
+
+    question: str = Field(min_length=1)
+    options: list[Annotated[str, Field(min_length=1)]] = Field(min_length=2, max_length=2)
+
+
+class _GuidedReasoningOutput(_ReasoningOutput):
+    missing_information: list[_GuidedQuestion] = Field(default_factory=list, max_length=3)
+
+
+def _render_questions(output: _GuidedReasoningOutput, language: str) -> list[str]:
+    vietnamese = _is_vietnamese_language(language)
+    lead = "Gợi ý tùy chọn: " if vietnamese else "Optional directions: "
+    tail = "Bạn có thể chọn hướng khác hoặc để quyết định sau." if vietnamese else "You can choose another direction or decide later."
+    return [f"{item.question.rstrip(' ?')}? {lead}{' / '.join(option.rstrip(' .') for option in item.options)}. {tail}"
+            for item in output.missing_information]
+
+
 class _PlanningOutput(BaseModel):
     model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
 
@@ -96,6 +115,16 @@ class _GroundedStrength(BaseModel):
 
 
 class _GroundedWeakness(_GroundedStrength):
+    kind: Literal["contradiction", "open_choice", "creative_proposal", "craft"]
+
+    @model_validator(mode="before")
+    @classmethod
+    def legacy_kind(cls, value):
+        # Read old recordings without advertising a default answer to the model.
+        if isinstance(value, dict) and "kind" not in value:
+            return {**value, "kind": "craft"}
+        return value
+
     author_quote: str = Field(
         description="Exact creator quote for a factual mismatch; empty for craft advice"
     )
@@ -129,17 +158,36 @@ def _grounded_evaluation(
     except (ValueError, TypeError):
         context_parts = [context]
     for item in output.weaknesses:
+        if item.kind == "contradiction" and not item.author_quote:
+            raise MalformedProviderResponseError("A factual contradiction needs creator evidence.")
         if item.author_quote and not any(item.author_quote in part for part in context_parts):
             raise MalformedProviderResponseError("Feedback author quote does not match the brief.")
-    return _format_grounded_evaluation(output)
+    return _format_grounded_evaluation(output, getattr(planning, "target_response_language", "English"))
 
 
-def _format_grounded_evaluation(output: _GroundedEvaluationOutput) -> _EvaluationOutput:
+def _format_grounded_evaluation(
+    output: _GroundedEvaluationOutput, target_language: str = "English"
+) -> _EvaluationOutput:
+    optional = {"open_choice", "creative_proposal"}
+    labels = ({"open_choice": "Chưa quyết định", "creative_proposal": "Gợi ý sáng tạo"}
+              if _is_vietnamese_language(target_language) else
+              {"open_choice": "Open choice", "creative_proposal": "Creative proposal"})
+    suggestions = []
+    for item in output.weaknesses:
+        if item.kind in optional:
+            suggestions.append(
+                f'[{item.section}] {labels[item.kind]} — “{item.quote}”: '
+                f'{item.reason} {item.suggestion}'
+            )
+        else:
+            suggestions.append(f'[{item.section}] {item.suggestion}')
+    only_options = bool(output.weaknesses) and all(item.kind in optional for item in output.weaknesses)
     return _EvaluationOutput(
-        passed=output.passed, rubric_scores=output.rubric_scores,
+        passed=True if only_options else output.passed, rubric_scores=output.rubric_scores,
         strengths=[f'[{item.section}] “{item.quote}” — {item.reason}' for item in output.strengths],
-        weaknesses=[f'[{item.section}] “{item.quote}” — {item.reason}' for item in output.weaknesses],
-        suggestions=[f'[{item.section}] {item.suggestion}' for item in output.weaknesses],
+        weaknesses=[f'[{item.section}] “{item.quote}” — {item.reason}'
+                    for item in output.weaknesses if item.kind not in optional],
+        suggestions=suggestions,
     )
 
 
@@ -147,8 +195,9 @@ def _context_strings(value: object):
     if isinstance(value, str):
         yield value
     elif isinstance(value, dict):
-        for child in value.values():
-            yield from _context_strings(child)
+        for key, child in value.items():
+            if key != "question":  # AI questions are not author assertions.
+                yield from _context_strings(child)
     elif isinstance(value, list):
         for child in value:
             yield from _context_strings(child)
@@ -306,11 +355,11 @@ class LLMReasoningLayer(ReasoningLayer):
             StructuredRequest(
                 instructions=self._prompt_loader.load("story_mentor", domain),
                 input_text=_idea_input(idea),
-                response_model=_ReasoningOutput,
+                response_model=_GuidedReasoningOutput,
                 stage="reasoning",
             )
         )
-        output = _expect_output(result.output, _ReasoningOutput)
+        output = _expect_output(result.output, _GuidedReasoningOutput)
         return _LLMReasoningArtifact(
             metadata=_metadata(idea.metadata.domain_id, "reasoning"),
             source_idea_id=idea.metadata.artifact_id,
@@ -321,7 +370,7 @@ class LLMReasoningLayer(ReasoningLayer):
                 ReasoningNote(label="Analysis summary", content=output.summary),
                 *(ReasoningNote(label=note.label, content=note.content) for note in output.notes),
             ),
-            open_questions=tuple(output.missing_information[:3]),
+            open_questions=tuple(_render_questions(output, target_language)),
         )
 
 

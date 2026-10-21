@@ -85,3 +85,30 @@ Current mappings:
 - Planning Layer: `_PlanningOutput`
 - Evaluation Layer: `_GroundedEvaluationOutput`, projected to `_EvaluationOutput` for existing findings
 
+
+## Creative choices (PR21 update)
+
+Each grounded feedback item can now carry `kind`: `contradiction`, `open_choice`,
+`creative_proposal`, or `craft`. Older recordings default to `craft` when omitted.
+A contradiction requires a nonempty quote from author material. AI-generated
+clarification questions are excluded from that evidence source, including when
+preserved in a historical creator context. Answer text remains available.
+
+Open choices and creative proposals are projected only into labelled suggestions,
+with their current-draft quote and rationale, not into weaknesses. If all issues
+are optional, they do not produce a blocking verdict. Real contradictions/craft
+issues retain the supplied verdict. Scores remain model estimates. This is not
+semantic validation: incorrect classification by the model is still possible.
+
+No UI/project schema migration is required. Old editorial feedback without `kind`
+round-trips without being marked as a new human correction just because a default
+field was introduced. Paired corrections still accompany actual weaknesses;
+additional optional suggestions need not have a corresponding weakness.
+
+Live reasoning now uses `_GuidedReasoningOutput`: every `missing_information`
+item has a `question` and exactly two nonempty `options`. The runtime renders this
+into the existing string questions, labelled optional with an invitation to choose
+another direction or defer. A bare topic string cannot pass provider validation.
+This guarantees the presence of choices, not their relevance or factual accuracy.
+Historical `_ReasoningOutput` recordings still use string questions; dataset
+corrections select the contract from the recorded request schema.

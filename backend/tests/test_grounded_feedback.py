@@ -83,3 +83,68 @@ def test_historical_editorial_feedback_still_uses_string_contract():
     }]}
     edited = {**legacy, "strengths": ["Human editorial correction"]}
     assert validate_corrections(sample, {"0": edited}) == {"0": edited}
+
+
+@pytest.mark.parametrize("kind", ["open_choice", "creative_proposal"])
+def test_optional_choices_are_not_weaknesses_or_blocking_verdicts(kind):
+    result = _grounded_evaluation(feedback(passed=False, weaknesses=[{
+        "kind": kind, "section": "Ending", "quote": "The result is still unknown.",
+        "reason": "Choose the feeling of the final gesture.", "author_quote": "",
+        "suggestion": "Try quiet relief or playful warmth, or decide later.",
+    }]), draft())
+    assert result.passed is True
+    assert result.weaknesses == []
+    assert len(result.suggestions) == 1
+    assert "The result is still unknown." in result.suggestions[0]
+    assert "decide later" in result.suggestions[0]
+
+
+def test_ai_question_cannot_be_used_as_author_evidence():
+    from dataclasses import replace
+
+    planning = replace(draft(), creator_context=json.dumps({
+        "idea": "Mai helps learners.", "constraints": [], "clarifications": [{
+            "question": "Does Mai want to win a prize?", "answer": "Not decided."
+        }],
+    }))
+    with pytest.raises(MalformedProviderResponseError):
+        _grounded_evaluation(feedback(weaknesses=[{
+            "kind": "contradiction", "section": "Ending", "quote": "The result is still unknown.",
+            "reason": "Author wants a prize.", "author_quote": "Mai want to win a prize",
+            "suggestion": "Show a prize.",
+        }]), planning)
+
+
+def test_contradiction_requires_evidence_and_still_blocks_when_mixed_with_options():
+    issue = {"kind": "contradiction", "section": "Ending", "quote": "The result is still unknown.",
+             "reason": "An example contradiction.", "author_quote": "", "suggestion": "Keep facts."}
+    with pytest.raises(MalformedProviderResponseError):
+        _grounded_evaluation(feedback(weaknesses=[issue]), draft())
+    issue["author_quote"] = "Results are unknown."
+    option = {**issue, "kind": "creative_proposal", "author_quote": ""}
+    result = _grounded_evaluation(feedback(passed=False, weaknesses=[issue, option]), draft())
+    assert result.passed is False
+    assert len(result.weaknesses) == 1
+    assert len(result.suggestions) == 2
+
+
+def test_older_grounded_record_without_kind_is_not_a_spurious_edit():
+    from app.application.dataset_corrections import validate_corrections
+
+    old = feedback(weaknesses=[{
+        "section": "Ending", "quote": "The result is still unknown.",
+        "reason": "Make this visible.", "author_quote": "", "suggestion": "Show an action.",
+    }]).model_dump(exclude_unset=True)
+    sample = {"status": "completed", "steps": [{
+        "stage": "evaluation", "status": "completed", "output": old,
+        "request": {"response_schema": {"title": "_GroundedEvaluationOutput"}},
+    }]}
+    old["weaknesses"][0].pop("kind", None)
+    assert "kind" not in old["weaknesses"][0]
+    assert validate_corrections(sample, {"0": old}) == {}
+
+
+def test_provider_schema_requires_classification_without_suggesting_a_default():
+    schema = _GroundedEvaluationOutput.model_json_schema()["$defs"]["_GroundedWeakness"]
+    assert "kind" in schema["required"]
+    assert "default" not in schema["properties"]["kind"]
