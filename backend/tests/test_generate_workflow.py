@@ -96,6 +96,8 @@ class FakeProvider:
                 },
             )
         else:
+            draft = json.loads(request.input_text.split("Current draft (JSON data):\n")[1].split("\n\n", 1)[0])
+            section = draft["sections"][0]
             output = response_model(
                 passed=True,
                 rubric_scores={
@@ -106,9 +108,9 @@ class FakeProvider:
                     "ending": 4,
                     "production_feasibility": 4,
                 },
-                strengths=["The emotional stakes are immediate."],
-                weaknesses=["The daughter needs a sharper personal objective."],
-                suggestions=["Clarify the exact departure deadline."],
+                strengths=[{"section": section["title"], "quote": section["content"],
+                            "reason": "The action makes the character's situation visible."}],
+                weaknesses=[],
             )
         return StructuredResult(
             output=output, model="fake-model", response_id="fake-response"
@@ -159,7 +161,7 @@ def test_harness_calls_provider_through_runtime_layers() -> None:
     assert [request.response_model.__name__ for request in provider.requests] == [
         "_ReasoningOutput",
         "_PlanningOutput",
-        "_EvaluationOutput",
+        "_GroundedEvaluationOutput",
     ]
     assert "FirstFrame AI Short Film Story Planner Prompt" in provider.requests[1].instructions
     assert "FirstFrame AI Short Film Script Critic Prompt" in provider.requests[2].instructions

@@ -51,6 +51,27 @@ The user will provide a vague creative idea.
 
 The idea may be incomplete, emotional, abstract, or only one sentence long.
 
+## Preserve source facts across every field
+
+Before drafting, identify who performs each action and who receives it, and which
+outcomes the creator has actually established. Keep the phase of life attached to each role; do not extend a later role to
+the entire journey. Keep those relations consistent
+in the logline, cast, actions, ending and production notes. A role held by the
+protagonist is not automatically a separate supporting character. Preserve the
+creator's terminology without changing its actor or recipient.
+
+Distinguish participation, effort and completion from achievement or selection.
+An unknown result is not a negative result. Preserve both branches of any
+explicit alternative rather than shortening it to one asserted outcome.
+Do not turn a learning journey into excellent performance, a win, qualification,
+a job offer or rejection unless the creator explicitly established that outcome.
+Do not make an unresolved outcome a condition for continuing the journey when
+the creator says it continues regardless. An open ending needs a visible action
+that preserves the uncertainty, not a hidden assertion of success elsewhere.
+Keep explicit durations and event order. Compress screen time without changing
+those facts. If a detail is undecided, leave it undecided or label a modest
+proposal; do not invent a new biographical fact to fill the schema.
+
 ## Planning Focus
 
 Use the Reasoning Layer notes provided in the input. Shape those notes into a practical story plan through these short-film lenses:

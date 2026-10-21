@@ -8,6 +8,8 @@ from app.application.demo import DemoScenario
 from app.application.workflow import (
     _evaluation_findings,
     _EvaluationOutput,
+    _format_grounded_evaluation,
+    _GroundedEvaluationOutput,
     _PlanningOutput,
     _ReasoningOutput,
     _structured_plan_sections,
@@ -31,6 +33,10 @@ def validate_corrections(
         model = OUTPUT_MODELS.get(step.get("stage"))
         if sample["status"] != "completed" or step.get("status") != "completed" or model is None:
             raise ValueError("Chỉ sửa output của bước đã hoàn tất và có cấu trúc được hỗ trợ.")
+        if (step.get("stage") == "evaluation"
+                and step.get("request", {}).get("response_schema", {}).get("title")
+                == "_GroundedEvaluationOutput"):
+            model = _GroundedEvaluationOutput
         validated = model.model_validate(output, strict=True).model_dump(mode="json")
         if validated != step.get("output"):
             result[key] = validated
@@ -81,7 +87,15 @@ def apply_demo_corrections(
                 )
             edited = True
         if step.feedback is not None and "evaluation" in edits:
-            evaluation = _EvaluationOutput.model_validate(edits["evaluation"])
+            evaluation_step = next(item for item in samples[source]["steps"]
+                                   if item["stage"] == "evaluation")
+            if (evaluation_step.get("request", {}).get("response_schema", {}).get("title")
+                    == "_GroundedEvaluationOutput"):
+                evaluation = _format_grounded_evaluation(
+                    _GroundedEvaluationOutput.model_validate(edits["evaluation"])
+                )
+            else:
+                evaluation = _EvaluationOutput.model_validate(edits["evaluation"])
             step.feedback = type(step.feedback).model_validate(
                 {
                     "artifact_id": step.feedback.artifact_id,

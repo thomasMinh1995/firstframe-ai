@@ -41,6 +41,23 @@ Both adapters append `model_json_schema()` to instructions. Ollama additionally 
 
 ## Evaluation Contract
 
+Live requests use `_GroundedEvaluationOutput`: strengths contain `section`,
+`quote`, `reason`; weaknesses additionally contain `author_quote` and `suggestion`.
+Quotes must be exact substrings in the named section of the current draft (or
+`title` / `logline`). Nonempty author quotes must occur in the decoded creator
+context. Invalid evidence raises the existing provider-response error before
+saving feedback; it does not rewrite the draft or silently discard a bad finding.
+
+This verifies evidence location, not semantic truth. A real model can still draw
+an incorrect inference from valid quotes. There is no new fidelity stage, no
+automatic rewrite and no automatic retry. PR #18 remains independent.
+
+The public findings and persisted project response remain unchanged. Editorial
+dataset correction selects the historical or grounded schema from the recorded
+request; historical string feedback remains readable. Human editorial corrections
+are schema-checked, not presented as fresh model validation.
+
+
 | Prompt Field | Schema Field | Status |
 | --- | --- | --- |
 | `passed` | `passed` | Synchronized |
@@ -52,7 +69,7 @@ Both adapters append `model_json_schema()` to instructions. Ollama additionally 
 | `rubric_scores.production_feasibility` | `rubric_scores.production_feasibility` | Synchronized |
 | `strengths` | `strengths` | Synchronized |
 | `weaknesses` | `weaknesses` | Synchronized |
-| `suggestions` | `suggestions` | Synchronized |
+| `weaknesses[].suggestion` | projected to legacy `suggestions` | One correction per issue |
 | `overall_read` | None | Removed |
 | `evaluation_summary` | None | Removed |
 | `mentor_questions` | None | Removed |
@@ -66,5 +83,5 @@ Both receive the same input and instructions and validate against `response_mode
 Current mappings:
 
 - Planning Layer: `_PlanningOutput`
-- Evaluation Layer: `_EvaluationOutput`
+- Evaluation Layer: `_GroundedEvaluationOutput`, projected to `_EvaluationOutput` for existing findings
 

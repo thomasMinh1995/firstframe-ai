@@ -9,7 +9,11 @@ from uuid import uuid4
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from app.application.ai_provider import StructuredProvider, StructuredRequest
+from app.application.ai_provider import (
+    MalformedProviderResponseError,
+    StructuredProvider,
+    StructuredRequest,
+)
 from app.application.dataset import recording_provider
 from app.application.knowledge_loader import KnowledgeLoader
 from app.application.language import ResponseLanguage, resolve_response_language
@@ -81,6 +85,73 @@ class _EvaluationOutput(BaseModel):
     strengths: list[str]
     weaknesses: list[str]
     suggestions: list[str]
+
+
+class _GroundedStrength(BaseModel):
+    model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
+
+    section: str = Field(min_length=1)
+    quote: str = Field(min_length=1)
+    reason: str = Field(min_length=1)
+
+
+class _GroundedWeakness(_GroundedStrength):
+    author_quote: str = Field(
+        description="Exact creator quote for a factual mismatch; empty for craft advice"
+    )
+    suggestion: str = Field(min_length=1)
+
+
+class _GroundedEvaluationOutput(BaseModel):
+    model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
+
+    strengths: list[_GroundedStrength] = Field(max_length=2)
+    weaknesses: list[_GroundedWeakness] = Field(max_length=3)
+    rubric_scores: EvaluationRubricScores
+    passed: bool
+
+
+def _grounded_evaluation(
+    output: _GroundedEvaluationOutput, planning: PlanningArtifact
+) -> _EvaluationOutput:
+    sources = {section.title: section.content for section in planning.sections}
+    sources.update({
+        "title": getattr(planning, "title", "") or "",
+        "logline": getattr(planning, "logline", "") or "",
+    })
+    for item in [*output.strengths, *output.weaknesses]:
+        if item.section not in sources or item.quote not in sources[item.section]:
+            raise MalformedProviderResponseError("Feedback quote does not match the current draft.")
+    context = getattr(planning, "creator_context", "")
+    # Decode JSON so quotes containing newlines or quotation marks can match verbatim.
+    try:
+        context_parts = list(_context_strings(json.loads(context)))
+    except (ValueError, TypeError):
+        context_parts = [context]
+    for item in output.weaknesses:
+        if item.author_quote and not any(item.author_quote in part for part in context_parts):
+            raise MalformedProviderResponseError("Feedback author quote does not match the brief.")
+    return _format_grounded_evaluation(output)
+
+
+def _format_grounded_evaluation(output: _GroundedEvaluationOutput) -> _EvaluationOutput:
+    return _EvaluationOutput(
+        passed=output.passed, rubric_scores=output.rubric_scores,
+        strengths=[f'[{item.section}] “{item.quote}” — {item.reason}' for item in output.strengths],
+        weaknesses=[f'[{item.section}] “{item.quote}” — {item.reason}' for item in output.weaknesses],
+        suggestions=[f'[{item.section}] {item.suggestion}' for item in output.weaknesses],
+    )
+
+
+def _context_strings(value: object):
+    if isinstance(value, str):
+        yield value
+    elif isinstance(value, dict):
+        for child in value.values():
+            yield from _context_strings(child)
+    elif isinstance(value, list):
+        for child in value:
+            yield from _context_strings(child)
 
 
 class WorkingTitle(BaseModel):
@@ -324,11 +395,13 @@ class LLMEvaluationLayer(EvaluationLayer):
             StructuredRequest(
                 instructions=self._prompt_loader.load(prompt_name, domain),
                 input_text=_evaluation_input(planning, rubric),
-                response_model=_EvaluationOutput,
+                response_model=_GroundedEvaluationOutput,
                 stage="evaluation",
             )
         )
-        output = _expect_output(result.output, _EvaluationOutput)
+        output = _grounded_evaluation(
+            _expect_output(result.output, _GroundedEvaluationOutput), planning
+        )
         return EvaluationArtifact(
             metadata=_metadata(planning.metadata.domain_id, "evaluation"),
             source_planning_id=planning.metadata.artifact_id,
@@ -772,11 +845,19 @@ def _feedback_language_header(target_language: str) -> str:
 
 def _evaluation_input(planning: PlanningArtifact, rubric: object) -> str:
     target_language = getattr(planning, "target_response_language", "English")
+    # Keep generic craft criteria before the authoritative brief; long mistake lists
+    # otherwise encourage local models to invent conflict instead of checking facts.
+    criteria = rubric.get("rubric", {}).get("criteria", []) if isinstance(rubric, dict) else []
+    lenses = [{"name": item["name"], "description": item["description"]} for item in criteria]
     return (
         _feedback_language_header(target_language)
-        + f"Creator intent and decisions:\n{getattr(planning, 'creator_context', '')}\n\n"
+        + f"Short-film story rubric:\n{json.dumps(lenses, ensure_ascii=False)}\n\n"
+        f"Creator intent and decisions:\n{getattr(planning, 'creator_context', '')}\n\n"
         f"Current draft (JSON data):\n{_planning_input(planning)}\n\n"
-        f"Short-film story rubric:\n{json.dumps(rubric, ensure_ascii=False)}"
+        "Compare this draft to the creator facts above before craft advice. "
+        "Copy section names and quote text exactly, without adding quotation marks inside quote fields. "
+        "author_quote comes ONLY from Creator intent and decisions, not the draft. "
+        "Unknown outcomes remain unknown. Do not reverse who helps whom."
     )
 
 

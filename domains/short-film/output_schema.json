@@ -78,5 +78,25 @@
       "ending",
       "production_feasibility"
     ]
+  },
+  "grounded_evaluation": {
+    "root_fields": [
+      "strengths",
+      "weaknesses",
+      "rubric_scores",
+      "passed"
+    ],
+    "strength_fields": [
+      "section",
+      "quote",
+      "reason"
+    ],
+    "weakness_fields": [
+      "section",
+      "quote",
+      "reason",
+      "author_quote",
+      "suggestion"
+    ]
   }
 }

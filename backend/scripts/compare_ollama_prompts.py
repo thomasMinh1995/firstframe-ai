@@ -182,6 +182,11 @@ def compare(
                 candidate_input = (
                     _feedback_language_header(language) + "Creator intent and decisions:\n" + body
                 )
+            if stage == "evaluation" and not experimental_critic:
+                raise ValueError(
+                    "The live critic uses a grounded contract. Use check_author_roles.py; "
+                    "legacy critic comparisons require --experimental-critic."
+                )
             candidate = StructuredRequest(
                 instructions=prompt_path.read_text(encoding="utf-8").strip(),
                 input_text=compact_qwen_planning_input(request["input_text"])

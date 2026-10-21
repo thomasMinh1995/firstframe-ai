@@ -153,6 +153,12 @@ def test_six_critic_scenarios_replay_both_variants_without_losing_author_or_draf
         )
 
     monkeypatch.setattr("scripts.compare_ollama_prompts.httpx.post", post)
+    if not experimental:
+        with pytest.raises(ValueError, match="grounded contract"):
+            compare(source, tmp_path / "result.json", [42], "http://127.0.0.1:11434",
+                    ["evaluation"])
+        assert not calls
+        return
     report = compare(
         source,
         tmp_path / "result.json",
@@ -174,13 +180,5 @@ def test_six_critic_scenarios_replay_both_variants_without_losing_author_or_draf
             assert json.dumps(value, ensure_ascii=False) in after["input_text"]
         assert fixture["expected_behavior"] not in after["input_text"]
         assert after["instructions"] != before["instructions"]
-        if not experimental:
-            if language == "Vietnamese":
-                assert "Ngôn ngữ góp ý: tiếng Việt" in after["instructions"]
-            else:
-                assert "Use the explicit target response language" in after["instructions"]
-            assert "new revision examples in the target language" in after["input_text"]
-            boundary = "Creator intent and decisions:\n"
-            assert after["input_text"].split(boundary, 1)[1] == original.split(boundary, 1)[1]
         assert before["feedback_pairs_valid"] is True
         assert after["feedback_pairs_valid"] is True

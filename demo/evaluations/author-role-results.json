@@ -1,0 +1,296 @@
+[
+  {
+    "model": "qwen2.5:7b",
+    "case_id": "mentor-plan",
+    "parameters": {
+      "temperature": 0.3,
+      "timeout_seconds": 180.0,
+      "num_ctx": 16384
+    },
+    "steps": [
+      {
+        "stage": "planning",
+        "output": {
+          "story_plan": {
+            "working_title": {
+              "title": "Mai - Người Hướng Dẫn"
+            },
+            "logline": {
+              "text": "Mai, một người hướng dẫn workshop gốm, tiếp tục học cách dạy mỗi ngày trong khi chờ đợi kết quả xét chứng chỉ giảng dạy của mình chưa được công bố."
+            },
+            "characters": {
+              "protagonist": "Mai",
+              "supporting_characters": [],
+              "antagonist_or_obstacle": null
+            },
+            "conflict": {
+              "external": "Kết quả xét chứng chỉ giảng dạy của Mai chưa được công bố.",
+              "internal": "Nỗi lo lắng về khả năng truyền đạt kỹ năng gốm thủ công cho học viên mới.",
+              "stakes": "Mai muốn chứng minh bản thân và đảm bảo chất lượng giáo trình."
+            },
+            "beginning": {
+              "setup": "Mai đang chuẩn bị một workshop gốm cho các học viên mới. Cô ấy tập trung vào việc hướng dẫn kỹ thuật cơ bản.",
+              "key_event": null
+            },
+            "middle": {
+              "escalation": "Trong quá trình hướng dẫn, Mai nhận ra rằng cô cần cải thiện kỹ năng của mình để truyền đạt hiệu quả hơn.",
+              "turning_point": "Mai quyết định tham gia một khóa học nâng cao về giảng dạy gốm thủ công."
+            },
+            "ending": {
+              "resolution": "Sau khi hoàn thành khóa học, Mai trở lại workshop và tự tin hướng dẫn các học viên mới. Kết quả xét chứng chỉ giảng dạy của cô vẫn chưa được công bố.",
+              "final_image": null
+            },
+            "theme": {
+              "statement": "Trải nghiệm giáo dục không ngừng nghỉ và việc cải thiện bản thân để truyền đạt kiến thức hiệu quả."
+            },
+            "visual_style": {
+              "description": null,
+              "visual_motifs": [
+                "gốm thủ công",
+                "học viên đang tập trung học"
+              ]
+            },
+            "tone": {
+              "description": "Tone nhẹ nhàng và lạc quan, thể hiện sự kiên trì của Mai trong việc hoàn thiện bản thân."
+            },
+            "production_notes": {
+              "notes": "Mai chỉ là một nhân vật chính. Sân khấu chủ yếu là nơi diễn ra workshop gốm thủ công.",
+              "locations": [
+                "phòng học workshop"
+              ],
+              "cast_size": null
+            }
+          }
+        },
+        "seconds": 102.931,
+        "instructions_sha256": "8397cd25dee986cce0b3749aad8d0b0b78da13b67eb6bc2b8785a2d0d4ead1ce",
+        "input_sha256": "1fa9ae947e89682eb594c66941a1e64bc5d0c49ed28f16f246cdefbc49e16f60"
+      },
+      {
+        "stage": "evaluation",
+        "output": {
+          "strengths": [
+            {
+              "section": "Main character",
+              "quote": "Mai",
+              "reason": "Đảm bảo Mai giữ vai trò chính và là nhân vật hướng dẫn, phù hợp với ý định của tác giả."
+            },
+            {
+              "section": "Main conflict",
+              "quote": "Kết quả xét chứng chỉ giảng dạy của Mai chưa được công bố. Nỗi lo lắng về khả năng truyền đạt kỹ năng gốm thủ công cho học viên mới. Mai muốn chứng minh bản thân và đảm bảo chất lượng giáo trình.",
+              "reason": "Đưa ra rõ ràng các vấn đề nội tâm và ngoại cảnh của Mai, tạo nên sự căng thẳng cần thiết."
+            }
+          ],
+          "weaknesses": [
+            {
+              "section": "Main conflict",
+              "quote": "Kết quả xét chứng chỉ giảng dạy của Mai chưa được công bố. Nỗi lo lắng về khả năng truyền đạt kỹ năng gốm thủ công cho học viên mới. Mai muốn chứng minh bản thân và đảm bảo chất lượng giáo trình.",
+              "reason": "Câu này không chính xác với dữ kiện tác giả, vì kết quả xét chứng chỉ giảng dạy của Mai chưa được công bố là một sự kiện chưa biết, không thể chắc chắn rằng Mai đã lo lắng về vấn đề này.",
+              "author_quote": "Kết quả xét chứng chỉ giảng dạy của Mai chưa được công bố.",
+              "suggestion": "Thay đổi thành: 'Mai nhận ra rằng cô cần cải thiện kỹ năng của mình để truyền đạt hiệu quả hơn, đồng thời lo lắng về khả năng truyền đạt kỹ năng gốm thủ công cho học viên mới. Cô muốn chứng minh bản thân và đảm bảo chất lượng giáo trình.'"
+            },
+            {
+              "section": "Ending",
+              "quote": "Sau khi hoàn thành khóa học, Mai trở lại workshop và tự tin hướng dẫn các học viên mới. Kết quả xét chứng chỉ giảng dạy của cô vẫn chưa được công bố.",
+              "reason": "Câu này không chính xác với dữ kiện tác giả, vì kết quả xét chứng chỉ giảng dạy của Mai chưa được công bố là một sự kiện chưa biết, không thể chắc chắn rằng Mai đã lo lắng về vấn đề này.",
+              "author_quote": "Kết quả xét chứng chỉ giảng dạy của Mai chưa được công bố.",
+              "suggestion": "Thay đổi thành: 'Sau khi hoàn thành khóa học, Mai trở lại workshop và tự tin hướng dẫn các học viên mới. Kết quả xét chứng chỉ giảng dạy của cô vẫn chưa được công bố.'"
+            },
+            {
+              "section": "Character",
+              "quote": "Mai",
+              "reason": "Cần cung cấp thêm thông tin về động cơ, hành vi và lựa chọn của Mai để tạo nên một nhân vật rõ ràng hơn.",
+              "author_quote": "",
+              "suggestion": "Thêm chi tiết về những nỗ lực và quyết định của Mai trong quá trình học và giảng dạy. Ví dụ: 'Mai dành thời gian nghiên cứu kỹ thuật mới, tham gia các buổi thảo luận với đồng nghiệp để cải thiện phương pháp giảng dạy.'"
+            }
+          ],
+          "rubric_scores": {
+            "story_clarity": 3,
+            "character": 2,
+            "conflict": 4,
+            "emotional_impact": 3,
+            "ending": 2,
+            "production_feasibility": 5
+          },
+          "passed": false
+        },
+        "seconds": 85.109,
+        "instructions_sha256": "598b3fc0612d1765b2b991f78e781985a9bc79ff6aa374493661a29999455677",
+        "input_sha256": "6952c8a3dbb7c283f637250c7a81cf059e02956681975609596364fc51ab408b"
+      }
+    ],
+    "status": "failed",
+    "error": "MalformedProviderResponseError"
+  },
+  {
+    "model": "qwen2.5:7b",
+    "case_id": "reversed-role-invented-outcome",
+    "parameters": {
+      "temperature": 0.3,
+      "timeout_seconds": 180.0,
+      "num_ctx": 16384
+    },
+    "steps": [
+      {
+        "stage": "evaluation",
+        "output": {
+          "strengths": [
+            {
+              "section": "Character",
+              "quote": "Mai là học viên, được nhóm người hướng dẫn dạy làm gốm.",
+              "reason": "Đây là một cách rõ ràng để giới thiệu vai trò của Mai như một học viên đang được hướng dẫn."
+            }
+          ],
+          "weaknesses": [
+            {
+              "section": "Ending",
+              "quote": "Mai đạt chứng chỉ với thành tích xuất sắc và nhờ đó mới được tiếp tục học.",
+              "reason": "Đây trái ngược với ý định của tác giả, nơi Mai chưa biết kết quả xét duyệt chứng chỉ giảng dạy.",
+              "author_quote": "Kết quả xét chứng chỉ giảng dạy của Mai chưa được công bố.",
+              "suggestion": "Thay đổi kết thúc để Mai vẫn đang chờ kết quả xét duyệt chứng chỉ giảng dạy."
+            },
+            {
+              "section": "Conflict",
+              "quote": "Học viên Mai được các người hướng dẫn dạy tạo hình.",
+              "reason": "Câu này không tạo ra áp lực hay trở ngại nào cho nhân vật Mai, mà chỉ mô tả một sự kiện đơn thuần.",
+              "author_quote": "",
+              "suggestion": "Thêm một trở ngại hoặc áp lực vào câu chuyện, ví dụ: Mai gặp khó khăn trong việc nắm bắt kỹ thuật làm gốm."
+            }
+          ],
+          "rubric_scores": {
+            "story_clarity": 3,
+            "character": 4,
+            "conflict": 2,
+            "emotional_impact": 3,
+            "ending": 1,
+            "production_feasibility": 4
+          },
+          "passed": false
+        },
+        "seconds": 30.068,
+        "instructions_sha256": "598b3fc0612d1765b2b991f78e781985a9bc79ff6aa374493661a29999455677",
+        "input_sha256": "5c5a6ec673f07061404bf3eb0022d4ce800c0f8b71638a5f59831948c7e139bc"
+      }
+    ],
+    "status": "failed",
+    "error": "MalformedProviderResponseError"
+  },
+  {
+    "model": "qwen2.5:7b",
+    "case_id": "corrected-open-ending",
+    "parameters": {
+      "temperature": 0.3,
+      "timeout_seconds": 180.0,
+      "num_ctx": 16384
+    },
+    "steps": [
+      {
+        "stage": "evaluation",
+        "output": {
+          "strengths": [
+            {
+              "section": "Character",
+              "quote": "Mai là người hướng dẫn workshop.",
+              "reason": "Đây là cách duy nhất tác giả xác định vai trò của Mai, nên giữ nguyên."
+            },
+            {
+              "section": "Ending",
+              "quote": "Kết quả chứng chỉ chưa được công bố; dù kết quả thế nào Mai vẫn tiếp tục học.",
+              "reason": "Tác giả muốn giữ sự không chắc chắn về kết quả và nhấn mạnh quyết tâm của Mai, nên giữ nguyên."
+            }
+          ],
+          "weaknesses": [
+            {
+              "section": "Conflict",
+              "quote": "Mai ngồi cạnh một học viên để hướng dẫn cách tạo hình.",
+              "reason": "Câu này không thể hiện áp lực hoặc trở ngại nào cho Mai. Cần thêm xung đột để tăng sức thuyết phục của câu chuyện.",
+              "author_quote": "",
+              "suggestion": "Thêm một tình huống khó khăn mà Mai phải đối mặt khi hướng dẫn học viên, như học viên gặp vấn đề trong quá trình tạo hình."
+            },
+            {
+              "section": "Emotional Impact",
+              "quote": "Mai hướng dẫn học viên tạo hình và tiếp tục học cách dạy.",
+              "reason": "Câu này không thể hiện cảm xúc của Mai hoặc học viên. Cần thêm chi tiết về cảm xúc để tăng sự liên kết với khán giả.",
+              "author_quote": "",
+              "suggestion": "Thêm mô tả về phản ứng cảm xúc của Mai khi hướng dẫn và học viên, như niềm vui, lo lắng hay thất vọng."
+            },
+            {
+              "section": "Story Clarity",
+              "quote": "Mai hướng dẫn học viên tạo hình và tiếp tục học cách dạy.",
+              "reason": "Câu này không rõ ràng về mục tiêu của workshop. Cần thêm thông tin để khán giả hiểu rõ hơn.",
+              "author_quote": "",
+              "suggestion": "Thêm mô tả về mục đích của workshop, như giúp học viên phát triển kỹ năng tạo hình cơ bản."
+            }
+          ],
+          "rubric_scores": {
+            "story_clarity": 3,
+            "character": 4,
+            "conflict": 2,
+            "emotional_impact": 2,
+            "ending": 4,
+            "production_feasibility": 5
+          },
+          "passed": false
+        },
+        "seconds": 39.657,
+        "instructions_sha256": "598b3fc0612d1765b2b991f78e781985a9bc79ff6aa374493661a29999455677",
+        "input_sha256": "532deeca9bc20ee5b0b4c1265aac992d5cd552d5813fc45303d17c4dc7d809e0"
+      }
+    ],
+    "status": "failed",
+    "error": "MalformedProviderResponseError"
+  },
+  {
+    "model": "qwen2.5:7b",
+    "case_id": "confirmed-outcome-en",
+    "parameters": {
+      "temperature": 0.3,
+      "timeout_seconds": 180.0,
+      "num_ctx": 16384
+    },
+    "steps": [
+      {
+        "stage": "evaluation",
+        "output": {
+          "strengths": [
+            {
+              "section": "Logline",
+              "quote": "Eli teaches beginners after receiving his instructor certificate.",
+              "reason": "The logline clearly establishes Eli's role and the timing of his certification, aligning with the creator's intent."
+            }
+          ],
+          "weaknesses": [
+            {
+              "section": "Ending",
+              "quote": "Eli puts his officially awarded instructor certificate in a folder and prepares the next lesson.",
+              "reason": "The ending lacks dramatic pressure or conflict, failing to create an emotional journey for the audience.",
+              "author_quote": "",
+              "suggestion": "Introduce a challenge during the next lesson that tests Eli's new skills."
+            },
+            {
+              "section": "Ending",
+              "quote": "Eli puts his officially awarded instructor certificate in a folder and prepares the next lesson.",
+              "reason": "The ending does not resolve, reframe, or complete the central question of Eli’s journey as an instructor.",
+              "author_quote": "",
+              "suggestion": "Show Eli successfully handling a difficult situation with his new certification."
+            }
+          ],
+          "rubric_scores": {
+            "story_clarity": 3,
+            "character": 4,
+            "conflict": 2,
+            "emotional_impact": 2,
+            "ending": 1,
+            "production_feasibility": 5
+          },
+          "passed": false
+        },
+        "seconds": 38.719,
+        "instructions_sha256": "f458c4503931b5097ac61f4fd6158f1d77c49ec311112ed52053e4e7fb511859",
+        "input_sha256": "47749694c86c0f86d7639b3089ad45925a4c1cbbffaa15b898ddbe6df9bed097"
+      }
+    ],
+    "status": "failed",
+    "error": "MalformedProviderResponseError"
+  }
+]

@@ -14,6 +14,16 @@ Phim quan sát có thể chỉ đổi nhịp nhìn/thời gian; không ép xung 
 Điều đã trả lời không được đổi thành câu hỏi. Điều tác giả để quyết định sau phải
 ghi là "Đề xuất: ..." nếu bạn cần đưa ra phương án; không gán thành ý tác giả.
 
+Giữ đúng ai làm gì cho ai trong mọi trường: logline, nhân vật, diễn biến, kết và
+ghi chú quay. Vai trò của nhân vật chính không tự thành một nhân vật phụ khác.
+Phân biệt tham gia/cố gắng/hoàn thành với thành tích hoặc kết quả được lựa chọn;
+không tự thêm kết quả chưa được tác giả xác nhận, kể cả kết quả tích cực.
+Kết quả chưa biết không đồng nghĩa thất bại; giữ cả hai khả năng nếu tác giả
+để mở, không bỏ một vế. Không kéo vai trò ở một giai đoạn sang toàn hành trình.
+Giữ các mốc thời gian và thứ tự đã nêu. Nếu hành trình tiếp tục bất kể kết quả,
+không biến kết quả chưa biết thành điều kiện để tiếp tục. Kết mở cần hành động
+cho thấy hành trình còn tiếp diễn mà không khẳng định kết quả ở trường khác.
+
 Viết gọn, mỗi trường một việc, không lặp lại câu hoặc kể cùng hành động hai lần:
 - beginning, middle, ending phải là ba khoảnh khắc KHÁC NHAU, có tiến triển bằng
   hành vi hoặc dấu hiệu thời gian. Không chép logline vào các phần này. Không bịa

@@ -38,3 +38,23 @@ repeated generic or leading questions even when the JSON schema is valid.
 These checks apply the context, clear-instruction, example, and evaluation approach
 in [OpenAI's prompt guidance](https://developers.openai.com/api/docs/guides/model-optimization#write-effective-prompts).
 Passing transport tests alone is insufficient to pass this behavioral checklist.
+
+
+## Grounded critic regression runner
+
+Run from `backend`:
+
+```sh
+PYTHONPATH=. .venv/bin/python scripts/check_author_roles.py --model qwen2.5:7b --output /tmp/author-roles.json
+```
+
+The four synthetic cases cover mentor roles, invented achievement, corrected open
+endings and confirmed achievements in English. `completed` means schema and quote
+validation passed; inspect `review_checks` separately for semantic acceptance.
+Do not publish real project inputs/outputs in evaluation artifacts.
+
+`compare_ollama_prompts.py` preserves the historical string-contract experiment
+with `--experimental-critic`. It rejects comparing the current grounded prompt
+against a historical string schema; use the runner above for current behavior.
+PR20 reference-isolation evidence is historical: its prompt hashes and timing do
+not describe the current critic.
