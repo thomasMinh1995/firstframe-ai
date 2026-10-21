@@ -35,7 +35,7 @@ class SampleState(BaseModel):
     fingerprint: str = Field(pattern=r"^[a-f0-9]{64}$")
     recording: dict[str, Any]
     review: BranchReview
-    history: list[BranchVersion] = Field(min_length=1, max_length=1000)
+    history: list[BranchVersion] = Field(min_length=1)
 
 
 class SavedBranch(SampleState):

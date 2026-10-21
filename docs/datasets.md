@@ -119,6 +119,9 @@ The API also rejects selections on unapproved samples.
 Annotations are keyed by run ID and a SHA-256 fingerprint of the original content.
 Re-exporting identical recordings preserves reviews; changing their content resets
 the visible review to unreviewed. Revision checks reject stale edits with HTTP 409.
+Review, output and version-restore writes also check the active branch's source
+fingerprint under the same SQLite write lock. A source switch during validation
+returns HTTP 409 without writing to an inactive source; reload before retrying.
 Back up `reviews.sqlite3` along with the recordings to preserve human annotations.
 Conflicting duplicate run IDs are excluded. This local tool has no reviewer account
 or multi-user authentication; labels represent the human using this installation.
@@ -280,7 +283,9 @@ they do not authenticate the author of a file. Import verifies supported schemas
 completed snapshots, approval, unique run IDs, historical output validity,
 continuous versions, restore references and the match between latest history and
 current correction. Unsupported/corrupt packages are rejected. The limit is
-25 MiB, 1,000 samples and 1,000 history entries per sample.
+25 MiB and 1,000 samples. History has no fixed version-count limit, so editing or
+restoring a sample beyond 1,000 versions does not make it unreadable or prevent
+export while the package remains within the byte limit. History is never truncated.
 
 The preview lists new samples, exact duplicates, conflicts, corrections, history
 entries and playable demos. Each conflict offers a field-by-field comparison of

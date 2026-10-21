@@ -167,6 +167,16 @@ class ReviewStore:
                 "version INTEGER, data TEXT NOT NULL, PRIMARY KEY(run_id, fingerprint, version))"
             )
             connection.execute("BEGIN IMMEDIATE")
+            if connection.execute(
+                "SELECT 1 FROM sqlite_master WHERE name='dataset_active_branches'"
+            ).fetchone():
+                active = connection.execute(
+                    "SELECT b.data FROM dataset_active_branches a JOIN dataset_branches b "
+                    "ON a.run_id=b.run_id AND a.branch_id=b.branch_id WHERE a.run_id=?",
+                    (run_id,),
+                ).fetchone()
+                if active and json.loads(active[0])["fingerprint"] != update.fingerprint:
+                    raise ReviewConflict("Nhánh nguồn đã thay đổi. Hãy tải lại mẫu trước khi lưu.")
             row = connection.execute(
                 "SELECT data FROM reviews WHERE run_id=? AND fingerprint=?",
                 (run_id, update.fingerprint),
