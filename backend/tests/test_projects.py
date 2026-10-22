@@ -186,9 +186,9 @@ def test_stream_reports_actual_steps_and_returns_saved_project(project_client, m
     project = client.put(url, json=data).json()
     response = client.post(f"{url}/plan/stream", json={"revision": project["revision"]})
     events = [json.loads(line) for line in response.text.splitlines() if line.strip()]
-    expected = [(stage, status) for stage in stages[1:]
+    assert stages[1:] == ["planning", "evaluation"]
+    expected = [(stage, status) for stage in ("planning", "saving", "evaluation", "saving")
                 for status in ("active", "completed")]
-    expected += [("saving", "active"), ("saving", "completed")]
     assert [(event["stage"], event["status"]) for event in events[:-1]] == expected
     assert events[-1]["project"]["draft"] is not None
     assert provider.requests[1].stage == "planning"

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { StoryFeedback } from "./StoryResultCards";
 import { StoryPlanReading } from "./StoryPlanReading";
-import { AuthorIntentCard, FeedbackIntent } from "./AuthorIntentCard";
+import { AuthorIntentCard, FeedbackIntent, IntentDetails } from "./AuthorIntentCard";
 import { OperationProgress } from "./OperationProgress";
 import { OnboardingTour, useOnboarding } from "./OnboardingTour";
 import { applyProgress, progressLanguage, type OperationStep } from "./progressState";
@@ -124,6 +124,22 @@ export default function Home() {
           setSteps((items) => applyProgress(items, event));
         }, progressLanguage(next.response_language));
         accept(result);
+        if (kind === "plan") {
+          const generation = result.plan_generations?.at(-1);
+          if (generation && generation.critic_status !== "reviewed") {
+            tour.failed(tourRequest);
+            setOperationFailed(true);
+            setError(generation.applied_revision === null
+              ? "Đã giữ bản đề xuất; chưa có góp ý hợp lệ. Bản đang viết vẫn được giữ. Bạn có thể xem và chọn nhận bản đề xuất rồi review riêng."
+              : "Đã lưu bản nháp; chưa có góp ý hợp lệ. Bạn có thể đọc, tự sửa và nhận phản hồi trên bản hiện tại mà không tạo lại.");
+            return;
+          }
+          if (generation?.applied_revision === null) {
+            tour.failed(tourRequest);
+            setNotice("Đã giữ bản đề xuất cùng góp ý riêng. Bản đang viết chỉ thay khi bạn chọn nhận.");
+            return;
+          }
+        }
         tour.succeeded(tourRequest, result.id);
       } catch (caught) {
         tour.failed(tourRequest);
@@ -217,7 +233,52 @@ export default function Home() {
             await persist(); setNotice("Đã lưu thay đổi.");
           })}>Lưu thay đổi</button>
           <button className="secondary" onClick={downloadBackup}>Tải bản sao JSON</button>
+          <button className="secondary" disabled={!!busy || dirty} onClick={() => {
+            tour.pause();
+            void run("Đang mở lại bản đã lưu…", async () => {
+              accept(await projectRequest(`/${project.id}`));
+              setNotice("Đã mở lại bản đã lưu. Không tạo lại hoặc gọi AI.");
+            });
+          }}>Mở lại bản đã lưu</button>
         </div>
+        {!!project.plan_generations?.length && <section className="panel version-history" aria-label="Các bản do AI tạo">
+          <h2>Các bản do AI tạo</h2>
+          <p>Bản đầu được lưu trực tiếp. Các lần tạo lại giữ thành đề xuất; bản đang viết chỉ thay khi bạn chọn nhận.
+            Mở xem không lưu hoặc gọi AI. Lưu hoặc tải bản sao các sửa đang có trước khi mở lại dự án.</p>
+          {[...project.plan_generations].reverse().map(generation => <details key={generation.id}>
+            <summary>{generation.draft.title} · {generation.applied_revision === null ? "Bản đề xuất" : "Đã dùng làm bản nháp"}
+              {generation.critic_status !== "reviewed" || !generation.feedback_source ? " · Chưa có góp ý hợp lệ" : " · Có góp ý riêng"}</summary>
+            <p className="storage-note preserve-lines">Lượt tạo {generation.id} · nguồn revision {generation.source_revision}.
+              {generation.applied_revision !== null && ` Đã nhận tại revision ${generation.applied_revision}. Bản đang viết có thể đã được sửa hoặc review sau đó.`}</p>
+            {(generation.critic_status !== "reviewed" || !generation.feedback_source) && <p className="form-message">
+              Bản phác thảo đã được giữ; lượt tạo này chưa có góp ý hợp lệ. Bạn có thể dùng bản này,
+              tự sửa và nhận phản hồi riêng mà không cần tạo lại.</p>}
+            <details className="feedback-context">
+              <summary>Ý đồ khi tạo bản này</summary>
+              <IntentDetails context={generation.context} />
+            </details>
+            <p className="preserve-lines">{generation.draft.logline}</p>
+            {generation.draft.sections.map((section, i) => <div key={i}>
+              <h3>{sectionLabels[section.title] ?? section.title}</h3>
+              <p className="preserve-lines">{section.content}</p>
+            </div>)}
+            {generation.feedback && generation.feedback_source && <>
+              <FeedbackIntent source={generation.feedback_source} projectId={project.id} artifactId={generation.feedback.artifact_id} />
+              <StoryFeedback evaluation={generation.feedback} uiLanguage="vi" />
+            </>}
+            {generation.applied_revision === null && <>
+              {!project.applicable_plan_ids?.includes(generation.id) && <p className="form-message">
+                Nguồn hoặc bản đang viết đã thay đổi; đề xuất này chỉ để tham khảo.</p>}
+              {dirty && <p className="form-message">Có sửa chưa lưu. Chưa thể nhận đề xuất để bảo vệ bản đang viết.</p>}
+              <button disabled={!!busy || dirty || !project.applicable_plan_ids?.includes(generation.id)} onClick={() =>
+                void run("Đang giữ lịch sử và nhận bản đề xuất…", async () => {
+                  accept(await projectRequest(`/${project.id}/plans/${generation.id}/accept`, "POST", { revision: project.revision }));
+                  setSelectedFeedback(null);
+                  setNotice("Đã nhận bản đề xuất. Bản trước được giữ trong lịch sử; có thể sửa và nhận phản hồi riêng.");
+                })}>Dùng bản đề xuất này</button>
+            </>}
+          </details>)}
+        </section>}
         <fieldset disabled={!!busy} className="project-fields">
           <section className="panel form-stack">
             <h2>1. Khoảnh khắc bạn muốn kể</h2>
@@ -278,7 +339,7 @@ export default function Home() {
             ))}
             <button data-tour-action="plan" disabled={project.analysis.missing_information.some((_, i) => !project.answers[i]?.trim())}
               onClick={() => action("plan")}>
-              {project.draft ? "Tạo lại bản phát triển (giữ phiên bản cũ)" : "Tạo bản phát triển từ lựa chọn của tôi"}
+              {project.draft ? "Tạo bản đề xuất mới (giữ bản đang viết)" : "Tạo bản phát triển từ lựa chọn của tôi"}
             </button>
           </section>}
           {project.draft && <section className="panel form-stack">

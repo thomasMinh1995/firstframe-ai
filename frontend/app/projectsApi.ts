@@ -22,6 +22,11 @@ export type ClarificationVersion = {
 export type DraftVersion = ClarificationVersion & {
   draft: StoryDraft; feedback: Feedback | null; feedback_source?: FeedbackSource | null;
 };
+export type PlanGeneration = {
+  id: string; created_at: string; source_revision: number; source_content: string;
+  context: AuthorContext; draft: StoryDraft; critic_status: "pending" | "failed" | "reviewed";
+  applied_revision: number | null; feedback: Feedback | null; feedback_source: FeedbackSource | null;
+};
 export type Project = {
   response_language: ResponseLanguage;
   id: string; revision: number; updated_at: string; title: string; idea: string;
@@ -30,6 +35,7 @@ export type Project = {
   author_context?: AuthorContext; feedback_source?: FeedbackSource | null;
   versions: DraftVersion[];
   clarification_history: ClarificationVersion[];
+  plan_generations?: PlanGeneration[]; applicable_plan_ids?: string[];
 };
 export type ProjectSummary = Pick<Project, "id" | "title" | "updated_at">;
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
@@ -178,12 +184,24 @@ function isProject(value: unknown): value is Project {
     && (value.feedback === null || isFeedback(value.feedback))
     && (value.author_context === undefined || isAuthorContext(value.author_context))
     && isFeedbackSource(value.feedback_source)
+    && (value.plan_generations === undefined || (Array.isArray(value.plan_generations)
+      && value.plan_generations.every(isPlanGeneration)))
+    && (value.applicable_plan_ids === undefined || strings(value.applicable_plan_ids))
     && typeof value.feedback_is_current === "boolean" && Array.isArray(value.versions)
     && value.versions.every((version) => isClarificationVersion(version) && isRecord(version)
       && isDraft(version.draft) && (version.feedback === null || isFeedback(version.feedback))
       && isFeedbackSource(version.feedback_source))
     && Array.isArray(value.clarification_history)
     && value.clarification_history.every(isClarificationVersion);
+}
+function isPlanGeneration(value: unknown): value is PlanGeneration {
+  return isRecord(value) && typeof value.id === "string" && typeof value.created_at === "string"
+    && typeof value.source_revision === "number" && Number.isInteger(value.source_revision) && value.source_revision >= 0
+    && typeof value.source_content === "string" && isAuthorContext(value.context) && isDraft(value.draft)
+    && ["pending", "failed", "reviewed"].includes(String(value.critic_status))
+    && (value.applied_revision === null || (typeof value.applied_revision === "number"
+      && Number.isInteger(value.applied_revision) && value.applied_revision >= 0))
+    && (value.feedback === null || isFeedback(value.feedback)) && isFeedbackSource(value.feedback_source);
 }
 function isClarificationVersion(value: unknown): value is ClarificationVersion & Record<string, unknown> {
   return isRecord(value) && typeof value.id === "string" && typeof value.created_at === "string"

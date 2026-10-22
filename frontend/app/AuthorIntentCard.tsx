@@ -7,7 +7,7 @@ function focusInput(id: string) {
   input?.focus({ preventScroll: true });
 }
 
-function IntentDetails({ context, editAnswers = false }: { context: AuthorContext; editAnswers?: boolean }) {
+export function IntentDetails({ context, editAnswers = false }: { context: AuthorContext; editAnswers?: boolean }) {
   return <dl className="intent-details">
     <div><dt>Khoảnh khắc của bạn</dt><dd className="preserve-lines">{context.idea || "Chưa ghi lại khoảnh khắc."}</dd></div>
     <div><dt>Điều muốn giữ / giới hạn</dt><dd>{context.constraints.length

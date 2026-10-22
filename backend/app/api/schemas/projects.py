@@ -1,6 +1,6 @@
 import json
 from collections.abc import Iterable
-from typing import Annotated
+from typing import Annotated, Literal
 
 from pydantic import (
     BaseModel,
@@ -161,6 +161,29 @@ class DraftVersion(ClarificationVersion):
         return self
 
 
+class PlanGeneration(BaseModel):
+    id: str
+    created_at: str
+    source_revision: int = Field(ge=0)
+    source_content: str
+    context: AuthorContext
+    draft: StoryDraft
+    critic_status: Literal["pending", "failed", "reviewed"] = "pending"
+    applied_revision: int | None = Field(default=None, ge=0)
+    feedback: EvaluationResponse | None = None
+    feedback_source: FeedbackSource | None = None
+
+    _parse_source = field_validator("feedback_source", mode="before")(parse_feedback_source)
+
+    @model_validator(mode="after")
+    def check_source(self) -> "PlanGeneration":
+        source = self.feedback_source
+        if source and (not source.matches(self.feedback) or source.draft != self.draft
+                       or source.context != self.context):
+            self.feedback_source = None
+        return self
+
+
 class ProjectResponse(BaseModel):
     response_language: ResponseLanguage = "auto"
     id: str
@@ -178,6 +201,7 @@ class ProjectResponse(BaseModel):
     reviewed_content: str | None = None
     versions: list[DraftVersion] = Field(default_factory=list)
     clarification_history: list[ClarificationVersion] = Field(default_factory=list)
+    plan_generations: list[PlanGeneration] = Field(default_factory=list)
 
     _parse_source = field_validator("feedback_source", mode="before")(parse_feedback_source)
 
@@ -191,7 +215,18 @@ class ProjectResponse(BaseModel):
             if version.feedback_source and (version.feedback_source.project_id != self.id
                                             or version.feedback_source.revision > self.revision):
                 version.feedback_source = None
+        for generation in self.plan_generations:
+            source = generation.feedback_source
+            if source and (source.project_id != self.id or source.revision > self.revision):
+                generation.feedback_source = None
         return self
+
+    @computed_field
+    @property
+    def applicable_plan_ids(self) -> list[str]:
+        return [item.id for item in self.plan_generations
+                if item.applied_revision is None and item.source_revision <= self.revision
+                and item.source_content == self.content_key() and item.context == self.author_context]
 
     def creator_answers(self, answers: list[str] | None = None) -> tuple[tuple[str, str], ...]:
         questions = self.analysis.missing_information if self.analysis else []

@@ -70,6 +70,7 @@ async function setup(browser, options = {}) {
       }
       Object.assign(p, body, { revision: p.revision + 1 });
       if (reviewChanged) p.feedback_is_current = false;
+      if (reviewChanged && p.applicable_plan_ids) p.applicable_plan_ids = [];
       if (changed) { p.analysis = null; p.answers = []; }
       if (mock.savePatch) Object.assign(p, clone(mock.savePatch));
       if (mock.loseSaveResponse) return route.abort('failed');
@@ -77,9 +78,26 @@ async function setup(browser, options = {}) {
     }
     if (mock.hold) await mock.hold;
     if (body.revision !== p.revision) return reply({ detail: 'Xung đột phiên bản. Bản sửa vẫn được giữ.' }, 409);
+    if (parts[3] === 'plans' && parts[5] === 'accept') {
+      const generation = p.plan_generations.find(g => g.id === parts[4]);
+      if (!generation || generation.applied_revision !== null || !p.applicable_plan_ids.includes(generation.id)) {
+        return reply({ detail: 'Nguồn đã thay đổi; bản đang viết được giữ.' }, 409);
+      }
+      p.versions.push({ id: `accept-${p.revision}`, created_at: p.updated_at, response_language: p.response_language,
+        idea: p.idea, constraints: clone(p.constraints), questions: p.analysis?.missing_information || [], answers: clone(p.answers),
+        draft: clone(p.draft), feedback: clone(p.feedback), feedback_source: clone(p.feedback_source) });
+      p.draft = clone(generation.draft); p.feedback = clone(generation.feedback); p.feedback_source = clone(generation.feedback_source);
+      p.feedback_is_current = !!p.feedback_source; p.revision++; generation.applied_revision = p.revision; p.applicable_plan_ids = [];
+      if (mock.loseAcceptResponse) return route.abort('failed');
+      return reply(p);
+    }
     if (mock.failAI) return reply({ detail: 'Chọn ngôn ngữ đầu ra.' }, 422);
     if (parts[3] === 'analyze') p.analysis = analysis();
-    else if (parts[3] === 'plan') p.draft = draft();
+    else if (parts[3] === 'plan') {
+      if (mock.planPatch) Object.assign(p, clone(mock.planPatch));
+      else p.draft = draft();
+      if (mock.losePlanResponse) { p.revision++; return route.abort('failed'); }
+    }
     else if (parts[3] === 'review') {
       assert.ok(mock.reviewPatch, 'review requires an explicit test result');
       Object.assign(p, clone(mock.reviewPatch));
@@ -604,6 +622,124 @@ async function setup(browser, options = {}) {
       assert.equal(await page.locator('.revision-note').count(), 0); assert.equal(countWrites(mock), 0);
       await t.close();
     }
+    // A critic failure returns a durable draft/proposal, never a successful whole workflow.
+    const recoveredDraft = { ...revisionDraft, title: 'Bản được giữ khi critic lỗi', logline: 'Nội dung planner đã tạo.' };
+    const recoveryIntent = { ...intentA, clarifications: [...intentA.clarifications,
+      { question: 'Hình ảnh cuối là gì?', answer: 'Giữ hình ảnh cuối còn mở.', input_index: 1 }], pending_questions: [] };
+    const recoverySource = { ...sourceA, context: recoveryIntent, draft: revisionDraft };
+    const recoveryBase = { ...revisionProject, answers: [revisionProject.answers[0], 'Giữ hình ảnh cuối còn mở.'],
+      author_context: recoveryIntent, feedback_source: recoverySource };
+    const generation = (existing, status = 'failed') => ({ id: 'g1', created_at: '2026-10-22T10:00:00Z',
+      source_revision: 4, source_content: 'verified by backend', context: recoveryIntent, draft: recoveredDraft,
+      critic_status: status, applied_revision: existing ? null : 5, feedback: null, feedback_source: null });
+    const recoveryPatch = existing => ({ draft: existing ? revisionDraft : recoveredDraft,
+      feedback: existing ? revisionFeedback : null, feedback_source: existing ? recoverySource : null,
+      feedback_is_current: existing, plan_generations: [generation(existing)], applicable_plan_ids: existing ? ['g1'] : [] });
+    const recoveredProject = existing => ({ ...recoveryBase, ...recoveryPatch(existing) });
+    const proposals = page => page.getByRole('region', { name: 'Các bản do AI tạo', exact: true });
+    for (const viewport of [{ width: 1280, height: 900 }, { width: 390, height: 844 }]) {
+      for (const existing of [false, true]) {
+        const initial = { ...recoveryBase, ...(existing ? {} : { draft: null, feedback: null, feedback_source: null, feedback_is_current: false }) };
+        t = await setup(browser, { projects: [initial], viewport, mock: { planPatch: recoveryPatch(existing) } }); ({ page, mock } = t);
+        await page.locator('[data-tour-action="plan"]').click();
+        await page.locator('.error[role="alert"]').waitFor();
+        assert.match(await page.locator('.error').innerText(), /chưa có góp ý hợp lệ/);
+        assert.equal(await page.locator('#draft-title').inputValue(), existing ? revisionDraft.title : recoveredDraft.title);
+        await proposals(page).locator(':scope > details > summary').click();
+        assert.match(await proposals(page).innerText(), /chưa có góp ý hợp lệ/);
+        assert.match(await page.locator('.status-panel').innerText(), /Thao tác chưa hoàn tất/);
+        const stored = clone(mock.projects), requests = clone(mock.calls);
+        await proposals(page).locator(':scope > details > summary').click(); await proposals(page).locator(':scope > details > summary').click();
+        assert.deepEqual(mock.projects, stored); assert.deepEqual(mock.calls, requests, 'viewing recovery makes no request');
+        if (existing) {
+          before = await buffer(page);
+          await page.locator('#draft-logline').fill('Sửa chưa lưu phải giữ.');
+          assert.equal(await page.getByRole('button', { name: 'Dùng bản đề xuất này', exact: true }).isDisabled(), true);
+          assert.equal(await page.getByRole('button', { name: 'Mở lại bản đã lưu', exact: true }).isDisabled(), true);
+          assert.deepEqual(mock.projects, stored);
+          await page.locator('#draft-logline').fill(revisionDraft.logline);
+          mock.loseAcceptResponse = true;
+          await click(page, 'Dùng bản đề xuất này'); await page.locator('.error[role="alert"]').waitFor();
+          assert.deepEqual(await buffer(page), before, 'lost acceptance response keeps the visible buffer');
+          assert.equal(mock.projects[0].draft.title, recoveredDraft.title);
+          const accepted = clone(mock.projects);
+          mock.loseAcceptResponse = false;
+          await click(page, 'Dùng bản đề xuất này'); await page.getByText('Xung đột phiên bản. Bản sửa vẫn được giữ.', { exact: true }).waitFor();
+          assert.deepEqual(mock.projects, accepted, 'duplicate acceptance cannot save again');
+          assert.deepEqual(await buffer(page), before);
+          await click(page, 'Mở lại bản đã lưu');
+          await page.getByText('Đã mở lại bản đã lưu. Không tạo lại hoặc gọi AI.', { exact: true }).waitFor();
+          assert.equal(await page.locator('#draft-title').inputValue(), recoveredDraft.title);
+          assert.equal(await page.locator('.feedback-section').count(), 0, 'old feedback is not attached to accepted unreviewed draft');
+          assert.ok(mock.projects[0].versions.some(v => v.draft.title === revisionDraft.title));
+        } else {
+          assert.equal(await page.getByRole('button', { name: 'Dùng bản đề xuất này', exact: true }).count(), 0);
+        }
+        await page.reload(); await page.locator('#draft-title').waitFor();
+        assert.equal(await page.locator('#draft-title').inputValue(), recoveredDraft.title);
+        await proposals(page).locator(':scope > details > summary').click();
+        await proposals(page).screenshot({ path: path.join(screenshots, `plan-recovery-${existing ? 'proposal' : 'first'}-${viewport.width}.png`) });
+        const savedDraft = clone(mock.projects[0].draft);
+        mock.reviewPatch = { feedback: revisionFeedback, feedback_is_current: true,
+          feedback_source: { ...recoverySource, draft: savedDraft, revision: mock.projects[0].revision } };
+        await click(page, 'Nhận phản hồi trên bản hiện tại');
+        await page.getByText('Đã lưu phản hồi và phiên bản cho đúng nội dung hiện tại.', { exact: true }).waitFor();
+        assert.deepEqual(mock.projects[0].draft, savedDraft);
+        assert.equal(mock.calls.filter(c => c.pathname.endsWith('/plan/stream')).length, 1, 'no replan after critic failure');
+        assert.equal(mock.calls.filter(c => c.pathname.endsWith('/review/stream')).length, 1);
+        await t.close();
+      }
+    }
+    // A dropped plan response can be reopened with a GET; no implicit retry or buffer replacement.
+    t = await setup(browser, { projects: [{ ...recoveryBase, draft: null, feedback: null, feedback_source: null }],
+      mock: { planPatch: recoveryPatch(false), losePlanResponse: true } }); ({ page, mock } = t);
+    await page.locator('[data-tour-action="plan"]').click(); await page.locator('.error[role="alert"]').waitFor();
+    assert.equal(await page.locator('#draft-title').count(), 0);
+    assert.equal(mock.projects[0].draft.title, recoveredDraft.title);
+    const writesBeforeReopen = countWrites(mock);
+    await click(page, 'Mở lại bản đã lưu'); await page.locator('#draft-title').waitFor();
+    assert.equal(countWrites(mock), writesBeforeReopen);
+    assert.equal(await page.locator('#draft-title').inputValue(), recoveredDraft.title);
+    await t.close();
+    // A late acceptance from a different window conflicts and never refreshes/retries itself.
+    t = await setup(browser, { projects: [recoveredProject(true)] }); ({ page, mock } = t);
+    await proposals(page).locator(':scope > details > summary').click(); before = await buffer(page);
+    const other = await t.context.newPage(); await other.goto(url); await other.locator('#draft-logline').waitFor();
+    await other.locator('#draft-logline').fill('Bản mới từ cửa sổ khác.'); await click(other, 'Lưu thay đổi');
+    await other.getByText('Đã lưu thay đổi.', { exact: true }).waitFor();
+    const peerStored = clone(mock.projects);
+    await click(page, 'Dùng bản đề xuất này'); await page.locator('.error[role="alert"]').waitFor();
+    assert.deepEqual(await buffer(page), before); assert.deepEqual(mock.projects, peerStored);
+    assert.equal(mock.calls.filter(c => c.pathname.endsWith('/accept')).length, 1);
+    await click(page, 'Mở lại bản đã lưu');
+    await page.getByText('Đã mở lại bản đã lưu. Không tạo lại hoặc gọi AI.', { exact: true }).waitFor();
+    assert.equal(await page.locator('#draft-logline').inputValue(), 'Bản mới từ cửa sổ khác.');
+    assert.equal(await page.getByRole('button', { name: 'Dùng bản đề xuất này', exact: true }).isDisabled(), true);
+    assert.match(await proposals(page).innerText(), /chỉ để tham khảo/);
+    await t.close();
+    // Successful regeneration also waits for acceptance and keeps its own critic source.
+    const reviewedGeneration = { ...generation(true, 'reviewed'), feedback: { ...revisionFeedback, artifact_id: 'f2' },
+      feedback_source: { ...recoverySource, artifact_id: 'f2', draft: recoveredDraft } };
+    t = await setup(browser, { projects: [recoveryBase], mock: { planPatch: { ...recoveryPatch(true),
+      plan_generations: [reviewedGeneration] } } }); ({ page, mock } = t);
+    await click(page, chooseIssue); await page.locator('[data-tour-action="plan"]').click();
+    await page.getByText('Đã giữ bản đề xuất cùng góp ý riêng. Bản đang viết chỉ thay khi bạn chọn nhận.', { exact: true }).waitFor();
+    assert.equal(await page.locator('#draft-title').inputValue(), revisionDraft.title);
+    await proposals(page).locator(':scope > details > summary').click();
+    const beforeViewing = clone(mock.calls);
+    await proposals(page).getByText('Ý đồ khi tạo bản này', { exact: true }).click();
+    assert.match(await proposals(page).innerText(), new RegExp(sourceA.context.idea));
+    assert.deepEqual(mock.calls, beforeViewing);
+    const modelCalls = mock.calls.filter(c => c.pathname.endsWith('/stream')).length;
+    await click(page, 'Dùng bản đề xuất này');
+    await page.getByText('Đã nhận bản đề xuất. Bản trước được giữ trong lịch sử; có thể sửa và nhận phản hồi riêng.', { exact: true }).waitFor();
+    assert.equal(await page.locator('#draft-title').inputValue(), recoveredDraft.title);
+    assert.equal(mock.projects[0].feedback_source.artifact_id, 'f2');
+    assert.deepEqual(mock.projects[0].feedback_source.draft, recoveredDraft);
+    assert.equal(await page.locator('.revision-note').count(), 0);
+    assert.equal(mock.calls.filter(c => c.pathname.endsWith('/stream')).length, modelCalls);
+    await t.close();
+    console.log('Plan recovery checks passed: durable first draft and separate proposal, explicit acceptance, dirty-buffer guard, lost plan/accept responses, no automatic retry, concurrent edits, old feedback isolation, reopen and review without replanning, desktop/mobile.');
     console.log('Manual revision checks passed: artifact-bound local selection, refusal, keyboard focus, no requests or rewrites, stale notes, save and AI failures, review/reopen, restore, history, project switch, concurrent saves and late conflicts.');
     console.log('Browser tour checks passed: full flow, no tour writes, buffers, keyboard, conditional data, failures, reload, project switch, cross-tab dismissal, storage, missing anchors and mobile viewport.');
     console.log('Story-plan reading checks passed: current buffer, optional details, zero navigation requests, stale feedback, leave warning, 409 preservation, save/reopen, missing data and desktop/mobile layouts.');

@@ -85,6 +85,21 @@ function stream(text, chunkSize=7) {
  await assert.rejects(()=>projectRequest('/p1'), /Nội dung đang sửa được giữ nguyên/);
  global.fetch=async()=>Response.json({ ...contextProject, feedback_source: { artifact_id: 'missing snapshot' } });
  await assert.rejects(()=>projectRequest('/p1'), /Nội dung đang sửa được giữ nguyên/);
+ const generation = { id: 'g1', created_at: 'now', source_revision: 1, source_content: 'saved source',
+   context: contextProject.author_context, draft: { title: 'Recovered plan', logline: '',
+     sections: [{ title: 'Ending', purpose: '', content: 'The fan stops.' }] },
+   critic_status: 'failed', applied_revision: null, feedback: null, feedback_source: null };
+ const recovered = { ...contextProject, plan_generations: [generation], applicable_plan_ids: ['g1'] };
+ global.fetch=async()=>Response.json(recovered);
+ assert.deepEqual(await projectRequest('/p1'), recovered);
+ assert.equal('plan_generations' in editableProject(recovered), false);
+ assert.equal('applicable_plan_ids' in editableProject(recovered), false);
+ for (const patch of [{ critic_status: 'passed' }, { source_revision: -1 }, { applied_revision: -1 },
+   { draft: null }, { context: null }, { feedback: { passed: true } }]) {
+   global.fetch=async()=>Response.json({ ...recovered, plan_generations: [{ ...generation, ...patch }] });
+   await assert.rejects(()=>projectRequest('/p1'), /Nội dung đang sửa được giữ nguyên/);
+ }
+ assert.equal(generation.critic_status, 'failed', 'validation never changes recovery data');
  const originalTimeout=AbortSignal.timeout;
  const saveController=new AbortController();
  AbortSignal.timeout=(ms)=>{assert.equal(ms,45000);return saveController.signal;};

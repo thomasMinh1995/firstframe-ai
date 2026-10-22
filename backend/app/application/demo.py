@@ -8,7 +8,7 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, Field, ValidationError
 
-from app.api.schemas.projects import ProjectResponse, StoryDraft
+from app.api.schemas.projects import PlanGeneration, ProjectResponse, StoryDraft
 from app.api.schemas.story import (
     AnalysisResponse,
     EvaluationResponse,
@@ -129,6 +129,10 @@ def _models(record: Recording | None, stage: str) -> list[ModelUse]:
 
 
 def _project_pair(record: Recording) -> tuple[ProjectResponse, ProjectResponse]:
+    generation = record.output.get("plan_generation")
+    if (record.operation == "plan" and generation is not None
+            and PlanGeneration.model_validate(generation).applied_revision is None):
+        raise ValueError("An unaccepted proposal is not a completed saved story round.")
     before = ProjectResponse.model_validate(record.input)
     after = ProjectResponse.model_validate(record.output)
     if (
