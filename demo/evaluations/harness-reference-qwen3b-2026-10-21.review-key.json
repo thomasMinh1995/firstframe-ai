@@ -1,0 +1,482 @@
+{
+  "20876a8db881c4d75cf35b6fa5364ca2": {
+    "case_id": "reversed-role-invented-outcome",
+    "seed": 42,
+    "variant": "baseline"
+  },
+  "12b431eff9fe100d54f854d2780c7b70": {
+    "case_id": "reversed-role-invented-outcome",
+    "seed": 42,
+    "variant": "target_keys"
+  },
+  "57e66673a64f7ee20e912c2ef683608d": {
+    "case_id": "reversed-role-invented-outcome",
+    "seed": 73,
+    "variant": "target_keys"
+  },
+  "bcf72180166fc25d729a9553a6ad44f2": {
+    "case_id": "reversed-role-invented-outcome",
+    "seed": 73,
+    "variant": "baseline"
+  },
+  "ca94fec2ea6c401ac9107df1b4e00750": {
+    "case_id": "reversed-role-invented-outcome",
+    "seed": 101,
+    "variant": "baseline"
+  },
+  "00905b5f03d3b3af413b2799bd697d02": {
+    "case_id": "reversed-role-invented-outcome",
+    "seed": 101,
+    "variant": "target_keys"
+  },
+  "d125ed63b30acf9647d8d570a1e59031": {
+    "case_id": "corrected-open-ending",
+    "seed": 42,
+    "variant": "target_keys"
+  },
+  "8118ae4c42b85e4419c987c3f41814b8": {
+    "case_id": "corrected-open-ending",
+    "seed": 42,
+    "variant": "baseline"
+  },
+  "8c5d5a1225c9aa8f08db43b17e583e7f": {
+    "case_id": "corrected-open-ending",
+    "seed": 73,
+    "variant": "baseline"
+  },
+  "d3e45a29b374f76d2268f74daef9901a": {
+    "case_id": "corrected-open-ending",
+    "seed": 73,
+    "variant": "target_keys"
+  },
+  "14e5e1998278a606b473158875be24e0": {
+    "case_id": "corrected-open-ending",
+    "seed": 101,
+    "variant": "target_keys"
+  },
+  "c9bb23b6b7703f312811b13fc4b65a64": {
+    "case_id": "corrected-open-ending",
+    "seed": 101,
+    "variant": "baseline"
+  },
+  "f4a0c3948cec235180f53d07ef62c280": {
+    "case_id": "confirmed-outcome-en",
+    "seed": 42,
+    "variant": "baseline"
+  },
+  "35ec6046667cb0bedf1ec2c492897443": {
+    "case_id": "confirmed-outcome-en",
+    "seed": 42,
+    "variant": "target_keys"
+  },
+  "393c5ea1ad329b2e20bc5705bab1d76e": {
+    "case_id": "confirmed-outcome-en",
+    "seed": 73,
+    "variant": "target_keys"
+  },
+  "82ae770567f0dadcaf8e9514c48368df": {
+    "case_id": "confirmed-outcome-en",
+    "seed": 73,
+    "variant": "baseline"
+  },
+  "500600abde9ff166dda9e77d5b721f1d": {
+    "case_id": "confirmed-outcome-en",
+    "seed": 101,
+    "variant": "baseline"
+  },
+  "bd26f38f2f1581e829106492b2163354": {
+    "case_id": "confirmed-outcome-en",
+    "seed": 101,
+    "variant": "target_keys"
+  },
+  "50e97ba1c4f22389e2fe9f44637cbf55": {
+    "case_id": "quiet-waiting",
+    "seed": 42,
+    "variant": "target_keys"
+  },
+  "06929ca89b7ce7fa57d3ea86cb62c6ac": {
+    "case_id": "quiet-waiting",
+    "seed": 42,
+    "variant": "baseline"
+  },
+  "4113c247cc1675831f0e14570c958bc0": {
+    "case_id": "quiet-waiting",
+    "seed": 73,
+    "variant": "baseline"
+  },
+  "fe2b6ceb56d7d172128c08df6d420724": {
+    "case_id": "quiet-waiting",
+    "seed": 73,
+    "variant": "target_keys"
+  },
+  "304eda80de95ff74938b0616b02db027": {
+    "case_id": "quiet-waiting",
+    "seed": 101,
+    "variant": "target_keys"
+  },
+  "8a041e1db75f3a5b376932c8a1c67a4a": {
+    "case_id": "quiet-waiting",
+    "seed": 101,
+    "variant": "baseline"
+  },
+  "56d88e8602c1691381bbdc9c08bc61c2": {
+    "case_id": "passport-contradiction",
+    "seed": 42,
+    "variant": "baseline"
+  },
+  "a483f2e305c2fcba30060c14338ab92b": {
+    "case_id": "passport-contradiction",
+    "seed": 42,
+    "variant": "target_keys"
+  },
+  "7a099714d70a5c32475f5d2c33d5bef6": {
+    "case_id": "passport-contradiction",
+    "seed": 73,
+    "variant": "target_keys"
+  },
+  "ef37b286e9e2afaf2e97e07ac4774cec": {
+    "case_id": "passport-contradiction",
+    "seed": 73,
+    "variant": "baseline"
+  },
+  "c70975bffe0e411e676c3e4748bc10a0": {
+    "case_id": "passport-contradiction",
+    "seed": 101,
+    "variant": "baseline"
+  },
+  "43f420fa1c423603f9b36ac69345cfbd": {
+    "case_id": "passport-contradiction",
+    "seed": 101,
+    "variant": "target_keys"
+  },
+  "c3241c98a96dd1cf1ba4e787dcc6cb16": {
+    "case_id": "resource-contradiction",
+    "seed": 42,
+    "variant": "target_keys"
+  },
+  "2ae4c3cc08eba62ea722443fb35c0543": {
+    "case_id": "resource-contradiction",
+    "seed": 42,
+    "variant": "baseline"
+  },
+  "77432395665711604a191ed9ad12bb24": {
+    "case_id": "resource-contradiction",
+    "seed": 73,
+    "variant": "baseline"
+  },
+  "ab40e6bae5c1bf00ddea36cec826fab8": {
+    "case_id": "resource-contradiction",
+    "seed": 73,
+    "variant": "target_keys"
+  },
+  "43010862a4d0eb4918212468c5994c2d": {
+    "case_id": "resource-contradiction",
+    "seed": 101,
+    "variant": "target_keys"
+  },
+  "6bfe4affaf39864b68f3b92081358844": {
+    "case_id": "resource-contradiction",
+    "seed": 101,
+    "variant": "baseline"
+  },
+  "fcec95ec068e5897c802462e6f2c56ff": {
+    "case_id": "deferred-proposal",
+    "seed": 42,
+    "variant": "baseline"
+  },
+  "72a28163bf234c6bfc9188775c3b1952": {
+    "case_id": "deferred-proposal",
+    "seed": 42,
+    "variant": "target_keys"
+  },
+  "d27d62ea29eebe21ce4b911df8ed1723": {
+    "case_id": "deferred-proposal",
+    "seed": 73,
+    "variant": "target_keys"
+  },
+  "80d909921c8633f516e5e5cea21c4e5c": {
+    "case_id": "deferred-proposal",
+    "seed": 73,
+    "variant": "baseline"
+  },
+  "257ac50913d273f66840658d08c2a0d3": {
+    "case_id": "deferred-proposal",
+    "seed": 101,
+    "variant": "baseline"
+  },
+  "190fe6910697d2411c19df54653964f2": {
+    "case_id": "deferred-proposal",
+    "seed": 101,
+    "variant": "target_keys"
+  },
+  "00e511837ad064703e8dd106db029444": {
+    "case_id": "deferred-keeps-fact",
+    "seed": 42,
+    "variant": "target_keys"
+  },
+  "8568b211a0a639854b66e97a4f507cbd": {
+    "case_id": "deferred-keeps-fact",
+    "seed": 42,
+    "variant": "baseline"
+  },
+  "0484a7382098844f2c30b65bc9e15e1d": {
+    "case_id": "deferred-keeps-fact",
+    "seed": 73,
+    "variant": "baseline"
+  },
+  "99d83379574818fa42f582594acfcc69": {
+    "case_id": "deferred-keeps-fact",
+    "seed": 73,
+    "variant": "target_keys"
+  },
+  "7bf1541a125e1b16ce40b2ac3a8a4a16": {
+    "case_id": "deferred-keeps-fact",
+    "seed": 101,
+    "variant": "target_keys"
+  },
+  "8113608f8f207a4311998c5df74e4b9e": {
+    "case_id": "deferred-keeps-fact",
+    "seed": 101,
+    "variant": "baseline"
+  },
+  "05df6ab45a50757812679777715fefa8": {
+    "case_id": "duplicate-section-names",
+    "seed": 42,
+    "variant": "baseline"
+  },
+  "eca2bc30623120f68b3c4e53a391010c": {
+    "case_id": "duplicate-section-names",
+    "seed": 42,
+    "variant": "target_keys"
+  },
+  "d6288507a4211ccde57f5d34ab4aaf94": {
+    "case_id": "duplicate-section-names",
+    "seed": 73,
+    "variant": "target_keys"
+  },
+  "2de267dc3b5add5c52e7802826618636": {
+    "case_id": "duplicate-section-names",
+    "seed": 73,
+    "variant": "baseline"
+  },
+  "fb289e2b2bf903231f8d54fde0765549": {
+    "case_id": "duplicate-section-names",
+    "seed": 101,
+    "variant": "baseline"
+  },
+  "3c45a674deb3950be4cbde32b7cf1697": {
+    "case_id": "duplicate-section-names",
+    "seed": 101,
+    "variant": "target_keys"
+  },
+  "00e514707a5de076450752e5ee33a421": {
+    "case_id": "mixed-language-feedback",
+    "seed": 42,
+    "variant": "target_keys"
+  },
+  "7b4493745b5f5719a9fa128f8a8f2bfe": {
+    "case_id": "mixed-language-feedback",
+    "seed": 42,
+    "variant": "baseline"
+  },
+  "a3f1dea1e739dad72d9b8eef1b911b0c": {
+    "case_id": "mixed-language-feedback",
+    "seed": 73,
+    "variant": "baseline"
+  },
+  "6482a5fc8d23fec5575e7146d1ed573c": {
+    "case_id": "mixed-language-feedback",
+    "seed": 73,
+    "variant": "target_keys"
+  },
+  "d20cc72e7bf981ca9ced081eed57ca9d": {
+    "case_id": "mixed-language-feedback",
+    "seed": 101,
+    "variant": "target_keys"
+  },
+  "7ca0d4d6448fc3c8dc330fef16bd1b74": {
+    "case_id": "mixed-language-feedback",
+    "seed": 101,
+    "variant": "baseline"
+  },
+  "9d8aae8c7a74d27d3ce9b20debcc7873": {
+    "case_id": "current-letter-draft",
+    "seed": 42,
+    "variant": "baseline"
+  },
+  "e045b82f3719ad2a8b635cedea7620c0": {
+    "case_id": "current-letter-draft",
+    "seed": 42,
+    "variant": "target_keys"
+  },
+  "92bf4d88e3329f1c089ac40e699788a6": {
+    "case_id": "current-letter-draft",
+    "seed": 73,
+    "variant": "target_keys"
+  },
+  "58089c4ce079d181d66f6c9eee18ea1f": {
+    "case_id": "current-letter-draft",
+    "seed": 73,
+    "variant": "baseline"
+  },
+  "9ec4cb6f5d4822f7ffb998881794a181": {
+    "case_id": "current-letter-draft",
+    "seed": 101,
+    "variant": "baseline"
+  },
+  "3ccb80e291263b0363976fa1429c6e9d": {
+    "case_id": "current-letter-draft",
+    "seed": 101,
+    "variant": "target_keys"
+  },
+  "fff30ae541e57d564c7d7680de62c8b0": {
+    "case_id": "missing-time-cue",
+    "seed": 42,
+    "variant": "target_keys"
+  },
+  "204966678c4a1a26f8e492bf474fdd90": {
+    "case_id": "missing-time-cue",
+    "seed": 42,
+    "variant": "baseline"
+  },
+  "ad016bf69fc7f65fd2a81932f9a4c946": {
+    "case_id": "missing-time-cue",
+    "seed": 73,
+    "variant": "baseline"
+  },
+  "683e8cb1764109e859d6e2f786afe930": {
+    "case_id": "missing-time-cue",
+    "seed": 73,
+    "variant": "target_keys"
+  },
+  "e37472ce4da25d4b47d099b562d36317": {
+    "case_id": "missing-time-cue",
+    "seed": 101,
+    "variant": "target_keys"
+  },
+  "9c557d7aba441a8e2238c9e5dc4d20a9": {
+    "case_id": "missing-time-cue",
+    "seed": 101,
+    "variant": "baseline"
+  },
+  "44b783bf2426a5d0eec8e91ba145a7e4": {
+    "case_id": "mentor-plan",
+    "seed": 42,
+    "variant": "baseline"
+  },
+  "a9382d18b436974a37e7b0141f95b1e4": {
+    "case_id": "mentor-plan",
+    "seed": 42,
+    "variant": "target_keys"
+  },
+  "b08e2a89aa8eb51c50a8c868186c3840": {
+    "case_id": "mentor-plan",
+    "seed": 73,
+    "variant": "target_keys"
+  },
+  "471ecd21a17cbc1ab155fa55f065b09d": {
+    "case_id": "mentor-plan",
+    "seed": 73,
+    "variant": "baseline"
+  },
+  "4630cb131451491b33e388f4679060e3": {
+    "case_id": "mentor-plan",
+    "seed": 101,
+    "variant": "baseline"
+  },
+  "80a32e994eeee1cac1ac3afc70c382e1": {
+    "case_id": "mentor-plan",
+    "seed": 101,
+    "variant": "target_keys"
+  },
+  "f8442332f9af6abaee6534a43dd8b363": {
+    "case_id": "plan-quiet-waiting",
+    "seed": 42,
+    "variant": "target_keys"
+  },
+  "5e06ca51ec641959911da5927cef75f7": {
+    "case_id": "plan-quiet-waiting",
+    "seed": 42,
+    "variant": "baseline"
+  },
+  "e1be3b9180c5ba6ed50ab720ea400d13": {
+    "case_id": "plan-quiet-waiting",
+    "seed": 73,
+    "variant": "baseline"
+  },
+  "6cbf82ac67be047c48d7b460641edd27": {
+    "case_id": "plan-quiet-waiting",
+    "seed": 73,
+    "variant": "target_keys"
+  },
+  "3a5471c673a221d4a8027fbca3d12a55": {
+    "case_id": "plan-quiet-waiting",
+    "seed": 101,
+    "variant": "target_keys"
+  },
+  "df987faa4b0f1a5922ef5906bca7f2c0": {
+    "case_id": "plan-quiet-waiting",
+    "seed": 101,
+    "variant": "baseline"
+  },
+  "817515ceede3788b16890e22304722da": {
+    "case_id": "plan-deferred-proposal",
+    "seed": 42,
+    "variant": "baseline"
+  },
+  "4fbfcd1c8c1a9272af9cf2e310178603": {
+    "case_id": "plan-deferred-proposal",
+    "seed": 42,
+    "variant": "target_keys"
+  },
+  "d712104c4c109b313ea558f050fcb3be": {
+    "case_id": "plan-deferred-proposal",
+    "seed": 73,
+    "variant": "target_keys"
+  },
+  "4f9d07c45589abce3bf79b2ef9ff63ab": {
+    "case_id": "plan-deferred-proposal",
+    "seed": 73,
+    "variant": "baseline"
+  },
+  "313318500b221fd967e2efbf8e0923a7": {
+    "case_id": "plan-deferred-proposal",
+    "seed": 101,
+    "variant": "baseline"
+  },
+  "f5460f22ee3a0f62338ff543af7aa699": {
+    "case_id": "plan-deferred-proposal",
+    "seed": 101,
+    "variant": "target_keys"
+  },
+  "1dcc852eff680ec91ab4f8b59439c5f6": {
+    "case_id": "plan-confirmed-outcome-en",
+    "seed": 42,
+    "variant": "target_keys"
+  },
+  "251ac776e8da0df2ee53b95d2d52fbd5": {
+    "case_id": "plan-confirmed-outcome-en",
+    "seed": 42,
+    "variant": "baseline"
+  },
+  "68aa703123edf8404c69c11d9b5e465a": {
+    "case_id": "plan-confirmed-outcome-en",
+    "seed": 73,
+    "variant": "baseline"
+  },
+  "cf0f006296d8dd621386288f048f086d": {
+    "case_id": "plan-confirmed-outcome-en",
+    "seed": 73,
+    "variant": "target_keys"
+  },
+  "4fb8d9395c9f47657fd838e55dfb03e1": {
+    "case_id": "plan-confirmed-outcome-en",
+    "seed": 101,
+    "variant": "target_keys"
+  },
+  "12cbac36c7764d2a2fca561aa399ad7f": {
+    "case_id": "plan-confirmed-outcome-en",
+    "seed": 101,
+    "variant": "baseline"
+  }
+}
