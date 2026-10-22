@@ -1,7 +1,7 @@
 // Run against TypeScript compiled to a temporary CommonJS directory.
 const assert = require('node:assert/strict');
 const { applyProgress, progressLanguage, progressCopy } = require(process.argv[2] + '/progressState.js');
-const { streamProjectOperation, projectRequest } = require(process.argv[2] + '/projectsApi.js');
+const { streamProjectOperation, projectRequest, editableProject } = require(process.argv[2] + '/projectsApi.js');
 const project = { id:'p1', title:'lab coach', updated_at:'now', revision:1, response_language:'en', idea:'untouched', constraints:[], answers:[], analysis:null, draft:null, feedback:null, feedback_is_current:false, versions:[], clarification_history:[] };
 let steps = [];
 for (const stage of ['prepare','fidelity','fidelity_audit','fidelity_audit','saving']) {
@@ -73,6 +73,18 @@ function stream(text, chunkSize=7) {
    assert.equal(cancellations,1);
    assert.ok(cleared>=3);
  } finally { global.setTimeout=realSetTimeout; global.clearTimeout=realClearTimeout; }
+ const contextProject = { ...project, author_context: { idea: project.idea, constraints: [],
+   clarifications: [{ question: 'Saved question', answer: 'Chưa quyết định', input_index: null }], pending_questions: [] },
+   feedback_source: null };
+ global.fetch=async()=>Response.json(contextProject);
+ assert.deepEqual(await projectRequest('/p1'), contextProject);
+ assert.equal('author_context' in editableProject(contextProject), false, 'read projection is never submitted as an edit');
+ assert.equal('feedback_source' in editableProject(contextProject), false, 'feedback source cannot be rebound by an edit');
+ global.fetch=async()=>Response.json({ ...contextProject, author_context: { ...contextProject.author_context,
+   pending_questions: [{ question: 'Cannot navigate here', input_index: -1 }] } });
+ await assert.rejects(()=>projectRequest('/p1'), /Nội dung đang sửa được giữ nguyên/);
+ global.fetch=async()=>Response.json({ ...contextProject, feedback_source: { artifact_id: 'missing snapshot' } });
+ await assert.rejects(()=>projectRequest('/p1'), /Nội dung đang sửa được giữ nguyên/);
  const originalTimeout=AbortSignal.timeout;
  const saveController=new AbortController();
  AbortSignal.timeout=(ms)=>{assert.equal(ms,45000);return saveController.signal;};

@@ -29,6 +29,113 @@ def payload(project):
     }
 
 
+def card_input(project):
+    card = project["author_context"]
+    return {"idea": card["idea"], "constraints": card["constraints"], "clarifications": [
+        {"question": item["question"], "answer": item["answer"]}
+        for item in card["clarifications"]
+    ]}
+
+
+def test_author_card_targets_the_last_effective_answer_to_a_repeated_question(project_client):
+    client, _ = project_client
+    project = develop_project(client, start_project(client))
+    store = project_routes.get_project_store()
+    raw = store.get(project["id"])
+    raw["analysis"]["missing_information"] = ["Điều cần giữ?", "Điều cần giữ?"]
+    raw["answers"] = ["Câu trước", "Câu hiệu lực sau cùng"]
+    store.save(raw, project["revision"])
+    reopened = client.get(f"/api/projects/{project['id']}").json()
+    assert reopened["author_context"]["clarifications"] == [{
+        "question": "Điều cần giữ?", "answer": "Câu hiệu lực sau cùng", "input_index": 1,
+    }]
+
+
+def test_author_card_and_feedback_sources_keep_a_when_author_saves_b(project_client):
+    client, provider = project_client
+    project = develop_project(client, start_project(client))
+    url = f"/api/projects/{project['id']}"
+    source_a = deepcopy(project["feedback_source"])
+    assert source_a["context"] == project["author_context"]
+    assert source_a["revision"] == project["revision"] - 1
+    for request in provider.requests[-2:]:
+        intent = json.loads(request.input_text.split("Creator intent and decisions:\n", 1)[1]
+                            .split("\n\n", 1)[0])
+        assert intent == card_input(project)
+    # A response projection cannot be supplied by a client, including through an old full-project PUT.
+    bad = {**payload(project), "author_context": {"idea": "AI proposes this"}}
+    assert client.put(url, json=bad).status_code == 422
+    assert client.get(url).json() == project
+    data = payload(project)
+    data["idea"] = "Một người mẹ chờ con trong căn bếp, không có cãi vã."
+    data["constraints"] = ["Giữ kết thúc mở", "Không tự thêm hòa giải"]
+    data["draft"]["logline"] = "Bản sửa thủ công vẫn phải được giữ."
+    changed = client.put(url, json=data).json()
+    assert changed["author_context"] == {
+        "idea": data["idea"], "constraints": data["constraints"],
+        "clarifications": [], "pending_questions": [],
+    }
+    assert changed["feedback_source"] == source_a
+    assert changed["feedback"] == project["feedback"]
+    assert changed["feedback_is_current"] is False
+    assert any(v["feedback_source"] == source_a for v in changed["versions"])
+    # A stale save does not change the card or rebind the feedback's source.
+    assert client.put(url, json=payload(project)).status_code == 409
+    assert client.get(url).json() == changed
+    reviewed = client.post(f"{url}/review", json={"revision": changed["revision"]}).json()
+    intent = json.loads(provider.requests[-1].input_text.split("Creator intent and decisions:\n", 1)[1]
+                        .split("\n\n", 1)[0])
+    assert intent == card_input(reviewed)
+    assert reviewed["feedback_source"]["context"] == changed["author_context"]
+    assert reviewed["feedback_source"]["artifact_id"] != source_a["artifact_id"]
+    assert reviewed["feedback_source"]["draft"] == data["draft"]
+    assert any(v["feedback_source"] == source_a for v in reviewed["versions"])
+    # Restore changes the working draft, not either feedback snapshot or its revision.
+    restore = payload(reviewed)
+    restore["draft"] = source_a["draft"]
+    restored = client.put(url, json=restore).json()
+    assert restored["feedback_source"] == reviewed["feedback_source"]
+    assert restored["feedback_is_current"] is False
+    store = project_routes.get_project_store()
+    stored = store.get(project["id"])
+    assert "author_context" not in stored, "the current card is a read projection, not a second store"
+    assert client.get(url).json() == restored
+    assert store.get(project["id"]) == stored, "opening cards must not write or migrate data"
+
+
+@pytest.mark.parametrize("corruption", ["missing", "shape", "project", "artifact", "context", "key", "draft", "revision"])
+def test_unverifiable_feedback_source_stays_missing_without_losing_work(project_client, corruption):
+    client, _ = project_client
+    project = develop_project(client, start_project(client))
+    store = project_routes.get_project_store()
+    raw = store.get(project["id"])
+    if corruption == "missing":
+        raw.pop("feedback_source")
+        for version in raw["versions"]:
+            version.pop("feedback_source", None)
+    elif corruption == "shape":
+        raw["feedback_source"] = {"not": "a source"}
+    elif corruption == "context":
+        raw["feedback_source"]["context"]["idea"] = "Not the intent used for this feedback"
+    elif corruption == "key":
+        raw["feedback_source"]["content_key"] = "{}"
+    elif corruption == "draft":
+        raw["feedback_source"]["draft"]["logline"] = "Different source draft"
+    elif corruption == "revision":
+        raw["feedback_source"]["revision"] = project["revision"] + 100
+    else:
+        raw["feedback_source"][f"{corruption}_id"] = "different"
+    stored = store.save(raw, project["revision"])
+    reopened = client.get(f"/api/projects/{project['id']}").json()
+    assert reopened["feedback_source"] is None
+    assert reopened["feedback"] == project["feedback"]
+    assert reopened["draft"] == project["draft"]
+    assert reopened["author_context"] == project["author_context"]
+    if corruption == "missing":
+        assert all(version["feedback_source"] is None for version in reopened["versions"])
+    assert store.get(project["id"]) == stored
+
+
 def start_project(client):
     response = client.post("/api/projects")
     assert response.status_code == 201
@@ -377,6 +484,12 @@ def test_reanalysis_keeps_author_choices_for_planning_and_edited_review(
     brief = json.loads(provider.requests[-1].input_text.split("Creator brief (JSON data):\n", 1)[1])
     assert brief["clarifications"] == choices
     assert project["analysis"]["missing_information"] == new_questions
+    card = project["author_context"]
+    assert [(item["question"], item["answer"]) for item in card["clarifications"]] == [
+        (item["question"], item["answer"]) for item in choices
+    ]
+    assert all(item["input_index"] is None for item in card["clarifications"])
+    assert [item["question"] for item in card["pending_questions"]] == new_questions
     assert client.get(url).json() == project
     if new_questions:
         assert client.post(f"{url}/plan", json={"revision": project["revision"]}).status_code == 422
@@ -401,6 +514,9 @@ def test_reanalysis_keeps_author_choices_for_planning_and_edited_review(
     assert "EDITED: An unopened letter" in provider.requests[-1].input_text
     assert project["draft"] == edited_draft
     assert project["feedback_is_current"] is True
+    assert project["feedback_source"]["context"] == project["author_context"]
+    assert project["feedback_source"]["draft"] == edited_draft
+    assert project["feedback_source"]["artifact_id"] == project["feedback"]["artifact_id"]
     response = client.post(f"{url}/plan", json={"revision": project["revision"]})
     assert response.status_code == 200
     for request in provider.requests[-2:]:
@@ -434,6 +550,12 @@ def test_changed_or_cleared_answer_overrides_retained_choice(project_client):
     project = client.put(url, json=data).json()
     assert project["feedback_is_current"] is False
     assert client.post(f"{url}/plan", json={"revision": project["revision"]}).status_code == 422
+    card = project["author_context"]
+    assert [item["answer"] for item in card["clarifications"]] == [data["answers"][1]]
+    assert card["clarifications"][0]["input_index"] == 1
+    assert card["pending_questions"] == [{
+        "question": project["analysis"]["missing_information"][0], "input_index": 0,
+    }]
     response = client.post(f"{url}/review", json={"revision": project["revision"]})
     assert response.status_code == 200
     context = json.loads(

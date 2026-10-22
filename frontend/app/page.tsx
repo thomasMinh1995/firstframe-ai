@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { StoryFeedback } from "./StoryResultCards";
 import { StoryPlanReading } from "./StoryPlanReading";
+import { AuthorIntentCard, FeedbackIntent } from "./AuthorIntentCard";
 import { OperationProgress } from "./OperationProgress";
 import { OnboardingTour, useOnboarding } from "./OnboardingTour";
 import { applyProgress, progressLanguage, type OperationStep } from "./progressState";
@@ -230,6 +231,8 @@ export default function Home() {
             {(!project.analysis || briefChanged) && <button data-tour-action="analyze" disabled={!project.idea.trim()}
               onClick={() => action("analyze")}>Cùng làm rõ ý tưởng</button>}
           </section>
+          {saved && <AuthorIntentCard context={saved.author_context} revision={saved.revision}
+            dirty={dirty} canEditAnswers={!briefChanged} />}
           {project.analysis && !briefChanged && <section className="panel form-stack">
             <h2 data-tour="choices" tabIndex={-1}>2. Những lựa chọn của bạn</h2>
             <p className="preserve-lines">{project.analysis.summary}</p>
@@ -290,6 +293,7 @@ export default function Home() {
             {currentFeedback ? "Phản hồi cho đúng bản hiện tại."
               : "Nội dung đã thay đổi. Phản hồi dưới đây thuộc bản trước; hãy nhận phản hồi mới."}
           </p>
+          <FeedbackIntent source={saved?.feedback_source} projectId={project.id} artifactId={project.feedback.artifact_id} />
           <StoryFeedback evaluation={project.feedback} uiLanguage="vi" />
         </section>}
         {!!project.versions.length && <section className="panel version-history">
@@ -307,7 +311,10 @@ export default function Home() {
               <h3>{sectionLabels[section.title] ?? section.title}</h3>
               <p className="preserve-lines">{section.content}</p>
             </div>)}
-            {version.feedback && <StoryFeedback evaluation={version.feedback} uiLanguage="vi" />}
+            {version.feedback && <>
+              <FeedbackIntent source={version.feedback_source} projectId={project.id} artifactId={version.feedback.artifact_id} />
+              <StoryFeedback evaluation={version.feedback} uiLanguage="vi" />
+            </>}
             <button disabled={!!busy} onClick={() => void run("Đang giữ bản hiện tại và khôi phục…", async () => {
               const next = await persist();
               if (!next) return;

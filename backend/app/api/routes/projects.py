@@ -12,8 +12,10 @@ from fastapi.responses import StreamingResponse
 
 from app.api.routes.generate import _to_response, get_story_generation_service
 from app.api.schemas.projects import (
+    AuthorContext,
     ClarificationVersion,
     DraftVersion,
+    FeedbackSource,
     ProjectResponse,
     ProjectSummary,
     ProjectUpdate,
@@ -118,7 +120,7 @@ def load_project(project_id: str, revision: int | None = None) -> ProjectRespons
 
 def save_project(project: ProjectResponse) -> ProjectResponse:
     report_progress("saving", "active")
-    data = project.model_dump(exclude={"feedback_is_current"})
+    data = project.model_dump(exclude_computed_fields=True)
     saved = ProjectResponse.model_validate(get_project_store().save(data, project.revision))
     report_progress("saving", "completed")
     return saved
@@ -135,6 +137,16 @@ def constraints_for(project: ProjectResponse) -> tuple[Constraint, ...]:
     )
 
 
+def attach_feedback_source(project: ProjectResponse, context: AuthorContext) -> None:
+    assert project.feedback is not None and project.draft is not None
+    project.reviewed_content = project.content_key()
+    project.feedback_source = FeedbackSource(
+        project_id=project.id, artifact_id=project.feedback.artifact_id,
+        revision=project.revision, content_key=project.reviewed_content,
+        context=context.model_copy(deep=True), draft=project.draft.model_copy(deep=True),
+    )
+
+
 def add_version(project: ProjectResponse) -> None:
     if project.draft is not None:
         version = DraftVersion(
@@ -148,6 +160,8 @@ def add_version(project: ProjectResponse) -> None:
             clarifications=dict(project.creator_answers()),
             draft=project.draft.model_copy(deep=True),
             feedback=project.feedback if project.feedback_is_current else None,
+            feedback_source=project.feedback_source.model_copy(deep=True)
+            if project.feedback_is_current and project.feedback_source else None,
         )
         if project.versions and project.versions[-1].model_dump(
             exclude={"id", "created_at"}
@@ -186,7 +200,7 @@ def list_projects():
 @router.post("", response_model=ProjectResponse, status_code=201)
 def create_project():
     project = ProjectResponse(id=str(uuid4()), updated_at=datetime.now(UTC).isoformat())
-    return get_project_store().create(project.model_dump(exclude={"feedback_is_current"}))
+    return get_project_store().create(project.model_dump(exclude_computed_fields=True))
 
 
 @router.get("/{project_id}", response_model=ProjectResponse)
@@ -270,6 +284,7 @@ def plan_project(project_id: str, request: RevisionRequest):
         ):
             raise HTTPException(422, "Hãy trả lời hoặc chọn để quyết định sau cho từng câu hỏi.")
         with capture_workflow("plan", dataset_snapshot(project)) as dataset:
+            context = project.author_context
             run = get_story_generation_service().plan(
                 project.idea, project.creator_answers(), constraints_for(project),
                 response_language=project.response_language,
@@ -282,7 +297,7 @@ def plan_project(project_id: str, request: RevisionRequest):
                 sections=[section.model_dump() for section in generated.story_plan.sections],
             )
             project.feedback = generated.evaluation
-            project.reviewed_content = project.content_key()
+            attach_feedback_source(project, context)
             add_version(project)
             saved = save_project(project)
             dataset.complete(dataset_snapshot(saved))
@@ -298,14 +313,7 @@ def review_project(project_id: str, request: RevisionRequest):
         if not any(section.content.strip() for section in project.draft.sections):
             raise HTTPException(422, "Hãy viết ít nhất một phần trước khi nhận phản hồi.")
         with capture_workflow("review", dataset_snapshot(project)) as dataset:
-            context = {
-                "idea": project.idea,
-                "constraints": project.constraints,
-                "clarifications": [
-                    {"question": question, "answer": answer}
-                    for question, answer in project.creator_answers()
-                ],
-            }
+            context = project.author_context
             evaluation = get_story_generation_service().review(
                 project.idea,
                 project.draft.title,
@@ -319,7 +327,7 @@ def review_project(project_id: str, request: RevisionRequest):
                     )
                     for i, section in enumerate(project.draft.sections)
                 ),
-                json.dumps(context, ensure_ascii=False),
+                json.dumps(context.ai_context(), ensure_ascii=False),
                 response_language=project.response_language,
             )
             project.feedback = EvaluationResponse(
@@ -332,7 +340,7 @@ def review_project(project_id: str, request: RevisionRequest):
                 },
                 findings=[item.__dict__ for item in evaluation.findings],
             )
-            project.reviewed_content = project.content_key()
+            attach_feedback_source(project, context)
             add_version(project)
             saved = save_project(project)
             dataset.complete(dataset_snapshot(saved))
