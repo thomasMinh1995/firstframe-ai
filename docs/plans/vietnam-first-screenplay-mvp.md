@@ -82,13 +82,45 @@ Bản đọc và mọi đề xuất mới vẫn được gọi đúng là story 
 | P0.2 — Đọc câu chuyện | Bản đọc tên, tóm tắt, mở đầu, diễn tiến, kết thúc từ chính draft; các mục khác mở rộng, giữ trình sửa hiện có | Hình dung được diễn tiến và một chi tiết đáng nhớ; không thêm lượt AI để viết bản kể thứ hai; sửa chưa lưu vẫn được giữ và hiển thị đúng trạng thái |
 | P0.3 — Điều muốn giữ | Phần thẻ ý đồ của #7: nguyên văn ý tưởng, ràng buộc và hỏi đáp hiệu lực từ cùng nguồn backend gửi AI | Phân biệt đã lưu/chưa lưu, lựa chọn tác giả/đề xuất AI; phản hồi cũ giữ ngữ cảnh nguồn riêng |
 | P0.4 — Một lần sửa | Hướng dẫn sửa trực tiếp rồi lưu/nhận góp ý; dùng điều hướng sẵn có. Liên kết mục tiêu có cấu trúc tiếp tục theo #7 | Góp ý đọc đúng bản mới; không tự viết lại, lưu hoặc gọi AI khi chỉ điều hướng; giữ buffer, lịch sử và cảnh báo góp ý cũ |
-| P0.5 — Duyệt và diễn tập | Ba tình huống Việt Nam trên đúng model/config demo; đo thời gian chờ; bản ghi dự phòng được duyệt và ghi rõ nguồn | Không có lỗi nghiêm trọng về ý định trong mẫu được chọn; góp ý có ích, thời gian chờ được báo đúng; bản ghi không được trình bày như chạy trực tiếp |
+| P0.5 — Duyệt và diễn tập | Ba tình huống Việt Nam, mỗi tình huống ba lượt toàn luồng độc lập trên đúng cấu hình demo; giữ mọi kết quả và đo thời gian | Chỉ demo trực tiếp khi đủ 9/9 lượt đạt điều kiện mục 4.1 và PO phê duyệt; nếu chưa đạt thì chỉ dùng bản ghi đã duyệt, ghi rõ là phát lại |
 
 P0.5 bắt đầu song song khi chuẩn bị nội dung. Ba tình huống gồm một hành động
 chăm sóc thường ngày, một chuyện vui/khó xử và một khoảnh khắc lặng. Khi triển
 khai, chỉ chỉnh prompt, quy tắc, rubric hoặc cấu hình liên quan đến lỗi đã
 quan sát; kiểm tra lại trên đúng cấu hình và đọc kết quả thực tế. Không suy
 ra chất lượng sáng tác từ JSON hợp lệ hoặc điểm rubric của AI.
+
+### 4.1. Điều kiện demo trực tiếp hoặc dùng bản ghi
+
+- Trước khi chạy, chốt ba brief, điều muốn giữ, câu trả lời/để mở, một thao
+  tác sửa thủ công và kỳ vọng cần kiểm tra cho từng ca. Áp dụng cách đọc
+  kết quả trong [checklist đánh giá model](../prompt-evaluation.md).
+- Mỗi ca chạy ba lần từ dự án tạm độc lập: làm rõ → plan → sửa → lưu → review.
+  Cố định commit, phiên bản prompt, model identifier/digest và cấu hình;
+  ghi seed nếu có. Lưu đủ input, output, lỗi, thời gian từng tác vụ và kết
+  luận của cả chín lượt, kể cả lượt không tạo được output; không bỏ lượt
+  xấu hoặc sinh lại đến khi chọn được mẫu đẹp.
+- Một lượt đạt khi hoàn thành luồng, giữ dữ liệu/phiên bản, phản hồi đọc đúng
+  draft và không có lỗi chặn. Lỗi chặn gồm: vi phạm lựa chọn/ràng buộc rõ
+  ràng; bịa quyết định tác giả hoặc dẫn chứng; tự viết lại draft; góp ý sai
+  nguồn; mất/ghi đè nội dung; tác vụ lỗi hoặc thiếu kết quả khiến không thể
+  tiếp tục. Góp ý phải đúng chi tiết và có bước sửa khả thi; không bắt sinh
+  vấn đề nếu bản không có lỗi có căn cứ. Khác biệt sở thích được ghi riêng.
+- Người diễn tập chốt trước ngân sách chờ cho từng tác vụ AI và kịch bản
+  trình bày tối đa năm phút, gồm cả thao tác/đọc và thời gian chờ thật.
+  Chỉ chạy trực tiếp khi 9/9 lượt đạt, đều trong ngân sách đã chốt và một
+  lần diễn tập đủ bài nằm trong năm phút. Không tăng ngân sách sau khi thấy
+  kết quả để đổi lượt trượt thành đạt.
+- PO (chủ sản phẩm) duyệt cùng người đọc có kinh nghiệm, ghi quyết định
+  **trực tiếp / chỉ bản ghi / chưa sẵn sàng**, ngày, cấu hình và bằng chứng
+  trong #26. Thiếu bằng chứng, có lượt trượt hoặc đổi cấu hình thì chưa đủ
+  điều kiện trực tiếp; sau sửa cần một đợt đủ chín lượt mới, giữ kết quả cũ.
+- Chế độ chỉ bản ghi dùng chuỗi brief–plan–bản sửa–review đã được duyệt đúng
+  nguồn; ghi rõ phát lại và mọi hiệu đính của người biên tập. Đây chỉ là
+  nghiệm thu nội dung phát lại, không phải nghiệm thu luồng trực tiếp hay
+  chất lượng model nói chung. Nếu đang demo gặp lỗi, quá ngân sách, hoặc
+  câu chuyện lệch ý rõ ràng: báo sự cố rồi chuyển sang bản ghi đã duyệt.
+  Nếu bản ghi cũng chưa được duyệt, hoãn phần đó; không thay kết quả âm thầm.
 
 Không mở rộng đợt demo sang trình viết screenplay, tự áp dụng góp ý, tạo
 video/ảnh, marketplace, cộng đồng trong ứng dụng hoặc quản lý sản xuất.
@@ -97,7 +129,7 @@ video/ảnh, marketplace, cộng đồng trong ứng dụng hoặc quản lý s�
 
 | Mốc | Kết quả và điều kiện chuyển bước |
 | --- | --- |
-| M1 — Story plan đúng ý | Hoàn thành đợt P0 và pilot; người mới tự đọc/sửa/lưu được bản muốn tiếp tục |
+| M1 — Story plan đúng ý | Hoàn thành đợt P0 theo chế độ demo được duyệt và pilot đạt mục 6.1; phát lại không thay thế nghiệm thu luồng pilot |
 | M1 tiếp — Sửa và chia sẻ | Hoàn thiện góp ý có mục tiêu theo #7; xuất đúng story plan đã chọn theo #5 |
 | M2 — Dàn cảnh | Thêm, bỏ, sắp xếp và sửa cảnh có hành động, mục đích, liên kết; kiểm chứng tác giả dùng được để viết tiếp |
 | M3 — Viết và sửa kịch bản | Viết hành động/lời thoại theo cảnh, góp ý cụ thể, giữ quyết định và phiên bản; ít nhất một vòng đọc sửa |
@@ -135,8 +167,36 @@ như Cinequill hoặc Screenwriting.ai. Dùng cùng chất liệu, ràng buộc 
 vụ; cho mỗi công cụ đủ ngữ cảnh và cơ hội sửa. Không coi quảng bá tính năng
 là bằng chứng chất lượng hoặc kết quả pilot nhỏ là lợi thế thị trường đã có.
 
-Chỉ ưu tiên M2 khi có người dùng muốn viết tiếp và xác định được họ mắc ở
-đâu. Đánh giá hoàn thành kịch bản khi M3/M4 khả dụng; không đo MVP story plan
+### 6.1. Điều kiện pilot đạt và chuyển sang M2
+
+- Trước pilot, PO chốt số người bắt đầu N trong khoảng 5–8, phiên bản ứng
+  dụng/model và cùng một phiếu nhiệm vụ. Nhiệm vụ gồm nhập khoảnh khắc, làm
+  rõ/tạo plan, diễn đạt lại diễn tiến vừa đọc, tự sửa một chi tiết, lưu,
+  nhận góp ý mới, mở lại đúng bản đã lưu và giải thích lựa chọn sửa.
+- Người quan sát ghi riêng từng người và từng bước: hoàn thành/chưa hoàn
+  thành, điểm mắc, lỗi, lý do bỏ dở và mức trợ giúp. H0 = chỉ dùng hướng dẫn
+  chung cùng tour/tài liệu trong sản phẩm; H1 = được người quan sát nhắc
+  từng bước hoặc chỉ chỗ thao tác; H2 = được gợi ý nội dung cần viết/sửa
+  hoặc thao tác hộ. Chỉ hoàn thành toàn nhiệm vụ ở H0 mới tính độc lập.
+  Người đã bắt đầu nhưng bỏ dở vẫn thuộc N và không tính đạt; không thay
+  bằng người thành công hơn để nâng tỷ lệ.
+- Ngưỡng vận hành đề xuất: ít nhất 80% của N hoàn thành độc lập, làm tròn
+  lên (N=5/6/7/8 cần 4/5/6/7 người). Ít nhất hai người trong nhóm đạt muốn
+  viết tiếp chính bản của họ; ghi bước tiếp họ muốn làm và điểm còn mắc.
+  Đây là ngưỡng quyết định của pilot nhỏ, không phải bằng chứng thị trường.
+- Không còn lỗi chặn chưa xử lý trong luồng pilot: mất/ghi đè nội dung,
+  không lưu/mở lại được, phản hồi sai draft/ngữ cảnh, AI vi phạm điều tác
+  giả đã chọn rõ hoặc lỗi tác vụ khiến không thể hoàn thành. Ghi ID/bằng
+  chứng lỗi; sau sửa xác nhận lại tình huống lỗi trên phiên bản ứng viên.
+- PO quyết định **đạt / chưa đạt / cần thêm bằng chứng** trong #26 sau khi
+  xem bảng kết quả N người và nhận xét người đọc có kinh nghiệm. Chỉ ưu tiên
+  M2 khi đủ ngưỡng, có nhu cầu viết tiếp, không còn lỗi chặn và PO ghi đạt.
+  Thiếu điều kiện nào thì tiếp tục sửa M1; bản ghi demo không bù cho pilot
+  trượt. Không hạ ngưỡng hồi tố: thay nhiệm vụ/ngưỡng phải chốt đợt mới và
+  giữ báo cáo cũ. Nếu đổi phiên bản giữa pilot, tách kết quả theo phiên bản,
+  không gộp các phiên bản để đạt ngưỡng; đợt mới vẫn cần đủ N=5–8.
+
+Đánh giá hoàn thành kịch bản khi M3/M4 khả dụng; không đo MVP story plan
 bằng tỷ lệ hoàn thành screenplay chưa được hỗ trợ. Lưu bằng chứng thử nghiệm
 và bản ghi theo cơ chế dataset hiện có, chỉ tái sử dụng nội dung được chọn
 với sự đồng ý của tác giả; không đưa trải nghiệm riêng vào repo công khai.

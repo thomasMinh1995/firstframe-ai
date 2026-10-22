@@ -24,9 +24,15 @@ The [detailed plan](plans/vietnam-first-screenplay-mvp.md) records the agreed di
 | P0.2 | Read title, logline, beginning, middle, and ending from the working draft; expand other details and retain the editor | The reader can picture the progression and a memorable detail; no extra AI narration call or loss of unsaved edits |
 | P0.3 | Deliver the saved author-context card portion of #7, with shared backend provenance and saved/unsaved distinctions | The author can see what is being used; proposals are not promoted to decisions; old feedback keeps its own context |
 | P0.4 | Guide one manual edit, save, and review using the existing controls | New feedback reads the exact revised draft; navigation does not rewrite, save, or call AI |
-| P0.5 | Curate and rehearse three Vietnamese situations on the actual demo model/config; measure latency and label any recorded fallback | No serious intent violation in selected samples; useful feedback and an honest live/recorded presentation |
+| P0.5 | Run three Vietnamese situations three times each as independent full workflows on the actual demo configuration; retain every result and timing | Live requires 9/9 passing runs and PO approval under plan section 4.1; otherwise use only an approved, clearly labeled recording |
 
 P0.5 begins alongside preparation. Include everyday care, humor or awkwardness, and a quiet observational moment. Address observed model failures narrowly and recheck the relevant guidance on the actual configuration; valid JSON or AI rubric scores alone do not establish quality.
+
+**Live/recorded acceptance:** Before running, freeze briefs, choices, manual edits, expected behavior, commit/prompt/model configuration, and per-AI-operation wait budgets. Follow the existing [model evaluation checklist](prompt-evaluation.md). Keep all nine independent analyze–plan–edit–save–review runs, including provider/validation failures, with inputs, outputs, seed when available, timings, and human verdicts; do not select only successful generations.
+
+Live requires 9/9 completed runs within the declared wait budgets, no blockers, and a full presentation rehearsal of at most five minutes including real waiting, actions, and reading. Blockers include explicit-intent violations, invented author decisions/evidence, draft rewriting, wrong feedback source, data loss/overwrite, or errors/missing results that prevent completion. Feedback must be grounded and actionable; an empty issue list is valid when no supported issue exists. A taste difference alone is not a blocker.
+
+The PO, together with an experienced reader, records **live / recorded only / not ready**, date, configuration, and evidence in #26. Missing evidence, any failed run, or a changed configuration prevents live approval until a new complete nine-run batch passes; retain earlier failures. Do not raise budgets retrospectively to pass a run. An approved recording must preserve the brief/plan/edit/review chain and label playback and editorial corrections; it does not establish live readiness or general model quality. During live failure, budget overrun, or a clear intent violation, disclose the problem and switch to the approved recording. Without an approved recording, defer that segment.
 
 Demo outcome: **tell a moment -> clarify what matters -> read a story plan -> make one author-led edit -> review the exact revised draft**. Changing the source idea or constraints still requires the existing clarification round. A 3–5 minute presentation must label its output as a story plan.
 
@@ -209,7 +215,13 @@ Start with a discovery pilot of 5–8 Vietnamese beginners using their own exper
 
 Compare selected tasks with a familiar chatbot and a direct story-development tool such as Cinequill or Screenwriting.ai, using the same material and constraints and reasonable context/revision opportunities. Do not infer competitor quality or a local advantage from feature marketing alone. Use private material only with the author's agreement and keep it out of public demo assets unless explicitly approved.
 
-Proceed toward Milestone 2 when users want to write further and their obstacles are understood. Measure completed screenplay drafts and export only when Milestones 3 and 4 are available. Generation counts and AI scores do not demonstrate success.
+**Pilot/Milestone 2 acceptance:** Apply [plan section 6.1](plans/vietnam-first-screenplay-mvp.md#61-điều-kiện-pilot-đạt-và-chuyển-sang-m2). Before starting, the PO fixes N=5–8, the application/model version, and the task sheet: enter a moment, clarify/generate, explain the progression, edit, save, review, reopen the saved revision, and explain the edit. Log each person's completion, obstacles, errors, dropout reasons, and help per step. H0 uses only the common instructions and in-product tour/docs; H1 receives step/navigation prompts from the observer; H2 receives creative suggestions or someone acts for them. Only full H0 completion is independent; starters who drop out stay in N and do not pass.
+
+At least 80% of N must complete independently, rounded up (N=5/6/7/8 requires 4/5/6/7 people). At least two independent completers must want to continue their own story and identify a next step; capture the obstacles. No unresolved blocker may remain: lost/overwritten work, inability to save/reopen, feedback on the wrong draft/context, explicit-intent violations, or operation errors preventing completion. Record evidence and verify each fixed failure on the candidate version.
+
+The PO records **pass / fail / more evidence needed** in #26 with the participant table and experienced-reader observations. Milestone 2 is prioritized only when all thresholds and the no-blocker condition hold and the PO records pass. Otherwise improve Milestone 1; an approved demo recording cannot substitute for a passing pilot. Do not lower thresholds retrospectively. A changed task/threshold requires a new batch; keep the old report. Separate different application/model versions rather than pooling results to pass; a new batch still needs N=5–8. These are operating thresholds for a small discovery pilot, not market-wide evidence.
+
+Measure completed screenplay drafts and export only when Milestones 3 and 4 are available. Generation counts and AI scores do not demonstrate success.
 
 ## Engineering Priorities
 
