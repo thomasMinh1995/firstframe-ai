@@ -183,10 +183,11 @@ class DatasetRun:
         except (OSError, sqlite3.Error) as error:
             self._warn(error)
 
-    def complete(self, snapshot: dict[str, Any]) -> None:
+    def complete(self, snapshot: dict[str, Any], *, workflow_complete: bool | None = None) -> None:
         self.record["output"] = json.loads(_json(snapshot))
         self.record["output_revision"] = snapshot.get("revision")
-        self.record["workflow_complete"] = self.record["operation"] in {"plan", "generate"}
+        self.record["workflow_complete"] = (self.record["operation"] in {"plan", "generate"}
+                                            if workflow_complete is None else workflow_complete)
         self._finish("completed")
 
     def _finish(self, status: str) -> None:

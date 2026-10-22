@@ -16,6 +16,7 @@ from app.api.schemas.projects import (
     ClarificationVersion,
     DraftVersion,
     FeedbackSource,
+    PlanGeneration,
     ProjectResponse,
     ProjectSummary,
     ProjectUpdate,
@@ -28,12 +29,13 @@ from app.application.ai_provider import (
     MissingProviderConfigurationError,
     ProviderRequestError,
     ProviderTimeoutError,
+    ProviderError,
 )
 from app.application.dataset import capture_workflow
 from app.application.language import LanguageSelectionRequired
 from app.application.progress import progress_listener, report_progress
 from app.application.project_store import ProjectConflict, ProjectNotFound, ProjectStore
-from app.core.artifacts import Constraint, PlanSection
+from app.core.artifacts import Constraint, PlanSection, StoryPlanArtifact
 
 router = APIRouter(prefix="/api/projects", tags=["projects"])
 
@@ -127,7 +129,9 @@ def save_project(project: ProjectResponse) -> ProjectResponse:
 
 
 def dataset_snapshot(project: ProjectResponse) -> dict[str, object]:
-    return project.model_dump(mode="json", exclude={"versions", "clarification_history"})
+    return project.model_dump(mode="json", exclude={
+        "versions", "clarification_history", "plan_generations", "applicable_plan_ids",
+    })
 
 
 def constraints_for(project: ProjectResponse) -> tuple[Constraint, ...]:
@@ -283,25 +287,82 @@ def plan_project(project_id: str, request: RevisionRequest):
             not answer.strip() for answer in project.answers
         ):
             raise HTTPException(422, "Hãy trả lời hoặc chọn để quyết định sau cho từng câu hỏi.")
-        with capture_workflow("plan", dataset_snapshot(project)) as dataset:
-            context = project.author_context
-            run = get_story_generation_service().plan(
-                project.idea, project.creator_answers(), constraints_for(project),
-                response_language=project.response_language,
+        generation_id = None
+
+        def keep_plan(plan: StoryPlanArtifact) -> None:
+            nonlocal project, generation_id
+            generation = PlanGeneration(
+                id=plan.metadata.artifact_id, created_at=datetime.now(UTC).isoformat(),
+                source_revision=project.revision, source_content=project.content_key(),
+                context=project.author_context,
+                draft=StoryDraft(
+                    title=plan.title or "Phim ngắn chưa đặt tên", logline=plan.logline or "",
+                    sections=[{"title": section.title, "purpose": section.purpose,
+                               "content": section.content} for section in plan.sections],
+                ),
             )
-            generated = _to_response(run)
-            add_version(project)
-            project.draft = StoryDraft(
-                title=generated.story_plan.title or "Phim ngắn chưa đặt tên",
-                logline=generated.story_plan.logline or "",
-                sections=[section.model_dump() for section in generated.story_plan.sections],
+            if project.draft is None:
+                project.draft = generation.draft.model_copy(deep=True)
+                project.feedback = project.feedback_source = project.reviewed_content = None
+                generation.applied_revision = project.revision + 1
+            project.plan_generations.append(generation)
+            project = save_project(project)
+            generation_id = generation.id
+
+        try:
+            with capture_workflow("plan", dataset_snapshot(project)) as dataset:
+                run = get_story_generation_service().plan(
+                    project.idea, project.creator_answers(), constraints_for(project),
+                    response_language=project.response_language, on_planned=keep_plan,
+                )
+                generation = project.plan_generations[-1]
+                generation.feedback = _to_response(run).evaluation
+                generation.critic_status = "reviewed"
+                # A proposal's critic reads its draft, never the working draft it may replace.
+                reviewed = project.model_copy(deep=True)
+                reviewed.draft = generation.draft.model_copy(deep=True)
+                reviewed.feedback = generation.feedback
+                attach_feedback_source(reviewed, generation.context)
+                generation.feedback_source = reviewed.feedback_source
+                if generation.applied_revision is not None:
+                    project.feedback = reviewed.feedback
+                    project.feedback_source = reviewed.feedback_source
+                    project.reviewed_content = reviewed.reviewed_content
+                    add_version(project)
+                project = save_project(project)
+                dataset.complete(
+                    {**dataset_snapshot(project), "plan_generation": generation.model_dump(mode="json")},
+                    workflow_complete=generation.applied_revision is not None,
+                )
+        except ProviderError:
+            if generation_id is None:
+                raise
+            project.plan_generations[-1].critic_status = "failed"
+            # Use only the checkpoint revision: a late critic must not overwrite a newer save.
+            project = save_project(project)
+        return project
+
+
+@router.post("/{project_id}/plans/{generation_id}/accept", response_model=ProjectResponse)
+def accept_plan(project_id: str, generation_id: str, request: RevisionRequest):
+    with project_errors():
+        project = load_project(project_id, request.revision)
+        generation = next((item for item in project.plan_generations if item.id == generation_id), None)
+        if generation is None:
+            raise HTTPException(404, "Không tìm thấy bản đề xuất trong dự án này.")
+        if generation.id not in project.applicable_plan_ids:
+            raise HTTPException(
+                409, "Bản đề xuất đã được nhận hoặc nguồn đã thay đổi. Bản đang viết vẫn được giữ.",
             )
-            project.feedback = generated.evaluation
-            attach_feedback_source(project, context)
-            add_version(project)
-            saved = save_project(project)
-            dataset.complete(dataset_snapshot(saved))
-            return saved
+        add_version(project)
+        project.draft = generation.draft.model_copy(deep=True)
+        source = generation.feedback_source
+        project.feedback = generation.feedback if source is not None else None
+        project.feedback_source = source.model_copy(deep=True) if source is not None else None
+        project.reviewed_content = source.content_key if source is not None else None
+        generation.applied_revision = project.revision + 1
+        add_version(project)
+        return save_project(project)
 
 
 @router.post("/{project_id}/review", response_model=ProjectResponse)

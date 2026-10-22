@@ -89,7 +89,7 @@ function copy(step: TourStep, p: Props) {
     case "choices": return (p.questionCount
       ? "Trả lời theo ý bạn, hoặc chọn Để quyết định sau nếu chưa chắc. "
       : "Ý tưởng không có câu hỏi bổ sung; bạn có thể tạo bản phát triển ngay. ")
-      + (p.context.hasDraft ? "Bạn cũng có thể xem bản đã có; tạo lại sẽ giữ phiên bản cũ." : "Bạn quyết định khi nào tạo bản phát triển từ các lựa chọn của mình.");
+      + (p.context.hasDraft ? "Bạn cũng có thể xem bản đã có; tạo lại sẽ giữ đề xuất riêng tới khi bạn chọn nhận." : "Bạn quyết định khi nào tạo bản phát triển từ các lựa chọn của mình.");
     case "draft": return "Sửa trực tiếp tên phim, tóm tắt và từng phần theo ý bạn. Đây là bản phát triển câu chuyện, chưa phải kịch bản theo cảnh hoàn chỉnh.";
     case "save": return "Nhận phản hồi trên bản hiện tại sẽ lưu trước khi gửi AI; bạn tự quyết định cách sửa. Sau khi sửa tiếp, góp ý cũ thuộc bản trước — hãy lưu thay đổi trước khi rời đi.";
   }

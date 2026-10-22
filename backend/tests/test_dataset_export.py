@@ -134,7 +134,8 @@ def test_project_exports_linked_rounds_and_exact_edited_draft(
     assert plan["parent_run_id"] == analyze["run_id"]
     assert plan["source_analysis_id"] == project["analysis"]["artifact_id"]
     assert plan["output_revision"] == project["revision"]
-    assert plan["input_revision"] + 1 == plan["output_revision"]
+    assert plan["input_revision"] + 2 == plan["output_revision"]
+    assert plan["output"]["plan_generation"]["applied_revision"] == plan["input_revision"] + 1
     assert plan["input"]["answers"] == project["answers"]
     assert [step["stage"] for step in plan["steps"]] == ["planning", "evaluation"]
     assert "versions" not in plan["output"]
@@ -167,7 +168,7 @@ def test_failed_critic_keeps_successful_planning_but_does_not_export_as_complete
     monkeypatch.setattr(provider, "request_structured", timeout)
     url = f"/api/projects/{project['id']}"
     response = client.post(f"{url}/plan", json={"revision": project["revision"]})
-    assert response.status_code == 504
+    assert response.status_code == 200
     record = DatasetStore(local_dataset_directory).records()[-1]
     assert record["status"] == "failed" and record["workflow_complete"] is False
     assert record["output"] is None
@@ -175,7 +176,12 @@ def test_failed_critic_keeps_successful_planning_but_does_not_export_as_complete
     assert record["steps"][0]["output"]["story_plan"]
     assert record["steps"][1]["error_type"] == "ProviderTimeoutError"
     assert "secret diagnostic" not in json.dumps(record)
-    assert client.get(url).json() == project
+    saved = client.get(url).json()
+    assert saved == response.json()
+    assert saved["draft"] == project["draft"]
+    assert saved["feedback_source"] == project["feedback_source"]
+    assert saved["plan_generations"][-1]["critic_status"] == "failed"
+    assert saved["plan_generations"][-1]["applied_revision"] is None
     assert exported(DatasetStore(local_dataset_directory))[-1] == record
 
 

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from pathlib import Path
@@ -358,7 +359,10 @@ class CreativeReasoningHarness:
     def analyze(self, idea: IdeaArtifact) -> ReasoningArtifact:
         return self._reasoning_layer.reason(idea, self.domains.get(idea.metadata.domain_id))
 
-    def plan(self, reasoning: ReasoningArtifact) -> HarnessRun:
+    def plan(
+        self, reasoning: ReasoningArtifact,
+        on_planned: Callable[[StoryPlanArtifact], None] | None = None,
+    ) -> HarnessRun:
         domain = self.domains.get(reasoning.metadata.domain_id)
         planning = self._planning_layer.plan(reasoning, domain)
         story_plan = StoryPlanArtifact(
@@ -369,6 +373,8 @@ class CreativeReasoningHarness:
             or _make_logline(_find_note(reasoning, "Original idea")),
             sections=planning.sections,
         )
+        if on_planned is not None:
+            on_planned(story_plan)
         evaluation = self._evaluation_layer.evaluate(planning, domain)
         return HarnessRun(analysis=reasoning, story_plan=story_plan, evaluation=evaluation)
 
@@ -410,6 +416,7 @@ class StoryGenerationService:
         answers: tuple[tuple[str, str], ...],
         constraints: tuple[Constraint, ...] = (),
         response_language: ResponseLanguage = "auto",
+        on_planned: Callable[[StoryPlanArtifact], None] | None = None,
     ) -> HarnessRun:
         return self._harness.plan(
             _LLMReasoningArtifact(
@@ -433,7 +440,8 @@ class StoryGenerationService:
                         for question, answer in answers
                     ),
                 ),
-            )
+            ),
+            on_planned=on_planned,
         )
 
     def review(
