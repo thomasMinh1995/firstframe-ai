@@ -679,6 +679,12 @@ button:disabled {
 .form-stack { display: grid; gap: 12px; margin-top: 20px; }
 .form-stack h2 { margin-bottom: 0; }
 .form-stack p { margin-bottom: 0; }
+.workspace-tools { margin-top: 18px; }
+.workspace-tools summary { color: var(--muted); }
+.story-reading { display: grid; gap: 14px; padding: 20px; background: var(--soft); border: 1px solid var(--line); border-radius: 8px; min-width: 0; }
+.story-reading h3 { margin: 0; font-size: clamp(1.35rem, 4vw, 1.8rem); }
+.story-reading p { line-height: 1.7; }
+.story-reading button { justify-self: start; }
 .question-block, .draft-section { display: grid; gap: 10px; }
 .question-block + .question-block { border-top: 1px solid var(--line); padding-top: 18px; }
 .short-textarea { min-height: 90px; }

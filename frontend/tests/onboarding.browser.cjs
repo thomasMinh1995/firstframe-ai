@@ -292,7 +292,101 @@ async function setup(browser, options = {}) {
     assert.match(await page.locator('#tour-description').innerText(), /Bản phát triển đang làm việc/);
     await click(page, 'Tiếp'); await step(page, 6); await click(page, 'Hoàn tất hướng dẫn');
     await t.close();
+
+    // Reading uses the entire working buffer, never a saved copy or a new AI result.
+    const readingProject = {
+      ...fullProject('p1'), constraints: ['Giữ kết thúc mở'], answers: ['Chưa quyết định'],
+      analysis: { ...analysis(), missing_information: ['Điều gì cần giữ?'] },
+      draft: { title: 'Bữa cơm muộn', logline: 'Mẹ để phần cơm cho con.', sections: [
+        { title: 'Beginning', purpose: 'Mở đầu', content: 'Con mở cửa.\nQuạt vẫn quay.' },
+        { title: 'Middle', purpose: 'Diễn tiến', content: 'Mẹ đẩy bát cơm sang.' },
+        { title: 'Ending', purpose: 'Kết thúc', content: 'Hai mẹ con ngồi im.' },
+        { title: 'Tone', purpose: 'Sắc thái', content: 'Lặng lẽ, không hòa giải.' },
+        { title: 'Ghi chú riêng', purpose: 'Ghi chú', content: '<script>Không thực thi</script>' },
+      ] },
+      feedback: { passed: true, rubric_scores: {}, findings: [] }, feedback_is_current: true,
+      versions: [{ id: 'v1', created_at: '2026-10-21T10:00:00Z', idea: 'Nguồn bản cũ',
+        constraints: [], questions: [], answers: [], draft: draft(), feedback: null }],
+    };
+    for (const viewport of [{ width: 1280, height: 900 }, { width: 390, height: 844 }]) {
+      t = await setup(browser, { projects: [readingProject], viewport }); ({ page, mock } = t);
+      const reading = page.getByRole('region', { name: 'Bản đọc story plan', exact: true });
+      assert.match(await reading.innerText(), /Bản đang làm việc · Đã lưu/);
+      assert.equal(await reading.getByRole('heading', { name: 'Bữa cơm muộn', exact: true }).count(), 1);
+      assert.equal(await reading.locator('.story-section').first().locator('p').textContent(), 'Con mở cửa.\nQuạt vẫn quay.');
+      assert.match(await page.locator('.feedback-section').innerText(), /Phản hồi cho đúng bản hiện tại/);
+      const serverBefore = clone(mock.projects), callsBefore = clone(mock.calls);
+      await page.locator('#project-title').fill('Tên dự án chưa lưu');
+      await page.locator('#response-language').selectOption('en');
+      await page.locator('#answer-0').fill('Giữ sự lặng lẽ, chưa chốt kết thúc');
+      await page.locator('#draft-title').fill('Tên phim tác giả đang sửa');
+      await page.locator('#draft-logline').fill('Tóm tắt mới chưa lưu.');
+      for (let i = 0; i < readingProject.draft.sections.length; i++) {
+        await page.locator(`#section-${i}`).fill(`Bản sửa ${i}\nDòng hai của tác giả.`);
+      }
+      before = await buffer(page);
+      assert.match(await reading.innerText(), /Có thay đổi chưa lưu/);
+      assert.match(await reading.innerText(), /Tên phim tác giả đang sửa/);
+      assert.match(await reading.innerText(), /Tóm tắt mới chưa lưu/);
+      for (let i = 0; i < 3; i++) assert.ok((await reading.innerText()).includes(`Bản sửa ${i}\nDòng hai của tác giả.`));
+      assert.equal(await reading.getByText('Bản sửa 3', { exact: false }).isVisible(), false);
+      await reading.locator('summary').click();
+      for (let i = 3; i < 5; i++) assert.ok((await reading.innerText()).includes(`Bản sửa ${i}\nDòng hai của tác giả.`));
+      assert.match(await page.locator('.feedback-section').innerText(), /thuộc bản trước/);
+      await click(page, 'Chuyển tới phần chỉnh sửa'); await focused(page, '#draft-logline');
+      assert.deepEqual(await buffer(page), before, 'reading and focusing preserve every editable field');
+      assert.deepEqual(mock.calls, callsBefore, 'reading/focusing sends no requests, including AI');
+      assert.deepEqual(mock.projects, serverBefore, 'reading never changes saved data or history');
+      assert.equal(await page.evaluate(() => {
+        const event = new Event('beforeunload', { cancelable: true });
+        window.dispatchEvent(event); return event.defaultPrevented;
+      }), true, 'unsaved work still has the leave warning');
+      assert.equal(await reading.evaluate(el => el.scrollWidth <= el.clientWidth), true, 'reader fits viewport');
+      await reading.screenshot({ path: path.join(screenshots, `story-reading-${viewport.width}.png`) });
+      mock.failSave = true;
+      await click(page, 'Lưu thay đổi'); await page.locator('.error[role="alert"]').waitFor();
+      assert.deepEqual(await buffer(page), before, '409 preserves the complete buffer');
+      assert.deepEqual(mock.projects, serverBefore, '409 preserves saved draft and history');
+      assert.match(await reading.innerText(), /Có thay đổi chưa lưu/);
+      writes = countWrites(mock);
+      await click(page, 'Chuyển tới phần chỉnh sửa'); await focused(page, '#draft-logline');
+      assert.equal(countWrites(mock), writes, 'navigation after failure does not retry the save');
+      mock.failSave = false;
+      await click(page, 'Lưu thay đổi');
+      await page.getByText('Đã lưu thay đổi.', { exact: true }).waitFor();
+      assert.deepEqual(await buffer(page), before);
+      assert.match(await reading.innerText(), /Bản đang làm việc · Đã lưu/);
+      assert.deepEqual(mock.projects[0].versions, serverBefore[0].versions);
+      await page.reload(); await reading.waitFor();
+      assert.deepEqual(await buffer(page), before, 'save/reopen preserves the exact edited content');
+      assert.match(await reading.innerText(), /Tóm tắt mới chưa lưu/);
+      assert.equal(mock.calls.some(c => /\/(analyze|plan|review)(\/stream)?$/.test(c.pathname)), false);
+      await t.close();
+    }
+    t = await setup(browser, { projects: [project()] }); ({ page, mock } = t);
+    assert.equal(await page.getByRole('region', { name: 'Bản đọc story plan' }).count(), 0, 'no draft means no invented reader');
+    assert.equal(await page.locator('#idea').getAttribute('aria-describedby'), 'idea-help');
+    await page.locator('.workspace-tools summary').click();
+    assert.equal(await page.getByRole('link', { name: 'Đánh giá chất lượng dataset' }).isVisible(), true);
+    assert.equal(countWrites(mock), 0);
+    await t.close();
+    t = await setup(browser, { projects: [fullProject('p1')] }); ({ page, mock } = t);
+    assert.match(await page.getByRole('region', { name: 'Bản đọc story plan' }).innerText(), /Chưa có phần mở đầu/);
+    assert.equal(await page.locator('#draft-logline').inputValue(), draft().logline);
+    assert.equal(countWrites(mock), 0, 'legacy empty sections remain editable without AI');
+    await t.close();
+    t = await setup(browser, { projects: [{ ...fullProject('p1'), draft: {
+      title: '', logline: ' ', sections: [{ title: 'Beginning', purpose: '', content: '' }],
+    } }] }); ({ page, mock } = t);
+    const emptyReading = await page.getByRole('region', { name: 'Bản đọc story plan' }).innerText();
+    assert.match(emptyReading, /Chưa có tên phim/); assert.match(emptyReading, /Chưa có tóm tắt/);
+    assert.match(emptyReading, /Chưa có nội dung/);
+    assert.equal(await page.locator('#draft-title').inputValue(), '');
+    assert.equal(await page.locator('#draft-logline').inputValue(), ' ');
+    assert.equal(countWrites(mock), 0, 'empty values get labels, never generated content');
+    await t.close();
     console.log('Browser tour checks passed: full flow, no tour writes, buffers, keyboard, conditional data, failures, reload, project switch, cross-tab dismissal, storage, missing anchors and mobile viewport.');
+    console.log('Story-plan reading checks passed: current buffer, optional details, zero navigation requests, stale feedback, leave warning, 409 preservation, save/reopen, missing data and desktop/mobile layouts.');
     console.log(`Screenshots: ${screenshots}`);
   } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });

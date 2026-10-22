@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { StoryFeedback } from "./StoryResultCards";
+import { StoryPlanReading } from "./StoryPlanReading";
 import { OperationProgress } from "./OperationProgress";
 import { OnboardingTour, useOnboarding } from "./OnboardingTour";
 import { applyProgress, progressLanguage, type OperationStep } from "./progressState";
@@ -136,11 +137,14 @@ export default function Home() {
       <header className="intro">
         <p className="eyebrow">Câu chuyện của bạn. Kịch bản đầu tiên của bạn.</p>
         <h1 id="workspace-title" tabIndex={-1}>FirstFrame</h1>
-        <p className="tagline">Từng bước phát triển câu chuyện bạn muốn kể.</p>
-        <p className="summary">Bắt đầu bằng ý tưởng, làm rõ những lựa chọn rồi cùng sửa bản phát triển.
-          Viết kịch bản theo cảnh sẽ đến sau.</p>
-        <a className="demo-entry secondary" href="/demo">Xem demo local từ kịch bản có sẵn</a>
-        <a className="demo-entry secondary" href="/datasets">Đánh giá chất lượng dataset</a>
+        <p className="tagline">Một khoảnh khắc nhỏ cũng đủ để bắt đầu.</p>
+        <p className="summary">Ghi lại điều bạn thấy, nghe hoặc nhớ. Cùng làm rõ điều muốn kể,
+          đọc bản phác thảo câu chuyện rồi tự sửa theo ý bạn.</p>
+        <details className="workspace-tools">
+          <summary>Demo và công cụ đánh giá</summary>
+          <a className="demo-entry secondary" href="/demo">Xem demo local từ kịch bản có sẵn</a>{" "}
+          <a className="demo-entry secondary" href="/datasets">Đánh giá chất lượng dataset</a>
+        </details>
       </header>
       <OnboardingTour tour={tour} context={tourContext} ready={workspaceLoadState === "ready"}
         empty={projectsListed && !projects.length} busy={!!busy} error={error}
@@ -177,8 +181,9 @@ export default function Home() {
       {error && <p className="error" role="alert">{error}</p>}
       {notice && <p className="operation-status" role="status">{notice}</p>}
       {!project && !busy && <section className="panel empty-project">
-        <h2>Bắt đầu câu chuyện đầu tiên</h2>
-        <p>Chọn “Dự án mới” để lưu ý tưởng và quay lại phát triển bất cứ lúc nào.</p>
+        <h2>Ghi lại khoảnh khắc của bạn</h2>
+        <p>Chọn “Dự án mới”, kể một khoảnh khắc bạn nhớ rồi lưu để quay lại viết tiếp.
+          Chưa cần biết toàn bộ câu chuyện sẽ đi tới đâu.</p>
         {error && <button onClick={() => window.location.reload()}>Thử kết nối lại</button>}
       </section>}
       {project && <>
@@ -191,7 +196,7 @@ export default function Home() {
         </div>
         <fieldset disabled={!!busy} className="project-fields">
           <section className="panel form-stack">
-            <h2>1. Câu chuyện bạn muốn kể</h2>
+            <h2>1. Khoảnh khắc bạn muốn kể</h2>
             <label htmlFor="project-title">Tên dự án</label>
             <input id="project-title" maxLength={200} value={project.title}
               onChange={(event) => setProject({ ...project, title: event.target.value })} />
@@ -201,18 +206,24 @@ export default function Home() {
               {Object.entries(responseLanguageLabels).map(([value, label]) =>
                 <option key={value} value={value}>{label}</option>)}
             </select>
-            <p className="storage-note">Hỗ trợ tiếng Việt và tiếng Anh. Với ý tưởng quá ngắn,
-              không dấu hoặc chưa rõ ngôn ngữ, hãy chọn ngôn ngữ đầu ra.
-              Lựa chọn áp dụng cho lần làm rõ, phát triển hoặc góp ý tiếp theo;
-              không tự dịch bản đang viết hay gọi AI. Thuật ngữ như lab coach có thể giữ nguyên.</p>
-            <label htmlFor="idea">Ý tưởng, kỷ niệm hoặc tình huống của bạn</label>
+            <details>
+              <summary>Về ngôn ngữ đầu ra</summary>
+              <p className="storage-note">Hỗ trợ tiếng Việt và tiếng Anh. Với ý tưởng quá ngắn,
+                không dấu hoặc chưa rõ ngôn ngữ, hãy chọn ngôn ngữ đầu ra.
+                Lựa chọn áp dụng cho lần làm rõ, phát triển hoặc góp ý tiếp theo;
+                không tự dịch bản đang viết hay gọi AI.</p>
+            </details>
+            <label htmlFor="idea">Khoảnh khắc, kỷ niệm hoặc tình huống của bạn</label>
+            <p className="storage-note" id="idea-help">Một cử chỉ, âm thanh hay chuyện vui/khó xử đều có thể bắt đầu câu chuyện.
+              Chưa cần có cốt truyện hoặc biết cách viết kịch bản.</p>
             <textarea id="idea" data-tour="idea" maxLength={5000} value={project.idea} rows={5}
-              placeholder="Điều gì khiến bạn muốn kể câu chuyện này?"
+              aria-describedby="idea-help"
+              placeholder="Ví dụ: Tôi về muộn. Mẹ để phần cơm trên bàn, chỉ hỏi có cần hâm lại không. Tôi nhớ tiếng chiếc quạt quay trong lúc hai mẹ con ngồi ăn."
               onChange={(event) => setProject({ ...project, idea: event.target.value })} />
             <label htmlFor="constraints">Điều bạn muốn giữ hoặc giới hạn thực hiện (tùy chọn)</label>
             <textarea id="constraints" className="short-textarea" rows={3}
               value={project.constraints.join("\n")}
-              placeholder="Mỗi dòng một ý, ví dụ: kết thúc mở; hai nhân vật; chỉ một căn nhà."
+              placeholder="Mỗi dòng một ý, ví dụ: giữ sự lặng lẽ; chưa cần kết thúc rõ; chỉ hai nhân vật."
               onChange={(event) => setProject({ ...project, constraints: event.target.value.split("\n") })} />
             {briefChanged && (project.analysis || project.draft) && <p className="form-message">Ý tưởng đã thay đổi. Làm rõ lại trước khi tạo
               bản phát triển mới; bản thảo và câu trả lời trước đó sẽ được giữ trong lịch sử.</p>}
@@ -246,6 +257,8 @@ export default function Home() {
           </section>}
           {project.draft && <section className="panel form-stack">
             <h2 data-tour="draft" tabIndex={-1}>3. Bản phát triển đang làm việc</h2>
+            <StoryPlanReading draft={project.draft} dirty={dirty} />
+            <h3>Chỉnh sửa bản phác thảo</h3>
             <p>Sửa trực tiếp nội dung của bạn. Nhận phản hồi sẽ lưu bản này trước khi gửi cho AI.</p>
             <label htmlFor="draft-title">Tên phim tạm thời</label>
             <input id="draft-title" maxLength={200} value={project.draft.title}

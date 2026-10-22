@@ -73,7 +73,7 @@ const titles: Record<TourStep, string> = {
   choices: "Những lựa chọn thuộc về bạn", draft: "Viết tiếp bằng giọng của bạn", save: "Lưu lại để tiếp tục",
 };
 const targetLabels: Record<TourStep, string> = {
-  "new-project": "Nút Dự án mới", idea: "Ô Ý tưởng, kỷ niệm hoặc tình huống của bạn",
+  "new-project": "Nút Dự án mới", idea: "Ô Khoảnh khắc, kỷ niệm hoặc tình huống của bạn",
   language: "Ngôn ngữ đầu ra", choices: "Những lựa chọn của bạn",
   draft: "Bản phát triển đang làm việc", save: "Thanh lưu thay đổi",
 };
@@ -82,7 +82,7 @@ function copy(step: TourStep, p: Props) {
     case "new-project": return p.context.projectId
       ? "Dự án mới tạo không gian cho một câu chuyện khác. Nút này sẽ lưu thay đổi của dự án đang mở trước khi tạo dự án mới."
       : "Tạo không gian riêng cho câu chuyện của bạn. Bạn có thể lưu và quay lại viết tiếp bất cứ lúc nào.";
-    case "idea": return "Kể một tình huống hoặc kỷ niệm, kèm điều bạn muốn giữ ở ô bên dưới. Dùng Lưu thay đổi để quay lại viết tiếp, kể cả khi chưa chạy AI.";
+    case "idea": return "Ghi lại một khoảnh khắc bạn thấy, nghe hoặc nhớ, kèm điều muốn giữ ở ô bên dưới. Chưa cần có cốt truyện. Dùng Lưu thay đổi để quay lại viết tiếp, kể cả khi chưa chạy AI.";
     case "language": return validAnalysis(p.context)
       ? "Ngôn ngữ này áp dụng cho lần AI tiếp theo, không dịch nội dung đã có. Ý tưởng đã được làm rõ; bạn có thể tiếp tục xem các lựa chọn mà không chạy AI lại."
       : "Chọn Tiếng Việt hoặc English nếu ý tưởng quá ngắn hay chưa rõ ngôn ngữ. Sau đó tự bấm Cùng làm rõ ý tưởng; FirstFrame sẽ lưu trước khi gửi AI.";
