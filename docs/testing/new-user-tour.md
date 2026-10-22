@@ -43,8 +43,9 @@ headless chạy frontend production. Dữ liệu được tổng hợp; không d
   khi kết quả đến muộn. Đóng thẻ trả về nút mở nếu còn tồn tại, nếu không về
   tiêu đề workspace. Thẻ vẫn nêu tên vùng đích khi spotlight bị ẩn.
 
-Chưa kiểm chứng bằng trình đọc màn hình thật, bàn phím ảo trên thiết bị thật
-hoặc Safari thật (xem lượt kiểm thử đa trình duyệt bên dưới). Chưa thực hiện pilot 3–5 người mới; PR chờ review UX và
+Chưa kiểm chứng bằng trình đọc màn hình thật, bàn phím ảo trên thiết bị thật.
+Safari thật đã pass smoke test (xem lượt kiểm thử đa trình duyệt bên dưới),
+nhưng chưa chạy toàn bộ suite. Chưa thực hiện pilot 3–5 người mới; PR chờ review UX và
 issue #22 vẫn mở cho nghiệm thu. Không dùng kiểm thử tour để kết luận chất
 lượng AI hoặc tốc độ model.
 
@@ -75,7 +76,7 @@ trước khi sửa, đều ở mức P2:
 | Reload, đổi dự án, storage hỏng và cross-tab dismissed/completed | Khớp; state/browser checks, không tự phát lại request |
 | Không tự ghi dự án/gọi AI, giữ input và lỗi hiện có | Khớp qua call-site review, so sánh buffer và theo dõi request |
 | Escape, trả focus, tên vùng đích khi bỏ spotlight | Đã sửa ba lỗi trên; browser regression pass |
-| Responsive, accessibility và pilot | Keyboard/viewport mô phỏng pass; screen reader, bàn phím ảo thật, Safari thật và pilot còn chờ; Firefox được kiểm tra ở lượt bên dưới |
+| Responsive, accessibility và pilot | Keyboard/viewport mô phỏng pass; screen reader, bàn phím ảo thật và pilot còn chờ; Firefox/WebKit pass suite, Safari thật pass smoke |
 
 Không còn lỗi chặn merge được xác nhận trong phạm vi kiểm tra này. Chưa
 kết luận đạt toàn bộ nghiệm thu của issue #22 vì các kiểm tra thủ công nêu
@@ -95,7 +96,7 @@ Kết quả ngày 22/10/2026 sau sửa lỗi:
 | Google Chrome 155.0.8059.85 | Pass toàn bộ suite hồi quy |
 | Firefox 151.0 (Playwright build v1532) | Pass toàn bộ suite |
 | WebKit 26.5 (Playwright build v2311) | Pass toàn bộ suite sau sửa lỗi Tab |
-| Safari 26.6.2 (ứng dụng macOS) | Blocked: Remote Automation chưa bật; chưa chạy suite |
+| Safari 26.6.2 (ứng dụng macOS) | Smoke pass: dialog, Tab/Shift+Tab, Escape, bước 2 → 3 và không ghi API; full suite còn chờ |
 
 Suite gồm đủ sáu bước, không tự ghi/gọi AI, giữ buffer, câu hỏi có điều kiện,
 lỗi lưu/AI, Escape/focus/Tab/Shift+Tab, reload/đổi dự án, tab khác bỏ qua khi
@@ -111,12 +112,11 @@ focus cho mọi Tab/Shift+Tab giữa các button enabled; không đổi workflow
 storage hoặc lời gọi API. Test mới kiểm tra từng điểm dừng và quay vòng,
 thay vì chỉ kiểm tra focus còn nằm trong dialog.
 
-Safari 26.6.2 thật đã được thử tạo session qua `/usr/bin/safaridriver`, nhưng
-bị chặn trước khi chạy ca kiểm thử: `You must enable 'Allow remote automation'
-in the Developer section of Safari Settings to control Safari via WebDriver.`
-Chưa thay đổi thiết lập này; cần người dùng bật Safari → Settings → Developer
-→ Allow remote automation rồi chạy tiếp. Không đánh dấu Safari đạt bằng
-kết quả WebKit; issue #22 phải giữ mục Safari mở.
+Safari 26.6.2 thật tạo session thành công qua `/usr/bin/safaridriver` sau khi
+bật Allow remote automation. Smoke test pass: mở tour trên workspace có project,
+Tab/Shift+Tab giữ focus trong dialog, Escape đóng tour, bước 2 → 3 sau
+Thực hành, giữ ý tưởng chưa lưu và không có request ghi. Chưa đánh dấu Safari
+đạt toàn bộ suite; issue #22 vẫn giữ mục chạy full Safari regression mở.
 
 ## Chạy lại
 
@@ -168,3 +168,7 @@ Firefox 151.0 và WebKit 26.5 sau sửa lỗi bàn phím:
 ![WebKit desktop — không phải Safari](assets/new-user-tour-webkit-desktop.png)
 
 ![WebKit mobile viewport — không phải Safari](assets/new-user-tour-webkit-mobile.png)
+
+Safari 26.6.2 thật: smoke test read-only đã pass trên macOS 26.6.2; chưa có
+ảnh vì lượt test tập trung vào keyboard và network, không phải chụp layout.
+Full Safari regression vẫn là mục nghiệm thu mở.
