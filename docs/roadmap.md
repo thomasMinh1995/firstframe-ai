@@ -227,6 +227,12 @@ Measure completed screenplay drafts and export only when Milestones 3 and 4 are 
 
 Keep the existing Harness and domain assets as the foundation. Add persistence, contracts, and checks as required by each milestone. Reliability work, including error handling and pilot access, should support the writing journey.
 
+The proposed [Harness improvement plan](plans/harness-improvement.md) divides the MVP into four small deliveries: entry copy and a reading view, the current saved author context, the existing manual revision loop, and recovery when the critic fails. Recovery distinguishes the first draft from regenerating an existing draft. Baseline preparation runs alongside these deliveries; data protection and the demo/pilot acceptance criteria above remain unchanged. Experiments with reference contracts stay independent of this basic work. Revision in both directions between story plan and screenplay remains a later direction, with changes limited to affected parts and approved by the author. This plan update delivers documentation only.
+
+The [first paired Qwen 3B experiment](evaluations/harness-reference-contract-2026-10-21.md) completed 108 model calls. The snapshot-key prototype remains confined to the evaluation runner: quote-validation acceptance fell, so it has not been promoted to the application workflow.
+
+The [controlled Qwen 3B–7B comparison](evaluations/harness-qwen3b-vs7b-2026-10-22.md) repeated all 108 calls with the 3B request profile and frozen source. On identical fixed drafts, the key-based variant passed reference/quote validation in 28/36 reviews with 7B versus 7/36 with 3B. These are technical acceptance counts; semantic errors persisted and latency increased. The runtime changed its critic contract during the experiment; these results describe the historical contract and do not validate the current runtime.
+
 Dynamic domain discovery, additional providers, RAG, multi-agent orchestration, streaming, and architecture refactoring are not prerequisites; revisit them only when a demonstrated product need justifies the work.
 
 ## Outside This Roadmap
