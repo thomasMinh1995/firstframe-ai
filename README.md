@@ -1,48 +1,56 @@
 # FirstFrame AI
 
-**Your story. Your first short-film screenplay.**
+**From a moment in your life to your first short-film screenplay.**
 
-FirstFrame AI helps beginners develop an idea into their first complete short-film screenplay through guided story development and specific, actionable feedback. The creator keeps control of the story and makes the final creative decisions.
+FirstFrame helps people in Vietnam write their first short film from their own experiences, understand their creative choices, and revise a screenplay to share with human collaborators. The author keeps control of the story.
 
-The current MVP supports saving projects, answering clarification questions before planning, editing a story plan, and requesting feedback on the revised draft through a **Creative Reasoning Harness**. It does not yet produce a complete screenplay.
+The current MVP supports saved projects, clarification questions, editable story plans, version history, and feedback on the revised draft through a **Creative Reasoning Harness**. It does not yet provide a scene outline, scene-level screenplay editor, or screenplay export.
 
 Current project workflow:
 
 ```text
-Save Idea -> Analyze -> Answer Questions -> Generate Story Plan -> Edit -> Review -> Save/Reopen
+Save Idea -> Analyze -> Answer/Defer Questions -> Generate Story Plan -> Edit -> Review -> Save/Reopen
 ```
+
+Review gives feedback on the saved draft; it does not rewrite it. Changing the idea or constraints uses the existing clarification flow again.
 
 ## Why It Exists
 
-Beginners often have a promising story idea but do not know how to shape it:
+A line of dialogue, an ordinary act of care, an awkward encounter, or a quiet memory can be enough to start. A beginner may need help discovering what matters in that moment and how to express it through actions, images, and sound.
 
-- What is the emotional core?
-- Who is the protagonist?
-- Where is the conflict?
-- Does the ending work?
-- Is the story practical for a short film?
+FirstFrame aims to help creators start without knowing film terminology, preserve what they want to keep, and learn through a specific revision. Quiet, funny, observational, and open-ended stories are valid forms. Production limits such as cast and locations inform the writing when relevant or chosen by the author.
 
-FirstFrame guides creators through these questions, explains revision options, and helps them decide what to develop next. Practical constraints such as cast size and available locations inform the writing process.
+## First Users and Differentiation to Validate
 
-## First Users
+The initial market is Vietnam. The first pilot focuses on Vietnamese film enthusiasts, especially young people who have not completed a short-film screenplay and lack a development method or someone to give useful feedback. A crew and filming schedule are not prerequisites.
 
-The first users are Vietnamese-speaking beginners who want to finish their first short-film screenplay. They have an idea or personal experience to explore but lack a development method and someone to give useful feedback.
+The proposed differences are practical outcomes to validate:
 
-They may be students, film-club members, or independent enthusiasts. They do not need a crew or a filming schedule to start; they need a willingness to write, review, and revise a draft.
+- Start from a moment before it becomes a fully formed film idea.
+- Handle Vietnamese forms of address, relationships, everyday settings, and speech in their specific context.
+- Develop feelings into actions that human actors can perform, with AI additions identified as proposals.
+- Help the author understand and make one useful revision.
+- Respect creative intent, deliberate ambiguity, and any practical limits the author chooses.
+
+Vietnamese support, a narrow scope, and a mentor label alone do not prove an advantage. Compare selected tasks with a familiar chatbot and a direct story-development tool during the pilot.
 
 ## Product Scope
 
 The planned core journey is:
 
 ```text
-Idea -> Story Development -> Scene Outline -> Write and Revise -> Complete Screenplay
+Moment -> Story Plan -> Scene Outline -> Write and Revise Screenplay -> Export Screenplay
 ```
 
-A completed draft contains all scenes from beginning to end, uses action and dialogue appropriate to the creator's intent, has undergone at least one feedback-and-revision round, and can be exported for reading and further development. This is the product goal, not a capability already delivered by the MVP.
+A story plan clarifies the intended story before detailed scene writing. It is a useful milestone to keep or share, but a good plan does not guarantee a good screenplay. Its detail should fit the size and form of the story.
 
-After the screenplay, optional rough scene illustrations may help creators visualize characters, positions, and key actions. This is a later extension, not a requirement for completing a screenplay. It does not include animation or video generation.
+The product goal is a complete short-film screenplay: all scenes are written, action and dialogue communicate the intended story, at least one feedback-and-revision round has taken place, and the selected draft can be exported for reading and further development. This is not a capability already delivered by the MVP.
 
-Filming preparation, shooting, editing, screenings, and feature-film or television development are outside the current product roadmap.
+FirstFrame's handoff ends at screenplay export. Casting, staging, shooting, editing, and post-production belong to a separate process with real people and actors. AI video, synthetic actors, generated footage, and production management are outside the product direction. Automatic scene illustrations are no longer an active roadmap milestone.
+
+Feature-film and television **screenwriting** may be explored after the short-film journey is validated and users demonstrate a need. This is a conditional long-term direction, not an MVP commitment; the handoff would still end at screenplay export.
+
+See the [Vietnam first-screenplay and MVP demo plan](docs/plans/vietnam-first-screenplay-mvp.md) for priorities, acceptance criteria, and pilot design. This update is documentation only; proposed demo improvements are not implemented by it.
 
 ## Current MVP
 
@@ -311,12 +319,12 @@ need live generation and are not part of this recorded playback.
 
 ## Next Milestones
 
-1. Validate the project clarification and revision loop with beginners.
-2. Develop an editable scene outline from the selected story plan.
-3. Support scene-level writing, specific feedback, and screenplay export.
-4. Consider optional rough scene illustrations after validating the core writing journey.
+1. Make the story-plan demo easier to start, read, and revise; show the author's effective choices and validate three Vietnamese situations on the actual demo model.
+2. Pilot with beginners, complete the focused feedback-to-edit flow, and export a selected story plan for sharing.
+3. Develop an editable scene outline, then support scene-level screenplay writing and revision.
+4. Export the selected complete screenplay for human collaborators; this is the product handoff.
 
-See [the roadmap](docs/roadmap.md) for milestone outcomes and validation. Expansion into other creative domains is deferred while FirstFrame validates the first-screenplay experience.
+See [the roadmap](docs/roadmap.md) and [the detailed demo plan](docs/plans/vietnam-first-screenplay-mvp.md). The onboarding tour is already implemented and awaits remaining acceptance, including beginner validation; adapt it to the settled writing flow rather than rebuilding it. Other creative domains remain deferred. Longer-form screenwriting is conditional future exploration.
 
 
 ### Human dataset review

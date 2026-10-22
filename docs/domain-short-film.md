@@ -2,7 +2,22 @@
 
 Short Film Story Development is the first supported domain for FirstFrame AI.
 
-It was chosen because short films are constrained enough for a hackathon demo but rich enough to show the value of a Creative Reasoning Harness: a vague idea must become a protagonist, conflict, emotional arc, ending, and feasible production plan.
+The initial market is Vietnam, with a pilot focused on people who have not completed a short-film screenplay. A line, action, encounter, or memory can be enough to start. The domain supports developing that material toward scenes, action, and dialogue that real actors and filmmakers can use.
+
+The product journey is **Moment -> Story Plan -> Scene Outline -> Write and Revise Screenplay -> Export Screenplay**. Runtime currently delivers story plans and feedback only. Casting, staging, shooting, editing, AI video, and synthetic actors are outside the product boundary.
+
+## Planned Domain Quality Priorities
+
+The [Vietnam first-screenplay demo plan](plans/vietnam-first-screenplay-mvp.md) defines proposed work, not prompt or rubric changes already delivered:
+
+- Ask only consequential questions in plain language; do not require a complete premise before beginning.
+- Respect Vietnamese forms of address, relationships, speech, and everyday settings in their particular context; ask about region or period only when relevant.
+- Develop emotion through performable action, images, and sound. Keep AI additions recognizable as proposals rather than facts about the author's experience.
+- Support funny, awkward, quiet, observational, and open-ended forms without imposing escalating conflict, reconciliation, or major transformation.
+- Give grounded feedback that helps the author make and explain a small edit.
+- Apply cast/location constraints when chosen or relevant; distinguish creative choices from temporary resource limits.
+
+These are quality hypotheses to validate with beginners and experienced readers. The current rubric still includes conflict and production feasibility; its existence is not evidence that all forms are evaluated appropriately. During later implementation, adjust only guidance implicated by observed failures, including any model-specific prompt profile, and validate real outputs. No prompt, rubric, schema, or example is changed by this direction update.
 
 ## Domain Assets
 
