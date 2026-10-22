@@ -1,10 +1,11 @@
 // Run against the production frontend with Playwright supplied via NODE_PATH.
 // Every project request is intercepted: no backend, real project or model is used.
-const { chromium } = require('playwright');
+const { chromium, firefox, webkit } = require('playwright');
 const assert = require('node:assert/strict');
 const path = require('node:path');
 const fs = require('node:fs/promises');
 const url = process.env.TOUR_TEST_URL || 'http://localhost:3033';
+const engine = process.env.TOUR_BROWSER || 'chrome';
 const screenshots = process.env.TOUR_SCREENSHOTS || '/private/tmp/firstframe-tour-screenshots';
 const key = 'firstframe:onboarding';
 const clone = value => structuredClone(value);
@@ -81,7 +82,11 @@ async function setup(browser, options = {}) {
 
 (async () => {
   await fs.mkdir(screenshots, { recursive: true });
-  const browser = await chromium.launch({ channel: 'chrome', headless: true });
+  assert.ok(['chrome', 'firefox', 'webkit'].includes(engine), 'TOUR_BROWSER must be chrome, firefox or webkit');
+  const browser = await ({ chrome: chromium, firefox, webkit })[engine].launch({
+    ...(engine === 'chrome' ? { channel: 'chrome' } : {}), headless: true,
+  });
+  console.log(`Testing ${engine} ${browser.version()} at ${url}`);
   try {
     // Escape works outside the modal too; disappearing openers use the workspace fallback.
     let t = await setup(browser), { page, mock } = t;
@@ -126,6 +131,15 @@ async function setup(browser, options = {}) {
     // Complete all six steps through real UI buttons, with no questions, sections or feedback.
     t = await setup(browser); ({ page, mock } = t);
     await click(page, 'Bắt đầu hướng dẫn'); await step(page, 1);
+    await focused(page, '#tour-title');
+    const tabOrder = await page.locator('.tour-card button:enabled').allTextContents();
+    // Check each stop, not just containment: WebKit may skip buttons by default.
+    for (let i = 0; i <= tabOrder.length; i++) {
+      await page.keyboard.press('Tab');
+      assert.equal(await page.evaluate(() => document.activeElement.textContent), tabOrder[i % tabOrder.length]);
+    }
+    await page.keyboard.press('Shift+Tab');
+    assert.equal(await page.evaluate(() => document.activeElement.textContent), tabOrder.at(-1));
     for (let i = 0; i < 12; i++) {
       await page.keyboard.press(i < 6 ? 'Tab' : 'Shift+Tab');
       assert.equal(await page.evaluate(() => !!document.activeElement.closest('dialog')), true, 'focus stays in modal');
