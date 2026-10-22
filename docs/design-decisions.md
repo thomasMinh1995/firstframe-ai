@@ -7,7 +7,7 @@ FirstFrame AI uses a fixed Creative Reasoning Harness instead of a free-form cha
 Reason:
 
 - story development benefits from repeatable steps;
-- judges can inspect the pipeline;
+- the author can understand and revisit creative choices;
 - future domains can reuse the same Reasoning -> Planning -> Evaluation structure;
 - the system can validate structured outputs instead of trusting free-form prose.
 
@@ -78,23 +78,35 @@ Reason:
 - artifacts are Harness-facing;
 - each can evolve without forcing the other to change immediately.
 
-## 8. Frontend Shows The Workflow
+## 8. Frontend Supports Reading and Revising
 
-The Thinking Timeline, Story Flow visualization, and result cards are intentionally part of the demo experience.
-
-Reason:
-
-- makes the Harness visible to judges;
-- communicates that the product reasons, plans, and evaluates;
-- helps users scan the result quickly instead of reading raw JSON.
-
-## 9. Honest MVP Constraints
-
-The MVP avoids auth, persistence, streaming, multi-agent orchestration, RAG, LangGraph, and vector search.
+The current frontend exposes the workflow through progress, editable story plans, feedback, and version history. The next demo priorities are a plain-language entry, a readable view of the same working draft, visible author context, and one manual revision loop.
 
 Reason:
 
-- hackathon scope favors a reliable end-to-end flow;
-- engineering depth is shown through clean contracts and boundaries;
-- unnecessary infrastructure would obscure the core product idea.
+- beginners need to picture their story and know the next action;
+- authors need to distinguish their choices from AI proposals;
+- feedback must refer to the draft and intent it actually reviewed;
+- review advises the author; it does not rewrite the draft.
 
+These additions are planned in the [Vietnam first-screenplay demo plan](plans/vietnam-first-screenplay-mvp.md). Displaying the read view must not require a second AI-authored narrative or discard unsaved edits.
+
+## 9. Scope Follows the Writing Journey
+
+The MVP already has local project persistence and operation progress. It does not yet deliver scene-level screenplay writing or screenplay export. Authentication, cloud sync, RAG, additional domains, and orchestration changes are not prerequisites for the next demo.
+
+Reason:
+
+- delivery is measured by an author starting, understanding, and revising a story;
+- technical work should address demonstrated reliability or writing needs;
+- implemented features and proposed work must remain distinguishable.
+
+## 10. Vietnam First, Through Screenplay Export
+
+FirstFrame focuses first on Vietnamese beginners writing their first short film from lived material. The journey ends at exporting the selected screenplay for human collaborators. Casting, staging, shooting, editing, and post-production are a separate human process. AI video, synthetic actors, and generated footage are outside the direction; automatic scene illustrations are no longer an active roadmap item.
+
+The differences to validate are a low-friction beginning, contextual Vietnamese relationships and speech, emotion expressed through performable action, a useful learning-by-revision loop, and respect for intent and relevant resources. They are hypotheses, not established competitive advantages.
+
+Story plans are the current development milestone; complete short-film screenplays remain the product goal. Feature or television screenwriting is conditional future exploration after this journey works. No production pipeline or future-format infrastructure is required now.
+
+See the [roadmap](roadmap.md) for delivery order and the [plan](plans/vietnam-first-screenplay-mvp.md) for acceptance and pilot design.
