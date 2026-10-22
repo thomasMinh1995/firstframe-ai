@@ -246,9 +246,11 @@ function TourDialog({ step, title, description, onMissing, onDismiss, children }
       if (event.key !== "Tab") return;
       const buttons = [...card.current!.querySelectorAll<HTMLButtonElement>("button:enabled")];
       const index = buttons.indexOf(document.activeElement as HTMLButtonElement);
-      if (index < 0 || (!event.shiftKey && index === buttons.length - 1) || (event.shiftKey && index === 0)) {
-        event.preventDefault(); (event.shiftKey ? buttons.at(-1) : buttons[0])?.focus();
-      }
+      // WebKit's default keyboard navigation may skip buttons even inside a modal.
+      event.preventDefault();
+      const next = index < 0 ? (event.shiftKey ? buttons.length - 1 : 0)
+        : (index + (event.shiftKey ? -1 : 1) + buttons.length) % buttons.length;
+      buttons[next]?.focus();
     }}>
     {placement?.hole ? <div className="tour-spotlight" aria-hidden="true" style={placement.hole} /> : <div className="tour-dim" aria-hidden="true" />}
     <div ref={card} className="tour-card" style={placement ? { left: placement.left, top: placement.top, width: placement.width, maxHeight: placement.maxHeight } : { visibility: "hidden" }}>
