@@ -62,6 +62,8 @@ async function setup(browser, options = {}) {
       const changed = p.idea !== body.idea || JSON.stringify(p.constraints) !== JSON.stringify(body.constraints);
       Object.assign(p, body, { revision: p.revision + 1 });
       if (changed) { p.analysis = null; p.answers = []; }
+      if (mock.savePatch) Object.assign(p, clone(mock.savePatch));
+      if (mock.loseSaveResponse) return route.abort('failed');
       return reply(p);
     }
     if (mock.hold) await mock.hold;
@@ -385,8 +387,100 @@ async function setup(browser, options = {}) {
     assert.equal(await page.locator('#draft-logline').inputValue(), ' ');
     assert.equal(countWrites(mock), 0, 'empty values get labels, never generated content');
     await t.close();
+
+    // The context card displays the server's saved projection, never a client-side merge.
+    const intentA = { idea: 'Ý đồ A: giữ sự lặng lẽ.', constraints: ['Không thêm cãi vã'], clarifications: [
+      { question: 'Lựa chọn giữ từ lượt trước?', answer: 'Một chiếc quạt cũ.', input_index: null },
+      { question: 'Điều gì cần giữ?', answer: 'Chưa quyết định. Đây vẫn là lời tác giả.', input_index: 0 },
+    ], pending_questions: [{ question: 'Hình ảnh cuối là gì?', input_index: 1 }] };
+    const sourceA = { project_id: 'p1', artifact_id: 'f1', revision: 3, content_key: 'saved-source-a',
+      context: intentA, draft: draft() };
+    const intentProject = { ...fullProject('p1'), revision: 4, idea: intentA.idea, constraints: intentA.constraints,
+      author_context: intentA, analysis: { ...analysis(), summary: 'AI tự đề xuất hòa giải.',
+        missing_information: ['Điều gì cần giữ?', 'Hình ảnh cuối là gì?'] },
+      answers: [intentA.clarifications[1].answer, ''], feedback: { artifact_id: 'f1', passed: true, rubric_scores: {}, findings: [] },
+      feedback_is_current: true, feedback_source: sourceA, versions: [{ id: 'v1', created_at: '2026-10-22T10:00:00Z',
+        idea: intentA.idea, constraints: intentA.constraints, questions: [], answers: [], draft: draft(),
+        feedback: { artifact_id: 'f1', passed: true, rubric_scores: {}, findings: [] }, feedback_source: sourceA }] };
+    const intentB = { idea: 'Ý đồ B: một chuyện vui ở bến xe.', constraints: ['Giữ sự hài hước'], clarifications: [], pending_questions: [] };
+    for (const viewport of [{ width: 1280, height: 900 }, { width: 390, height: 844 }]) {
+      t = await setup(browser, { projects: [intentProject], viewport }); ({ page, mock } = t);
+      const card = page.getByRole('region', { name: 'Ý đồ đã lưu hiện tại', exact: true });
+      assert.match(await card.innerText(), /revision 4/);
+      assert.match(await card.innerText(), /Một chiếc quạt cũ/);
+      assert.match(await card.innerText(), /Chưa quyết định. Đây vẫn là lời tác giả/);
+      assert.doesNotMatch(await card.innerText(), /AI tự đề xuất hòa giải/);
+      await card.screenshot({ path: path.join(screenshots, `author-intent-with-choices-${viewport.width}.png`) });
+      before = await buffer(page); const callsBefore = clone(mock.calls);
+      await click(page, 'Chỉnh câu trả lời 2'); await focused(page, '#answer-0');
+      await click(page, 'Trả lời câu hỏi 2'); await focused(page, '#answer-1');
+      await click(page, 'Chỉnh điều muốn giữ'); await focused(page, '#constraints');
+      await click(page, 'Chỉnh khoảnh khắc'); await focused(page, '#idea');
+      assert.deepEqual(await buffer(page), before); assert.deepEqual(mock.calls, callsBefore);
+      const feedbackSource = page.locator('.feedback-section .feedback-context');
+      await feedbackSource.locator('summary').click();
+      assert.match(await feedbackSource.innerText(), /Ý đồ A/);
+      assert.equal(await feedbackSource.getByRole('button').count(), 0, 'feedback context is always read-only');
+      await page.locator('#project-title').fill('Tên dự án chưa lưu');
+      await page.locator('#draft-logline').fill('Bản sửa của tác giả chưa lưu');
+      await page.locator('#answer-0').fill('Tôi thay câu trả lời nhưng chưa lưu');
+      await page.locator('#idea').fill(intentB.idea);
+      await page.locator('#constraints').fill(intentB.constraints[0]);
+      before = await buffer(page);
+      assert.match(await card.innerText(), /Có thay đổi chưa lưu/);
+      assert.match(await card.innerText(), /Ý đồ A/); assert.doesNotMatch(await card.innerText(), /Ý đồ B/);
+      assert.equal(await card.getByRole('button', { name: /Chỉnh câu trả lời/ }).count(), 0, 'hidden answer fields are not navigation targets');
+      mock.failSave = true;
+      await click(page, 'Lưu thay đổi'); await page.locator('.error[role="alert"]').waitFor();
+      assert.deepEqual(await buffer(page), before);
+      assert.match(await card.innerText(), /revision 4/); assert.match(await card.innerText(), /Ý đồ A/);
+      assert.match(await feedbackSource.innerText(), /Ý đồ A/);
+      writes = countWrites(mock);
+      await click(page, 'Chỉnh khoảnh khắc'); await focused(page, '#idea');
+      assert.equal(countWrites(mock), writes, 'context navigation cannot retry a failed save');
+      mock.failSave = false;
+      mock.savePatch = { author_context: intentB, feedback_is_current: false };
+      await click(page, 'Lưu thay đổi'); await page.getByText('Đã lưu thay đổi.', { exact: true }).waitFor();
+      assert.deepEqual(await buffer(page), before);
+      assert.match(await card.innerText(), /Ý đồ B/); assert.doesNotMatch(await card.innerText(), /Ý đồ A|Một chiếc quạt cũ/);
+      assert.match(await feedbackSource.innerText(), /Ý đồ A/); assert.doesNotMatch(await feedbackSource.innerText(), /Ý đồ B/);
+      const oldVersion = page.locator('.version-history > details').first();
+      await oldVersion.locator('summary').first().click();
+      await oldVersion.locator('.feedback-context summary').click();
+      assert.match(await oldVersion.locator('.feedback-context').innerText(), /Ý đồ A/);
+      assert.equal(await oldVersion.locator('.feedback-context button').count(), 0);
+      await card.screenshot({ path: path.join(screenshots, `author-intent-${viewport.width}.png`) });
+      await page.reload(); await card.waitFor();
+      assert.match(await card.innerText(), /Ý đồ B/);
+      await feedbackSource.locator('summary').click(); assert.match(await feedbackSource.innerText(), /Ý đồ A/);
+      assert.deepEqual(mock.projects[0].feedback_source, sourceA);
+      assert.equal(mock.calls.some(c => /\/(analyze|plan|review)(\/stream)?$/.test(c.pathname)), false);
+      await t.close();
+    }
+    // The server may have saved B even though the response was lost; A remains the last confirmed card.
+    t = await setup(browser, { projects: [intentProject] }); ({ page, mock } = t);
+    await page.locator('#idea').fill(intentB.idea); before = await buffer(page);
+    mock.savePatch = { author_context: intentB }; mock.loseSaveResponse = true;
+    await click(page, 'Lưu thay đổi'); await page.locator('.error[role="alert"]').waitFor();
+    assert.deepEqual(await buffer(page), before);
+    assert.equal(mock.projects[0].idea, intentB.idea, 'server committed before losing response');
+    const confirmed = page.getByRole('region', { name: 'Ý đồ đã lưu hiện tại', exact: true });
+    assert.match(await confirmed.innerText(), /Ý đồ A/); assert.match(await confirmed.innerText(), /bản cuối đã xác nhận/);
+    assert.deepEqual(mock.projects[0].feedback_source, sourceA);
+    assert.equal(countWrites(mock), 1, 'uncertain save is not retried automatically');
+    await t.close();
+    for (const source of [null, { ...sourceA, project_id: 'other-project' }, { ...sourceA, artifact_id: 'other-feedback' }]) {
+      t = await setup(browser, { projects: [{ ...intentProject, feedback_source: source }] }); ({ page, mock } = t);
+      const missing = page.locator('.feedback-section .feedback-context');
+      await missing.locator('summary').click();
+      assert.match(await missing.innerText(), /Chưa có đủ thông tin nguồn/);
+      assert.doesNotMatch(await missing.innerText(), /Ý đồ A/);
+      assert.equal(countWrites(mock), 0);
+      await t.close();
+    }
     console.log('Browser tour checks passed: full flow, no tour writes, buffers, keyboard, conditional data, failures, reload, project switch, cross-tab dismissal, storage, missing anchors and mobile viewport.');
     console.log('Story-plan reading checks passed: current buffer, optional details, zero navigation requests, stale feedback, leave warning, 409 preservation, save/reopen, missing data and desktop/mobile layouts.');
+    console.log('Author-context checks passed: backend projection, retained/open/pending choices, no navigation requests, saved A/buffer B, 409 and lost-response preservation, historical provenance, reload, missing/mismatched sources and desktop/mobile.');
     console.log(`Screenshots: ${screenshots}`);
   } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });

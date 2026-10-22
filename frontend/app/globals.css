@@ -685,6 +685,14 @@ button:disabled {
 .story-reading h3 { margin: 0; font-size: clamp(1.35rem, 4vw, 1.8rem); }
 .story-reading p { line-height: 1.7; }
 .story-reading button { justify-self: start; }
+.intent-details { margin: 0; min-width: 0; }
+.intent-details > div { border-top: 1px solid var(--line); padding: 14px 0; }
+.intent-details dt { font-weight: 700; }
+.intent-details dd { margin: 8px 0 0; }
+.intent-details ul { margin: 0; padding-left: 22px; }
+.intent-answer { display: grid; gap: 8px; margin-top: 12px; }
+.intent-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.feedback-context { margin-bottom: 18px; padding: 16px; border: 1px solid var(--line); border-radius: 8px; background: var(--soft); }
 .question-block, .draft-section { display: grid; gap: 10px; }
 .question-block + .question-block { border-top: 1px solid var(--line); padding-top: 18px; }
 .short-textarea { min-height: 90px; }

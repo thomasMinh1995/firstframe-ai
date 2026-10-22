@@ -4,20 +4,30 @@ import type { UiLanguage } from "./language";
 import type { ResponseLanguage } from "./language";
 
 export type StoryDraft = { title: string; logline: string; sections: StoryPlanSection[] };
-export type Feedback = GenerateResponse["evaluation"];
+export type Feedback = GenerateResponse["evaluation"] & { artifact_id?: string };
+export type AuthorContext = {
+  idea: string; constraints: string[];
+  clarifications: { question: string; answer: string; input_index: number | null }[];
+  pending_questions: { question: string; input_index: number }[];
+};
+export type FeedbackSource = {
+  project_id: string; artifact_id: string; revision: number; content_key: string;
+  context: AuthorContext; draft: StoryDraft;
+};
 export type ClarificationVersion = {
   response_language: ResponseLanguage;
   id: string; created_at: string; idea: string; constraints: string[]; answers: string[];
   questions: string[];
 };
 export type DraftVersion = ClarificationVersion & {
-  draft: StoryDraft; feedback: Feedback | null;
+  draft: StoryDraft; feedback: Feedback | null; feedback_source?: FeedbackSource | null;
 };
 export type Project = {
   response_language: ResponseLanguage;
   id: string; revision: number; updated_at: string; title: string; idea: string;
   constraints: string[]; analysis: (GenerateResponse["analysis"] & { artifact_id: string }) | null; answers: string[];
   draft: StoryDraft | null; feedback: Feedback | null; feedback_is_current: boolean;
+  author_context?: AuthorContext; feedback_source?: FeedbackSource | null;
   versions: DraftVersion[];
   clarification_history: ClarificationVersion[];
 };
@@ -122,6 +132,21 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 function strings(value: unknown): value is string[] {
   return Array.isArray(value) && value.every((item) => typeof item === "string");
 }
+function isAuthorContext(value: unknown): value is AuthorContext {
+  const index = (v: unknown) => typeof v === "number" && Number.isInteger(v) && v >= 0;
+  return isRecord(value) && typeof value.idea === "string" && strings(value.constraints)
+    && Array.isArray(value.clarifications) && value.clarifications.every(item => isRecord(item)
+      && typeof item.question === "string" && typeof item.answer === "string"
+      && (item.input_index === null || index(item.input_index)))
+    && Array.isArray(value.pending_questions) && value.pending_questions.every(item => isRecord(item)
+      && typeof item.question === "string" && index(item.input_index));
+}
+function isFeedbackSource(value: unknown): value is FeedbackSource | null | undefined {
+  return value == null || (isRecord(value) && typeof value.project_id === "string"
+    && typeof value.artifact_id === "string" && typeof value.content_key === "string"
+    && typeof value.revision === "number" && Number.isInteger(value.revision) && value.revision >= 0
+    && isAuthorContext(value.context) && isDraft(value.draft));
+}
 function isSummary(value: unknown): value is ProjectSummary & Record<string, unknown> {
   return isRecord(value) && typeof value.id === "string" && typeof value.title === "string"
     && typeof value.updated_at === "string";
@@ -134,6 +159,7 @@ export function isDraft(value: unknown): value is StoryDraft {
 }
 export function isFeedback(value: unknown): value is Feedback {
   return isRecord(value) && (value.passed === null || typeof value.passed === "boolean")
+    && (value.artifact_id === undefined || typeof value.artifact_id === "string")
     && isRecord(value.rubric_scores)
     && Object.values(value.rubric_scores).every((score) => typeof score === "number")
     && Array.isArray(value.findings) && value.findings.every((finding) => isRecord(finding)
@@ -150,9 +176,12 @@ function isProject(value: unknown): value is Project {
       && strings(analysis.missing_information) && Array.isArray(analysis.notes)))
     && (value.draft === null || isDraft(value.draft))
     && (value.feedback === null || isFeedback(value.feedback))
+    && (value.author_context === undefined || isAuthorContext(value.author_context))
+    && isFeedbackSource(value.feedback_source)
     && typeof value.feedback_is_current === "boolean" && Array.isArray(value.versions)
     && value.versions.every((version) => isClarificationVersion(version) && isRecord(version)
-      && isDraft(version.draft) && (version.feedback === null || isFeedback(version.feedback)))
+      && isDraft(version.draft) && (version.feedback === null || isFeedback(version.feedback))
+      && isFeedbackSource(version.feedback_source))
     && Array.isArray(value.clarification_history)
     && value.clarification_history.every(isClarificationVersion);
 }
