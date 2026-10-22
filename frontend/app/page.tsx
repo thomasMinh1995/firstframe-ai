@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { StoryFeedback } from "./StoryResultCards";
 import { OperationProgress } from "./OperationProgress";
+import { OnboardingTour, useOnboarding } from "./OnboardingTour";
 import { applyProgress, progressLanguage, type OperationStep } from "./progressState";
 import { sectionLabels } from "./storyLabels";
 import { responseLanguageLabels, type ResponseLanguage } from "./language";
@@ -18,6 +19,8 @@ export default function Home() {
   const [busy, setBusy] = useState<string | null>("Đang mở dự án…");
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
+  const [workspaceLoadState, setWorkspaceLoadState] = useState<"loading" | "ready" | "error">("loading");
+  const [projectsListed, setProjectsListed] = useState(false);
   const [steps, setSteps] = useState<OperationStep[]>([]);
   const [operationFailed, setOperationFailed] = useState(false);
   const [operationTiming, setOperationTiming] = useState<{
@@ -37,10 +40,14 @@ export default function Home() {
     questions: saved.analysis?.missing_information ?? [],
   });
   const currentFeedback = project?.feedback_is_current && !feedbackChanged;
+  const tourContext = { projectId: project?.id ?? null, hasAnalysis: !!project?.analysis,
+    hasDraft: !!project?.draft, briefChanged };
+  const tour = useOnboarding(tourContext, !!busy, error);
   useEffect(() => { if (dirty) setNotice(null); }, [dirty]);
 
   function accept(next: Project) {
     setProject(next); setSaved(next);
+    setWorkspaceLoadState("ready");
     setProjects((items) => [next, ...items.filter((item) => item.id !== next.id)]);
   }
   useEffect(() => {
@@ -49,9 +56,12 @@ export default function Home() {
       try {
         const items = await listProjects();
         const last = items.length ? await projectRequest(`/${items[0].id}`) : null;
-        if (!cancelled) { setProjects(items); setProject(last); setSaved(last); }
+        if (!cancelled) {
+          setProjects(items); setProject(last); setSaved(last);
+          setProjectsListed(true); setWorkspaceLoadState("ready");
+        }
       } catch (caught) {
-        if (!cancelled) setError(message(caught));
+        if (!cancelled) { setError(message(caught)); setWorkspaceLoadState("error"); }
       } finally { if (!cancelled) setBusy(null); }
     }
     void openLastProject();
@@ -79,6 +89,7 @@ export default function Home() {
     return next;
   }
   function action(kind: "analyze" | "plan" | "review") {
+    const tourRequest = kind === "review" ? null : tour.begin(kind);
     const labels = { analyze: "Đang tìm câu hỏi cần làm rõ…", plan: "Đang phát triển câu chuyện…",
       review: "Đang đọc và góp ý bản đã sửa…" };
     setOperationFailed(false);
@@ -89,10 +100,13 @@ export default function Home() {
         const next = await persist();
         if (!next) throw new Error("Hãy mở dự án trước khi tiếp tục.");
         setSteps((items) => items.map((step) => step.stage === "prepare" ? { ...step, status: "completed" } : step));
-        accept(await streamProjectOperation(next, kind, (event) => {
+        const result = await streamProjectOperation(next, kind, (event) => {
           setSteps((items) => applyProgress(items, event));
-        }, progressLanguage(next.response_language)));
+        }, progressLanguage(next.response_language));
+        accept(result);
+        tour.succeeded(tourRequest, result.id);
       } catch (caught) {
+        tour.failed(tourRequest);
         setOperationFailed(true);
         setSteps((items) => items.map((step) => step.status === "active" ? { ...step, status: "failed" } : step));
         throw caught;
@@ -121,18 +135,23 @@ export default function Home() {
     <main className="page-shell"><div className="workspace">
       <header className="intro">
         <p className="eyebrow">Câu chuyện của bạn. Kịch bản đầu tiên của bạn.</p>
-        <h1>FirstFrame</h1>
+        <h1 id="workspace-title" tabIndex={-1}>FirstFrame</h1>
         <p className="tagline">Từng bước phát triển câu chuyện bạn muốn kể.</p>
         <p className="summary">Bắt đầu bằng ý tưởng, làm rõ những lựa chọn rồi cùng sửa bản phát triển.
           Viết kịch bản theo cảnh sẽ đến sau.</p>
         <a className="demo-entry secondary" href="/demo">Xem demo local từ kịch bản có sẵn</a>
         <a className="demo-entry secondary" href="/datasets">Đánh giá chất lượng dataset</a>
       </header>
+      <OnboardingTour tour={tour} context={tourContext} ready={workspaceLoadState === "ready"}
+        empty={projectsListed && !projects.length} busy={!!busy} error={error}
+        idea={project?.idea ?? ""} answers={project?.answers ?? []}
+        questionCount={project?.analysis?.missing_information.length ?? 0} />
       <nav className="project-toolbar panel" aria-label="Dự án">
         <label htmlFor="project-picker">Dự án của bạn</label>
         <select id="project-picker" value={project?.id ?? ""} disabled={!!busy}
           onChange={(event) => {
             const id = event.target.value;
+            tour.pause();
             void run("Đang lưu và mở dự án…", async () => {
               await persist(); accept(await projectRequest(`/${id}`));
             });
@@ -140,9 +159,16 @@ export default function Home() {
           <option value="" disabled>Chọn dự án</option>
           {projects.map((item) => <option key={item.id} value={item.id}>{item.title}</option>)}
         </select>
-        <button disabled={!!busy} onClick={() => void run("Đang tạo dự án…", async () => {
-          await persist(); accept(await projectRequest("", "POST"));
-        })}>Dự án mới</button>
+        <button data-tour="new-project" disabled={!!busy} onClick={() => {
+          const ticket = tour.begin("create");
+          void run("Đang tạo dự án…", async () => {
+            try {
+              await persist();
+              const created = await projectRequest("", "POST");
+              accept(created); tour.succeeded(ticket, created.id);
+            } catch (caught) { tour.failed(ticket); throw caught; }
+          });
+        }}>Dự án mới</button>
         <p className="storage-note">Dự án được lưu cục bộ trên máy này. Chưa có đồng bộ tài khoản.</p>
       </nav>
       {!!steps.length && operationTiming && <OperationProgress steps={steps} failed={operationFailed}
@@ -156,9 +182,9 @@ export default function Home() {
         {error && <button onClick={() => window.location.reload()}>Thử kết nối lại</button>}
       </section>}
       {project && <>
-        <div className="save-toolbar">
-          <p role="status">{dirty ? "Có thay đổi chưa lưu" : "Đã lưu"}</p>
-          <button disabled={!!busy || !dirty} onClick={() => void run("Đang lưu…", async () => {
+        <div className="save-toolbar" data-tour="save" tabIndex={-1}>
+          <p id="save-status" role="status" tabIndex={-1}>{dirty ? "Có thay đổi chưa lưu" : "Đã lưu"}</p>
+          <button data-tour-action="save" disabled={!!busy || !dirty} onClick={() => void run("Đang lưu…", async () => {
             await persist(); setNotice("Đã lưu thay đổi.");
           })}>Lưu thay đổi</button>
           <button className="secondary" onClick={downloadBackup}>Tải bản sao JSON</button>
@@ -170,7 +196,7 @@ export default function Home() {
             <input id="project-title" maxLength={200} value={project.title}
               onChange={(event) => setProject({ ...project, title: event.target.value })} />
             <label htmlFor="response-language">Ngôn ngữ đầu ra</label>
-            <select id="response-language" value={project.response_language} onChange={(event) =>
+            <select id="response-language" data-tour="language" value={project.response_language} onChange={(event) =>
               setProject({ ...project, response_language: event.target.value as ResponseLanguage })}>
               {Object.entries(responseLanguageLabels).map(([value, label]) =>
                 <option key={value} value={value}>{label}</option>)}
@@ -180,7 +206,7 @@ export default function Home() {
               Lựa chọn áp dụng cho lần làm rõ, phát triển hoặc góp ý tiếp theo;
               không tự dịch bản đang viết hay gọi AI. Thuật ngữ như lab coach có thể giữ nguyên.</p>
             <label htmlFor="idea">Ý tưởng, kỷ niệm hoặc tình huống của bạn</label>
-            <textarea id="idea" maxLength={5000} value={project.idea} rows={5}
+            <textarea id="idea" data-tour="idea" maxLength={5000} value={project.idea} rows={5}
               placeholder="Điều gì khiến bạn muốn kể câu chuyện này?"
               onChange={(event) => setProject({ ...project, idea: event.target.value })} />
             <label htmlFor="constraints">Điều bạn muốn giữ hoặc giới hạn thực hiện (tùy chọn)</label>
@@ -190,11 +216,11 @@ export default function Home() {
               onChange={(event) => setProject({ ...project, constraints: event.target.value.split("\n") })} />
             {briefChanged && (project.analysis || project.draft) && <p className="form-message">Ý tưởng đã thay đổi. Làm rõ lại trước khi tạo
               bản phát triển mới; bản thảo và câu trả lời trước đó sẽ được giữ trong lịch sử.</p>}
-            {(!project.analysis || briefChanged) && <button disabled={!project.idea.trim()}
+            {(!project.analysis || briefChanged) && <button data-tour-action="analyze" disabled={!project.idea.trim()}
               onClick={() => action("analyze")}>Cùng làm rõ ý tưởng</button>}
           </section>
           {project.analysis && !briefChanged && <section className="panel form-stack">
-            <h2>2. Những lựa chọn của bạn</h2>
+            <h2 data-tour="choices" tabIndex={-1}>2. Những lựa chọn của bạn</h2>
             <p className="preserve-lines">{project.analysis.summary}</p>
             {!project.analysis.missing_information.length && <p>Ý tưởng đã đủ rõ cho một bản phát triển.
               Bạn quyết định khi nào bắt đầu tạo bản phát triển.</p>}
@@ -213,13 +239,13 @@ export default function Home() {
                 }}>Để quyết định sau</button>
               </div>
             ))}
-            <button disabled={project.analysis.missing_information.some((_, i) => !project.answers[i]?.trim())}
+            <button data-tour-action="plan" disabled={project.analysis.missing_information.some((_, i) => !project.answers[i]?.trim())}
               onClick={() => action("plan")}>
               {project.draft ? "Tạo lại bản phát triển (giữ phiên bản cũ)" : "Tạo bản phát triển từ lựa chọn của tôi"}
             </button>
           </section>}
           {project.draft && <section className="panel form-stack">
-            <h2>3. Bản phát triển đang làm việc</h2>
+            <h2 data-tour="draft" tabIndex={-1}>3. Bản phát triển đang làm việc</h2>
             <p>Sửa trực tiếp nội dung của bạn. Nhận phản hồi sẽ lưu bản này trước khi gửi cho AI.</p>
             <label htmlFor="draft-title">Tên phim tạm thời</label>
             <input id="draft-title" maxLength={200} value={project.draft.title}
