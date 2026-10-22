@@ -9,6 +9,7 @@ import { OnboardingTour, useOnboarding } from "./OnboardingTour";
 import { applyProgress, progressLanguage, type OperationStep } from "./progressState";
 import { sectionLabels } from "./storyLabels";
 import { responseLanguageLabels, type ResponseLanguage } from "./language";
+import type { EvaluationFinding } from "./apiClient";
 import {
   editableProject, listProjects, projectRequest, streamProjectOperation,
   type Project, type ProjectSummary, type StoryDraft,
@@ -21,6 +22,9 @@ export default function Home() {
   const [busy, setBusy] = useState<string | null>("Đang mở dự án…");
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
+  const [selectedFeedback, setSelectedFeedback] = useState<{
+    projectId: string; artifactId: string; criterionId: string; message: string;
+  } | null>(null);
   const [workspaceLoadState, setWorkspaceLoadState] = useState<"loading" | "ready" | "error">("loading");
   const [projectsListed, setProjectsListed] = useState(false);
   const [steps, setSteps] = useState<OperationStep[]>([]);
@@ -42,12 +46,26 @@ export default function Home() {
     questions: saved.analysis?.missing_information ?? [],
   });
   const currentFeedback = project?.feedback_is_current && !feedbackChanged;
+  const selectableFeedback = currentFeedback && !busy && !!project?.draft && !!project.feedback?.artifact_id
+    && saved?.feedback_source?.project_id === project.id
+    && saved.feedback_source.artifact_id === project.feedback.artifact_id;
   const tourContext = { projectId: project?.id ?? null, hasAnalysis: !!project?.analysis,
     hasDraft: !!project?.draft, briefChanged };
   const tour = useOnboarding(tourContext, !!busy, error);
   useEffect(() => { if (dirty) setNotice(null); }, [dirty]);
+  useEffect(() => {
+    if (!selectedFeedback) return;
+    const frame = requestAnimationFrame(() => {
+      const note = document.getElementById("selected-feedback-title");
+      note?.scrollIntoView({ block: "center" });
+      note?.focus({ preventScroll: true });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [selectedFeedback]);
 
   function accept(next: Project) {
+    setSelectedFeedback(current => current?.projectId === next.id
+      && current.artifactId === next.feedback?.artifact_id ? current : null);
     setProject(next); setSaved(next);
     setWorkspaceLoadState("ready");
     setProjects((items) => [next, ...items.filter((item) => item.id !== next.id)]);
@@ -123,6 +141,11 @@ export default function Home() {
   }
   function updateDraft(next: StoryDraft) {
     if (project) setProject({ ...project, draft: next });
+  }
+  function chooseFeedback(finding: EvaluationFinding) {
+    if (!selectableFeedback || !project?.feedback?.artifact_id) return;
+    setSelectedFeedback({ projectId: project.id, artifactId: project.feedback.artifact_id,
+      criterionId: finding.criterion_id, message: finding.message });
   }
   function downloadBackup() {
     if (!project) return;
@@ -261,7 +284,21 @@ export default function Home() {
           {project.draft && <section className="panel form-stack">
             <h2 data-tour="draft" tabIndex={-1}>3. Bản phát triển đang làm việc</h2>
             <StoryPlanReading draft={project.draft} dirty={dirty} />
-            <h3>Chỉnh sửa bản phác thảo</h3>
+            <h3 id="draft-editor-title" tabIndex={-1}>Chỉnh sửa bản phác thảo</h3>
+            {selectedFeedback && <aside className="revision-note" aria-labelledby="selected-feedback-title">
+              <h4 id="selected-feedback-title" tabIndex={-1}>Góp ý bạn đang cân nhắc</h4>
+              <p className={currentFeedback ? "operation-status" : "form-message"} role="status">
+                {currentFeedback ? "Góp ý đọc bản hiện tại. Bạn tự chọn phần muốn sửa bên dưới."
+                  : "Góp ý này thuộc bản trước. Giữ làm tham khảo; chưa có đánh giá cho nội dung đang sửa."}</p>
+              <p className="preserve-lines">{selectedFeedback.message}</p>
+              <FeedbackIntent source={saved?.feedback_source} projectId={selectedFeedback.projectId} artifactId={selectedFeedback.artifactId} />
+              <p>Sửa trực tiếp theo ý bạn, rồi lưu và nhận phản hồi trên bản mới.
+                Khi đọc lại, hãy tự giải thích vì sao bạn sửa hoặc giữ cách kể của mình.</p>
+              <button type="button" className="secondary" onClick={() => {
+                setSelectedFeedback(null);
+                document.getElementById("draft-editor-title")?.focus();
+              }}>Bỏ chọn góp ý này</button>
+            </aside>}
             <p>Sửa trực tiếp nội dung của bạn. Nhận phản hồi sẽ lưu bản này trước khi gửi cho AI.</p>
             <label htmlFor="draft-title">Tên phim tạm thời</label>
             <input id="draft-title" maxLength={200} value={project.draft.title}
@@ -294,7 +331,10 @@ export default function Home() {
               : "Nội dung đã thay đổi. Phản hồi dưới đây thuộc bản trước; hãy nhận phản hồi mới."}
           </p>
           <FeedbackIntent source={saved?.feedback_source} projectId={project.id} artifactId={project.feedback.artifact_id} />
-          <StoryFeedback evaluation={project.feedback} uiLanguage="vi" />
+          {!selectableFeedback && !busy && <p className="storage-note">Góp ý cũ hoặc chưa có đủ nguồn chỉ để tham khảo.
+            Hãy nhận phản hồi cho đúng bản hiện tại trước khi chọn góp ý mới để tự sửa.</p>}
+          <StoryFeedback evaluation={project.feedback} uiLanguage="vi" onChoose={chooseFeedback}
+            selectedCriterion={selectedFeedback?.criterionId} selectionDisabled={!selectableFeedback} />
         </section>}
         {!!project.versions.length && <section className="panel version-history">
           <h2>Các phiên bản đã giữ</h2>
@@ -321,6 +361,7 @@ export default function Home() {
               accept(await projectRequest(`/${next.id}`, "PUT", {
                 ...editableProject(next), draft: version.draft,
               }));
+              setSelectedFeedback(null);
               setNotice("Đã dùng lại nội dung bản phát triển. Các phiên bản trước vẫn được giữ.");
             })}>Dùng lại bản phát triển này</button>
           </details>)}

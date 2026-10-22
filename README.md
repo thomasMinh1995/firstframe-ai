@@ -59,6 +59,7 @@ See the [Vietnam first-screenplay and MVP demo plan](docs/plans/vietnam-first-sc
 - Up to three clarification questions before story-plan generation, with an explicit option to defer a decision
 - Editable story plans and feedback tied to the exact reviewed content
 - Saved author-context card from the backend's effective idea, constraints and clarification answers, with unsaved-edit warnings and navigation that does not save or call AI
+- Optional manual revision note: choose one current feedback item to read beside the editor, edit in your own words, then save/review/reopen through the existing controls
 - Version history, story-plan restoration, and JSON backup download
 - Clarification history preserves earlier questions and answers when the brief changes; answers stay in the active author context across reanalysis of the same brief, even if the new question list changes or is empty
 - Revision checks that reject stale saves from another window
@@ -81,6 +82,8 @@ Use **Save changes / Lưu thay đổi** before closing a project. Switching proj
 Changing the idea or constraints requires a new clarification round. Earlier answers remain readable in **Các lựa chọn trước đây** and are not silently applied to a new brief. Feedback freshness checks include the questions as well as the answers and draft. Older saved projects remain readable; feedback without this complete context is conservatively marked outdated until reviewed again.
 
 **Ý đồ đã lưu hiện tại** shows the last confirmed saved context, including answers retained from earlier clarification rounds of the same brief. Blank answers are pending questions; deferred choices keep the author's exact wording. New evaluations save their own source context and draft with the feedback and version history. **Ý đồ đã dùng cho góp ý này** stays with that feedback when the current context changes. Older feedback without verified source metadata is labeled as missing information; opening it does not reconstruct context or migrate stored projects.
+
+**Xem cạnh bản thảo** keeps the selected feedback text near the editor so you can decide what to change or ignore. Selection only moves focus to the note; it does not infer a target field, rewrite, save, or call AI. After a content/context edit, the note is labeled as belonging to the previous version, not as resolved. The choice is temporary and clears on new feedback, project changes, successful restoration or reload. Historical feedback and feedback without verified source metadata stay read-only. Review still saves pending edits first; a failed save prevents review, and a failed review preserves the saved draft and old feedback with its source.
 
 Reanalyzing the same brief passes existing choices to the mentor and retains them
 for planning and review. Current answers override earlier answers to the same
