@@ -693,6 +693,11 @@ button:disabled {
 .intent-answer { display: grid; gap: 8px; margin-top: 12px; }
 .intent-actions { display: flex; flex-wrap: wrap; gap: 12px; }
 .feedback-context { margin-bottom: 18px; padding: 16px; border: 1px solid var(--line); border-radius: 8px; background: var(--soft); }
+.feedback-choice { display: block; margin-top: 10px; }
+.feedback-choice[aria-pressed="true"] { outline: 2px solid var(--accent); outline-offset: 2px; }
+.revision-note { display: grid; gap: 12px; padding: 18px; border-left: 3px solid var(--accent); background: var(--soft); min-width: 0; }
+.revision-note .feedback-context { margin-bottom: 0; }
+.revision-note h4:focus, #draft-editor-title:focus { outline: 2px solid var(--accent); outline-offset: 3px; }
 .question-block, .draft-section { display: grid; gap: 10px; }
 .question-block + .question-block { border-top: 1px solid var(--line); padding-top: 18px; }
 .short-textarea { min-height: 90px; }

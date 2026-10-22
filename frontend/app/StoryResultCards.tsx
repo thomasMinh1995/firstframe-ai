@@ -1,6 +1,6 @@
 "use client";
 
-import { AnalysisNote, GenerateResponse, StoryPlanSection } from "./apiClient";
+import { AnalysisNote, GenerateResponse, StoryPlanSection, type EvaluationFinding } from "./apiClient";
 import type { UiLanguage } from "./language";
 import { rubricLabels } from "./storyLabels";
 import type { ReactNode } from "react";
@@ -107,21 +107,35 @@ const resultCopy = {
 
 type ResultCopy = (typeof resultCopy)[UiLanguage];
 
-export function StoryFeedback({ evaluation, uiLanguage }: {
+export function StoryFeedback({ evaluation, uiLanguage, onChoose, selectedCriterion, selectionDisabled = false }: {
   evaluation: GenerateResponse["evaluation"];
   uiLanguage: UiLanguage;
+  onChoose?: (finding: EvaluationFinding) => void;
+  selectedCriterion?: string;
+  selectionDisabled?: boolean;
 }) {
   const copy = resultCopy[uiLanguage];
   const shaped = shapeEvaluation({ evaluation }, uiLanguage);
+  const weaknesses = evaluation.findings.filter(item => item.criterion_id.startsWith("weakness-"));
+  const suggestions = evaluation.findings.filter(item => item.criterion_id.startsWith("suggestion-"));
   return (
     <ReportCard eyebrow={copy.evaluation} title={uiLanguage === "vi" ? "Góp ý cho lần sửa tiếp theo" : copy.evaluationTitle}
       icon="✍️" delayClass="reveal-1">
       <p>{uiLanguage === "vi" ? "Đây là gợi ý tham khảo. Bạn quyết định điều gì phù hợp với câu chuyện của mình."
         : "These are suggestions. You decide what fits your story."}</p>
+      {onChoose && <p>Chọn một góp ý để xem cạnh bản thảo và tự quyết định phần muốn sửa.
+        Đối chiếu với ý đồ của bạn: điều trái dữ kiện hoặc lựa chọn rõ, điều còn để mở và đề xuất sáng tạo cần được cân nhắc khác nhau.
+        Bạn có thể bỏ qua góp ý không phù hợp; không cần sửa tất cả.</p>}
       <div className="feedback-grid">
         <SectionList title={copy.strengths} items={shaped.strengths} emptyText={copy.emptyStrengths} />
-        <SectionList title={copy.weaknesses} items={shaped.weaknesses} emptyText={copy.emptyWeaknesses} />
-        <SectionList title={copy.suggestions} items={shaped.suggestions} emptyText={copy.emptySuggestions} />
+        <SectionList title={copy.weaknesses} items={shaped.weaknesses} emptyText={copy.emptyWeaknesses}
+          onChoose={onChoose && (index => onChoose(weaknesses[index]))}
+          selectedIndex={weaknesses.findIndex(item => item.criterion_id === selectedCriterion)}
+          selectionDisabled={selectionDisabled} />
+        <SectionList title={copy.suggestions} items={shaped.suggestions} emptyText={copy.emptySuggestions}
+          onChoose={onChoose && (index => onChoose(suggestions[index]))}
+          selectedIndex={suggestions.findIndex(item => item.criterion_id === selectedCriterion)}
+          selectionDisabled={selectionDisabled} />
       </div>
       <details className="rubric-details">
         <summary>{uiLanguage === "vi" ? "Xem điểm tham khảo" : "Reference scores"}</summary>
@@ -261,18 +275,29 @@ function SectionList({
   title,
   items,
   emptyText,
+  onChoose,
+  selectedIndex,
+  selectionDisabled,
 }: {
   title: string;
   items: string[];
   emptyText: string;
+  onChoose?: (index: number) => void;
+  selectedIndex?: number;
+  selectionDisabled?: boolean;
 }) {
   return (
     <section className="list-section">
       <h3>{title}</h3>
       {items.length > 0 ? (
         <ul>
-          {items.map((item) => (
-            <li key={item}>{item}</li>
+          {items.map((item, index) => (
+            <li key={index}><span className="preserve-lines">{item}</span>
+              {onChoose && <button type="button" className="secondary feedback-choice"
+                aria-label={`Chọn ${title.toLowerCase()} ${index + 1} để tự sửa`}
+                aria-pressed={selectedIndex === index} disabled={selectionDisabled}
+                onClick={() => onChoose(index)}>Xem cạnh bản thảo</button>}
+            </li>
           ))}
         </ul>
       ) : (

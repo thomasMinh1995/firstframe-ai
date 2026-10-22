@@ -58,18 +58,32 @@ async function setup(browser, options = {}) {
     if (!p) return reply({ detail: 'missing' }, 404);
     if (method === 'GET') return reply(p);
     if (method === 'PUT') {
-      if (mock.failSave) return reply({ detail: 'Xung đột phiên bản. Bản sửa vẫn được giữ.' }, 409);
+      if (mock.failSave || body.revision !== p.revision) return reply({ detail: 'Xung đột phiên bản. Bản sửa vẫn được giữ.' }, 409);
       const changed = p.idea !== body.idea || JSON.stringify(p.constraints) !== JSON.stringify(body.constraints);
+      const reviewChanged = changed || p.response_language !== body.response_language
+        || JSON.stringify(p.answers) !== JSON.stringify(body.answers) || JSON.stringify(p.draft) !== JSON.stringify(body.draft);
+      if (mock.recordVersions && p.draft && JSON.stringify(p.draft) !== JSON.stringify(body.draft)) {
+        p.versions.push({ id: `v${p.revision}`, created_at: p.updated_at, response_language: p.response_language,
+          idea: p.idea, constraints: clone(p.constraints), questions: p.analysis?.missing_information || [], answers: clone(p.answers),
+          draft: clone(p.draft), feedback: p.feedback_is_current ? clone(p.feedback) : null,
+          feedback_source: p.feedback_is_current ? clone(p.feedback_source) : null });
+      }
       Object.assign(p, body, { revision: p.revision + 1 });
+      if (reviewChanged) p.feedback_is_current = false;
       if (changed) { p.analysis = null; p.answers = []; }
       if (mock.savePatch) Object.assign(p, clone(mock.savePatch));
       if (mock.loseSaveResponse) return route.abort('failed');
       return reply(p);
     }
     if (mock.hold) await mock.hold;
+    if (body.revision !== p.revision) return reply({ detail: 'Xung đột phiên bản. Bản sửa vẫn được giữ.' }, 409);
     if (mock.failAI) return reply({ detail: 'Chọn ngôn ngữ đầu ra.' }, 422);
     if (parts[3] === 'analyze') p.analysis = analysis();
     else if (parts[3] === 'plan') p.draft = draft();
+    else if (parts[3] === 'review') {
+      assert.ok(mock.reviewPatch, 'review requires an explicit test result');
+      Object.assign(p, clone(mock.reviewPatch));
+    }
     else throw new Error(`Unexpected model operation: ${pathname}`);
     p.revision++;
     return reply(JSON.stringify({ type: 'progress', stage: 'reasoning', status: 'completed' }) + '\n'
@@ -478,6 +492,119 @@ async function setup(browser, options = {}) {
       assert.equal(countWrites(mock), 0);
       await t.close();
     }
+    // Manual revision is local to one feedback artifact, with no inferred field targets or auto-apply.
+    const finding = (criterion_id, message) => ({ criterion_id, message, severity: 'info', score: null });
+    const revisionDraft = { title: 'Bữa cơm', logline: 'Mẹ đợi con ăn cơm.', sections: [
+      { title: 'Beginning', purpose: 'Mở đầu', content: 'Tiếng quạt quay.' },
+      { title: 'Middle', purpose: 'Diễn tiến', content: 'Mẹ đẩy bát cơm sang.' },
+      { title: 'Ending', purpose: 'Kết thúc', content: 'Hai người ngồi im.' },
+    ] };
+    const issue = 'Ending: hãy cân nhắc nhịp dừng.\nĐây là nhận định để tác giả xem lại.';
+    const proposal = 'Giữ kết mở; thử để tiếng quạt thay lời giải thích, nếu phù hợp với ý bạn.';
+    const revisionFeedback = { artifact_id: 'f1', passed: true, rubric_scores: {}, findings: [
+      finding('strength-1', 'Giữ tiếng quạt trong khoảng lặng.'),
+      finding('weakness-1', issue), finding('weakness-2', issue), finding('suggestion-1', proposal),
+    ] };
+    const revisionProject = { ...intentProject, draft: revisionDraft, feedback: revisionFeedback,
+      feedback_source: { ...sourceA, draft: revisionDraft }, versions: [] };
+    const chooseIssue = 'Chọn điểm yếu 2 để tự sửa', chooseProposal = 'Chọn gợi ý cải thiện 1 để tự sửa';
+    for (const viewport of [{ width: 1280, height: 900 }, { width: 390, height: 844 }]) {
+      t = await setup(browser, { projects: [revisionProject], viewport, mock: { recordVersions: true } }); ({ page, mock } = t);
+      const note = page.locator('.revision-note');
+      await page.locator('#project-title').fill('Tên dự án đang sửa');
+      before = await buffer(page); writes = countWrites(mock);
+      const requestsBefore = clone(mock.calls), storedBefore = clone(mock.projects);
+      await page.getByRole('button', { name: chooseIssue, exact: true }).focus(); await page.keyboard.press('Enter');
+      await focused(page, '#selected-feedback-title');
+      assert.equal(await note.locator('.preserve-lines').first().textContent(), issue);
+      assert.equal(await page.locator('.feedback-choice[aria-pressed="true"]').count(), 1, 'duplicate messages keep distinct selection');
+      await click(page, chooseProposal); await focused(page, '#selected-feedback-title');
+      assert.equal(await note.locator('.preserve-lines').first().textContent(), proposal, 'suggestion is not paired with a weakness by index');
+      assert.deepEqual(await buffer(page), before); assert.deepEqual(mock.calls, requestsBefore);
+      assert.deepEqual(mock.projects, storedBefore);
+      await click(page, 'Bỏ chọn góp ý này'); await focused(page, '#draft-editor-title');
+      assert.equal(await note.count(), 0); assert.deepEqual(await buffer(page), before); assert.equal(countWrites(mock), writes);
+      await click(page, chooseIssue); await focused(page, '#selected-feedback-title');
+      await page.locator('#draft-logline').fill('Tác giả giữ sự chăm sóc qua hành động.');
+      await page.locator('#section-1').fill('Mẹ đẩy bát cơm. Con kéo ghế ngồi xuống.');
+      before = await buffer(page); const edited = clone(mock.projects[0].draft);
+      edited.logline = await page.locator('#draft-logline').inputValue(); edited.sections[1].content = await page.locator('#section-1').inputValue();
+      assert.match(await note.innerText(), /thuộc bản trước/);
+      assert.equal(await page.getByRole('button', { name: chooseProposal }).isDisabled(), true);
+      assert.deepEqual(mock.calls, requestsBefore, 'selection and typing send no requests');
+      await note.screenshot({ path: path.join(screenshots, `manual-revision-${viewport.width}.png`) });
+      mock.failSave = true;
+      await click(page, 'Nhận phản hồi trên bản hiện tại'); await page.locator('.error[role="alert"]').waitFor();
+      assert.deepEqual(await buffer(page), before); assert.equal(mock.calls.some(c => c.pathname.endsWith('/review/stream')), false);
+      assert.deepEqual(mock.projects, storedBefore); assert.match(await note.innerText(), /thuộc bản trước/);
+      mock.failSave = false; mock.failAI = true;
+      await click(page, 'Nhận phản hồi trên bản hiện tại');
+      await page.getByText('Không bắt đầu được thao tác. Bản đang sửa vẫn được giữ.', { exact: true }).waitFor();
+      assert.deepEqual(mock.projects[0].draft, edited, 'AI failure never rolls back the saved manual draft');
+      assert.deepEqual(mock.projects[0].feedback, revisionFeedback);
+      assert.deepEqual(await buffer(page), before); assert.match(await note.innerText(), /thuộc bản trước/);
+      assert.equal(mock.projects[0].versions.length, 1);
+      mock.failAI = false;
+      const reviewRevision = mock.projects[0].revision;
+      mock.reviewPatch = { feedback: { artifact_id: 'f2', passed: true, rubric_scores: {}, findings: [finding('suggestion-1', proposal)] },
+        feedback_is_current: true, feedback_source: { ...sourceA, artifact_id: 'f2', revision: reviewRevision,
+          content_key: 'edited-source', draft: edited } };
+      await click(page, 'Nhận phản hồi trên bản hiện tại');
+      await page.getByText('Đã lưu phản hồi và phiên bản cho đúng nội dung hiện tại.', { exact: true }).waitFor();
+      assert.equal(await note.count(), 0, 'new feedback clears the previous artifact selection');
+      assert.equal(mock.calls.filter(c => c.pathname.endsWith('/review/stream')).at(-1).body.revision, reviewRevision);
+      assert.deepEqual(mock.projects[0].feedback_source.draft, edited);
+      assert.deepEqual(await buffer(page), before);
+      await page.reload(); await page.locator('#draft-logline').waitFor();
+      assert.deepEqual(await buffer(page), before); assert.equal(await note.count(), 0, 'selection is not stored across reload');
+      const version = page.locator('.version-history > details').first(); await version.locator('summary').first().click();
+      assert.equal(await version.locator('.feedback-choice').count(), 0, 'history remains read-only');
+      await click(page, chooseProposal); await focused(page, '#selected-feedback-title');
+      await version.getByRole('button', { name: 'Dùng lại bản phát triển này', exact: true }).click();
+      await page.getByText('Đã dùng lại nội dung bản phát triển. Các phiên bản trước vẫn được giữ.', { exact: true }).waitFor();
+      assert.equal(await note.count(), 0, 'restore clears the selected note even when feedback ID is unchanged');
+      assert.deepEqual(mock.projects[0].draft, revisionDraft);
+      assert.deepEqual(mock.projects[0].feedback_source.draft, edited, 'restore does not rebind feedback to the restored draft');
+      assert.ok(mock.projects[0].versions.some(v => v.feedback_source?.artifact_id === 'f1'));
+      assert.ok(mock.calls.filter(c => c.body).every(c => !('selectedFeedback' in c.body)), 'selection never enters API payloads');
+      await t.close();
+    }
+    // Another window saves while review is pending. Its late result must conflict, not replace either buffer.
+    t = await setup(browser, { projects: [revisionProject], mock: { recordVersions: true } }); ({ page, mock } = t);
+    await click(page, chooseIssue); await page.locator('#draft-logline').fill('Bản sửa cửa sổ một.');
+    before = await buffer(page);
+    let releaseReview; mock.hold = new Promise(resolve => { releaseReview = resolve; });
+    const reviewStarted = page.waitForRequest(request => request.method() === 'POST' && request.url().endsWith('/review/stream'));
+    await click(page, 'Nhận phản hồi trên bản hiện tại');
+    await reviewStarted;
+    await page.waitForFunction(() => document.querySelector('#draft-logline').matches(':disabled'));
+    const peer = await t.context.newPage(); await peer.goto(url); await peer.locator('#draft-logline').waitFor();
+    await peer.locator('#draft-logline').fill('Bản mới hơn từ cửa sổ hai.');
+    await click(peer, 'Lưu thay đổi'); await peer.getByText('Đã lưu thay đổi.', { exact: true }).waitFor();
+    releaseReview(); await page.locator('.error[role="alert"]').waitFor();
+    assert.deepEqual(await buffer(page), before);
+    assert.equal(mock.projects[0].draft.logline, 'Bản mới hơn từ cửa sổ hai.');
+    assert.equal(await peer.locator('#draft-logline').inputValue(), 'Bản mới hơn từ cửa sổ hai.');
+    assert.deepEqual(mock.projects[0].feedback, revisionFeedback);
+    assert.equal(mock.projects[0].feedback_source.artifact_id, 'f1');
+    assert.match(await page.locator('.revision-note').innerText(), /thuộc bản trước/);
+    assert.equal(await page.locator('#draft-logline').isDisabled(), false, 'failed review unlocks the editor');
+    await t.close();
+    // Selection does not follow the author into a different project.
+    t = await setup(browser, { projects: [revisionProject, { ...revisionProject, id: 'p2', title: 'Dự án hai',
+      feedback_source: { ...revisionProject.feedback_source, project_id: 'p2' } }] }); ({ page } = t);
+    await click(page, chooseIssue); await page.locator('#project-picker').selectOption('p2');
+    await page.waitForFunction(() => document.querySelector('#project-picker').value === 'p2' && !document.querySelector('#project-picker').disabled);
+    assert.equal(await page.locator('.revision-note').count(), 0);
+    await t.close();
+    for (const p of [{ ...revisionProject, feedback_source: null }, { ...revisionProject,
+      feedback: { ...revisionFeedback, passed: false, findings: [finding('strength-1', 'Giữ khoảng lặng.')] } }]) {
+      t = await setup(browser, { projects: [p] }); ({ page, mock } = t);
+      assert.equal(await page.locator('.feedback-choice:enabled').count(), 0, 'missing source and empty issue lists never invent actionable issues');
+      assert.equal(await page.locator('.revision-note').count(), 0); assert.equal(countWrites(mock), 0);
+      await t.close();
+    }
+    console.log('Manual revision checks passed: artifact-bound local selection, refusal, keyboard focus, no requests or rewrites, stale notes, save and AI failures, review/reopen, restore, history, project switch, concurrent saves and late conflicts.');
     console.log('Browser tour checks passed: full flow, no tour writes, buffers, keyboard, conditional data, failures, reload, project switch, cross-tab dismissal, storage, missing anchors and mobile viewport.');
     console.log('Story-plan reading checks passed: current buffer, optional details, zero navigation requests, stale feedback, leave warning, 409 preservation, save/reopen, missing data and desktop/mobile layouts.');
     console.log('Author-context checks passed: backend projection, retained/open/pending choices, no navigation requests, saved A/buffer B, 409 and lost-response preservation, historical provenance, reload, missing/mismatched sources and desktop/mobile.');
