@@ -28,8 +28,8 @@ inconsistency. Use a temporary project so existing work is preserved.
 
 For critic cases, use a complete saved plan with the stated sections; read feedback
 against the entire draft. A useful response has at most two evidenced strengths,
-at most three prioritized weaknesses, and the same number of suggestions paired
-by index. Each issue cites a real section/detail, connects it to the intended
+at most three prioritized weaknesses, and an actionable suggestion for each actual weakness. Optional creative
+suggestions may additionally appear without being counted as weaknesses. Each issue cites a real section/detail, connects it to the intended
 experience, and proposes a feasible next action. Empty issue arrays are valid.
 Reject fabricated evidence, invented author decisions, forced plot formulas,
 rewriting the draft, or failure to respect explicit production limits. Review
@@ -38,3 +38,44 @@ repeated generic or leading questions even when the JSON schema is valid.
 These checks apply the context, clear-instruction, example, and evaluation approach
 in [OpenAI's prompt guidance](https://developers.openai.com/api/docs/guides/model-optimization#write-effective-prompts).
 Passing transport tests alone is insufficient to pass this behavioral checklist.
+
+
+## Grounded critic regression runner
+
+Run from `backend`:
+
+```sh
+PYTHONPATH=. .venv/bin/python scripts/check_author_roles.py --model qwen2.5:7b --output /tmp/author-roles.json
+```
+
+The four synthetic cases cover mentor roles, invented achievement, corrected open
+endings and confirmed achievements in English. `completed` means schema and quote
+validation passed; inspect `review_checks` separately for semantic acceptance.
+Do not publish real project inputs/outputs in evaluation artifacts.
+
+`compare_ollama_prompts.py` preserves the historical string-contract experiment
+with `--experimental-critic`. It rejects comparing the current grounded prompt
+against a historical string schema; use the runner above for current behavior.
+PR20 reference-isolation evidence is historical: its prompt hashes and timing do
+not describe the current critic.
+
+
+For a beginner who has not decided, evaluate three distinctions: confirmed author
+facts, open choices, and optional AI proposals. Questions should offer two small
+possibilities with different effects, allow another direction or deferral, and
+avoid introducing biography as a premise. The planner may creatively stage open
+parts if explicitly labelled; the critic must not treat an open choice as an
+error or require accepting its own suggested solution.
+
+A local-only replay runner accepts an exported project JSON:
+
+```sh
+PYTHONPATH=. .venv/bin/python scripts/check_creative_choices.py --project-json /tmp/project.json --output /tmp/creative-choices.json --models qwen2.5:7b qwen2.5:3b
+```
+
+It reruns analysis, explicitly defers all returned questions, then runs planning
+and evaluation. It never writes to the project store. Outputs include private
+input material and must stay local unless separately approved for publication.
+The initial PR21 author-role evidence remains historical, bound to commit 5095699;
+its replay checks input preservation and rejection of invalid evidence, not the
+current prompt hash or current model quality.

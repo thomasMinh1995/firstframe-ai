@@ -41,6 +41,23 @@ Both adapters append `model_json_schema()` to instructions. Ollama additionally 
 
 ## Evaluation Contract
 
+Live requests use `_GroundedEvaluationOutput`: strengths contain `section`,
+`quote`, `reason`; weaknesses additionally contain `author_quote` and `suggestion`.
+Quotes must be exact substrings in the named section of the current draft (or
+`title` / `logline`). Nonempty author quotes must occur in the decoded creator
+context. Invalid evidence raises the existing provider-response error before
+saving feedback; it does not rewrite the draft or silently discard a bad finding.
+
+This verifies evidence location, not semantic truth. A real model can still draw
+an incorrect inference from valid quotes. There is no new fidelity stage, no
+automatic rewrite and no automatic retry. PR #18 remains independent.
+
+The public findings and persisted project response remain unchanged. Editorial
+dataset correction selects the historical or grounded schema from the recorded
+request; historical string feedback remains readable. Human editorial corrections
+are schema-checked, not presented as fresh model validation.
+
+
 | Prompt Field | Schema Field | Status |
 | --- | --- | --- |
 | `passed` | `passed` | Synchronized |
@@ -52,7 +69,7 @@ Both adapters append `model_json_schema()` to instructions. Ollama additionally 
 | `rubric_scores.production_feasibility` | `rubric_scores.production_feasibility` | Synchronized |
 | `strengths` | `strengths` | Synchronized |
 | `weaknesses` | `weaknesses` | Synchronized |
-| `suggestions` | `suggestions` | Synchronized |
+| `weaknesses[].suggestion` | projected to legacy `suggestions` | One correction per issue |
 | `overall_read` | None | Removed |
 | `evaluation_summary` | None | Removed |
 | `mentor_questions` | None | Removed |
@@ -66,5 +83,32 @@ Both receive the same input and instructions and validate against `response_mode
 Current mappings:
 
 - Planning Layer: `_PlanningOutput`
-- Evaluation Layer: `_EvaluationOutput`
+- Evaluation Layer: `_GroundedEvaluationOutput`, projected to `_EvaluationOutput` for existing findings
 
+
+## Creative choices (PR21 update)
+
+Each grounded feedback item can now carry `kind`: `contradiction`, `open_choice`,
+`creative_proposal`, or `craft`. Older recordings default to `craft` when omitted.
+A contradiction requires a nonempty quote from author material. AI-generated
+clarification questions are excluded from that evidence source, including when
+preserved in a historical creator context. Answer text remains available.
+
+Open choices and creative proposals are projected only into labelled suggestions,
+with their current-draft quote and rationale, not into weaknesses. If all issues
+are optional, they do not produce a blocking verdict. Real contradictions/craft
+issues retain the supplied verdict. Scores remain model estimates. This is not
+semantic validation: incorrect classification by the model is still possible.
+
+No UI/project schema migration is required. Old editorial feedback without `kind`
+round-trips without being marked as a new human correction just because a default
+field was introduced. Paired corrections still accompany actual weaknesses;
+additional optional suggestions need not have a corresponding weakness.
+
+Live reasoning now uses `_GuidedReasoningOutput`: every `missing_information`
+item has a `question` and exactly two nonempty `options`. The runtime renders this
+into the existing string questions, labelled optional with an invitation to choose
+another direction or defer. A bare topic string cannot pass provider validation.
+This guarantees the presence of choices, not their relevance or factual accuracy.
+Historical `_ReasoningOutput` recordings still use string questions; dataset
+corrections select the contract from the recorded request schema.

@@ -1,0 +1,100 @@
+[
+  {
+    "idea": "Mai là người hướng dẫn workshop gốm, giúp các học viên mới tạo hình. Mai vẫn học cách dạy mỗi ngày. Kết quả xét chứng chỉ giảng dạy của Mai chưa được công bố.",
+    "constraints": [
+      "Giữ Mai ở vai trò hướng dẫn, các học viên là người được hướng dẫn.",
+      "Kết mở bằng việc Mai tiếp tục học cách dạy, bất kể kết quả chứng chỉ. Không tự thêm thành tích."
+    ],
+    "language": "vi",
+    "id": "mentor-plan",
+    "operation": "plan",
+    "review_checks": [
+      "Mai teaches learners consistently; do not turn mentor into recipient or separate person.",
+      "No invented excellence, award or certificate. Keep outcome open and show continued learning."
+    ]
+  },
+  {
+    "idea": "Mai là người hướng dẫn workshop gốm, giúp các học viên mới tạo hình. Mai vẫn học cách dạy mỗi ngày. Kết quả xét chứng chỉ giảng dạy của Mai chưa được công bố.",
+    "constraints": [
+      "Giữ Mai ở vai trò hướng dẫn, các học viên là người được hướng dẫn.",
+      "Kết mở bằng việc Mai tiếp tục học cách dạy, bất kể kết quả chứng chỉ. Không tự thêm thành tích."
+    ],
+    "language": "vi",
+    "id": "reversed-role-invented-outcome",
+    "operation": "review",
+    "title": "Một buổi workshop",
+    "logline": "Học viên Mai được các người hướng dẫn dạy tạo hình.",
+    "sections": [
+      {
+        "title": "Main character",
+        "purpose": "Role",
+        "content": "Mai là học viên, được nhóm người hướng dẫn dạy làm gốm."
+      },
+      {
+        "title": "Ending",
+        "purpose": "Final image",
+        "content": "Mai đạt chứng chỉ với thành tích xuất sắc và nhờ đó mới được tiếp tục học."
+      }
+    ],
+    "review_checks": [
+      "Identify reversed role and unsupported achievement/condition before style.",
+      "Quote exact current draft fragments with section anchors; match suggestions.",
+      "Do not ask creator to reveal deliberately unknown certificate result."
+    ]
+  },
+  {
+    "idea": "Mai là người hướng dẫn workshop gốm, giúp các học viên mới tạo hình. Mai vẫn học cách dạy mỗi ngày. Kết quả xét chứng chỉ giảng dạy của Mai chưa được công bố.",
+    "constraints": [
+      "Giữ Mai ở vai trò hướng dẫn, các học viên là người được hướng dẫn.",
+      "Kết mở bằng việc Mai tiếp tục học cách dạy, bất kể kết quả chứng chỉ. Không tự thêm thành tích."
+    ],
+    "language": "vi",
+    "id": "corrected-open-ending",
+    "operation": "review",
+    "title": "Một buổi workshop",
+    "logline": "Mai hướng dẫn học viên tạo hình và tiếp tục học cách dạy.",
+    "sections": [
+      {
+        "title": "Main character",
+        "purpose": "Role",
+        "content": "Mai là người hướng dẫn workshop. Mai ngồi cạnh một học viên để hướng dẫn cách tạo hình."
+      },
+      {
+        "title": "Ending",
+        "purpose": "Final image",
+        "content": "Sau buổi workshop, Mai mở sổ học cách dạy. Kết quả chứng chỉ chưa được công bố; dù kết quả thế nào Mai vẫn tiếp tục học."
+      }
+    ],
+    "review_checks": [
+      "Do not repeat the reversed role or invented award from the separate bad case.",
+      "Specific anchored praise is acceptable; do not manufacture problems or require a closed outcome."
+    ]
+  },
+  {
+    "id": "confirmed-outcome-en",
+    "operation": "review",
+    "language": "en",
+    "idea": "Eli is a swim instructor teaching adult beginners. His instructor certificate was officially awarded last month.",
+    "constraints": [
+      "Keep the confirmed certificate. Do not invent a competition win."
+    ],
+    "title": "The next lesson",
+    "logline": "Eli teaches beginners after receiving his instructor certificate.",
+    "sections": [
+      {
+        "title": "Main character",
+        "purpose": "Role",
+        "content": "Eli is the instructor; the adults in the pool are his learners."
+      },
+      {
+        "title": "Ending",
+        "purpose": "Final image",
+        "content": "Eli puts his officially awarded instructor certificate in a folder and prepares the next lesson."
+      }
+    ],
+    "review_checks": [
+      "Do not call an explicitly confirmed achievement unsupported.",
+      "Keep instructor/learner roles and English feedback; praise must quote actual content."
+    ]
+  }
+]

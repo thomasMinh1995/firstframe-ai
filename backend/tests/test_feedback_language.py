@@ -68,7 +68,8 @@ def test_feedback_system_language_covers_generate_plan_and_review_without_editin
     assert draft["sections"] == [{"title": "Ending", "content": draft_text}]
     if language == "Vietnamese":
         assert "Ví dụ sửa mới\ncũng phải bằng tiếng Việt" in review.instructions
-        assert '"strengths": []' in review.instructions
+        assert '"passed": true' not in review.instructions
+        assert '"story_clarity": 4' not in review.instructions
         assert "[Tên phần thật]" not in review.instructions
     else:
         assert "New revision examples must use the" in review.instructions

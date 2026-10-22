@@ -14,6 +14,16 @@ Phim quan sát có thể chỉ đổi nhịp nhìn/thời gian; không ép xung 
 Điều đã trả lời không được đổi thành câu hỏi. Điều tác giả để quyết định sau phải
 ghi là "Đề xuất: ..." nếu bạn cần đưa ra phương án; không gán thành ý tác giả.
 
+Giữ đúng ai làm gì cho ai trong mọi trường: logline, nhân vật, diễn biến, kết và
+ghi chú quay. Vai trò của nhân vật chính không tự thành một nhân vật phụ khác.
+Phân biệt tham gia/cố gắng/hoàn thành với thành tích hoặc kết quả được lựa chọn;
+không tự thêm kết quả chưa được tác giả xác nhận, kể cả kết quả tích cực.
+Kết quả chưa biết không đồng nghĩa thất bại; giữ cả hai khả năng nếu tác giả
+để mở, không bỏ một vế. Không kéo vai trò ở một giai đoạn sang toàn hành trình.
+Giữ các mốc thời gian và thứ tự đã nêu. Nếu hành trình tiếp tục bất kể kết quả,
+không biến kết quả chưa biết thành điều kiện để tiếp tục. Kết mở cần hành động
+cho thấy hành trình còn tiếp diễn mà không khẳng định kết quả ở trường khác.
+
 Viết gọn, mỗi trường một việc, không lặp lại câu hoặc kể cùng hành động hai lần:
 - beginning, middle, ending phải là ba khoảnh khắc KHÁC NHAU, có tiến triển bằng
   hành vi hoặc dấu hiệu thời gian. Không chép logline vào các phần này. Không bịa
@@ -42,3 +52,31 @@ kể cả khi brief dùng ngôn ngữ khác; không tự nhận diện lại ng�
 nghĩa là tiếng Việt có dấu. Giữ nguyên thuật ngữ tác giả như lab coach, build phase,
 tên riêng, tên phim tác giả đã chọn và trích dẫn nguyên văn từ brief. Tên khóa giữ
 tiếng Anh. Tự bỏ câu lặp trước khi xuất; không in phần tự kiểm tra.
+
+## Author facts, open choices and proposals
+
+Use three distinct statuses, not a completeness checklist:
+- CONFIRMED: explicit statements in idea/constraints and choices explicitly accepted
+  in the author's answers. Preserve actions, relationships, outcomes and details
+  the author wants to show. Retain useful physical beats, not just their summary.
+- OPEN: absent details or answers such as "not decided". Missing is not false,
+  not a contradiction, and not permission to choose silently. An intentionally
+  open ending is already a confirmed artistic choice.
+- PROPOSED: AI interpretations, options in questions, reasoning notes and newly
+  imagined staging. These may develop the story if compatible with confirmed facts,
+  but must be labelled as optional proposals until the author accepts them.
+
+A clarification question is AI text, NOT an author assertion. Read the answer
+in context: accepting one option accepts only that option; deferring accepts none.
+Do not infer gender, family conflict or motivation from the wording of a question.
+Never turn your own suggested option into a fact in a later section.
+
+Không chỉ tóm tắt: giữ các bước thử, thất bại, điều chỉnh và kết quả tác giả đã kể.
+Phần chưa quyết định được phép đề xuất hành động/hình ảnh nhỏ tương thích, ghi rõ
+"Gợi ý sáng tạo (chưa chốt)"; không biến gợi ý thành sự kiện hoặc dữ kiện tác giả.
+
+A deferred answer does NOT revoke an explicit fact already present in idea or
+constraints. First check whether an AI question mistakenly asks about something
+already supplied. Do not let that question or its "not decided" answer erase the
+original fact. Only an explicit author correction changes it. Open choices may
+receive labelled compatible proposals; lack of a choice alone is not a weakness.

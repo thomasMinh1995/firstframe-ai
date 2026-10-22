@@ -1,4 +1,5 @@
 import json
+import re
 from pathlib import Path
 
 import pytest
@@ -18,6 +19,7 @@ from app.application.workflow import (
     VisualStyle,
     WorkingTitle,
     _EvaluationOutput,
+    _GroundedEvaluationOutput,
     _PlanningOutput,
     _StructuredStoryPlanOutput,
 )
@@ -44,6 +46,7 @@ def test_output_schema_matches_pydantic_contracts() -> None:
         "tone": list(Tone.model_fields),
         "production_notes": list(ProductionNotes.model_fields),
     }
+    assert schema["grounded_evaluation"]["root_fields"] == list(_GroundedEvaluationOutput.model_fields)
     assert schema["evaluation"]["root_fields"] == list(_EvaluationOutput.model_fields)
     assert schema["evaluation"]["rubric_score_fields"] == list(EvaluationRubricScores.model_fields)
 
@@ -66,10 +69,14 @@ def test_script_critic_prompt_mentions_every_evaluation_schema_field(name) -> No
     schema = _load_output_schema()
     prompt = _read_prompt(name)
 
-    for field in schema["evaluation"]["root_fields"]:
-        assert f'"{field}"' in prompt
+    for field in _GroundedEvaluationOutput.model_fields:
+        assert re.search(rf"\b{field}\b", prompt)
     for field in schema["evaluation"]["rubric_score_fields"]:
-        assert f'"{field}"' in prompt
+        assert re.search(rf"\b{field}\b", prompt)
+
+    assert '"passed": true' not in prompt
+    assert '"story_clarity": 4' not in prompt
+    assert '"A specific, anchored strength and its effect."' not in prompt
 
 
 def test_prompts_do_not_request_known_obsolete_fields() -> None:

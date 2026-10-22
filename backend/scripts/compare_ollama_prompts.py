@@ -18,6 +18,7 @@ from app.application.dataset_corrections import OUTPUT_MODELS
 from app.application.workflow import (
     _EvaluationOutput,
     _feedback_language_header,
+    _GuidedReasoningOutput,
     _is_vietnamese_language,
     compact_qwen_planning_input,
 )
@@ -151,7 +152,7 @@ def compare(
             stage = step["stage"]
             if stages and stage not in stages:
                 continue
-            model = OUTPUT_MODELS[stage]
+            model = _GuidedReasoningOutput if stage == "reasoning" else OUTPUT_MODELS[stage]
             request = step["request"]
             if request["response_schema"] != model.model_json_schema():
                 raise ValueError(
@@ -181,6 +182,11 @@ def compare(
                     raise ValueError("Evaluation input is missing its creator-context boundary.")
                 candidate_input = (
                     _feedback_language_header(language) + "Creator intent and decisions:\n" + body
+                )
+            if stage == "evaluation" and not experimental_critic:
+                raise ValueError(
+                    "The live critic uses a grounded contract. Use check_author_roles.py; "
+                    "legacy critic comparisons require --experimental-critic."
                 )
             candidate = StructuredRequest(
                 instructions=prompt_path.read_text(encoding="utf-8").strip(),

@@ -64,8 +64,8 @@ def test_explicit_language_reaches_every_workflow_step_without_changing_the_inpu
             assert "All generated JSON string values must use" not in request.input_text
             assert "Detect the user's input language" not in request.instructions
             assert "All string values must use" not in request.instructions
-            assert ("Giữ nguyên thuật" in request.instructions if qwen_profile
-                    else "Keep author terms" in request.instructions)
+            assert ("thuật ngữ" in request.instructions if qwen_profile
+                    else "author terms" in request.instructions)
     assert 'lab coach nói \\"Keep learning.\\" tại VinUni.' in provider.requests[3].input_text
 
 

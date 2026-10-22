@@ -17,7 +17,11 @@ from app.api.routes import projects as routes
 from app.application.ai_provider import ProviderTimeoutError, StructuredRequest
 from app.application.dataset import DatasetStore, capture_workflow, recording_provider
 from app.application.project_store import ProjectStore
-from app.application.workflow import _EvaluationOutput, _PlanningOutput, _ReasoningOutput
+from app.application.workflow import (
+    _GroundedEvaluationOutput,
+    _GuidedReasoningOutput,
+    _PlanningOutput,
+)
 from app.infrastructure.ollama_provider import OllamaProvider, OllamaProviderConfig
 from app.infrastructure.openai_provider import OpenAIProvider, OpenAIProviderConfig
 from app.main import create_app
@@ -44,7 +48,7 @@ def test_records_real_adapter_identity_and_actual_model(
     backend, monkeypatch, local_dataset_directory
 ):
     fake = FakeProvider()
-    models = [_ReasoningOutput, _PlanningOutput, _EvaluationOutput]
+    models = [_GuidedReasoningOutput, _PlanningOutput, _GroundedEvaluationOutput]
     actual_model = "gpt-resolved-snapshot" if backend == "openai" else "qwen-local:latest"
     monkeypatch.setenv("AI_PROVIDER", "misleading-env-value")
     if backend == "openai":

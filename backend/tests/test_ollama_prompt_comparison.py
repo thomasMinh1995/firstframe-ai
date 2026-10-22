@@ -5,7 +5,7 @@ import httpx
 import pytest
 
 from app.application.ai_provider import StructuredRequest, strict_json_instructions
-from app.application.workflow import _ReasoningOutput
+from app.application.workflow import _GuidedReasoningOutput
 from scripts.compare_ollama_prompts import compare, indicators
 
 
@@ -15,7 +15,7 @@ def test_paired_replay_preserves_input_schema_seed_and_raw_evidence(
 ):
     output = {"summary": "Mẹ chờ trong bếp.", "notes": [], "missing_information": []}
     request = StructuredRequest(
-        "Old instructions", "Target response language: Vietnamese\nMẹ chờ.", _ReasoningOutput
+        "Old instructions", "Target response language: Vietnamese\nMẹ chờ.", _GuidedReasoningOutput
     )
     source = tmp_path / "record.json"
     source.write_text(
@@ -31,7 +31,7 @@ def test_paired_replay_preserves_input_schema_seed_and_raw_evidence(
                         "request": {
                             "input_text": request.input_text,
                             "effective_instructions": strict_json_instructions(request),
-                            "response_schema": _ReasoningOutput.model_json_schema(),
+                            "response_schema": _GuidedReasoningOutput.model_json_schema(),
                         },
                     }
                 ],
@@ -63,7 +63,7 @@ def test_paired_replay_preserves_input_schema_seed_and_raw_evidence(
     assert sum(run["status"] == "failed" for run in report["runs"]) == int(invalid_first)
     assert [run["variant"] for run in report["runs"]] == ["before", "after", "after", "before"]
     assert all(body["messages"][1]["content"] == request.input_text for body in calls)
-    assert all(body["format"] == _ReasoningOutput.model_json_schema() for body in calls)
+    assert all(body["format"] == _GuidedReasoningOutput.model_json_schema() for body in calls)
     assert [body["options"]["seed"] for body in calls] == [42, 42, 73, 73]
     assert all(run["raw_output"] and run["actual_model"] == "qwen2.5:3b" for run in report["runs"])
     assert len({run["input_sha256"] for run in report["runs"]}) == 1
@@ -153,6 +153,12 @@ def test_six_critic_scenarios_replay_both_variants_without_losing_author_or_draf
         )
 
     monkeypatch.setattr("scripts.compare_ollama_prompts.httpx.post", post)
+    if not experimental:
+        with pytest.raises(ValueError, match="grounded contract"):
+            compare(source, tmp_path / "result.json", [42], "http://127.0.0.1:11434",
+                    ["evaluation"])
+        assert not calls
+        return
     report = compare(
         source,
         tmp_path / "result.json",
@@ -174,13 +180,5 @@ def test_six_critic_scenarios_replay_both_variants_without_losing_author_or_draf
             assert json.dumps(value, ensure_ascii=False) in after["input_text"]
         assert fixture["expected_behavior"] not in after["input_text"]
         assert after["instructions"] != before["instructions"]
-        if not experimental:
-            if language == "Vietnamese":
-                assert "Ngôn ngữ góp ý: tiếng Việt" in after["instructions"]
-            else:
-                assert "Use the explicit target response language" in after["instructions"]
-            assert "new revision examples in the target language" in after["input_text"]
-            boundary = "Creator intent and decisions:\n"
-            assert after["input_text"].split(boundary, 1)[1] == original.split(boundary, 1)[1]
         assert before["feedback_pairs_valid"] is True
         assert after["feedback_pairs_valid"] is True

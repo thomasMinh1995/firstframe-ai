@@ -8,6 +8,7 @@ from test_generate_workflow import FakeProvider
 from app.api.routes import projects as project_routes
 from app.application.ai_provider import MissingProviderConfigurationError
 from app.application.project_store import ProjectStore
+from app.application.workflow import _GuidedQuestion
 from app.main import create_app
 
 
@@ -105,7 +106,7 @@ def test_questions_gate_generation_and_review_uses_the_saved_edited_draft(projec
     url = f"/api/projects/{project['id']}"
     assert client.post(f"{url}/plan", json={"revision": project["revision"]}).status_code == 422
     project = client.post(f"{url}/analyze", json={"revision": project["revision"]}).json()
-    assert [item.response_model.__name__ for item in provider.requests] == ["_ReasoningOutput"]
+    assert [item.response_model.__name__ for item in provider.requests] == ["_GuidedReasoningOutput"]
     assert project["draft"] is None
     assert client.post(f"{url}/plan", json={"revision": project["revision"]}).status_code == 422
     data = payload(project)
@@ -125,7 +126,7 @@ def test_questions_gate_generation_and_review_uses_the_saved_edited_draft(projec
     assert project["versions"][0]["draft"] == original_draft
     edited_draft = deepcopy(project["draft"])
     project = client.post(f"{url}/review", json={"revision": project["revision"]}).json()
-    assert provider.requests[-1].response_model.__name__ == "_EvaluationOutput"
+    assert provider.requests[-1].response_model.__name__ == "_GroundedEvaluationOutput"
     assert "EDITED_ENDING" in provider.requests[-1].input_text
     assert "He wants to apologize" in provider.requests[-1].input_text
     assert "Only one apartment" in provider.requests[-1].input_text
@@ -296,7 +297,7 @@ def test_late_ai_response_cannot_replace_newer_saved_work(project_client, monkey
     original_request = provider.request_structured
 
     def save_while_ai_is_running(request):
-        if request.response_model.__name__ == "_EvaluationOutput":
+        if request.response_model.__name__ == "_GroundedEvaluationOutput":
             latest = client.get(url).json()
             data = payload(latest)
             data["draft"]["logline"] = "A newer edit from another window."
@@ -366,8 +367,8 @@ def test_reanalysis_keeps_author_choices_for_planning_and_edited_review(
 
     def change_questions(request):
         result = original_request(request)
-        if request.response_model.__name__ == "_ReasoningOutput":
-            result.output.missing_information = new_questions
+        if request.response_model.__name__ == "_GuidedReasoningOutput":
+            result.output.missing_information = [_GuidedQuestion(question=q, options=["One direction", "Another direction"]) for q in new_questions]
         return result
 
     monkeypatch.setattr(provider, "request_structured", change_questions)
@@ -376,7 +377,9 @@ def test_reanalysis_keeps_author_choices_for_planning_and_edited_review(
     project = response.json()
     brief = json.loads(provider.requests[-1].input_text.split("Creator brief (JSON data):\n", 1)[1])
     assert brief["clarifications"] == choices
-    assert project["analysis"]["missing_information"] == new_questions
+    assert len(project["analysis"]["missing_information"]) == len(new_questions)
+    assert all(rendered.startswith(question) for rendered, question in
+               zip(project["analysis"]["missing_information"], new_questions, strict=True))
     assert client.get(url).json() == project
     if new_questions:
         assert client.post(f"{url}/plan", json={"revision": project["revision"]}).status_code == 422
@@ -387,7 +390,7 @@ def test_reanalysis_keeps_author_choices_for_planning_and_edited_review(
     edited_draft = deepcopy(project["draft"])
     choices += [
         {"question": question, "answer": answer}
-        for question, answer in zip(new_questions, project["answers"])
+        for question, answer in zip(project["analysis"]["missing_information"], project["answers"])
     ]
     response = client.post(f"{url}/review", json={"revision": project["revision"]})
     assert response.status_code == 200
@@ -458,7 +461,7 @@ def test_clear_initial_brief_waits_for_explicit_plan_request(project_client, mon
 
     def no_questions(request):
         result = original_request(request)
-        if request.response_model.__name__ == "_ReasoningOutput":
+        if request.response_model.__name__ == "_GuidedReasoningOutput":
             result.output.missing_information = []
         return result
 
@@ -483,8 +486,8 @@ def test_same_answer_text_for_different_questions_cannot_revalidate_old_feedback
 
     def ask_different_questions(request):
         result = original_request(request)
-        if request.response_model.__name__ == "_ReasoningOutput":
-            result.output.missing_information = ["When does the story end?", "What does she want?"]
+        if request.response_model.__name__ == "_GuidedReasoningOutput":
+            result.output.missing_information = [_GuidedQuestion(question=q, options=["One direction", "Another direction"]) for q in ["When does the story end?", "What does she want?"]]
         return result
 
     monkeypatch.setattr(provider, "request_structured", ask_different_questions)
@@ -708,3 +711,24 @@ def test_stream_disconnect_finishes_saving_without_overwriting_newer_edits(proje
     latest = asyncio.run(disconnected(True))
     assert client.get(url).json() == latest
     assert len(provider.requests) == 2
+
+
+def test_invalid_feedback_quote_preserves_saved_revision(project_client, monkeypatch):
+    client, provider = project_client
+    project = develop_project(client, start_project(client))
+    url = f"/api/projects/{project['id']}"
+    data = payload(project)
+    data["draft"]["sections"][0]["content"] = "Bản sửa mới giữ nguyên vai trò workshop coach."
+    project = client.put(url, json=data).json()
+    original_request = provider.request_structured
+
+    def wrong_quote(request):
+        result = original_request(request)
+        if request.stage == "evaluation":
+            result.output.strengths[0].quote = "A quote from a different revision."
+        return result
+
+    monkeypatch.setattr(provider, "request_structured", wrong_quote)
+    response = client.post(f"{url}/review", json={"revision": project["revision"]})
+    assert response.status_code == 502
+    assert client.get(url).json() == project
