@@ -72,6 +72,11 @@ const titles: Record<TourStep, string> = {
   "new-project": "Bắt đầu câu chuyện đầu tiên", idea: "Câu chuyện bạn muốn kể", language: "Cùng làm rõ ý tưởng",
   choices: "Những lựa chọn thuộc về bạn", draft: "Viết tiếp bằng giọng của bạn", save: "Lưu lại để tiếp tục",
 };
+const targetLabels: Record<TourStep, string> = {
+  "new-project": "Nút Dự án mới", idea: "Ô Ý tưởng, kỷ niệm hoặc tình huống của bạn",
+  language: "Ngôn ngữ đầu ra", choices: "Những lựa chọn của bạn",
+  draft: "Bản phát triển đang làm việc", save: "Thanh lưu thay đổi",
+};
 function copy(step: TourStep, p: Props) {
   switch (step) {
     case "new-project": return p.context.projectId
@@ -95,17 +100,23 @@ export function OnboardingTour(props: Props) {
   const { state } = tour;
   const record = state.record;
   const focusFrame = useRef(0);
+  const opener = useRef<HTMLElement | null>(null);
   useEffect(() => () => cancelAnimationFrame(focusFrame.current), []);
-  const focusAfter = (selector: string) => {
+  const focusAfter = (destination: string | HTMLElement | null) => {
     cancelAnimationFrame(focusFrame.current);
     focusFrame.current = requestAnimationFrame(() => {
-      const element = document.querySelector<HTMLElement>(selector);
-      const target = element?.isConnected && !element.matches(":disabled") ? element : document.getElementById("workspace-title");
+      const element = typeof destination === "string" ? document.querySelector<HTMLElement>(destination) : destination;
+      const target = element?.isConnected && element !== document.body && element.getClientRects().length
+        && !element.matches(":disabled") ? element : document.getElementById("workspace-title");
       target?.scrollIntoView({ block: "center", behavior: "auto" });
       target?.focus({ preventScroll: true });
     });
   };
-  const dismiss = () => { tour.dismiss(); focusAfter("#tour-help"); };
+  const open = (button: HTMLElement, resume = false) => { opener.current = button; tour.open(resume); };
+  const dismiss = () => {
+    const destination = record?.status === "active" ? opener.current : document.activeElement as HTMLElement | null;
+    tour.dismiss(); focusAfter(destination);
+  };
   const practice = () => {
     if (!record) return;
     const step = record.stepId;
@@ -124,20 +135,28 @@ export function OnboardingTour(props: Props) {
   const next = record ? nextStep(record.stepId, context) : null;
   const previous = record ? previousStep(record.stepId, context) : null;
   const active = record?.status === "active" && ready && !busy;
+  useEffect(() => {
+    if (!welcome && !resumable) return;
+    const escape = (event: KeyboardEvent) => {
+      if (event.key !== "Escape" || event.defaultPrevented || event.isComposing || document.querySelector("dialog[open]")) return;
+      event.preventDefault(); dismiss();
+    };
+    document.addEventListener("keydown", escape);
+    return () => document.removeEventListener("keydown", escape);
+  }, [welcome, resumable, dismiss]);
 
   return <>
     <button id="tour-help" className="secondary tour-help" disabled={!ready || busy || !state.initialized}
-      onClick={() => tour.open()}>Hướng dẫn sử dụng</button>
-    {welcome && <section className="tour-notice" aria-label="Chào mừng đến với FirstFrame"
-      onKeyDown={event => { if (event.key === "Escape") { event.preventDefault(); dismiss(); } }}>
+      onClick={event => open(event.currentTarget)}>Hướng dẫn sử dụng</button>
+    {welcome && <section className="tour-notice" aria-label="Chào mừng đến với FirstFrame">
       <div><strong>Bắt đầu cùng FirstFrame</strong><p>Xem hướng dẫn ngắn, rồi thực hành từng bước với câu chuyện của bạn.</p></div>
-      <button onClick={() => tour.open()}>Bắt đầu hướng dẫn</button>
+      <button onClick={event => open(event.currentTarget)}>Bắt đầu hướng dẫn</button>
       <button className="secondary" onClick={dismiss}>Bỏ qua</button>
     </section>}
     {resumable && <section className="tour-notice" aria-label="Tiến độ hướng dẫn">
       <p role="status">{state.hint ?? (record.status === "paused" ? "Hướng dẫn đang tạm dừng. Bạn có thể tiếp tục khi sẵn sàng."
         : "Bạn đang thực hành. Tiếp tục hướng dẫn khi sẵn sàng, hoặc bỏ qua để tự khám phá.")}</p>
-      <button disabled={!ready || busy || !continuation(state, context)} onClick={() => tour.open(true)}>Tiếp tục hướng dẫn</button>
+      <button disabled={!ready || busy || !continuation(state, context)} onClick={event => open(event.currentTarget, true)}>Tiếp tục hướng dẫn</button>
       <button className="secondary" onClick={dismiss}>Bỏ qua</button>
     </section>}
     {active && createPortal(<TourDialog step={record.stepId} title={titles[record.stepId]} description={copy(record.stepId, props)}
@@ -236,7 +255,7 @@ function TourDialog({ step, title, description, onMissing, onDismiss, children }
       <button className="tour-close" aria-label="Đóng hướng dẫn" onClick={onDismiss}>×</button>
       <p className="eyebrow">FirstFrame · Hướng dẫn</p>
       <h2 id="tour-title" tabIndex={-1}>{title}</h2>
-      <p id="tour-description">{description}</p>
+      <p id="tour-description"><strong>{targetLabels[step]}.</strong> {description}</p>
       {children}
     </div>
   </dialog>;

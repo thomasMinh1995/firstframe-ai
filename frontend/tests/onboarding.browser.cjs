@@ -83,8 +83,48 @@ async function setup(browser, options = {}) {
   await fs.mkdir(screenshots, { recursive: true });
   const browser = await chromium.launch({ channel: 'chrome', headless: true });
   try {
-    // Complete all six steps through real UI buttons, with no questions, sections or feedback.
+    // Escape works outside the modal too; disappearing openers use the workspace fallback.
     let t = await setup(browser), { page, mock } = t;
+    await page.keyboard.press('Escape'); await status(page, 'dismissed');
+    await focused(page, '#workspace-title');
+    assert.equal(countWrites(mock), 0);
+    await t.close();
+    t = await setup(browser); ({ page, mock } = t);
+    await click(page, 'Bắt đầu hướng dẫn'); await step(page, 1);
+    await page.keyboard.press('Escape'); await focused(page, '#workspace-title');
+    await click(page, 'Hướng dẫn sử dụng'); await step(page, 1);
+    await click(page, 'Đóng hướng dẫn'); await focused(page, '#tour-help');
+    await t.close();
+    t = await setup(browser, { projects: [project()] }); ({ page, mock } = t);
+    await click(page, 'Hướng dẫn sử dụng'); await click(page, 'Thực hành');
+    await page.locator('#idea').fill('Nội dung chưa lưu khi dùng Escape.');
+    const practiceBuffer = await buffer(page);
+    await page.keyboard.press('Escape'); await status(page, 'dismissed');
+    await focused(page, '#idea');
+    assert.deepEqual(await buffer(page), practiceBuffer); assert.equal(countWrites(mock), 0);
+    await click(page, 'Hướng dẫn sử dụng'); await click(page, 'Thực hành');
+    await click(page, 'Tiếp tục hướng dẫn'); await step(page, 3);
+    await page.keyboard.press('Escape'); await focused(page, '#workspace-title');
+    // Dismiss during an actual pending request; its later result must not revive the tour.
+    let releaseEscape; mock.hold = new Promise(resolve => { releaseEscape = resolve; });
+    await click(page, 'Hướng dẫn sử dụng'); await click(page, 'Tiếp'); await click(page, 'Thực hành');
+    await click(page, 'Cùng làm rõ ý tưởng');
+    await page.waitForFunction(() => document.querySelector('#tour-help').disabled);
+    await page.getByRole('button', { name: 'Bỏ qua', exact: true }).focus();
+    await page.keyboard.press('Escape'); await status(page, 'dismissed');
+    await focused(page, '#workspace-title');
+    releaseEscape();
+    await page.waitForFunction(() => !document.querySelector('#tour-help').disabled);
+    await status(page, 'dismissed'); assert.equal(await page.locator('dialog[open]').count(), 0);
+    await t.close();
+    t = await setup(browser, { projects: [project()], storage: JSON.stringify({ version: 1, status: 'paused', stepId: 'idea', projectId: 'p1' }) });
+    ({ page } = t);
+    await page.getByRole('button', { name: 'Tiếp tục hướng dẫn', exact: true }).focus();
+    await page.keyboard.press('Escape'); await status(page, 'dismissed'); await focused(page, '#workspace-title');
+    await t.close();
+
+    // Complete all six steps through real UI buttons, with no questions, sections or feedback.
+    t = await setup(browser); ({ page, mock } = t);
     await click(page, 'Bắt đầu hướng dẫn'); await step(page, 1);
     for (let i = 0; i < 12; i++) {
       await page.keyboard.press(i < 6 ? 'Tab' : 'Shift+Tab');
@@ -234,6 +274,8 @@ async function setup(browser, options = {}) {
       const r = document.querySelector('.tour-card').getBoundingClientRect();
       return r.left >= 0 && r.top >= 0 && r.right <= innerWidth && r.bottom <= innerHeight;
     });
+    assert.equal(await page.locator('.tour-spotlight').count(), 0);
+    assert.match(await page.locator('#tour-description').innerText(), /Bản phát triển đang làm việc/);
     await click(page, 'Tiếp'); await step(page, 6); await click(page, 'Hoàn tất hướng dẫn');
     await t.close();
     console.log('Browser tour checks passed: full flow, no tour writes, buffers, keyboard, conditional data, failures, reload, project switch, cross-tab dismissal, storage, missing anchors and mobile viewport.');
