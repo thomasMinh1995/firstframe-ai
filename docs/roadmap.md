@@ -14,19 +14,28 @@ The current MVP delivers clarification and manual story-plan revision, not a com
 
 The product handoff ends at screenplay export. Casting, staging, shooting, editing, and post-production are a separate process with real people and actors. AI video, synthetic actors, generated footage, and production management are outside the direction.
 
-## Next Delivery Priority: Story-Plan Demo for Vietnamese Beginners — Planned
+## Next Delivery Priority: Eight Harness Follow-up Packages — Planned
 
-The [detailed plan](plans/vietnam-first-screenplay-mvp.md) records the agreed direction and acceptance criteria; [implementation issue #26](https://github.com/thomasMinh1995/firstframe-ai/issues/26) stays open after the documentation PR merges. These are proposed improvements, not features delivered by this documentation update. Existing milestone numbers are retained for references; the delivery order below takes precedence over their numbering.
+The [product plan](plans/vietnam-first-screenplay-mvp.md) records the agreed direction and acceptance criteria; [implementation issue #26](https://github.com/thomasMinh1995/firstframe-ai/issues/26) remains the place to record acceptance. The four initial harness deliveries have merged in PRs #30–#33: entry copy/reading view, saved author context, the manual revision loop, and plan recovery when the critic fails. Recovery preserves the first generated draft or a separate regeneration proposal without overwriting the working draft. Implementation does not establish demo or pilot acceptance.
 
-| Order | Small change | Expected evidence |
+Full-flow validation on `f607732` completed all nine journeys and preserved sources, but seven plan-generation runs exceeded the 120-second budget and unsupported or intent-violating feedback remained. The next work follows the [eight-package harness plan](plans/harness-improvement.md), updated on 23 October 2026. These are reviewable work packages, not eight new features or a fixed number of PRs. This update changes documentation only. Existing product milestone numbers remain unchanged.
+
+| Package | Smallest scope | Expected evidence |
 | --- | --- | --- |
-| P0.1 | Invite a small lived moment through plain Vietnamese copy and examples; keep existing project/save mechanics | A beginner knows what to enter with little assistance |
-| P0.2 | Read title, logline, beginning, middle, and ending from the working draft; expand other details and retain the editor | The reader can picture the progression and a memorable detail; no extra AI narration call or loss of unsaved edits |
-| P0.3 | Deliver the saved author-context card portion of #7, with shared backend provenance and saved/unsaved distinctions | The author can see what is being used; proposals are not promoted to decisions; old feedback keeps its own context |
-| P0.4 | Guide one manual edit, save, and review using the existing controls | New feedback reads the exact revised draft; navigation does not rewrite, save, or call AI |
-| P0.5 | Run three Vietnamese situations three times each as independent full workflows on the actual demo configuration; retain every result and timing | Live requires 9/9 passing runs and PO approval under plan section 4.1; otherwise use only an approved, clearly labeled recording |
+| H1 — Review failures | Freeze development cases and ask a second reader to check difficult judgments | Keep original outputs, expected evidence, grading rules and disagreements |
+| H2 — Source chunks and IDs | Offline comparison of the focused prompt/full text with full text carrying structural chunk IDs and code-rendered quotes | Measure source selection, exact text, semantic support, false alarms, misses, abstentions and time separately |
+| H3 — Minimal repair | Test repair guidance separately from the source representation | Fix the violating detail while preserving valid action, roles, intent and open choices; no automatic application |
+| H4 — Unseen and multiple-constraint cases | Evaluate the candidate on cases withheld from tuning | Keep full denominators and reader judgments; decide whether evidence supports integration |
+| H5 — Conditional integration | Integrate the supported candidate into the existing runtime | Preserve snapshot/revision pairing, unsaved work, history, recovery and legacy compatibility; pass relevant contract/API/UI tests |
+| H6 — Waiting time | Profile planner, critic and orchestration; vary one factor at a time | Reduce budget overruns without sacrificing content quality or data protection |
+| H7 — Demo acceptance | Run a new complete batch of three situations × three independent full journeys on the final configuration, then rehearse | Live requires 9/9 passing runs and PO/reader approval under product plan section 4.1 |
+| H8 — Pilot and value comparison | N=5–8 beginners, with a fair comparison to familiar agent/chatbot workflows | Apply the existing H0, completion, continuation and PO criteria below; record effort and assistance |
 
-P0.5 begins alongside preparation. Include everyday care, humor or awkwardness, and a quiet observational moment. Address observed model failures narrowly and recheck the relevant guidance on the actual configuration; valid JSON or AI rubric scores alone do not establish quality.
+Start with H1 → H2 → H3 → H4; integrate in H5 only when the evidence supports the candidate. H6 profiling can run alongside the experiments; freeze all candidate changes before H7. H8 follows the existing pilot conditions. Include everyday care, humor or awkwardness, and a quiet observational moment. Keep failures and inconclusive results; valid JSON, an existing source ID or an AI score alone does not establish quality. ID/chunking experiments and the full deeper #7 contract do not become new prerequisites for an exploratory pilot; unresolved blockers still prevent acceptance under the criteria below.
+
+H2/H5 use structural chunks to address sources, while retaining the full current draft and effective saved author context in the model input. Each ID belongs to its exact project/source snapshot and field/span; ordinal section IDs are not stable identities across revisions or reordering. The model selects IDs and backend code renders original text. A violation needs the relevant author constraint and draft evidence; a valid reference does not prove semantic support. Reject wrong-snapshot/invalid references without fuzzy matching or relocation. Keep old feedback on its original source; legacy feedback lacking source/IDs stays readable with a missing-information label and no unverified navigation. Preserve buffers, history, revision checks and both recovery paths; navigation never saves, rewrites or calls AI.
+
+Embedding, retrieval, top-k context reduction, vector databases and reranking are outside these eight packages. They require a separate demonstrated need and evaluation against full text with IDs or lexical search before any future integration. This document update does not change prompts, schemas, runtime, model configuration, project data or prototype files.
 
 **Live/recorded acceptance:** Before running, freeze briefs, choices, manual edits, expected behavior, commit/prompt/model configuration, and per-AI-operation wait budgets. Follow the existing [model evaluation checklist](prompt-evaluation.md). Keep all nine independent analyze–plan–edit–save–review runs, including provider/validation failures, with inputs, outputs, seed when available, timings, and human verdicts; do not select only successful generations.
 
@@ -131,7 +140,7 @@ Automated tests cover the question gate, persistence across app instances, revie
 
 **Validation:** Exporting historical version A while working on B produces A's content, excludes AI feedback from the document and PDF metadata, and preserves B's unsaved buffer. Late responses and retries cannot overwrite edits or silently select a newer revision. Vietnamese text and multi-page layout must be visually verified during implementation.
 
-## Milestone 1.2: Visible Author Intent and Feedback-to-Edit Flow — P0, Planned
+## Milestone 1.2: Visible Author Intent and Feedback-to-Edit Flow — P0, Partially Implemented
 
 - Show the effective saved author context, including retained clarifications, without promoting AI analysis or proposals into author decisions.
 - Distinguish saved context, unsaved edits, and the context of historical feedback.
@@ -142,7 +151,7 @@ Automated tests cover the question gate, persistence across app instances, revie
 
 **User outcome:** The beginner can explain the intent being used, choose a useful revision, and complete a focused story-plan revision round while retaining creative control.
 
-**Status:** Planning only; no implementation is delivered by the planning PR. See [P0 #7](https://github.com/thomasMinh1995/firstframe-ai/issues/7) and the [implementation plan](plans/p0-author-intent-revision-flow.md). This P0 can proceed independently of PDF export in Milestone 1.1; merging the plan does not close the feature issue.
+**Status:** The saved author-context card, feedback provenance and the existing manual revision loop were delivered in harness parts 2–3. Structured per-item evidence/target links and the full deeper navigation flow remain planned under [P0 #7](https://github.com/thomasMinh1995/firstframe-ai/issues/7) and its [implementation plan](plans/p0-author-intent-revision-flow.md). H2 tests source chunk IDs offline; H5 integrates only a supported candidate and does not imply completion of all #7 UX. This work remains independent of PDF export in Milestone 1.1; neither the partial implementation nor this plan update closes the feature issue or establishes pilot acceptance.
 
 **Validation:** Saved context must match AI input; feedback artifacts, snapshots and targets must remain paired. Validate quotations against each target field, not the whole draft. Navigation preserves all unsaved text, including project-name-only edits, and uncertain save results must not trigger a reload or retry that overwrites buffers. Automated contract/UI tests and a real-model beginner pilot are required during implementation; transport tests alone do not establish feedback quality.
 
@@ -227,7 +236,7 @@ Measure completed screenplay drafts and export only when Milestones 3 and 4 are 
 
 Keep the existing Harness and domain assets as the foundation. Add persistence, contracts, and checks as required by each milestone. Reliability work, including error handling and pilot access, should support the writing journey.
 
-The proposed [Harness improvement plan](plans/harness-improvement.md) divides the MVP into four small deliveries: entry copy and a reading view, the current saved author context, the existing manual revision loop, and recovery when the critic fails. Recovery distinguishes the first draft from regenerating an existing draft. Baseline preparation runs alongside these deliveries; data protection and the demo/pilot acceptance criteria above remain unchanged. Experiments with reference contracts stay independent of this basic work. Revision in both directions between story plan and screenplay remains a later direction, with changes limited to affected parts and approved by the author. This plan update delivers documentation only.
+The [Harness improvement plan](plans/harness-improvement.md) now tracks eight follow-up packages after the four merged MVP deliveries: failure review, offline structural chunk/ID grounding, minimal repair, withheld/multiple-constraint evaluation, conditional runtime integration, waiting time, demo acceptance and pilot/value comparison. Chunking/ID work is part of H2/H5; embedding/retrieval is not included. Retain the existing manual writing flow, source snapshots, revision checks, unsaved buffers, history and recovery guarantees. Invalid references cannot become verified edit links; older feedback must never acquire current source context. Data protection and all demo/pilot thresholds above remain unchanged. Revision in both directions between story plan and screenplay remains a later direction, limited to affected parts and approved by the author. This update delivers documentation only; the eight packages have not been implemented or accepted by it.
 
 The [first paired Qwen 3B experiment](evaluations/harness-reference-contract-2026-10-21.md) completed 108 model calls. The snapshot-key prototype remains confined to the evaluation runner: quote-validation acceptance fell, so it has not been promoted to the application workflow.
 
