@@ -12,6 +12,8 @@ const labels: Record<string, string> = {
   passed: "Đạt yêu cầu", rubric_scores: "Điểm tiêu chí (1–5)", strengths: "Điểm mạnh", weaknesses: "Điểm chưa tốt",
   suggestions: "Góp ý", story_clarity: "Độ rõ câu chuyện", character: "Nhân vật", emotional_impact: "Tác động cảm xúc",
   production_feasibility: "Khả thi sản xuất",
+  reviews: "Đối chiếu card", card_id: "Card", decision_id: "Lựa chọn tác giả", related_card_id: "Card liên quan (tùy chọn)",
+  comparison: "Kết quả (aligned / mismatch / uncertain)", observation: "Nhận xét cụ thể", suggestion: "Bước sửa",
 };
 
 export default function OutputFields({value, onChange, name = "Output"}: {
@@ -23,7 +25,8 @@ export default function OutputFields({value, onChange, name = "Output"}: {
         onChange={(next) => onChange(value.map((old, i) => i === index ? next : old))} />
       <button type="button" className="secondary" onClick={() => onChange(value.filter((_, i) => i !== index))}>Xóa mục {index + 1}</button>
     </div>)}
-    <button type="button" className="secondary" onClick={() => onChange([...value, name === "notes" ? {label: "", content: ""} : ""])}>Thêm mục</button>
+    <button type="button" className="secondary" onClick={() => onChange([...value, name === "notes" ? {label: "", content: ""}
+      : name === "reviews" ? {card_id: "", decision_id: "", related_card_id: null, comparison: "uncertain", observation: "", suggestion: ""} : ""])}>Thêm mục</button>
   </div>;
   if (typeof value === "object" && value !== null) return <div className="form-stack output-fields">
     <strong>{labels[name] ?? name}</strong>

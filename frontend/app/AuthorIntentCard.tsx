@@ -1,7 +1,13 @@
+import { revealWorkspaceTarget } from "./WorkspaceStage";
 import type { AuthorContext, FeedbackSource } from "./projectsApi";
 
 function focusInput(id: string) {
   const input = document.getElementById(id);
+  revealWorkspaceTarget(input ?? document.querySelector(`[data-answer-open="${id}"]`));
+  if (!input && id.startsWith("answer-")) {
+    document.querySelector<HTMLButtonElement>(`[data-answer-open="${id}"]`)?.click();
+    return;
+  }
   if (input?.matches(":disabled")) return;
   input?.scrollIntoView({ block: "center" });
   input?.focus({ preventScroll: true });

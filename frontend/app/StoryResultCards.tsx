@@ -137,12 +137,12 @@ export function StoryFeedback({ evaluation, uiLanguage, onChoose, selectedCriter
           selectedIndex={suggestions.findIndex(item => item.criterion_id === selectedCriterion)}
           selectionDisabled={selectionDisabled} />
       </div>
-      <details className="rubric-details">
+      {shaped.scores.length > 0 && <details className="rubric-details">
         <summary>{uiLanguage === "vi" ? "Xem điểm tham khảo" : "Reference scores"}</summary>
         <div className="scores">{shaped.scores.map((score) => <span key={score.label}>
           {score.label}: {score.value}/5
         </span>)}</div>
-      </details>
+      </details>}
     </ReportCard>
   );
 }

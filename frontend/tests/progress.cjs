@@ -132,3 +132,26 @@ assert.match(dirtyFailure,/You have unsaved edits/);
 assert.match(dirtyFailure,/Save or download a JSON backup before reloading/);
 assert.doesNotMatch(dirtyFailure,/Content saved before the AI request/);
 assert.match(render('vi',steps,false,true),/Các thay đổi mới trên màn hình chưa được lưu/);
+
+const { planProgressGroups } = require(process.argv[2] + '/progressState.js');
+let pipeline = [{ stage: 'prepare', status: 'completed', occurrence: 1 }];
+let groups = planProgressGroups(pipeline);
+assert.equal(groups.length, 3);
+assert.equal(groups[1].children.find(s => s.stage === 'planning').status, 'pending');
+pipeline = applyProgress(pipeline, {stage:'plan_choices',status:'active'});
+pipeline = applyProgress(pipeline, {stage:'plan_choices',status:'failed'});
+groups = planProgressGroups(pipeline);
+assert.equal(groups[0].status, 'failed');
+assert.equal(groups[1].children.every(s => s.status === 'pending'), true, 'failed checks never imply AI ran');
+for (const stage of ['planning_context','planning','planning_structure','plan_checkpoint','evaluation','plan_save']) {
+ pipeline = applyProgress(pipeline, {stage,status:'active'});
+ pipeline = applyProgress(pipeline, {stage,status:'completed'});
+}
+groups = planProgressGroups(pipeline);
+assert.equal(groups[0].status, 'failed', 'later events cannot erase a failed child');
+assert.equal(groups[1].status, 'completed');
+assert.equal(groups[2].status, 'completed');
+console.log('Nested plan progress checks passed: planned/pending children, real status events, failure preservation and checkpoints.');
+
+const retry = ['plan_checkpoint','evaluation','fidelity_audit','evaluation','fidelity_audit','plan_save'].map((stage,i)=>({stage,status:'completed',occurrence:i+1}));
+assert.deepEqual(planProgressGroups(retry)[2].children.map(step=>step.stage), retry.map(step=>step.stage), 'nested progress keeps real critic/audit retry order');

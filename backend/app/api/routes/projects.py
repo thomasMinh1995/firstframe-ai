@@ -32,9 +32,11 @@ from app.application.ai_provider import (
     ProviderError,
 )
 from app.application.dataset import capture_workflow
-from app.application.language import LanguageSelectionRequired
-from app.application.progress import progress_listener, report_progress
+from app.application.clarification import MAX_CHOICES, conversation_questions
+from app.application.language import LanguageSelectionRequired, resolve_response_language
+from app.application.progress import progress_listener, report_progress, progress_step
 from app.application.project_store import ProjectConflict, ProjectNotFound, ProjectStore
+from app.application.revision_review import review_context
 from app.core.artifacts import Constraint, PlanSection, StoryPlanArtifact
 
 router = APIRouter(prefix="/api/projects", tags=["projects"])
@@ -42,7 +44,7 @@ router = APIRouter(prefix="/api/projects", tags=["projects"])
 
 @router.post("/{project_id}/{operation}/stream")
 async def stream_project_operation(
-    project_id: str, operation: Literal["analyze", "plan", "review"], request: RevisionRequest
+    project_id: str, operation: Literal["analyze", "clarify", "plan", "review"], request: RevisionRequest
 ):
     events: asyncio.Queue = asyncio.Queue()
     loop = asyncio.get_running_loop()
@@ -53,7 +55,7 @@ async def stream_project_operation(
 
         token = progress_listener.set(publish)
         try:
-            handler = {"analyze": analyze_project, "plan": plan_project, "review": review_project}
+            handler = {"analyze": analyze_project, "clarify": clarify_project, "plan": plan_project, "review": review_project}
             result = handler[operation](project_id, request)
             publish({"type": "result", "project": result.model_dump(mode="json")})
         except HTTPException as error:
@@ -120,12 +122,10 @@ def load_project(project_id: str, revision: int | None = None) -> ProjectRespons
     return project
 
 
-def save_project(project: ProjectResponse) -> ProjectResponse:
-    report_progress("saving", "active")
-    data = project.model_dump(exclude_computed_fields=True)
-    saved = ProjectResponse.model_validate(get_project_store().save(data, project.revision))
-    report_progress("saving", "completed")
-    return saved
+def save_project(project: ProjectResponse, stage: str = "saving") -> ProjectResponse:
+    with progress_step(stage):
+        data = project.model_dump(exclude_computed_fields=True)
+        return ProjectResponse.model_validate(get_project_store().save(data, project.revision))
 
 
 def dataset_snapshot(project: ProjectResponse) -> dict[str, object]:
@@ -244,10 +244,24 @@ def update_project(project_id: str, request: ProjectUpdate):
 
 @router.post("/{project_id}/analyze", response_model=ProjectResponse)
 def analyze_project(project_id: str, request: RevisionRequest):
+    return _analyze_project(project_id, request)
+
+
+@router.post("/{project_id}/clarify", response_model=ProjectResponse)
+def clarify_project(project_id: str, request: RevisionRequest):
+    return _analyze_project(project_id, request, conversation=True)
+
+
+def _analyze_project(project_id: str, request: RevisionRequest, conversation: bool = False):
     with project_errors():
         project = load_project(project_id, request.revision)
         if not project.idea.strip():
             raise HTTPException(422, "Hãy nhập ý tưởng trước khi bắt đầu.")
+        existing = list(project.analysis.missing_information) if conversation and project.analysis else []
+        if existing and (len(project.answers) != len(existing) or any(not answer.strip() for answer in project.answers)):
+            raise HTTPException(422, "Hãy trả lời hoặc để quyết định sau các câu hiện tại trước khi hỏi tiếp.")
+        if len(existing) >= MAX_CHOICES:
+            raise HTTPException(422, "Đã có đủ 20 lượt làm rõ. Bạn có thể sửa các lựa chọn trước khi xác nhận.")
         with capture_workflow("analyze", dataset_snapshot(project)) as dataset:
             known_answers = project.creator_answers()
             reasoning = get_story_generation_service().analyze(
@@ -266,7 +280,8 @@ def analyze_project(project_id: str, request: RevisionRequest):
                     AnalysisNoteResponse(label=note.label, content=note.content)
                     for note in reasoning.notes
                 ],
-                missing_information=list(reasoning.open_questions[:3]),
+                missing_information=conversation_questions(reasoning.open_questions, existing, previous_answers,
+                    resolve_response_language(project.idea, project.response_language)) if conversation else list(reasoning.open_questions[:3]),
             )
             project.answers = [
                 previous_answers.get(question, "") for question in project.analysis.missing_information
@@ -280,13 +295,14 @@ def analyze_project(project_id: str, request: RevisionRequest):
 def plan_project(project_id: str, request: RevisionRequest):
     with project_errors():
         project = load_project(project_id, request.revision)
-        if project.analysis is None:
-            raise HTTPException(422, "Hãy làm rõ ý tưởng trước khi tạo bản phát triển.")
-        questions = project.analysis.missing_information
-        if len(questions) != len(project.answers) or any(
-            not answer.strip() for answer in project.answers
-        ):
-            raise HTTPException(422, "Hãy trả lời hoặc chọn để quyết định sau cho từng câu hỏi.")
+        with progress_step("plan_choices"):
+            if project.analysis is None:
+                raise HTTPException(422, "Hãy làm rõ ý tưởng trước khi tạo bản phát triển.")
+            questions = project.analysis.missing_information
+            if len(questions) != len(project.answers) or any(
+                not answer.strip() for answer in project.answers
+            ):
+                raise HTTPException(422, "Hãy trả lời hoặc chọn để quyết định sau cho từng câu hỏi.")
         generation_id = None
 
         def keep_plan(plan: StoryPlanArtifact) -> None:
@@ -306,7 +322,7 @@ def plan_project(project_id: str, request: RevisionRequest):
                 project.feedback = project.feedback_source = project.reviewed_content = None
                 generation.applied_revision = project.revision + 1
             project.plan_generations.append(generation)
-            project = save_project(project)
+            project = save_project(project, "plan_checkpoint")
             generation_id = generation.id
 
         try:
@@ -329,7 +345,7 @@ def plan_project(project_id: str, request: RevisionRequest):
                     project.feedback_source = reviewed.feedback_source
                     project.reviewed_content = reviewed.reviewed_content
                     add_version(project)
-                project = save_project(project)
+                project = save_project(project, "plan_save")
                 dataset.complete(
                     {**dataset_snapshot(project), "plan_generation": generation.model_dump(mode="json")},
                     workflow_complete=generation.applied_revision is not None,
@@ -339,7 +355,7 @@ def plan_project(project_id: str, request: RevisionRequest):
                 raise
             project.plan_generations[-1].critic_status = "failed"
             # Use only the checkpoint revision: a late critic must not overwrite a newer save.
-            project = save_project(project)
+            project = save_project(project, "plan_save")
         return project
 
 
@@ -375,6 +391,10 @@ def review_project(project_id: str, request: RevisionRequest):
             raise HTTPException(422, "Hãy viết ít nhất một phần trước khi nhận phản hồi.")
         with capture_workflow("review", dataset_snapshot(project)) as dataset:
             context = project.author_context
+            previous_draft = project.feedback_source.draft if project.feedback_source else None
+            if previous_draft == project.draft:
+                previous_draft = next((version.draft for version in reversed(project.versions)
+                                       if version.draft != project.draft), None)
             evaluation = get_story_generation_service().review(
                 project.idea,
                 project.draft.title,
@@ -390,6 +410,12 @@ def review_project(project_id: str, request: RevisionRequest):
                 ),
                 json.dumps(context.ai_context(), ensure_ascii=False),
                 response_language=project.response_language,
+                review_context=review_context(
+                    project.draft.model_dump(),
+                    previous_draft.model_dump() if previous_draft else None,
+                    context.model_dump(),
+                    resolve_response_language(project.idea, project.response_language) == "Vietnamese",
+                ),
             )
             project.feedback = EvaluationResponse(
                 artifact_id=evaluation.metadata.artifact_id,

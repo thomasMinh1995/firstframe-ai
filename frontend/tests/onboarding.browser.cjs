@@ -16,14 +16,57 @@ const analysis = () => ({ artifact_id: 'a1', summary: 'Một cuộc gặp bất 
 const draft = () => ({ title: 'Cuộc gặp', logline: 'Một người thợ học cách lắng nghe.', sections: [] });
 const fullProject = id => ({ ...project(id), analysis: analysis(), draft: draft() });
 const countWrites = mock => mock.calls.filter(c => c.method !== 'GET').length;
-const buffer = page => page.locator('input, textarea, select').evaluateAll(nodes => nodes.map(n => [n.id, n.value]));
-const click = (page, name) => page.getByRole('button', { name, exact: true }).click();
+const buffer = page => page.evaluate(() => {
+  const fields = Array.from(document.querySelectorAll('input, textarea, select'))
+    .filter(n => !n.closest('.story-field') && !n.id.startsWith('answer-')).map(n => [n.id, n.value]);
+  for (const button of document.querySelectorAll('[data-answer-open]')) {
+    const id = button.dataset.answerOpen;
+    fields.push([id, document.getElementById(id)?.value ?? document.getElementById(id + '-value')?.textContent ?? '']);
+  }
+  const draftFields = new Map();
+  for (const n of document.querySelectorAll('.story-field')) {
+    const id = n.querySelector('h3').id.replace(/-label$/, '').replace(/-part-\d+$/, '');
+    const value = (n.querySelector('input, textarea')?.value ?? n.querySelector('.story-field-value').textContent).replace(/\s+/g, ' ').trim();
+    draftFields.set(id, draftFields.has(id) ? draftFields.get(id) + ' ' + value : value);
+  }
+  return [...fields, ...draftFields].sort(([a], [b]) => a.localeCompare(b));
+});
+async function reveal(page, locator) {
+  const ancestors = locator.locator('xpath=ancestor::details');
+  for (let i = await ancestors.count() - 1; i >= 0; i--) {
+    const item = ancestors.nth(i);
+    if (await item.getAttribute('open') === null) await item.locator(':scope > summary').click();
+  }
+}
+async function answer(page, index, value) {
+  await reveal(page, page.locator('[data-answer-open]').first());
+  const input = page.locator(`#answer-${index}`);
+  if (!await input.count()) await page.locator(`[data-answer-open="answer-${index}"]`).click();
+  await input.fill(value);
+}
+async function edit(page, id) {
+  const field = page.locator('.story-field').filter({ has: page.locator(`[id="${id}-label"]`) });
+  await field.waitFor({ state: 'attached' });
+  await reveal(page, field);
+  const input = page.locator(`[id="${id}"]`);
+  if (!await input.count()) await field.getByRole('button', { name: /^Sửa / }).click();
+  await input.focus();
+  return input;
+}
+async function confirmPlan(page) {
+  await reveal(page, page.locator('[data-choice-review]'));
+  await page.getByRole('button', { name: 'Xem lại các lựa chọn', exact: true }).click();
+  await page.locator('[data-tour-action="plan"]').click();
+}
+const click = (page, name) => ['Tạo bản phát triển từ lựa chọn của tôi', 'Tạo bản đề xuất mới (giữ bản đang viết)'].includes(name)
+  ? confirmPlan(page) : page.getByRole('button', { name, exact: true }).click();
 const step = (page, n) => page.getByText(`Bước ${n}/6`, { exact: true }).waitFor({ state: 'visible' });
 const focused = (page, selector) => page.waitForFunction(selector => document.activeElement.matches(selector), selector);
 const status = (page, expected) => page.waitForFunction(({ key, expected }) => JSON.parse(localStorage.getItem(key))?.status === expected, { key, expected });
 
 async function setup(browser, options = {}) {
   const context = await browser.newContext({ viewport: options.viewport || { width: 1280, height: 900 }, reducedMotion: 'reduce' });
+  context.setDefaultTimeout(10000);
   const mock = { projects: clone(options.projects || []), calls: [], failList: false, failSave: false, failAI: false, hold: null, ...options.mock };
   const errors = [];
   context.on('page', p => p.on('pageerror', e => errors.push(e.message)));
@@ -58,6 +101,10 @@ async function setup(browser, options = {}) {
     if (!p) return reply({ detail: 'missing' }, 404);
     if (method === 'GET') return reply(p);
     if (method === 'PUT') {
+      if (mock.holdSave) {
+        const pending = mock.holdSave; mock.holdSave = null;
+        await pending;
+      }
       if (mock.failSave || body.revision !== p.revision) return reply({ detail: 'Xung đột phiên bản. Bản sửa vẫn được giữ.' }, 409);
       const changed = p.idea !== body.idea || JSON.stringify(p.constraints) !== JSON.stringify(body.constraints);
       const reviewChanged = changed || p.response_language !== body.response_language
@@ -92,7 +139,15 @@ async function setup(browser, options = {}) {
       return reply(p);
     }
     if (mock.failAI) return reply({ detail: 'Chọn ngôn ngữ đầu ra.' }, 422);
-    if (parts[3] === 'analyze') p.analysis = analysis();
+    if (parts[3] === 'clarify') {
+      const old = p.analysis?.missing_information ?? [];
+      const proposed = mock.clarifyQuestions ?? (old.length ? ['Bạn muốn giữ chi tiết nào nữa?', 'Nhịp nào cần chậm lại?']
+        : ['Bạn muốn theo chân ai?', 'Điều muốn giữ?', 'Muốn dừng ở đâu?', 'Cách kể?', 'Cảm giác muốn giữ?', 'Giới hạn thực hiện?']);
+      const extra = proposed.filter(q => !old.includes(q));
+      p.analysis = { ...analysis(), artifact_id: `a-${p.revision}`, missing_information: [...old, ...extra] };
+      p.answers = [...p.answers, ...extra.map(() => '')];
+    }
+    else if (parts[3] === 'analyze') p.analysis = analysis();
     else if (parts[3] === 'plan') {
       if (mock.planPatch) Object.assign(p, clone(mock.planPatch));
       else p.draft = draft();
@@ -104,17 +159,21 @@ async function setup(browser, options = {}) {
     }
     else throw new Error(`Unexpected model operation: ${pathname}`);
     p.revision++;
-    return reply(JSON.stringify({ type: 'progress', stage: 'reasoning', status: 'completed' }) + '\n'
+    const stages = parts[3] === 'plan' ? ['plan_choices','planning_context','planning','planning_structure','plan_checkpoint','evaluation','plan_save'] : ['reasoning','saving'];
+    return reply(stages.flatMap(stage => ['active','completed'].map(status => JSON.stringify({ type: 'progress', stage, status }))).join('\n') + '\n'
       + JSON.stringify({ type: 'result', project: p }) + '\n', 200, 'application/x-ndjson');
   });
   const page = await context.newPage();
-  await page.goto(url);
+  const entry = new URL(url);
+  await page.goto(entry.href);
   await page.getByRole('button', { name: 'Dự án mới', exact: true }).waitFor();
   await page.waitForFunction(() => !document.querySelector('[data-tour="new-project"]').disabled);
   return { context, page, mock, errors, close: async () => { assert.deepEqual(errors, []); await context.close(); } };
 }
 
-(async () => {
+module.exports = { setup, project, analysis, draft, fullProject, edit, answer, reveal, confirmPlan };
+
+if (require.main === module) (async () => {
   await fs.mkdir(screenshots, { recursive: true });
   assert.ok(['chrome', 'firefox', 'webkit'].includes(engine), 'TOUR_BROWSER must be chrome, firefox or webkit');
   const browser = await ({ chrome: chromium, firefox, webkit })[engine].launch({
@@ -228,7 +287,7 @@ async function setup(browser, options = {}) {
     await click(page, 'Tiếp tục hướng dẫn'); await step(page, 4); await click(page, 'Thực hành');
     await focused(page, '#answer-1');
     assert.equal(await page.locator('[data-tour-action="plan"]').isDisabled(), true);
-    await page.getByRole('button', { name: 'Để quyết định sau', exact: true }).nth(1).click();
+    await page.getByRole('button', { name: 'Để quyết định sau', exact: true }).click();
     assert.equal(countWrites(mock), writes);
     await click(page, 'Tạo bản phát triển từ lựa chọn của tôi');
     await click(page, 'Tiếp tục hướng dẫn'); await step(page, 5);
@@ -241,6 +300,7 @@ async function setup(browser, options = {}) {
     assert.equal(await page.getByText('Bắt đầu cùng FirstFrame', { exact: true }).count(), 0);
     await click(page, 'Hướng dẫn sử dụng'); await step(page, 5); await click(page, 'Thực hành');
     await page.locator('#idea').fill('Một ý tưởng hoàn toàn khác.');
+    await page.getByText(/Ý tưởng đã thay đổi\. Làm rõ lại/).waitFor();
     before = await buffer(page); writes = countWrites(mock);
     await click(page, 'Tiếp tục hướng dẫn'); await step(page, 2);
     await page.keyboard.press('Escape'); await status(page, 'dismissed');
@@ -344,30 +404,33 @@ async function setup(browser, options = {}) {
     };
     for (const viewport of [{ width: 1280, height: 900 }, { width: 390, height: 844 }]) {
       t = await setup(browser, { projects: [readingProject], viewport }); ({ page, mock } = t);
-      const reading = page.getByRole('region', { name: 'Bản đọc story plan', exact: true });
-      assert.match(await reading.innerText(), /Bản đang làm việc · Đã lưu/);
-      assert.equal(await reading.getByRole('heading', { name: 'Bữa cơm muộn', exact: true }).count(), 1);
-      assert.equal(await reading.locator('.story-section').first().locator('p').textContent(), 'Con mở cửa.\nQuạt vẫn quay.');
+      const reading = page.locator('.story-draft-editor');
+      assert.match(await reading.innerText(), /Bản đang viết · Đã lưu/);
+      assert.equal(await reading.locator('.story-field-title .story-field-value').textContent(), 'Bữa cơm muộn');
+      assert.equal(await reading.locator('.story-draft-path .story-field-value').first().textContent(), 'Con mở cửa.');
+      assert.equal(await reading.locator('.story-draft-path > li').count(), 4);
       assert.match(await page.locator('.feedback-section').innerText(), /Phản hồi cho đúng bản hiện tại/);
       const serverBefore = clone(mock.projects), callsBefore = clone(mock.calls);
       await page.locator('#project-title').fill('Tên dự án chưa lưu');
       await page.locator('#response-language').selectOption('en');
-      await page.locator('#answer-0').fill('Giữ sự lặng lẽ, chưa chốt kết thúc');
-      await page.locator('#draft-title').fill('Tên phim tác giả đang sửa');
-      await page.locator('#draft-logline').fill('Tóm tắt mới chưa lưu.');
+      await answer(page, 0, 'Giữ sự lặng lẽ, chưa chốt kết thúc');
+      await (await edit(page, 'draft-title')).fill('Tên phim tác giả đang sửa');
+      await (await edit(page, 'draft-logline')).fill('Tóm tắt mới chưa lưu.');
       for (let i = 0; i < readingProject.draft.sections.length; i++) {
-        await page.locator(`#section-${i}`).fill(`Bản sửa ${i}\nDòng hai của tác giả.`);
+        await (await edit(page, `section-${i}`)).fill(`Bản sửa ${i}\nDòng hai của tác giả.`);
       }
+      while (await reading.getByRole('button', { name: 'Xong', exact: true }).count()) await reading.getByRole('button', { name: 'Xong', exact: true }).first().click();
       before = await buffer(page);
       assert.match(await reading.innerText(), /Có thay đổi chưa lưu/);
       assert.match(await reading.innerText(), /Tên phim tác giả đang sửa/);
       assert.match(await reading.innerText(), /Tóm tắt mới chưa lưu/);
       for (let i = 0; i < 3; i++) assert.ok((await reading.innerText()).includes(`Bản sửa ${i}\nDòng hai của tác giả.`));
+      await reading.locator('summary').click();
       assert.equal(await reading.getByText('Bản sửa 3', { exact: false }).isVisible(), false);
       await reading.locator('summary').click();
       for (let i = 3; i < 5; i++) assert.ok((await reading.innerText()).includes(`Bản sửa ${i}\nDòng hai của tác giả.`));
       assert.match(await page.locator('.feedback-section').innerText(), /thuộc bản trước/);
-      await click(page, 'Chuyển tới phần chỉnh sửa'); await focused(page, '#draft-logline');
+      await edit(page, 'draft-logline'); await focused(page, '#draft-logline');
       assert.deepEqual(await buffer(page), before, 'reading and focusing preserve every editable field');
       assert.deepEqual(mock.calls, callsBefore, 'reading/focusing sends no requests, including AI');
       assert.deepEqual(mock.projects, serverBefore, 'reading never changes saved data or history');
@@ -383,13 +446,13 @@ async function setup(browser, options = {}) {
       assert.deepEqual(mock.projects, serverBefore, '409 preserves saved draft and history');
       assert.match(await reading.innerText(), /Có thay đổi chưa lưu/);
       writes = countWrites(mock);
-      await click(page, 'Chuyển tới phần chỉnh sửa'); await focused(page, '#draft-logline');
+      await edit(page, 'draft-logline'); await focused(page, '#draft-logline');
       assert.equal(countWrites(mock), writes, 'navigation after failure does not retry the save');
       mock.failSave = false;
       await click(page, 'Lưu thay đổi');
       await page.getByText('Đã lưu thay đổi.', { exact: true }).waitFor();
       assert.deepEqual(await buffer(page), before);
-      assert.match(await reading.innerText(), /Bản đang làm việc · Đã lưu/);
+      assert.match(await reading.innerText(), /Bản đang viết · Đã lưu/);
       assert.deepEqual(mock.projects[0].versions, serverBefore[0].versions);
       await page.reload(); await reading.waitFor();
       assert.deepEqual(await buffer(page), before, 'save/reopen preserves the exact edited content');
@@ -398,25 +461,24 @@ async function setup(browser, options = {}) {
       await t.close();
     }
     t = await setup(browser, { projects: [project()] }); ({ page, mock } = t);
-    assert.equal(await page.getByRole('region', { name: 'Bản đọc story plan' }).count(), 0, 'no draft means no invented reader');
+    assert.equal(await page.locator('.story-draft-editor').count(), 0, 'no draft means no invented reader');
     assert.equal(await page.locator('#idea').getAttribute('aria-describedby'), 'idea-help');
     await page.locator('.workspace-tools summary').click();
     assert.equal(await page.getByRole('link', { name: 'Đánh giá chất lượng dataset' }).isVisible(), true);
     assert.equal(countWrites(mock), 0);
     await t.close();
     t = await setup(browser, { projects: [fullProject('p1')] }); ({ page, mock } = t);
-    assert.match(await page.getByRole('region', { name: 'Bản đọc story plan' }).innerText(), /Chưa có phần mở đầu/);
-    assert.equal(await page.locator('#draft-logline').inputValue(), draft().logline);
+    assert.match(await page.locator('.story-draft-editor').innerText(), /Chưa có nội dung phác thảo/);
+    assert.equal(await (await edit(page, 'draft-logline')).inputValue(), draft().logline);
     assert.equal(countWrites(mock), 0, 'legacy empty sections remain editable without AI');
     await t.close();
     t = await setup(browser, { projects: [{ ...fullProject('p1'), draft: {
       title: '', logline: ' ', sections: [{ title: 'Beginning', purpose: '', content: '' }],
     } }] }); ({ page, mock } = t);
-    const emptyReading = await page.getByRole('region', { name: 'Bản đọc story plan' }).innerText();
-    assert.match(emptyReading, /Chưa có tên phim/); assert.match(emptyReading, /Chưa có tóm tắt/);
+    const emptyReading = await page.locator('.story-draft-editor').innerText();
     assert.match(emptyReading, /Chưa có nội dung/);
-    assert.equal(await page.locator('#draft-title').inputValue(), '');
-    assert.equal(await page.locator('#draft-logline').inputValue(), ' ');
+    assert.equal(await (await edit(page, 'draft-title')).inputValue(), '');
+    assert.equal(await (await edit(page, 'draft-logline')).inputValue(), ' ');
     assert.equal(countWrites(mock), 0, 'empty values get labels, never generated content');
     await t.close();
 
@@ -437,6 +499,7 @@ async function setup(browser, options = {}) {
     const intentB = { idea: 'Ý đồ B: một chuyện vui ở bến xe.', constraints: ['Giữ sự hài hước'], clarifications: [], pending_questions: [] };
     for (const viewport of [{ width: 1280, height: 900 }, { width: 390, height: 844 }]) {
       t = await setup(browser, { projects: [intentProject], viewport }); ({ page, mock } = t);
+      await page.locator('.workspace-author-context > summary').click();
       const card = page.getByRole('region', { name: 'Ý đồ đã lưu hiện tại', exact: true });
       assert.match(await card.innerText(), /revision 4/);
       assert.match(await card.innerText(), /Một chiếc quạt cũ/);
@@ -454,8 +517,8 @@ async function setup(browser, options = {}) {
       assert.match(await feedbackSource.innerText(), /Ý đồ A/);
       assert.equal(await feedbackSource.getByRole('button').count(), 0, 'feedback context is always read-only');
       await page.locator('#project-title').fill('Tên dự án chưa lưu');
-      await page.locator('#draft-logline').fill('Bản sửa của tác giả chưa lưu');
-      await page.locator('#answer-0').fill('Tôi thay câu trả lời nhưng chưa lưu');
+      await (await edit(page, 'draft-logline')).fill('Bản sửa của tác giả chưa lưu');
+      await answer(page, 0, 'Tôi thay câu trả lời nhưng chưa lưu');
       await page.locator('#idea').fill(intentB.idea);
       await page.locator('#constraints').fill(intentB.constraints[0]);
       before = await buffer(page);
@@ -482,7 +545,7 @@ async function setup(browser, options = {}) {
       assert.match(await oldVersion.locator('.feedback-context').innerText(), /Ý đồ A/);
       assert.equal(await oldVersion.locator('.feedback-context button').count(), 0);
       await card.screenshot({ path: path.join(screenshots, `author-intent-${viewport.width}.png`) });
-      await page.reload(); await card.waitFor();
+      await page.reload(); await page.locator('.workspace-author-context > summary').click(); await card.waitFor();
       assert.match(await card.innerText(), /Ý đồ B/);
       await feedbackSource.locator('summary').click(); assert.match(await feedbackSource.innerText(), /Ý đồ A/);
       assert.deepEqual(mock.projects[0].feedback_source, sourceA);
@@ -496,6 +559,7 @@ async function setup(browser, options = {}) {
     await click(page, 'Lưu thay đổi'); await page.locator('.error[role="alert"]').waitFor();
     assert.deepEqual(await buffer(page), before);
     assert.equal(mock.projects[0].idea, intentB.idea, 'server committed before losing response');
+    await page.locator('.workspace-author-context > summary').click();
     const confirmed = page.getByRole('region', { name: 'Ý đồ đã lưu hiện tại', exact: true });
     assert.match(await confirmed.innerText(), /Ý đồ A/); assert.match(await confirmed.innerText(), /bản cuối đã xác nhận/);
     assert.deepEqual(mock.projects[0].feedback_source, sourceA);
@@ -543,10 +607,10 @@ async function setup(browser, options = {}) {
       await click(page, 'Bỏ chọn góp ý này'); await focused(page, '#draft-editor-title');
       assert.equal(await note.count(), 0); assert.deepEqual(await buffer(page), before); assert.equal(countWrites(mock), writes);
       await click(page, chooseIssue); await focused(page, '#selected-feedback-title');
-      await page.locator('#draft-logline').fill('Tác giả giữ sự chăm sóc qua hành động.');
-      await page.locator('#section-1').fill('Mẹ đẩy bát cơm. Con kéo ghế ngồi xuống.');
+      await (await edit(page, 'draft-logline')).fill('Tác giả giữ sự chăm sóc qua hành động.');
+      await (await edit(page, 'section-1')).fill('Mẹ đẩy bát cơm. Con kéo ghế ngồi xuống.');
       before = await buffer(page); const edited = clone(mock.projects[0].draft);
-      edited.logline = await page.locator('#draft-logline').inputValue(); edited.sections[1].content = await page.locator('#section-1').inputValue();
+      edited.logline = await (await edit(page, 'draft-logline')).inputValue(); edited.sections[1].content = await (await edit(page, 'section-1')).inputValue();
       assert.match(await note.innerText(), /thuộc bản trước/);
       assert.equal(await page.getByRole('button', { name: chooseProposal }).isDisabled(), true);
       assert.deepEqual(mock.calls, requestsBefore, 'selection and typing send no requests');
@@ -573,7 +637,7 @@ async function setup(browser, options = {}) {
       assert.equal(mock.calls.filter(c => c.pathname.endsWith('/review/stream')).at(-1).body.revision, reviewRevision);
       assert.deepEqual(mock.projects[0].feedback_source.draft, edited);
       assert.deepEqual(await buffer(page), before);
-      await page.reload(); await page.locator('#draft-logline').waitFor();
+      await page.reload(); await (await edit(page, 'draft-logline')).waitFor();
       assert.deepEqual(await buffer(page), before); assert.equal(await note.count(), 0, 'selection is not stored across reload');
       const version = page.locator('.version-history > details').first(); await version.locator('summary').first().click();
       assert.equal(await version.locator('.feedback-choice').count(), 0, 'history remains read-only');
@@ -589,24 +653,24 @@ async function setup(browser, options = {}) {
     }
     // Another window saves while review is pending. Its late result must conflict, not replace either buffer.
     t = await setup(browser, { projects: [revisionProject], mock: { recordVersions: true } }); ({ page, mock } = t);
-    await click(page, chooseIssue); await page.locator('#draft-logline').fill('Bản sửa cửa sổ một.');
+    await click(page, chooseIssue); await (await edit(page, 'draft-logline')).fill('Bản sửa cửa sổ một.');
     before = await buffer(page);
     let releaseReview; mock.hold = new Promise(resolve => { releaseReview = resolve; });
     const reviewStarted = page.waitForRequest(request => request.method() === 'POST' && request.url().endsWith('/review/stream'));
     await click(page, 'Nhận phản hồi trên bản hiện tại');
     await reviewStarted;
-    await page.waitForFunction(() => document.querySelector('#draft-logline').matches(':disabled'));
-    const peer = await t.context.newPage(); await peer.goto(url); await peer.locator('#draft-logline').waitFor();
-    await peer.locator('#draft-logline').fill('Bản mới hơn từ cửa sổ hai.');
+    await page.waitForFunction(() => document.querySelector('.project-fields').disabled);
+    const peer = await t.context.newPage(); await peer.goto(url); await (await edit(peer, 'draft-logline')).waitFor();
+    await (await edit(peer, 'draft-logline')).fill('Bản mới hơn từ cửa sổ hai.');
     await click(peer, 'Lưu thay đổi'); await peer.getByText('Đã lưu thay đổi.', { exact: true }).waitFor();
     releaseReview(); await page.locator('.error[role="alert"]').waitFor();
     assert.deepEqual(await buffer(page), before);
     assert.equal(mock.projects[0].draft.logline, 'Bản mới hơn từ cửa sổ hai.');
-    assert.equal(await peer.locator('#draft-logline').inputValue(), 'Bản mới hơn từ cửa sổ hai.');
+    assert.equal(await (await edit(peer, 'draft-logline')).inputValue(), 'Bản mới hơn từ cửa sổ hai.');
     assert.deepEqual(mock.projects[0].feedback, revisionFeedback);
     assert.equal(mock.projects[0].feedback_source.artifact_id, 'f1');
     assert.match(await page.locator('.revision-note').innerText(), /thuộc bản trước/);
-    assert.equal(await page.locator('#draft-logline').isDisabled(), false, 'failed review unlocks the editor');
+    assert.equal(await (await edit(page, 'draft-logline')).isDisabled(), false, 'failed review unlocks the editor');
     await t.close();
     // Selection does not follow the author into a different project.
     t = await setup(browser, { projects: [revisionProject, { ...revisionProject, id: 'p2', title: 'Dự án hai',
@@ -644,7 +708,7 @@ async function setup(browser, options = {}) {
         await page.locator('[data-tour-action="plan"]').click();
         await page.locator('.error[role="alert"]').waitFor();
         assert.match(await page.locator('.error').innerText(), /chưa có góp ý hợp lệ/);
-        assert.equal(await page.locator('#draft-title').inputValue(), existing ? revisionDraft.title : recoveredDraft.title);
+        assert.equal(await (await edit(page, 'draft-title')).inputValue(), existing ? revisionDraft.title : recoveredDraft.title);
         await proposals(page).locator(':scope > details > summary').click();
         assert.match(await proposals(page).innerText(), /chưa có góp ý hợp lệ/);
         assert.match(await page.locator('.status-panel').innerText(), /Thao tác chưa hoàn tất/);
@@ -653,11 +717,11 @@ async function setup(browser, options = {}) {
         assert.deepEqual(mock.projects, stored); assert.deepEqual(mock.calls, requests, 'viewing recovery makes no request');
         if (existing) {
           before = await buffer(page);
-          await page.locator('#draft-logline').fill('Sửa chưa lưu phải giữ.');
+          await (await edit(page, 'draft-logline')).fill('Sửa chưa lưu phải giữ.');
           assert.equal(await page.getByRole('button', { name: 'Dùng bản đề xuất này', exact: true }).isDisabled(), true);
           assert.equal(await page.getByRole('button', { name: 'Mở lại bản đã lưu', exact: true }).isDisabled(), true);
           assert.deepEqual(mock.projects, stored);
-          await page.locator('#draft-logline').fill(revisionDraft.logline);
+          await (await edit(page, 'draft-logline')).fill(revisionDraft.logline);
           mock.loseAcceptResponse = true;
           await click(page, 'Dùng bản đề xuất này'); await page.locator('.error[role="alert"]').waitFor();
           assert.deepEqual(await buffer(page), before, 'lost acceptance response keeps the visible buffer');
@@ -669,14 +733,14 @@ async function setup(browser, options = {}) {
           assert.deepEqual(await buffer(page), before);
           await click(page, 'Mở lại bản đã lưu');
           await page.getByText('Đã mở lại bản đã lưu. Không tạo lại hoặc gọi AI.', { exact: true }).waitFor();
-          assert.equal(await page.locator('#draft-title').inputValue(), recoveredDraft.title);
+          assert.equal(await (await edit(page, 'draft-title')).inputValue(), recoveredDraft.title);
           assert.equal(await page.locator('.feedback-section').count(), 0, 'old feedback is not attached to accepted unreviewed draft');
           assert.ok(mock.projects[0].versions.some(v => v.draft.title === revisionDraft.title));
         } else {
           assert.equal(await page.getByRole('button', { name: 'Dùng bản đề xuất này', exact: true }).count(), 0);
         }
-        await page.reload(); await page.locator('#draft-title').waitFor();
-        assert.equal(await page.locator('#draft-title').inputValue(), recoveredDraft.title);
+        await page.reload(); await (await edit(page, 'draft-title')).waitFor();
+        assert.equal(await (await edit(page, 'draft-title')).inputValue(), recoveredDraft.title);
         await proposals(page).locator(':scope > details > summary').click();
         await proposals(page).screenshot({ path: path.join(screenshots, `plan-recovery-${existing ? 'proposal' : 'first'}-${viewport.width}.png`) });
         const savedDraft = clone(mock.projects[0].draft);
@@ -697,15 +761,15 @@ async function setup(browser, options = {}) {
     assert.equal(await page.locator('#draft-title').count(), 0);
     assert.equal(mock.projects[0].draft.title, recoveredDraft.title);
     const writesBeforeReopen = countWrites(mock);
-    await click(page, 'Mở lại bản đã lưu'); await page.locator('#draft-title').waitFor();
+    await click(page, 'Mở lại bản đã lưu'); await (await edit(page, 'draft-title')).waitFor();
     assert.equal(countWrites(mock), writesBeforeReopen);
-    assert.equal(await page.locator('#draft-title').inputValue(), recoveredDraft.title);
+    assert.equal(await (await edit(page, 'draft-title')).inputValue(), recoveredDraft.title);
     await t.close();
     // A late acceptance from a different window conflicts and never refreshes/retries itself.
     t = await setup(browser, { projects: [recoveredProject(true)] }); ({ page, mock } = t);
     await proposals(page).locator(':scope > details > summary').click(); before = await buffer(page);
-    const other = await t.context.newPage(); await other.goto(url); await other.locator('#draft-logline').waitFor();
-    await other.locator('#draft-logline').fill('Bản mới từ cửa sổ khác.'); await click(other, 'Lưu thay đổi');
+    const other = await t.context.newPage(); await other.goto(url); await (await edit(other, 'draft-logline')).waitFor();
+    await (await edit(other, 'draft-logline')).fill('Bản mới từ cửa sổ khác.'); await click(other, 'Lưu thay đổi');
     await other.getByText('Đã lưu thay đổi.', { exact: true }).waitFor();
     const peerStored = clone(mock.projects);
     await click(page, 'Dùng bản đề xuất này'); await page.locator('.error[role="alert"]').waitFor();
@@ -713,7 +777,7 @@ async function setup(browser, options = {}) {
     assert.equal(mock.calls.filter(c => c.pathname.endsWith('/accept')).length, 1);
     await click(page, 'Mở lại bản đã lưu');
     await page.getByText('Đã mở lại bản đã lưu. Không tạo lại hoặc gọi AI.', { exact: true }).waitFor();
-    assert.equal(await page.locator('#draft-logline').inputValue(), 'Bản mới từ cửa sổ khác.');
+    assert.equal(await (await edit(page, 'draft-logline')).inputValue(), 'Bản mới từ cửa sổ khác.');
     assert.equal(await page.getByRole('button', { name: 'Dùng bản đề xuất này', exact: true }).isDisabled(), true);
     assert.match(await proposals(page).innerText(), /chỉ để tham khảo/);
     await t.close();
@@ -724,7 +788,7 @@ async function setup(browser, options = {}) {
       plan_generations: [reviewedGeneration] } } }); ({ page, mock } = t);
     await click(page, chooseIssue); await page.locator('[data-tour-action="plan"]').click();
     await page.getByText('Đã giữ bản đề xuất cùng góp ý riêng. Bản đang viết chỉ thay khi bạn chọn nhận.', { exact: true }).waitFor();
-    assert.equal(await page.locator('#draft-title').inputValue(), revisionDraft.title);
+    assert.equal(await (await edit(page, 'draft-title')).inputValue(), revisionDraft.title);
     await proposals(page).locator(':scope > details > summary').click();
     const beforeViewing = clone(mock.calls);
     await proposals(page).getByText('Ý đồ khi tạo bản này', { exact: true }).click();
@@ -733,7 +797,7 @@ async function setup(browser, options = {}) {
     const modelCalls = mock.calls.filter(c => c.pathname.endsWith('/stream')).length;
     await click(page, 'Dùng bản đề xuất này');
     await page.getByText('Đã nhận bản đề xuất. Bản trước được giữ trong lịch sử; có thể sửa và nhận phản hồi riêng.', { exact: true }).waitFor();
-    assert.equal(await page.locator('#draft-title').inputValue(), recoveredDraft.title);
+    assert.equal(await (await edit(page, 'draft-title')).inputValue(), recoveredDraft.title);
     assert.equal(mock.projects[0].feedback_source.artifact_id, 'f2');
     assert.deepEqual(mock.projects[0].feedback_source.draft, recoveredDraft);
     assert.equal(await page.locator('.revision-note').count(), 0);

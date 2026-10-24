@@ -14,6 +14,7 @@ from pydantic import (
 
 from app.api.schemas.story import AnalysisResponse, EvaluationResponse
 from app.application.language import ResponseLanguage
+from app.application.clarification import MAX_CHOICES
 
 ShortText = Annotated[str, Field(max_length=2000)]
 
@@ -45,7 +46,7 @@ class ProjectUpdate(RevisionRequest):
     title: str = Field(min_length=1, max_length=200)
     idea: str = Field(max_length=5000)
     constraints: list[ShortText] = Field(max_length=20)
-    answers: list[ShortText] = Field(max_length=3)
+    answers: list[ShortText] = Field(max_length=MAX_CHOICES)
     draft: StoryDraft | None
 
 

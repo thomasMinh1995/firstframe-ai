@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { revealWorkspaceTarget } from "./WorkspaceStage";
 import { createPortal } from "react-dom";
 import {
   available, continuation, initialTour, nextStep, previousStep, reduceTour, tourSteps, tourStorageKey, validAnalysis,
@@ -105,7 +106,16 @@ export function OnboardingTour(props: Props) {
   const focusAfter = (destination: string | HTMLElement | null) => {
     cancelAnimationFrame(focusFrame.current);
     focusFrame.current = requestAnimationFrame(() => {
+      const active = document.activeElement;
+      if (active?.matches("input, textarea, select")
+        && !(typeof destination === "string" ? active.matches(destination) : active === destination)) return;
+      if (typeof destination === "string" && destination.startsWith("#answer-") && !document.querySelector(destination)) {
+        const opener = document.querySelector<HTMLButtonElement>(`[data-answer-open="${destination.slice(1)}"]`);
+        revealWorkspaceTarget(opener); opener?.click();
+        return;
+      }
       const element = typeof destination === "string" ? document.querySelector<HTMLElement>(destination) : destination;
+      revealWorkspaceTarget(element);
       const target = element?.isConnected && element !== document.body && element.getClientRects().length
         && !element.matches(":disabled") ? element : document.getElementById("workspace-title");
       target?.scrollIntoView({ block: "center", behavior: "auto" });
@@ -125,9 +135,20 @@ export function OnboardingTour(props: Props) {
       : document.querySelector('[data-tour-action="analyze"]:enabled') ? '[data-tour-action="analyze"]' : "#response-language";
     if (step === "choices") {
       const index = Array.from({ length: props.questionCount }, (_, i) => i).find(i => !props.answers[i]?.trim());
-      selector = index === undefined ? '[data-tour-action="plan"]' : `#answer-${index}`;
+      selector = index === undefined ? '[data-choice-review]' : `#answer-${index}`;
     }
-    if (step === "draft") selector = "#draft-logline";
+    if (step === "draft") {
+      const editor = document.querySelector<HTMLButtonElement>('[data-draft-open="logline"]');
+      if (editor && !editor.disabled) {
+        tour.practice();
+        cancelAnimationFrame(focusFrame.current);
+        focusFrame.current = requestAnimationFrame(() => {
+          if (!document.activeElement?.matches("input, textarea, select")) { revealWorkspaceTarget(editor); editor.click(); }
+        });
+        return;
+      }
+      selector = "#draft-logline";
+    }
     tour.practice(); focusAfter(selector);
   };
   const welcome = state.initialized && state.offerAllowed && !record && ready && empty && !context.projectId && !busy && !error;
@@ -190,6 +211,7 @@ function TourDialog({ step, title, description, onMissing, onDismiss, children }
     const panel = card.current!;
     const targets = document.querySelectorAll<HTMLElement>(`[data-tour="${step}"]`);
     const target = targets.length === 1 ? targets[0] : null;
+    revealWorkspaceTarget(target);
     if (!target || !target.getClientRects().length || getComputedStyle(target).visibility === "hidden") { missing.current(); return; }
     target.scrollIntoView({ block: "center", behavior: "auto" });
     layer.showModal();
