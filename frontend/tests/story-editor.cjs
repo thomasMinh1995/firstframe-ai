@@ -47,6 +47,12 @@ assert.equal(replaceStoryBeat(long, spans, 1, long.slice(spans[1].start, spans[1
 const unicode = 'Mẹ chờ 👩‍👦. Con về.\nBát cơm còn ấm.';
 assert.equal(splitStorySection(unicode).length, 3);
 assert.equal(splitStorySection('3.5 phút. Con ngồi xuống.').length, 2);
+for (const [text, expected] of [
+  ['Cha chờ.\uFEFFCon về.', ['Cha chờ.', 'Con về.']],
+  ['\uFEFFCha chờ.\uFEFF', ['Cha chờ.']],
+  ['Cha chờ.\u0085Con về.', ['Cha chờ.\u0085Con về.']],
+  ['Cha chờ.\u001CCon về.', ['Cha chờ.\u001CCon về.']],
+]) assert.deepEqual(splitStorySection(text).map(s => text.slice(s.start, s.end)), expected);
 html = render({ ...draft, sections: [section('Beginning', 'A. B.'), section('Middle', 'C. D.'), section('Ending', 'E. F.')] });
 assert.equal((html.match(/class="story-card-number"/g) || []).length, 6);
 assert.ok(html.includes('section-0-part-1-label'));

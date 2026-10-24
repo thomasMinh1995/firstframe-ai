@@ -2,9 +2,9 @@
 
 ## Kết quả
 
-- Chạy lại backend trước khi commit: **307 passed, 1 skipped**, một cảnh báo deprecation của Starlette/httpx.
+- Chạy lại backend trước khi commit: **311 passed, 1 skipped**, một cảnh báo deprecation của Starlette/httpx.
 - Chạy lại TypeScript `tsc --noEmit` và các checks render/state cho editor/card buffer, quote anchors, progress/stream và onboarding: qua.
-- Production build **QHn42rLerf4dwDFX3K1fb** đã qua. 31 file app khớp SHA-256 với source đã chạy ma trận UI; đóng gói PR không đổi runtime sau lượt kiểm chứng đó.
+- Production build **xeBgvIS7YaKS3hCxEge3K** đã qua. 31 file app khớp SHA-256 với source đã chạy ma trận UI.
 - Source và tài liệu qua whitespace check.
 
 | Engine | Buffer/dữ liệu | UI/chuyển bước | Hội thoại/xác nhận/tiến trình | Tổng |
@@ -14,6 +14,10 @@
 | WebKit 26.5 | 27/27 | 4/4 | 2/2 | 33/33 |
 
 **99/99 ca UI qua**, profile và dữ liệu QA tạm, request mock. Các suite nằm trong `frontend/tests/story-workspace.browser.cjs`, `workspace-focus.browser.cjs`, `workspace-dialogue.browser.cjs`. Báo cáo công khai chỉ giữ [số liệu tổng hợp và hash source](assets/approved-story-workspace-matrix.json).
+
+Bộ onboarding dài cũng đã qua trên cả Chrome, Firefox và WebKit: luồng đầy đủ, buffer, bàn phím, lỗi mạng, reload, đổi project, dismissal giữa hai tab, storage và mobile viewport. Không phát hiện khác biệt giữa các engine.
+
+Tour giữ sáu chặng với hướng dẫn con theo UI mới: điều hướng trong cùng workspace, hội thoại từng câu, hỏi thêm, sửa câu cũ, xem lại và Đồng ý, ba nhóm tiến trình cùng bước con, card chữ S, góp ý có nguồn, lưu/JSON/đề xuất/lịch sử. Hai lối thực hành mới chỉ focus nút Xem góp ý và vùng Đề xuất và lịch sử; kiểm thử xác nhận không đổi buffer hoặc gửi request. Luồng tour đầy đủ cũng kiểm tra hỏi thêm thành tám câu và sửa câu đầu trước khi tạo plan.
 
 ## Phạm vi đã kiểm tra
 
@@ -25,6 +29,8 @@
 
 Backend bổ sung kiểm tra nhiều lượt làm rõ, provider lỗi, stale revision, giới hạn 20 câu và tương thích analyze cũ. Lượt đầu thiếu import progress helper đã được sửa trước khi chạy lại toàn bộ. Assertion UI bổ sung bắt lỗi thanh bước sau tạo draft ngắn; bản cuối đã sửa và chạy lại cả 99 ca.
 
+Review PR cũng bổ sung kiểm tra quote anchor với whitespace theo trình duyệt (BOM, NBSP, U+0085 và các ký tự phân cách). Trước khi sửa, bốn trường hợp tạo card/quote khác nhau giữa JavaScript và Python; sau khi đồng bộ quy tắc, cả bốn đều qua.
+
 ## Demo và giới hạn
 
 Demo dùng API/SQLite/dataset và sự kiện xử lý thật với provider **ui-demo / fake-model**, output QA cố định: ý tưởng ngắn → sáu câu → hỏi thêm thành chín → sửa câu cũ → xem lại → Đồng ý → tám bước con → sáu card chữ S. Snapshot trước Đồng ý chưa có draft/plan; sau Đồng ý, context tạo plan dùng đúng câu trả lời mới nhất.
@@ -35,6 +41,6 @@ Ba ảnh được rà soát chỉ chứa truyện QA “Bát cơm trước cửa
 - [Tiến trình đang chạy](assets/workspace-dialogue-progress-2026-10-24.png).
 - [Story plan chữ S](assets/workspace-dialogue-story-plan-2026-10-24.png).
 
-Không dùng demo QA để kết luận chất lượng model. Qwen3 trước đó còn sai ràng buộc/timeout; không chạy lại model trong lượt đóng gói PR. Chưa chạy lại bộ onboarding browser dài trong đợt UI cuối; onboarding state và tour trong suite story đã được kiểm tra. Thiết bị thật, accessibility với IME/bàn phím ảo và pilot người dùng mới vẫn cần nghiệm thu. Tiến trình thuộc lượt chạy hiện tại, không dựng lại khi reload.
+Không dùng demo QA để kết luận chất lượng model. Qwen3 trước đó còn sai ràng buộc/timeout; không chạy lại model trong lượt đóng gói PR. Thiết bị thật, accessibility với IME/bàn phím ảo và pilot người dùng mới vẫn cần nghiệm thu. Tiến trình thuộc lượt chạy hiện tại, không dựng lại khi reload.
 
 Log terminal, patch thí nghiệm, output model và snapshot dự án thô được giữ local; không nằm trong PR công khai này. Dàn cảnh/Kịch bản để chốt UI riêng theo [phạm vi đã chốt](../plans/approved-story-workspace.md).

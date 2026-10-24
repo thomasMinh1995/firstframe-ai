@@ -53,6 +53,16 @@ def test_card_boundaries_match_editor(text, count):
     assert all(text[a:b] == text[a:b].strip() for a, b in spans)
 
 
+@pytest.mark.parametrize("text,expected", [
+    ("Cha chờ.\ufeffCon về.", ["Cha chờ.", "Con về."]),
+    ("\ufeffCha chờ.\ufeff", ["Cha chờ."]),
+    ("Cha chờ.\u0085Con về.", ["Cha chờ.\u0085Con về."]),
+    ("Cha chờ.\u001cCon về.", ["Cha chờ.\u001cCon về."]),
+])
+def test_card_quotes_use_browser_whitespace_rules(text, expected):
+    assert [text[a:b] for a, b in card_spans(text)] == expected
+
+
 def test_saved_answers_do_not_take_current_question_numbers():
     draft, previous, author = context_fixture()
     author["clarifications"][0]["input_index"] = None

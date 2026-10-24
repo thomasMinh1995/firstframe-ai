@@ -68,7 +68,7 @@ export function CardFeedback({ cardId, label, evaluation, source, current, selec
     })}
     {current && !entries.length && <p>Chưa có nhận xét riêng cho card này. Góp ý chung nằm trong phần “Toàn bộ góp ý”.</p>}
     {!current && selected && <details><summary>Góp ý trước đó đang tham khảo</summary><p className="preserve-lines">{selected.message}</p></details>}
-    <button type="button" onClick={onReview}>Nhận phản hồi trên bản hiện tại</button>
+    <button type="button" data-tour-review onClick={onReview}>Nhận phản hồi trên bản hiện tại</button>
     <p className="storage-note">Bạn quyết định sửa hay giữ. Thao tác này lưu nội dung hiện tại trước khi gửi AI.</p>
   </aside>;
 }

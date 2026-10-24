@@ -431,7 +431,7 @@ export default function Home() {
                   const id = selectedCard.id; setSelectedCard(null); setSelectedFeedback(null);
                   requestAnimationFrame(() => document.querySelector<HTMLButtonElement>(`[data-card-id="${id}"] .card-feedback-trigger`)?.focus());
                 }} onReview={() => action("review")} />} />
-            {!selectedCard && <button onClick={() => action("review")}>Nhận phản hồi trên bản hiện tại</button>}
+            {!selectedCard && <button data-tour-review onClick={() => action("review")}>Nhận phản hồi trên bản hiện tại</button>}
         {project.feedback && <details id="workspace-feedback" tabIndex={-1} className="feedback-section" aria-label="Phản hồi"><summary>Toàn bộ góp ý</summary>
           <p className={currentFeedback ? "operation-status" : "form-message"} role="status">
             {currentFeedback ? "Phản hồi cho đúng bản hiện tại."

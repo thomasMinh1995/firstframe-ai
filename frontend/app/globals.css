@@ -37,6 +37,9 @@
 .tour-card h2:focus { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 2px; }
 .tour-card > p:not(.eyebrow) { line-height: 1.6; color: var(--muted); margin: 0 0 20px; }
 .tour-card .eyebrow { font-size: .75rem; padding-right: 24px; }
+.tour-instructions { padding-left: 20px; margin: 0 0 16px; color: var(--muted); font-size: .875rem; line-height: 1.5; }
+.tour-instructions li + li { margin-top: 8px; }
+.tour-footer { margin-top: 16px; }
 .tour-close {
   position: absolute; top: 10px; right: 10px; padding: 4px; width: 36px; height: 36px;
   font-size: 1.5rem; background: transparent; color: var(--muted); border: 0;

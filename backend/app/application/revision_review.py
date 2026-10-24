@@ -9,6 +9,11 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from app.application.ai_provider import MalformedProviderResponseError
 
+BROWSER_WHITESPACE = (
+    "\t\n\v\f\r \u00a0\u1680\u2000\u2001\u2002\u2003\u2004\u2005\u2006"
+    "\u2007\u2008\u2009\u200a\u2028\u2029\u202f\u205f\u3000\ufeff"
+)
+
 
 class CardReview(BaseModel):
     model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
@@ -23,21 +28,22 @@ class CardReview(BaseModel):
 
 def card_spans(text: str) -> list[tuple[int, int]]:
     # Mirror StoryPlanEditor.splitStorySection so anchors match the visible cards.
+    space = f"[{re.escape(BROWSER_WHITESPACE)}]"
     spans = []
     units = [0]
     for char in text:
         units.append(units[-1] + (2 if ord(char) > 0xFFFF else 1))
     start = 0
-    boundaries = [m.end() for m in re.finditer(r'''(?:[.!?…。！？]+[”"'’)\]]*(?=\s|$)|\r?\n+)''', text)]
+    boundaries = [m.end() for m in re.finditer(rf'''(?:[.!?…。！？]+[”"'’)\]]*(?={space}|$)|\r?\n+)''', text)]
     for end in [*boundaries, len(text)]:
-        while start < end and text[start].isspace():
+        while start < end and text[start] in BROWSER_WHITESPACE:
             start += 1
         stop = end
-        while stop > start and text[stop - 1].isspace():
+        while stop > start and text[stop - 1] in BROWSER_WHITESPACE:
             stop -= 1
         while units[stop] - units[start] > 200:
             limit = bisect_right(units, units[start] + 200) - 1
-            gaps = list(re.finditer(r"\s+", text[start:limit]))
+            gaps = list(re.finditer(f"{space}+", text[start:limit]))
             if not gaps or units[start + gaps[-1].start()] - units[start] < 40:
                 break
             gap = gaps[-1]

@@ -1,12 +1,12 @@
 {
   "date": "2026-10-24",
-  "production_build": "QHn42rLerf4dwDFX3K1fb",
+  "production_build": "xeBgvIS7YaKS3hCxEge3K",
   "source_files_matched": 31,
   "source_sha256": {
     "app/AuthorIntentCard.tsx": "b4eb68361722e8ed9ab4371b594620d044ba710fd11b2a84704463bfdff6c7d5",
-    "app/CardFeedback.tsx": "5f455886121c18fa1d86aa4642a93d69bf6264bc2221297da9cabad17779b7b3",
+    "app/CardFeedback.tsx": "592741f3de2d6889bcb76d172e473d57ff4aaebf5fa45cb9b06e397f642e7e08",
     "app/ClarificationConversation.tsx": "3c010080d78622d0ab662d1f922822e809b0da1594cd246a2fa6a2ea39b1f44f",
-    "app/OnboardingTour.tsx": "3e5c720ebdb3dcf353f67db7704644090305d0bf647cde2fba7089ce2852d174",
+    "app/OnboardingTour.tsx": "f0d610215516697e50fbf5e5a7f574df4a142c989f396ff258a95a4c8976e04c",
     "app/OperationProgress.tsx": "dfd1fd7b5679a107991563ef45fe41531b1c05ecbe146ed968154150695caa2b",
     "app/StoryFlowVisualization.tsx": "a20b84223eb7e136adfdd03af4deba2c05b8d6e21d0cca156de4c90d5ace6cc2",
     "app/StoryPlanEditor.tsx": "882ad0fd8bbcaf33b5ec82eddffe8424ba9261e84eed92b72157c336c6e94ed2",
@@ -23,11 +23,11 @@
     "app/datasets/page.tsx": "d164f7eb58f2d3feb9fc0537db96d739f2f41a69673b10ff8964d93f27505b9a",
     "app/demo/page.tsx": "51aff5f2eecf24fcf9ed92aca8ad7d303800c6769e442b0cf352fd4c2301cf54",
     "app/demoApi.ts": "980555b1ebf56fd62de2baa193412e07c3e6e73c5f51fd2bfcaae7ce6882769d",
-    "app/globals.css": "46ed4e11d68645a00996689e7dbb50f045fffcc1948e411443a9a3697acc7055",
+    "app/globals.css": "0f3f565d8b02a1664038770a0730023e3c260fc9f5aff57b2787018a9758d1ec",
     "app/language.ts": "8b3ba34821b7fe7be41f378f8c6307d87afb32d63b511cebe6072cf3b0e109c5",
     "app/layout.tsx": "ca959dab60ab3934030b1fdc0e59e4133504725dce029bc5f3c13e42047af006",
     "app/onboardingState.ts": "9ebd57c9e85a477524cc45697358a9a1d468677b922b54ede6fce0c8d17985f6",
-    "app/page.tsx": "3fa36890ef64e0b264bcf0059a61a2374f16c9cdd953f5f3d47ca656f3b7be3e",
+    "app/page.tsx": "5e2055ba5609476f2c09c590f892569d3165e99fe13e8ef7462db4e7fe176014",
     "app/progressState.ts": "44c3709503def11874fc7a3e10c1d01482a4e427a5f395b88e06a4adc935c79f",
     "app/projectsApi.ts": "90cf6387865a13354d973d7692db2037b03b5b37818c431603cb6f7c5404dbd8",
     "app/prototype/page.tsx": "ea3addc280d755e552be056ab79ef642580140b18a7fbc5795cda025258e0924",
@@ -36,11 +36,16 @@
     "app/storyWorkspace.css": "982121e607495da2ee0f20271746d9117dd591b2a98a33b3a4cfa4c47d44ff89"
   },
   "backend": {
-    "passed": 307,
+    "passed": 311,
     "skipped": 1,
     "warnings": 1
   },
   "browser_total": 99,
+  "onboarding_full_flow": {
+    "engines": ["chrome", "firefox", "webkit"],
+    "passed": 3,
+    "total": 3
+  },
   "browsers": [
     {
       "engine": "chrome",
