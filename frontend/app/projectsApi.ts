@@ -53,7 +53,7 @@ export async function streamProjectOperation(
   const controller = new AbortController();
   let timer = setTimeout(() => controller.abort(), 45_000);
   try {
-    const response = await fetch(`${baseUrl}/api/projects/${project.id}/${kind}/stream`, {
+    const response = await fetch(`${baseUrl}/api/projects/${project.id}/${kind === "analyze" ? "clarify" : kind}/stream`, {
       method: "POST", headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ revision: project.revision }), signal: controller.signal,
     }).catch(() => { throw new Error(copy.connectionError); });

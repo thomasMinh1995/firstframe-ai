@@ -5,16 +5,18 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import TypeVar
+from typing import Literal, TypeVar
 from uuid import uuid4
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, create_model
 
 from app.application.ai_provider import StructuredProvider, StructuredRequest
 from app.application.dataset import recording_provider
+from app.application.progress import progress_step
 from app.application.knowledge_loader import KnowledgeLoader
 from app.application.language import ResponseLanguage, resolve_response_language
 from app.application.prompt_loader import PromptLoader
+from app.application.revision_review import CardReview, feedback_messages
 from app.core.artifacts import (
     ArtifactKind,
     ArtifactMetadata,
@@ -82,6 +84,37 @@ class _EvaluationOutput(BaseModel):
     strengths: list[str]
     weaknesses: list[str]
     suggestions: list[str]
+
+
+class _RevisionReviewOutput(BaseModel):
+    model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
+
+    reviews: list[CardReview] = Field(min_length=1, max_length=3)
+    passed: bool
+    rubric_scores: EvaluationRubricScores | None = None
+
+
+@dataclass(frozen=True)
+class RevisionEvaluation:
+    passed: bool
+    strengths: list[str]
+    weaknesses: list[str]
+    suggestions: list[str]
+    rubric_scores: EvaluationRubricScores | None = None
+
+
+def _card_review_schema(context: dict) -> type[_RevisionReviewOutput]:
+    neighbors = list(dict.fromkeys(pair["related_card_id"] for pair in context["neighbor_checks"]))
+    cards = list(dict.fromkeys([*context["focus_card_ids"], *neighbors])) or [card["id"] for card in context["cards"]]
+    decisions = [item["id"] for item in context["decisions"] if item["id"] != "idea"] or ["idea"]
+    related = Literal[tuple(cards)] if neighbors else str | None
+    card_review = create_model("FocusedCardReview", __base__=CardReview,
+                               card_id=(Literal[tuple(cards)], ...),
+                               decision_id=(Literal[tuple(decisions)], ...),
+                               related_card_id=(related, ...))
+    return create_model("_RevisionReviewOutput", __base__=_RevisionReviewOutput,
+                        reviews=(list[card_review], Field(min_length=1, max_length=1)),
+                        rubric_scores=(type(None), ...))
 
 
 class WorkingTitle(BaseModel):
@@ -185,6 +218,7 @@ class _LLMPlanningArtifact(PlanningArtifact):
     logline: str | None = None
     target_response_language: str = "English"
     creator_context: str = ""
+    review_context: dict | None = None
 
 
 @dataclass(frozen=True)
@@ -270,20 +304,21 @@ class LLMPlanningLayer(PlanningLayer):
         self._compact_context = compact_context
 
     def plan(self, reasoning: ReasoningArtifact, domain: DomainPlugin) -> PlanningArtifact:
-        knowledge = None
-        if not self._compact_context:
-            # Only craft guidance belongs here; worked stories supply competing facts.
-            knowledge = {
-                "film_glossary": [
-                    {key: entry[key] for key in ("term", "simple_definition", "why_it_matters")}
-                    for entry in self._knowledge_loader.load("film_glossary", domain)["glossary"]
-                ],
-                "film_rules": [
-                    {key: entry[key] for key in ("rule", "guidance")}
-                    for entry in self._knowledge_loader.load("film_rules", domain)["rules"]
-                ],
-            }
-        input_text = _reasoning_input(reasoning, knowledge)
+        with progress_step("planning_context"):
+            knowledge = None
+            if not self._compact_context:
+                # Only craft guidance belongs here; worked stories supply competing facts.
+                knowledge = {
+                    "film_glossary": [
+                        {key: entry[key] for key in ("term", "simple_definition", "why_it_matters")}
+                        for entry in self._knowledge_loader.load("film_glossary", domain)["glossary"]
+                    ],
+                    "film_rules": [
+                        {key: entry[key] for key in ("rule", "guidance")}
+                        for entry in self._knowledge_loader.load("film_rules", domain)["rules"]
+                    ],
+                }
+            input_text = _reasoning_input(reasoning, knowledge)
         result = self._provider.request_structured(
             StructuredRequest(
                 instructions=self._prompt_loader.load("story_planner", domain),
@@ -292,17 +327,18 @@ class LLMPlanningLayer(PlanningLayer):
                 stage="planning",
             )
         )
-        output = _expect_output(result.output, _PlanningOutput)
-        story_plan = output.story_plan
-        return _LLMPlanningArtifact(
-            metadata=_metadata(reasoning.metadata.domain_id, "planning"),
-            source_reasoning_id=reasoning.metadata.artifact_id,
-            title=story_plan.working_title.title,
-            logline=story_plan.logline.text,
-            sections=tuple(_structured_plan_sections(story_plan)),
-            target_response_language=_find_note(reasoning, "Target response language"),
-            creator_context=getattr(reasoning, "creator_context", ""),
-        )
+        with progress_step("planning_structure"):
+            output = _expect_output(result.output, _PlanningOutput)
+            story_plan = output.story_plan
+            return _LLMPlanningArtifact(
+                metadata=_metadata(reasoning.metadata.domain_id, "planning"),
+                source_reasoning_id=reasoning.metadata.artifact_id,
+                title=story_plan.working_title.title,
+                logline=story_plan.logline.text,
+                sections=tuple(_structured_plan_sections(story_plan)),
+                target_response_language=_find_note(reasoning, "Target response language"),
+                creator_context=getattr(reasoning, "creator_context", ""),
+            )
 
 
 class LLMEvaluationLayer(EvaluationLayer):
@@ -321,15 +357,22 @@ class LLMEvaluationLayer(EvaluationLayer):
         target_language = getattr(planning, "target_response_language", "English")
         # Small local models copy the critic's English examples despite a Vietnamese input header.
         prompt_name = "script_critic_vi" if _is_vietnamese_language(target_language) else "script_critic"
+        review_context = getattr(planning, "review_context", None)
+        if review_context is not None:
+            prompt_name = "card_review_vi" if _is_vietnamese_language(target_language) else "card_review"
         result = self._provider.request_structured(
             StructuredRequest(
                 instructions=self._prompt_loader.load(prompt_name, domain),
                 input_text=_evaluation_input(planning, rubric),
-                response_model=_EvaluationOutput,
+                response_model=_card_review_schema(review_context) if review_context is not None else _EvaluationOutput,
                 stage="evaluation",
             )
         )
-        output = _expect_output(result.output, _EvaluationOutput)
+        if review_context is not None:
+            review = _expect_output(result.output, _RevisionReviewOutput)
+            output = revision_evaluation(review, review_context)
+        else:
+            output = _expect_output(result.output, _EvaluationOutput)
         return EvaluationArtifact(
             metadata=_metadata(planning.metadata.domain_id, "evaluation"),
             source_planning_id=planning.metadata.artifact_id,
@@ -452,6 +495,7 @@ class StoryGenerationService:
         sections: tuple[PlanSection, ...],
         creator_context: str,
         response_language: ResponseLanguage = "auto",
+        review_context: dict | None = None,
     ) -> EvaluationArtifact:
         return self._harness.review(
             _LLMPlanningArtifact(
@@ -462,6 +506,7 @@ class StoryGenerationService:
                 sections=sections,
                 target_response_language=resolve_response_language(idea_text, response_language),
                 creator_context=creator_context,
+                review_context=review_context,
             )
         )
 
@@ -780,6 +825,14 @@ def _feedback_language_header(target_language: str) -> str:
 
 def _evaluation_input(planning: PlanningArtifact, rubric: object) -> str:
     target_language = getattr(planning, "target_response_language", "English")
+    review_context = getattr(planning, "review_context", None)
+    if review_context is not None:
+        focus = set(review_context["focus_card_ids"])
+        nearby = {pair["related_card_id"] for pair in review_context["neighbor_checks"]}
+        context = {**review_context, "cards": [card for card in review_context["cards"]
+                   if not focus or card["id"] in focus | nearby]}
+        return (_feedback_language_header(target_language) + "Card review context (JSON data):\n"
+                + json.dumps(context, ensure_ascii=False))
     return (
         _feedback_language_header(target_language)
         + f"Creator intent and decisions:\n{getattr(planning, 'creator_context', '')}\n\n"
@@ -788,12 +841,19 @@ def _evaluation_input(planning: PlanningArtifact, rubric: object) -> str:
     )
 
 
+def revision_evaluation(review: _RevisionReviewOutput, context: dict) -> RevisionEvaluation:
+    strengths, weaknesses, suggestions = feedback_messages(review.reviews, context)
+    return RevisionEvaluation(passed=all(item.comparison == "aligned" for item in review.reviews), strengths=strengths,
+                              weaknesses=weaknesses, suggestions=suggestions)
+
+
 def _evaluation_findings(
-    output: _EvaluationOutput,
+    output: _EvaluationOutput | RevisionEvaluation,
     target_language: str = "English",
 ) -> list[EvaluationFinding]:
     findings: list[EvaluationFinding] = []
-    for criterion_id, score in output.rubric_scores.model_dump().items():
+    scores = output.rubric_scores.model_dump() if output.rubric_scores else {}
+    for criterion_id, score in scores.items():
         findings.append(
             EvaluationFinding(
                 criterion_id=criterion_id,

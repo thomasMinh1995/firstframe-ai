@@ -1,8 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { WorkspaceStage, revealWorkspaceTarget } from "./WorkspaceStage";
+import { CardFeedback, anchoredReview } from "./CardFeedback";
 import { StoryFeedback } from "./StoryResultCards";
-import { StoryPlanReading } from "./StoryPlanReading";
+import { StoryPlanEditor, type DraftField } from "./StoryPlanEditor";
+import { ClarificationConversation } from "./ClarificationConversation";
+import "./storyWorkspace.css";
 import { AuthorIntentCard, FeedbackIntent, IntentDetails } from "./AuthorIntentCard";
 import { OperationProgress } from "./OperationProgress";
 import { OnboardingTour, useOnboarding } from "./OnboardingTour";
@@ -12,7 +16,7 @@ import { responseLanguageLabels, type ResponseLanguage } from "./language";
 import type { EvaluationFinding } from "./apiClient";
 import {
   editableProject, listProjects, projectRequest, streamProjectOperation,
-  type Project, type ProjectSummary, type StoryDraft,
+  type Project, type ProjectSummary,
 } from "./projectsApi";
 
 export default function Home() {
@@ -25,6 +29,8 @@ export default function Home() {
   const [selectedFeedback, setSelectedFeedback] = useState<{
     projectId: string; artifactId: string; criterionId: string; message: string;
   } | null>(null);
+  const [pendingStage, setPendingStage] = useState<string | null>(null);
+  const [selectedCard, setSelectedCard] = useState<{ id: string; label: string } | null>(null);
   const [workspaceLoadState, setWorkspaceLoadState] = useState<"loading" | "ready" | "error">("loading");
   const [projectsListed, setProjectsListed] = useState(false);
   const [steps, setSteps] = useState<OperationStep[]>([]);
@@ -45,6 +51,8 @@ export default function Home() {
     idea: saved.idea, constraints: saved.constraints, answers: saved.answers, draft: saved.draft,
     questions: saved.analysis?.missing_information ?? [],
   });
+  const decisionKey = JSON.stringify([project?.id, project?.idea, project?.constraints, project?.response_language,
+    project?.analysis?.artifact_id, project?.analysis?.missing_information, project?.answers]);
   const currentFeedback = project?.feedback_is_current && !feedbackChanged;
   const selectableFeedback = currentFeedback && !busy && !!project?.draft && !!project.feedback?.artifact_id
     && saved?.feedback_source?.project_id === project.id
@@ -56,16 +64,47 @@ export default function Home() {
   useEffect(() => {
     if (!selectedFeedback) return;
     const frame = requestAnimationFrame(() => {
-      const note = document.getElementById("selected-feedback-title");
+      const note = selectedCard ? document.querySelector<HTMLElement>(`[data-card-id="${selectedCard.id}"] .card-feedback-trigger`)
+        : document.getElementById("selected-feedback-title");
+      revealWorkspaceTarget(note);
       note?.scrollIntoView({ block: "center" });
       note?.focus({ preventScroll: true });
     });
     return () => cancelAnimationFrame(frame);
-  }, [selectedFeedback]);
+  }, [selectedFeedback, selectedCard]);
+
+  useEffect(() => {
+    if (selectedCard && !document.querySelector(`[data-card-id="${selectedCard.id}"]`)) setSelectedCard(null);
+  }, [selectedCard, saved?.revision, project?.id]);
+
+  useEffect(() => {
+    if (!pendingStage) return;
+    const frame = requestAnimationFrame(() => {
+      const target = document.getElementById(pendingStage);
+      if (target) {
+        revealWorkspaceTarget(target);
+        const focus = pendingStage === "workspace-choices"
+          ? document.querySelector<HTMLElement>(".clarification-current textarea") ?? target : target;
+        focus.scrollIntoView({ block: pendingStage === "workspace-draft" ? "start" : "center" }); focus.focus({ preventScroll: true });
+      }
+      setPendingStage(null);
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [pendingStage]);
+
+  useEffect(() => {
+    if (operationTiming?.kind !== "plan" || operationTiming.finishedAt !== null) return;
+    const frame = requestAnimationFrame(() => {
+      const target = document.getElementById("workspace-operation");
+      target?.scrollIntoView({ block: "start" }); target?.focus({ preventScroll: true });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [operationTiming?.startedAt]);
 
   function accept(next: Project) {
     setSelectedFeedback(current => current?.projectId === next.id
       && current.artifactId === next.feedback?.artifact_id ? current : null);
+    if (next.id !== project?.id) setSelectedCard(null);
     setProject(next); setSaved(next);
     setWorkspaceLoadState("ready");
     setProjects((items) => [next, ...items.filter((item) => item.id !== next.id)]);
@@ -108,13 +147,15 @@ export default function Home() {
     accept(next);
     return next;
   }
-  function action(kind: "analyze" | "plan" | "review") {
+  function action(kind: "analyze" | "plan" | "review", confirmedKey?: string) {
+    if (kind === "plan" && confirmedKey !== decisionKey) return;
     const tourRequest = kind === "review" ? null : tour.begin(kind);
-    const labels = { analyze: "Đang tìm câu hỏi cần làm rõ…", plan: "Đang phát triển câu chuyện…",
+    const labels = { analyze: project?.analysis && !briefChanged ? "Đang đọc câu trả lời và tìm câu hỏi tiếp theo…" : "Đang tìm câu hỏi cần làm rõ…", plan: "Đang phát triển câu chuyện…",
       review: "Đang đọc và góp ý bản đã sửa…" };
     setOperationFailed(false);
     setOperationTiming({ kind, startedAt: performance.now(), finishedAt: null });
     setSteps([{ stage: "prepare", status: "active", occurrence: 1 }]);
+    let questionDelta = 0;
     void run(labels[kind], async () => {
       try {
         const next = await persist();
@@ -123,6 +164,7 @@ export default function Home() {
         const result = await streamProjectOperation(next, kind, (event) => {
           setSteps((items) => applyProgress(items, event));
         }, progressLanguage(next.response_language));
+        questionDelta = (result.analysis?.missing_information.length ?? 0) - (next.analysis?.missing_information.length ?? 0);
         accept(result);
         if (kind === "plan") {
           const generation = result.plan_generations?.at(-1);
@@ -140,6 +182,7 @@ export default function Home() {
             return;
           }
         }
+        if (kind !== "review") setPendingStage(kind === "analyze" ? "workspace-choices" : "workspace-draft");
         tour.succeeded(tourRequest, result.id);
       } catch (caught) {
         tour.failed(tourRequest);
@@ -150,16 +193,29 @@ export default function Home() {
         const finishedAt = performance.now();
         setOperationTiming((timing) => timing ? { ...timing, finishedAt } : timing);
       }
-      setNotice(kind === "analyze" ? "Hãy trả lời các câu hỏi trước khi tạo bản phát triển."
+      setNotice(kind === "analyze" ? questionDelta > 0 ? `Có thêm ${questionDelta} câu hỏi. Các lựa chọn trước vẫn được giữ; chưa tạo bản phát triển.`
+        : "Chưa có câu hỏi mới. Các lựa chọn vẫn được giữ; bạn có thể sửa hoặc xem lại để quyết định tạo bản phát triển."
         : kind === "plan" ? "Đã tạo và lưu bản phát triển. Bạn có thể sửa trực tiếp bên dưới."
           : "Đã lưu phản hồi và phiên bản cho đúng nội dung hiện tại.");
     }, true);
   }
-  function updateDraft(next: StoryDraft) {
-    if (project) setProject({ ...project, draft: next });
+  function updateDraftField(field: DraftField, value: string) {
+    setProject(current => {
+      if (!current?.draft) return current;
+      const draft = current.draft;
+      return { ...current, draft: typeof field === "number"
+        ? { ...draft, sections: draft.sections.map((section, index) => index === field ? { ...section, content: value } : section) }
+        : { ...draft, [field]: value } };
+    });
   }
   function chooseFeedback(finding: EvaluationFinding) {
     if (!selectableFeedback || !project?.feedback?.artifact_id) return;
+    const base = finding.criterion_id.startsWith("suggestion-")
+      ? project.feedback.findings.find(item => item.criterion_id === finding.criterion_id.replace("suggestion-", "weakness-")) ?? finding : finding;
+    const anchor = anchoredReview(base, saved?.feedback_source);
+    const cardId = anchor?.cardIds[0];
+    setSelectedCard(cardId && document.querySelector(`[data-card-id="${cardId}"]`)
+      ? { id: cardId, label: base.message.split(": “")[0] } : null);
     setSelectedFeedback({ projectId: project.id, artifactId: project.feedback.artifact_id,
       criterionId: finding.criterion_id, message: finding.message });
   }
@@ -172,75 +228,7 @@ export default function Home() {
     URL.revokeObjectURL(url);
   }
 
-  return (
-    <main className="page-shell"><div className="workspace">
-      <header className="intro">
-        <p className="eyebrow">Câu chuyện của bạn. Kịch bản đầu tiên của bạn.</p>
-        <h1 id="workspace-title" tabIndex={-1}>FirstFrame</h1>
-        <p className="tagline">Một khoảnh khắc nhỏ cũng đủ để bắt đầu.</p>
-        <p className="summary">Ghi lại điều bạn thấy, nghe hoặc nhớ. Cùng làm rõ điều muốn kể,
-          đọc bản phác thảo câu chuyện rồi tự sửa theo ý bạn.</p>
-        <details className="workspace-tools">
-          <summary>Demo và công cụ đánh giá</summary>
-          <a className="demo-entry secondary" href="/demo">Xem demo local từ kịch bản có sẵn</a>{" "}
-          <a className="demo-entry secondary" href="/datasets">Đánh giá chất lượng dataset</a>
-        </details>
-      </header>
-      <OnboardingTour tour={tour} context={tourContext} ready={workspaceLoadState === "ready"}
-        empty={projectsListed && !projects.length} busy={!!busy} error={error}
-        idea={project?.idea ?? ""} answers={project?.answers ?? []}
-        questionCount={project?.analysis?.missing_information.length ?? 0} />
-      <nav className="project-toolbar panel" aria-label="Dự án">
-        <label htmlFor="project-picker">Dự án của bạn</label>
-        <select id="project-picker" value={project?.id ?? ""} disabled={!!busy}
-          onChange={(event) => {
-            const id = event.target.value;
-            tour.pause();
-            void run("Đang lưu và mở dự án…", async () => {
-              await persist(); accept(await projectRequest(`/${id}`));
-            });
-          }}>
-          <option value="" disabled>Chọn dự án</option>
-          {projects.map((item) => <option key={item.id} value={item.id}>{item.title}</option>)}
-        </select>
-        <button data-tour="new-project" disabled={!!busy} onClick={() => {
-          const ticket = tour.begin("create");
-          void run("Đang tạo dự án…", async () => {
-            try {
-              await persist();
-              const created = await projectRequest("", "POST");
-              accept(created); tour.succeeded(ticket, created.id);
-            } catch (caught) { tour.failed(ticket); throw caught; }
-          });
-        }}>Dự án mới</button>
-        <p className="storage-note">Dự án được lưu cục bộ trên máy này. Chưa có đồng bộ tài khoản.</p>
-      </nav>
-      {!!steps.length && operationTiming && <OperationProgress steps={steps} failed={operationFailed}
-        timing={operationTiming} dirty={dirty} language={progressLanguage(project?.response_language ?? "auto")} />}
-      {busy && !steps.length && <p className="operation-status" role="status">{busy}</p>}
-      {error && <p className="error" role="alert">{error}</p>}
-      {notice && <p className="operation-status" role="status">{notice}</p>}
-      {!project && !busy && <section className="panel empty-project">
-        <h2>Ghi lại khoảnh khắc của bạn</h2>
-        <p>Chọn “Dự án mới”, kể một khoảnh khắc bạn nhớ rồi lưu để quay lại viết tiếp.
-          Chưa cần biết toàn bộ câu chuyện sẽ đi tới đâu.</p>
-        {error && <button onClick={() => window.location.reload()}>Thử kết nối lại</button>}
-      </section>}
-      {project && <>
-        <div className="save-toolbar" data-tour="save" tabIndex={-1}>
-          <p id="save-status" role="status" tabIndex={-1}>{dirty ? "Có thay đổi chưa lưu" : "Đã lưu"}</p>
-          <button data-tour-action="save" disabled={!!busy || !dirty} onClick={() => void run("Đang lưu…", async () => {
-            await persist(); setNotice("Đã lưu thay đổi.");
-          })}>Lưu thay đổi</button>
-          <button className="secondary" onClick={downloadBackup}>Tải bản sao JSON</button>
-          <button className="secondary" disabled={!!busy || dirty} onClick={() => {
-            tour.pause();
-            void run("Đang mở lại bản đã lưu…", async () => {
-              accept(await projectRequest(`/${project.id}`));
-              setNotice("Đã mở lại bản đã lưu. Không tạo lại hoặc gọi AI.");
-            });
-          }}>Mở lại bản đã lưu</button>
-        </div>
+  const proposals = project && <>
         {!!project.plan_generations?.length && <section className="panel version-history" aria-label="Các bản do AI tạo">
           <h2>Các bản do AI tạo</h2>
           <p>Bản đầu được lưu trực tiếp. Các lần tạo lại giữ thành đề xuất; bản đang viết chỉ thay khi bạn chọn nhận.
@@ -279,9 +267,88 @@ export default function Home() {
             </>}
           </details>)}
         </section>}
+  </>;
+
+  return (
+    <main className="page-shell story-workspace"><div className="workspace">
+      <header className="intro">
+        <p className="eyebrow">Câu chuyện của bạn. Kịch bản đầu tiên của bạn.</p>
+        <h1 id="workspace-title" tabIndex={-1}>FirstFrame</h1>
+        <p className="workspace-mode-label">Không gian viết</p>
+        <p className="tagline">Một khoảnh khắc nhỏ cũng đủ để bắt đầu.</p>
+        <p className="summary">Ghi lại điều bạn thấy, nghe hoặc nhớ. Cùng làm rõ điều muốn kể,
+          đọc bản phác thảo câu chuyện rồi tự sửa theo ý bạn.</p>
+        <details className="workspace-tools">
+          <summary>Demo và công cụ đánh giá</summary>
+          <a className="demo-entry secondary" href="/demo">Xem demo local từ kịch bản có sẵn</a>{" "}
+          <a className="demo-entry secondary" href="/datasets">Đánh giá chất lượng dataset</a>
+        </details>
+      </header>
+      <div className="workspace-layout">
+      <WorkspaceNavigation project={project} briefChanged={briefChanged} creatingPlan={!!busy && operationTiming?.kind === "plan"} />
+      <div className="workspace-content">
+      <OnboardingTour tour={tour} context={tourContext} ready={workspaceLoadState === "ready"}
+        empty={projectsListed && !projects.length} busy={!!busy} error={error}
+        idea={project?.idea ?? ""} answers={project?.answers ?? []}
+        questionCount={project?.analysis?.missing_information.length ?? 0} />
+      <nav className="project-toolbar panel" aria-label="Dự án">
+        <label htmlFor="project-picker">Dự án của bạn</label>
+        <select id="project-picker" value={project?.id ?? ""} disabled={!!busy}
+          onChange={(event) => {
+            const id = event.target.value;
+            tour.pause();
+            void run("Đang lưu và mở dự án…", async () => {
+              await persist(); accept(await projectRequest(`/${id}`));
+            });
+          }}>
+          <option value="" disabled>Chọn dự án</option>
+          {projects.map((item) => <option key={item.id} value={item.id}>{item.title}</option>)}
+        </select>
+        <button data-tour="new-project" disabled={!!busy} onClick={() => {
+          const ticket = tour.begin("create");
+          void run("Đang tạo dự án…", async () => {
+            try {
+              await persist();
+              const created = await projectRequest("", "POST");
+              accept(created); tour.succeeded(ticket, created.id);
+            } catch (caught) { tour.failed(ticket); throw caught; }
+          });
+        }}>Dự án mới</button>
+        <p className="storage-note">Dự án được lưu cục bộ trên máy này. Chưa có đồng bộ tài khoản.</p>
+      </nav>
+      {busy && !steps.length && <p className="operation-status" role="status">{busy}</p>}
+      {!project && error && <p className="error" role="alert">{error}</p>}
+      {notice && <p className="operation-status" role="status">{notice}</p>}
+      {!project && !busy && <section className="panel empty-project">
+        <h2>Ghi lại khoảnh khắc của bạn</h2>
+        <p>Chọn “Dự án mới”, kể một khoảnh khắc bạn nhớ rồi lưu để quay lại viết tiếp.
+          Chưa cần biết toàn bộ câu chuyện sẽ đi tới đâu.</p>
+        {error && <button onClick={() => window.location.reload()}>Thử kết nối lại</button>}
+      </section>}
+      {project && <>
+        <div className="save-toolbar" data-tour="save" tabIndex={-1}>
+          <span className="save-project-title">{project.title}</span>
+          <p id="save-status" role="status" tabIndex={-1}>{dirty ? "Có thay đổi chưa lưu" : "Đã lưu"}</p>
+          <button data-tour-action="save" disabled={!!busy || !dirty} onClick={() => void run("Đang lưu…", async () => {
+            await persist(); setNotice("Đã lưu thay đổi.");
+          })}>Lưu thay đổi</button>
+          <details className="save-more"><summary>Tùy chọn bản lưu</summary><div>
+          <button className="secondary" onClick={downloadBackup}>Tải bản sao JSON</button>
+          <button className="secondary" disabled={!!busy || dirty} onClick={() => {
+            tour.pause();
+            void run("Đang mở lại bản đã lưu…", async () => {
+              accept(await projectRequest(`/${project.id}`));
+              setNotice("Đã mở lại bản đã lưu. Không tạo lại hoặc gọi AI.");
+            });
+          }}>Mở lại bản đã lưu</button>
+          </div></details>
+          {error && <p className="error" role="alert">{error}</p>}
+        </div>
+      {!!steps.length && operationTiming && <OperationProgress steps={steps} failed={operationFailed}
+        timing={operationTiming} dirty={dirty} language={progressLanguage(project?.response_language ?? "auto")} />}
         <fieldset disabled={!!busy} className="project-fields">
-          <section className="panel form-stack">
-            <h2>1. Khoảnh khắc bạn muốn kể</h2>
+          <WorkspaceStage key={`${project.id}:idea`} id="workspace-idea" title="1. Khoảnh khắc bạn muốn kể"
+            complete={!!project.analysis && !briefChanged} preview={project.idea || "Bắt đầu bằng một khoảnh khắc nhỏ."}>
             <label htmlFor="project-title">Tên dự án</label>
             <input id="project-title" maxLength={200} value={project.title}
               onChange={(event) => setProject({ ...project, title: event.target.value })} />
@@ -314,39 +381,33 @@ export default function Home() {
               bản phát triển mới; bản thảo và câu trả lời trước đó sẽ được giữ trong lịch sử.</p>}
             {(!project.analysis || briefChanged) && <button data-tour-action="analyze" disabled={!project.idea.trim()}
               onClick={() => action("analyze")}>Cùng làm rõ ý tưởng</button>}
-          </section>
-          {saved && <AuthorIntentCard context={saved.author_context} revision={saved.revision}
-            dirty={dirty} canEditAnswers={!briefChanged} />}
-          {project.analysis && !briefChanged && <section className="panel form-stack">
-            <h2 data-tour="choices" tabIndex={-1}>2. Những lựa chọn của bạn</h2>
-            <p className="preserve-lines">{project.analysis.summary}</p>
-            {!project.analysis.missing_information.length && <p>Ý tưởng đã đủ rõ cho một bản phát triển.
-              Bạn quyết định khi nào bắt đầu tạo bản phát triển.</p>}
-            {project.analysis.missing_information.map((question, index) => (
-              <div className="question-block" key={`${project.analysis?.artifact_id}-${index}`}>
-                <label htmlFor={`answer-${index}`}>{question}</label>
-                <textarea id={`answer-${index}`} className="short-textarea" rows={3} maxLength={2000}
-                  value={project.answers[index] ?? ""} onChange={(event) => {
-                    const answers = [...project.answers]; answers[index] = event.target.value;
-                    setProject({ ...project, answers });
-                  }} />
-                <button className="secondary" onClick={() => {
-                  const answers = [...project.answers];
-                  answers[index] = "Chưa quyết định. Nếu đề xuất một lựa chọn, hãy ghi rõ đó là gợi ý của AI.";
-                  setProject({ ...project, answers });
-                }}>Để quyết định sau</button>
-              </div>
-            ))}
-            <button data-tour-action="plan" disabled={project.analysis.missing_information.some((_, i) => !project.answers[i]?.trim())}
-              onClick={() => action("plan")}>
-              {project.draft ? "Tạo bản đề xuất mới (giữ bản đang viết)" : "Tạo bản phát triển từ lựa chọn của tôi"}
-            </button>
-          </section>}
-          {project.draft && <section className="panel form-stack">
-            <h2 data-tour="draft" tabIndex={-1}>3. Bản phát triển đang làm việc</h2>
-            <StoryPlanReading draft={project.draft} dirty={dirty} />
-            <h3 id="draft-editor-title" tabIndex={-1}>Chỉnh sửa bản phác thảo</h3>
-            {selectedFeedback && <aside className="revision-note" aria-labelledby="selected-feedback-title">
+          </WorkspaceStage>
+          {saved && <details className="workspace-author-context">
+            <summary>Ý đồ và lựa chọn đã lưu <span>{dirty ? "Có thay đổi chưa lưu" : "Bản đã lưu"}</span></summary>
+            <AuthorIntentCard context={saved.author_context} revision={saved.revision} dirty={dirty} canEditAnswers={!briefChanged} />
+          </details>}
+          {project.analysis && !briefChanged && <WorkspaceStage key={`${project.id}:choices:${project.analysis.artifact_id}`}
+            id="workspace-choices" title="2. Những lựa chọn của bạn" complete={!!project.draft}
+            preview={`${project.analysis.missing_information.filter((_, i) => project.answers[i]?.trim()).length}/${project.analysis.missing_information.length} câu đã trả lời · Mở để xem hoặc sửa`}>
+            <div data-tour="choices">
+            <ClarificationConversation key={`${project.id}:${project.analysis.artifact_id}`}
+              summary={project.analysis.summary} questions={project.analysis.missing_information} answers={project.answers}
+              confirmationKey={decisionKey} idea={project.idea} constraints={project.constraints} hasDraft={!!project.draft}
+              retained={saved?.author_context?.clarifications.filter(item => item.input_index === null) ?? []}
+              onAskMore={() => action("analyze")} onConfirm={() => action("plan", decisionKey)}
+              onChange={(index, value) => setProject(current => {
+                if (!current) return current;
+                const answers = Array.from({ length: Math.max(current.answers.length, index + 1) },
+                  (_, i) => i === index ? value : current.answers[i] ?? "");
+                return { ...current, answers };
+              })} />
+            </div>
+          </WorkspaceStage>}
+          {project.draft && <section className="panel form-stack working-draft" data-workspace-stage="workspace-draft">
+            <h2 id="workspace-draft" data-tour="draft" tabIndex={-1}>3. Bản phát triển đang làm việc</h2>
+            <h3 id="draft-editor-title" tabIndex={-1}>Đọc và sửa ngay tại card</h3>
+            {operationTiming?.kind === "plan" && operationTiming.finishedAt !== null && <a className="storage-note" href="#workspace-operation">Xem lại tiến trình tạo bản này</a>}
+            {selectedFeedback && !selectedCard && <aside className="revision-note" aria-labelledby="selected-feedback-title">
               <h4 id="selected-feedback-title" tabIndex={-1}>Góp ý bạn đang cân nhắc</h4>
               <p className={currentFeedback ? "operation-status" : "form-message"} role="status">
                 {currentFeedback ? "Góp ý đọc bản hiện tại. Bạn tự chọn phần muốn sửa bên dưới."
@@ -360,33 +421,18 @@ export default function Home() {
                 document.getElementById("draft-editor-title")?.focus();
               }}>Bỏ chọn góp ý này</button>
             </aside>}
-            <p>Sửa trực tiếp nội dung của bạn. Nhận phản hồi sẽ lưu bản này trước khi gửi cho AI.</p>
-            <label htmlFor="draft-title">Tên phim tạm thời</label>
-            <input id="draft-title" maxLength={200} value={project.draft.title}
-              onChange={(event) => updateDraft({ ...project.draft!, title: event.target.value })} />
-            <label htmlFor="draft-logline">Tóm tắt câu chuyện trong một câu</label>
-            <textarea id="draft-logline" className="short-textarea" rows={3} maxLength={2000}
-              value={project.draft.logline}
-              onChange={(event) => updateDraft({ ...project.draft!, logline: event.target.value })} />
-            {project.draft.sections.map((section, index) => <div className="draft-section" key={index}>
-              <label htmlFor={`section-${index}`}>{sectionLabels[section.title] ?? section.title}</label>
-              <textarea id={`section-${index}`} rows={5} maxLength={10000} value={section.content}
-                onChange={(event) => updateDraft({ ...project.draft!,
-                  sections: project.draft!.sections.map((item, i) => i === index
-                    ? { ...item, content: event.target.value } : item) })} />
-            </div>)}
-            <button onClick={() => action("review")}>Nhận phản hồi trên bản hiện tại</button>
-          </section>}
-        </fieldset>
-        {!!project.clarification_history.length && <section className="panel version-history">
-          <h2>Các lựa chọn trước đây</h2>
-          <p>Bạn có thể tham khảo và chép lại câu trả lời phù hợp. Các lựa chọn này không tự áp dụng cho ý tưởng mới.</p>
-          {[...project.clarification_history].reverse().map((version) => <details key={version.id}>
-            <summary>{new Date(version.created_at).toLocaleString("vi-VN")} · {version.idea}</summary>
-            <PastAnswers questions={version.questions} answers={version.answers} />
-          </details>)}
-        </section>}
-        {project.feedback && <section className="feedback-section" aria-label="Phản hồi">
+            <StoryPlanEditor key={`${project.id}:${saved?.revision}`} draft={project.draft}
+              dirty={dirty} onChange={updateDraftField} selectedCardId={selectedCard?.id} onSelectCard={setSelectedCard}
+              inspector={selectedCard && <CardFeedback cardId={selectedCard.id} label={selectedCard.label}
+                evaluation={project.feedback} source={saved?.feedback_source?.project_id === project.id
+                  && saved.feedback_source.artifact_id === project.feedback?.artifact_id ? saved.feedback_source : null}
+                current={!!currentFeedback} selected={selectedFeedback ? { message: selectedFeedback.message } : null}
+                onClose={() => {
+                  const id = selectedCard.id; setSelectedCard(null); setSelectedFeedback(null);
+                  requestAnimationFrame(() => document.querySelector<HTMLButtonElement>(`[data-card-id="${id}"] .card-feedback-trigger`)?.focus());
+                }} onReview={() => action("review")} />} />
+            {!selectedCard && <button data-tour-review onClick={() => action("review")}>Nhận phản hồi trên bản hiện tại</button>}
+        {project.feedback && <details id="workspace-feedback" tabIndex={-1} className="feedback-section" aria-label="Phản hồi"><summary>Toàn bộ góp ý</summary>
           <p className={currentFeedback ? "operation-status" : "form-message"} role="status">
             {currentFeedback ? "Phản hồi cho đúng bản hiện tại."
               : "Nội dung đã thay đổi. Phản hồi dưới đây thuộc bản trước; hãy nhận phản hồi mới."}
@@ -396,6 +442,19 @@ export default function Home() {
             Hãy nhận phản hồi cho đúng bản hiện tại trước khi chọn góp ý mới để tự sửa.</p>}
           <StoryFeedback evaluation={project.feedback} uiLanguage="vi" onChoose={chooseFeedback}
             selectedCriterion={selectedFeedback?.criterionId} selectionDisabled={!selectableFeedback} />
+        </details>}
+
+          </section>}
+        </fieldset>
+        <details className="workspace-library"><summary>Đề xuất và lịch sử ({(project.plan_generations?.length ?? 0) + project.versions.length + project.clarification_history.length})</summary>
+        {proposals}
+        {!!project.clarification_history.length && <section className="panel version-history">
+          <h2>Các lựa chọn trước đây</h2>
+          <p>Bạn có thể tham khảo và chép lại câu trả lời phù hợp. Các lựa chọn này không tự áp dụng cho ý tưởng mới.</p>
+          {[...project.clarification_history].reverse().map((version) => <details key={version.id}>
+            <summary>{new Date(version.created_at).toLocaleString("vi-VN")} · {version.idea}</summary>
+            <PastAnswers questions={version.questions} answers={version.answers} />
+          </details>)}
         </section>}
         {!!project.versions.length && <section className="panel version-history">
           <h2>Các phiên bản đã giữ</h2>
@@ -427,9 +486,60 @@ export default function Home() {
             })}>Dùng lại bản phát triển này</button>
           </details>)}
         </section>}
+        </details>
       </>}
-    </div></main>
+    </div></div></div></main>
   );
+}
+
+function WorkspaceNavigation({ project, briefChanged, creatingPlan }: { project: Project | null; briefChanged: boolean; creatingPlan: boolean }) {
+  const [active, setActive] = useState("workspace-idea");
+  useEffect(() => {
+    let frame = 0;
+    const stages = [...document.querySelectorAll<HTMLElement>("[data-workspace-stage]")];
+    const measure = () => {
+      const line = window.innerWidth <= 760 ? 190 : 130;
+      const focused = document.activeElement as HTMLElement | null;
+      const bounds = focused?.getBoundingClientRect();
+      // A short final draft cannot always scroll to the rail's tracking line.
+      const focusedStage = bounds && bounds.bottom > line && bounds.top < window.innerHeight
+        ? focused?.closest<HTMLElement>("[data-workspace-stage]") : null;
+      const current = focusedStage ?? stages.filter(stage => stage.getBoundingClientRect().top <= line).at(-1) ?? stages[0];
+      if (current) setActive(current.dataset.workspaceStage!);
+    };
+    const scroll = () => { cancelAnimationFrame(frame); frame = requestAnimationFrame(measure); };
+    const focus = (event: FocusEvent) => {
+      const stage = (event.target as HTMLElement)?.closest<HTMLElement>("[data-workspace-stage]");
+      if (stage) setActive(stage.dataset.workspaceStage!);
+    };
+    const resize = new ResizeObserver(scroll); stages.forEach(stage => resize.observe(stage));
+    window.addEventListener("scroll", scroll, { passive: true }); window.addEventListener("resize", scroll);
+    document.addEventListener("focusin", focus); measure();
+    return () => { cancelAnimationFrame(frame); resize.disconnect(); window.removeEventListener("scroll", scroll);
+      window.removeEventListener("resize", scroll); document.removeEventListener("focusin", focus); };
+  }, [project?.id, !!project?.analysis, !!project?.draft, briefChanged]);
+  const items = [
+    { id: "workspace-idea", label: "Ý tưởng", available: !!project },
+    { id: "workspace-choices", label: "Làm rõ", available: !!project?.analysis && !briefChanged },
+    { id: "workspace-draft", label: "Story plan", available: !!project?.draft || creatingPlan },
+    { id: "workspace-outline", label: "Dàn cảnh", available: false },
+    { id: "workspace-script", label: "Kịch bản", available: false },
+  ];
+  return <aside className="workspace-rail"><p className="eyebrow">Câu chuyện của bạn</p>
+    <nav className="workspace-stage-nav" aria-label="Hành trình câu chuyện">
+      {items.map((item, index) => <button key={item.id} type="button" disabled={!item.available}
+        aria-current={item.available && item.id === (creatingPlan ? "workspace-draft" : active) ? "step" : undefined}
+        onClick={() => {
+          const target = document.getElementById(creatingPlan && item.id === "workspace-draft" ? "workspace-operation" : item.id);
+          revealWorkspaceTarget(target); setActive(item.id);
+          target?.scrollIntoView({ block: "start" }); target?.focus({ preventScroll: true });
+        }}>
+        <span className="workspace-stage-number" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
+        <span>{item.label}<small>{index > 2 ? "Chưa hỗ trợ" : item.available ? (item.id === (creatingPlan ? "workspace-draft" : active) ? (creatingPlan ? "Đang tạo" : "Đang làm việc") : "Xem lại") : "Chưa có nội dung"}</small></span>
+      </button>)}
+    </nav>
+    <p className="workspace-rail-note">Câu chuyện và lựa chọn của bạn làm chủ đạo.<br />Các bước sau mở khi sản phẩm hỗ trợ.</p>
+  </aside>;
 }
 
 function message(error: unknown) {

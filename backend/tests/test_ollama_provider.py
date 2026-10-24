@@ -139,7 +139,7 @@ def test_project_workflow_uses_local_fallback_and_preserves_edits(tmp_path, monk
 
     from app.api.routes import projects as routes
     from app.application.project_store import ProjectStore
-    from app.application.workflow import _EvaluationOutput, _PlanningOutput, _ReasoningOutput
+    from app.application.workflow import _EvaluationOutput, _PlanningOutput, _ReasoningOutput, _RevisionReviewOutput
     from app.main import create_app
 
     monkeypatch.setenv("AI_PROVIDER", "auto")
@@ -150,7 +150,7 @@ def test_project_workflow_uses_local_fallback_and_preserves_edits(tmp_path, monk
     )
     fake = FakeProvider()
     models = {
-        model.__name__: model for model in (_ReasoningOutput, _PlanningOutput, _EvaluationOutput)
+        model.__name__: model for model in (_ReasoningOutput, _PlanningOutput, _EvaluationOutput, _RevisionReviewOutput)
     }
 
     def post(url, **kwargs):

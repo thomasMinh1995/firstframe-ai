@@ -153,7 +153,14 @@ def test_legacy_generate_and_review_rounds_support_editorial_outputs(demo_export
     add_review(client, project)
     sample = detail(client, "review")
     evaluation = copy.deepcopy(sample["recording"]["steps"][0]["output"])
-    evaluation["suggestions"] = ["Phản hồi lượt sửa đã được biên tập"]
+    evaluation["reviews"][0]["observation"] = "Phản hồi lượt sửa đã được biên tập"
+    invented = copy.deepcopy(evaluation)
+    invented["reviews"][0]["card_id"] = "invented-card"
+    assert save_outputs(client, sample, {"0": invented}).status_code == 422
+    scored = copy.deepcopy(evaluation)
+    scored["rubric_scores"] = dict.fromkeys(["story_clarity", "character", "conflict", "emotional_impact",
+                                          "ending", "production_feasibility"], 4)
+    assert save_outputs(client, sample, {"0": scored}).status_code == 422
     edited = save_outputs(client, sample, {"0": evaluation}).json()
     assert annotate(client, edited, status="approved").status_code == 200
     response = client.post("/api/generate", json={"idea": "A mother waits by the window."})
@@ -169,7 +176,7 @@ def test_legacy_generate_and_review_rounds_support_editorial_outputs(demo_export
     project_summary = next(item for item in summaries if item["id"] != legacy["id"])
     scenario = client.get(f"/api/demo/scenarios/{project_summary['id']}").json()
     assert any(
-        item["message"] == evaluation["suggestions"][0]
+        evaluation["reviews"][0]["observation"] in item["message"]
         for item in scenario["steps"][-1]["feedback"]["findings"]
     )
     rows = [

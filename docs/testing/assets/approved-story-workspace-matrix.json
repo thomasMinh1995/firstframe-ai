@@ -1,0 +1,111 @@
+{
+  "date": "2026-10-24",
+  "production_build": "xeBgvIS7YaKS3hCxEge3K",
+  "source_files_matched": 31,
+  "source_sha256": {
+    "app/AuthorIntentCard.tsx": "b4eb68361722e8ed9ab4371b594620d044ba710fd11b2a84704463bfdff6c7d5",
+    "app/CardFeedback.tsx": "592741f3de2d6889bcb76d172e473d57ff4aaebf5fa45cb9b06e397f642e7e08",
+    "app/ClarificationConversation.tsx": "3c010080d78622d0ab662d1f922822e809b0da1594cd246a2fa6a2ea39b1f44f",
+    "app/OnboardingTour.tsx": "f0d610215516697e50fbf5e5a7f574df4a142c989f396ff258a95a4c8976e04c",
+    "app/OperationProgress.tsx": "dfd1fd7b5679a107991563ef45fe41531b1c05ecbe146ed968154150695caa2b",
+    "app/StoryFlowVisualization.tsx": "a20b84223eb7e136adfdd03af4deba2c05b8d6e21d0cca156de4c90d5ace6cc2",
+    "app/StoryPlanEditor.tsx": "882ad0fd8bbcaf33b5ec82eddffe8424ba9261e84eed92b72157c336c6e94ed2",
+    "app/StoryResultCards.tsx": "3b18b39b9aa27e8f852b8738c2ecfdeb20bff2fa4b301c903a44b0aebb78615e",
+    "app/ThinkingTimeline.tsx": "5d8dc0010dab01d2991d586ee063d16b5004d387f90ee522a1182fd8bc3f74f4",
+    "app/WorkspaceStage.tsx": "0b8f29b7f8e66bc7d48741ee71c5181b340d2c74ba28dbca67a7beee49589f9e",
+    "app/apiClient.ts": "8eafdd33e847c43d35039b1790a7cb945b69c9816a6daf0c776e8e325aa96633",
+    "app/datasetApi.ts": "42ebeb777c75dfec2ed3358f70ae34a805aa8fb2aebeb5b2a925797ddc90bad2",
+    "app/datasets/DatasetTransfer.tsx": "a825b0189feb43b5c42ff705a49cdf9ae86853b00201530aab96ab4db952d8e3",
+    "app/datasets/JsonChanges.tsx": "fd7fe160224160bb892618cb3c0cff9f20d37d7442d35d330e46b1a780e646ac",
+    "app/datasets/OutputFields.tsx": "04b61ef228da4db1a743e1fa9cd166882b3c706e27dd12319e2fde2164c70297",
+    "app/datasets/OutputHistory.tsx": "99fd88817a30f756811c180f866d4ebf7fd1a97ead92e65906edca75356db3c0",
+    "app/datasets/SavedBranches.tsx": "59baa6a7d1350b1e41ded9a09df223a472e78d6a4e594699a65789f62918ed15",
+    "app/datasets/page.tsx": "d164f7eb58f2d3feb9fc0537db96d739f2f41a69673b10ff8964d93f27505b9a",
+    "app/demo/page.tsx": "51aff5f2eecf24fcf9ed92aca8ad7d303800c6769e442b0cf352fd4c2301cf54",
+    "app/demoApi.ts": "980555b1ebf56fd62de2baa193412e07c3e6e73c5f51fd2bfcaae7ce6882769d",
+    "app/globals.css": "0f3f565d8b02a1664038770a0730023e3c260fc9f5aff57b2787018a9758d1ec",
+    "app/language.ts": "8b3ba34821b7fe7be41f378f8c6307d87afb32d63b511cebe6072cf3b0e109c5",
+    "app/layout.tsx": "ca959dab60ab3934030b1fdc0e59e4133504725dce029bc5f3c13e42047af006",
+    "app/onboardingState.ts": "9ebd57c9e85a477524cc45697358a9a1d468677b922b54ede6fce0c8d17985f6",
+    "app/page.tsx": "5e2055ba5609476f2c09c590f892569d3165e99fe13e8ef7462db4e7fe176014",
+    "app/progressState.ts": "44c3709503def11874fc7a3e10c1d01482a4e427a5f395b88e06a4adc935c79f",
+    "app/projectsApi.ts": "90cf6387865a13354d973d7692db2037b03b5b37818c431603cb6f7c5404dbd8",
+    "app/prototype/page.tsx": "ea3addc280d755e552be056ab79ef642580140b18a7fbc5795cda025258e0924",
+    "app/prototype/prototype.module.css": "323f6ca72caa1f8e104e5a82e4474fa7ad978978d0c9c772bcef09b8cda26904",
+    "app/storyLabels.ts": "ae982769b7b84e86554a6a690b775dab5e2e3974c902c497b6c7d38031cb67c3",
+    "app/storyWorkspace.css": "982121e607495da2ee0f20271746d9117dd591b2a98a33b3a4cfa4c47d44ff89"
+  },
+  "backend": {
+    "passed": 311,
+    "skipped": 1,
+    "warnings": 1
+  },
+  "browser_total": 99,
+  "onboarding_full_flow": {
+    "engines": ["chrome", "firefox", "webkit"],
+    "passed": 3,
+    "total": 3
+  },
+  "browsers": [
+    {
+      "engine": "chrome",
+      "version": "155.0.8059.86",
+      "total": 33,
+      "suites": {
+        "story-workspace": {
+          "total": 27,
+          "passed": 27
+        },
+        "workspace-focus": {
+          "total": 4,
+          "passed": 4
+        },
+        "workspace-dialogue": {
+          "total": 2,
+          "passed": 2
+        }
+      }
+    },
+    {
+      "engine": "firefox",
+      "version": "151.0",
+      "total": 33,
+      "suites": {
+        "story-workspace": {
+          "total": 27,
+          "passed": 27
+        },
+        "workspace-focus": {
+          "total": 4,
+          "passed": 4
+        },
+        "workspace-dialogue": {
+          "total": 2,
+          "passed": 2
+        }
+      }
+    },
+    {
+      "engine": "webkit",
+      "version": "26.5",
+      "total": 33,
+      "suites": {
+        "story-workspace": {
+          "total": 27,
+          "passed": 27
+        },
+        "workspace-focus": {
+          "total": 4,
+          "passed": 4
+        },
+        "workspace-dialogue": {
+          "total": 2,
+          "passed": 2
+        }
+      }
+    }
+  ],
+  "qa_only": true,
+  "real_model_acceptance": false,
+  "contains_raw_model_output_or_project_snapshots": false
+}

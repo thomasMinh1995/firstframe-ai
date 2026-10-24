@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { revealWorkspaceTarget } from "./WorkspaceStage";
 import { createPortal } from "react-dom";
 import {
   available, continuation, initialTour, nextStep, previousStep, reduceTour, tourSteps, tourStorageKey, validAnalysis,
@@ -70,12 +71,12 @@ type Props = {
 };
 const titles: Record<TourStep, string> = {
   "new-project": "Bắt đầu câu chuyện đầu tiên", idea: "Câu chuyện bạn muốn kể", language: "Cùng làm rõ ý tưởng",
-  choices: "Những lựa chọn thuộc về bạn", draft: "Viết tiếp bằng giọng của bạn", save: "Lưu lại để tiếp tục",
+  choices: "Trò chuyện, xem lại rồi đồng ý", draft: "Story plan chữ S và góp ý AI", save: "Lưu, đề xuất và lịch sử",
 };
 const targetLabels: Record<TourStep, string> = {
   "new-project": "Nút Dự án mới", idea: "Ô Khoảnh khắc, kỷ niệm hoặc tình huống của bạn",
   language: "Ngôn ngữ đầu ra", choices: "Những lựa chọn của bạn",
-  draft: "Bản phát triển đang làm việc", save: "Thanh lưu thay đổi",
+  draft: "Đọc và sửa ngay tại card", save: "Thanh lưu thay đổi",
 };
 function copy(step: TourStep, p: Props) {
   switch (step) {
@@ -86,12 +87,35 @@ function copy(step: TourStep, p: Props) {
     case "language": return validAnalysis(p.context)
       ? "Ngôn ngữ này áp dụng cho lần AI tiếp theo, không dịch nội dung đã có. Ý tưởng đã được làm rõ; bạn có thể tiếp tục xem các lựa chọn mà không chạy AI lại."
       : "Chọn Tiếng Việt hoặc English nếu ý tưởng quá ngắn hay chưa rõ ngôn ngữ. Sau đó tự bấm Cùng làm rõ ý tưởng; FirstFrame sẽ lưu trước khi gửi AI.";
-    case "choices": return (p.questionCount
-      ? "Trả lời theo ý bạn, hoặc chọn Để quyết định sau nếu chưa chắc. "
-      : "Ý tưởng không có câu hỏi bổ sung; bạn có thể tạo bản phát triển ngay. ")
-      + (p.context.hasDraft ? "Bạn cũng có thể xem bản đã có; tạo lại sẽ giữ đề xuất riêng tới khi bạn chọn nhận." : "Bạn quyết định khi nào tạo bản phát triển từ các lựa chọn của mình.");
-    case "draft": return "Sửa trực tiếp tên phim, tóm tắt và từng phần theo ý bạn. Đây là bản phát triển câu chuyện, chưa phải kịch bản theo cảnh hoàn chỉnh.";
-    case "save": return "Nhận phản hồi trên bản hiện tại sẽ lưu trước khi gửi AI; bạn tự quyết định cách sửa. Sau khi sửa tiếp, góp ý cũ thuộc bản trước — hãy lưu thay đổi trước khi rời đi.";
+    case "choices": return p.questionCount
+      ? "Mỗi lượt một câu hỏi. Câu trả lời cũ vẫn ở phía trên để bạn đọc và sửa; những lựa chọn này dẫn đường cho story plan."
+      : "Chưa có câu hỏi bổ sung. Bạn vẫn có thể hỏi thêm, hoặc xem lại các lựa chọn trước khi đồng ý tạo bản phát triển.";
+    case "draft": return "Đọc các card ngắn theo đường chữ S, từ số nhỏ đến lớn. Trên điện thoại, card xếp thành một cột theo đúng thứ tự. Dàn cảnh và Kịch bản sẽ có hướng dẫn riêng khi được hỗ trợ.";
+    case "save": return "Xong chỉ đóng ô sửa. Dùng Lưu thay đổi để giữ nội dung trước khi rời đi. Trạng thái Đã lưu xác nhận bản trên máy này; chưa có đồng bộ tài khoản.";
+  }
+}
+
+function instructions(step: TourStep, hasDraft: boolean): string[] {
+  switch (step) {
+    case "new-project": return ["Dùng Dự án của bạn để mở lại câu chuyện; Dự án mới bắt đầu câu chuyện khác.",
+      "Thanh Ý tưởng → Làm rõ → Story plan đưa bạn tới từng vùng trên cùng màn hình."];
+    case "idea": return ["Kể một ý tưởng ngắn. Điều muốn giữ hoặc giới hạn thực hiện là tùy chọn.",
+      "Vùng đã xong có thể thu gọn. Bấm tiêu đề vùng để mở lại và sửa."];
+    case "language": return ["Cùng làm rõ ý tưởng lưu bản hiện tại rồi hỏi AI. Hướng dẫn không tự chạy AI.",
+      "Điều FirstFrame đã hiểu cho bạn đọc lại cách hệ thống hiểu ý tưởng."];
+    case "choices": return ["Trả lời rồi bấm Tiếp tục; chưa chắc thì chọn Để quyết định sau. Sửa câu trả lời hoặc số câu hỏi mở lại câu cũ.",
+      "Khi trả lời hết, Hỏi thêm từ câu trả lời của tôi sẽ nối câu hỏi mới và giữ câu cũ, tối đa 20 câu.",
+      "Xem lại các lựa chọn chỉ mở bản tổng hợp. FirstFrame chỉ tạo khi bạn bấm Đồng ý; sửa lựa chọn cần xem lại và đồng ý lại.",
+      "Sau Đồng ý, xem ba nhóm cùng các bước con: chuẩn bị lựa chọn → phát triển story plan → đối chiếu và giữ kết quả. Bước chưa chạy vẫn hiện chờ.",
+      hasDraft ? "Tạo lại sẽ giữ một đề xuất riêng; bản đang viết chỉ đổi khi bạn chọn nhận." : "Khi hoàn tất, story plan xuất hiện ngay bên dưới."];
+    case "draft": return ["Sửa trên card. Xong giữ phần đang viết; Hủy hoặc Escape hoàn tác riêng card đó.",
+      "Bấm Xem góp ý trên card vừa sửa, rồi tự bấm nhận phản hồi. FirstFrame lưu trước khi gửi AI.",
+      "Đọc trích đoạn card và câu trả lời Làm rõ được đối chiếu. Góp ý thiếu nguồn chỉ để tham khảo; bạn quyết định giữ hay sửa.",
+      "Sửa tiếp làm góp ý thuộc bản trước. Nhận phản hồi mới để đánh giá bản hiện tại; Toàn bộ góp ý mở phần tổng hợp."];
+    case "save": return ["Tùy chọn bản lưu có tải JSON và Mở lại bản đã lưu. Không thể mở lại khi còn thay đổi chưa lưu.",
+      "Đề xuất và lịch sử cho xem bản AI, bản trước và câu trả lời cũ. Chỉ nhận hoặc khôi phục khi bạn chủ động chọn.",
+      "Nếu hai tab xung đột revision, phần đang sửa được giữ. Đọc báo lỗi trước khi quyết định tiếp tục.",
+      "Hướng dẫn sử dụng luôn mở lại được. Khu Công cụ chứa các công cụ bổ sung."];
   }
 }
 
@@ -105,7 +129,16 @@ export function OnboardingTour(props: Props) {
   const focusAfter = (destination: string | HTMLElement | null) => {
     cancelAnimationFrame(focusFrame.current);
     focusFrame.current = requestAnimationFrame(() => {
+      const active = document.activeElement;
+      if (active?.matches("input, textarea, select")
+        && !(typeof destination === "string" ? active.matches(destination) : active === destination)) return;
+      if (typeof destination === "string" && destination.startsWith("#answer-") && !document.querySelector(destination)) {
+        const opener = document.querySelector<HTMLButtonElement>(`[data-answer-open="${destination.slice(1)}"]`);
+        revealWorkspaceTarget(opener); opener?.click();
+        return;
+      }
       const element = typeof destination === "string" ? document.querySelector<HTMLElement>(destination) : destination;
+      revealWorkspaceTarget(element);
       const target = element?.isConnected && element !== document.body && element.getClientRects().length
         && !element.matches(":disabled") ? element : document.getElementById("workspace-title");
       target?.scrollIntoView({ block: "center", behavior: "auto" });
@@ -125,9 +158,20 @@ export function OnboardingTour(props: Props) {
       : document.querySelector('[data-tour-action="analyze"]:enabled') ? '[data-tour-action="analyze"]' : "#response-language";
     if (step === "choices") {
       const index = Array.from({ length: props.questionCount }, (_, i) => i).find(i => !props.answers[i]?.trim());
-      selector = index === undefined ? '[data-tour-action="plan"]' : `#answer-${index}`;
+      selector = index === undefined ? '[data-choice-review]' : `#answer-${index}`;
     }
-    if (step === "draft") selector = "#draft-logline";
+    if (step === "draft") {
+      const editor = document.querySelector<HTMLButtonElement>('[data-draft-open="logline"]');
+      if (editor && !editor.disabled) {
+        tour.practice();
+        cancelAnimationFrame(focusFrame.current);
+        focusFrame.current = requestAnimationFrame(() => {
+          if (!document.activeElement?.matches("input, textarea, select")) { revealWorkspaceTarget(editor); editor.click(); }
+        });
+        return;
+      }
+      selector = "#draft-logline";
+    }
     tour.practice(); focusAfter(selector);
   };
   const welcome = state.initialized && state.offerAllowed && !record && ready && empty && !context.projectId && !busy && !error;
@@ -154,7 +198,8 @@ export function OnboardingTour(props: Props) {
       <button className="secondary" onClick={dismiss}>Bỏ qua</button>
     </section>}
     {resumable && <section className="tour-notice" aria-label="Tiến độ hướng dẫn">
-      <p role="status">{state.hint ?? (record.status === "paused" ? "Hướng dẫn đang tạm dừng. Bạn có thể tiếp tục khi sẵn sàng."
+      <p role="status">{state.hint ?? (busy && record.stepId === "choices" ? "Theo dõi tiến trình ngay bên dưới: chuẩn bị lựa chọn → phát triển Story plan → đối chiếu và giữ kết quả. Mỗi nhóm có các bước con; khi hoàn tất, bạn có thể tiếp tục hướng dẫn."
+        : record.status === "paused" ? "Hướng dẫn đang tạm dừng. Bạn có thể tiếp tục khi sẵn sàng."
         : "Bạn đang thực hành. Tiếp tục hướng dẫn khi sẵn sàng, hoặc bỏ qua để tự khám phá.")}</p>
       <button disabled={!ready || busy || !continuation(state, context)} onClick={event => open(event.currentTarget, true)}>Tiếp tục hướng dẫn</button>
       <button className="secondary" onClick={dismiss}>Bỏ qua</button>
@@ -162,8 +207,18 @@ export function OnboardingTour(props: Props) {
     {active && createPortal(<TourDialog step={record.stepId} title={titles[record.stepId]} description={copy(record.stepId, props)}
       onMissing={() => tour.pause("Chưa thể mở bước này. Bạn có thể thử lại hoặc bỏ qua.")}
       onDismiss={dismiss}>
+      <ol aria-label="Cách thực hiện" className="tour-instructions">
+        {instructions(record.stepId, context.hasDraft).map(instruction => <li key={instruction}>{instruction}</li>)}
+      </ol>
+      {record.stepId === "draft" && <button className="secondary" onClick={() => {
+        tour.practice();
+        focusAfter(document.querySelector(".card-feedback-trigger") ? ".card-feedback-trigger" : "[data-tour-review]");
+      }}>Thử xem góp ý</button>}
+      {record.stepId === "save" && <button className="secondary" onClick={() => {
+        tour.pause(); focusAfter(".workspace-library > summary");
+      }}>Khám phá đề xuất và lịch sử</button>}
       <div className="tour-footer">
-        <span>Bước {tourSteps.indexOf(record.stepId) + 1}/6</span>
+        <span>Bước {tourSteps.indexOf(record.stepId) + 1}/{tourSteps.length}</span>
         <button className="secondary" disabled={!previous} onClick={() => previous && tour.navigate(previous)}>Trước</button>
         {record.stepId !== "save" && <button className={next ? "secondary" : ""} onClick={practice}>Thực hành</button>}
         {next && <button onClick={() => tour.navigate(next)}>Tiếp</button>}
@@ -190,6 +245,7 @@ function TourDialog({ step, title, description, onMissing, onDismiss, children }
     const panel = card.current!;
     const targets = document.querySelectorAll<HTMLElement>(`[data-tour="${step}"]`);
     const target = targets.length === 1 ? targets[0] : null;
+    revealWorkspaceTarget(target);
     if (!target || !target.getClientRects().length || getComputedStyle(target).visibility === "hidden") { missing.current(); return; }
     target.scrollIntoView({ block: "center", behavior: "auto" });
     layer.showModal();

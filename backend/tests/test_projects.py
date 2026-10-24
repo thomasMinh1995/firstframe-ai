@@ -37,6 +37,16 @@ def card_input(project):
     ]}
 
 
+def critic_author(request):
+    if "Card review context (JSON data):\n" not in request.input_text:
+        return json.loads(request.input_text.split("Creator intent and decisions:\n", 1)[1].split("\n\n", 1)[0])
+    context = json.loads(request.input_text.split("Card review context (JSON data):\n", 1)[1])
+    return {"idea": context["decisions"][0]["text"],
+            "constraints": [d["text"] for d in context["decisions"] if d["id"].startswith("constraint-")],
+            "clarifications": [{"question": d["question"], "answer": d["text"]}
+                               for d in context["decisions"] if d["id"].startswith("answer-")]}
+
+
 def test_author_card_targets_the_last_effective_answer_to_a_repeated_question(project_client):
     client, _ = project_client
     project = develop_project(client, start_project(client))
@@ -83,8 +93,7 @@ def test_author_card_and_feedback_sources_keep_a_when_author_saves_b(project_cli
     assert client.put(url, json=payload(project)).status_code == 409
     assert client.get(url).json() == changed
     reviewed = client.post(f"{url}/review", json={"revision": changed["revision"]}).json()
-    intent = json.loads(provider.requests[-1].input_text.split("Creator intent and decisions:\n", 1)[1]
-                        .split("\n\n", 1)[0])
+    intent = critic_author(provider.requests[-1])
     assert intent == card_input(reviewed)
     assert reviewed["feedback_source"]["context"] == changed["author_context"]
     assert reviewed["feedback_source"]["artifact_id"] != source_a["artifact_id"]
@@ -187,7 +196,7 @@ def test_stream_reports_actual_steps_and_returns_saved_project(project_client, m
     response = client.post(f"{url}/plan/stream", json={"revision": project["revision"]})
     events = [json.loads(line) for line in response.text.splitlines() if line.strip()]
     assert stages[1:] == ["planning", "evaluation"]
-    expected = [(stage, status) for stage in ("planning", "saving", "evaluation", "saving")
+    expected = [(stage, status) for stage in ("plan_choices", "planning_context", "planning", "planning_structure", "plan_checkpoint", "evaluation", "plan_save")
                 for status in ("active", "completed")]
     assert [(event["stage"], event["status"]) for event in events[:-1]] == expected
     assert events[-1]["project"]["draft"] is not None
@@ -201,8 +210,8 @@ def test_stream_returns_validation_error_without_model_call(project_client):
     response = client.post(f"/api/projects/{project['id']}/plan/stream",
                            json={"revision": project["revision"]})
     events = [json.loads(line) for line in response.text.splitlines() if line.strip()]
-    assert len(events) == 1
-    assert events[0]["type"] == "error"
+    assert [(e.get("stage"), e.get("status")) for e in events[:-1]] == [("plan_choices", "active"), ("plan_choices", "failed")]
+    assert events[-1]["type"] == "error"
     assert provider.requests == []
 
 
@@ -232,29 +241,20 @@ def test_questions_gate_generation_and_review_uses_the_saved_edited_draft(projec
     assert project["versions"][0]["draft"] == original_draft
     edited_draft = deepcopy(project["draft"])
     project = client.post(f"{url}/review", json={"revision": project["revision"]}).json()
-    assert provider.requests[-1].response_model.__name__ == "_EvaluationOutput"
+    assert provider.requests[-1].response_model.__name__ == "_RevisionReviewOutput"
     assert "EDITED_ENDING" in provider.requests[-1].input_text
     assert "He wants to apologize" in provider.requests[-1].input_text
     assert "Only one apartment" in provider.requests[-1].input_text
     review_input = provider.requests[-1].input_text
-    context = json.loads(
-        review_input.split("Creator intent and decisions:\n", 1)[1].split("\n\n", 1)[0]
-    )
+    context = critic_author(provider.requests[-1])
     assert context["clarifications"] == [
         {"question": question, "answer": answer}
         for question, answer in zip(project["analysis"]["missing_information"], project["answers"])
     ]
-    current_draft = json.loads(
-        review_input.split("Current draft (JSON data):\n", 1)[1].split("\n\n", 1)[0]
-    )
-    assert current_draft == {
-        "title": edited_draft["title"],
-        "logline": edited_draft["logline"],
-        "sections": [
-            {"title": section["title"], "content": section["content"]}
-            for section in edited_draft["sections"]
-        ],
-    }
+    cards = json.loads(review_input.split("Card review context (JSON data):\n", 1)[1])["cards"]
+    assert any(card["text"] == edited_draft["sections"][5]["content"] for card in cards)
+    assert all(card["text"] in section["content"] for card in cards
+               for section in edited_draft["sections"] if section["title"] == card["section"])
     assert "Resolve the short film through a visible choice or image." not in review_input
     assert "He gives Linh his blessing at the airport curb." not in review_input
     assert project["draft"] == edited_draft
@@ -313,17 +313,11 @@ def test_review_after_brief_and_draft_edits_keeps_terms_language_and_project_sou
     reviewed = response.json()
     request = provider.requests[-1]
     assert policy in request.instructions
-    draft, _ = json.JSONDecoder().raw_decode(
-        request.input_text.split("Current draft (JSON data):\n", 1)[1]
-    )
-    assert draft == {
-        "title": saved["draft"]["title"],
-        "logline": saved["draft"]["logline"],
-        "sections": [
-            {"title": section["title"], "content": section["content"]}
-            for section in saved["draft"]["sections"]
-        ],
-    }
+    cards = json.loads(request.input_text.split("Card review context (JSON data):\n", 1)[1])["cards"]
+    assert any(card["text"] == saved["draft"]["title"] for card in cards)
+    for card in cards:
+        assert any(card["text"] in text for text in [saved["draft"]["title"], saved["draft"]["logline"],
+                   *(section["content"] for section in saved["draft"]["sections"])])
     assert "He gives Linh his blessing at the airport curb." not in request.input_text
     assert reviewed["draft"] == saved["draft"]
     assert reviewed["feedback_is_current"] is True
@@ -403,7 +397,7 @@ def test_late_ai_response_cannot_replace_newer_saved_work(project_client, monkey
     original_request = provider.request_structured
 
     def save_while_ai_is_running(request):
-        if request.response_model.__name__ == "_EvaluationOutput":
+        if request.stage == "evaluation":
             latest = client.get(url).json()
             data = payload(latest)
             data["draft"]["logline"] = "A newer edit from another window."
@@ -505,11 +499,7 @@ def test_reanalysis_keeps_author_choices_for_planning_and_edited_review(
     response = client.post(f"{url}/review", json={"revision": project["revision"]})
     assert response.status_code == 200
     project = response.json()
-    context = json.loads(
-        provider.requests[-1]
-        .input_text.split("Creator intent and decisions:\n", 1)[1]
-        .split("\n\n", 1)[0]
-    )
+    context = critic_author(provider.requests[-1])
     assert context["clarifications"] == choices
     assert "EDITED: An unopened letter" in provider.requests[-1].input_text
     assert project["draft"] == edited_draft
@@ -558,11 +548,7 @@ def test_changed_or_cleared_answer_overrides_retained_choice(project_client):
     }]
     response = client.post(f"{url}/review", json={"revision": project["revision"]})
     assert response.status_code == 200
-    context = json.loads(
-        provider.requests[-1]
-        .input_text.split("Creator intent and decisions:\n", 1)[1]
-        .split("\n\n", 1)[0]
-    )
+    context = critic_author(provider.requests[-1])
     assert context["clarifications"] == [
         {
             "question": project["analysis"]["missing_information"][1],

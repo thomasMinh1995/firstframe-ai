@@ -11,9 +11,13 @@ export const progressCopy = {
     unsavedError: "Bạn có thay đổi chưa lưu trên màn hình. Hãy lưu lại hoặc tải bản sao JSON trước khi tải lại trang hay mở lại dự án.",
     savedWithEdits: "Lần chạy trước đã hoàn tất và lưu. Các thay đổi mới trên màn hình chưa được lưu hoặc kiểm tra lại.",
     prepareError: "Chưa lưu được thay đổi. Bản đang sửa vẫn ở trên màn hình; hãy thử lưu lại hoặc tải bản sao JSON trước khi tải lại trang.",
-    preparing: "Đang chuẩn bị yêu cầu…", active: "Đang thực hiện", completed: "Đã xong", failure: "Chưa hoàn tất",
+    waiting: "Chờ bước trước", notRun: "Chưa thực hiện", preparing: "Đang chuẩn bị yêu cầu…", active: "Đang thực hiện", completed: "Đã xong", failure: "Chưa hoàn tất",
     analyze: "Làm rõ ý tưởng", plan: "Tạo bản phát triển", review: "Nhận phản hồi",
-    stages: { prepare: "Chuẩn bị và lưu nội dung hiện tại", reasoning: "Đọc ý tưởng và chuẩn bị câu hỏi",
+    stages: { plan_choices: "Đọc các lựa chọn đã xác nhận và kiểm tra câu trả lời",
+      planning_context: "Tập hợp ý tưởng, lựa chọn và điều muốn giữ",
+      planning_structure: "Kiểm tra cấu trúc và sắp xếp các phần câu chuyện",
+      plan_checkpoint: "Giữ bản phác thảo trước khi đọc góp ý",
+      plan_save: "Lưu kết quả và lịch sử của lượt này", prepare: "Chuẩn bị và lưu nội dung hiện tại", reasoning: "Đọc ý tưởng và chuẩn bị câu hỏi",
       planning: "Phát triển câu chuyện từ lựa chọn của bạn", fidelity: "Đối chiếu bản thảo với ý đồ tác giả",
       evaluation: "Đọc bản thảo và đề xuất góp ý", fidelity_audit: "Kiểm tra căn cứ và hướng sửa của góp ý",
       saving: "Lưu kết quả và lịch sử phiên bản" } as Record<string, string>,
@@ -29,9 +33,13 @@ export const progressCopy = {
     unsavedError: "You have unsaved edits on screen. Save or download a JSON backup before reloading or reopening the project.",
     savedWithEdits: "The previous run completed and was saved. New edits on screen have not been saved or reviewed again.",
     prepareError: "Changes could not be saved. Your edits remain on screen; retry saving or download a JSON backup before reloading.",
-    preparing: "Preparing the request…", active: "In progress", completed: "Done", failure: "Incomplete",
+    waiting: "Waiting for previous step", notRun: "Not performed", preparing: "Preparing the request…", active: "In progress", completed: "Done", failure: "Incomplete",
     analyze: "Clarify the idea", plan: "Develop the story", review: "Review the draft",
-    stages: { prepare: "Prepare and save current content", reasoning: "Read the idea and prepare questions",
+    stages: { plan_choices: "Check confirmed choices and answers",
+      planning_context: "Assemble the idea, choices and constraints",
+      planning_structure: "Validate and arrange the story sections",
+      plan_checkpoint: "Keep the draft before reviewing it",
+      plan_save: "Save results and history for this run", prepare: "Prepare and save current content", reasoning: "Read the idea and prepare questions",
       planning: "Develop the story from your choices", fidelity: "Compare the draft with author intent",
       evaluation: "Read the draft and propose feedback", fidelity_audit: "Check the evidence and proposed revision",
       saving: "Save results and version history" } as Record<string, string>,
@@ -51,4 +59,29 @@ export function applyProgress(steps: OperationStep[], event: ProgressEvent): Ope
 export function progressLanguage(language: string): UiLanguage {
   // Auto selects the existing Vietnamese interface; it does not redetect or translate content.
   return language === "en" ? "en" : "vi";
+}
+
+
+export function planProgressGroups(steps: OperationStep[]) {
+  const preparation = ["prepare", "plan_choices", "planning_context"];
+  const development = ["planning", "planning_structure"];
+  return [
+    { id: "prepare", stages: preparation },
+    { id: "develop", stages: development },
+    { id: "review", stages: ["plan_checkpoint", "evaluation", "plan_save"] },
+  ].map(group => {
+    type Row = Omit<OperationStep, "status"> & { status: OperationStep["status"] | "pending" };
+    const children: Row[] = steps.filter(step => group.id === "review"
+      ? ![...preparation, ...development].includes(step.stage) : group.stages.includes(step.stage));
+    // Preserve the event order, including a critic/audit retry; insert only missing future steps.
+    group.stages.forEach((stage, index) => {
+      if (children.some(step => step.stage === stage)) return;
+      const next = children.findIndex(step => group.stages.slice(index + 1).includes(step.stage));
+      children.splice(next < 0 ? children.length : next, 0, { stage, occurrence: 1, status: "pending" });
+    });
+    const status = children.some(step => step.status === "failed") ? "failed"
+      : children.some(step => step.status === "active") ? "active"
+        : children.every(step => step.status === "completed") ? "completed" : "pending";
+    return { ...group, children, status };
+  });
 }

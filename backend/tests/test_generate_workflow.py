@@ -95,6 +95,23 @@ class FakeProvider:
                     },
                 },
             )
+        elif response_model.__name__ == "_RevisionReviewOutput":
+            context = json.JSONDecoder().raw_decode(
+                request.input_text.split("Card review context (JSON data):\n", 1)[1]
+            )[0]
+            card = context["focus_card_ids"][0] if context["focus_card_ids"] else context["cards"][0]["id"]
+            decision = next((item["id"] for item in context["decisions"]
+                             if item["id"].startswith("answer-")),
+                            next((item["id"] for item in context["decisions"] if item["id"] != "idea"), "idea"))
+            neighbor = next((pair["related_card_id"] for pair in context.get("neighbor_checks", [])
+                             if pair["card_id"] == card), None)
+            output = response_model(
+                reviews=[{"card_id": card, "decision_id": decision, "related_card_id": neighbor,
+                          "comparison": "aligned", "observation": "The detail serves the author's choice.",
+                          "suggestion": ""}],
+                passed=True,
+                rubric_scores=None,
+            )
         else:
             output = response_model(
                 passed=True,
