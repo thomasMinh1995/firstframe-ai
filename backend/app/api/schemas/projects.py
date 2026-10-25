@@ -111,6 +111,20 @@ class FeedbackSource(BaseModel):
     def matches(self, feedback: EvaluationResponse | None) -> bool:
         if feedback is None or self.artifact_id != feedback.artifact_id:
             return False
+        if feedback.revision_notes is not None:
+            from app.application.revision_review import review_context
+
+            context = review_context(self.draft.model_dump(), None, self.context.model_dump(), False)
+            cards = {item["id"]: item["text"] for item in context["cards"]}
+            decisions = {item["id"]: item for item in context["decisions"]}
+            for note in feedback.revision_notes:
+                decision = decisions.get(note.decision_id)
+                if (note.artifact_id != self.artifact_id or decision is None
+                        or note.decision_quote != decision["text"]
+                        or note.decision_question != decision.get("question")
+                        or len({target.target_id for target in note.targets}) != len(note.targets)
+                        or any(cards.get(target.target_id) != target.quote for target in note.targets)):
+                    return False
         try:
             snapshot = ReviewedContent.model_validate_json(self.content_key)
         except ValidationError:

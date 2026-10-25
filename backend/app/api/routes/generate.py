@@ -90,6 +90,7 @@ def _to_response(run: HarnessRun) -> GenerateResponse:
         ),
         evaluation=EvaluationResponse(
             artifact_id=run.evaluation.metadata.artifact_id,
+            revision_notes=run.evaluation.revision_notes,
             passed=run.evaluation.passed,
             rubric_scores={
                 finding.criterion_id: finding.score

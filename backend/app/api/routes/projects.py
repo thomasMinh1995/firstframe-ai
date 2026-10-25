@@ -330,6 +330,7 @@ def plan_project(project_id: str, request: RevisionRequest):
                 run = get_story_generation_service().plan(
                     project.idea, project.creator_answers(), constraints_for(project),
                     response_language=project.response_language, on_planned=keep_plan,
+                    structured_review=True,
                 )
                 generation = project.plan_generations[-1]
                 generation.feedback = _to_response(run).evaluation
@@ -419,6 +420,7 @@ def review_project(project_id: str, request: RevisionRequest):
             )
             project.feedback = EvaluationResponse(
                 artifact_id=evaluation.metadata.artifact_id,
+                revision_notes=evaluation.revision_notes,
                 passed=evaluation.passed,
                 rubric_scores={
                     item.criterion_id: item.score

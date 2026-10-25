@@ -4,6 +4,9 @@ import { AnalysisNote, GenerateResponse, StoryPlanSection, type EvaluationFindin
 import type { UiLanguage } from "./language";
 import { rubricLabels } from "./storyLabels";
 import type { ReactNode } from "react";
+import type { Feedback, FeedbackSource } from "./projectsApi";
+import type { RevisionNote } from "./apiClient";
+import { readRevisionNotes, validatedTargets } from "./revisionNotes";
 
 type StoryResultCardsProps = {
   result: GenerateResponse;
@@ -107,10 +110,12 @@ const resultCopy = {
 
 type ResultCopy = (typeof resultCopy)[UiLanguage];
 
-export function StoryFeedback({ evaluation, uiLanguage, onChoose, selectedCriterion, selectionDisabled = false }: {
-  evaluation: GenerateResponse["evaluation"];
+export function StoryFeedback({ evaluation, uiLanguage, onChoose, onTarget, source, selectedCriterion, selectionDisabled = false }: {
+  evaluation: Feedback;
   uiLanguage: UiLanguage;
   onChoose?: (finding: EvaluationFinding) => void;
+  onTarget?: (note: RevisionNote, targetId: string) => void;
+  source?: FeedbackSource | null;
   selectedCriterion?: string;
   selectionDisabled?: boolean;
 }) {
@@ -118,6 +123,7 @@ export function StoryFeedback({ evaluation, uiLanguage, onChoose, selectedCriter
   const shaped = shapeEvaluation({ evaluation }, uiLanguage);
   const weaknesses = evaluation.findings.filter(item => item.criterion_id.startsWith("weakness-"));
   const suggestions = evaluation.findings.filter(item => item.criterion_id.startsWith("suggestion-"));
+  const notes = readRevisionNotes(evaluation);
   return (
     <ReportCard eyebrow={copy.evaluation} title={uiLanguage === "vi" ? "Góp ý cho lần sửa tiếp theo" : copy.evaluationTitle}
       icon="✍️" delayClass="reveal-1">
@@ -128,6 +134,29 @@ export function StoryFeedback({ evaluation, uiLanguage, onChoose, selectedCriter
         Bạn có thể bỏ qua góp ý không phù hợp; không cần sửa tất cả.</p>}
       <div className="feedback-grid">
         <SectionList title={copy.strengths} items={shaped.strengths} emptyText={copy.emptyStrengths} />
+        {notes !== null ? <section className="list-section"><h3>Ưu tiên cân nhắc sửa ({notes.length})</h3>
+          {!notes.length && <p>Không có ưu tiên sửa được trả về. Bạn vẫn quyết định có giữ cách kể này hay không.</p>}
+          {notes.map(note => {
+            const targets = validatedTargets(note, source, evaluation.artifact_id);
+            return <article key={note.note_id} className="card-feedback-item">
+              <p>{note.comparison === "uncertain" ? "Điều cần làm rõ" : "Điều có thể trái lựa chọn của bạn"}</p>
+              <p className="preserve-lines">{note.observation}</p>
+              <p className="preserve-lines"><strong>Bước tiếp theo: </strong>{note.suggestion}</p>
+              <details><summary>Xem nguồn đối chiếu</summary>
+                {note.decision_question && <p>{note.decision_question}</p>}
+                <p className="preserve-lines">{note.decision_quote}</p>
+                {note.targets.map(target => <blockquote key={target.target_id} className="preserve-lines">{target.quote}</blockquote>)}
+                <p>Trích dẫn đúng chữ chưa chứng minh nhận xét đúng nghĩa. Bạn có thể giữ bản hiện tại.</p>
+              </details>
+              {onTarget && targets && !selectionDisabled ? <div>
+                {targets.length > 1 && <p>Chọn phần bạn muốn tự sửa:</p>}
+                {targets.map(target => <button key={target.target_id} type="button" className="secondary"
+                  onClick={() => onTarget(note, target.target_id)}>Sửa phần này: {target.label}</button>)}
+              </div> : <p className="storage-note">{!targets ? "Chưa xác minh được nguồn và mục tiêu; góp ý này chỉ để đọc."
+                : "Góp ý thuộc bản trước hoặc đang chỉ đọc."}</p>}
+            </article>;
+          })}
+        </section> : <>
         <SectionList title={copy.weaknesses} items={shaped.weaknesses} emptyText={copy.emptyWeaknesses}
           onChoose={onChoose && (index => onChoose(weaknesses[index]))}
           selectedIndex={weaknesses.findIndex(item => item.criterion_id === selectedCriterion)}
@@ -136,6 +165,7 @@ export function StoryFeedback({ evaluation, uiLanguage, onChoose, selectedCriter
           onChoose={onChoose && (index => onChoose(suggestions[index]))}
           selectedIndex={suggestions.findIndex(item => item.criterion_id === selectedCriterion)}
           selectionDisabled={selectionDisabled} />
+        </>}
       </div>
       {shaped.scores.length > 0 && <details className="rubric-details">
         <summary>{uiLanguage === "vi" ? "Xem điểm tham khảo" : "Reference scores"}</summary>

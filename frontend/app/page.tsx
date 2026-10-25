@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { WorkspaceStage, revealWorkspaceTarget } from "./WorkspaceStage";
-import { CardFeedback, anchoredReview } from "./CardFeedback";
+import { CardFeedback } from "./CardFeedback";
+import { readRevisionNotes, validatedTargets } from "./revisionNotes";
 import { StoryFeedback } from "./StoryResultCards";
 import { StoryPlanEditor, type DraftField } from "./StoryPlanEditor";
 import { ClarificationConversation } from "./ClarificationConversation";
@@ -13,7 +14,7 @@ import { OnboardingTour, useOnboarding } from "./OnboardingTour";
 import { applyProgress, progressLanguage, type OperationStep } from "./progressState";
 import { sectionLabels } from "./storyLabels";
 import { responseLanguageLabels, type ResponseLanguage } from "./language";
-import type { EvaluationFinding } from "./apiClient";
+import type { EvaluationFinding, RevisionNote } from "./apiClient";
 import {
   editableProject, listProjects, projectRequest, streamProjectOperation,
   type Project, type ProjectSummary,
@@ -210,14 +211,26 @@ export default function Home() {
   }
   function chooseFeedback(finding: EvaluationFinding) {
     if (!selectableFeedback || !project?.feedback?.artifact_id) return;
-    const base = finding.criterion_id.startsWith("suggestion-")
-      ? project.feedback.findings.find(item => item.criterion_id === finding.criterion_id.replace("suggestion-", "weakness-")) ?? finding : finding;
-    const anchor = anchoredReview(base, saved?.feedback_source);
-    const cardId = anchor?.cardIds[0];
-    setSelectedCard(cardId && document.querySelector(`[data-card-id="${cardId}"]`)
-      ? { id: cardId, label: base.message.split(": “")[0] } : null);
+    setSelectedCard(null);
     setSelectedFeedback({ projectId: project.id, artifactId: project.feedback.artifact_id,
       criterionId: finding.criterion_id, message: finding.message });
+  }
+  function chooseTarget(note: RevisionNote, targetId: string) {
+    if (!selectableFeedback || !project?.feedback
+      || !readRevisionNotes(project.feedback)?.includes(note)) return;
+    const targets = validatedTargets(note, saved?.feedback_source, project.feedback.artifact_id);
+    if (!targets?.some(target => target.target_id === targetId)) return;
+    const target = targets.find(item => item.target_id === targetId)!;
+    setSelectedFeedback(null);
+    setSelectedCard(document.querySelector(`[data-card-id="${targetId}"]`) ? { id: targetId, label: target.label } : null);
+    requestAnimationFrame(() => {
+      const field = document.querySelector<HTMLElement>(`[data-revision-target="${targetId}"]`);
+      revealWorkspaceTarget(field);
+      field?.scrollIntoView({ block: "center" });
+      const input = field?.querySelector<HTMLInputElement | HTMLTextAreaElement>("input, textarea");
+      if (input) input.focus({ preventScroll: true });
+      else field?.querySelector<HTMLButtonElement>(".story-edit-button")?.click();
+    });
   }
   function downloadBackup() {
     if (!project) return;
@@ -252,7 +265,7 @@ export default function Home() {
             </div>)}
             {generation.feedback && generation.feedback_source && <>
               <FeedbackIntent source={generation.feedback_source} projectId={project.id} artifactId={generation.feedback.artifact_id} />
-              <StoryFeedback evaluation={generation.feedback} uiLanguage="vi" />
+              <StoryFeedback evaluation={generation.feedback} uiLanguage="vi" source={generation.feedback_source} />
             </>}
             {generation.applied_revision === null && <>
               {!project.applicable_plan_ids?.includes(generation.id) && <p className="form-message">
@@ -441,6 +454,7 @@ export default function Home() {
           {!selectableFeedback && !busy && <p className="storage-note">Góp ý cũ hoặc chưa có đủ nguồn chỉ để tham khảo.
             Hãy nhận phản hồi cho đúng bản hiện tại trước khi chọn góp ý mới để tự sửa.</p>}
           <StoryFeedback evaluation={project.feedback} uiLanguage="vi" onChoose={chooseFeedback}
+            onTarget={chooseTarget} source={saved?.feedback_source?.project_id === project.id ? saved.feedback_source : null}
             selectedCriterion={selectedFeedback?.criterionId} selectionDisabled={!selectableFeedback} />
         </details>}
 
@@ -473,7 +487,7 @@ export default function Home() {
             </div>)}
             {version.feedback && <>
               <FeedbackIntent source={version.feedback_source} projectId={project.id} artifactId={version.feedback.artifact_id} />
-              <StoryFeedback evaluation={version.feedback} uiLanguage="vi" />
+              <StoryFeedback evaluation={version.feedback} uiLanguage="vi" source={version.feedback_source} />
             </>}
             <button disabled={!!busy} onClick={() => void run("Đang giữ bản hiện tại và khôi phục…", async () => {
               const next = await persist();

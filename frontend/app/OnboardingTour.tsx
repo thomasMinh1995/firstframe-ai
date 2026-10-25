@@ -108,11 +108,13 @@ function instructions(step: TourStep, hasDraft: boolean): string[] {
       "Xem lại các lựa chọn chỉ mở bản tổng hợp. FirstFrame chỉ tạo khi bạn bấm Đồng ý; sửa lựa chọn cần xem lại và đồng ý lại.",
       "Sau Đồng ý, xem ba nhóm cùng các bước con: chuẩn bị lựa chọn → phát triển story plan → đối chiếu và giữ kết quả. Bước chưa chạy vẫn hiện chờ.",
       hasDraft ? "Tạo lại sẽ giữ một đề xuất riêng; bản đang viết chỉ đổi khi bạn chọn nhận." : "Khi hoàn tất, story plan xuất hiện ngay bên dưới."];
-    case "draft": return ["Sửa trên card. Xong giữ phần đang viết; Hủy hoặc Escape hoàn tác riêng card đó.",
-      "Bấm Xem góp ý trên card vừa sửa, rồi tự bấm nhận phản hồi. FirstFrame lưu trước khi gửi AI.",
-      "Đọc trích đoạn card và câu trả lời Làm rõ được đối chiếu. Góp ý thiếu nguồn chỉ để tham khảo; bạn quyết định giữ hay sửa.",
-      "Sửa tiếp làm góp ý thuộc bản trước. Nhận phản hồi mới để đánh giá bản hiện tại; Toàn bộ góp ý mở phần tổng hợp."];
+    case "draft": return ["Đọc ý đồ đã lưu và nguồn được dùng cho góp ý. Đây là story plan để phát triển tiếp, chưa phải kịch bản theo cảnh.",
+      "Trong Toàn bộ góp ý, đọc nhận xét, nguồn đối chiếu và bước sửa đi cùng nhau. Bạn có thể từ chối góp ý hoặc giữ cách kể hiện tại.",
+      "Sửa phần này chỉ mở đúng ô sửa, không lưu hay gọi AI. Nếu góp ý liên quan nhiều phần, bạn tự chọn phần muốn sửa; góp ý cũ hoặc thiếu nguồn chỉ để đọc.",
+      "Sửa trên card. Xong giữ phần đang viết; Hủy hoặc Escape hoàn tác riêng card đó. Sửa tiếp làm góp ý thuộc bản trước.",
+      "Bấm Xem góp ý trên card rồi tự bấm nhận phản hồi. FirstFrame lưu trước khi gửi AI; bạn không cần chạy review để hoàn tất hướng dẫn."];
     case "save": return ["Tùy chọn bản lưu có tải JSON và Mở lại bản đã lưu. Không thể mở lại khi còn thay đổi chưa lưu.",
+      "Nhận phản hồi trên bản hiện tại lưu trước rồi mới gửi AI. Sửa tiếp khiến góp ý cũ chỉ còn để tham khảo; hãy lưu trước khi rời đi.",
       "Đề xuất và lịch sử cho xem bản AI, bản trước và câu trả lời cũ. Chỉ nhận hoặc khôi phục khi bạn chủ động chọn.",
       "Nếu hai tab xung đột revision, phần đang sửa được giữ. Đọc báo lỗi trước khi quyết định tiếp tục.",
       "Hướng dẫn sử dụng luôn mở lại được. Khu Công cụ chứa các công cụ bổ sung."];

@@ -16,7 +16,7 @@ from app.application.progress import progress_step
 from app.application.knowledge_loader import KnowledgeLoader
 from app.application.language import ResponseLanguage, resolve_response_language
 from app.application.prompt_loader import PromptLoader
-from app.application.revision_review import CardReview, feedback_messages
+from app.application.revision_review import CardReview, feedback_messages, revision_notes, review_context
 from app.core.artifacts import (
     ArtifactKind,
     ArtifactMetadata,
@@ -257,6 +257,7 @@ class HarnessRun:
 @dataclass(frozen=True)
 class _LLMReasoningArtifact(ReasoningArtifact):
     creator_context: str = ""
+    review_initial: bool = False
 
 
 class LLMReasoningLayer(ReasoningLayer):
@@ -330,14 +331,24 @@ class LLMPlanningLayer(PlanningLayer):
         with progress_step("planning_structure"):
             output = _expect_output(result.output, _PlanningOutput)
             story_plan = output.story_plan
+            sections = tuple(_structured_plan_sections(story_plan))
+            context = None
+            if getattr(reasoning, "review_initial", False):
+                context = review_context(
+                    {"title": story_plan.working_title.title, "logline": story_plan.logline.text,
+                     "sections": [{"title": s.title, "content": s.content} for s in sections]},
+                    None, json.loads(reasoning.creator_context),
+                    _is_vietnamese_language(_find_note(reasoning, "Target response language")),
+                )
             return _LLMPlanningArtifact(
                 metadata=_metadata(reasoning.metadata.domain_id, "planning"),
                 source_reasoning_id=reasoning.metadata.artifact_id,
                 title=story_plan.working_title.title,
                 logline=story_plan.logline.text,
-                sections=tuple(_structured_plan_sections(story_plan)),
+                sections=sections,
                 target_response_language=_find_note(reasoning, "Target response language"),
                 creator_context=getattr(reasoning, "creator_context", ""),
+                review_context=context,
             )
 
 
@@ -373,11 +384,14 @@ class LLMEvaluationLayer(EvaluationLayer):
             output = revision_evaluation(review, review_context)
         else:
             output = _expect_output(result.output, _EvaluationOutput)
+        metadata = _metadata(planning.metadata.domain_id, "evaluation")
         return EvaluationArtifact(
-            metadata=_metadata(planning.metadata.domain_id, "evaluation"),
+            metadata=metadata,
             source_planning_id=planning.metadata.artifact_id,
             passed=output.passed,
             findings=tuple(_evaluation_findings(output, target_language)),
+            revision_notes=revision_notes(review.reviews, review_context, metadata.artifact_id)
+                if review_context is not None else None,
         )
 
 
@@ -460,12 +474,14 @@ class StoryGenerationService:
         constraints: tuple[Constraint, ...] = (),
         response_language: ResponseLanguage = "auto",
         on_planned: Callable[[StoryPlanArtifact], None] | None = None,
+        structured_review: bool = False,
     ) -> HarnessRun:
         return self._harness.plan(
             _LLMReasoningArtifact(
                 metadata=_metadata(DEFAULT_DOMAIN_ID, "reasoning"),
                 source_idea_id=str(uuid4()),
                 creator_context=_creator_input(idea_text, constraints, answers),
+                review_initial=structured_review,
                 notes=(
                     ReasoningNote(label="Original idea", content=idea_text),
                     ReasoningNote(
