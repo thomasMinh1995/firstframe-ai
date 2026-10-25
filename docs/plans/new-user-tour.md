@@ -1,8 +1,47 @@
 # Kế hoạch: Tour hướng dẫn người dùng mới
 
-- Trạng thái: đã triển khai MVP frontend trên nhánh `codex/new-user-tour`; chờ review và pilot người mới.
+- Cập nhật: 25/10/2026. Tour đã merge và điều chỉnh theo workspace PR #36;
+  review/regression kỹ thuật đã qua, chưa hoàn tất nghiệm thu thực tế.
+- Ưu tiên tiếp theo: cập nhật phần bị ảnh hưởng khi triển khai #7 ổn định,
+  trước kiểm chứng/nghiệm thu #7; giữ #22 mở cho các mục còn thiếu.
 - Issue: [Feature #22](https://github.com/thomasMinh1995/firstframe-ai/issues/22).
 - Kiểm chứng và cách chạy: [Tour người dùng mới](../testing/new-user-tour.md).
+- UI hiện hành và QA workspace: [phạm vi đã chốt](approved-story-workspace.md),
+  [báo cáo đã merge](../testing/approved-story-workspace.md).
+
+## Cập nhật tour sau khi phần triển khai #7 ổn định
+
+Theo [thứ tự ưu tiên #7](p0-author-intent-revision-flow.md), chốt hành vi và
+kiểm thử kỹ thuật của vòng sửa trước, rồi sửa tour theo các control thực sự
+đã có. Tour phải sẵn sàng trước kiểm chứng luồng kết hợp/pilot của #7; không
+chờ issue #7 đóng mới cập nhật. Chỉ đánh dấu hoàn tất cập nhật kỹ thuật khi
+review và regression liên quan qua; đây chưa phải nghiệm thu toàn bộ #22.
+
+- Dùng lại sáu chặng và UI workspace đã chốt. Chủ yếu cập nhật chặng 5–6:
+  xem ý đồ/nguồn của góp ý, chọn hoặc từ chối, điều hướng tới card/mục tiêu
+  đã xác minh, tự sửa, lưu và nhận góp ý trên đúng bản mới. Chặng khác chỉ
+  chỉnh nếu control/hành vi của #7 thực sự làm hướng dẫn cũ không còn đúng.
+- Dẫn tới control có thật sau triển khai #7; nguồn thiếu/sai hoặc feedback
+  cũ không được tour tạo liên kết giả hay mở quyền sửa theo phản hồi cũ.
+  Giải thích Xong, Lưu và review theo đúng tác dụng thực tế; không coi xem
+  nguồn hoặc chọn góp ý là đã chấp nhận/sửa xong.
+- Giữ tiến độ, bỏ qua/đóng/hoàn tất và quyền mở lại. Sửa lời dẫn không ép
+  phát lại tour, xóa tiến độ hay thay dữ liệu dự án. Điều hướng chỉ focus,
+  không tự lưu, sửa, restore hoặc gọi AI; thao tác thật vẫn do tác giả chọn.
+- Kiểm chứng với #7 trên cùng phiên bản: control/focus có điều kiện, phản
+  hồi mới/cũ/legacy, buffer, lưu lỗi/chưa rõ kết quả, hai tab và response
+  muộn; giữ storage, Escape, bàn phím và desktop/mobile regression đã có.
+  Ghi đúng môi trường giả/lượt model thật và các mục chưa kiểm tra.
+
+Các mục #22 vẫn còn mở: pilot 3–5 người mới, tổng kết nghiệm thu, trình đọc
+màn hình thật, thiết bị/IME/bàn phím ảo thật và full Safari regression. Không
+đánh dấu các mục này đạt chỉ vì tour đã cập nhật hoặc suite tự động qua.
+Không bắt đóng toàn bộ #22 mới tiếp tục harness sau nghiệm thu #7.
+
+Các mô tả control/copy/anchor ban đầu bên dưới dùng để truy vết; khi khác
+UI đã chốt trong PR #36 thì đối chiếu tài liệu workspace và code hiện hành.
+Các bảo vệ và tiêu chí nghiệm thu dưới đây vẫn giữ nguyên. Lần cập nhật
+kế hoạch này chỉ sửa tài liệu, chưa thay code tour hoặc nghiệm thu pilot.
 
 ## Mục tiêu và bối cảnh
 
