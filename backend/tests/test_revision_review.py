@@ -188,3 +188,93 @@ def test_project_review_uses_latest_answer_and_changed_card_keeps_contract(proje
     again = json.JSONDecoder().raw_decode(provider.requests[-1].input_text.split("Card review context (JSON data):\n", 1)[1])[0]
     assert again["focus_card_ids"] == context["focus_card_ids"]
     assert repeated.json()["draft"] == reviewed["draft"]
+
+
+def test_structured_priorities_keep_pairs_and_exact_sources():
+    from app.application.revision_review import revision_notes
+    draft, _, author = context_fixture()
+    # Duplicate titles and identical text still have distinct snapshot-local IDs.
+    draft['sections'][2] = deepcopy(draft['sections'][1])
+    context = review_context(draft, None, author, True)
+    reviews = [CardReview(card_id=key, related_card_id=None, decision_id='answer-1',
+        comparison='mismatch', observation=f'Problem {i}', suggestion=f'Next step {i}')
+        for i, key in enumerate(['section-1', 'section-2', 'draft-logline'])]
+    notes = revision_notes(reviews, context, 'f1')
+    assert [(n.observation, n.suggestion) for n in notes] == [
+        ('Problem 0', 'Next step 0'), ('Problem 1', 'Next step 1'), ('Problem 2', 'Next step 2')]
+    assert [n.targets[0].target_id for n in notes] == ['section-1', 'section-2', 'draft-logline']
+    assert all(n.artifact_id == 'f1' and n.decision_question == 'Kết?' for n in notes)
+    assert notes[0].targets[0].quote == notes[1].targets[0].quote == 'Anh nhìn điện thoại.'
+
+
+def issue_provider(provider, monkeypatch):
+    original = provider.request_structured
+
+    def with_issue(request):
+        result = original(request)
+        if request.response_model.__name__ == '_RevisionReviewOutput':
+            result.output.reviews[0].comparison = 'mismatch'
+            result.output.reviews[0].observation = 'This detail conflicts with the stated stopping point.'
+            result.output.reviews[0].suggestion = 'End on the chosen gesture.'
+        return result
+    monkeypatch.setattr(provider, 'request_structured', with_issue)
+
+
+def test_initial_and_manual_feedback_persist_the_same_structured_contract(project_client, monkeypatch):
+    client, provider = project_client
+    issue_provider(provider, monkeypatch)
+    project = develop_project(client, start_project(client))
+    url = f"/api/projects/{project['id']}"
+    initial = deepcopy(project['feedback'])
+    assert len(initial['revision_notes']) == 1
+    note = initial['revision_notes'][0]
+    assert note['artifact_id'] == initial['artifact_id']
+    assert note['suggestion'] == 'End on the chosen gesture.'
+    assert project['feedback_source'] is not None
+    assert project['plan_generations'][-1]['feedback'] == initial
+    assert client.get(url).json() == project
+    data = payload(project)
+    data['draft']['logline'] = 'The writer changes the logline.'
+    saved = client.put(url, json=data).json()
+    response = client.post(url + '/review', json={'revision': saved['revision']})
+    assert response.status_code == 200, response.text
+    reviewed = response.json()
+    latest = reviewed['feedback']['revision_notes'][0]
+    assert latest['targets'] == [{'target_id': 'draft-logline', 'quote': data['draft']['logline']}]
+    assert latest['artifact_id'] != note['artifact_id']
+    assert reviewed['feedback_source']['draft'] == data['draft']
+    assert any(v['feedback'] == initial for v in reviewed['versions'])
+    assert client.get(url).json() == reviewed
+
+
+@pytest.mark.parametrize('corruption', ['artifact', 'wrong-section', 'partial-pair', 'decision-question', 'duplicate-target', 'shape'])
+def test_invalid_priority_metadata_is_read_only_without_losing_project(project_client, monkeypatch, corruption):
+    client, provider = project_client
+    issue_provider(provider, monkeypatch)
+    project = develop_project(client, start_project(client))
+    from app.api.routes.projects import get_project_store
+    store = get_project_store()
+    raw = store.get(project['id'])
+    note = raw['feedback']['revision_notes'][0]
+    if corruption == 'artifact':
+        note['artifact_id'] = 'another-feedback'
+    elif corruption == 'wrong-section':
+        note['targets'][0]['target_id'] = 'draft-logline'
+    elif corruption == 'partial-pair':
+        note['targets'].append({'target_id': 'section-999', 'quote': 'invented'})
+    elif corruption == 'decision-question':
+        note['decision_question'] = 'A different question with the same answer'
+    elif corruption == 'duplicate-target':
+        note['targets'].append(deepcopy(note['targets'][0]))
+    else:
+        raw['feedback']['revision_notes'] = [{'broken': True}]
+    stored = store.save(raw, project['revision'])
+    reopened = client.get(f"/api/projects/{project['id']}").json()
+    if corruption == 'shape':
+        assert reopened['feedback']['revision_notes'] is None
+    else:
+        assert reopened['feedback_source'] is None
+    assert reopened['draft'] == project['draft']
+    assert reopened['answers'] == project['answers']
+    assert reopened['feedback']['findings'] == project['feedback']['findings']
+    assert store.get(project['id']) == stored, 'GET must never migrate stored notes'

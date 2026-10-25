@@ -1,4 +1,4 @@
-"""Card anchors for manual review; project and feedback wire formats stay unchanged."""
+"""Exact source anchors shared by initial and manual review."""
 
 import re
 from bisect import bisect_right
@@ -8,6 +8,7 @@ from typing import Literal
 from pydantic import BaseModel, ConfigDict, Field
 
 from app.application.ai_provider import MalformedProviderResponseError
+from app.core.artifacts import RevisionNote, RevisionTarget
 
 BROWSER_WHITESPACE = (
     "\t\n\v\f\r \u00a0\u1680\u2000\u2001\u2002\u2003\u2004\u2005\u2006"
@@ -138,3 +139,18 @@ def feedback_messages(reviews: list[CardReview], context: dict) -> tuple[list[st
                             for review in reviews):
         raise MalformedProviderResponseError("Card review skipped continuity with neighboring cards.")
     return strengths, weaknesses, suggestions
+
+
+def revision_notes(reviews: list[CardReview], context: dict, artifact_id: str) -> tuple[RevisionNote, ...]:
+    # Validate the entire result before attaching any actionable source metadata.
+    feedback_messages(reviews, context)
+    cards = {card["id"]: card for card in context["cards"]}
+    decisions = {decision["id"]: decision for decision in context["decisions"]}
+    return tuple(RevisionNote(
+        note_id=f"revision-{i + 1}", artifact_id=artifact_id, comparison=review.comparison,
+        observation=review.observation, suggestion=review.suggestion,
+        decision_id=review.decision_id, decision_quote=decisions[review.decision_id]["text"],
+        decision_question=decisions[review.decision_id].get("question"),
+        targets=tuple(RevisionTarget(target_id=key, quote=cards[key]["text"])
+                      for key in (review.card_id, review.related_card_id) if key is not None),
+    ) for i, review in enumerate(reviews) if review.comparison != "aligned")

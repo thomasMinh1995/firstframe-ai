@@ -18,6 +18,13 @@ export type EvaluationFinding = {
   score: number | null;
 };
 
+export type RevisionNote = {
+  note_id: string; artifact_id: string; comparison: "mismatch" | "uncertain";
+  observation: string; suggestion: string;
+  decision_id: string; decision_quote: string; decision_question: string | null;
+  targets: { target_id: string; quote: string }[];
+};
+
 export type GenerateResponse = {
   analysis: {
     summary: string;
@@ -33,6 +40,7 @@ export type GenerateResponse = {
     passed: boolean | null;
     rubric_scores: Record<string, number>;
     findings: EvaluationFinding[];
+    revision_notes?: RevisionNote[] | null;
   };
 };
 

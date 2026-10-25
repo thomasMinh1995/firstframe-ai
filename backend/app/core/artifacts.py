@@ -66,11 +66,31 @@ class EvaluationFinding:
 
 
 @dataclass(frozen=True)
+class RevisionTarget:
+    target_id: str
+    quote: str
+
+
+@dataclass(frozen=True)
+class RevisionNote:
+    note_id: str
+    artifact_id: str
+    comparison: Literal["uncertain", "mismatch"]
+    observation: str
+    suggestion: str
+    decision_id: str
+    decision_quote: str
+    decision_question: str | None
+    targets: tuple[RevisionTarget, ...]
+
+
+@dataclass(frozen=True)
 class EvaluationArtifact:
     metadata: ArtifactMetadata
     source_planning_id: str
     findings: tuple[EvaluationFinding, ...] = field(default_factory=tuple)
     passed: bool | None = None
+    revision_notes: tuple[RevisionNote, ...] | None = None
 
 
 @dataclass(frozen=True)

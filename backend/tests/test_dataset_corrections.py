@@ -99,7 +99,7 @@ def test_reasoning_and_evaluation_edits_replay_and_survive_reexport(demo_exports
     assert annotate(client, edited, status="approved", use_for_demo=True).status_code == 200
     plan = detail(client, "plan")
     feedback = copy.deepcopy(plan["recording"]["steps"][1]["output"])
-    feedback["suggestions"] = ["Góp ý đã chỉnh"]
+    feedback["reviews"][0].update(comparison="mismatch", suggestion="Góp ý đã chỉnh")
     edited = save_outputs(client, plan, {"1": feedback}).json()
     assert (
         annotate(
@@ -115,7 +115,7 @@ def test_reasoning_and_evaluation_edits_replay_and_survive_reexport(demo_exports
         note["content"] == "Giữ kết mở" for note in scenario["steps"][1]["analysis"]["notes"]
     )
     assert any(
-        item["message"] == "Góp ý đã chỉnh" for item in scenario["steps"][4]["feedback"]["findings"]
+        item["message"].endswith("Góp ý đã chỉnh") for item in scenario["steps"][4]["feedback"]["findings"]
     )
     rows = [
         json.loads(line) for line in client.get("/api/datasets/training.jsonl").text.splitlines()
@@ -129,7 +129,7 @@ def test_invalid_edits_restoration_and_stale_fingerprints(demo_exports):
     for edits in [{"99": {}}, {"-1": {}}, {"00": {}}, {"0": {"wrong": "shape"}}]:
         assert save_outputs(client, sample, edits).status_code == 422
     feedback = copy.deepcopy(sample["recording"]["steps"][1]["output"])
-    feedback["rubric_scores"]["character"] = 99
+    feedback["reviews"][0]["card_id"] = "invented-card"
     assert save_outputs(client, sample, {"1": feedback}).status_code == 422
     edited = save_outputs(client, sample, {"0": corrected_plan(sample)}).json()
     assert annotate(client, edited, status="approved", use_for_training=True).status_code == 200

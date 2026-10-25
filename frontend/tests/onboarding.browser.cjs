@@ -436,7 +436,7 @@ if (require.main === module) (async () => {
       assert.equal(await reading.locator('.story-draft-path > li').count(), 4);
       const tourCalls = clone(mock.calls), tourBuffer = await buffer(page);
       await click(page, 'Hướng dẫn sử dụng'); await step(page, 5);
-      assert.match(await page.getByRole('list', { name: 'Cách thực hiện' }).innerText(), /Xong.*Hủy.*Xem góp ý.*Làm rõ.*bản trước/s);
+      assert.match(await page.getByRole('list', { name: 'Cách thực hiện' }).innerText(), /ý đồ.*nguồn.*bước sửa.*Sửa phần này.*Xong.*Hủy.*bản trước/s);
       await page.screenshot({ path: path.join(screenshots, `new-workflow-tour-${viewport.width}.png`) });
       await click(page, 'Thử xem góp ý');
       await focused(page, '.card-feedback-trigger');

@@ -78,5 +78,36 @@
       "ending",
       "production_feasibility"
     ]
+  },
+  "revision_review": {
+    "root_fields": [
+      "reviews",
+      "passed",
+      "rubric_scores"
+    ],
+    "review_fields": [
+      "card_id",
+      "decision_id",
+      "related_card_id",
+      "observation",
+      "comparison",
+      "suggestion"
+    ],
+    "source_rules": "IDs are enumerated from the same review snapshot; exact quotes are attached by the server.",
+    "project_feedback_fields": [
+      "note_id",
+      "artifact_id",
+      "comparison",
+      "observation",
+      "suggestion",
+      "decision_id",
+      "decision_quote",
+      "decision_question",
+      "targets"
+    ],
+    "target_fields": [
+      "target_id",
+      "quote"
+    ]
   }
 }

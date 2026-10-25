@@ -69,8 +69,7 @@ def test_author_card_and_feedback_sources_keep_a_when_author_saves_b(project_cli
     assert source_a["context"] == project["author_context"]
     assert source_a["revision"] == project["revision"] - 1
     for request in provider.requests[-2:]:
-        intent = json.loads(request.input_text.split("Creator intent and decisions:\n", 1)[1]
-                            .split("\n\n", 1)[0])
+        intent = critic_author(request)
         assert intent == card_input(project)
     # A response projection cannot be supplied by a client, including through an old full-project PUT.
     bad = {**payload(project), "author_context": {"idea": "AI proposes this"}}
@@ -510,9 +509,7 @@ def test_reanalysis_keeps_author_choices_for_planning_and_edited_review(
     response = client.post(f"{url}/plan", json={"revision": project["revision"]})
     assert response.status_code == 200
     for request in provider.requests[-2:]:
-        context = json.loads(
-            request.input_text.split("Creator intent and decisions:\n", 1)[1].split("\n\n", 1)[0]
-        )
+        context = critic_author(request)
         assert context["clarifications"] == choices
     project = response.json()
     data = payload(project)

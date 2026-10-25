@@ -181,7 +181,7 @@ function Field({ id, label, value, maxLength, onChange }: {
       event.preventDefault(); event.stopPropagation(); close(true);
     }
   }
-  return <div className={`story-field${id === "draft-title" ? " story-field-title" : ""}`}>
+  return <div data-revision-target={id} className={`story-field${id === "draft-title" ? " story-field-title" : ""}`}>
     <div className="story-field-heading">
       <h3 id={`${id}-label`}>{label}</h3>
       {!editing && <button ref={editButton} type="button" className="story-edit-button"
