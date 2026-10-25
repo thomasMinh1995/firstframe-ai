@@ -202,7 +202,7 @@ export default function DatasetsPage() {
             disabled={review.status !== "approved" || !sample.eligible}
             onChange={(event) => setReview({...review, use_for_training: event.target.checked})} />Chọn để chuẩn bị train model</label>
         </fieldset>
-        <p>Để demo phát lại đủ ngữ cảnh, chọn cả mẫu phân tích và tạo plan liên quan.
+        <p>Để demo phát lại đủ ngữ cảnh, chọn cả mẫu phân tích và tạo bản phát triển liên quan.
           Các lượt sửa chỉ xuất hiện khi được duyệt và chọn theo chuỗi.</p>
         <div className="demo-controls"><button disabled={saving || !reviewDirty || outputsDirty} onClick={save}>{saving ? "Đang lưu…" : "Lưu đánh giá"}</button>
           <button className="secondary" disabled={saving || !reviewDirty} onClick={() => setReview(sample.review)}>Bỏ thay đổi</button></div>

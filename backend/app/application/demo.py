@@ -8,7 +8,7 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, Field, ValidationError
 
-from app.api.schemas.projects import ProjectResponse, StoryDraft
+from app.api.schemas.projects import PlanGeneration, ProjectResponse, StoryDraft
 from app.api.schemas.story import (
     AnalysisResponse,
     EvaluationResponse,
@@ -129,6 +129,10 @@ def _models(record: Recording | None, stage: str) -> list[ModelUse]:
 
 
 def _project_pair(record: Recording) -> tuple[ProjectResponse, ProjectResponse]:
+    generation = record.output.get("plan_generation")
+    if (record.operation == "plan" and generation is not None
+            and PlanGeneration.model_validate(generation).applied_revision is None):
+        raise ValueError("An unaccepted proposal is not a completed saved story round.")
     before = ProjectResponse.model_validate(record.input)
     after = ProjectResponse.model_validate(record.output)
     if (
@@ -164,7 +168,7 @@ def _initial_steps(root: Recording, records: dict[str, Recording]) -> list[DemoS
         )
         feedback, answers = output.evaluation, []
         analysis_record = root
-        answer_description = "Luồng này đã tạo plan trực tiếp; không có câu trả lời tác giả riêng."
+        answer_description = "Luồng này đã tạo bản phát triển trực tiếp; không có câu trả lời tác giả riêng."
     else:
         before, after = _project_pair(root)
         idea, constraints, analysis = before.idea, before.constraints, before.analysis
@@ -175,7 +179,7 @@ def _initial_steps(root: Recording, records: dict[str, Recording]) -> list[DemoS
         ]
         answer_description = "Các lựa chọn tác giả đã gửi khi tạo bản phát triển này."
         if not answers:
-            answer_description = "Brief không có câu trả lời làm rõ riêng trong bản ghi này."
+            answer_description = "Ý tưởng này không có câu trả lời làm rõ riêng trong bản ghi."
         for candidate in records.values():
             if candidate.operation != "analyze" or candidate.project_id != root.project_id:
                 continue

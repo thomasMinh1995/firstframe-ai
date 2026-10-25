@@ -51,7 +51,7 @@ def test_prompt_profile_keeps_context_schema_and_recorded_effective_prompt(
         assert step["request"]["effective_instructions"] == strict_json_instructions(request)
         assert step["request"]["response_schema"] == request.response_model.model_json_schema()
         if request.stage == "planning":
-            assert ("Reusable domain examples:" in request.input_text) is not profile
+            assert "Reusable domain examples:" not in request.input_text
             assert ("Short-film domain knowledge:" in request.input_text) is not profile
         if request.stage == "evaluation":
             assert "Short-film story rubric:" in request.input_text
@@ -92,3 +92,9 @@ def test_compaction_preserves_author_decisions_and_notes_verbatim_and_handles_un
         compact_qwen_planning_input("Unknown layout; keep all author data")
         == "Unknown layout; keep all author data"
     )
+
+
+def test_legacy_compaction_keeps_headings_inside_author_notes():
+    author = "Notes:\n\nShort-film domain knowledge:\nA prop label, not a boundary."
+    original = author + "\n\nShort-film domain knowledge:\n{}"
+    assert compact_qwen_planning_input(original) == author

@@ -1,8 +1,11 @@
 # P0: Hiển thị ý đồ tác giả và nối góp ý với thao tác sửa
 
-- Trạng thái: đề xuất, chờ PO review; chưa triển khai.
+- Cập nhật: 25/10/2026. Ưu tiên hoàn thiện #7, cập nhật tour khi luồng sửa ổn
+  định, kiểm chứng/nghiệm thu #7 rồi mới tiếp tục tám gói harness.
+- Trạng thái: đã triển khai một phần qua PR #31–#32 và workspace PR #36;
+  phần còn thiếu cần rà soát và nghiệm thu, không triển khai lại từ đầu.
 - Issue: [P0 #7](https://github.com/thomasMinh1995/firstframe-ai/issues/7).
-- PR kế hoạch chỉ thay đổi tài liệu; không sửa code, prompt, schema hay dependency runtime.
+- Lần cập nhật này chỉ thay đổi tài liệu; không sửa code, prompt, schema hay dependency runtime.
 
 ## Mục tiêu và phạm vi
 
@@ -19,17 +22,37 @@ bảng câu hỏi hoặc xác nhận ý đồ lại mỗi lần chỉ để đư
 - `ProjectResponse` có `idea`, `constraints`, `answers`, `clarifications` và
   `creator_answers()` để kết hợp câu trả lời hiệu lực; thay brief sẽ đưa lựa
   chọn cũ về lịch sử. Không cần thêm một kho lưu ý đồ khác.
-- `page.tsx` có trường sửa ý tưởng, ràng buộc, câu trả lời, từng mục story plan,
-  lưu, nhận phản hồi và lịch sử. Các lựa chọn giữ qua nhiều lượt phân tích chưa
-  được thể hiện thành một thẻ ngữ cảnh đầy đủ.
-- `StoryFeedback` hiển thị ba danh sách riêng. `findings` hiện chứa thông điệp
-  dạng chuỗi và tên nhóm như `weakness-1`, `suggestion-1`, chưa có liên kết đáng
-  tin cậy tới trường cần sửa.
+- PR #31–#32 đã giao thẻ ý đồ đã lưu, nguồn feedback và vòng sửa thủ công.
+  PR #36 bổ sung workspace card, hội thoại làm rõ, xác nhận trước khi tạo plan
+  và góp ý cạnh card có đối chiếu nguồn. [UI đã chốt](approved-story-workspace.md)
+  là nền triển khai; #35 đã hoàn thành, không thiết kế lại ba phần đã chốt.
+- Đã có `CardReview`, `CardFeedback` và quote anchors của đúng snapshot.
+  Một số dữ liệu vẫn đi qua `findings`/chuỗi hiển thị; phải đối chiếu từng
+  yêu cầu ghép cặp, định danh mục tiêu, điều hướng và tương thích bên dưới
+  với code/bằng chứng hiện có trước khi chọn phần cần bổ sung. Không coi có
+  anchor đúng chữ là đã đạt toàn bộ #7 hoặc đúng nghĩa trên model thật.
 - `content_key()`, `reviewed_content`, `feedback_is_current` và kiểm tra thay đổi
   chưa lưu đã có; P0 phải tiếp tục dùng cơ chế này, không coi revision bằng nhau
   hoặc tên mục giống nhau là đủ chứng minh phản hồi còn đúng.
 - PDF đang là kế hoạch riêng ở [#5](https://github.com/thomasMinh1995/firstframe-ai/issues/5).
   Hai tính năng P0 này không phụ thuộc PDF và không thay phạm vi bản xuất.
+
+## Ưu tiên và mốc chuyển bước
+
+**#7 ổn định phần triển khai → cập nhật tour → kiểm chứng luồng kết hợp và
+nghiệm thu #7 → tiếp tục harness H1–H8.** Không chờ đóng #7 mới sửa tour:
+hướng dẫn phải khớp luồng sửa trước khi dùng nó trong pilot của #7.
+
+“Ổn định phần triển khai” nghĩa là đã chốt hành vi/hợp đồng cần thiết và qua
+kiểm thử kỹ thuật liên quan; chưa phải nghiệm thu chất lượng hoặc đóng issue.
+Chỉ nghiệm thu/đóng #7 khi đủ tiêu chí hiện có và bằng chứng trải nghiệm thực
+tế. Các sửa chữa/kiểm tra cần thiết để hoàn thành #7 vẫn thuộc #7, không mở
+benchmark H1–H8, embedding hoặc một framework harness mới làm phụ thuộc.
+
+Giữ các mốc riêng: cập nhật tour kỹ thuật không đóng #22. Pilot 3–5 người,
+tổng kết, trình đọc màn hình, thiết bị/IME/bàn phím thật và full Safari của
+#22 còn mở khi chưa có bằng chứng. Không dùng việc #22 còn mở để bắt làm lại
+#7, hoặc dùng nghiệm thu #7 tự đánh dấu mọi mục #22 đạt.
 
 ## A. Thẻ ý đồ tác giả đang dùng
 
@@ -115,8 +138,10 @@ hỏi tác giả muốn giữ mâu thuẫn này hay đổi hành động, rồi 
 
 ### Liên kết có cấu trúc, thuộc đúng bản phản hồi
 
-- Bổ sung dữ liệu ghép cặp, dự kiến tên `revision_notes`, thay vì frontend tự
-  ghép hai mảng chuỗi hoặc tìm từ “Ending” trong thông điệp để đoán mục tiêu.
+- Rà soát dữ liệu ghép cặp/nguồn đang có, ưu tiên dùng lại `CardReview` và
+  luồng chuyển artifact/API; chỉ bổ sung chỗ còn thiếu. Không thêm một hợp
+  đồng song song chỉ để đổi tên, hoặc để frontend tự ghép hai mảng chuỗi hay
+  tìm từ “Ending” trong thông điệp để đoán mục tiêu.
   Mỗi mục có ID trong lần phản hồi, căn cứ, tác động, bước tiếp theo và danh
   sách khóa mục tiêu. Backend gán ID mục góp ý, không dùng số thứ tự qua nhiều
   vòng như danh tính của cùng một vấn đề.
@@ -214,17 +239,37 @@ mới hoặc xóa trạng thái bận của lượt đang chạy.
 
 ## Thứ tự thực hiện
 
-1. **Chốt mẫu trải nghiệm và dữ liệu:** ví dụ kết mở, câu trả lời để sau, ý đồ
-   xung đột với hành động, bản cũ thiếu metadata và hai mục trùng tên.
-2. **Thẻ ngữ cảnh:** phép chiếu canonical, phân biệt buffer và bản lưu, đường
-   dẫn tới trường gốc; chứng minh dữ liệu UI khớp đầu vào AI.
-3. **Góp ý ghép cặp:** hợp đồng, khóa mục tiêu, lưu nguồn và tương thích cũ;
-   kiểm tra cả đánh giá plan mới lẫn review bản sửa.
-4. **Luồng sửa:** focus không ghi dữ liệu, nhãn cũ, lưu/review, xử lý lỗi và kết
-   quả đến muộn. Không làm thêm màn hình quản lý task hoặc tự áp dụng đề xuất.
-5. **Đánh giá thực tế:** chạy mô hình thật, pilot 5–10 người mới qua hai vòng sửa
+1. **Rà phần đã có và chốt phần thiếu:** lập đối chiếu từng tiêu chí với
+   PR #31–#32/#36, code và test; chốt mẫu kết mở, câu trả lời để sau, ý đồ
+   xung đột với hành động, bản cũ thiếu metadata và hai mục trùng tên. Chỉ
+   làm phần thiếu, giữ UI Ý tưởng/Làm rõ/Story plan đã được chốt.
+2. **Hoàn thiện nguồn ngữ cảnh:** dùng phép chiếu canonical hiện có, phân
+   biệt buffer/bản lưu và nguồn feedback; kiểm tra retained answers, xóa/sửa
+   câu trả lời, đổi brief và dữ liệu UI khớp đầu vào AI.
+3. **Hoàn thiện góp ý ghép cặp:** dùng lại hợp đồng khi phù hợp, bổ sung phần
+   thiếu về khóa mục tiêu, lưu nguồn và tương thích cũ; kiểm tra cả đánh giá
+   plan mới lẫn review bản sửa, không suy mục tiêu từ tên hoặc thứ tự chuỗi.
+4. **Ổn định vòng sửa và test kỹ thuật:** focus không ghi dữ liệu, nhãn cũ,
+   lưu/review, lỗi và response muộn; qua contract/API/UI tests phù hợp trước
+   khi chốt nội dung tour. Không thêm màn hình quản lý task hay tự áp dụng.
+5. **Cập nhật tour theo #7:** làm theo [phần cập nhật tour sau #7](new-user-tour.md#cập-nhật-tour-sau-khi-phần-triển-khai-7-ổn-định),
+   chủ yếu chặng đọc/sửa và lưu/review; giữ sáu bước, tiến độ cũ và quyền bỏ
+   qua/mở lại. Không đợi nghiệm thu/đóng #7 mới làm bước này.
+6. **Kiểm chứng luồng kết hợp:** đi từ đọc ý đồ/góp ý, xem nguồn, chọn hoặc
+   từ chối, tới đúng card, tự sửa, lưu, review và mở lại. Kiểm tra tour trên
+   cả dữ liệu mới/cũ, feedback cũ/thiếu nguồn, buffer, xung đột và response
+   muộn; tour không tự thao tác lưu/AI. Nếu #7 thay đổi lại sau bước này,
+   đối chiếu tour và chạy lại ca liên quan trên cùng phiên bản ứng viên.
+7. **Đánh giá thực tế:** chạy mô hình thật, pilot 5–10 người mới qua hai vòng sửa
    và nhờ 1–2 người đọc có kinh nghiệm đánh giá. Đây là quy mô thử nghiệm đề xuất,
    không phải kết quả đã có hoặc cam kết chất lượng.
+
+Giữ riêng tiêu chí #7, pilot tour 3–5 người của #22 và pilot MVP N=5–8 của
+#26. Có thể chuẩn bị cùng đợt nếu chốt trước nhiệm vụ/phiên bản và ghi đủ bằng
+chứng cho từng tiêu chí; không tự dùng một kết quả để đóng cả ba issue.
+Sau khi đủ bằng chứng nghiệm thu #7 và tour đã cập nhật/kiểm tra kỹ thuật,
+mới tiếp tục [harness H1–H8](harness-improvement.md); dùng lại kết quả liên
+quan, không chạy lại hoặc tích hợp lại phần đã đạt chỉ vì đổi thứ tự kế hoạch.
 
 ## Tiêu chí nghiệm thu
 

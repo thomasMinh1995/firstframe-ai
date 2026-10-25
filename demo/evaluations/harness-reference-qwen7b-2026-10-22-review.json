@@ -1,0 +1,1901 @@
+{
+  "status": "completed; agent qualitative review only",
+  "grader": "Codex agent; unblinded; no independent human review",
+  "grades": [
+    {
+      "index": 0,
+      "content_ok": false,
+      "issues": [
+        "role_reversal",
+        "missed_contradiction"
+      ],
+      "note": "Khen Mai là học viên như dữ kiện tác giả; chỉ bắt kết quả chứng chỉ bịa, bỏ sót đảo vai.",
+      "grading_note": "Same raw output as the excluded aborted attempt; retained qualitative judgment.",
+      "case_id": "reversed-role-invented-outcome",
+      "seed": 42,
+      "variant": "baseline",
+      "operation": "review",
+      "output_sha256": "edc8411a3e818930fcae33d08a7ed4d7444d3c8d9751faebbf220bc75ea04395",
+      "runtime_accepted": false
+    },
+    {
+      "index": 1,
+      "content_ok": false,
+      "issues": [
+        "false_praise",
+        "internal_inconsistency"
+      ],
+      "note": "Bắt hai mâu thuẫn ở weaknesses nhưng khen logline đảo vai là đúng ý tác giả; kết luận tự mâu thuẫn.",
+      "grading_note": "Same raw output as the excluded aborted attempt; retained qualitative judgment.",
+      "case_id": "reversed-role-invented-outcome",
+      "seed": 42,
+      "variant": "target_keys",
+      "operation": "review",
+      "output_sha256": "7f8848e2c5975a741b6729872af4e42c29e9663d3df6b50b3cdd581234d0ab07",
+      "runtime_accepted": false
+    },
+    {
+      "index": 2,
+      "content_ok": false,
+      "issues": [
+        "false_praise",
+        "incompatible_fix"
+      ],
+      "note": "Bắt đảo vai/kết quả bịa nhưng khen logline đảo vai, cách sửa vẫn hy vọng đạt thành tích để được tiếp tục học trái kết mở bất kể kết quả.",
+      "grading_note": "Same raw output as the excluded aborted attempt; retained qualitative judgment.",
+      "case_id": "reversed-role-invented-outcome",
+      "seed": 73,
+      "variant": "target_keys",
+      "operation": "review",
+      "output_sha256": "311941886f6308cdd57ecc24b108a31c1c355dbd8fb35aca7b244921b98bed2f",
+      "runtime_accepted": true
+    },
+    {
+      "index": 3,
+      "content_ok": false,
+      "issues": [
+        "role_reversal",
+        "missed_contradiction",
+        "incompatible_fix"
+      ],
+      "note": "Khen vai học viên, không bắt đảo vai; cách sửa vẫn cho Mai đạt chứng chỉ chưa được công bố.",
+      "grading_note": "Same raw output as the excluded aborted attempt; retained qualitative judgment.",
+      "case_id": "reversed-role-invented-outcome",
+      "seed": 73,
+      "variant": "baseline",
+      "operation": "review",
+      "output_sha256": "a1bfdea70ae74a8d7bb01f3065e3e9fc68a04ed83428eb9eca11f23a736791a3",
+      "runtime_accepted": false
+    },
+    {
+      "index": 4,
+      "content_ok": false,
+      "issues": [
+        "missed_contradiction"
+      ],
+      "note": "Sửa kết quả chứng chỉ bịa nhưng bỏ sót đảo vai Mai thành học viên.",
+      "grading_note": "Same raw output as the excluded aborted attempt; retained qualitative judgment.",
+      "case_id": "reversed-role-invented-outcome",
+      "seed": 101,
+      "variant": "baseline",
+      "operation": "review",
+      "output_sha256": "542fc2afe4f0bc126439cd9e0067e02f8b79f5770faaabe7d3249538e490f3b4",
+      "runtime_accepted": true
+    },
+    {
+      "index": 5,
+      "content_ok": false,
+      "issues": [
+        "wrong_author_source",
+        "incompatible_fix"
+      ],
+      "note": "Dùng câu draft đảo vai làm author_quote; đề xuất logline vẫn để Mai được hướng dẫn, không sửa vai đã chốt.",
+      "grading_note": "Same raw output as the excluded aborted attempt; retained qualitative judgment.",
+      "case_id": "reversed-role-invented-outcome",
+      "seed": 101,
+      "variant": "target_keys",
+      "operation": "review",
+      "output_sha256": "81a18c0dbaf3aeec7e821b8db1a31ee9cd36d95d847d59de8a22c6fd97a36dad",
+      "runtime_accepted": false
+    },
+    {
+      "index": 6,
+      "content_ok": false,
+      "issues": [
+        "false_contradiction"
+      ],
+      "note": "Gắn contradiction cho kết mở vốn khớp đúng brief và quote nguồn; cách sửa chỉ thêm cải thiện kỹ năng, không chứng minh mâu thuẫn.",
+      "grading_note": "Same raw output as excluded aborted attempt; retained judgment.",
+      "case_id": "corrected-open-ending",
+      "seed": 42,
+      "variant": "target_keys",
+      "operation": "review",
+      "output_sha256": "12d16d238b4b75cd8cbb41a27036f6b95f7211915f29ee4f4f10da4a9322247b",
+      "runtime_accepted": true
+    },
+    {
+      "index": 7,
+      "content_ok": false,
+      "issues": [
+        "false_diagnosis",
+        "role_confusion",
+        "wrong_language"
+      ],
+      "note": "Gọi vai đã rõ là chưa chốt, cho phép đảo ai hướng dẫn ai; suy kết quả đã biết; một góp ý chuyển sang tiếng Trung và chứa văn bản lỗi.",
+      "grading_note": "Same raw output as excluded aborted attempt; retained judgment.",
+      "case_id": "corrected-open-ending",
+      "seed": 42,
+      "variant": "baseline",
+      "operation": "review",
+      "output_sha256": "a0ab944b82f2e5f9863f0d4d5c0037633291af045424c4029169920a1800804d",
+      "runtime_accepted": false
+    },
+    {
+      "index": 8,
+      "content_ok": true,
+      "issues": [],
+      "note": "Giữ vai và kết mở; các creative_proposal chung chung về khó khăn/cảm xúc có giá trị thấp nhưng tương thích brief, chưa buộc chốt kết quả. Tham chiếu sai được chấm kỹ thuật riêng.",
+      "grading_note": "Same raw output as excluded aborted attempt; retained judgment.",
+      "case_id": "corrected-open-ending",
+      "seed": 73,
+      "variant": "baseline",
+      "operation": "review",
+      "output_sha256": "a82db8d1d5072a0bb2447560d176f8a72f31c68836ac7aaf13d05d6c6d0c83f5",
+      "runtime_accepted": false
+    },
+    {
+      "index": 9,
+      "content_ok": false,
+      "issues": [
+        "false_contradiction",
+        "wrong_language"
+      ],
+      "note": "Báo contradiction cho kết quả vốn chưa biết, cách sửa gần lặp bản đúng rồi lẫn tiếng Trung.",
+      "grading_note": "Same raw output as excluded aborted attempt; retained judgment.",
+      "case_id": "corrected-open-ending",
+      "seed": 73,
+      "variant": "target_keys",
+      "operation": "review",
+      "output_sha256": "fea7759ade2eba2858aa0ff39872fd65910e2b4eb1db42938b48947fbd532547",
+      "runtime_accepted": true
+    },
+    {
+      "index": 10,
+      "content_ok": false,
+      "issues": [
+        "false_contradiction",
+        "author_intent"
+      ],
+      "note": "Báo contradiction cho kết mở đúng; đổi bất kể kết quả vẫn học thành không quan tâm chứng chỉ, suy diễn thái độ tác giả chưa chốt.",
+      "grading_note": "Same raw output as excluded aborted attempt; retained judgment.",
+      "case_id": "corrected-open-ending",
+      "seed": 101,
+      "variant": "target_keys",
+      "operation": "review",
+      "output_sha256": "512cc78fc3f15cb7c0777ef267578fe7203e76d4f9f6826455f9b8f2caaf6b97",
+      "runtime_accepted": true
+    },
+    {
+      "index": 11,
+      "content_ok": false,
+      "issues": [
+        "false_contradiction",
+        "author_intent",
+        "wrong_language"
+      ],
+      "note": "Suy Mai mở sổ cá nhân làm mất vai hướng dẫn, ép đổi hành động đã được tác giả chọn; có quote lỗi tiếng Trung.",
+      "grading_note": "Same raw output as excluded aborted attempt; retained judgment.",
+      "case_id": "corrected-open-ending",
+      "seed": 101,
+      "variant": "baseline",
+      "operation": "review",
+      "output_sha256": "a8b2bc9d9784d3f51dd8d9b930addd165d16a0f1eeccc85f4ddff6d253c2e5f7",
+      "runtime_accepted": false
+    },
+    {
+      "index": 12,
+      "content_ok": false,
+      "issues": [
+        "forced_drama"
+      ],
+      "note": "Giữ chứng chỉ đã trao nhưng chê kết thúc vì thiếu xung đột và resolution như điều thiết yếu; đề nghị học viên khó hoặc bất an mới không cần thiết trong ca đối chứng đúng.",
+      "grading_note": "Same raw output as excluded aborted attempt; retained judgment.",
+      "case_id": "confirmed-outcome-en",
+      "seed": 42,
+      "variant": "baseline",
+      "operation": "review",
+      "output_sha256": "613256f177066c6cb9460984a118c2ce1093ce5091210d890a29b3ad59725473",
+      "runtime_accepted": false
+    },
+    {
+      "index": 13,
+      "content_ok": false,
+      "issues": [
+        "forced_drama",
+        "false_diagnosis"
+      ],
+      "note": "Giữ vai/chứng chỉ, gợi ý tương tác cụ thể hợp lý; nhưng kết luận kết đã xác nhận vai là thiếu outcome và cần xung đột/cảm xúc như lỗi, ép trọng tâm mới.",
+      "grading_note": "Same raw output as excluded aborted attempt; retained judgment.",
+      "case_id": "confirmed-outcome-en",
+      "seed": 42,
+      "variant": "target_keys",
+      "operation": "review",
+      "output_sha256": "f85a669ed6c83e3967a0f23a77ea07b00c1d96c4d8fb565170ccb0b53ddf646b",
+      "runtime_accepted": true
+    },
+    {
+      "index": 14,
+      "content_ok": false,
+      "issues": [
+        "false_absence",
+        "unexplained_finding"
+      ],
+      "note": "Reason chỉ lặp nhãn/quote; ngoặc nói không có tuyên bố vai Eli dù idea chốt instructor. Đổi folder sang trưng bày không nêu vấn đề cần giải quyết.",
+      "grading_note": "Same raw output as excluded aborted attempt; retained judgment.",
+      "case_id": "confirmed-outcome-en",
+      "seed": 73,
+      "variant": "target_keys",
+      "operation": "review",
+      "output_sha256": "16c5df74cff7cd3395320413b186ed36fd646ded4505d1ce60d0ef6837cd8e2b",
+      "runtime_accepted": true
+    },
+    {
+      "index": 15,
+      "content_ok": false,
+      "issues": [
+        "forced_drama",
+        "unsupported_chronology"
+      ],
+      "note": "Chê kết vì thiếu kịch tính/resolution rồi tự đặt buổi dạy chính thức đầu tiên, dù chứng chỉ đã trao tháng trước và không chốt đây là buổi đầu.",
+      "grading_note": "Same raw output as excluded aborted attempt; retained judgment.",
+      "case_id": "confirmed-outcome-en",
+      "seed": 73,
+      "variant": "baseline",
+      "operation": "review",
+      "output_sha256": "3219040818acad39583f84ca1876a25395fb880f2632081436fc62de27258d8e",
+      "runtime_accepted": false
+    },
+    {
+      "index": 16,
+      "content_ok": false,
+      "issues": [
+        "forced_drama"
+      ],
+      "note": "Áp yêu cầu xung đột/áp lực/hành trình cảm xúc từ rubric lên kết đúng; ép thêm học viên khó thay vì nhận diện phạm vi tác giả.",
+      "grading_note": "Same raw output as excluded aborted attempt; retained judgment.",
+      "case_id": "confirmed-outcome-en",
+      "seed": 101,
+      "variant": "baseline",
+      "operation": "review",
+      "output_sha256": "76485591a5fa117a5ec932fc6eb92f3507914a12fa6ec5a3ae62737b1688325c",
+      "runtime_accepted": false
+    },
+    {
+      "index": 17,
+      "content_ok": false,
+      "issues": [
+        "forced_drama",
+        "unsupported_chronology"
+      ],
+      "note": "Gắn open_choice cho nhu cầu cảm xúc/xung đột do model áp đặt; ví dụ tự chốt buổi dạy chính thức đầu tiên dù chứng chỉ đã trao tháng trước.",
+      "grading_note": "Same raw output as excluded aborted attempt; retained judgment.",
+      "case_id": "confirmed-outcome-en",
+      "seed": 101,
+      "variant": "target_keys",
+      "operation": "review",
+      "output_sha256": "346675678f36b26bc58a3025e05a576a4e259620901049091dfc292336bb4fe5",
+      "runtime_accepted": true
+    },
+    {
+      "index": 18,
+      "content_ok": false,
+      "issues": [
+        "false_contradiction",
+        "author_intent",
+        "wrong_language"
+      ],
+      "note": "Suy chờ cơm nguội là hứa người vắng sẽ về; xóa việc chờ/mốc thời gian phù hợp chủ ý, reason lẫn tiếng Trung.",
+      "grading_note": "Same raw output as excluded aborted attempt; retained judgment.",
+      "case_id": "quiet-waiting",
+      "seed": 42,
+      "variant": "target_keys",
+      "operation": "review",
+      "output_sha256": "fd81caaf31c62fd336c0045e1be7c52408e4c0e6e4a085666ff180f08b3816e0",
+      "runtime_accepted": false
+    },
+    {
+      "index": 19,
+      "content_ok": false,
+      "issues": [
+        "false_contradiction",
+        "author_intent"
+      ],
+      "note": "Coi cơm nguội và bát nguyên là tiết lộ người vắng/kết quả; sửa mất mốc thời gian và thêm ẩn dụ thách thức không căn cứ.",
+      "grading_note": "Same raw output as excluded aborted attempt; retained judgment.",
+      "case_id": "quiet-waiting",
+      "seed": 42,
+      "variant": "baseline",
+      "operation": "review",
+      "output_sha256": "9245cdc9f2897f462a2f2a2e377d0cebb03a6c76bb801a5ea656d15400d62ed6",
+      "runtime_accepted": false
+    },
+    {
+      "index": 20,
+      "content_ok": false,
+      "issues": [
+        "false_contradiction",
+        "wrong_author_source"
+      ],
+      "note": "Báo mâu thuẫn trên hai hành động phù hợp kết mở, còn dùng chính draft làm nguồn tác giả; đề xuất bỏ mốc cơm nguội.",
+      "grading_note": "Same raw output as excluded aborted attempt; retained judgment.",
+      "case_id": "quiet-waiting",
+      "seed": 73,
+      "variant": "baseline",
+      "operation": "review",
+      "output_sha256": "55aab483fc8a2d180290c78937adbc6d0b97c991b9996cefb40c7274068575ad",
+      "runtime_accepted": false
+    },
+    {
+      "index": 21,
+      "content_ok": false,
+      "issues": [
+        "false_contradiction",
+        "author_intent"
+      ],
+      "note": "Suy mẹ ăn phần mình là đóng kết người vắng, trong khi bát kia còn nguyên; cách sửa lặp bản đúng và thêm diễn giải.",
+      "grading_note": "Same raw output as excluded aborted attempt; retained judgment.",
+      "case_id": "quiet-waiting",
+      "seed": 73,
+      "variant": "target_keys",
+      "operation": "review",
+      "output_sha256": "43946244bc00d5547606728b7739fd5b0bd7aa292bda1e2f5a3a5423ddd261af",
+      "runtime_accepted": true
+    },
+    {
+      "index": 22,
+      "content_ok": false,
+      "issues": [
+        "author_intent",
+        "incompatible_fix"
+      ],
+      "note": "Đề nghị âm thanh phòng khách để gợi sự hiện diện người vắng, trái yêu cầu không xác nhận có về; đề nghị bất ngờ thay kết chờ không cần thiết.",
+      "grading_note": "Same raw output as excluded aborted attempt; retained judgment.",
+      "case_id": "quiet-waiting",
+      "seed": 101,
+      "variant": "target_keys",
+      "operation": "review",
+      "output_sha256": "12271fca2e4408582723ece84b0a9f2054b317c911342dd195065cd4ff960a7e",
+      "runtime_accepted": true
+    },
+    {
+      "index": 23,
+      "content_ok": false,
+      "issues": [
+        "false_diagnosis",
+        "author_intent"
+      ],
+      "note": "Đòi làm rõ ai được giúp và kết quả trong phim cố ý chờ không rõ người vắng; thay bát nguyên bằng ẩn dụ xóa sự chờ đợi.",
+      "grading_note": "Same raw output as excluded aborted attempt; retained judgment.",
+      "case_id": "quiet-waiting",
+      "seed": 101,
+      "variant": "baseline",
+      "operation": "review",
+      "output_sha256": "9bc97034c5c44dd63b33e3d7d5ec904dd1a3018ba9fee60a7cc33e20f0bb42ef",
+      "runtime_accepted": false
+    },
+    {
+      "index": 24,
+      "content_ok": false,
+      "issues": [
+        "incompatible_fix"
+      ],
+      "note": "Bắt giấu hộ chiếu ngăn con đi nhưng đề nghị thuyết phục con ở lại, vẫn trái mục đích chỉ xin lỗi chứ không cản.",
+      "grading_note": "Same raw output as excluded aborted attempt; retained judgment.",
+      "case_id": "passport-contradiction",
+      "seed": 42,
+      "variant": "baseline",
+      "operation": "review",
+      "output_sha256": "c68bd2d74d493e4287a88cb5e7661cf8cc04d6af9f2f800e7254a855b5827dba",
+      "runtime_accepted": false
+    },
+    {
+      "index": 25,
+      "content_ok": false,
+      "issues": [
+        "false_contradiction",
+        "incompatible_fix"
+      ],
+      "note": "Báo hai cốc/hộ chiếu trên bàn là mâu thuẫn vô căn cứ; nhận ra giấu hộ chiếu nhưng đề nghị vẫn giấu và tạo áp lực, không trở về mục tiêu chỉ xin lỗi.",
+      "grading_note": "Same raw output as excluded aborted attempt; retained judgment.",
+      "case_id": "passport-contradiction",
+      "seed": 42,
+      "variant": "target_keys",
+      "operation": "review",
+      "output_sha256": "69b03273615ae46a2cf716fd8c38badd7981e910d0a73a22b7b89d2dece8274d",
+      "runtime_accepted": true
+    },
+    {
+      "index": 26,
+      "content_ok": false,
+      "issues": [
+        "evidence_relevance",
+        "wrong_author_source"
+      ],
+      "note": "Cách sửa bỏ giấu hộ chiếu phù hợp nhưng gắn mâu thuẫn với giới hạn địa điểm/diễn viên thay vì ý đồ không cản; dùng draft làm nguồn tác giả, không giải thích đúng lỗi.",
+      "grading_note": "Same raw output as excluded aborted attempt; retained judgment.",
+      "case_id": "passport-contradiction",
+      "seed": 73,
+      "variant": "target_keys",
+      "operation": "review",
+      "output_sha256": "2aee97461ec1c70fa86ff20c97cea3f661ab16859558a7863ca1e94d81325a24",
+      "runtime_accepted": false
+    },
+    {
+      "index": 27,
+      "content_ok": true,
+      "issues": [],
+      "note": "Nhận ra giấu hộ chiếu ngăn con đi trái ý đồ; đề nghị bỏ giấu, khuyến khích quyết định đi và xin lỗi trực tiếp/để con quyết định. Diễn đạt về quyết định cuối còn dư, quote sai chấm kỹ thuật riêng.",
+      "grading_note": "Same raw output as excluded aborted attempt; retained judgment.",
+      "case_id": "passport-contradiction",
+      "seed": 73,
+      "variant": "baseline",
+      "operation": "review",
+      "output_sha256": "ffb0d2ddf3b2e6ac08227e57cf658e4dc36ae6862d7a7f8e3ca9a4f640789087",
+      "runtime_accepted": false
+    },
+    {
+      "index": 28,
+      "content_ok": false,
+      "issues": [
+        "incompatible_fix"
+      ],
+      "note": "Nêu đúng không được cản con đi nhưng lại đề nghị thuyết phục ở lại/đổi kế hoạch. Góp ý kết sau đó hợp lý không bù được cách sửa trái mục đích.",
+      "grading_note": "Same raw output as excluded aborted attempt; retained judgment.",
+      "case_id": "passport-contradiction",
+      "seed": 101,
+      "variant": "baseline",
+      "operation": "review",
+      "output_sha256": "0e70097274c8c91eed1ff5a852e237b5b0650170008c33e1572adb9346dd3627",
+      "runtime_accepted": false
+    },
+    {
+      "index": 29,
+      "content_ok": false,
+      "issues": [
+        "evidence_relevance",
+        "incompatible_fix",
+        "invented_character"
+      ],
+      "note": "Gắn lỗi giấu hộ chiếu với giới hạn địa điểm, chỉ đề nghị giấu chỗ khác và nhắc bố mẹ/con dù chỉ cha/con. Không sửa hành vi cản con đi.",
+      "grading_note": "Same raw output as excluded aborted attempt; retained judgment.",
+      "case_id": "passport-contradiction",
+      "seed": 101,
+      "variant": "target_keys",
+      "operation": "review",
+      "output_sha256": "e229477a8c816a0e16ea272ed8ef2c5ceea295377b61e32fa7eddc636fb2c851",
+      "runtime_accepted": false
+    },
+    {
+      "index": 30,
+      "content_ok": false,
+      "issues": [
+        "incompatible_fix",
+        "false_contradiction"
+      ],
+      "note": "Bắt ngoài trời/đám đông nhưng thêm bạn giữ ô trái một diễn viên; gọi ô còn lỗ là mâu thuẫn và buộc vá hoàn toàn, xóa gag.",
+      "grading_note": "Same raw output as excluded aborted attempt; retained judgment.",
+      "case_id": "resource-contradiction",
+      "seed": 42,
+      "variant": "target_keys",
+      "operation": "review",
+      "output_sha256": "6add6b27ab7b7018bdda157a4938df5f13c49ef4f944341c0f10a9cf68e38114",
+      "runtime_accepted": true
+    },
+    {
+      "index": 31,
+      "content_ok": false,
+      "issues": [
+        "incompatible_fix"
+      ],
+      "note": "Bắt vi phạm một diễn viên và giữ phòng trọ nhưng cách sửa lại thêm nhân vật tưởng tượng giúp qua cửa sổ/điện thoại, không giữ tác vụ tự vá một người, không thoại.",
+      "grading_note": "Same raw output as excluded aborted attempt; retained judgment.",
+      "case_id": "resource-contradiction",
+      "seed": 42,
+      "variant": "baseline",
+      "operation": "review",
+      "output_sha256": "0fd581bd63efff9dcff9ba6d30d3bbea21665895eb4682c5b27bf1ce8d334f49",
+      "runtime_accepted": false
+    },
+    {
+      "index": 32,
+      "content_ok": false,
+      "issues": [
+        "incompatible_fix",
+        "forced_resolution"
+      ],
+      "note": "Bắt giới hạn nhưng đề nghị bạn giữ ô qua điện thoại và thêm bạn/người thân ở kết; ép hoàn thiện chiếc ô thay gag chưa vá xong.",
+      "grading_note": "Same raw output as excluded aborted attempt; retained judgment.",
+      "case_id": "resource-contradiction",
+      "seed": 73,
+      "variant": "baseline",
+      "operation": "review",
+      "output_sha256": "0b5ad2c611dc2c81c6caa37982dcaf1e55be7c851d38ec84b64adb89aefba488",
+      "runtime_accepted": false
+    },
+    {
+      "index": 33,
+      "content_ok": true,
+      "issues": [],
+      "note": "Bắt cảnh ga tàu/đám đông trái giới hạn và chuyển hành động về phòng một người; gợi ý kỹ xảo/thử vá lại còn dư và giải thích Ending nghèo, nhưng không thêm diễn viên hoặc buộc kết quả thành công.",
+      "grading_note": "Same raw output as excluded aborted attempt; retained judgment.",
+      "case_id": "resource-contradiction",
+      "seed": 73,
+      "variant": "target_keys",
+      "operation": "review",
+      "output_sha256": "f10550bd3075a41bf89a8727a10ca99f5e242a2528d481712ed52514f3d0ab30",
+      "runtime_accepted": true
+    },
+    {
+      "index": 34,
+      "content_ok": false,
+      "issues": [
+        "missed_contradiction",
+        "forced_resolution"
+      ],
+      "note": "Chỉ chê thiếu hài, không giải thích vi phạm ga tàu/đám đông; ép chiếc ô đã vá xong thay gag còn lỗ và tự thêm mưa phá trong phòng không nêu cách thực hiện.",
+      "grading_note": "Same raw output as excluded aborted attempt; retained judgment.",
+      "case_id": "resource-contradiction",
+      "seed": 101,
+      "variant": "target_keys",
+      "operation": "review",
+      "output_sha256": "483fe169da3a74f502449f29e6dc80a6b653294efdb9aaf72369acde55c37306",
+      "runtime_accepted": true
+    },
+    {
+      "index": 35,
+      "content_ok": false,
+      "issues": [
+        "forced_resolution",
+        "author_intent"
+      ],
+      "note": "Sửa đúng cảnh đám đông nhưng coi ô còn lỗ là lựa chọn chưa được xác nhận rồi ép vá hoàn hảo, không tôn trọng gag hiện hành.",
+      "grading_note": "Same raw output as excluded aborted attempt; retained judgment.",
+      "case_id": "resource-contradiction",
+      "seed": 101,
+      "variant": "baseline",
+      "operation": "review",
+      "output_sha256": "706c0c5f65438f5703506e2d754f941769592608f91d83fd1d441382346da21f",
+      "runtime_accepted": false
+    },
+    {
+      "index": 36,
+      "content_ok": false,
+      "issues": [
+        "deferral_as_error",
+        "false_contradiction"
+      ],
+      "note": "Nhận biết bạn cũ là tùy chọn nhưng vẫn đòi bỏ/ghi nhãn vốn đã có; gọi kết không giải thích quan hệ là contradiction và buộc tác giả chọn quan hệ.",
+      "grading_note": "Same raw output as excluded aborted attempt; retained judgment.",
+      "case_id": "deferred-proposal",
+      "seed": 42,
+      "variant": "baseline",
+      "operation": "review",
+      "output_sha256": "2be77c5ff253c6448a4681ac047acf26fc853051dc0aefffa3bde9ec70d1669f",
+      "runtime_accepted": false
+    },
+    {
+      "index": 37,
+      "content_ok": false,
+      "issues": [
+        "proposal_as_error",
+        "deferral_as_error"
+      ],
+      "note": "Khen quan hệ để mở nhưng gắn craft weakness và yêu cầu xóa đề xuất đã ghi tùy chọn chỉ vì tác giả chưa chọn.",
+      "grading_note": "Same raw output as excluded aborted attempt; retained judgment.",
+      "case_id": "deferred-proposal",
+      "seed": 42,
+      "variant": "target_keys",
+      "operation": "review",
+      "output_sha256": "3e95b19d9f73d4d5dd644848d46f6bbad19458b8e4165708f9761527a0657b0e",
+      "runtime_accepted": true
+    },
+    {
+      "index": 38,
+      "content_ok": true,
+      "issues": [],
+      "note": "Nhận diện đây là lựa chọn mở, cho phép giữ nguyên và chỉ hỏi tác giả nếu muốn thử xác định quan hệ; lời khuyên dư nhưng không buộc chọn/xóa.",
+      "grading_note": "Same raw output as excluded aborted attempt; retained judgment.",
+      "case_id": "deferred-proposal",
+      "seed": 73,
+      "variant": "target_keys",
+      "operation": "review",
+      "output_sha256": "23fce210376b1fe2604106a650074d666cea0bd3bed16d098c6c18719bc1d6ed",
+      "runtime_accepted": true
+    },
+    {
+      "index": 39,
+      "content_ok": false,
+      "issues": [
+        "deferral_as_error",
+        "proposal_as_error"
+      ],
+      "note": "Nói đề xuất không là điểm yếu nhưng vẫn yêu cầu xóa; chê kết không giải thích quan hệ và đòi thêm cảnh xác định quan hệ tác giả cố ý chưa chọn.",
+      "grading_note": "Same raw output as excluded aborted attempt; retained judgment.",
+      "case_id": "deferred-proposal",
+      "seed": 73,
+      "variant": "baseline",
+      "operation": "review",
+      "output_sha256": "b65756faae8aef86990dc544028f52eee5853906251c17aed260d2b4c98b8f7d",
+      "runtime_accepted": false
+    },
+    {
+      "index": 40,
+      "content_ok": true,
+      "issues": [],
+      "note": "Dù nhãn yếu điểm và cách diễn đạt còn lặp/mơ hồ, cả hai suggestion đều giữ nguyên logline và phần tùy chọn cho tác giả cân nhắc, không ép chọn quan hệ.",
+      "grading_note": "Same raw output as excluded aborted attempt; retained judgment.",
+      "case_id": "deferred-proposal",
+      "seed": 101,
+      "variant": "baseline",
+      "operation": "review",
+      "output_sha256": "8152144dd5538fec1a1bb7366b1bdbf0a105fd239af2ee6d4365427ba980562b",
+      "runtime_accepted": false
+    },
+    {
+      "index": 41,
+      "content_ok": false,
+      "issues": [
+        "proposal_as_error",
+        "forced_drama"
+      ],
+      "note": "Coi gợi ý đã dán nhãn là thay quyết định mở; tự thêm giải quyết mâu thuẫn cũ để làm logline có mục tiêu, không phải nhu cầu tác giả.",
+      "grading_note": "Same raw output as excluded aborted attempt; retained judgment.",
+      "case_id": "deferred-proposal",
+      "seed": 101,
+      "variant": "target_keys",
+      "operation": "review",
+      "output_sha256": "8c411fb3abcd8263e1c4d86643db0802eafa27c8677fc117c73a493130d656d9",
+      "runtime_accepted": true
+    },
+    {
+      "index": 42,
+      "content_ok": false,
+      "issues": [
+        "false_contradiction",
+        "deferral_erases_fact",
+        "role_confusion"
+      ],
+      "note": "Coi làm mẫu và giúp gỡ mũi đan là không thể hướng dẫn; dùng câu để sau làm bằng chứng xóa vai instructor đã chốt, ép hướng dẫn từ xa/qua ý nghĩ.",
+      "case_id": "deferred-keeps-fact",
+      "seed": 42,
+      "variant": "target_keys",
+      "operation": "review",
+      "output_sha256": "e347904b78513bdad4d468d05791e846e26f11090d59dea8f6b180e9a5f8a0f3",
+      "runtime_accepted": true
+    },
+    {
+      "index": 43,
+      "content_ok": false,
+      "issues": [
+        "false_contradiction",
+        "role_confusion",
+        "invented_unknown_outcome"
+      ],
+      "note": "Coi hỗ trợ học viên trái vai instructor; suy ghi sổ là chưa rõ đã dạy và tự nhắc kết quả chưa công bố dù ca Lan không có chứng chỉ. Cách sửa gần như đồng nghĩa draft.",
+      "case_id": "deferred-keeps-fact",
+      "seed": 42,
+      "variant": "baseline",
+      "operation": "review",
+      "output_sha256": "963a5090b786795ec6b35372ed1157b703a58d33437cb128736ac63e07faad50",
+      "runtime_accepted": false
+    },
+    {
+      "index": 44,
+      "content_ok": false,
+      "issues": [
+        "false_contradiction",
+        "role_confusion"
+      ],
+      "note": "Khẳng định người hướng dẫn không được giúp học viên gỡ mũi đan; cách sửa tự gỡ có thể là lựa chọn dạy nhưng lý do mâu thuẫn là sai.",
+      "case_id": "deferred-keeps-fact",
+      "seed": 73,
+      "variant": "baseline",
+      "operation": "review",
+      "output_sha256": "0cd864581fb9b4c55d77a5beb2c3e04d65dda55d539dc60881c67b4fc48b53b0",
+      "runtime_accepted": false
+    },
+    {
+      "index": 45,
+      "content_ok": false,
+      "issues": [
+        "false_contradiction",
+        "role_confusion",
+        "deferral_as_error"
+      ],
+      "note": "Coi làm mẫu/gỡ mũi đan là làm học viên; gọi ghi sổ người hướng dẫn chưa rõ vai và cho phép đổi thành học viên ghi. Không giữ dữ kiện vai đã chốt.",
+      "case_id": "deferred-keeps-fact",
+      "seed": 73,
+      "variant": "target_keys",
+      "operation": "review",
+      "output_sha256": "2766805c542d80afacfd805eafeaa7300bc9776c07bdae20df9dfc9b130de8c9",
+      "runtime_accepted": true
+    },
+    {
+      "index": 46,
+      "content_ok": false,
+      "issues": [
+        "false_contradiction",
+        "deferral_erases_fact"
+      ],
+      "note": "Báo logline Lan hướng dẫn người mới là mâu thuẫn dù đã đúng vai; cách sửa gần trùng nguyên văn. Gọi hành động làm mẫu là tác giả chưa quyết định.",
+      "case_id": "deferred-keeps-fact",
+      "seed": 101,
+      "variant": "target_keys",
+      "operation": "review",
+      "output_sha256": "d49f32b477dde3c2ce2f41cb8b0088ecc17204460992839f6128b8f136393976",
+      "runtime_accepted": true
+    },
+    {
+      "index": 47,
+      "content_ok": false,
+      "issues": [
+        "false_contradiction",
+        "role_confusion",
+        "forced_resolution"
+      ],
+      "note": "Gọi giúp học viên là đảo vai; buộc bỏ ghi sổ vì đã dạy xong và chốt học viên đã nắm kỹ thuật dù không có nguồn.",
+      "case_id": "deferred-keeps-fact",
+      "seed": 101,
+      "variant": "baseline",
+      "operation": "review",
+      "output_sha256": "0adf917c9937c1d2cb8bfaee7d7d3cc20c76bca2df37f1a075c3ea64f20752bd",
+      "runtime_accepted": false
+    },
+    {
+      "index": 48,
+      "content_ok": false,
+      "issues": [
+        "unsupported_outcome",
+        "weak_fix"
+      ],
+      "note": "Bắt cảnh ga tàu trái giới hạn nhưng khen con rời cửa là đã chấp nhận xin lỗi, điều draft không xác nhận. Cách sửa vẫn kéo con nhìn ga qua cửa sổ, chưa trở về mục đích xin lỗi trong căn hộ.",
+      "case_id": "duplicate-section-names",
+      "seed": 42,
+      "variant": "baseline",
+      "operation": "review",
+      "output_sha256": "583785b976889bdebeabb7049469a55f0c1369073b2e40b177bc4fb51b22c6c6",
+      "runtime_accepted": false
+    },
+    {
+      "index": 49,
+      "content_ok": false,
+      "issues": [
+        "false_contradiction",
+        "forced_drama"
+      ],
+      "note": "Khóa trỏ đúng Beat ga tàu và sửa về căn hộ; sau đó báo Ending đã để cha ở lại là contradiction, đề nghị chính hành động đã có để tăng căng thẳng.",
+      "case_id": "duplicate-section-names",
+      "seed": 42,
+      "variant": "target_keys",
+      "operation": "review",
+      "output_sha256": "42d8550573ad3d1168b3144375b73cbae014e09fb7d8a829bc26d20881da0ce5",
+      "runtime_accepted": true
+    },
+    {
+      "index": 50,
+      "content_ok": false,
+      "issues": [
+        "false_contradiction",
+        "false_absence",
+        "wrong_author_source"
+      ],
+      "note": "Bắt Beat ga tàu đúng; nhưng dùng draft làm author_quote, nói không có hành động cha dù đã đứng lại căn hộ và gắn contradiction cho kết phù hợp.",
+      "case_id": "duplicate-section-names",
+      "seed": 73,
+      "variant": "target_keys",
+      "operation": "review",
+      "output_sha256": "86716cbb58ece7ddaeef5ad811ff8f014aa06133bc9a458c6bfc7adb15c34d97",
+      "runtime_accepted": false
+    },
+    {
+      "index": 51,
+      "content_ok": false,
+      "issues": [
+        "false_contradiction",
+        "invented_constraint"
+      ],
+      "note": "Bắt Beat ga tàu đúng nhưng suy chỉ xin lỗi nghĩa không được đặt cốc nước, báo lỗi trên Beat trong căn hộ hợp brief.",
+      "case_id": "duplicate-section-names",
+      "seed": 73,
+      "variant": "baseline",
+      "operation": "review",
+      "output_sha256": "c6c5dab649272919360f1e4a931399e3c117283cb5b74e0c61f1e12dde8514d9",
+      "runtime_accepted": false
+    },
+    {
+      "index": 52,
+      "content_ok": false,
+      "issues": [
+        "incompatible_fix"
+      ],
+      "note": "Nhận ra ga tàu trái ý đồ nhưng đề nghị cha ngồi tại ga nhìn con đi, tiếp tục vi phạm căn hộ/no station. Các gợi ý cảm xúc sau không sửa lỗi giới hạn này.",
+      "case_id": "duplicate-section-names",
+      "seed": 101,
+      "variant": "baseline",
+      "operation": "review",
+      "output_sha256": "5a007dddb1b21bbbd517a146b21c65a7c709dde30a656c529e73d3b912b802a2",
+      "runtime_accepted": false
+    },
+    {
+      "index": 53,
+      "content_ok": false,
+      "issues": [
+        "false_contradiction"
+      ],
+      "note": "Trỏ đúng Beat ga tàu và sửa về căn hộ; gắn contradiction cho kết cha đứng lại trong căn hộ rồi đề nghị gần nguyên văn, không chỉ ra vi phạm thật.",
+      "case_id": "duplicate-section-names",
+      "seed": 101,
+      "variant": "target_keys",
+      "operation": "review",
+      "output_sha256": "628d498570767449daaba569a87fa4605629bbdb2b81c99f97d334b9e7a47dcc",
+      "runtime_accepted": true
+    },
+    {
+      "index": 54,
+      "content_ok": false,
+      "issues": [
+        "wrong_language",
+        "forced_drama"
+      ],
+      "note": "Toàn bộ nhận xét/cách sửa bằng tiếng Anh trong ca yêu cầu tiếng Việt, dù quote English cần giữ. Áp thêm thất bại prototype/áp lực trên draft đúng.",
+      "case_id": "mixed-language-feedback",
+      "seed": 42,
+      "variant": "target_keys",
+      "operation": "review",
+      "output_sha256": "147807f86698843696737fbde01f8ea6c60d7b3c3cf80df1419797c4260f5230",
+      "runtime_accepted": true
+    },
+    {
+      "index": 55,
+      "content_ok": false,
+      "issues": [
+        "false_contradiction",
+        "role_confusion",
+        "wrong_language"
+      ],
+      "note": "Cho rằng lab coach không được giúp thử prototype hoặc ghi nhận xét giảng dạy; ví dụ sửa mới viết English trái yêu cầu Vietnamese.",
+      "case_id": "mixed-language-feedback",
+      "seed": 42,
+      "variant": "baseline",
+      "operation": "review",
+      "output_sha256": "3d4f14e16d209f8df3f26f4814930b2c3611180a4aa153710970018995ea0eeb",
+      "runtime_accepted": false
+    },
+    {
+      "index": 56,
+      "content_ok": false,
+      "issues": [
+        "forced_drama",
+        "wrong_language",
+        "unsupported_achievement"
+      ],
+      "note": "Ép thêm debug thành công rồi lỗi nghiêm trọng gây rủi ro an toàn để có xung đột; toàn bộ ví dụ mới English dù yêu cầu Vietnamese.",
+      "case_id": "mixed-language-feedback",
+      "seed": 73,
+      "variant": "baseline",
+      "operation": "review",
+      "output_sha256": "29af1ba509dd52cf04d46447a2f0f15bb5bf31f08ab04415cb07869e3905cdfb",
+      "runtime_accepted": false
+    },
+    {
+      "index": 57,
+      "content_ok": false,
+      "issues": [
+        "wrong_language",
+        "forced_resolution"
+      ],
+      "note": "Nhận xét/suggestion đều English; đòi kết đóng/central question chưa được brief đặt ra và thêm coach khác.",
+      "case_id": "mixed-language-feedback",
+      "seed": 73,
+      "variant": "target_keys",
+      "operation": "review",
+      "output_sha256": "deb1da418fdffc713511f6b175fb15c77f9993eeb4fc802dfb92f07e30483244",
+      "runtime_accepted": true
+    },
+    {
+      "index": 58,
+      "content_ok": false,
+      "issues": [
+        "wrong_language"
+      ],
+      "note": "Reason Vietnamese nhưng cả hai suggestion mới English, trái yêu cầu viết ví dụ mới bằng Vietnamese; không phải chỉ giữ nguyên quote nguồn.",
+      "case_id": "mixed-language-feedback",
+      "seed": 101,
+      "variant": "target_keys",
+      "operation": "review",
+      "output_sha256": "bb2153d3ccf0d8d4a4933bc359d8049ecc1e077564a1df11aabfea0bc39902be",
+      "runtime_accepted": true
+    },
+    {
+      "index": 59,
+      "content_ok": false,
+      "issues": [
+        "false_contradiction",
+        "role_confusion",
+        "wrong_language"
+      ],
+      "note": "Quote nguồn hợp lệ nhưng suy coach giúp học viên test là tự làm thay; feedback English/Chinese, ví dụ English và tự nói kết quả chưa xác nhận không thuộc ca.",
+      "case_id": "mixed-language-feedback",
+      "seed": 101,
+      "variant": "baseline",
+      "operation": "review",
+      "output_sha256": "dfa6875953b58f651e753874a47d263d2956a407e1a6187e5eee75c1603c11de",
+      "runtime_accepted": true
+    },
+    {
+      "index": 60,
+      "content_ok": true,
+      "issues": [],
+      "borderline": true,
+      "note": "Gợi ý thêm phản ứng/cử chỉ của con gái, vẫn một diễn viên trong căn hộ, không thêm sân bay/cha xuất hiện/hòa giải bắt buộc. Lý do thiếu áp lực chung chung, việc giữ thư đã có nên giá trị thấp; cần người đọc đối chiếu craft.",
+      "case_id": "current-letter-draft",
+      "seed": 42,
+      "variant": "baseline",
+      "operation": "review",
+      "output_sha256": "c372eba9486de308b8eaf6f5613820c2caab220104afdcc0c9fe01c5c21279bd",
+      "runtime_accepted": false
+    },
+    {
+      "index": 61,
+      "content_ok": false,
+      "issues": [
+        "wrong_language"
+      ],
+      "note": "Gợi ý cử chỉ vẫn giữ một diễn viên/căn hộ và không bắt hòa giải, nhưng strength reason viết English trái yêu cầu Vietnamese. Author_quote copy từ draft bị chấm kỹ thuật riêng.",
+      "case_id": "current-letter-draft",
+      "seed": 42,
+      "variant": "target_keys",
+      "operation": "review",
+      "output_sha256": "91a28d4e04a516b04912cc22e37d00a195cc51197d23690dc59f651cf07d6d4d",
+      "runtime_accepted": false
+    },
+    {
+      "index": 62,
+      "content_ok": false,
+      "issues": [
+        "wrong_language"
+      ],
+      "note": "Suggestion về cử chỉ hợp phạm vi, nhưng strength reason viết English; hai reason craft chỉ ghi nhãn, không giải thích tác dụng.",
+      "case_id": "current-letter-draft",
+      "seed": 73,
+      "variant": "target_keys",
+      "operation": "review",
+      "output_sha256": "cc9c0e3f88d22ac62d83a1f30cdfb4bb90fccbb82021901a075599504c8aa82a",
+      "runtime_accepted": true
+    },
+    {
+      "index": 63,
+      "content_ok": false,
+      "issues": [
+        "wrong_language",
+        "forced_resolution"
+      ],
+      "note": "Feedback toàn English, chê thiếu closure và đề nghị đốt thư để chốt quá khứ; áp kết quả/cảm xúc không từ brief.",
+      "case_id": "current-letter-draft",
+      "seed": 73,
+      "variant": "baseline",
+      "operation": "review",
+      "output_sha256": "7a8a0c5b7d19da5e4144615ddea37dca95f504db02e92dc0cfb74db2ccf84c91",
+      "runtime_accepted": false
+    },
+    {
+      "index": 64,
+      "content_ok": false,
+      "issues": [
+        "wrong_language",
+        "forced_resolution"
+      ],
+      "borderline": true,
+      "note": "Gợi ý khóc/viết thư trả lời vẫn trong căn hộ một người, nhưng reason có chữ Chinese kết局 và khẳng định phải giải quyết vấn đề/đối thoại mới đủ kết. Mức độ chấp nhận craft cần đối chiếu độc lập.",
+      "case_id": "current-letter-draft",
+      "seed": 101,
+      "variant": "baseline",
+      "operation": "review",
+      "output_sha256": "d46416e11f8d54c1cfee1de858c2db84be2e7ff98fff784c1659199add41255a",
+      "runtime_accepted": false
+    },
+    {
+      "index": 65,
+      "content_ok": false,
+      "issues": [
+        "false_contradiction",
+        "invented_location"
+      ],
+      "note": "Suy mở phong bì tại bàn ăn trong căn hộ gợi không gian như sân bay, báo contradiction với no airport dù draft không có sân bay.",
+      "case_id": "current-letter-draft",
+      "seed": 101,
+      "variant": "target_keys",
+      "operation": "review",
+      "output_sha256": "35261f93592e09e50f6f16f997bfd8c63ad4556912c6921fee142056b466cf9c",
+      "runtime_accepted": true
+    },
+    {
+      "index": 66,
+      "content_ok": false,
+      "issues": [
+        "wrong_language",
+        "false_contradiction"
+      ],
+      "note": "Feedback hầu hết Chinese, báo đặt bát/nhìn bát là contradiction với chờ cả chiều thay vì gợi mốc thời gian có căn cứ; quote còn sai dấu câu.",
+      "case_id": "missing-time-cue",
+      "seed": 42,
+      "variant": "target_keys",
+      "operation": "review",
+      "output_sha256": "9e5b5db5f0b30236318b45153b8b2c181e5fa49e9a34cfa438aeb9c7cec37520",
+      "runtime_accepted": false
+    },
+    {
+      "index": 67,
+      "content_ok": true,
+      "issues": [],
+      "borderline": true,
+      "note": "Bắt đúng draft chưa làm thấy thời gian chờ kéo dài, đề nghị cử chỉ chờ mà không tiết lộ người vắng/đổi diễn viên hay địa điểm. Cách nhìn bát/khóc chưa phải mốc thời gian mạnh; quote nguồn bị tính kỹ thuật riêng.",
+      "case_id": "missing-time-cue",
+      "seed": 42,
+      "variant": "baseline",
+      "operation": "review",
+      "output_sha256": "06b3153bb7154969205340ec6df62ef19d6e544767a31d51b02413e2cb446824",
+      "runtime_accepted": false
+    },
+    {
+      "index": 68,
+      "content_ok": true,
+      "issues": [],
+      "borderline": true,
+      "note": "Bắt thiếu biểu hiện chờ kéo dài, thêm chờ/tiếng đồng hồ và giữ người vắng chưa xác định; cảnh mẹ rời khung có thể quay từ bếp. Nhãn contradiction thay craft và hiệu quả mốc thời gian còn cần người đọc đối chiếu; không bắt quay không gian khác.",
+      "case_id": "missing-time-cue",
+      "seed": 73,
+      "variant": "baseline",
+      "operation": "review",
+      "output_sha256": "276c54a13fb8661e2ae0312afcfc34cf2f302380ccd657ec9b7ea5c19f09ed8b",
+      "runtime_accepted": false
+    },
+    {
+      "index": 69,
+      "content_ok": false,
+      "issues": [
+        "wrong_language",
+        "false_contradiction"
+      ],
+      "note": "Toàn bộ feedback English; coi đặt bát là trái chờ thụ động dù hai hành động tương thích. Gợi kéo dài shot là phần hữu ích nhưng không bù lỗi còn lại.",
+      "case_id": "missing-time-cue",
+      "seed": 73,
+      "variant": "target_keys",
+      "operation": "review",
+      "output_sha256": "c74f011eb4619eb825a502c48bc5c03505ec71096f9ffa6691c76606960fce0b",
+      "runtime_accepted": true
+    },
+    {
+      "index": 70,
+      "content_ok": false,
+      "issues": [
+        "wrong_language",
+        "false_contradiction"
+      ],
+      "note": "Feedback English trong ca Vietnamese; gọi hành động mở đầu đặt bát là mâu thuẫn chỉ vì chưa có thời gian trôi, áp yêu cầu resolution dù chủ ý chờ mở.",
+      "case_id": "missing-time-cue",
+      "seed": 101,
+      "variant": "target_keys",
+      "operation": "review",
+      "output_sha256": "97dc3cbfe956d9890786215f0a60b5d628647ed38433baf4ff4c1ccbdfc6b9ca",
+      "runtime_accepted": true
+    },
+    {
+      "index": 71,
+      "content_ok": false,
+      "issues": [
+        "false_contradiction",
+        "proposal_as_error",
+        "wrong_author_source"
+      ],
+      "note": "Gọi ngồi xuống/nhìn bát là sai dữ kiện chỉ vì tác giả chưa xác nhận từng cử chỉ; dùng câu draft làm nguồn tác giả và không bắt thiếu mốc thời gian.",
+      "case_id": "missing-time-cue",
+      "seed": 101,
+      "variant": "baseline",
+      "operation": "review",
+      "output_sha256": "7382d3eb9386d78169a753cf240424e8bd65362517792c1a5cb946e6f49f6140",
+      "runtime_accepted": false
+    },
+    {
+      "index": 72,
+      "content_ok": false,
+      "issues": [
+        "role_confusion",
+        "false_contradiction"
+      ],
+      "note": "Khen chuỗi nhân vật Mai/Học viên là Mai vừa học viên vừa hướng dẫn; gọi chưa công bố chứng chỉ và tiếp tục dạy/học là mâu thuẫn dù phù hợp brief, lặp finding.",
+      "case_id": "mentor-plan",
+      "seed": 42,
+      "variant": "baseline",
+      "operation": "plan",
+      "output_sha256": "1c640f047f8b321c161950502d4226100148a56759d1b0cbb1b16897a85b8892",
+      "runtime_accepted": false
+    },
+    {
+      "index": 73,
+      "content_ok": false,
+      "issues": [
+        "confirmed_fact_as_open_choice",
+        "false_contradiction"
+      ],
+      "note": "Đọc 'Mai Học viên' rồi nói vai giáo viên/học viên đều hợp lý dù nguồn chốt mentor; gọi chưa công bố chứng chỉ là contradiction với chính dữ kiện chưa công bố.",
+      "case_id": "mentor-plan",
+      "seed": 42,
+      "variant": "target_keys",
+      "operation": "plan",
+      "output_sha256": "fb5de6d9589c10f7b24528b50d29c7b59690330250a61765737664a7559221bc",
+      "runtime_accepted": true
+    },
+    {
+      "index": 74,
+      "content_ok": false,
+      "issues": [
+        "false_contradiction",
+        "projection_artifact_as_story_error"
+      ],
+      "note": "Chê Core idea lặp logline dù pipeline tự sao chép; gọi thách thức dạy/kết tiếp tục học là contradiction với chứng chỉ chưa công bố dù không chốt thành tích. Bỏ sót khóa học tự thêm.",
+      "case_id": "mentor-plan",
+      "seed": 73,
+      "variant": "target_keys",
+      "operation": "plan",
+      "output_sha256": "4a1c90f7e79e44b6f20e989d204442af2ea9ef910d9665cef88f66a9676a4cf6",
+      "runtime_accepted": true
+    },
+    {
+      "index": 75,
+      "content_ok": false,
+      "issues": [
+        "false_contradiction",
+        "unknown_outcome_as_error"
+      ],
+      "note": "Nguồn/quote qua validator nhưng coi chưa rõ nhận chứng chỉ là không nhất quán dù tác giả yêu cầu chưa biết; báo contradiction trên kết tiếp tục dạy/học phù hợp. Gợi ý thêm chủ thể Mai chỉ có ích một phần.",
+      "case_id": "mentor-plan",
+      "seed": 73,
+      "variant": "baseline",
+      "operation": "plan",
+      "output_sha256": "e0805b0777394c9bf853d15ff1ea0de848ff7b32535a4e2c4e0f80cbf6ff2c4f",
+      "runtime_accepted": true
+    },
+    {
+      "index": 76,
+      "content_ok": false,
+      "issues": [
+        "false_contradiction",
+        "unsupported_exam"
+      ],
+      "note": "Gọi tiếp tục hướng dẫn/học là trái chứng chỉ chưa công bố; sửa thành chuẩn bị kỳ thi sắp tới không có trong nguồn, trong khi tác giả nói đang chờ kết quả.",
+      "case_id": "mentor-plan",
+      "seed": 101,
+      "variant": "baseline",
+      "operation": "plan",
+      "output_sha256": "63fb096e536d9d1e02a6005b4d188432dc7d082ef30e2ecdcfd26a31e069276c",
+      "runtime_accepted": false
+    },
+    {
+      "index": 77,
+      "content_ok": false,
+      "issues": [
+        "invented_achievement",
+        "false_diagnosis",
+        "author_intent"
+      ],
+      "note": "Dù biết kết quả chưa chốt, đề nghị Mai hoàn thành khóa nâng cao và nhận chứng chỉ mới; lại suy tiếp tục hướng dẫn nghĩa chứng chỉ đã công bố.",
+      "case_id": "mentor-plan",
+      "seed": 101,
+      "variant": "target_keys",
+      "operation": "plan",
+      "output_sha256": "c50cc2cdf3dd5347ad96b23845ed07097a61fab85d877409a482f21d329a4dea",
+      "runtime_accepted": true
+    },
+    {
+      "index": 78,
+      "content_ok": true,
+      "issues": [],
+      "borderline": true,
+      "note": "Đề nghị giữ mẹ ở bàn ăn thay chuyển phòng khách, phù hợp một căn bếp; các gợi ý camera/nỗi sợ vẫn giữ nhân vật/người vắng chưa rõ. Lý do chưa nêu rõ giới hạn địa điểm và có lời khuyên dư; author_quote lấy từ draft được chấm kỹ thuật riêng.",
+      "case_id": "plan-quiet-waiting",
+      "seed": 42,
+      "variant": "target_keys",
+      "operation": "plan",
+      "output_sha256": "fe7a880bd50c3d4ce7ac025c2c52923681125f5368a5e67f558bddef9514163e",
+      "runtime_accepted": false
+    },
+    {
+      "index": 79,
+      "content_ok": false,
+      "issues": [
+        "invented_absent_identity",
+        "dialogue_violation",
+        "resource_violation",
+        "forced_resolution"
+      ],
+      "note": "Đòi chỉ rõ người vắng là con trai, thêm câu thoại gọi con và giữ cảnh phòng khách; trái cả danh tính để mở, không thoại và một bếp.",
+      "case_id": "plan-quiet-waiting",
+      "seed": 42,
+      "variant": "baseline",
+      "operation": "plan",
+      "output_sha256": "d024acced619cd7db59fbcf80d3ac2e8f8f1eee2a3df00b502ca451e1b1fd367",
+      "runtime_accepted": false
+    },
+    {
+      "index": 80,
+      "content_ok": false,
+      "issues": [
+        "false_contradiction",
+        "nonsensical_causality",
+        "wrong_author_source"
+      ],
+      "note": "Dùng draft làm author_quote; lập luận người vắng trước khi mẹ chờ nên không thể là nguyên nhân chờ, rồi đòi làm rõ cảm xúc/kết quả hy vọng dù chưa có mâu thuẫn thật.",
+      "case_id": "plan-quiet-waiting",
+      "seed": 73,
+      "variant": "baseline",
+      "operation": "plan",
+      "output_sha256": "a63039194f84d15ed7233b8a4ff8d4d2b3f9776b5017ac2440e8313584ba6353",
+      "runtime_accepted": false
+    },
+    {
+      "index": 81,
+      "content_ok": false,
+      "issues": [
+        "invented_absent_identity",
+        "invented_return",
+        "forced_resolution"
+      ],
+      "note": "Qua validator nhưng yêu cầu chốt người vắng là con trai đi công tác hai tháng, rồi thêm bóng người xuất hiện cửa sổ; trái danh tính và việc trở về tác giả cố ý để mở.",
+      "case_id": "plan-quiet-waiting",
+      "seed": 73,
+      "variant": "target_keys",
+      "operation": "plan",
+      "output_sha256": "5310b72c0b6d3f2d83447a483fa330d7323a125fd30bc0ca595976f20f7d47b3",
+      "runtime_accepted": true
+    },
+    {
+      "index": 82,
+      "content_ok": false,
+      "issues": [
+        "false_contradiction",
+        "unsupported_gender"
+      ],
+      "note": "Gắn contradiction cho người vắng chưa về dù tương thích kết mở; đề nghị thêm 'anh ấy' không có nguồn. Các cử chỉ chờ còn lại phù hợp nhưng không chứng minh mâu thuẫn.",
+      "case_id": "plan-quiet-waiting",
+      "seed": 101,
+      "variant": "target_keys",
+      "operation": "plan",
+      "output_sha256": "c002f1e630237421d59b8eab02a188e7bd76e43ec4426e3680ec80759a5f3df1",
+      "runtime_accepted": false
+    },
+    {
+      "index": 83,
+      "content_ok": false,
+      "issues": [
+        "author_intent",
+        "forced_resolution"
+      ],
+      "note": "Chê trạng thái tiếp tục chờ là không có giải quyết/tiến triển dù tác giả chọn quan sát kết mở. Một số gợi ý cử chỉ hợp phạm vi nhưng lý do buộc chuyển biến không căn cứ ý đồ.",
+      "case_id": "plan-quiet-waiting",
+      "seed": 101,
+      "variant": "baseline",
+      "operation": "plan",
+      "output_sha256": "c9a75156fddf58017059aabdf985b08163d7876494271f89936eb0d1d44ad01e",
+      "runtime_accepted": false
+    },
+    {
+      "index": 84,
+      "content_ok": false,
+      "issues": [
+        "deferral_as_error",
+        "forced_relationship_resolution",
+        "proposal_as_fact"
+      ],
+      "note": "Coi trạng thái tác giả chưa chọn là chủ đề đã chốt; yêu cầu đổi tên theo quan hệ và thêm quyết định cuối 'Chúng ta nên thử lại', ép kết quan hệ thay vì giữ để sau.",
+      "case_id": "plan-deferred-proposal",
+      "seed": 42,
+      "variant": "baseline",
+      "operation": "plan",
+      "output_sha256": "89244142180be16199c56ac2d9a453e779575d6aa597abb85991223cfe2ade5e",
+      "runtime_accepted": false
+    },
+    {
+      "index": 85,
+      "content_ok": false,
+      "issues": [
+        "deferral_as_error",
+        "wrong_author_attribution",
+        "projection_loses_role"
+      ],
+      "note": "Viết nguồn thành hai nhân vật chưa quyết định quan hệ thay vì tác giả chưa chọn; yêu cầu xác định quan hệ/role để xử lý thiếu tên. Plan gốc đã phân protagonist A/supporting B nhưng phép chiếu nối tên mất nhãn.",
+      "case_id": "plan-deferred-proposal",
+      "seed": 42,
+      "variant": "target_keys",
+      "operation": "plan",
+      "output_sha256": "906998741fd39b097e9b786e3a47f74ae0ffdf901055c3e6ebb71ae92f193cc3",
+      "runtime_accepted": false
+    },
+    {
+      "index": 86,
+      "content_ok": false,
+      "issues": [
+        "deferral_as_error",
+        "unlabelled_relationship"
+      ],
+      "note": "Đề nghị thêm quá khứ để làm rõ họ là bạn thân từ thời học sinh, gắn craft như thiếu sót phải sửa thay vì giữ quan hệ tác giả chưa chọn ở dạng đề xuất.",
+      "case_id": "plan-deferred-proposal",
+      "seed": 73,
+      "variant": "target_keys",
+      "operation": "plan",
+      "output_sha256": "5318a37bc7579174d857462ba249637b24f8d2693ee0977ceab048f302343256",
+      "runtime_accepted": true
+    },
+    {
+      "index": 87,
+      "content_ok": true,
+      "issues": [],
+      "borderline": true,
+      "note": "Các mục đều creative_proposal, gợi cử chỉ/cảm xúc và một người rời bàn mà không chốt họ là bạn/người thân, không thêm diễn viên hay bắt quay phòng khác. Lý do đòi kịch tính/độ rõ còn chung chung; cần người đọc đối chiếu giá trị craft.",
+      "case_id": "plan-deferred-proposal",
+      "seed": 73,
+      "variant": "baseline",
+      "operation": "plan",
+      "output_sha256": "f4bf57eb8aef820208b2684e28c496fe70e7feec28bb94cbf5a5d479f58ba329",
+      "runtime_accepted": false
+    },
+    {
+      "index": 88,
+      "content_ok": false,
+      "issues": [
+        "proposal_as_fact",
+        "wrong_author_attribution"
+      ],
+      "note": "Đúng khi giữ quan hệ để mở, nhưng khẳng định tác giả đã chọn kết im lặng/xa cách dù đó là chi tiết do planner AI tự thêm. Còn lấy câu hỏi AI và draft làm author_quote.",
+      "case_id": "plan-deferred-proposal",
+      "seed": 101,
+      "variant": "baseline",
+      "operation": "plan",
+      "output_sha256": "48e37910ea5164eeca7540f22b1c5702218b7f43787ff14db325afa90b1a53b0",
+      "runtime_accepted": false
+    },
+    {
+      "index": 89,
+      "content_ok": false,
+      "issues": [
+        "deferral_as_error",
+        "forced_relationship_resolution"
+      ],
+      "note": "Qua validator nhưng liên tiếp chê quan hệ chưa rõ và yêu cầu chốt hai người là bạn cũ lâu không gặp, trái lựa chọn tác giả để sau.",
+      "case_id": "plan-deferred-proposal",
+      "seed": 101,
+      "variant": "target_keys",
+      "operation": "plan",
+      "output_sha256": "915c37cfab8ba7239e2e398d6d55fb20c27041cae468e251ac16080575b2b7c6",
+      "runtime_accepted": true
+    },
+    {
+      "index": 90,
+      "content_ok": false,
+      "issues": [
+        "missed_contradiction",
+        "false_praise",
+        "incompatible_fix"
+      ],
+      "note": "Khen logline chờ chứng chỉ dù nguồn chốt đã trao; bỏ sót mâu thuẫn chính, còn thêm close call khi certification và đề nghị nhận chứng chỉ ở kết tương lai.",
+      "case_id": "plan-confirmed-outcome-en",
+      "seed": 42,
+      "variant": "target_keys",
+      "operation": "plan",
+      "output_sha256": "b80227cda614a3fc9bdd4582e53fdf69428fe8d363cec69629174274bf63dc85",
+      "runtime_accepted": true
+    },
+    {
+      "index": 91,
+      "content_ok": false,
+      "issues": [
+        "missed_contradiction",
+        "false_praise",
+        "projection_loses_role"
+      ],
+      "note": "Khen việc chờ chứng chỉ và đề nghị nhận trong phim thay vì giữ mốc đã trao tháng trước. Cho rằng danh sách Eli/Sarah/Tom làm mất protagonist, đề nghị xóa tên phụ do phép chiếu mất nhãn.",
+      "case_id": "plan-confirmed-outcome-en",
+      "seed": 42,
+      "variant": "baseline",
+      "operation": "plan",
+      "output_sha256": "f2195737ec2d3e28a3226acfb0b9f0be2fcb0cb1aea3e85d3936f291a02828ba",
+      "runtime_accepted": true
+    },
+    {
+      "index": 92,
+      "content_ok": false,
+      "issues": [
+        "false_contradiction",
+        "projection_loses_role"
+      ],
+      "note": "Gợi bổ sung đúng mốc chứng chỉ đã trao tháng trước, nhưng báo danh sách Eli/Sarah/Tom là mâu thuẫn với protagonist duy nhất và suy nhiều người cùng tên. Role gốc đã phân rõ trước khi bị nối mất nhãn.",
+      "case_id": "plan-confirmed-outcome-en",
+      "seed": 73,
+      "variant": "baseline",
+      "operation": "plan",
+      "output_sha256": "a9aec319ae46ce5a21e3282dd5073fa60cd5be81fb59c47fcbd92787e4b1048d",
+      "runtime_accepted": false
+    },
+    {
+      "index": 93,
+      "content_ok": false,
+      "issues": [
+        "false_contradiction",
+        "false_absence",
+        "invented_open_intent"
+      ],
+      "note": "Coi cầm chứng chỉ đã được trao là contradiction vì chưa được mô tả; nói ending chưa xác nhận trust dù quote khẳng định earning trust, rồi áp ý đồ kết mở không có trong brief. Gợi làm rõ nhãn nhân vật có ích một phần.",
+      "case_id": "plan-confirmed-outcome-en",
+      "seed": 73,
+      "variant": "target_keys",
+      "operation": "plan",
+      "output_sha256": "f814492c02047ecbf7d663aa060c231d054c01d32ed24889058c0de0240f11e4",
+      "runtime_accepted": false
+    },
+    {
+      "index": 94,
+      "content_ok": false,
+      "issues": [
+        "false_absence",
+        "forced_climax"
+      ],
+      "note": "Chê chưa phát triển tác động lên cách dạy dù Middle đã có Eli đổi sang chú ý cá nhân/kiên nhẫn; ép thêm final test/climax vào kết học viên đã tiến bộ. Tiếp tục coi stakes duy trì chứng chỉ là hướng hợp lệ mà không phân nguồn.",
+      "case_id": "plan-confirmed-outcome-en",
+      "seed": 101,
+      "variant": "target_keys",
+      "operation": "plan",
+      "output_sha256": "4ec32588fa6c7064ad7f8a4176f917cb022ff09eb891426437ff3334d7bbe54e",
+      "runtime_accepted": true
+    },
+    {
+      "index": 95,
+      "content_ok": false,
+      "issues": [
+        "false_absence"
+      ],
+      "note": "Nói Middle không cho thấy tự nghi ngờ ảnh hưởng phương pháp dù câu ngay sau ghi Eli chuyển sang chú ý cá nhân/kiên nhẫn, điều chỉnh dạy; cách sửa lặp phần đã có. Gợi ý còn tiếp tục stakes chứng chỉ tự thêm.",
+      "case_id": "plan-confirmed-outcome-en",
+      "seed": 101,
+      "variant": "baseline",
+      "operation": "plan",
+      "output_sha256": "d7a111904abc5daf10face8dd52d3827dfb041a437f60bc1fa51f348c66db5cb",
+      "runtime_accepted": true
+    }
+  ],
+  "plan_grades": [
+    {
+      "index": 0,
+      "content_ok": false,
+      "author_intent_ok": true,
+      "language_ok": false,
+      "issues": [
+        "wrong_language"
+      ],
+      "note": "Giữ Mai hướng dẫn học viên, kết quả chứng chỉ chưa công bố và tiếp tục học cách dạy; không thêm khóa học/giải thưởng. Tone mới lại English 'Tranquil and focused', không giữ trọn target Vietnamese.",
+      "case_id": "mentor-plan",
+      "seed": 42,
+      "schema_valid": true,
+      "output_sha256": "5e3c8db838e6199071f3bf6b0df619f513437aab4577abb8272c4ecb5b802ba2"
+    },
+    {
+      "index": 1,
+      "content_ok": false,
+      "author_intent_ok": false,
+      "language_ok": true,
+      "issues": [
+        "unlabelled_proposal",
+        "unsupported_course"
+      ],
+      "note": "Giữ vai Mai hướng dẫn và không chốt chứng chỉ; vẫn tự thêm khóa học nâng cao cùng nhà máy gốm không gắn nhãn đề xuất, giống lỗi đã chấm ở 3B.",
+      "case_id": "mentor-plan",
+      "seed": 73,
+      "schema_valid": true,
+      "output_sha256": "b26938d58dbfb46121e953347bdf9b036c49ddf8dbc38970a956a829274b5bcb"
+    },
+    {
+      "index": 2,
+      "content_ok": false,
+      "author_intent_ok": false,
+      "language_ok": true,
+      "issues": [
+        "unsupported_course",
+        "unlabelled_proposal"
+      ],
+      "note": "Giữ Mai hướng dẫn và chứng chỉ chưa công bố, nhưng tự chốt tham gia khóa học nâng cao không nhãn đề xuất; thêm yếu tố tự tin/âm thanh gốm vỡ như dữ kiện sẵn.",
+      "case_id": "mentor-plan",
+      "seed": 101,
+      "schema_valid": true,
+      "output_sha256": "d6f4e2718cdb2be1705b136356617430484268b1be4e32fd1db3ccb0eb4c0864"
+    },
+    {
+      "index": 3,
+      "content_ok": false,
+      "author_intent_ok": false,
+      "language_ok": true,
+      "issues": [
+        "resource_violation",
+        "internal_inconsistency"
+      ],
+      "note": "Giữ một mẹ/không thoại/người vắng chưa rõ và có đồng hồ; nhưng kết đưa mẹ sang phòng khách trong khi chỉ được một căn bếp, production_notes lại ghi chỉ bếp.",
+      "case_id": "plan-quiet-waiting",
+      "seed": 42,
+      "schema_valid": true,
+      "output_sha256": "9599748c37f07e6487ffdb7a0917aaf1be5846c96262cd2635dec483831aa90c"
+    },
+    {
+      "index": 4,
+      "content_ok": false,
+      "author_intent_ok": true,
+      "language_ok": false,
+      "issues": [
+        "wrong_language"
+      ],
+      "note": "Giữ một mẹ/một bếp, không thoại và không tiết lộ danh tính hay việc trở về. Tone lại English 'Tranquil and hopeful'; theme gia đình là suy diễn rộng cần đối chiếu nhưng chưa chốt danh tính cụ thể.",
+      "case_id": "plan-quiet-waiting",
+      "seed": 73,
+      "schema_valid": true,
+      "output_sha256": "4974d68883df374e259bcaa0e20d0a550436c81b3614ff9564ffe9c772e64308"
+    },
+    {
+      "index": 5,
+      "content_ok": true,
+      "author_intent_ok": true,
+      "language_ok": true,
+      "issues": [],
+      "note": "Giữ một mẹ/một bếp/không thoại, người vắng và việc trở về chưa xác định, kết mở; không ép twist/giải thích. 'Thời gian trôi qua' còn cần thể hiện bằng hình ảnh cụ thể nhưng không vi phạm ý đồ.",
+      "case_id": "plan-quiet-waiting",
+      "seed": 101,
+      "schema_valid": true,
+      "output_sha256": "3e26fc062d7c93893bf7e86b01a6cd24bc88d95b1736889626585b8133a19fb0"
+    },
+    {
+      "index": 6,
+      "content_ok": false,
+      "author_intent_ok": false,
+      "language_ok": true,
+      "issues": [
+        "deferral_as_plot",
+        "unlabelled_proposal"
+      ],
+      "note": "Biến tác giả chưa chọn bạn/người thân thành mâu thuẫn quan hệ chưa rõ của nhân vật; cho họ hồi tưởng/chia sẻ kỷ niệm và suy nghĩ quan hệ, không nhãn đề xuất. Hai diễn viên/một phòng vẫn đúng.",
+      "case_id": "plan-deferred-proposal",
+      "seed": 42,
+      "schema_valid": true,
+      "output_sha256": "c2753f955c99e3a3e6e8137a9e4be7b254a1d0913c3ba62f4f210d03fa211861"
+    },
+    {
+      "index": 7,
+      "content_ok": false,
+      "author_intent_ok": false,
+      "language_ok": true,
+      "issues": [
+        "deferral_as_plot",
+        "unlabelled_proposal"
+      ],
+      "note": "Tiếp tục biến quan hệ tác giả chưa chọn thành mâu thuẫn/hồi hộp của nhân vật; tự thêm kỷ niệm chung và họ không biết tiếp tục thế nào, không nhãn đề xuất.",
+      "case_id": "plan-deferred-proposal",
+      "seed": 73,
+      "schema_valid": true,
+      "output_sha256": "3fc303ae54a9583aeaaa4449784d8ad463b88483e749bc1853e43984751a3490"
+    },
+    {
+      "index": 8,
+      "content_ok": false,
+      "author_intent_ok": false,
+      "language_ok": true,
+      "issues": [
+        "deferral_as_plot",
+        "unlabelled_proposal"
+      ],
+      "note": "Biến tác giả chưa chọn quan hệ thành sự bất an/quan hệ chưa xác định trong truyện; tự chốt nam/nữ, đối thoại và xa cách như dữ kiện, không nhãn đề xuất. Hai người/một phòng vẫn đúng.",
+      "case_id": "plan-deferred-proposal",
+      "seed": 101,
+      "schema_valid": true,
+      "output_sha256": "184ffe71cc7659933a632b42ed5cb2cb558f0e387621e27dbfcdbbcaaaedf0c7"
+    },
+    {
+      "index": 9,
+      "content_ok": false,
+      "author_intent_ok": false,
+      "language_ok": true,
+      "issues": [
+        "confirmed_outcome_erased",
+        "invented_backstory",
+        "unlabelled_proposal"
+      ],
+      "note": "Đổi chứng chỉ đã chính thức trao tháng trước thành Eli đang chờ/nhìn tới chứng chỉ; tự thêm Sarah/Tom, nỗi sợ quá khứ của Eli và thành công học viên không nhãn đề xuất.",
+      "case_id": "plan-confirmed-outcome-en",
+      "seed": 42,
+      "schema_valid": true,
+      "output_sha256": "e75dc234f725167ab5bdac3192df586e9719026a20d99308093b9067a6b39616"
+    },
+    {
+      "index": 10,
+      "content_ok": false,
+      "author_intent_ok": false,
+      "language_ok": true,
+      "issues": [
+        "unsupported_chronology",
+        "unlabelled_proposal"
+      ],
+      "note": "Giữ Eli là instructor và chứng chỉ đã được trao; nhưng tự đặt buổi dạy đầu tiên/người mới, sự cố học viên và hành trình chứng tỏ năng lực không nhãn đề xuất. Không giữ rõ mốc trao tháng trước.",
+      "case_id": "plan-confirmed-outcome-en",
+      "seed": 73,
+      "schema_valid": true,
+      "output_sha256": "e8d3a82c2bc0345e6b6865e0b89858e82c4e1931ddc1226e35f60153de934029"
+    },
+    {
+      "index": 11,
+      "content_ok": false,
+      "author_intent_ok": false,
+      "language_ok": true,
+      "issues": [
+        "unsupported_condition",
+        "unsupported_chronology",
+        "unlabelled_proposal"
+      ],
+      "note": "Giữ Eli instructor và có chứng chỉ treo tường, nhưng tự thêm stakes phải duy trì certification, buổi dạy đầu tiên và các phiên học sau dẫn tới thành công học viên; không nhãn đề xuất hay nguồn về điều kiện chứng chỉ.",
+      "case_id": "plan-confirmed-outcome-en",
+      "seed": 101,
+      "schema_valid": true,
+      "output_sha256": "294d530eaa4e8cb9b9db29094cf34b763d686b54792c86f0821eefc04c8331d4"
+    }
+  ],
+  "criteria": "Read every output against fixture review_checks and full source. Accept the response only if it preserves author facts, intent, resources and target language, catches required material contradictions, and avoids material false diagnoses or incompatible fixes. Harmless redundant optional suggestions may pass. Technical quote/key validity is scored separately. A partly correct response can fail if other items introduce material errors.",
+  "protocol_notes": [
+    "The planning case plan-quiet-waiting inherited a fixed-draft-only check ('Waiting already has a time cue') even though no draft is supplied to planning. That premise is inapplicable to all three generated-plan trials. Keep the original frozen cases in raw evidence, exclude that check from qualitative grading, correct future fixture expectations after the run, and disclose the correction. No model-visible input, schema, prompt, raw result or technical verdict changes.",
+    "Only execution model changed to qwen2.5:7b; request_profile_model is pinned to qwen2.5:3b. All 72 fixed-review and 12 planner requests match historical 3B requests exactly. The 24 downstream critic requests use 7B-generated plans; interpret this stratum separately.",
+    "The aborted attempt is excluded in full: 42 generated critic outputs followed by 30 critic and 12 planner transport failures. Primary run starts fresh with all cases; no resume or model-output retry. All first 42 primary outputs match the aborted outputs byte-for-byte; qualitative judgments were reused only on exact raw-output matches.",
+    "Workspace source changed concurrently to a different critic contract. Primary run uses an isolated copy of e5198db, 23 source hashes checked. The current runner later gained a compatibility diagnostic; that does not change requests on compatible historical source.",
+    "Agent grading is unblinded and exposed to the aborted attempt. Borderline craft judgments are marked; no independent human grading, held-out set or user pilot. Exact quote/key validity is separate from semantic judgment.",
+    "Ollama version/templates were read during the primary run. No historical server-version capture exists in the 3B artifact. Current /api/show omits parameters for both models; absence is not a proof of identical historical sampler defaults."
+  ],
+  "summary": {
+    "baseline": {
+      "attempts": 48,
+      "schema_valid": 48,
+      "runtime_accepted": 5,
+      "upstream_planning_failures": 0,
+      "seconds": 2281.439,
+      "error_runs": {
+        "author_quote": 15,
+        "draft_quote": 5,
+        "missing_author_quote": 1,
+        "target_reference": 37
+      },
+      "median_seconds": 49.337,
+      "prompt_tokens": 126420,
+      "output_tokens": 19966,
+      "invalid_target_labels": {
+        "Character": 5,
+        "Story Clarity": 2,
+        "Conflict": 1,
+        "Emotional Impact": 1,
+        "Logline": 32,
+        "Main Conflict": 5,
+        "Main Character": 1
+      },
+      "review": {
+        "attempts": 36,
+        "accepted": 2,
+        "median_seconds": 41.103,
+        "agent_content_acceptable": 6,
+        "runtime_and_agent_acceptable": 0,
+        "borderline_outputs": 4
+      },
+      "plan": {
+        "attempts": 12,
+        "accepted": 3,
+        "median_seconds": 65.963,
+        "agent_content_acceptable": 1,
+        "runtime_and_agent_acceptable": 0,
+        "borderline_outputs": 1
+      },
+      "agent_content_acceptable": 7,
+      "runtime_and_agent_acceptable": 0,
+      "borderline_outputs": 5,
+      "runtime_and_agent_acceptable_excluding_borderline": 0
+    },
+    "target_keys": {
+      "attempts": 48,
+      "schema_valid": 48,
+      "runtime_accepted": 36,
+      "upstream_planning_failures": 0,
+      "seconds": 2622.182,
+      "error_runs": {
+        "author_quote": 12,
+        "draft_quote": 1
+      },
+      "median_seconds": 53.174,
+      "prompt_tokens": 147447,
+      "output_tokens": 22844,
+      "invalid_target_labels": {},
+      "review": {
+        "attempts": 36,
+        "accepted": 28,
+        "median_seconds": 47.871,
+        "agent_content_acceptable": 2,
+        "runtime_and_agent_acceptable": 2,
+        "borderline_outputs": 0
+      },
+      "plan": {
+        "attempts": 12,
+        "accepted": 8,
+        "median_seconds": 73.463,
+        "agent_content_acceptable": 1,
+        "runtime_and_agent_acceptable": 0,
+        "borderline_outputs": 1
+      },
+      "agent_content_acceptable": 3,
+      "runtime_and_agent_acceptable": 2,
+      "borderline_outputs": 1,
+      "runtime_and_agent_acceptable_excluding_borderline": 2
+    }
+  },
+  "planning_summary": {
+    "attempts": 12,
+    "schema_valid": 12,
+    "median_seconds": 58.654,
+    "agent_content_acceptable": 1,
+    "author_intent_acceptable": 3,
+    "language_acceptable": 10
+  },
+  "integrity": {
+    "source_hashes_unchanged_in_frozen_copy": true,
+    "cases_identical": true,
+    "non_model_parameters_identical": true,
+    "requests_reconstructed": 96,
+    "fixed_requests_identical_to_3b": 72,
+    "planner_requests_identical_to_3b": 12,
+    "runtime_verdicts_replayed": 96,
+    "paired_snapshots_equal": 48,
+    "model_metadata_unchanged": true,
+    "planner_outputs_revalidated": 12,
+    "unique_critic_trials": 96,
+    "unique_planner_trials": 12,
+    "first_42_outputs_match_excluded_attempt": true,
+    "both_model_digests_rechecked": true,
+    "primary_run_resumed": false
+  },
+  "case_acceptance": {
+    "reversed-role-invented-outcome": {
+      "baseline": 1,
+      "target_keys": 1
+    },
+    "corrected-open-ending": {
+      "baseline": 0,
+      "target_keys": 3
+    },
+    "confirmed-outcome-en": {
+      "baseline": 0,
+      "target_keys": 3
+    },
+    "quiet-waiting": {
+      "baseline": 0,
+      "target_keys": 2
+    },
+    "passport-contradiction": {
+      "baseline": 0,
+      "target_keys": 1
+    },
+    "resource-contradiction": {
+      "baseline": 0,
+      "target_keys": 3
+    },
+    "deferred-proposal": {
+      "baseline": 0,
+      "target_keys": 3
+    },
+    "deferred-keeps-fact": {
+      "baseline": 0,
+      "target_keys": 3
+    },
+    "duplicate-section-names": {
+      "baseline": 0,
+      "target_keys": 2
+    },
+    "mixed-language-feedback": {
+      "baseline": 1,
+      "target_keys": 3
+    },
+    "current-letter-draft": {
+      "baseline": 0,
+      "target_keys": 2
+    },
+    "missing-time-cue": {
+      "baseline": 0,
+      "target_keys": 2
+    },
+    "mentor-plan": {
+      "baseline": 1,
+      "target_keys": 3
+    },
+    "plan-quiet-waiting": {
+      "baseline": 0,
+      "target_keys": 1
+    },
+    "plan-deferred-proposal": {
+      "baseline": 0,
+      "target_keys": 2
+    },
+    "plan-confirmed-outcome-en": {
+      "baseline": 2,
+      "target_keys": 2
+    }
+  },
+  "fixed_review_paired_transitions": {
+    "baseline": {
+      "both_accepted": 0,
+      "only_3b": 14,
+      "only_7b": 2,
+      "neither": 20
+    },
+    "target_keys": {
+      "both_accepted": 5,
+      "only_3b": 2,
+      "only_7b": 23,
+      "neither": 6
+    }
+  },
+  "provider_metadata": {
+    "ollama_version": {
+      "version": "0.23.0"
+    },
+    "qwen2.5:3b": {
+      "template": "{{- if .Messages }}\n{{- if or .System .Tools }}<|im_start|>system\n{{- if .System }}\n{{ .System }}\n{{- end }}\n{{- if .Tools }}\n\n# Tools\n\nYou may call one or more functions to assist with the user query.\n\nYou are provided with function signatures within <tools></tools> XML tags:\n<tools>\n{{- range .Tools }}\n{\"type\": \"function\", \"function\": {{ .Function }}}\n{{- end }}\n</tools>\n\nFor each function call, return a json object with function name and arguments within <tool_call></tool_call> XML tags:\n<tool_call>\n{\"name\": <function-name>, \"arguments\": <args-json-object>}\n</tool_call>\n{{- end }}<|im_end|>\n{{ end }}\n{{- range $i, $_ := .Messages }}\n{{- $last := eq (len (slice $.Messages $i)) 1 -}}\n{{- if eq .Role \"user\" }}<|im_start|>user\n{{ .Content }}<|im_end|>\n{{ else if eq .Role \"assistant\" }}<|im_start|>assistant\n{{ if .Content }}{{ .Content }}\n{{- else if .ToolCalls }}<tool_call>\n{{ range .ToolCalls }}{\"name\": \"{{ .Function.Name }}\", \"arguments\": {{ .Function.Arguments }}}\n{{ end }}</tool_call>\n{{- end }}{{ if not $last }}<|im_end|>\n{{ end }}\n{{- else if eq .Role \"tool\" }}<|im_start|>user\n<tool_response>\n{{ .Content }}\n</tool_response><|im_end|>\n{{ end }}\n{{- if and (ne .Role \"assistant\") $last }}<|im_start|>assistant\n{{ end }}\n{{- end }}\n{{- else }}\n{{- if .System }}<|im_start|>system\n{{ .System }}<|im_end|>\n{{ end }}{{ if .Prompt }}<|im_start|>user\n{{ .Prompt }}<|im_end|>\n{{ end }}<|im_start|>assistant\n{{ end }}{{ .Response }}{{ if .Response }}<|im_end|>{{ end }}",
+      "parameters": null,
+      "details": {
+        "parent_model": "",
+        "format": "gguf",
+        "family": "qwen2",
+        "families": [
+          "qwen2"
+        ],
+        "parameter_size": "3.1B",
+        "quantization_level": "Q4_K_M"
+      },
+      "capabilities": [
+        "completion",
+        "tools"
+      ]
+    },
+    "qwen2.5:7b": {
+      "template": "{{- if .Messages }}\n{{- if or .System .Tools }}<|im_start|>system\n{{- if .System }}\n{{ .System }}\n{{- end }}\n{{- if .Tools }}\n\n# Tools\n\nYou may call one or more functions to assist with the user query.\n\nYou are provided with function signatures within <tools></tools> XML tags:\n<tools>\n{{- range .Tools }}\n{\"type\": \"function\", \"function\": {{ .Function }}}\n{{- end }}\n</tools>\n\nFor each function call, return a json object with function name and arguments within <tool_call></tool_call> XML tags:\n<tool_call>\n{\"name\": <function-name>, \"arguments\": <args-json-object>}\n</tool_call>\n{{- end }}<|im_end|>\n{{ end }}\n{{- range $i, $_ := .Messages }}\n{{- $last := eq (len (slice $.Messages $i)) 1 -}}\n{{- if eq .Role \"user\" }}<|im_start|>user\n{{ .Content }}<|im_end|>\n{{ else if eq .Role \"assistant\" }}<|im_start|>assistant\n{{ if .Content }}{{ .Content }}\n{{- else if .ToolCalls }}<tool_call>\n{{ range .ToolCalls }}{\"name\": \"{{ .Function.Name }}\", \"arguments\": {{ .Function.Arguments }}}\n{{ end }}</tool_call>\n{{- end }}{{ if not $last }}<|im_end|>\n{{ end }}\n{{- else if eq .Role \"tool\" }}<|im_start|>user\n<tool_response>\n{{ .Content }}\n</tool_response><|im_end|>\n{{ end }}\n{{- if and (ne .Role \"assistant\") $last }}<|im_start|>assistant\n{{ end }}\n{{- end }}\n{{- else }}\n{{- if .System }}<|im_start|>system\n{{ .System }}<|im_end|>\n{{ end }}{{ if .Prompt }}<|im_start|>user\n{{ .Prompt }}<|im_end|>\n{{ end }}<|im_start|>assistant\n{{ end }}{{ .Response }}{{ if .Response }}<|im_end|>{{ end }}",
+      "parameters": null,
+      "details": {
+        "parent_model": "",
+        "format": "gguf",
+        "family": "qwen2",
+        "families": [
+          "qwen2"
+        ],
+        "parameter_size": "7.6B",
+        "quantization_level": "Q4_K_M"
+      },
+      "capabilities": [
+        "completion",
+        "tools"
+      ]
+    },
+    "templates_identical": true,
+    "default_parameters_identical": true
+  },
+  "elapsed_seconds": 5618.24795,
+  "call_seconds_total": 5615.526,
+  "excluded_aborted_attempt": {
+    "artifact": "harness-reference-qwen7b-2026-10-22-aborted.json",
+    "generated_outputs": 42,
+    "transport_failures": 42,
+    "attempts": 84
+  }
+}

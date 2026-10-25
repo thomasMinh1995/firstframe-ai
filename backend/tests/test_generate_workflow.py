@@ -95,6 +95,23 @@ class FakeProvider:
                     },
                 },
             )
+        elif response_model.__name__ == "_RevisionReviewOutput":
+            context = json.JSONDecoder().raw_decode(
+                request.input_text.split("Card review context (JSON data):\n", 1)[1]
+            )[0]
+            card = context["focus_card_ids"][0] if context["focus_card_ids"] else context["cards"][0]["id"]
+            decision = next((item["id"] for item in context["decisions"]
+                             if item["id"].startswith("answer-")),
+                            next((item["id"] for item in context["decisions"] if item["id"] != "idea"), "idea"))
+            neighbor = next((pair["related_card_id"] for pair in context.get("neighbor_checks", [])
+                             if pair["card_id"] == card), None)
+            output = response_model(
+                reviews=[{"card_id": card, "decision_id": decision, "related_card_id": neighbor,
+                          "comparison": "aligned", "observation": "The detail serves the author's choice.",
+                          "suggestion": ""}],
+                passed=True,
+                rubric_scores=None,
+            )
         else:
             output = response_model(
                 passed=True,
@@ -166,10 +183,9 @@ def test_harness_calls_provider_through_runtime_layers() -> None:
     assert "Short-film domain knowledge" in provider.requests[1].input_text
     assert "film_glossary" in provider.requests[1].input_text
     assert "film_rules" in provider.requests[1].input_text
-    assert "story_patterns" in provider.requests[1].input_text
-    assert "Reusable domain examples" in provider.requests[1].input_text
-    assert "source_id" in provider.requests[1].input_text
-    assert "user_idea" in provider.requests[1].input_text
+    assert "story_patterns" not in provider.requests[1].input_text
+    assert "Reusable domain examples" not in provider.requests[1].input_text
+    assert "beginner_example" not in provider.requests[1].input_text
     assert "Short-film story rubric" in provider.requests[2].input_text
     assert "Story Clarity" in provider.requests[2].input_text
     assert "Production Feasibility" in provider.requests[2].input_text
@@ -270,6 +286,7 @@ def test_generate_endpoint_returns_structured_response(monkeypatch) -> None:
 
     assert response.status_code == 200
     body = response.json()
+    assert body["analysis"]["summary"] == "The idea has a clear emotional center."
     assert body["analysis"]["missing_information"]
     assert body["story_plan"]["title"] == "Before She Leaves"
     assert body["story_plan"]["sections"]

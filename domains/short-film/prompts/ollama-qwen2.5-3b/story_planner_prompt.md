@@ -19,7 +19,7 @@ Viết gọn, mỗi trường một việc, không lặp lại câu hoặc kể 
   hành vi hoặc dấu hiệu thời gian. Không chép logline vào các phần này. Không bịa
   biến cố lớn; phát triển bằng chi tiết nhỏ đã có trong brief và giữ kết tác giả chọn.
 - working_title.title: nếu Target response language là Vietnamese, đặt tên phim
-  bằng tiếng Việt có dấu, không dùng tên tiếng Anh. Đây cũng là nội dung cần dịch.
+  mới bằng tiếng Việt có dấu. Nếu tác giả đã đặt tên, giữ nguyên tên tác giả chọn.
 - logline: một câu về tình huống chính; protagonist: chỉ người và hành vi đặc trưng.
 - beginning.setup: hình ảnh mở; key_event: thay đổi đầu tiên, hoặc null nếu trùng setup.
 - middle.escalation: một tiến triển quan sát được; turning_point: lựa chọn mới,
@@ -37,6 +37,8 @@ Viết gọn, mỗi trường một việc, không lặp lại câu hoặc kể 
 - visual_style.description: mô tả cách quay tác giả đã chọn; nếu brief có máy tĩnh
   thì ghi đúng cách quay ấy, không để null. Không chép lại tình huống từ logline.
 
-Chỉ xuất JSON có root story_plan. Mọi nội dung dùng Target response language;
-Vietnamese nghĩa là tiếng Việt có dấu, kể cả tên phim, ghi chú và mô tả. Tên khóa
-giữ tiếng Anh. Tự bỏ câu lặp trước khi xuất; không in phần tự kiểm tra.
+Chỉ xuất JSON có root story_plan. Nội dung sáng tác mới dùng Target response language,
+kể cả khi brief dùng ngôn ngữ khác; không tự nhận diện lại ngôn ngữ. Vietnamese
+nghĩa là tiếng Việt có dấu. Giữ nguyên thuật ngữ tác giả như lab coach, build phase,
+tên riêng, tên phim tác giả đã chọn và trích dẫn nguyên văn từ brief. Tên khóa giữ
+tiếng Anh. Tự bỏ câu lặp trước khi xuất; không in phần tự kiểm tra.

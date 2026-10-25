@@ -88,36 +88,6 @@ it does not mean the screenplay is finished or market-ready. Set passed false
 for a material unresolved contradiction or gap that blocks that next step.
 Minor refinement alone does not require passed false.
 
-## Calibration examples (illustrative, not facts about the current draft)
-
-Intent: quiet, open ending; the daughter need not forgive her father.
-Current [Ending]: "Người cha đặt chìa khóa lên bàn. Con gái nhìn, không cầm lên."
-
-Grounded strength: "[Ending] Con gái nhìn chìa khóa mà không cầm lên giữ được
-khoảng cách giữa hai người, phù hợp với kết mở bạn muốn."
-Do not demand a hug, forgiveness, or an explicit explanation of her feelings.
-
-Intent: only one apartment; the father wants to apologize, not stop her leaving.
-Current [Middle]: father hides her passport. Current [Ending]: a goodbye in the apartment.
-
-Weakness: "[Middle] Việc giấu hộ chiếu có thể khiến người xem hiểu người cha
-muốn ngăn con đi, khác với ý định chỉ xin lỗi bạn đã nêu."
-Matching suggestion: "[Middle] Bạn muốn giữ hành động giấu hộ chiếu để người cha
-còn mâu thuẫn, hay giữ hướng chỉ xin lỗi? Nếu chọn hướng thứ hai, có thể để ông
-ngập ngừng trước một lời xin lỗi ngay trong căn hộ; chưa cần thêm bối cảnh."
-Do not declare that the passport action is necessarily a mistake or erase it.
-
-Intent: observational waiting in silence; the absent person's identity stays unknown.
-Current [Beginning]: mother sets two bowls. [Middle]: she folds a napkin.
-[Ending]: one untouched bowl remains, but no detail indicates time passing.
-
-Possible issue, if supported by the full draft: "[Middle, Ending] Từ gấp khăn đến
-bát cơm còn nguyên chưa có dấu hiệu thời gian trôi; người xem có thể thấy một
-khoảnh khắc ăn một mình thay vì cảm giác chờ đợi bạn muốn."
-Small revision: "[Middle, Ending] Có thể cho bát cơm từ còn bốc hơi đến nguội đi
-để cảm nhận thời gian chờ, vẫn giữ im lặng và không tiết lộ người vắng mặt."
-Do not add a phone call explaining that person's identity or fate.
-
 ## Output contract
 
 Return strict JSON only, without Markdown or prose outside it. Exactly these fields:

@@ -2,15 +2,63 @@
 
 ## Product Direction
 
-FirstFrame helps beginners complete their first short-film screenplay through guided story development and specific feedback, while keeping creative decisions with the author.
+FirstFrame helps people in Vietnam develop a moment from their own lives into their first short-film screenplay, understand their creative decisions, and revise the work for human collaborators.
 
-The first users are Vietnamese-speaking beginners with an idea or personal experience they want to turn into a screenplay. A crew and filming schedule are not prerequisites.
+The first pilot focuses on Vietnamese film enthusiasts, especially young people who have not completed a short-film screenplay and lack a development method or useful feedback. No prior film vocabulary, crew, or shooting schedule is required.
 
 ```text
-Idea -> Story Development -> Scene Outline -> Write and Revise -> Complete Screenplay
+Moment -> Story Plan -> Scene Outline -> Write and Revise Screenplay -> Export Screenplay
 ```
 
-The current MVP supports the project clarification and story-plan revision loop in Milestone 1. Later milestones extend that foundation toward a complete screenplay and remain planned work. Milestones describe delivery order rather than fixed dates.
+The current MVP delivers clarification and manual story-plan revision, not a complete screenplay. A story plan is a useful milestone for choosing the story; it is not a guarantee of screenplay quality or the final product ceiling. Review gives feedback without rewriting the author's draft.
+
+The product handoff ends at screenplay export. Casting, staging, shooting, editing, and post-production are a separate process with real people and actors. AI video, synthetic actors, generated footage, and production management are outside the direction.
+
+## Next Delivery Priority: Finish #7, Update the Tour, Then Resume Harness Work
+
+The [product plan](plans/vietnam-first-screenplay-mvp.md) records the agreed direction and acceptance criteria; [implementation issue #26](https://github.com/thomasMinh1995/firstframe-ai/issues/26) remains the place to record acceptance. The four initial harness deliveries merged in PRs #30–#33. PR #36 delivered the approved card workspace, clarification/confirmation flow and source-checked card feedback; #35 is complete for that UI scope. These are existing foundations, not work to implement again. Implementation does not establish demo or pilot acceptance.
+
+The priority agreed on 25 October 2026 is **finish the implementation of #7 → update the tour → validate the combined flow and accept #7 → resume H1–H8**. This order supersedes earlier delivery scheduling references; the product acceptance criteria stay unchanged:
+
+| Stage | Scope | Transition evidence |
+| --- | --- | --- |
+| 1 — Stabilize #7 | Audit what PR #36 already delivers; finish the missing intent/evidence/target pairing and manual revision behavior | Relevant contract/API/UI tests pass; the behavior to explain in the tour is stable |
+| 2 — Update the tour | Adjust affected instructions and real controls, mainly reading/editing and save/review | Preserve six steps, stored progress, dismissal/replay and navigation without writes or AI calls |
+| 3 — Validate and accept #7 | Check #7 and the tour on the same candidate, including real-model evaluation and the existing #7 pilot requirements | Record sufficient evidence against #7 criteria before closing it; keep incomplete #22 criteria open |
+| 4 — Resume harness | Continue the existing eight packages below using the accepted #7 foundation | Retain evidence gates and final demo/pilot criteria; do not rebuild or automatically reaccept #7 |
+
+Update the tour after #7 implementation stabilizes, **before** its pilot/acceptance, rather than waiting for #7 to close. Narrow fixes and tests needed for #7 remain in that issue; do not make it wait for all eight harness packages. Full #22 closure is not required to resume harness after #7 acceptance and the technical tour update. Its real-device, screen-reader, full Safari, 3–5-user pilot and acceptance-summary work remain open without evidence. The approved Idea/Clarification/Story Plan UI stays in place. See the [#7 plan](plans/p0-author-intent-revision-flow.md) and [tour update plan](plans/new-user-tour.md).
+
+Full-flow validation on `f607732` completed all nine journeys and preserved sources, but seven plan-generation runs exceeded the 120-second budget and unsupported or intent-violating feedback remained. After #7 acceptance and the technical tour update, work resumes under the [eight-package harness plan](plans/harness-improvement.md), updated on 25 October 2026. These are reviewable work packages, not eight new features or a fixed number of PRs. This update changes documentation only. Existing product milestone numbers remain unchanged.
+
+| Package | Smallest scope | Expected evidence |
+| --- | --- | --- |
+| H1 — Review failures | Freeze development cases and ask a second reader to check difficult judgments | Keep original outputs, expected evidence, grading rules and disagreements |
+| H2 — Source chunks and IDs | Offline comparison of the focused prompt/full text with full text carrying structural chunk IDs and code-rendered quotes | Measure source selection, exact text, semantic support, false alarms, misses, abstentions and time separately |
+| H3 — Minimal repair | Test repair guidance separately from the source representation | Fix the violating detail while preserving valid action, roles, intent and open choices; no automatic application |
+| H4 — Unseen and multiple-constraint cases | Evaluate the candidate on cases withheld from tuning | Keep full denominators and reader judgments; decide whether evidence supports integration |
+| H5 — Conditional integration | Integrate the supported candidate into the existing runtime | Preserve snapshot/revision pairing, unsaved work, history, recovery and legacy compatibility; pass relevant contract/API/UI tests |
+| H6 — Waiting time | Profile planner, critic and orchestration; vary one factor at a time | Reduce budget overruns without sacrificing content quality or data protection |
+| H7 — Demo acceptance | Run a new complete batch of three situations × three independent full journeys on the final configuration, then rehearse | Live requires 9/9 passing runs and PO/reader approval under product plan section 4.1 |
+| H8 — Pilot and value comparison | N=5–8 beginners, with a fair comparison to familiar agent/chatbot workflows | Apply the existing H0, completion, continuation and PO criteria below; record effort and assistance |
+
+After the #7/tour sequence above, resume H1 → H2 → H3 → H4; integrate in H5 only when the evidence supports the candidate. H6 profiling can run alongside those experiments after harness resumes; freeze all candidate changes before H7. H8 follows the existing pilot conditions. Include everyday care, humor or awkwardness, and a quiet observational moment. Keep failures and inconclusive results; valid JSON, an existing source ID or an AI score alone does not establish quality. This scheduling decision adds no new demo/pilot threshold; unresolved blockers still prevent acceptance under the criteria below. Reuse accepted #7 source/target behavior and evaluate only the additional harness improvements.
+
+H2/H5 use structural chunks to address sources, while retaining the full current draft and effective saved author context in the model input. Each ID belongs to its exact project/source snapshot and field/span; ordinal section IDs are not stable identities across revisions or reordering. The model selects IDs and backend code renders original text. A violation needs the relevant author constraint and draft evidence; a valid reference does not prove semantic support. Reject wrong-snapshot/invalid references without fuzzy matching or relocation. Keep old feedback on its original source; legacy feedback lacking source/IDs stays readable with a missing-information label and no unverified navigation. Preserve buffers, history, revision checks and both recovery paths; navigation never saves, rewrites or calls AI.
+
+Embedding, retrieval, top-k context reduction, vector databases and reranking are outside these eight packages. They require a separate demonstrated need and evaluation against full text with IDs or lexical search before any future integration. This document update does not change prompts, schemas, runtime, model configuration, project data or prototype files.
+
+**Live/recorded acceptance:** Before running, freeze briefs, choices, manual edits, expected behavior, commit/prompt/model configuration, and per-AI-operation wait budgets. Follow the existing [model evaluation checklist](prompt-evaluation.md). Keep all nine independent analyze–plan–edit–save–review runs, including provider/validation failures, with inputs, outputs, seed when available, timings, and human verdicts; do not select only successful generations.
+
+Live requires 9/9 completed runs within the declared wait budgets, no blockers, and a full presentation rehearsal of at most five minutes including real waiting, actions, and reading. Blockers include explicit-intent violations, invented author decisions/evidence, draft rewriting, wrong feedback source, data loss/overwrite, or errors/missing results that prevent completion. Feedback must be grounded and actionable; an empty issue list is valid when no supported issue exists. A taste difference alone is not a blocker.
+
+The PO, together with an experienced reader, records **live / recorded only / not ready**, date, configuration, and evidence in #26. Missing evidence, any failed run, or a changed configuration prevents live approval until a new complete nine-run batch passes; retain earlier failures. Do not raise budgets retrospectively to pass a run. An approved recording must preserve the brief/plan/edit/review chain and label playback and editorial corrections; it does not establish live readiness or general model quality. During live failure, budget overrun, or a clear intent violation, disclose the problem and switch to the approved recording. Without an approved recording, defer that segment.
+
+Demo outcome: **tell a moment -> clarify what matters -> read a story plan -> make one author-led edit -> review the exact revised draft**. Changing the source idea or constraints still requires the existing clarification round. A 3–5 minute presentation must label its output as a story plan.
+
+The differences to validate are starting without a formed premise, handling Vietnamese relationships and speech in context, expressing emotion through performable action, learning through a small revision, and respecting intent and relevant resources. Do not require escalating conflict, transformation, reconciliation, or a resolved ending for every form.
+
+Complete #7 and update its tour guidance in the priority sequence above; do not defer that revision flow until after the demo pilot. Selected story-plan PDF (#5) stays after the demo and does not block it. Scene outlines, screenplay writing/revision and screenplay export remain later milestones. Keep pending #22 acceptance separate from its technical update. Technical experiments should address observed writing-flow failures.
 
 ## Completed MVP Foundation
 
@@ -103,7 +151,7 @@ Automated tests cover the question gate, persistence across app instances, revie
 
 **Validation:** Exporting historical version A while working on B produces A's content, excludes AI feedback from the document and PDF metadata, and preserves B's unsaved buffer. Late responses and retries cannot overwrite edits or silently select a newer revision. Vietnamese text and multi-page layout must be visually verified during implementation.
 
-## Milestone 1.2: Visible Author Intent and Feedback-to-Edit Flow — P0, Planned
+## Milestone 1.2: Visible Author Intent and Feedback-to-Edit Flow — P0, Partially Implemented
 
 - Show the effective saved author context, including retained clarifications, without promoting AI analysis or proposals into author decisions.
 - Distinguish saved context, unsaved edits, and the context of historical feedback.
@@ -114,11 +162,24 @@ Automated tests cover the question gate, persistence across app instances, revie
 
 **User outcome:** The beginner can explain the intent being used, choose a useful revision, and complete a focused story-plan revision round while retaining creative control.
 
-**Status:** Planning only; no implementation is delivered by the planning PR. See [P0 #7](https://github.com/thomasMinh1995/firstframe-ai/issues/7) and the [implementation plan](plans/p0-author-intent-revision-flow.md). This P0 can proceed independently of PDF export in Milestone 1.1; merging the plan does not close the feature issue.
+**Status:** The saved context/provenance and manual revision loop were delivered in harness parts 2–3; PR #36 adds source-checked card feedback. [P0 #7](https://github.com/thomasMinh1995/firstframe-ai/issues/7) is now the first priority: audit the existing contract/anchors, implement only the missing pairing/target/navigation behavior, update the tour once stable, and validate the combined flow before acceptance. Later H2/H5 work reuses that foundation rather than implementing #7 again. See the [implementation plan](plans/p0-author-intent-revision-flow.md). This work remains independent of PDF; neither partial delivery nor this documentation update closes #7 or establishes pilot acceptance.
 
 **Validation:** Saved context must match AI input; feedback artifacts, snapshots and targets must remain paired. Validate quotations against each target field, not the whole draft. Navigation preserves all unsaved text, including project-name-only edits, and uncertain save results must not trigger a reload or retry that overwrites buffers. Automated contract/UI tests and a real-model beginner pilot are required during implementation; transport tests alone do not establish feedback quality.
 
-## Milestone 2: Build an Editable Scene Outline
+## New-User Onboarding Tour — Implemented, Technical Review Passed, Acceptance Pending
+
+- Guide beginners through six steps in three stages: starting a project, clarifying their choices, and editing/reviewing a story plan.
+- Show each step only when its target exists; pause for real user actions and preserve all unsaved edits.
+- Support dismissing, resuming, replaying, mobile layouts, keyboard navigation, and browser-local progress.
+- Keep tour navigation independent of project writes and AI calls.
+
+**User outcome:** A beginner knows what to do next and how to save, revise, and return to a story project.
+
+**Status:** The tour was updated for PR #36. Review on 25 October passed TypeScript, state checks and production tour regression on Chrome, Firefox and WebKit; this does not replace real-device or user acceptance. Next, adjust affected instructions/controls after #7 implementation stabilizes and before its pilot/acceptance. Preserve six steps and existing progress; do not force users to replay. [Feature #22](https://github.com/thomasMinh1995/firstframe-ai/issues/22) remains open for the 3–5-user pilot, acceptance summary, real screen reader, mobile/IME/virtual keyboard and full real-Safari regression. See the [plan](plans/new-user-tour.md), [tour evidence](testing/new-user-tour.md) and [workspace QA](testing/approved-story-workspace.md).
+
+**Validation:** Cover empty and existing projects, conditional questions/drafts, failures, reloads, and project switches. Verify focus and positioning in a browser, and confirm tour controls preserve the full buffer without making save or AI requests.
+
+## Milestone 2: Build an Editable Scene Outline — Planned
 
 - Develop the selected story plan into an ordered list of scenes.
 - Clarify what happens in each scene, its purpose, and how it connects to the story.
@@ -129,55 +190,78 @@ Automated tests cover the question gate, persistence across app instances, revie
 
 **Validation:** The creator can use the outline to write scenes and understand the effect of changing their order or purpose.
 
-## Milestone 3: Complete and Revise the Screenplay
+## Milestone 3: Complete and Revise the Screenplay — Planned
 
 - Support writing and editing action and dialogue scene by scene.
 - Anchor feedback to specific scenes or passages, explaining the issue and offering revision options.
 - Let the creator choose which suggestions to apply and retain draft versions.
-- Support at least one feedback-and-revision round and export a readable screenplay.
+- Support at least one feedback-and-revision round; screenplay export is the handoff in Milestone 4.
 - Use the rubric as a discussion aid, adapted to creative intent; an AI score is not a completion gate.
 
 **User outcome:** A complete short-film screenplay, from first scene to last, revised and ready to share for reading and further development.
 
-**Completion means:** All scenes are written, action and dialogue communicate the intended story, at least one feedback-and-revision round has taken place, and the draft can be exported. Shooting or producing a film is not required.
+**Writing completion means:** All scenes are written, action and dialogue communicate the intended story, and at least one feedback-and-revision round has taken place. Full product completion also requires exporting the selected draft in Milestone 4. Shooting or producing a film is a separate process.
 
 **Validation:** Beginners can complete and revise drafts. Experienced readers review examples of feedback and before/after drafts to check whether suggestions are specific, useful, and respectful of the author's intent.
 
-## Later Optional Extension: Rough Scene Illustrations
+## Milestone 4: Export the Selected Screenplay — Planned
 
-Consider this only after validating the core screenplay journey.
+- Export the current saved draft or a selected historical screenplay version without changing its wording.
+- Deliver a readable screenplay with complete Vietnamese text, scene headings, action, and dialogue for human collaborators.
+- Preserve draft/version identity, unsaved work, and revision protections; keep AI feedback separate from the script.
+- Keep export independent of model availability. Select formats and verify layout during implementation.
 
-- Provide simple scene sketches showing characters, positions, and key actions based on the screenplay.
-- Let the creator correct the sketches when they misrepresent a scene.
-- Use the sketches to reveal unclear action or staging and inform further script revision.
+**User outcome:** A complete, revised screenplay the author can share for reading and development with real actors and filmmakers. This is FirstFrame's product handoff and is distinct from story-plan PDF in Milestone 1.1.
 
-**User outcome:** An optional visual aid for understanding the screenplay. Illustrations are not required to complete a project and do not extend the scope into animation, video generation, or production management.
+**Validation:** The selected version exports faithfully, Vietnamese and multi-page layout remain readable, and writers and experienced readers can use the document. Neither export nor AI scoring certifies production readiness or artistic quality.
+
+## Conditional Future Direction: Feature and Television Screenwriting
+
+Explore only after beginners can complete the short-film journey and some demonstrate a need to continue. Assess whether the characters, relationships, and material support a longer story rather than simply adding scenes. Television would require separate validation of episodic development.
+
+Keep original material, author choices, and version history. No feature/season infrastructure is required for the demo. The future scope would still end at screenplay export; no automatic expansion, synthetic casting, or production tooling is promised.
+
+Automatic scene illustrations are no longer an active milestone under this writing-only direction.
 
 ## Product Validation
 
-Recruit a small pilot of beginners working on their first screenplay. Track:
+Start with a discovery pilot of 5–8 Vietnamese beginners using their own experiences; this is not a representative market study. Record:
 
-- How many starting projects reach a completed screenplay, and how long it takes.
-- Whether creators can act on feedback and explain their revision decisions.
-- Reasons projects stall or are abandoned.
-- Experienced readers' assessment of feedback and draft improvement.
-- How much manual mentor support each project needs.
+- Where people need help starting, reading, saving, or revising.
+- Which meaningful details are retained, lost, or invented against intent, including forms of address and relationships.
+- Whether authors can complete and explain one useful edit, and want to keep, share, or develop the plan further.
+- Experienced readers' assessment of performable action, progression, and ambiguity relative to intent.
+- Reasons projects stall and how much manual mentor support they need.
 
-Run a small pilot as soon as Milestone 1 is usable, using manual support to learn what later milestones need. Validate the full writing journey once Milestone 3 is available. Generation counts and AI rubric scores alone do not demonstrate success.
+Compare selected tasks with a familiar chatbot and a direct story-development tool such as Cinequill or Screenwriting.ai, using the same material and constraints and reasonable context/revision opportunities. Do not infer competitor quality or a local advantage from feature marketing alone. Use private material only with the author's agreement and keep it out of public demo assets unless explicitly approved.
+
+**Pilot/Milestone 2 acceptance:** Apply [plan section 6.1](plans/vietnam-first-screenplay-mvp.md#61-điều-kiện-pilot-đạt-và-chuyển-sang-m2). Before starting, the PO fixes N=5–8, the application/model version, and the task sheet: enter a moment, clarify/generate, explain the progression, edit, save, review, reopen the saved revision, and explain the edit. Log each person's completion, obstacles, errors, dropout reasons, and help per step. H0 uses only the common instructions and in-product tour/docs; H1 receives step/navigation prompts from the observer; H2 receives creative suggestions or someone acts for them. Only full H0 completion is independent; starters who drop out stay in N and do not pass.
+
+At least 80% of N must complete independently, rounded up (N=5/6/7/8 requires 4/5/6/7 people). At least two independent completers must want to continue their own story and identify a next step; capture the obstacles. No unresolved blocker may remain: lost/overwritten work, inability to save/reopen, feedback on the wrong draft/context, explicit-intent violations, or operation errors preventing completion. Record evidence and verify each fixed failure on the candidate version.
+
+The PO records **pass / fail / more evidence needed** in #26 with the participant table and experienced-reader observations. Milestone 2 is prioritized only when all thresholds and the no-blocker condition hold and the PO records pass. Otherwise improve Milestone 1; an approved demo recording cannot substitute for a passing pilot. Do not lower thresholds retrospectively. A changed task/threshold requires a new batch; keep the old report. Separate different application/model versions rather than pooling results to pass; a new batch still needs N=5–8. These are operating thresholds for a small discovery pilot, not market-wide evidence.
+
+Measure completed screenplay drafts and export only when Milestones 3 and 4 are available. Generation counts and AI scores do not demonstrate success.
 
 ## Engineering Priorities
 
 Keep the existing Harness and domain assets as the foundation. Add persistence, contracts, and checks as required by each milestone. Reliability work, including error handling and pilot access, should support the writing journey.
+
+The [Harness improvement plan](plans/harness-improvement.md) retains eight follow-up packages, to resume after #7 implementation, the technical tour update and #7 acceptance. Those packages remain failure review, structural chunk/ID grounding, minimal repair, withheld/multiple-constraint evaluation, conditional integration, waiting time, demo acceptance and pilot/value comparison. H2/H5 reuse accepted #7 contracts and UI; embedding/retrieval remains excluded. Keep snapshots, revision checks, unsaved buffers, history, recovery and legacy compatibility. Invalid references cannot become verified edit links or acquire current context. All demo/pilot thresholds remain unchanged. Plan–screenplay revision in both directions remains a later author-approved direction. This update changes only the #7, tour and harness plans plus this roadmap; it implements no code, closes no issue and accepts none of the packages.
+
+The [first paired Qwen 3B experiment](evaluations/harness-reference-contract-2026-10-21.md) completed 108 model calls. The snapshot-key prototype remains confined to the evaluation runner: quote-validation acceptance fell, so it has not been promoted to the application workflow.
+
+The [controlled Qwen 3B–7B comparison](evaluations/harness-qwen3b-vs7b-2026-10-22.md) repeated all 108 calls with the 3B request profile and frozen source. On identical fixed drafts, the key-based variant passed reference/quote validation in 28/36 reviews with 7B versus 7/36 with 3B. These are technical acceptance counts; semantic errors persisted and latency increased. The runtime changed its critic contract during the experiment; these results describe the historical contract and do not validate the current runtime.
 
 Dynamic domain discovery, additional providers, RAG, multi-agent orchestration, streaming, and architecture refactoring are not prerequisites; revisit them only when a demonstrated product need justifies the work.
 
 ## Outside This Roadmap
 
 - Filming preparation, shooting schedules, and crew management.
-- Shooting, video generation, editing, and screenings.
+- Shooting, AI video, synthetic actors, generated footage, editing, post-production, and screenings.
 - Automatic expansion into feature films or television series, or producer matchmaking.
 - Other creative domains such as marketing, games, books, or educational storytelling.
 - Payment and account-management features beyond access needed for a pilot.
 
-Feature-film potential may remain a long-term ambition. It is not a requirement for a successful first short-film screenplay.
+Feature and television screenwriting are conditional future research within the export boundary, not current delivery commitments. A successful short film does not need to become a longer work.
 

@@ -1,3 +1,5 @@
+import type { ResponseLanguage } from "./language";
+
 export type AnalysisNote = {
   label: string;
   content: string;
@@ -16,6 +18,13 @@ export type EvaluationFinding = {
   score: number | null;
 };
 
+export type RevisionNote = {
+  note_id: string; artifact_id: string; comparison: "mismatch" | "uncertain";
+  observation: string; suggestion: string;
+  decision_id: string; decision_quote: string; decision_question: string | null;
+  targets: { target_id: string; quote: string }[];
+};
+
 export type GenerateResponse = {
   analysis: {
     summary: string;
@@ -31,12 +40,15 @@ export type GenerateResponse = {
     passed: boolean | null;
     rubric_scores: Record<string, number>;
     findings: EvaluationFinding[];
+    revision_notes?: RevisionNote[] | null;
   };
 };
 
 const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
 
-export async function generateStoryPlan(idea: string): Promise<GenerateResponse> {
+export async function generateStoryPlan(
+  idea: string, responseLanguage: ResponseLanguage = "auto",
+): Promise<GenerateResponse> {
   let response: Response;
 
   try {
@@ -45,14 +57,16 @@ export async function generateStoryPlan(idea: string): Promise<GenerateResponse>
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ idea }),
+      body: JSON.stringify({ idea, response_language: responseLanguage }),
     });
   } catch {
-    throw new Error("Backend unavailable. Start the backend and try again.");
+    throw new Error("Không kết nối được backend. Hãy kiểm tra rồi thử lại.");
   }
 
   if (!response.ok) {
-    throw new Error("The story plan request failed. Please try again.");
+    const detail: unknown = await response.json().catch(() => null);
+    throw new Error(isRecord(detail) && typeof detail.detail === "string" ? detail.detail
+      : "Chưa tạo được bản phát triển. Hãy thử lại.");
   }
 
   try {
@@ -62,7 +76,7 @@ export async function generateStoryPlan(idea: string): Promise<GenerateResponse>
     }
     return data;
   } catch {
-    throw new Error("The backend returned an invalid response.");
+    throw new Error("Backend trả về dữ liệu không hợp lệ.");
   }
 }
 

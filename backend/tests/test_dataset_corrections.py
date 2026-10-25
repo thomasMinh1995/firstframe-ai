@@ -99,7 +99,7 @@ def test_reasoning_and_evaluation_edits_replay_and_survive_reexport(demo_exports
     assert annotate(client, edited, status="approved", use_for_demo=True).status_code == 200
     plan = detail(client, "plan")
     feedback = copy.deepcopy(plan["recording"]["steps"][1]["output"])
-    feedback["suggestions"] = ["Góp ý đã chỉnh"]
+    feedback["reviews"][0].update(comparison="mismatch", suggestion="Góp ý đã chỉnh")
     edited = save_outputs(client, plan, {"1": feedback}).json()
     assert (
         annotate(
@@ -115,7 +115,7 @@ def test_reasoning_and_evaluation_edits_replay_and_survive_reexport(demo_exports
         note["content"] == "Giữ kết mở" for note in scenario["steps"][1]["analysis"]["notes"]
     )
     assert any(
-        item["message"] == "Góp ý đã chỉnh" for item in scenario["steps"][4]["feedback"]["findings"]
+        item["message"].endswith("Góp ý đã chỉnh") for item in scenario["steps"][4]["feedback"]["findings"]
     )
     rows = [
         json.loads(line) for line in client.get("/api/datasets/training.jsonl").text.splitlines()
@@ -129,7 +129,7 @@ def test_invalid_edits_restoration_and_stale_fingerprints(demo_exports):
     for edits in [{"99": {}}, {"-1": {}}, {"00": {}}, {"0": {"wrong": "shape"}}]:
         assert save_outputs(client, sample, edits).status_code == 422
     feedback = copy.deepcopy(sample["recording"]["steps"][1]["output"])
-    feedback["rubric_scores"]["character"] = 99
+    feedback["reviews"][0]["card_id"] = "invented-card"
     assert save_outputs(client, sample, {"1": feedback}).status_code == 422
     edited = save_outputs(client, sample, {"0": corrected_plan(sample)}).json()
     assert annotate(client, edited, status="approved", use_for_training=True).status_code == 200
@@ -153,7 +153,14 @@ def test_legacy_generate_and_review_rounds_support_editorial_outputs(demo_export
     add_review(client, project)
     sample = detail(client, "review")
     evaluation = copy.deepcopy(sample["recording"]["steps"][0]["output"])
-    evaluation["suggestions"] = ["Phản hồi lượt sửa đã được biên tập"]
+    evaluation["reviews"][0]["observation"] = "Phản hồi lượt sửa đã được biên tập"
+    invented = copy.deepcopy(evaluation)
+    invented["reviews"][0]["card_id"] = "invented-card"
+    assert save_outputs(client, sample, {"0": invented}).status_code == 422
+    scored = copy.deepcopy(evaluation)
+    scored["rubric_scores"] = dict.fromkeys(["story_clarity", "character", "conflict", "emotional_impact",
+                                          "ending", "production_feasibility"], 4)
+    assert save_outputs(client, sample, {"0": scored}).status_code == 422
     edited = save_outputs(client, sample, {"0": evaluation}).json()
     assert annotate(client, edited, status="approved").status_code == 200
     response = client.post("/api/generate", json={"idea": "A mother waits by the window."})
@@ -169,7 +176,7 @@ def test_legacy_generate_and_review_rounds_support_editorial_outputs(demo_export
     project_summary = next(item for item in summaries if item["id"] != legacy["id"])
     scenario = client.get(f"/api/demo/scenarios/{project_summary['id']}").json()
     assert any(
-        item["message"] == evaluation["suggestions"][0]
+        evaluation["reviews"][0]["observation"] in item["message"]
         for item in scenario["steps"][-1]["feedback"]["findings"]
     )
     rows = [

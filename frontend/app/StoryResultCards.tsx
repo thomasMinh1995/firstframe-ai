@@ -1,8 +1,12 @@
 "use client";
 
-import { AnalysisNote, GenerateResponse, StoryPlanSection } from "./apiClient";
+import { AnalysisNote, GenerateResponse, StoryPlanSection, type EvaluationFinding } from "./apiClient";
 import type { UiLanguage } from "./language";
+import { rubricLabels } from "./storyLabels";
 import type { ReactNode } from "react";
+import type { Feedback, FeedbackSource } from "./projectsApi";
+import type { RevisionNote } from "./apiClient";
+import { readRevisionNotes, validatedTargets } from "./revisionNotes";
 
 type StoryResultCardsProps = {
   result: GenerateResponse;
@@ -70,7 +74,7 @@ const resultCopy = {
     emotionalCore: "Lõi cảm xúc",
     missingInformation: "Thông tin còn thiếu",
     opportunities: "Cơ hội phát triển",
-    storyPlan: "Story Plan",
+    storyPlan: "Bản phát triển",
     storyPlanTitle: "Bản phát triển đầu tiên",
     workingTitle: "Tên tạm thời",
     evaluation: "Đánh giá",
@@ -85,12 +89,12 @@ const resultCopy = {
     emptyStrengths: "Chưa có điểm mạnh.",
     emptyWeaknesses: "Chưa có điểm yếu.",
     emptySuggestions: "Chưa có gợi ý cải thiện.",
-    noLogline: "Chưa có logline.",
+    noLogline: "Chưa có tóm tắt câu chuyện.",
     untitled: "Phim ngắn chưa đặt tên",
     notReturned: "Chưa có nội dung.",
     sectionLabels: {
       workingTitle: "Tên tạm thời",
-      logline: "Logline",
+      logline: "Tóm tắt một câu",
       theme: "Chủ đề",
       characters: "Nhân vật",
       conflict: "Xung đột",
@@ -106,28 +110,69 @@ const resultCopy = {
 
 type ResultCopy = (typeof resultCopy)[UiLanguage];
 
-export function StoryFeedback({ evaluation, uiLanguage }: {
-  evaluation: GenerateResponse["evaluation"];
+export function StoryFeedback({ evaluation, uiLanguage, onChoose, onTarget, source, selectedCriterion, selectionDisabled = false }: {
+  evaluation: Feedback;
   uiLanguage: UiLanguage;
+  onChoose?: (finding: EvaluationFinding) => void;
+  onTarget?: (note: RevisionNote, targetId: string) => void;
+  source?: FeedbackSource | null;
+  selectedCriterion?: string;
+  selectionDisabled?: boolean;
 }) {
   const copy = resultCopy[uiLanguage];
-  const shaped = shapeEvaluation({ evaluation });
+  const shaped = shapeEvaluation({ evaluation }, uiLanguage);
+  const weaknesses = evaluation.findings.filter(item => item.criterion_id.startsWith("weakness-"));
+  const suggestions = evaluation.findings.filter(item => item.criterion_id.startsWith("suggestion-"));
+  const notes = readRevisionNotes(evaluation);
   return (
     <ReportCard eyebrow={copy.evaluation} title={uiLanguage === "vi" ? "Góp ý cho lần sửa tiếp theo" : copy.evaluationTitle}
       icon="✍️" delayClass="reveal-1">
       <p>{uiLanguage === "vi" ? "Đây là gợi ý tham khảo. Bạn quyết định điều gì phù hợp với câu chuyện của mình."
         : "These are suggestions. You decide what fits your story."}</p>
+      {onChoose && <p>Chọn một góp ý để xem cạnh bản thảo và tự quyết định phần muốn sửa.
+        Đối chiếu với ý đồ của bạn: điều trái dữ kiện hoặc lựa chọn rõ, điều còn để mở và đề xuất sáng tạo cần được cân nhắc khác nhau.
+        Bạn có thể bỏ qua góp ý không phù hợp; không cần sửa tất cả.</p>}
       <div className="feedback-grid">
         <SectionList title={copy.strengths} items={shaped.strengths} emptyText={copy.emptyStrengths} />
-        <SectionList title={copy.weaknesses} items={shaped.weaknesses} emptyText={copy.emptyWeaknesses} />
-        <SectionList title={copy.suggestions} items={shaped.suggestions} emptyText={copy.emptySuggestions} />
+        {notes !== null ? <section className="list-section"><h3>Ưu tiên cân nhắc sửa ({notes.length})</h3>
+          {!notes.length && <p>Không có ưu tiên sửa được trả về. Bạn vẫn quyết định có giữ cách kể này hay không.</p>}
+          {notes.map(note => {
+            const targets = validatedTargets(note, source, evaluation.artifact_id);
+            return <article key={note.note_id} className="card-feedback-item">
+              <p>{note.comparison === "uncertain" ? "Điều cần làm rõ" : "Điều có thể trái lựa chọn của bạn"}</p>
+              <p className="preserve-lines">{note.observation}</p>
+              <p className="preserve-lines"><strong>Bước tiếp theo: </strong>{note.suggestion}</p>
+              <details><summary>Xem nguồn đối chiếu</summary>
+                {note.decision_question && <p>{note.decision_question}</p>}
+                <p className="preserve-lines">{note.decision_quote}</p>
+                {note.targets.map(target => <blockquote key={target.target_id} className="preserve-lines">{target.quote}</blockquote>)}
+                <p>Trích dẫn đúng chữ chưa chứng minh nhận xét đúng nghĩa. Bạn có thể giữ bản hiện tại.</p>
+              </details>
+              {onTarget && targets && !selectionDisabled ? <div>
+                {targets.length > 1 && <p>Chọn phần bạn muốn tự sửa:</p>}
+                {targets.map(target => <button key={target.target_id} type="button" className="secondary"
+                  onClick={() => onTarget(note, target.target_id)}>Sửa phần này: {target.label}</button>)}
+              </div> : <p className="storage-note">{!targets ? "Chưa xác minh được nguồn và mục tiêu; góp ý này chỉ để đọc."
+                : "Góp ý thuộc bản trước hoặc đang chỉ đọc."}</p>}
+            </article>;
+          })}
+        </section> : <>
+        <SectionList title={copy.weaknesses} items={shaped.weaknesses} emptyText={copy.emptyWeaknesses}
+          onChoose={onChoose && (index => onChoose(weaknesses[index]))}
+          selectedIndex={weaknesses.findIndex(item => item.criterion_id === selectedCriterion)}
+          selectionDisabled={selectionDisabled} />
+        <SectionList title={copy.suggestions} items={shaped.suggestions} emptyText={copy.emptySuggestions}
+          onChoose={onChoose && (index => onChoose(suggestions[index]))}
+          selectedIndex={suggestions.findIndex(item => item.criterion_id === selectedCriterion)}
+          selectionDisabled={selectionDisabled} />
+        </>}
       </div>
-      <details className="rubric-details">
+      {shaped.scores.length > 0 && <details className="rubric-details">
         <summary>{uiLanguage === "vi" ? "Xem điểm tham khảo" : "Reference scores"}</summary>
         <div className="scores">{shaped.scores.map((score) => <span key={score.label}>
           {score.label}: {score.value}/5
         </span>)}</div>
-      </details>
+      </details>}
     </ReportCard>
   );
 }
@@ -136,7 +181,7 @@ export function StoryResultCards({ result, uiLanguage }: StoryResultCardsProps) 
   const copy = resultCopy[uiLanguage];
   const analysis = shapeAnalysis(result);
   const storyPlan = shapeStoryPlan(result, copy);
-  const evaluation = shapeEvaluation(result);
+  const evaluation = shapeEvaluation(result, uiLanguage);
 
   return (
     <div className="results report-stack">
@@ -179,7 +224,7 @@ export function StoryResultCards({ result, uiLanguage }: StoryResultCardsProps) 
         </div>
 
         {evaluation.scores.length > 0 ? (
-          <div className="score-grid" aria-label="Rubric scores">
+          <div className="score-grid" aria-label={uiLanguage === "vi" ? "Điểm tham khảo" : "Rubric scores"}>
             {evaluation.scores.map((score) => (
               <article key={score.label} className="score-card">
                 <div className="score-row">
@@ -260,18 +305,29 @@ function SectionList({
   title,
   items,
   emptyText,
+  onChoose,
+  selectedIndex,
+  selectionDisabled,
 }: {
   title: string;
   items: string[];
   emptyText: string;
+  onChoose?: (index: number) => void;
+  selectedIndex?: number;
+  selectionDisabled?: boolean;
 }) {
   return (
     <section className="list-section">
       <h3>{title}</h3>
       {items.length > 0 ? (
         <ul>
-          {items.map((item) => (
-            <li key={item}>{item}</li>
+          {items.map((item, index) => (
+            <li key={index}><span className="preserve-lines">{item}</span>
+              {onChoose && <button type="button" className="secondary feedback-choice"
+                aria-label={`Chọn ${title.toLowerCase()} ${index + 1} để tự sửa`}
+                aria-pressed={selectedIndex === index} disabled={selectionDisabled}
+                onClick={() => onChoose(index)}>Xem cạnh bản thảo</button>}
+            </li>
           ))}
         </ul>
       ) : (
@@ -319,10 +375,10 @@ function shapeStoryPlan(result: GenerateResponse, copy: ResultCopy) {
   });
 }
 
-function shapeEvaluation(result: Pick<GenerateResponse, "evaluation">) {
+function shapeEvaluation(result: Pick<GenerateResponse, "evaluation">, uiLanguage: UiLanguage) {
   return {
     scores: Object.entries(result.evaluation.rubric_scores).map(([criterion, value]) => ({
-      label: formatLabel(criterion),
+      label: uiLanguage === "vi" ? rubricLabels[criterion] ?? criterion : formatLabel(criterion),
       value,
     })),
     strengths: result.evaluation.findings

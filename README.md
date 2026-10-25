@@ -1,54 +1,66 @@
 # FirstFrame AI
 
-**Your story. Your first short-film screenplay.**
+**From a moment in your life to your first short-film screenplay.**
 
-FirstFrame AI helps beginners develop an idea into their first complete short-film screenplay through guided story development and specific, actionable feedback. The creator keeps control of the story and makes the final creative decisions.
+FirstFrame helps people in Vietnam write their first short film from their own experiences, understand their creative choices, and revise a screenplay to share with human collaborators. The author keeps control of the story.
 
-The current MVP supports saving projects, answering clarification questions before planning, editing a story plan, and requesting feedback on the revised draft through a **Creative Reasoning Harness**. It does not yet produce a complete screenplay.
+The current MVP supports saved projects, clarification questions, editable story plans, version history, and feedback on the revised draft through a **Creative Reasoning Harness**. It does not yet provide a scene outline, scene-level screenplay editor, or screenplay export.
 
 Current project workflow:
 
 ```text
-Save Idea -> Analyze -> Answer Questions -> Generate Story Plan -> Edit -> Review -> Save/Reopen
+Save Idea -> Analyze -> Answer/Defer Questions -> Generate Story Plan -> Edit -> Review -> Save/Reopen
 ```
+
+Review gives feedback on the saved draft; it does not rewrite it. Changing the idea or constraints uses the existing clarification flow again.
 
 ## Why It Exists
 
-Beginners often have a promising story idea but do not know how to shape it:
+A line of dialogue, an ordinary act of care, an awkward encounter, or a quiet memory can be enough to start. A beginner may need help discovering what matters in that moment and how to express it through actions, images, and sound.
 
-- What is the emotional core?
-- Who is the protagonist?
-- Where is the conflict?
-- Does the ending work?
-- Is the story practical for a short film?
+FirstFrame aims to help creators start without knowing film terminology, preserve what they want to keep, and learn through a specific revision. Quiet, funny, observational, and open-ended stories are valid forms. Production limits such as cast and locations inform the writing when relevant or chosen by the author.
 
-FirstFrame guides creators through these questions, explains revision options, and helps them decide what to develop next. Practical constraints such as cast size and available locations inform the writing process.
+## First Users and Differentiation to Validate
 
-## First Users
+The initial market is Vietnam. The first pilot focuses on Vietnamese film enthusiasts, especially young people who have not completed a short-film screenplay and lack a development method or someone to give useful feedback. A crew and filming schedule are not prerequisites.
 
-The first users are Vietnamese-speaking beginners who want to finish their first short-film screenplay. They have an idea or personal experience to explore but lack a development method and someone to give useful feedback.
+The proposed differences are practical outcomes to validate:
 
-They may be students, film-club members, or independent enthusiasts. They do not need a crew or a filming schedule to start; they need a willingness to write, review, and revise a draft.
+- Start from a moment before it becomes a fully formed film idea.
+- Handle Vietnamese forms of address, relationships, everyday settings, and speech in their specific context.
+- Develop feelings into actions that human actors can perform, with AI additions identified as proposals.
+- Help the author understand and make one useful revision.
+- Respect creative intent, deliberate ambiguity, and any practical limits the author chooses.
+
+Vietnamese support, a narrow scope, and a mentor label alone do not prove an advantage. Compare selected tasks with a familiar chatbot and a direct story-development tool during the pilot.
 
 ## Product Scope
 
 The planned core journey is:
 
 ```text
-Idea -> Story Development -> Scene Outline -> Write and Revise -> Complete Screenplay
+Moment -> Story Plan -> Scene Outline -> Write and Revise Screenplay -> Export Screenplay
 ```
 
-A completed draft contains all scenes from beginning to end, uses action and dialogue appropriate to the creator's intent, has undergone at least one feedback-and-revision round, and can be exported for reading and further development. This is the product goal, not a capability already delivered by the MVP.
+A story plan clarifies the intended story before detailed scene writing. It is a useful milestone to keep or share, but a good plan does not guarantee a good screenplay. Its detail should fit the size and form of the story.
 
-After the screenplay, optional rough scene illustrations may help creators visualize characters, positions, and key actions. This is a later extension, not a requirement for completing a screenplay. It does not include animation or video generation.
+The product goal is a complete short-film screenplay: all scenes are written, action and dialogue communicate the intended story, at least one feedback-and-revision round has taken place, and the selected draft can be exported for reading and further development. This is not a capability already delivered by the MVP.
 
-Filming preparation, shooting, editing, screenings, and feature-film or television development are outside the current product roadmap.
+FirstFrame's handoff ends at screenplay export. Casting, staging, shooting, editing, and post-production belong to a separate process with real people and actors. AI video, synthetic actors, generated footage, and production management are outside the product direction. Automatic scene illustrations are no longer an active roadmap milestone.
+
+Feature-film and television **screenwriting** may be explored after the short-film journey is validated and users demonstrate a need. This is a conditional long-term direction, not an MVP commitment; the handoff would still end at screenplay export.
+
+See the [Vietnam first-screenplay and MVP demo plan](docs/plans/vietnam-first-screenplay-mvp.md) for priorities, acceptance criteria, and pilot design. This update is documentation only; proposed demo improvements are not implemented by it.
 
 ## Current MVP
 
+- Optional six-step onboarding tour with practice breaks, replay, and browser-local progress; tour navigation preserves unsaved text and makes no AI or project-write requests
 - Local SQLite project storage, project selection, and explicit save controls
 - Up to three clarification questions before story-plan generation, with an explicit option to defer a decision
 - Editable story plans and feedback tied to the exact reviewed content
+- Saved author-context card from the backend's effective idea, constraints and clarification answers, with unsaved-edit warnings and navigation that does not save or call AI
+- Optional manual revision note: choose one current feedback item to read beside the editor, edit in your own words, then save/review/reopen through the existing controls
+- Planner checkpoints in the project store: the first draft survives critic failure; regeneration stays a separate proposal until explicitly accepted, with revision/source checks and history preservation
 - Version history, story-plan restoration, and JSON backup download
 - Clarification history preserves earlier questions and answers when the brief changes; answers stay in the active author context across reanalysis of the same brief, even if the new question list changes or is empty
 - Revision checks that reject stale saves from another window
@@ -68,7 +80,19 @@ Filming preparation, shooting, editing, screenings, and feature-film or televisi
 
 Use **Save changes / Lưu thay đổi** before closing a project. Switching projects, creating another project, and requesting AI work save pending edits first. Unsaved changes trigger a browser warning when leaving. Projects are stored in `backend/.data/projects.sqlite3`, which is ignored by Git; keep this file when restarting or moving the local installation. JSON downloads provide a readable backup; importing them is not implemented yet.
 
+The writing workspace at `/` uses the card UI for every project. Story prose is split into short cards at existing sentence/paragraph boundaries, with a soft 200-character limit at word boundaries. A curved S path runs across three columns on desktop, two at medium widths, and one on mobile. Card edits replace only the corresponding text in the original section, preserving other cards and separators; saving/review still uses the original draft format. There is no view switch; old `workspace=story` or `workspace=classic` links open the same UI.
+
+Clarification is a guided conversation: one answer editor at a time, 5–6 initial questions, and follow-up batches of up to three new questions, up to 20 in the current question set. Prior answers remain visible and editable; **Tiếp tục** and **Để quyết định sau** only update the buffer. **Hỏi thêm từ câu trả lời của tôi** saves and requests follow-up questions. **Xem lại các lựa chọn** opens a recap; only **Đồng ý, tạo bản phát triển** starts planning. Editing a choice requires reviewing and confirming again. Planning displays three groups with eight required substeps, using actual backend progress events and preserving optional/repeated audit steps. The new `/clarify` and `/clarify/stream` endpoints support this conversation; legacy `/analyze` retains its existing behavior. Project fields and revision requests retain their existing shape, with answer validation extended from 3 to 20.
+
+**Xong** closes a card editor; **Hủy** or Escape restores only that card's text when opened. A successful save ends card editing sessions. Save or download a JSON backup before accepting a reload: unsaved text lives in memory. The user approved the Idea → Clarification → Story plan UI on 24 October 2026. Outline and screenplay steps remain disabled, with their UI to be agreed when implemented. See the [approved scope](docs/plans/approved-story-workspace.md) and [UI checks](docs/testing/approved-story-workspace.md).
+
 Changing the idea or constraints requires a new clarification round. Earlier answers remain readable in **Các lựa chọn trước đây** and are not silently applied to a new brief. Feedback freshness checks include the questions as well as the answers and draft. Older saved projects remain readable; feedback without this complete context is conservatively marked outdated until reviewed again.
+
+**Ý đồ đã lưu hiện tại** shows the last confirmed saved context, including answers retained from earlier clarification rounds of the same brief. Blank answers are pending questions; deferred choices keep the author's exact wording. New evaluations save their own source context and draft with the feedback and version history. **Ý đồ đã dùng cho góp ý này** stays with that feedback when the current context changes. Older feedback without verified source metadata is labeled as missing information; opening it does not reconstruct context or migrate stored projects.
+
+**Xem cạnh bản thảo** keeps the selected feedback text near the editor so you can decide what to change or ignore. Selection only moves focus to the note; it does not infer a target field, rewrite, save, or call AI. After a content/context edit, the note is labeled as belonging to the previous version, not as resolved. The choice is temporary and clears on new feedback, project changes, successful restoration or reload. Historical feedback and feedback without verified source metadata stay read-only. Review still saves pending edits first; a failed save prevents review, and a failed review preserves the saved draft and old feedback with its source.
+
+**Các bản do AI tạo** retains each generated plan, generation ID, source revision and author context in the project database before the critic runs. The first plan becomes the working draft immediately. Regeneration, including a successful critic result, stays a separate proposal until **Dùng bản đề xuất này** is chosen. Acceptance uses `POST /api/projects/{id}/plans/{generation_id}/accept` with the displayed revision, preserves history, and refuses a changed source or repeated acceptance. An unreviewed proposal never inherits the old draft's feedback. Unsaved edits disable acceptance and reopening; **Mở lại bản đã lưu** performs only a GET and is useful after a dropped response. A critic failure returns the saved project with `critic_status=failed`, rather than discarding the plan; a pending status remains readable after interruption. Save/edit/review can continue without replanning. Failed critic rounds and unaccepted proposals are not completed demo rounds. See [recovery checks](docs/testing/plan-recovery.md).
 
 Reanalyzing the same brief passes existing choices to the mentor and retains them
 for planning and review. Current answers override earlier answers to the same
@@ -78,6 +102,38 @@ the effective clarification context; feedback from before this context was recor
 is conservatively marked outdated.
 
 This is a local, single-user MVP without authentication. Keep the backend bound to localhost. AI actions use OpenAI when `OPENAI_API_KEY` is configured, otherwise a running Ollama server and an installed chat model. Project saving and reopening work without either provider.
+
+### Output language and interface labels
+
+FirstFrame supports Vietnamese and English AI output. The backend makes the same
+language decision for clarification, planning, review and `/api/generate`; the
+frontend does not guess independently. Automatic detection matches whole words
+after Unicode normalization. It needs at least two distinct known words and more
+than twice as many matching words as the other language, covering at least one
+third of the input words. Place-name tokens `Việt` and `Nam` are not language hints.
+A substring such as `con`
+inside `concert`, an accent, or a proper name alone is insufficient evidence.
+
+For uncertain, short, unaccented or balanced bilingual ideas, automatic mode asks
+the creator to select **Tiếng Việt** or **English** before any model call (HTTP 422).
+This is a conservative heuristic, not a general language identifier: French and
+other unsupported inputs should use an explicit supported output choice. Mixed
+author terminology such as `lab coach`, `build phase` and names remains allowed.
+
+The output choice is saved per project and recorded with versions. Changing it
+keeps unsaved text in the editor and does not save, call AI or translate existing
+content automatically. The next AI action saves pending edits and uses the choice;
+feedback for a different explicit choice is marked outdated. Existing projects
+default to automatic mode without rewriting their data or invalidating compatible
+automatic-mode feedback. Legacy clients that omit the field preserve a saved
+explicit choice. The interface remains Vietnamese regardless of AI output language;
+display labels do not rename JSON keys, rewrite author text or translate quotations.
+Mentor and planner prompts also follow the explicit output choice and instruct the
+model to retain author terminology and source quotations. Model compliance is not
+guaranteed: the Qwen review sample still translated an author-supplied film title.
+
+See the [language detection and UI checks](docs/evaluations/language-detection-ui-2026-10-21.md)
+for regression cases and real Ollama review evidence.
 
 ## Architecture At A Glance
 
@@ -278,12 +334,12 @@ need live generation and are not part of this recorded playback.
 
 ## Next Milestones
 
-1. Validate the project clarification and revision loop with beginners.
-2. Develop an editable scene outline from the selected story plan.
-3. Support scene-level writing, specific feedback, and screenplay export.
-4. Consider optional rough scene illustrations after validating the core writing journey.
+1. Make the story-plan demo easier to start, read, and revise; show the author's effective choices and validate three Vietnamese situations on the actual demo model.
+2. Pilot with beginners, complete the focused feedback-to-edit flow, and export a selected story plan for sharing.
+3. Develop an editable scene outline, then support scene-level screenplay writing and revision.
+4. Export the selected complete screenplay for human collaborators; this is the product handoff.
 
-See [the roadmap](docs/roadmap.md) for milestone outcomes and validation. Expansion into other creative domains is deferred while FirstFrame validates the first-screenplay experience.
+See [the roadmap](docs/roadmap.md) and [the detailed demo plan](docs/plans/vietnam-first-screenplay-mvp.md). The onboarding tour is already implemented and awaits remaining acceptance, including beginner validation; adapt it to the settled writing flow rather than rebuilding it. Other creative domains remain deferred. Longer-form screenwriting is conditional future exploration.
 
 
 ### Human dataset review

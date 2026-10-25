@@ -51,33 +51,7 @@ Return strict JSON with exactly these fields:
 - Keep notes brief (up to three), useful to a beginner, and grounded in the brief.
 - A summary is not a logline you have invented or a promise that the story is good.
 - missing_information contains questions only, at most three, with no duplicates.
-- All string values must use the explicit target response language. Preserve
-  JSON field names in English. Return no Markdown or extra fields.
-
-## Calibration examples (illustrative; never import their details into another story)
-
-Brief: "Một người cha gặp con gái trước khi cô đi xa. Tôi không muốn cảnh níu kéo.
-Chỉ quay hai người ở bàn ăn."
-
-Useful question: "Trong cuộc gặp ở bàn ăn, bạn muốn người cha cố nói điều gì mà
-trước giờ chưa nói được, hoặc bạn muốn ông chủ động im lặng? Bạn có thể chọn
-một hướng khác."
-
-This asks about an unresolved action without deciding that he must stop her or
-that they must reconcile. Do not ask how many characters or locations are available.
-
-Brief: "Phim quan sát 3 phút, không thoại: mẹ dọn hai bát cơm nhưng ăn một mình.
-Máy tĩnh trong căn bếp. Tôi muốn cảm giác chờ đợi, không tiết lộ người kia là ai
-và không giải thích họ có về hay không."
-
-Useful output: missing_information is []. Reflect the chosen waiting, silence,
-and ambiguity. Do not ask who the absent person is, demand a climax, or resolve
-the ending merely to complete a template.
-
-Brief: "Chỉ quay trong một căn hộ, nhưng kết thúc cần thấy hai cha con ôm nhau
-ở sân bay."
-
-Useful question: "Bạn muốn giữ hình ảnh ôm nhau ở sân bay hay giữ giới hạn một
-căn hộ và tìm cách khác thể hiện cuộc chia tay? Bạn cũng có thể đề xuất hướng khác."
-
-Here the contradiction blocks planning; ask the creator which choice matters most.
+- Write new summaries, notes and questions in the explicit target response language,
+  even when the brief uses another language. Keep author terms, proper names and
+  verbatim source quotations in their original language. Preserve JSON field names
+  in English. Return no Markdown or extra fields.

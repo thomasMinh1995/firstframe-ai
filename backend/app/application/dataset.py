@@ -25,6 +25,7 @@ from app.application.ai_provider import (
     StructuredResult,
     strict_json_instructions,
 )
+from app.application.progress import report_progress
 from app.application.project_store import ProjectConflict
 
 logger = logging.getLogger(__name__)
@@ -182,10 +183,11 @@ class DatasetRun:
         except (OSError, sqlite3.Error) as error:
             self._warn(error)
 
-    def complete(self, snapshot: dict[str, Any]) -> None:
+    def complete(self, snapshot: dict[str, Any], *, workflow_complete: bool | None = None) -> None:
         self.record["output"] = json.loads(_json(snapshot))
         self.record["output_revision"] = snapshot.get("revision")
-        self.record["workflow_complete"] = self.record["operation"] in {"plan", "generate"}
+        self.record["workflow_complete"] = (self.record["operation"] in {"plan", "generate"}
+                                            if workflow_complete is None else workflow_complete)
         self._finish("completed")
 
     def _finish(self, status: str) -> None:
@@ -245,9 +247,11 @@ class RecordingProvider:
         self.run.record["steps"].append(step)
         self.run.persist()
         started = time.monotonic()
+        report_progress(request.stage, "active")
         try:
             result = self.provider.request_structured(request)
         except Exception as error:
+            report_progress(request.stage, "failed")
             step.update(
                 status="failed",
                 error_type=type(error).__name__,
@@ -255,6 +259,7 @@ class RecordingProvider:
             )
             raise
         else:
+            report_progress(request.stage, "completed")
             step.update(
                 status="completed",
                 model=result.model,

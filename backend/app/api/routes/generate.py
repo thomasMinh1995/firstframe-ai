@@ -17,6 +17,7 @@ from app.application.ai_provider import (
     ProviderTimeoutError,
 )
 from app.application.dataset import capture_workflow
+from app.application.language import LanguageSelectionRequired
 from app.application.workflow import HarnessRun, create_story_generation_service
 from app.core.artifacts import Constraint
 
@@ -28,6 +29,7 @@ def generate(request: IdeaRequest) -> GenerateResponse:
     try:
         with capture_workflow("generate", request.model_dump(mode="json")) as dataset:
             run = get_story_generation_service().generate(
+                response_language=request.response_language,
                 idea_text=request.idea,
                 domain_id=request.domain_id,
                 constraints=tuple(
@@ -38,6 +40,8 @@ def generate(request: IdeaRequest) -> GenerateResponse:
             response = _to_response(run)
             dataset.complete(response.model_dump(mode="json"))
             return response
+    except LanguageSelectionRequired as error:
+        raise HTTPException(422, str(error)) from error
     except MissingProviderConfigurationError as error:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
@@ -86,6 +90,7 @@ def _to_response(run: HarnessRun) -> GenerateResponse:
         ),
         evaluation=EvaluationResponse(
             artifact_id=run.evaluation.metadata.artifact_id,
+            revision_notes=run.evaluation.revision_notes,
             passed=run.evaluation.passed,
             rubric_scores={
                 finding.criterion_id: finding.score
@@ -106,8 +111,4 @@ def _to_response(run: HarnessRun) -> GenerateResponse:
 
 
 def _analysis_summary(run: HarnessRun) -> str:
-    missing_count = len(run.analysis.open_questions)
-    return (
-        "The idea has enough signal for a first short-film story plan, "
-        f"with {missing_count} missing decisions to clarify in the next pass."
-    )
+    return next((note.content for note in run.analysis.notes if note.label == "Analysis summary"), "")

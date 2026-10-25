@@ -68,3 +68,41 @@ Current mappings:
 - Planning Layer: `_PlanningOutput`
 - Evaluation Layer: `_EvaluationOutput`
 
+## Project revision feedback (#7)
+
+Project plan generation and manual review both use the existing `CardReview`
+provider contract (`_RevisionReviewOutput`). The server supplies card/decision
+IDs from the current immutable snapshot; the model selects IDs and returns
+`comparison`, `observation` (detail and its effect relative to intent), and a
+specific `suggestion`. The existing focused provider prompt returns one review,
+within the transport limit of three priorities. Aligned reviews produce strengths
+and zero priorities. This does not establish semantic correctness or acceptance.
+
+The core evaluation, API and saved project/history/proposal now carry optional
+`revision_notes` alongside the compatible `findings` projection:
+
+- `note_id`, `artifact_id`, `comparison`, `observation`, `suggestion` keep each
+  issue and next step paired through every layer.
+- `decision_id`, `decision_quote`, `decision_question` identify the actual author
+  source. An equal answer to another question is not an interchangeable source.
+- `targets[]` contains snapshot-local `target_id` and the exact server-extracted
+  `quote`. IDs cover title, logline and section/card positions, including duplicate
+  section names. They have meaning only inside the matching `FeedbackSource`
+  (project, evaluation artifact, reviewed content and author/draft snapshot).
+
+Every target and decision must match that snapshot exactly. One bad reference
+makes the whole priority read-only; no fuzzy relocation or selection of the first
+valid reference. Multi-target priorities expose an explicit choice. Navigation
+only opens/focuses the chosen editor and preserves the complete unsaved buffer.
+Changing only the project name does not invalidate feedback. Editing relevant
+content does; undoing to the exact saved content can restore navigation.
+
+Missing/malformed optional metadata falls back to readable legacy findings,
+without generating pairs or links from array positions or prose. Opening a
+project does not migrate stored data. Old feedback, historical views and
+proposals remain read-only. Save/review still use the existing optimistic lock,
+atomic source snapshot and recovery checkpoint.
+
+The legacy `/api/generate` and default offline `StoryGenerationService.plan()`
+retain `_EvaluationOutput`, including recorded baseline replays. Project routes
+explicitly opt into structured initial review; no baseline files are rewritten.
