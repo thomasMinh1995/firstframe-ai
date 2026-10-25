@@ -1,7 +1,7 @@
 # Kế hoạch cải tiến harness FirstFrame
 
-- Cập nhật: 23/10/2026, tám gói sau bốn phần MVP đã merge; kết hợp chunking
-  theo cấu trúc và ID nguồn, chưa triển khai embedding/retrieval.
+- Cập nhật: 25/10/2026. Hoàn thiện #7 → cập nhật tour → kiểm chứng/nghiệm thu
+  #7 → tiếp tục tám gói harness. Giữ chunking/ID nguồn, chưa embedding/retrieval.
 - Trạng thái: nền tảng bốn phần đã triển khai; tám gói dưới đây là công việc
   tiếp theo, chưa được triển khai hoặc nghiệm thu bởi lần sửa tài liệu này.
 - Cơ sở sản phẩm: [kế hoạch trong PR #27](vietnam-first-screenplay-mvp.md),
@@ -47,7 +47,13 @@ cũng là quyết định có giá trị. Điểm AI và JSON hợp lệ chỉ l
   Tạo lần đầu lưu draft trước critic khi nguồn hợp lệ; tạo lại giữ đề xuất
   riêng tới khi tác giả nhận, không ghi đè bản đang viết.
 - Thẻ ý đồ và vòng sửa đã giao một phần của [P0 #7](p0-author-intent-revision-flow.md).
-  Liên kết góp ý tới mục tiêu có cấu trúc và đã kiểm tra chưa được triển khai.
+  Workspace PR #36 đã bổ sung góp ý cạnh card và quote anchors có kiểm tra
+  nguồn. Cần rà phần còn thiếu của hợp đồng/điều hướng theo #7; chưa coi
+  tiến triển này là nghiệm thu toàn bộ #7 hoặc tám gói harness.
+- [UI workspace](approved-story-workspace.md) đã chốt, #35 đã hoàn thành.
+  Tour đã cập nhật theo PR #36 và qua regression kỹ thuật; #22 vẫn mở cho
+  pilot, tổng kết và nghiệm thu thực tế. Không làm lại UI Ý tưởng/Làm rõ/
+  Story plan đã chốt khi tiếp tục #7 hoặc harness.
 - Đợt toàn luồng trên commit `f607732` hoàn tất 9/9 hành trình và giữ nguồn,
   nhưng 7/9 lượt tạo plan vượt mốc 120 giây và còn góp ý trái ý/thiếu căn cứ.
   Chưa đủ điều kiện demo trực tiếp; chưa có nghiệm thu PO hoặc pilot.
@@ -68,6 +74,26 @@ baseline mới cần đo đúng API/luồng và hợp đồng hiện tại.
 
 ## 3. Tám gói tiếp theo: chất lượng, tích hợp và nghiệm thu
 
+### Thứ tự ưu tiên trước khi tiếp tục harness
+
+1. Hoàn thiện [#7](p0-author-intent-revision-flow.md) từ code/bằng chứng đã
+   có sau PR #36, kiểm thử nguồn, ghép cặp, mục tiêu và vòng sửa thủ công.
+2. Khi phần triển khai #7 ổn định và qua test kỹ thuật, [cập nhật tour](new-user-tour.md)
+   ở các chặng chịu ảnh hưởng. Làm trước nghiệm thu/pilot #7, không đợi đóng
+   #7 mới cập nhật hướng dẫn; giữ sáu chặng, tiến độ và quyền bỏ qua/mở lại.
+3. Kiểm chứng luồng #7 + tour trên cùng ứng viên, chạy model thật và pilot
+   theo tiêu chí #7, ghi quyết định nghiệm thu. Giữ riêng các mục chưa đủ
+   bằng chứng của #22; không tự đóng #22 hoặc nghiệm thu MVP #26 thay cho nó.
+4. Sau khi #7 đủ bằng chứng nghiệm thu và tour đã cập nhật/kiểm tra kỹ thuật,
+   mới tiếp tục H1–H8 bên dưới. Không cần chờ các nghiệm thu riêng còn lại
+   của #22 để bắt đầu harness, không dùng mock/QA thay bằng chứng model thật.
+
+Đây là thứ tự thực hiện đã chọn; không đổi tiêu chí demo/pilot ở mục 4.
+Test/sửa hẹp cần để hoàn thành #7 vẫn thuộc #7, không phải mở sớm tám gói
+harness. Khi quay lại H1–H8, dùng lại hợp đồng nguồn, UI và bằng chứng phù
+hợp của #7, chỉ kiểm tra/bổ sung phần còn thiếu; không làm lại một feature
+đã nghiệm thu hoặc gộp các đợt khác cấu hình thành một đợt đạt.
+
 Bốn phần MVP đã có code; không triển khai lại chúng. Tám gói là đơn vị công
 việc có thể review riêng, gồm đánh giá/thử nghiệm, triển khai và nghiệm thu,
 không phải tám feature hoặc tám PR cố định. Chunking và ID nguồn nằm trong
@@ -84,15 +110,15 @@ gói 2 và 5; không thêm một dự án RAG hoặc một kho bản thảo mớ
 | 7 — Demo toàn luồng | Đợt mới 3 tình huống × 3 lượt, diễn tập và PO duyệt | Đủ bằng chứng theo mục 4; không ghép benchmark rời rạc |
 | 8 — Pilot và đối chiếu giá trị | N=5–8 người mới; so với cách dùng agent/chatbot | Đạt tiêu chí hiện có, ghi mức hỗ trợ và quyết định PO |
 
-**Làm trước:** gói 1 → 2 → 3 → 4, chỉ mở tích hợp gói 5 khi có bằng chứng
+**Khi tiếp tục harness:** gói 1 → 2 → 3 → 4, chỉ mở tích hợp gói 5 khi có bằng chứng
 phù hợp. Đo thời gian ở gói 6 có thể song song với thử nghiệm; mọi thay đổi
 ứng viên phải được chốt trước đợt nghiệm thu gói 7. Gói 8 theo điều kiện pilot
 hiện hành. Nếu thử nghiệm chưa có lợi thì ghi chưa đạt/cần thêm bằng chứng,
 không tự tích hợp hoặc mở rộng kiến trúc để hoàn thành đủ tám ô.
 
-ID/chunking là ứng viên xử lý lỗi đã thấy, không là điều kiện bắt buộc mới
-của pilot khám phá. Lỗi vi phạm ý đồ, sai nguồn, mất dữ liệu và các lỗi chặn
-khác vẫn phải được xử lý theo mục 4 dù chọn giải pháp kỹ thuật nào.
+ID/chunking là ứng viên xử lý lỗi đã thấy, không thêm tiêu chí nghiệm thu
+mới hoặc bắt #7 chờ xong H1–H8. Lỗi vi phạm ý đồ, sai nguồn, mất dữ liệu và
+các lỗi chặn khác vẫn phải được xử lý theo mục 4 dù chọn giải pháp nào.
 
 ### Các bảo vệ áp dụng cho cả tám gói
 
@@ -140,6 +166,8 @@ tham số, seed nếu có, thứ tự và mọi lỗi/abstain; không sinh lại
 
 ### 3.2. Gói 2 — Chunking theo cấu trúc và ID nguồn, chỉ thử offline
 
+Dùng lại ánh xạ nguồn/ID đã có sau #7; mục đích là đối chiếu hiệu quả trên
+bộ thử, không tạo một hệ định danh hoặc triển khai lại feature song song.
 Harness đang có các phần story plan. Chia nguồn theo trường/phần rồi đoạn
 hoặc câu khi cần; giữ lời thoại với người nói và quy tắc với ngoại lệ.
 Tên phim, logline và từng mục ý đồ/hỏi đáp cũng có thể là đơn vị nguồn.
@@ -206,7 +234,8 @@ quote do backend dựng và feedback phải giữ cùng snapshot. ID sai, sai ph
 bản, phạm vi không hợp lệ hoặc một trong các tham chiếu của mục không kiểm
 tra được thì mục ấy không có liên kết điều hướng được xác minh; không đoán
 lại bằng tên hoặc gắn sang draft hiện tại. Góp ý tổng thể/thiếu nguồn vẫn
-đọc được với nhãn phù hợp. Chưa triển khai toàn bộ UX liên kết sâu của #7.
+đọc được với nhãn phù hợp. Dùng lại kết quả #7 đã nghiệm thu; gói này chỉ
+tích hợp phần cải thiện có bằng chứng mới, không triển khai lại UX của #7.
 
 **Bàn giao:** test hợp đồng/API/UI phù hợp cho cả review sau tạo và sau sửa,
 dữ liệu cũ, stale feedback, xóa/reorder phần, restore, hai cửa sổ, lưu lỗi/kết
@@ -230,9 +259,11 @@ thu mới, không gộp kết quả khác cấu hình.
 ### 3.7. Gói 7 — Kiểm chứng demo trên cấu hình cuối
 
 Chạy mới đủ ba tình huống × ba lượt độc lập: làm rõ → plan → tác giả tự sửa
-→ lưu → review → mở lại. Hỏi tối đa ba câu có ích, có thể không hỏi nếu đã
-đủ rõ. Giữ toàn bộ kết quả, input/output, thời gian và đọc đối chiếu. Thử
-nghiệm offline ở gói 1–6 không thay chín lượt này. Diễn tập đủ thao tác, đọc
+→ lưu → review → mở lại. Dùng luồng làm rõ/xác nhận hiện hành đã chốt trong
+[workspace](approved-story-workspace.md), không áp giới hạn ba câu của luồng
+cũ hoặc đổi giới hạn trong gói kiểm chứng. Giữ toàn bộ kết quả, input/output,
+thời gian và đọc đối chiếu. Thử nghiệm offline ở gói 1–6 không thay chín lượt
+này. Diễn tập đủ thao tác, đọc
 và chờ thực; PO/người đọc duyệt live/bản ghi/chưa sẵn sàng theo mục 4.
 
 ### 3.8. Gói 8 — Pilot và so sánh giá trị
@@ -248,9 +279,10 @@ không lấy điểm AI hoặc số tính năng làm lợi thế. Giữ nguyên 
 Chưa triển khai embedding/retrieval, vector database, reranker hoặc giảm
 context. Chỉ mở đợt đánh giá riêng khi có nhu cầu tìm kiếm hoặc dữ liệu chứng
 minh giá trị so với toàn văn có ID/tìm từ khóa; không thêm hai gói này vào
-tám gói đã chọn. Trạng thái `confirmed/open/proposed`, review hẹp và toàn bộ
-liên kết sâu của #7 không là phụ thuộc mới của pilot. Giữ tour đã có, hoàn
-tất nghiệm thu và điều chỉnh lời dẫn khi luồng ổn định; [PDF #5](story-plan-pdf-export.md)
+tám gói đã chọn. Trạng thái `confirmed/open/proposed`, review hẹp và mở rộng
+ngoài phạm vi #7 không là phụ thuộc mới của pilot. Tour được cập nhật ngay
+sau khi triển khai #7 ổn định; các nghiệm thu #22 còn thiếu tiếp tục theo dõi
+riêng, không coi đã đạt chỉ vì đổi lời dẫn. [PDF #5](story-plan-pdf-export.md)
 đi sau demo. Sửa hai chiều story plan–kịch bản vẫn là hướng về sau ở mục 5.
 
 ## 4. Nghiệm thu MVP và kiểm chứng giá trị
@@ -339,10 +371,11 @@ quan và từ chối đề xuất không làm mất nội dung.
 
 ## 6. Phạm vi lần cập nhật tài liệu
 
-Cập nhật kế hoạch harness và roadmap theo tám gói, phản ánh bốn phần MVP đã
-merge và đưa chunking/ID nguồn vào thử nghiệm gói 2, tích hợp có điều kiện ở
-gói 5. Giữ nguyên bảo vệ dữ liệu và các ngưỡng nghiệm thu của kế hoạch sản
-phẩm. Chưa sửa workflow, prompt, rubric, schema, UI, dependency, model mặc
+Đồng bộ kế hoạch #7, tour, harness và roadmap theo thứ tự #7 → cập nhật tour
+→ kiểm chứng/nghiệm thu #7 → tiếp tục tám gói harness. Giữ chunking/ID nguồn
+ở gói 2 và 5, dùng lại phần đã có của #7. Giữ nguyên bảo vệ dữ liệu và các
+ngưỡng nghiệm thu của kế hoạch sản phẩm. Chưa sửa workflow, prompt, rubric,
+schema, UI, dependency, model mặc
 định, prototype hoặc dữ liệu dự án; chưa triển khai embedding/retrieval.
 Không coi tám gói là đã hoàn thành, không chạy model hoặc pilot để nghiệm
 thu trong lần cập nhật tài liệu này.
