@@ -22,7 +22,12 @@ from app.api.schemas.projects import (
     ProjectUpdate,
     RevisionRequest,
     StoryDraft,
+    SceneOutline,
+    SceneOutlineVersion,
+    ScenePlanSource,
+    author_context,
 )
+from app.api.schemas.scenes import StartSceneOutline
 from app.api.schemas.story import AnalysisNoteResponse, AnalysisResponse, EvaluationResponse
 from app.application.ai_provider import (
     MalformedProviderResponseError,
@@ -220,6 +225,20 @@ def update_project(project_id: str, request: ProjectUpdate):
         questions = project.analysis.missing_information if project.analysis else []
         if len(request.answers) != len(questions):
             raise HTTPException(422, "Câu trả lời phải khớp với bộ câu hỏi hiện tại.")
+        if "scene_outline" in request.model_fields_set:
+            edit, outline = request.scene_outline, project.scene_outline
+            if edit is None:
+                if outline is not None:
+                    raise HTTPException(422, "Không xóa nguồn dàn cảnh; bạn có thể bỏ từng cảnh.")
+            elif outline is None:
+                raise HTTPException(422, "Chọn nguồn story plan trước khi sửa dàn cảnh.")
+            elif edit.id != outline.id or edit.version != outline.version:
+                raise ProjectConflict
+            elif edit.scenes != outline.scenes:
+                archive_scene_outline(project)
+                project.scene_outline = outline.model_copy(update={
+                    "scenes": edit.scenes, "version": outline.version + 1,
+                })
         brief_changed = project.idea != request.idea or project.constraints != request.constraints
         if brief_changed:
             archive_clarifications(project, request.answers)
@@ -239,6 +258,58 @@ def update_project(project_id: str, request: ProjectUpdate):
             project.clarifications = {}
         else:
             project.answers = request.answers
+        return save_project(project)
+
+
+def archive_scene_outline(project: ProjectResponse) -> None:
+    if project.scene_outline is not None:
+        project.scene_versions.append(SceneOutlineVersion(
+            id=str(uuid4()), created_at=datetime.now(UTC).isoformat(),
+            outline=project.scene_outline.model_copy(deep=True),
+        ))
+
+
+@router.post("/{project_id}/scene-outline", response_model=ProjectResponse)
+def start_scene_outline(project_id: str, request: StartSceneOutline):
+    with project_errors():
+        project = load_project(project_id, request.revision)
+        if project.scene_outline is not None:
+            raise HTTPException(409, "Dự án đã có dàn cảnh. Bản hiện tại được giữ nguyên.")
+        if request.source_version_id == "current":
+            draft, context, language = project.draft, project.author_context, project.response_language
+        else:
+            version = next((v for v in project.versions if v.id == request.source_version_id), None)
+            if version is None:
+                raise HTTPException(404, "Không tìm thấy phiên bản story plan đã chọn.")
+            draft, language = version.draft, version.response_language
+            choices = {**version.clarifications, **dict(zip(version.questions, version.answers))}
+            context = author_context(version.idea, version.constraints,
+                                     ((q, a) for q, a in choices.items() if a.strip()),
+                                     version.questions, version.answers)
+        if draft is None:
+            raise HTTPException(422, "Cần một bản story plan đã lưu để bắt đầu dàn cảnh.")
+        project.scene_outline = SceneOutline(
+            id=str(uuid4()), version=1, scenes=[], source=ScenePlanSource(
+                id=str(uuid4()), project_revision=project.revision,
+                version_id=request.source_version_id, draft=draft.model_copy(deep=True),
+                context=context.model_copy(deep=True), response_language=language,
+            ),
+        )
+        return save_project(project)
+
+
+@router.post("/{project_id}/scene-versions/{version_id}/restore", response_model=ProjectResponse)
+def restore_scene_outline(project_id: str, version_id: str, request: RevisionRequest):
+    with project_errors():
+        project = load_project(project_id, request.revision)
+        version = next((v for v in project.scene_versions if v.id == version_id), None)
+        if project.scene_outline is None or version is None:
+            raise HTTPException(404, "Không tìm thấy bản dàn cảnh đã lưu.")
+        current_version = project.scene_outline.version
+        archive_scene_outline(project)
+        project.scene_outline = version.outline.model_copy(deep=True, update={
+            "version": current_version + 1,
+        })
         return save_project(project)
 
 

@@ -1,0 +1,53 @@
+.scene-outline { margin-top: 28px; min-width: 0; }
+.scene-outline [hidden], .scene-popover [hidden] { display: none !important; }
+.scene-heading { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.scene-heading h2, .scene-heading h3, .scene-heading p { margin: 0; }
+.scene-start { display: grid; gap: 12px; margin-top: 16px; }
+.scene-source, .scene-history, .scene-next { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); }
+.scene-canvas { position: relative; padding: 14px 32px; }
+.scene-path { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px; list-style: none; padding: 0; margin: 0; }
+.scene-path > li { grid-column: var(--wide-column); grid-row: var(--wide-row); min-width: 0; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px; }
+.scene-select { display: grid; gap: 10px; padding: 0; border: 0; background: transparent; color: var(--foreground); width: 100%; text-align: left; box-shadow: none; }
+.scene-select:hover { background: transparent; }
+.scene-select strong { font-size: 17px; }
+.scene-select > span { overflow-wrap: anywhere; }
+.scene-image-empty { display: grid; place-items: center; aspect-ratio: 1.6; background: var(--soft); border: 1px dashed var(--line); color: var(--muted); font-size: 12px; }
+.scene-excerpt { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; white-space: pre-wrap; font-size: 13px; }
+.scene-path > li > button.secondary { margin-top: 16px; }
+.scene-popover { position: fixed; inset: 0; margin: auto; width: min(660px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); padding: 24px; border: 1px solid var(--accent); border-radius: 14px; background: var(--panel); color: var(--foreground); box-shadow: 0 16px 60px rgb(0 0 0 / 18%); overflow-y: auto; overscroll-behavior: contain; }
+.scene-popover::backdrop { background: rgb(0 0 0 / 8%); }
+.scene-popover .scene-heading { margin-bottom: 16px; }
+.scene-field { display: grid; gap: 7px; margin: 16px 0; min-width: 0; }
+.scene-field label { font-size: 13px; font-weight: 600; }
+.scene-field textarea, .scene-field input, .scene-choice textarea { box-sizing: border-box; width: 100%; min-width: 0; }
+.scene-field textarea, .scene-choice textarea { min-height: 88px; }
+.scene-field textarea[rows="5"] { min-height: 150px; }
+.scene-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.scene-tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; background: var(--soft); padding: 4px; border-radius: 9px; margin: 20px 0; }
+.scene-tabs button { font-size: 13px; padding: 10px 4px; background: transparent; color: var(--foreground); border: 0; }
+.scene-tabs button[aria-selected=true] { background: var(--accent); color: white; }
+.scene-order { display: flex; flex-wrap: wrap; gap: 8px; }
+.scene-choices { margin-top: 20px; }
+.scene-choice { border-top: 1px solid var(--line); padding: 10px 0; }
+.scene-choice .scene-heading { margin-bottom: 6px; }
+.scene-history > div { margin: 16px 0; }
+.scene-help-heading { display: flex; align-items: center; gap: 8px; }
+.scene-help h4 { margin: 12px 0; }
+.scene-info { border: 0; background: transparent; color: var(--accent); font-size: 18px; width: 40px; min-height: 40px; padding: 4px; }
+.scene-help-content { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows .2s ease, opacity .2s ease; }
+.scene-help-content.is-open { grid-template-rows: 1fr; opacity: 1; }
+.scene-help-content > div { min-height: 0; overflow: hidden; }
+.scene-help-content p { color: var(--muted); font-size: 13px; margin: 0 0 12px; }
+@media (max-width: 1100px) {
+  .scene-path { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .scene-path > li { grid-column: var(--column); grid-row: var(--row); }
+}
+@media (max-width: 600px) {
+  .scene-canvas { padding: 14px 0; }
+  .scene-path { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+  .scene-path > li { grid-column: auto; grid-row: auto; }
+  .scene-pair { grid-template-columns: 1fr; gap: 0; }
+  .scene-popover { padding: 16px; }
+  .scene-field textarea, .scene-field input, .scene-choice textarea { font-size: 16px; }
+}
+@media (prefers-reduced-motion: reduce) { .scene-help-content { transition: none; } }

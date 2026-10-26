@@ -2,6 +2,7 @@ import type { GenerateResponse, StoryPlanSection } from "./apiClient";
 import { progressCopy } from "./progressState";
 import type { UiLanguage } from "./language";
 import type { ResponseLanguage } from "./language";
+import { stagingLabels, type Scene, type SceneOutline, type SceneVersion, type SceneHandoff } from "./sceneTypes";
 
 export type StoryDraft = { title: string; logline: string; sections: StoryPlanSection[] };
 export type Feedback = GenerateResponse["evaluation"] & { artifact_id?: string };
@@ -36,6 +37,8 @@ export type Project = {
   versions: DraftVersion[];
   clarification_history: ClarificationVersion[];
   plan_generations?: PlanGeneration[]; applicable_plan_ids?: string[];
+  scene_outline?: SceneOutline | null; scene_versions?: SceneVersion[];
+  scene_source_is_current?: boolean; scene_handoff?: SceneHandoff | null;
 };
 export type ProjectSummary = Pick<Project, "id" | "title" | "updated_at">;
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
@@ -130,7 +133,10 @@ export async function projectRequest(path: string, method = "GET", body?: unknow
 export function editableProject(project: Project) {
   return { revision: project.revision, response_language: project.response_language,
     title: project.title, idea: project.idea,
-    constraints: project.constraints, answers: project.answers, draft: project.draft };
+    constraints: project.constraints, answers: project.answers, draft: project.draft,
+    ...(project.scene_outline == null ? {} : { scene_outline: {
+      id: project.scene_outline.id, version: project.scene_outline.version, scenes: project.scene_outline.scenes,
+    } }) };
 }
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
@@ -187,12 +193,40 @@ function isProject(value: unknown): value is Project {
     && (value.plan_generations === undefined || (Array.isArray(value.plan_generations)
       && value.plan_generations.every(isPlanGeneration)))
     && (value.applicable_plan_ids === undefined || strings(value.applicable_plan_ids))
+    && (value.scene_outline == null || isSceneOutline(value.scene_outline))
+    && (value.scene_versions === undefined || (Array.isArray(value.scene_versions)
+      && value.scene_versions.every(v => isRecord(v) && typeof v.id === "string"
+        && typeof v.created_at === "string" && isSceneOutline(v.outline))))
+    && (value.scene_source_is_current === undefined || typeof value.scene_source_is_current === "boolean")
+    && (value.scene_handoff == null || isSceneHandoff(value.scene_handoff))
     && typeof value.feedback_is_current === "boolean" && Array.isArray(value.versions)
     && value.versions.every((version) => isClarificationVersion(version) && isRecord(version)
       && isDraft(version.draft) && (version.feedback === null || isFeedback(version.feedback))
       && isFeedbackSource(version.feedback_source))
     && Array.isArray(value.clarification_history)
     && value.clarification_history.every(isClarificationVersion);
+}
+const uuid = (v: unknown): v is string => typeof v === "string"
+  && /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(v);
+const positive = (v: unknown): v is number => typeof v === "number" && Number.isInteger(v) && v >= 1;
+function isScene(v: unknown): v is Scene {
+  return isRecord(v) && uuid(v.id)
+    && ["title", "action", "location", "time", "characters", "goal", "purpose", "viewer_intent", "keep_or_avoid"]
+      .every(k => typeof v[k] === "string") && isRecord(v.staging_choices)
+    && Object.entries(v.staging_choices).every(([key, text]) => Object.hasOwn(stagingLabels, key) && typeof text === "string");
+}
+function isScenes(v: unknown): v is Scene[] {
+  return Array.isArray(v) && v.length <= 60 && v.every(isScene) && new Set(v.map(s => s.id)).size === v.length;
+}
+function isSceneOutline(v: unknown): v is SceneOutline {
+  return isRecord(v) && uuid(v.id) && positive(v.version) && isScenes(v.scenes) && isRecord(v.source)
+    && uuid(v.source.id) && Number.isInteger(v.source.project_revision) && Number(v.source.project_revision) >= 0
+    && typeof v.source.version_id === "string" && isDraft(v.source.draft) && isAuthorContext(v.source.context)
+    && ["auto", "vi", "en"].includes(String(v.source.response_language));
+}
+function isSceneHandoff(v: unknown): v is SceneHandoff {
+  return isRecord(v) && uuid(v.outline_id) && uuid(v.source_id) && positive(v.version)
+    && Number.isInteger(v.project_revision) && Number(v.project_revision) >= 0 && isScenes(v.scenes);
 }
 function isPlanGeneration(value: unknown): value is PlanGeneration {
   return isRecord(value) && typeof value.id === "string" && typeof value.created_at === "string"
