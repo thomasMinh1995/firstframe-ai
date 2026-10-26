@@ -51,3 +51,13 @@
   .scene-field textarea, .scene-field input, .scene-choice textarea { font-size: 16px; }
 }
 @media (prefers-reduced-motion: reduce) { .scene-help-content { transition: none; } }
+
+.scene-suggestions { margin: 24px 0; padding: 20px; border: 1px solid var(--line); border-radius: 12px; }
+.scene-suggestions label { display: grid; gap: 6px; margin: 12px 0; }
+.scene-suggestions textarea, .scene-suggestions select { width: 100%; box-sizing: border-box; min-width: 0; }
+.scene-suggestions textarea { min-height: 80px; }
+.scene-suggestions > .scene-heading { margin-top: 12px; }
+.scene-proposal { border-top: 1px solid var(--line); margin-top: 20px; padding-top: 16px; }
+.scene-proposal-preview > ol { padding-left: 22px; }
+.scene-proposal-preview > ol > li { margin: 20px 0; }
+@media (max-width: 600px) { .scene-suggestions { padding: 12px; } .scene-suggestions textarea, .scene-suggestions select { font-size: 16px; } }

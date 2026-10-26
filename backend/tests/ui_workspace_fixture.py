@@ -24,7 +24,8 @@ from test_projects import develop_project, start_project
 
 from app.api.routes import projects as routes
 from app.application import workflow
-from app.application.ai_provider import ProviderTimeoutError
+from app.api.schemas.scenes import SceneSuggestionResult
+from app.application.ai_provider import ProviderTimeoutError, StructuredResult
 from app.application.project_store import ProjectStore
 from app.main import create_app
 
@@ -32,8 +33,18 @@ from app.main import create_app
 class WorkspaceProvider(FakeProvider):
     fail_critic = False
     plans = 0
+    fail_scenes = False
 
     def request_structured(self, request):
+        if request.stage == "scene_generation":
+            self.requests.append(request)
+            if self.fail_scenes:
+                raise ProviderTimeoutError("UI fixture scene failure")
+            mode = json.loads(request.input_text)["mode"]
+            return StructuredResult(output=SceneSuggestionResult(scenes=[{
+                "title": f"Cảnh đề xuất {i + 1}", "action": "Cha đặt thư. Con nhìn rồi dừng lại.",
+                "purpose": "Giữ khoảng lặng.", "transition": "Cắt trước câu trả lời.",
+            } for i in range(2 if mode == "list" else 1)]), model="fixture-scenes")
         if self.fail_critic and request.stage == "evaluation":
             self.requests.append(request)
             raise ProviderTimeoutError("UI fixture critic failure")
@@ -82,7 +93,9 @@ def inspect():
 
 @app.post("/__test/control")
 async def control(values: dict):
-    assert set(values) <= {"fail_critic", "hold_suffix", "lose_response_suffix", "release"}
+    assert set(values) <= {"fail_critic", "hold_suffix", "lose_response_suffix", "release", "fail_scenes"}
+    if "fail_scenes" in values:
+        provider.fail_scenes = values["fail_scenes"]
     if "fail_critic" in values:
         provider.fail_critic = values["fail_critic"]
     for key in ("hold_suffix", "lose_response_suffix"):
@@ -93,6 +106,7 @@ async def control(values: dict):
     return {"ok": True}
 
 
+routes.get_scene_provider = lambda: provider
 app.add_middleware(CORSMiddleware, allow_origins=["http://127.0.0.1:3034"],
                    allow_methods=["*"], allow_headers=["*"])
 with TestClient(app) as client:

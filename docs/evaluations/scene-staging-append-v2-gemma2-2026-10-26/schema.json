@@ -1,0 +1,80 @@
+{
+  "$defs": {
+    "SuggestedScene": {
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "action": {
+          "maxLength": 10000,
+          "minLength": 1,
+          "title": "Action",
+          "type": "string"
+        },
+        "location": {
+          "default": "",
+          "maxLength": 500,
+          "title": "Location",
+          "type": "string"
+        },
+        "time": {
+          "default": "",
+          "maxLength": 200,
+          "title": "Time",
+          "type": "string"
+        },
+        "characters": {
+          "default": "",
+          "maxLength": 2000,
+          "title": "Characters",
+          "type": "string"
+        },
+        "goal": {
+          "default": "",
+          "maxLength": 2000,
+          "title": "Goal",
+          "type": "string"
+        },
+        "purpose": {
+          "default": "",
+          "maxLength": 2000,
+          "title": "Purpose",
+          "type": "string"
+        },
+        "transition": {
+          "default": "",
+          "maxLength": 2000,
+          "title": "Transition",
+          "type": "string"
+        }
+      },
+      "required": [
+        "title",
+        "action"
+      ],
+      "title": "SuggestedScene",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "scenes": {
+      "items": {
+        "$ref": "#/$defs/SuggestedScene"
+      },
+      "maxItems": 60,
+      "minItems": 1,
+      "title": "Scenes",
+      "type": "array"
+    }
+  },
+  "required": [
+    "scenes"
+  ],
+  "title": "SceneSuggestionResult",
+  "type": "object"
+}

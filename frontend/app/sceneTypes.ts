@@ -23,3 +23,13 @@ export function emptyScene(): Scene {
   return { id: crypto.randomUUID(), title: "Cảnh mới", action: "", location: "", time: "",
     characters: "", goal: "", purpose: "", viewer_intent: "", keep_or_avoid: "", staging_choices: {} };
 }
+
+export type SceneSuggestionInput = { request_id: string; mode: "list" | "append" | "develop";
+  target_scene_id: string | null; instructions: string };
+export type SceneProposal = {
+  id: string; created_at: string; source_revision: number; source_content: string; source_outline: SceneOutline;
+  mode: SceneSuggestionInput["mode"]; target_scene_id: string | null; instructions: string;
+  status: "pending" | "ready" | "failed" | "applied" | "discarded";
+  scenes: Scene[]; preview_scenes?: Scene[] | null; transitions: Record<string, string>; provider: string | null; model: string | null;
+  parameters: Record<string, unknown>; prompt_version: string; error: string | null; applied_revision: number | null;
+};

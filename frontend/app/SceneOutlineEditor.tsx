@@ -2,8 +2,9 @@
 
 import { useEffect, useId, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import type { Project } from "./projectsApi";
-import { emptyScene, stagingLabels, type Scene, type SceneOutline, type StagingKey } from "./sceneTypes";
+import { emptyScene, stagingLabels, type Scene, type SceneOutline, type StagingKey, type SceneSuggestionInput } from "./sceneTypes";
 import { StoryPath } from "./StoryPlanEditor";
+import { SceneSuggestions } from "./SceneSuggestions";
 import { IntentDetails } from "./AuthorIntentCard";
 import "./sceneOutline.css";
 
@@ -15,12 +16,13 @@ const groups: { title: string; keys: StagingKey[] }[] = [
   { title: "Cách nhìn qua máy quay", keys: ["composition", "shot", "angle", "moment"] },
 ];
 
-export function SceneOutlineEditor({ project, saved, dirty, sourceCurrent, error, onChange, onStart, onRestore, onPrepare, onSave }: {
+export function SceneOutlineEditor({ project, saved, dirty, sourceCurrent, error, onChange, onStart, onRestore, onPrepare, onSave, onSuggest, onInspect, onDiscard, onPreviewChange, canUseProposal }: {
   project: Project; saved: Project; dirty: boolean; sourceCurrent: boolean;
-  onChange: (outline: SceneOutline) => void; onStart: (versionId: string) => void;
+  onChange: (outline: SceneOutline, proposalId?: string | null) => void; onStart: (versionId: string) => void;
   onRestore: (versionId: string) => void; onPrepare: () => void;
   onSave: () => void;
-  error: string | null;
+  error: string | null; canUseProposal: boolean; onPreviewChange: (id: string, scenes: Scene[]) => void;
+  onSuggest: (input: SceneSuggestionInput) => Promise<void>; onInspect: () => Promise<boolean>; onDiscard: (id: string) => void;
 }) {
   const outline = project.scene_outline;
   const [source, setSource] = useState("current");
@@ -28,7 +30,7 @@ export function SceneOutlineEditor({ project, saved, dirty, sourceCurrent, error
   const [tab, setTab] = useState<Tab>("content");
   const [editingChoice, setEditingChoice] = useState<StagingKey | null>(null);
   const [notice, setNotice] = useState("");
-  const [undo, setUndo] = useState<{ before: Scene[]; after: string } | null>(null);
+  const [undo, setUndo] = useState<{ before: Scene[]; after: string; proposalId?: string } | null>(null);
   const dialog = useRef<HTMLDivElement>(null);
   const list = useRef<HTMLOListElement>(null);
   const id = useId();
@@ -51,7 +53,7 @@ export function SceneOutlineEditor({ project, saved, dirty, sourceCurrent, error
   }
   function replace(scenes: Scene[], message: string) {
     if (!outline) return;
-    setUndo({ before: structuredClone(outline.scenes), after: JSON.stringify(scenes) });
+    setUndo({ before: structuredClone(outline.scenes), after: JSON.stringify(scenes), proposalId: project.pending_scene_proposal_id });
     onChange({ ...outline, scenes }); setNotice(message);
   }
   function add() {
@@ -75,7 +77,7 @@ export function SceneOutlineEditor({ project, saved, dirty, sourceCurrent, error
     if (JSON.stringify(outline.scenes) !== undo.after) {
       setNotice("Bạn đã sửa tiếp. Không tự ghi đè phần mới để hoàn tác."); return;
     }
-    onChange({ ...outline, scenes: structuredClone(undo.before) }); setUndo(null); setNotice("Đã hoàn tác trong bản chưa lưu.");
+    onChange({ ...outline, scenes: structuredClone(undo.before) }, undo.proposalId ?? null); setUndo(null); setNotice("Đã hoàn tác trong bản chưa lưu.");
   }
   const fields = (key: keyof Omit<Scene, "id" | "staging_choices">, label: string, maxLength = 2000, rows = 2) => selectedScene &&
     <div className="scene-field" key={key}><label htmlFor={`${id}-${key}`}>{label}</label>
@@ -90,7 +92,7 @@ export function SceneOutlineEditor({ project, saved, dirty, sourceCurrent, error
       {outline && <button type="button" onClick={add} disabled={outline.scenes.length >= 60}>Tự thêm cảnh</button>}</header>
     <SceneHint title="Bắt đầu từ đâu?">Chọn một story plan đã lưu rồi tự viết diễn tiến từng cảnh.
       Click card để sửa; đóng popover giữ phần đang viết. Lưu bằng thanh Lưu thay đổi của dự án.
-      Gói này chưa có gợi ý AI hoặc tạo hình.</SceneHint>
+      Gợi ý AI được xem riêng trước khi dùng; tạo hình chưa triển khai.</SceneHint>
     {!outline ? <div className="scene-start">
       <label htmlFor={`${id}-source`}>Story plan nguồn</label>
       <select id={`${id}-source`} value={source} onChange={e => setSource(e.target.value)}>
@@ -111,6 +113,13 @@ export function SceneOutlineEditor({ project, saved, dirty, sourceCurrent, error
       </details>
       {!sourceCurrent && <p className="form-message" role="status">Story plan hoặc ý đồ hiện tại khác nguồn đã chọn.
         Dàn cảnh vẫn giữ nguồn riêng; không tự cập nhật hoặc ghi đè.</p>}
+      <SceneSuggestions project={project} dirty={dirty} onSuggest={onSuggest} onInspect={onInspect} onDiscard={onDiscard}
+        onPreviewChange={onPreviewChange} canUse={canUseProposal}
+        onKeepManual={() => { onChange(outline, null); setUndo(null);
+          setNotice("Đã giữ nội dung để tự chỉnh; chưa lưu và không đánh dấu đề xuất đã dùng. Nguồn dàn cảnh vẫn giữ nguyên."); }}
+        onUse={(scenes, proposalId) => { setUndo({ before: structuredClone(outline.scenes), after: JSON.stringify(scenes), proposalId: project.pending_scene_proposal_id });
+          onChange({ ...outline, scenes }, proposalId);
+          setNotice("Đã đưa đề xuất vào bản đang sửa. Bạn tự chỉnh và lưu; AI chưa xác nhận chất lượng."); }} />
       <div className="scene-heading"><span>TRÌNH TỰ CẢNH · đọc theo mũi tên</span><span>{outline.scenes.length} cảnh</span></div>
       <div className="scene-canvas"><StoryPath list={list} count={outline.scenes.length} orderKey={outline.scenes.map(s => s.id).join()} />
         <ol ref={list} className="scene-path" aria-label="Danh sách cảnh">
