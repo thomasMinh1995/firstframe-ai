@@ -40,6 +40,8 @@ assert.equal(readRevisionNotes({ revision_notes: [note, note] }), null);
 assert.equal(readRevisionNotes({ revision_notes: [{ ...note, targets: null }] }), null);
 assert.deepEqual(readRevisionNotes({ revision_notes: [] }), []);
 assert.deepEqual(readRevisionNotes({ revision_notes: [note] }), [note]);
+assert.deepEqual(readRevisionNotes({ revision_notes: [{ ...note, suggestion: '' }] }), [{ ...note, suggestion: '' }]);
+assert.equal(readRevisionNotes({ revision_notes: [{ ...note, comparison: 'mismatch', suggestion: '  ' }] }), null);
 // Whitespace and same-title sections are significant; never relocate a quote by text.
 const duplicate = structuredClone(source);
 duplicate.draft.sections.push({ ...duplicate.draft.sections[2] });
@@ -86,3 +88,43 @@ for (const current of [true, false]) {
   assert.ok(html.includes('bạn quyết định giữ hay tự sửa'));
 }
 console.log('HITL presentation checks passed: VI/EN, true/false/unknown AI verdicts, reference scores, legacy/structured feedback, current/stale cards, no actions or mutation.');
+
+// Uncertainty stays separate from confirmed conflicts, including optional questions and old notes.
+for (const suggestion of ['', 'Bạn muốn dừng ở đâu?']) {
+  const uncertain = { ...note, suggestion };
+  const feedback = { ...evaluation, passed: null, revision_notes: [uncertain], findings: [
+    { criterion_id: 'clarification-1', message: uncertain.observation, severity: 'info', score: null },
+  ] };
+  const before = structuredClone(feedback);
+  for (const language of ['vi', 'en']) {
+    const html = renderToStaticMarkup(React.createElement(StoryFeedback, {
+      evaluation: feedback, uiLanguage: language, source, onTarget: noAction,
+    }));
+    assert.ok(html.includes(language === 'vi' ? 'Chưa đủ căn cứ' : 'Not enough evidence'));
+    assert.ok(!html.includes('Ưu tiên cân nhắc sửa') && !html.includes('Possible conflicts'));
+    assert.ok(html.includes('Xem phần này') && !html.includes('Sửa phần này'));
+    assert.ok(html.includes('Anh buông tay.') && html.includes('Dừng khi bắt máy.'));
+    assert.equal(html.includes(language === 'vi' ? 'Gợi ý tùy chọn:' : 'Optional suggestion:'), !!suggestion);
+    for (const revision_notes of [null, undefined]) {
+      const fallback = renderToStaticMarkup(React.createElement(StoryFeedback, {
+        evaluation: { ...feedback, revision_notes }, uiLanguage: language,
+      }));
+      assert.ok(fallback.includes(uncertain.observation));
+      assert.ok(fallback.includes(language === 'vi' ? 'Chưa đủ căn cứ' : 'Not enough evidence'));
+    }
+  }
+  const html = renderToStaticMarkup(React.createElement(CardFeedback, {
+    cardId: 'section-2', label: 'Kết thúc', evaluation: feedback, source, current: true,
+    onClose: noAction, onReview: noAction,
+  }));
+  assert.ok(html.includes('Chưa đủ căn cứ') && html.includes('Chưa xác định đây là lỗi'));
+  assert.equal(html.includes('Gợi ý tùy chọn:'), !!suggestion);
+  assert.deepEqual(feedback, before);
+}
+const mixedFeedback = { ...evaluation, revision_notes: [note, { ...note, note_id: 'n2', comparison: 'mismatch' }] };
+const mixedHtml = renderToStaticMarkup(React.createElement(StoryFeedback, {
+  evaluation: mixedFeedback, uiLanguage: 'vi', source,
+}));
+assert.ok(mixedHtml.includes('Điều có thể trái lựa chọn của bạn (1)'));
+assert.ok(mixedHtml.includes('Chưa đủ căn cứ — cần làm rõ (1)'));
+console.log('Neutral feedback checks passed: empty/optional suggestions, old notes, separate groups, source binding and read-only rendering.');

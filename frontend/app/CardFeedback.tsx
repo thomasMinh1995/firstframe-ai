@@ -62,8 +62,10 @@ export function CardFeedback({ cardId, label, evaluation, source, current, selec
     <p>{feedbackGuidance.vi}</p>
     {!current && <p className="form-message" role="status">{evaluation ? "Nội dung đã thay đổi. Góp ý cũ thuộc bản trước." : "Chưa có góp ý cho bản này."}</p>}
     {cardNotes.map(note => <div key={note.note_id} className="card-feedback-item">
+      <p>{note.comparison === "uncertain" ? "Chưa đủ căn cứ — cần làm rõ" : "Điều có thể trái lựa chọn của bạn"}</p>
       <p className="preserve-lines">{note.observation}</p>
-      <p className="preserve-lines"><strong>Bước tiếp theo: </strong>{note.suggestion}</p>
+      {note.comparison === "uncertain" && <p>Chưa xác định đây là lỗi. Bạn có thể giữ nguyên hoặc làm rõ ý định.</p>}
+      {note.suggestion.trim() && <p className="preserve-lines"><strong>Gợi ý tùy chọn: </strong>{note.suggestion}</p>}
       <details><summary>Xem nguồn đối chiếu</summary><p>{note.decision_question}</p>
         <p className="preserve-lines">{note.decision_quote}</p>
         {note.targets.map(target => <blockquote key={target.target_id} className="preserve-lines">{target.quote}</blockquote>)}

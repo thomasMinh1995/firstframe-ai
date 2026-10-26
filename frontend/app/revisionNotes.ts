@@ -10,7 +10,8 @@ export function readRevisionNotes(feedback: Feedback): RevisionNote[] | null {
   const notes: unknown = feedback.revision_notes;
   if (!Array.isArray(notes) || notes.length > 3 || !notes.every(n => record(n)
     && ["note_id", "artifact_id", "observation", "suggestion", "decision_id", "decision_quote"].every(k => typeof n[k] === "string")
-    && !!n.note_id && !!n.observation && !!n.suggestion && ["mismatch", "uncertain"].includes(String(n.comparison))
+    && !!n.note_id && !!n.observation && ["mismatch", "uncertain"].includes(String(n.comparison))
+    && (n.comparison !== "mismatch" || !!String(n.suggestion).trim())
     && (n.decision_question === null || typeof n.decision_question === "string")
     && Array.isArray(n.targets) && n.targets.length > 0 && n.targets.length <= 2
     && n.targets.every(t => record(t) && typeof t.target_id === "string" && typeof t.quote === "string"))) return null;
