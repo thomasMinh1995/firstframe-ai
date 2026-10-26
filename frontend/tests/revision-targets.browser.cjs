@@ -73,6 +73,43 @@ async function go(page, target) {
   }
   try {
     for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844 }]) {
+      const uncertain = fixture();
+      uncertain.feedback.passed = null;
+      uncertain.feedback.revision_notes = [{ ...uncertain.feedback.revision_notes[0], comparison: 'uncertain', suggestion: '' }];
+      await run('uncertain-source-navigation-buffer', viewport, async ({ page, mock }) => {
+        const panel = page.locator('#workspace-feedback');
+        assert.match(await panel.innerText(), /Chưa đủ căn cứ — cần làm rõ \(1\)/i);
+        assert.doesNotMatch(await panel.innerText(), /Ưu tiên cân nhắc sửa|Gợi ý tùy chọn:/);
+        assert.equal(await actions(page).count(), 0);
+        await reveal(page, page.locator('#project-title'));
+        await page.locator('#project-title').fill('Tên còn trong buffer');
+        const before = await exactBuffer(page), calls = mock.calls.length, server = clone(mock.projects);
+        await panel.getByRole('button', { name: 'Xem phần này: Kết thúc · Card 5', exact: true }).click();
+        await page.waitForFunction(() => document.activeElement?.id === 'section-3');
+        const inspector = page.locator('.card-feedback');
+        assert.match(await inspector.innerText(), /Chưa đủ căn cứ[\s\S]*Chưa xác định đây là lỗi/);
+        assert.doesNotMatch(await inspector.innerText(), /Gợi ý tùy chọn:/);
+        await inspector.getByText('Xem nguồn đối chiếu', { exact: true }).click();
+        assert.match(await inspector.innerText(), /Giữ kết mở\.[\s\S]*Con đặt tay xuống\./);
+        await inspector.screenshot({ path: path.join(output, `uncertain-${viewport.width}.png`) });
+        assert.deepEqual(await exactBuffer(page), before);
+        assert.deepEqual(mock.projects, server); assert.equal(mock.calls.length, calls);
+        await page.locator('#section-3').fill('Cử chỉ tác giả tự sửa.');
+        assert.equal(await panel.getByRole('button', { name: /^Xem phần này:/ }).count(), 0);
+        assert.match(await inspector.innerText(), /Góp ý cũ thuộc bản trước/);
+        assert.equal(writes(mock).length, 0);
+      }, uncertain);
+      for (const state of ['stale', 'wrong-source']) {
+        const readonly = clone(uncertain);
+        if (state === 'stale') readonly.feedback_is_current = false;
+        else readonly.feedback.revision_notes[0].targets[0].quote = 'Không thuộc nguồn';
+        await run(`uncertain-readonly-${state}`, viewport, async ({ page, mock }) => {
+          const panel = page.locator('#workspace-feedback');
+          assert.match(await panel.innerText(), /Chưa đủ căn cứ/i);
+          assert.equal(await panel.getByRole('button', { name: /^(Xem|Sửa) phần này:/ }).count(), 0);
+          assert.equal(writes(mock).length, 0);
+        }, readonly);
+      }
       await run('duplicate-title-focus-buffer', viewport, async ({ page, mock }) => {
         await reveal(page, page.locator('#project-title'));
         await page.locator('#project-title').fill('Tên dự án chưa lưu');

@@ -104,7 +104,8 @@ def test_findings_pair_real_card_and_answer_with_exact_server_evidence():
                        related_card_id="section-3", comparison="mismatch",
                        observation="Hai card lặp sự kiện bắt máy, có thể làm điểm dừng thiếu rõ ràng.",
                        suggestion="Gộp sự kiện bắt máy vào một card, giữ cử chỉ buông tay.")
-    strengths, weaknesses, suggestions = feedback_messages([review], context)
+    strengths, weaknesses, suggestions, clarifications = feedback_messages([review], context)
+    assert not clarifications
     assert not strengths
     assert "Anh thôi bấu mép bàn" in weaknesses[0]
     assert "Card 4 · Kết thúc · 1: “Cha bắt máy.”" in weaknesses[0]
@@ -118,7 +119,7 @@ def test_review_can_target_neighbor_while_preserving_valid_edited_card():
                 comparison="mismatch", observation="Card trước chưa khớp cách kể đã chọn.",
                 suggestion="Sửa card trước, giữ cử chỉ trong card mới.")
     parsed = _card_review_schema(context).model_validate(dict(reviews=[data], passed=False, rubric_scores=None))
-    _, issues, steps = feedback_messages(parsed.reviews, context)
+    _, issues, steps, _ = feedback_messages(parsed.reviews, context)
     assert issues[0].startswith("Card 4")
     assert steps[0].startswith("Card 4")
     with pytest.raises(ValidationError):
@@ -278,3 +279,122 @@ def test_invalid_priority_metadata_is_read_only_without_losing_project(project_c
     assert reopened['answers'] == project['answers']
     assert reopened['feedback']['findings'] == project['feedback']['findings']
     assert store.get(project['id']) == stored, 'GET must never migrate stored notes'
+
+
+@pytest.mark.parametrize('suggestion', ['', 'Bạn muốn dừng ở cuộc gọi hay sau đó?'])
+def test_uncertain_is_neutral_and_keeps_exact_sources(suggestion):
+    from app.application.workflow import _card_review_schema, revision_evaluation, _evaluation_findings
+    from app.application.revision_review import revision_notes
+    from app.api.schemas.story import EvaluationResponse
+    draft, previous, author = context_fixture()
+    original = deepcopy((draft, previous, author))
+    context = review_context(draft, previous, author, True)
+    review = _card_review_schema(context).model_validate(dict(reviews=[dict(
+        card_id='section-3-part-1', related_card_id='section-3', decision_id='answer-1',
+        comparison='uncertain', observation='Chưa đủ căn cứ để xác định điểm dừng có trái ý đồ.',
+        suggestion=suggestion)], passed=True, rubric_scores=None))
+    result = revision_evaluation(review, context)
+    assert result.passed is None, 'Neither a confirmed violation nor a pass'
+    assert not result.weaknesses and not result.strengths
+    findings = _evaluation_findings(result, 'Vietnamese')
+    assert any(f.criterion_id == 'clarification-1' and f.severity == 'info' for f in findings)
+    assert not any(f.criterion_id.startswith('weakness-') for f in findings)
+    notes = revision_notes(review.reviews, context, 'f1')
+    feedback = EvaluationResponse(artifact_id='f1', passed=result.passed,
+        findings=[f.__dict__ for f in findings], revision_notes=notes)
+    assert feedback.revision_notes[0].suggestion == suggestion
+    assert feedback.revision_notes[0].decision_quote == author['clarifications'][1]['answer']
+    assert feedback.revision_notes[0].targets[0].quote == context['cards'][4]['text']
+    assert (draft, previous, author) == original
+    broken = feedback.model_dump()
+    broken['revision_notes'][0]['comparison'] = 'mismatch'
+    broken['revision_notes'][0]['suggestion'] = '   '
+    assert EvaluationResponse.model_validate(broken).revision_notes is None
+    # Uncertainty never bypasses anchor validation.
+    review.reviews[0].card_id = 'invented'
+    with pytest.raises(MalformedProviderResponseError):
+        revision_evaluation(review, context)
+
+
+@pytest.mark.parametrize('comparison, suggestion, expected', [
+    ('aligned', '', True), ('uncertain', '', None),
+    ('uncertain', 'Bạn có muốn làm rõ điểm dừng không?', None),
+    ('mismatch', 'Cân nhắc bỏ phần vượt điểm dừng.', False),
+])
+def test_fake_provider_verdict_persists_without_changing_writer_data(
+        project_client, monkeypatch, comparison, suggestion, expected):
+    client, provider = project_client
+    original = provider.request_structured
+
+    def respond(request):
+        result = original(request)
+        if request.stage == 'evaluation' and hasattr(result.output, 'reviews'):
+            result.output.reviews[0].comparison = comparison
+            result.output.reviews[0].suggestion = suggestion
+            result.output.reviews[0].observation = 'Đối chiếu giới hạn và điểm dừng trong nguồn.'
+            result.output.passed = expected is not True  # Ignore the model's aggregate verdict.
+        return result
+
+    monkeypatch.setattr(provider, 'request_structured', respond)
+    project = develop_project(client, start_project(client))
+    url = f"/api/projects/{project['id']}"
+    assert project['feedback']['passed'] is expected
+    assert project['plan_generations'][-1]['critic_status'] == 'reviewed'
+    assert project['plan_generations'][-1]['feedback'] == project['feedback']
+    changed = payload(project)
+    changed['draft']['logline'] = 'Bản sửa thủ công phải được giữ.'
+    saved = client.put(url, json=changed).json()
+    assert not saved['feedback_is_current']
+    assert saved['feedback'] == project['feedback']
+    response = client.post(url + '/review', json={'revision': saved['revision']})
+    assert response.status_code == 200, response.text
+    reviewed = response.json()
+    assert reviewed['feedback']['passed'] is expected
+    assert reviewed['feedback_is_current']
+    assert reviewed['feedback_source']['draft'] == saved['draft']
+    assert reviewed['feedback_source']['context'] == saved['author_context']
+    assert reviewed['feedback']['artifact_id'] != project['feedback']['artifact_id']
+    for key in ['draft', 'answers', 'constraints', 'idea']:
+        assert reviewed[key] == saved[key]
+    assert client.get(url).json() == reviewed
+    assert client.put(url, json=payload(saved)).status_code == 409
+    assert client.get(url).json() == reviewed
+    if comparison == 'uncertain':
+        assert reviewed['feedback']['revision_notes'][0]['suggestion'] == suggestion
+        assert all(f['severity'] == 'info' for f in reviewed['feedback']['findings'])
+        assert not any(f['criterion_id'].startswith('weakness-') for f in reviewed['feedback']['findings'])
+    # GET leaves the historical verdict and source intact too.
+    assert any(v['feedback'] == project['feedback'] for v in reviewed['versions'])
+
+
+def test_mixed_review_keeps_uncertainty_separate_without_hiding_violation():
+    from app.application.workflow import _RevisionReviewOutput, revision_evaluation
+    context = review_context(*context_fixture(), True)
+    common = dict(card_id='section-3-part-1', related_card_id='section-3', decision_id='answer-1')
+    review = _RevisionReviewOutput(reviews=[
+        CardReview(**common, comparison='uncertain', observation='Chưa rõ.', suggestion=''),
+        CardReview(**common, comparison='mismatch', observation='Vượt điểm dừng.', suggestion='Cân nhắc bỏ phần sau điểm dừng.'),
+    ], passed=True, rubric_scores=None)
+    result = revision_evaluation(review, context)
+    assert result.passed is False
+    assert len(result.weaknesses) == len(result.clarifications) == len(result.suggestions) == 1
+
+
+def test_old_uncertain_feedback_is_read_without_regrading_or_migration(project_client, monkeypatch):
+    client, provider = project_client
+    issue_provider(provider, monkeypatch)
+    project = develop_project(client, start_project(client))
+    from app.api.routes.projects import get_project_store
+    store = get_project_store()
+    raw = store.get(project['id'])
+    raw['feedback']['revision_notes'][0]['comparison'] = 'uncertain'
+    # Older uncertain output was stored as failed with weakness findings.
+    assert raw['feedback']['passed'] is False
+    stored = store.save(raw, project['revision'])
+    calls = len(provider.requests)
+    reopened = client.get(f"/api/projects/{project['id']}").json()
+    assert reopened['feedback'] == stored['feedback']
+    assert reopened['feedback_source'] == stored['feedback_source']
+    assert reopened['feedback']['revision_notes'][0]['suggestion']
+    assert store.get(project['id']) == stored
+    assert len(provider.requests) == calls

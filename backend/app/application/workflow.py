@@ -96,10 +96,11 @@ class _RevisionReviewOutput(BaseModel):
 
 @dataclass(frozen=True)
 class RevisionEvaluation:
-    passed: bool
+    passed: bool | None
     strengths: list[str]
     weaknesses: list[str]
     suggestions: list[str]
+    clarifications: list[str] = field(default_factory=list)
     rubric_scores: EvaluationRubricScores | None = None
 
 
@@ -858,9 +859,10 @@ def _evaluation_input(planning: PlanningArtifact, rubric: object) -> str:
 
 
 def revision_evaluation(review: _RevisionReviewOutput, context: dict) -> RevisionEvaluation:
-    strengths, weaknesses, suggestions = feedback_messages(review.reviews, context)
-    return RevisionEvaluation(passed=all(item.comparison == "aligned" for item in review.reviews), strengths=strengths,
-                              weaknesses=weaknesses, suggestions=suggestions)
+    strengths, weaknesses, suggestions, clarifications = feedback_messages(review.reviews, context)
+    passed = False if weaknesses else None if clarifications else True
+    return RevisionEvaluation(passed=passed, strengths=strengths, weaknesses=weaknesses,
+                              suggestions=suggestions, clarifications=clarifications)
 
 
 def _evaluation_findings(
@@ -902,6 +904,11 @@ def _evaluation_findings(
                 severity="info",
             )
         )
+    if isinstance(output, RevisionEvaluation):
+        for index, clarification in enumerate(output.clarifications, start=1):
+            findings.append(EvaluationFinding(
+                criterion_id=f"clarification-{index}", message=clarification, severity="info",
+            ))
     return findings
 
 

@@ -1,6 +1,6 @@
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator
+from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator, model_validator
 
 from app.application.language import ResponseLanguage
 from app.application.workflow import DEFAULT_DOMAIN_ID
@@ -76,11 +76,17 @@ class RevisionNoteResponse(BaseModel):
     artifact_id: str
     comparison: Literal["uncertain", "mismatch"]
     observation: str = Field(min_length=1)
-    suggestion: str = Field(min_length=1)
+    suggestion: str
     decision_id: str
     decision_quote: str
     decision_question: str | None
     targets: list[RevisionTargetResponse] = Field(min_length=1, max_length=2)
+
+    @model_validator(mode="after")
+    def mismatch_needs_next_step(self):
+        if self.comparison == "mismatch" and not self.suggestion.strip():
+            raise ValueError("A mismatch needs a specific next step.")
+        return self
 
 
 class EvaluationResponse(BaseModel):
