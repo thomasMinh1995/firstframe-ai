@@ -1,8 +1,8 @@
 # Kế hoạch cải tiến harness FirstFrame
 
-- Cập nhật: 26/10/2026. Ưu tiên đối chiếu nghiệm thu #7 → xác nhận và sửa
-  một lỗi ảnh hưởng lớn → kiểm chứng luồng người dùng. Thay lịch tám gói
-  bằng phạm vi nhỏ theo lỗi thực tế; không mở thêm kiến trúc harness.
+- Cập nhật: 26/10/2026. Chốt phần còn lại của #7 → kiểm chứng/nghiệm thu
+  luồng đang có → dừng đợt harness story plan → dàn cảnh và kịch bản.
+  Không mở lại lịch tám gói hoặc tối ưu critic không có điểm dừng.
 - Trạng thái: nền tảng bốn phần, phần kỹ thuật #7/tour (PR #38) và bộ thử
   offline (PR #40, issue #39) đã merge; #7 chưa được nghiệm thu chất lượng
   hoặc pilot. Không triển khai lại phần đã có, không coi test là nghiệm thu.
@@ -32,6 +32,14 @@ kịch bản còn phụ thuộc hành động, lời thoại và nhịp cảnh; 
 bảo đảm kịch bản hay. Story plan được phép thay đổi khi quá trình viết làm lộ
 vấn đề hoặc tìm ra hướng tốt hơn. Kịch bản hoàn chỉnh vẫn là đích đến; sản phẩm
 bàn giao ở bản xuất để con người cùng làm phim.
+
+Mức chi tiết story plan hiện tại là nền để kiểm chứng bước viết tiếp; chưa
+có căn cứ cần kéo dài plan hoặc hoàn thiện mọi góp ý trước khi kết thúc đợt
+harness. Mục tiêu sản phẩm tiếp theo là dàn cảnh và kịch bản có chất lượng.
+“Dàn cảnh” ở đây là scene outline: diễn tiến, hành động và mục đích từng cảnh
+để viết kịch bản, chưa mở sang dàn dựng trên trường quay hoặc quản lý sản xuất.
+Chất lượng thoại, nhịp và biểu đạt được phát triển tiếp ở cấp cảnh; không ép
+story plan giải quyết hết. Điều này không miễn lỗi vi phạm ý đồ rõ ràng.
 
 **Kết quả MVP cần chứng minh:** tác giả bắt đầu từ một khoảnh khắc, đọc được
 story plan đúng hướng, nhận ra một chỗ cần sửa, tự sửa, lưu và nhận góp ý trên
@@ -92,9 +100,47 @@ không thay tiêu chí nghiệm thu của #7, tour hoặc kế hoạch sản ph�
 
 | Việc | Phạm vi nhỏ nhất | Bàn giao và điểm dừng |
 | --- | --- | --- |
-| 1 — Đối chiếu nghiệm thu #7 | Rà từng tiêu chí với code/test/bằng chứng sau PR #38; tách phần kỹ thuật đã giao, lỗi thực tế và bằng chứng người dùng còn thiếu | Danh sách phần đã chứng minh và phần chưa đạt; không tự đóng #7 hoặc tạo lại feature đã merge |
-| 2 — Xác nhận và sửa một lỗi ảnh hưởng lớn | Nhờ người đọc có kinh nghiệm đối chiếu một số ca đã lưu; chọn một lỗi tác động tới ý đồ hoặc vòng sửa, thử một thay đổi có giả thuyết rõ | So trước/sau trên ca liên quan và đối chứng; chỉ tích hợp khi có ích và qua bảo vệ dữ liệu; không có lợi thì dừng hướng đó, ghi chưa đạt |
-| 3 — Kiểm chứng luồng người dùng | Khi ứng viên ổn định, kiểm chứng #7 + tour trên cùng cấu hình, rồi demo/pilot theo mục 4 | Đủ bằng chứng theo tiêu chí hiện có, ghi quyết định PO; thiếu bằng chứng/lỗi chặn vẫn là chưa đạt |
+| 1 — Chốt phần còn lại của #7 | Dùng lại audit code/test và các ca đã đối chiếu; chốt lỗi chặn, vấn đề biên tập và bằng chứng còn thiếu theo tiêu chí hiện có | Không triển khai lại phần đã merge; mỗi mục thiếu phải có cách xác minh, không chuyển thành một dự án harness mới |
+| 2 — Kết thúc hướng thử không hiệu quả | Giữ baseline; các ứng viên prompt đã thử chưa cải thiện đủ để tích hợp. Chỉ sửa hẹp lỗi chặn đã xác nhận khi có hướng xử lý cụ thể | Lưu toàn bộ lỗi và quyết định không tích hợp; không tự thêm vòng model/prompt, schema hoặc judge. Lỗi chặn vẫn mở cho tới khi có bằng chứng xử lý |
+| 3 — Kiểm chứng và bàn giao | Kiểm chứng #7 + tour trên cấu hình được chọn; thực hiện demo/pilot theo mục 4 khi đủ điều kiện | Chỉ kết thúc nghiệm thu khi đủ tiêu chí; sau đó chuyển trọng tâm sang M2 dàn cảnh, M3 viết/sửa kịch bản và M4 xuất kịch bản |
+
+### Phần đã làm và phần còn phải chốt
+
+Audit kỹ thuật và các phép thử model thật đã có. Người dùng đã đối chiếu bốn
+ca: bỏ lời tha thứ để giữ kết mở; giữ nhịp im lặng rồi trả lời nhưng làm thoại
+tự nhiên; giữ kết bằng cử chỉ; thay giấu hộ chiếu bằng đặt thư xin lỗi và để
+con gái tự quyết định. Đây là kết luận biên tập cho các ca cụ thể, không phải
+draft runtime đã được sửa hoặc nghiệm thu người đọc độc lập/pilot.
+
+Ứng viên prompt đối chiếu bản sửa gần nhất được đóng băng và chạy 16 lượt
+trên cùng bốn ca với Qwen 2.5 7B: cả hai nhánh qua hợp đồng 8/8, báo oan 3/4,
+bản sửa đạt trọn tiêu chí ở ca vi phạm 0/4. Ứng viên đọc phủ định tốt hơn nhưng
+không cải thiện kết quả tổng thể; không tích hợp. Bốn ca đã dùng phát triển
+prompt không trở thành bộ nghiệm thu tổng quát, không đổi nhãn theo diễn giải
+mới của người dùng. Không lên lịch thêm một vòng để đạt riêng bộ này.
+
+Phần còn lại là chốt trạng thái từng tiêu chí #7, xử lý/xác minh lỗi chặn còn
+thực tế, rồi kiểm chứng vòng tự sửa–lưu–review–mở lại và bổ sung bằng chứng
+người dùng, người đọc, tour, demo/pilot còn thiếu. Giữ nguyên yêu cầu đánh giá
+thực tế của #7 trong kế hoạch liên kết; không gộp hoặc thay bằng bốn ca này.
+
+### Điểm dừng của đợt harness story plan
+
+- Dừng hướng tối ưu khi ứng viên không có lợi: lưu kết quả, không tích hợp
+  và không tự mở nhánh thử khác. Mốc này đã áp dụng cho các ứng viên vừa thử.
+- Kết thúc đợt bàn giao khi luồng #7 có đủ bằng chứng theo tiêu chí hiện có,
+  các bảo vệ dữ liệu vẫn đạt và không còn lỗi chặn. Không đòi critic hoàn hảo
+  hoặc mọi sở thích biên tập đều được model đáp ứng; không tự đặt thêm ngưỡng.
+- Ưu tiên triển khai M2 sau khi pilot #26 đạt và PO ghi quyết định theo mục 4;
+  tiếp đến M3/M4 theo roadmap. Không chờ embedding, judge, tám gói harness,
+  mọi tối ưu prompt hoặc đóng toàn bộ #22 mới chuyển trọng tâm sản phẩm.
+
+Nếu còn vi phạm ý đồ rõ, sai nguồn, mất dữ liệu, lỗi không hoàn thành luồng
+hoặc chưa đủ bằng chứng theo tiêu chí hiện hành thì ghi **chưa đạt**, giữ mục
+chặn cụ thể và cách xác minh. Quyền từ chối góp ý giúp tác giả giữ kiểm soát,
+không biến góp ý sai thành đạt. Dừng thử nghiệm không đồng nghĩa đóng #7 hoặc
+cho phép vượt điều kiện sang M2. Sau bàn giao, harness chỉ được sửa khi có
+lỗi cụ thể ảnh hưởng hành trình viết; không có backlog tối ưu thường trực.
 
 ### 3.1. Đối chiếu trước khi viết thêm code
 
@@ -265,6 +311,15 @@ và vòng sửa; chỉ đánh giá hoàn thành kịch bản khi M3/M4 khả d�
 
 Phần này là hướng M2–M4, triển khai khi có dàn cảnh và trình viết kịch bản;
 không đưa screenplay editor, liên kết cảnh hoặc tự viết lại vào đợt demo MVP.
+
+Sau điểm dừng ở mục 3 và nghiệm thu hiện hành, ưu tiên dùng story plan đã
+chọn để xây dàn cảnh có thể chỉnh sửa (M2), rồi viết/sửa hành động và thoại
+theo cảnh (M3), cuối cùng xuất đúng bản kịch bản được chọn (M4). Kiểm chứng
+story plan có giúp người dùng viết được cảnh và giải thích lựa chọn tốt hơn;
+không dùng số lần sinh hoặc điểm critic thay chất lượng tác phẩm. Giữ thứ tự
+milestone và PDF #5 độc lập, sau demo như roadmap; không tạo phụ thuộc PDF
+mới cho nghiệm thu #7 hoặc M2. Sửa hai chiều cần tác giả chọn và chưa phải
+điều kiện để hoàn thành harness hiện tại.
 
 ### Xác định cấp độ vấn đề trước khi sửa
 
