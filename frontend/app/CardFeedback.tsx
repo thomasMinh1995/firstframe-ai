@@ -4,6 +4,7 @@ import type { EvaluationFinding } from "./apiClient";
 import type { Feedback, FeedbackSource } from "./projectsApi";
 import { splitStorySection } from "./StoryPlanEditor";
 import { readRevisionNotes, validatedTargets } from "./revisionNotes";
+import { feedbackGuidance } from "./storyLabels";
 
 // Interpret only the server's exact quoted anchors; legacy prose remains general feedback.
 export function anchoredReview(finding: EvaluationFinding, source: FeedbackSource | null | undefined) {
@@ -58,6 +59,7 @@ export function CardFeedback({ cardId, label, evaluation, source, current, selec
   return <aside className="card-feedback" aria-label={`Góp ý cạnh ${label}`}>
     <header><div><span className="eyebrow">Góp ý AI · tham khảo</span><h4>{label}</h4></div>
       <button type="button" className="secondary" aria-label="Đóng góp ý cạnh card" onClick={onClose}>Đóng</button></header>
+    <p>{feedbackGuidance.vi}</p>
     {!current && <p className="form-message" role="status">{evaluation ? "Nội dung đã thay đổi. Góp ý cũ thuộc bản trước." : "Chưa có góp ý cho bản này."}</p>}
     {cardNotes.map(note => <div key={note.note_id} className="card-feedback-item">
       <p className="preserve-lines">{note.observation}</p>

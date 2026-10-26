@@ -12,7 +12,7 @@ import { AuthorIntentCard, FeedbackIntent, IntentDetails } from "./AuthorIntentC
 import { OperationProgress } from "./OperationProgress";
 import { OnboardingTour, useOnboarding } from "./OnboardingTour";
 import { applyProgress, progressLanguage, type OperationStep } from "./progressState";
-import { sectionLabels } from "./storyLabels";
+import { feedbackGuidance, sectionLabels } from "./storyLabels";
 import { responseLanguageLabels, type ResponseLanguage } from "./language";
 import type { EvaluationFinding, RevisionNote } from "./apiClient";
 import {
@@ -422,6 +422,7 @@ export default function Home() {
             {operationTiming?.kind === "plan" && operationTiming.finishedAt !== null && <a className="storage-note" href="#workspace-operation">Xem lại tiến trình tạo bản này</a>}
             {selectedFeedback && !selectedCard && <aside className="revision-note" aria-labelledby="selected-feedback-title">
               <h4 id="selected-feedback-title" tabIndex={-1}>Góp ý bạn đang cân nhắc</h4>
+              <p>{feedbackGuidance.vi}</p>
               <p className={currentFeedback ? "operation-status" : "form-message"} role="status">
                 {currentFeedback ? "Góp ý đọc bản hiện tại. Bạn tự chọn phần muốn sửa bên dưới."
                   : "Góp ý này thuộc bản trước. Giữ làm tham khảo; chưa có đánh giá cho nội dung đang sửa."}</p>

@@ -63,6 +63,7 @@ async function go(page, target) {
     try {
       t = await setup(browser, { viewport, projects: [project], mock });
       await t.page.locator('.story-workspace').waitFor(); await openFeedback(t.page);
+      assert.match(await t.page.locator('#workspace-feedback').innerText(), /không đánh giá năng lực viết[\s\S]*chứng minh bản thảo đã tốt hơn/);
       await fn(t); await t.close();
       report.results.push({ name, width: viewport.width, passed: true });
     } catch (e) {
@@ -82,6 +83,9 @@ async function go(page, target) {
         await page.screenshot({ path: path.join(output, `priorities-${viewport.width}.png`) });
         await first.getByRole('button', { name: 'Sửa phần này: Kết thúc · Card 5', exact: true }).click();
         await page.waitForFunction(() => document.activeElement?.id === 'section-3');
+        const inspector = page.locator('.card-feedback');
+        assert.match(await inspector.innerText(), /có thể sai hoặc bỏ sót[\s\S]*bạn quyết định giữ hay tự sửa/);
+        await inspector.screenshot({ path: path.join(output, `hitl-inspector-${viewport.width}.png`) });
         assert.deepEqual(await exactBuffer(page), before);
         assert.deepEqual(mock.projects, server); assert.equal(mock.calls.length, calls);
         await page.locator('#section-3').fill('Bản tự sửa chưa lưu.');
@@ -149,6 +153,10 @@ async function go(page, target) {
           assert.equal(await actions(page).count(), 0);
           const before = await exactBuffer(page);
           assert.match(await page.locator('#workspace-feedback').innerText(), corruption === 'legacy' ? /Góp ý cũ còn đọc được/ : /Nhận xét n2/);
+          if (corruption === 'legacy') {
+            await page.locator('#workspace-feedback').getByRole('button', { name: /^Chọn .* để tự sửa$/ }).first().click();
+            assert.match(await page.locator('.revision-note').innerText(), /có thể sai hoặc bỏ sót[\s\S]*không đánh giá năng lực viết/);
+          }
           assert.deepEqual(await exactBuffer(page), before); assert.equal(writes(mock).length, 0);
         }, p);
       }
