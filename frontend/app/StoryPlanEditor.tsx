@@ -117,7 +117,9 @@ export function StoryPlanEditor({ draft, dirty, onChange, selectedCardId, onSele
   </div>;
 }
 
-function StoryPath({ list, count }: { list: React.RefObject<HTMLOListElement | null>; count: number }) {
+export function StoryPath({ list, count, orderKey = "" }: {
+  list: React.RefObject<HTMLOListElement | null>; count: number; orderKey?: string;
+}) {
   const marker = useId();
   const [drawing, setDrawing] = useState({ width: 1, height: 1, paths: [] as string[] });
   useEffect(() => {
@@ -150,7 +152,7 @@ function StoryPath({ list, count }: { list: React.RefObject<HTMLOListElement | n
     const observer = new ResizeObserver(measure);
     observer.observe(canvas); cards.forEach(card => observer.observe(card)); measure();
     return () => observer.disconnect();
-  }, [list, count]);
+  }, [list, count, orderKey]);
   return <svg className="story-path-lines" aria-hidden="true" viewBox={`0 0 ${drawing.width} ${drawing.height}`}>
     <defs><marker id={marker} markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
       <path d="M 1 1 L 5 3.5 L 1 6" fill="none" stroke="currentColor" strokeWidth="1.4" />

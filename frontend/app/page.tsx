@@ -6,6 +6,7 @@ import { CardFeedback } from "./CardFeedback";
 import { readRevisionNotes, validatedTargets } from "./revisionNotes";
 import { StoryFeedback } from "./StoryResultCards";
 import { StoryPlanEditor, type DraftField } from "./StoryPlanEditor";
+import { SceneOutlineEditor } from "./SceneOutlineEditor";
 import { ClarificationConversation } from "./ClarificationConversation";
 import "./storyWorkspace.css";
 import { AuthorIntentCard, FeedbackIntent, IntentDetails } from "./AuthorIntentCard";
@@ -460,6 +461,28 @@ export default function Home() {
         </details>}
 
           </section>}
+          {saved && <SceneOutlineEditor key={project.id} project={project} saved={saved} dirty={dirty} error={error}
+            sourceCurrent={!feedbackChanged && !!project.scene_source_is_current}
+            onChange={outline => setProject(current => current ? { ...current, scene_outline: outline } : current)}
+            onStart={versionId => void run("Đang giữ nguồn và mở dàn cảnh…", async () => {
+              const next = await persist(); if (!next) return;
+              accept(await projectRequest(`/${next.id}/scene-outline`, "POST", {
+                revision: next.revision, source_version_id: versionId,
+              })); setNotice("Đã giữ nguồn story plan. Bạn có thể tự thêm cảnh; không gọi AI.");
+            })}
+            onRestore={versionId => void run("Đang lưu và khôi phục dàn cảnh…", async () => {
+              const next = await persist(); if (!next) return;
+              accept(await projectRequest(`/${next.id}/scene-versions/${versionId}/restore`, "POST", { revision: next.revision }));
+              setNotice("Đã khôi phục dàn cảnh. Story plan và các bản dàn cảnh trước vẫn được giữ.");
+            })}
+            onSave={() => void run("Đang lưu dàn cảnh…", async () => {
+              await persist(); setNotice("Đã lưu thay đổi dàn cảnh và mọi sửa đang chờ trong dự án.");
+            })}
+            onPrepare={() => void run("Đang lưu bản nguồn viết tiếp…", async () => {
+              const next = await persist();
+              if (!next?.scene_handoff) throw new Error("Cần tên và diễn tiến cho từng cảnh trước khi chuẩn bị bản viết tiếp.");
+              setNotice(`Đã lưu bản nguồn M2 phiên bản ${next.scene_handoff.version}. M3 chưa triển khai; chưa tạo kịch bản.`);
+            })} />}
         </fieldset>
         <details className="workspace-library"><summary>Đề xuất và lịch sử ({(project.plan_generations?.length ?? 0) + project.versions.length + project.clarification_history.length})</summary>
         {proposals}
@@ -537,7 +560,7 @@ function WorkspaceNavigation({ project, briefChanged, creatingPlan }: { project:
     { id: "workspace-idea", label: "Ý tưởng", available: !!project },
     { id: "workspace-choices", label: "Làm rõ", available: !!project?.analysis && !briefChanged },
     { id: "workspace-draft", label: "Story plan", available: !!project?.draft || creatingPlan },
-    { id: "workspace-outline", label: "Dàn cảnh", available: false },
+    { id: "workspace-outline", label: "Dàn cảnh", available: !!project },
     { id: "workspace-script", label: "Kịch bản", available: false },
   ];
   return <aside className="workspace-rail"><p className="eyebrow">Câu chuyện của bạn</p>
@@ -550,7 +573,7 @@ function WorkspaceNavigation({ project, briefChanged, creatingPlan }: { project:
           target?.scrollIntoView({ block: "start" }); target?.focus({ preventScroll: true });
         }}>
         <span className="workspace-stage-number" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
-        <span>{item.label}<small>{index > 2 ? "Chưa hỗ trợ" : item.available ? (item.id === (creatingPlan ? "workspace-draft" : active) ? (creatingPlan ? "Đang tạo" : "Đang làm việc") : "Xem lại") : "Chưa có nội dung"}</small></span>
+        <span>{item.label}<small>{!item.available && index > 2 ? "Chưa hỗ trợ" : item.available ? (item.id === (creatingPlan ? "workspace-draft" : active) ? (creatingPlan ? "Đang tạo" : "Đang làm việc") : "Xem lại") : "Chưa có nội dung"}</small></span>
       </button>)}
     </nav>
     <p className="workspace-rail-note">Câu chuyện và lựa chọn của bạn làm chủ đạo.<br />Các bước sau mở khi sản phẩm hỗ trợ.</p>

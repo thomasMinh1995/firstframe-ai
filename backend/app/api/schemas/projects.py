@@ -13,6 +13,7 @@ from pydantic import (
 )
 
 from app.api.schemas.story import AnalysisResponse, EvaluationResponse
+from app.api.schemas.scenes import SceneOutlineEdit
 from app.application.language import ResponseLanguage
 from app.application.clarification import MAX_CHOICES
 
@@ -48,6 +49,7 @@ class ProjectUpdate(RevisionRequest):
     constraints: list[ShortText] = Field(max_length=20)
     answers: list[ShortText] = Field(max_length=MAX_CHOICES)
     draft: StoryDraft | None
+    scene_outline: SceneOutlineEdit | None = None
 
 
 class AuthorAnswer(BaseModel):
@@ -199,6 +201,25 @@ class PlanGeneration(BaseModel):
         return self
 
 
+class ScenePlanSource(BaseModel):
+    id: str
+    project_revision: int
+    version_id: str
+    draft: StoryDraft
+    context: AuthorContext
+    response_language: ResponseLanguage
+
+
+class SceneOutline(SceneOutlineEdit):
+    source: ScenePlanSource
+
+
+class SceneOutlineVersion(BaseModel):
+    id: str
+    created_at: str
+    outline: SceneOutline
+
+
 class ProjectResponse(BaseModel):
     response_language: ResponseLanguage = "auto"
     id: str
@@ -217,6 +238,28 @@ class ProjectResponse(BaseModel):
     versions: list[DraftVersion] = Field(default_factory=list)
     clarification_history: list[ClarificationVersion] = Field(default_factory=list)
     plan_generations: list[PlanGeneration] = Field(default_factory=list)
+    scene_outline: SceneOutline | None = None
+    scene_versions: list[SceneOutlineVersion] = Field(default_factory=list)
+
+    @computed_field
+    @property
+    def scene_source_is_current(self) -> bool:
+        source = self.scene_outline.source if self.scene_outline else None
+        return bool(source and source.draft == self.draft
+                    and source.context == self.author_context
+                    and source.response_language == self.response_language)
+
+    @computed_field
+    @property
+    def scene_handoff(self) -> dict[str, object] | None:
+        outline = self.scene_outline
+        if not outline or not outline.scenes or any(
+            not scene.title.strip() or not scene.action.strip() for scene in outline.scenes
+        ):
+            return None
+        return {"outline_id": outline.id, "version": outline.version,
+                "project_revision": self.revision, "source_id": outline.source.id,
+                "scenes": [scene.model_dump() for scene in outline.scenes]}
 
     _parse_source = field_validator("feedback_source", mode="before")(parse_feedback_source)
 
