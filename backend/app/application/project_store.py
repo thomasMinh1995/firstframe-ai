@@ -1,5 +1,6 @@
 import json
 import sqlite3
+from collections.abc import Callable
 from contextlib import contextmanager
 from datetime import UTC, datetime
 from pathlib import Path
@@ -77,3 +78,18 @@ class ProjectStore:
             if cursor.rowcount != 1:
                 raise ProjectConflict
         return saved
+
+    def update(self, project_id: str, change: Callable[[dict[str, Any]], None]) -> dict[str, Any]:
+        """Keep a late AI result without replacing edits saved while it was running."""
+        with self._connect() as connection:
+            connection.execute("BEGIN IMMEDIATE")
+            row = connection.execute("SELECT data FROM projects WHERE id = ?", (project_id,)).fetchone()
+            if row is None:
+                raise ProjectNotFound
+            project = json.loads(row[0])
+            change(project)
+            project["revision"] += 1
+            project["updated_at"] = datetime.now(UTC).isoformat()
+            connection.execute("UPDATE projects SET revision = ?, data = ? WHERE id = ?",
+                               (project["revision"], json.dumps(project, ensure_ascii=False), project_id))
+        return project

@@ -2,7 +2,7 @@ import type { GenerateResponse, StoryPlanSection } from "./apiClient";
 import { progressCopy } from "./progressState";
 import type { UiLanguage } from "./language";
 import type { ResponseLanguage } from "./language";
-import { stagingLabels, type Scene, type SceneOutline, type SceneVersion, type SceneHandoff } from "./sceneTypes";
+import { stagingLabels, type Scene, type SceneOutline, type SceneVersion, type SceneHandoff, type SceneProposal, type SceneSuggestionInput } from "./sceneTypes";
 
 export type StoryDraft = { title: string; logline: string; sections: StoryPlanSection[] };
 export type Feedback = GenerateResponse["evaluation"] & { artifact_id?: string };
@@ -38,6 +38,8 @@ export type Project = {
   clarification_history: ClarificationVersion[];
   plan_generations?: PlanGeneration[]; applicable_plan_ids?: string[];
   scene_outline?: SceneOutline | null; scene_versions?: SceneVersion[];
+  scene_proposals?: SceneProposal[]; applicable_scene_proposal_ids?: string[];
+  pending_scene_proposal_id?: string; pending_scene_previews?: Record<string, Scene[]>;
   scene_source_is_current?: boolean; scene_handoff?: SceneHandoff | null;
 };
 export type ProjectSummary = Pick<Project, "id" | "title" | "updated_at">;
@@ -48,8 +50,8 @@ export type ProgressEvent = {
 };
 
 export async function streamProjectOperation(
-  project: Project, kind: "analyze" | "plan" | "review",
-  onProgress: (event: ProgressEvent) => void, language: UiLanguage = "vi",
+  project: Project, kind: "analyze" | "plan" | "review" | "scene-suggestions",
+  onProgress: (event: ProgressEvent) => void, language: UiLanguage = "vi", input?: SceneSuggestionInput,
 ): Promise<Project> {
   const copy = progressCopy[language];
   // Backend heartbeats arrive every 15s. A silent connection must not lock the editor forever.
@@ -58,7 +60,7 @@ export async function streamProjectOperation(
   try {
     const response = await fetch(`${baseUrl}/api/projects/${project.id}/${kind === "analyze" ? "clarify" : kind}/stream`, {
       method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ revision: project.revision }), signal: controller.signal,
+      body: JSON.stringify({ revision: project.revision, ...input }), signal: controller.signal,
     }).catch(() => { throw new Error(copy.connectionError); });
     if (!response.ok || !response.body) throw new Error(copy.startError);
     const reader = response.body.getReader();
@@ -133,11 +135,22 @@ export async function projectRequest(path: string, method = "GET", body?: unknow
 export function editableProject(project: Project) {
   return { revision: project.revision, response_language: project.response_language,
     title: project.title, idea: project.idea,
+    ...(project.pending_scene_proposal_id ? { scene_proposal_id: project.pending_scene_proposal_id } : {}),
+    ...(project.pending_scene_previews && Object.keys(project.pending_scene_previews).length ? { scene_proposal_previews: project.pending_scene_previews } : {}),
     constraints: project.constraints, answers: project.answers, draft: project.draft,
     ...(project.scene_outline == null ? {} : { scene_outline: {
       id: project.scene_outline.id, version: project.scene_outline.version, scenes: project.scene_outline.scenes,
     } }) };
 }
+
+export function sameEditableContent(a: Project, b: Project): boolean {
+  const { revision: _a, ...left } = editableProject(a);
+  const { revision: _b, ...right } = editableProject(b);
+  const previews = (project: Project) => (project.scene_proposals ?? [])
+    .filter(p => p.preview_scenes != null).map(p => [p.id, p.preview_scenes]);
+  return JSON.stringify([left, previews(a)]) === JSON.stringify([right, previews(b)]);
+}
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
 }
@@ -193,6 +206,8 @@ function isProject(value: unknown): value is Project {
     && (value.plan_generations === undefined || (Array.isArray(value.plan_generations)
       && value.plan_generations.every(isPlanGeneration)))
     && (value.applicable_plan_ids === undefined || strings(value.applicable_plan_ids))
+    && (value.scene_proposals === undefined || (Array.isArray(value.scene_proposals) && value.scene_proposals.every(isSceneProposal)))
+    && (value.applicable_scene_proposal_ids === undefined || strings(value.applicable_scene_proposal_ids))
     && (value.scene_outline == null || isSceneOutline(value.scene_outline))
     && (value.scene_versions === undefined || (Array.isArray(value.scene_versions)
       && value.scene_versions.every(v => isRecord(v) && typeof v.id === "string"
@@ -223,6 +238,18 @@ function isSceneOutline(v: unknown): v is SceneOutline {
     && uuid(v.source.id) && Number.isInteger(v.source.project_revision) && Number(v.source.project_revision) >= 0
     && typeof v.source.version_id === "string" && isDraft(v.source.draft) && isAuthorContext(v.source.context)
     && ["auto", "vi", "en"].includes(String(v.source.response_language));
+}
+function isSceneProposal(v: unknown): v is SceneProposal {
+  return isRecord(v) && uuid(v.id) && typeof v.created_at === "string"
+    && Number.isInteger(v.source_revision) && Number(v.source_revision) >= 0 && typeof v.source_content === "string"
+    && isSceneOutline(v.source_outline) && ["list", "append", "develop"].includes(String(v.mode))
+    && (v.target_scene_id === null || uuid(v.target_scene_id)) && typeof v.instructions === "string"
+    && ["pending", "ready", "failed", "applied", "discarded"].includes(String(v.status)) && isScenes(v.scenes)
+    && (v.preview_scenes == null || isScenes(v.preview_scenes))
+    && isRecord(v.transitions) && Object.values(v.transitions).every(t => typeof t === "string")
+    && (v.provider === null || typeof v.provider === "string") && (v.model === null || typeof v.model === "string")
+    && isRecord(v.parameters) && typeof v.prompt_version === "string" && (v.error === null || typeof v.error === "string")
+    && (v.applied_revision === null || positive(v.applied_revision));
 }
 function isSceneHandoff(v: unknown): v is SceneHandoff {
   return isRecord(v) && uuid(v.outline_id) && uuid(v.source_id) && positive(v.version)

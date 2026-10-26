@@ -6,6 +6,7 @@ import { CardFeedback } from "./CardFeedback";
 import { readRevisionNotes, validatedTargets } from "./revisionNotes";
 import { StoryFeedback } from "./StoryResultCards";
 import { StoryPlanEditor, type DraftField } from "./StoryPlanEditor";
+import type { Scene, SceneSuggestionInput } from "./sceneTypes";
 import { SceneOutlineEditor } from "./SceneOutlineEditor";
 import { ClarificationConversation } from "./ClarificationConversation";
 import "./storyWorkspace.css";
@@ -17,7 +18,7 @@ import { feedbackGuidance, sectionLabels } from "./storyLabels";
 import { responseLanguageLabels, type ResponseLanguage } from "./language";
 import type { EvaluationFinding, RevisionNote } from "./apiClient";
 import {
-  editableProject, listProjects, projectRequest, streamProjectOperation,
+  editableProject, sameEditableContent, listProjects, projectRequest, streamProjectOperation,
   type Project, type ProjectSummary,
 } from "./projectsApi";
 
@@ -38,7 +39,7 @@ export default function Home() {
   const [steps, setSteps] = useState<OperationStep[]>([]);
   const [operationFailed, setOperationFailed] = useState(false);
   const [operationTiming, setOperationTiming] = useState<{
-    kind: "analyze" | "plan" | "review"; startedAt: number; finishedAt: number | null;
+    kind: "analyze" | "plan" | "review" | "scene-suggestions"; startedAt: number; finishedAt: number | null;
   } | null>(null);
   const dirty = project !== null && saved !== null
     && JSON.stringify(editableProject(project)) !== JSON.stringify(editableProject(saved));
@@ -463,7 +464,41 @@ export default function Home() {
           </section>}
           {saved && <SceneOutlineEditor key={project.id} project={project} saved={saved} dirty={dirty} error={error}
             sourceCurrent={!feedbackChanged && !!project.scene_source_is_current}
-            onChange={outline => setProject(current => current ? { ...current, scene_outline: outline } : current)}
+            canUseProposal={!feedbackChanged && !project.pending_scene_proposal_id && JSON.stringify(project.scene_outline) === JSON.stringify(saved.scene_outline)}
+            onPreviewChange={(id: string, scenes: Scene[]) => setProject(current => current ? { ...current,
+              pending_scene_previews: { ...current.pending_scene_previews, [id]: scenes } } : current)}
+            onChange={(outline, proposalId) => setProject(current => current ? {
+              ...current, scene_outline: outline, ...(proposalId !== undefined ? { pending_scene_proposal_id: proposalId ?? undefined } : {}),
+            } : current)}
+            onSuggest={(input: SceneSuggestionInput) => {
+              setSteps([{ stage: "prepare", status: "active", occurrence: 1 }]); setOperationFailed(false);
+              setOperationTiming({ kind: "scene-suggestions", startedAt: performance.now(), finishedAt: null });
+              return run("Đang gợi ý cảnh từ nguồn đã chọn…", async () => {
+                try {
+                  const next = await persist(); if (!next) return;
+                  setSteps(items => applyProgress(items, { stage: "prepare", status: "completed" }));
+                  const result = await streamProjectOperation(next, "scene-suggestions",
+                    event => setSteps(items => applyProgress(items, event)), progressLanguage(next.response_language), input);
+                  accept(result); setNotice("Đã giữ đề xuất riêng. Hãy đọc, tự chỉnh rồi chọn dùng; cảnh đang viết chưa đổi.");
+                } catch (caught) {
+                  setOperationFailed(true); setSteps(items => items.map(s => s.status === "active" ? { ...s, status: "failed" } : s));
+                  throw caught;
+                } finally { setOperationTiming(t => t ? { ...t, finishedAt: performance.now() } : t); }
+              }, true);
+            }}
+            onInspect={async () => { let checked = false; await run("Đang kiểm tra đề xuất đã lưu…", async () => {
+              const next = await projectRequest(`/${project.id}`);
+              if (dirty) {
+                if (!saved || !sameEditableContent(saved, next)) throw new Error("Nội dung đã đổi ở cửa sổ khác. Bản đang sửa vẫn giữ nguyên; hãy tải bản sao trước khi mở lại.");
+                setSaved(next); setProject(current => current ? { ...current, revision: next.revision,
+                  scene_proposals: next.scene_proposals, applicable_scene_proposal_ids: next.applicable_scene_proposal_ids } : current);
+              } else accept(next);
+              checked = true;
+            }); return checked; }}
+            onDiscard={proposalId => void run("Đang bỏ đề xuất cảnh…", async () => {
+              const next = await persist(); if (!next) return;
+              accept(await projectRequest(`/${next.id}/scene-proposals/${proposalId}/discard`, "POST", { revision: next.revision }));
+            })}
             onStart={versionId => void run("Đang giữ nguồn và mở dàn cảnh…", async () => {
               const next = await persist(); if (!next) return;
               accept(await projectRequest(`/${next.id}/scene-outline`, "POST", {
