@@ -12,19 +12,25 @@ Moment -> Story Plan -> Scene Outline -> Write and Revise Screenplay -> Export S
 
 The current MVP delivers clarification and manual story-plan revision, not a complete screenplay. A story plan is a useful milestone for choosing the story; it is not a guarantee of screenplay quality or the final product ceiling. Review gives feedback without rewriting the author's draft.
 
+Keep the current story-plan level of detail as the basis for validating the next writing step. The product goal is a good screenplay supported by an editable scene outline; do not keep expanding the plan or polishing its critic indefinitely. Develop dialogue, action and rhythm at scene level. Here, “dàn cảnh” means the scene outline in Milestone 2; physical staging and production remain outside this roadmap. Existing intent, data and acceptance requirements still apply.
+
 The product handoff ends at screenplay export. Casting, staging, shooting, editing, and post-production are a separate process with real people and actors. AI video, synthetic actors, generated footage, and production management are outside the direction.
 
 ## Next Delivery Priority: Finish #7 Through the Existing Writing Flow
 
 The [product plan](plans/vietnam-first-screenplay-mvp.md) and [issue #26](https://github.com/thomasMinh1995/firstframe-ai/issues/26) retain the existing product and acceptance criteria. PRs #30–#33 delivered the four MVP foundations; PR #36 delivered the approved workspace. PR #38 delivered the remaining technical #7 pairing/target/navigation work and affected tour instructions. Reuse these deliveries. Technical merge does not close #7 or establish model quality or pilot acceptance.
 
-The priority on **26 October 2026** is **audit #7 acceptance evidence → confirm and fix one high-impact failure → validate the user journey**. This replaces the scheduled H1–H8 sequence; no eight-package checklist or general-purpose critic is a prerequisite for the MVP.
+The priority on **26 October 2026** is **close the remaining #7 evidence and blockers → validate and accept the existing journey → end the story-plan harness delivery phase → scene outline and screenplay milestones**. This replaces the scheduled H1–H8 sequence; no eight-package checklist or general-purpose critic is a prerequisite for the MVP.
 
 | Priority | Smallest scope | Evidence and stopping point |
 | --- | --- | --- |
-| 1 — Audit #7 | Compare existing criteria with delivered code/tests and real-model/user evidence | Separate demonstrated technical behavior, actual failures and missing acceptance evidence; do not rebuild delivered features or close #7 from test counts |
-| 2 — Fix one confirmed failure | Ask an experienced reader to check saved cases; choose one failure affecting intent or manual revision and test one change | Freeze expectations/configuration before inference, retain every failure and compare fairly; integrate only a useful change that preserves data/source behavior; stop an unhelpful candidate |
-| 3 — Validate the writing journey | Check #7 and the tour on the same stable candidate, then demo/pilot under the criteria below | Keep the existing full-flow, waiting-time, H0, participant and PO requirements; missing evidence or unresolved blockers remain failures |
+| 1 — Close remaining #7 work | Reuse the audit and reviewed cases; identify unresolved blockers, editorial preferences and missing evidence against existing criteria | Give each missing item a concrete verification step; do not rebuild delivered features or close #7 from test counts |
+| 2 — Stop unsuccessful experiments | Keep baseline after unsuccessful prompt trials; address only confirmed blockers with a specific narrow intervention | Retain all failures and rejected candidates; no automatic prompt/model loop or extra schema/judge. Unresolved blockers stay open |
+| 3 — Validate and hand over | Check #7 and the tour on the selected configuration, then demo/pilot when ready | Preserve all existing acceptance requirements. After acceptance, prioritize M2 scene outline, M3 screenplay writing/revision and M4 export |
+
+The technical audit and real-model trials already exist. The author reviewed four saved cases and chose to preserve open endings and sequential beats, use natural dialogue, and replace passport hiding with an apology letter that leaves the daughter free to decide. These are case-specific editorial decisions, not implemented fixes or independent-reader/pilot acceptance. The latest frozen 16-call Qwen 2.5 7B trial passed the source/JSON contract in both arms, but both had 3/4 false alarms on valid cases and 0/4 fully valid repairs on violation cases. The candidate was not selected; do not schedule another trial merely to pass these reused development cases or relabel the original closed-ending case using the author's later clarification.
+
+**Harness stopping point:** stop an unsuccessful candidate now; finish the delivery phase only when #7 has its required technical, real-model, reader and user evidence, its data protections hold, and no acceptance blocker remains. A perfect critic and agreement with every editorial preference are not additional requirements. Move implementation priority to M2 only after the existing #26 pilot thresholds and PO pass decision below are met. Otherwise record **not passed / more evidence needed**, the remaining blocker and its verification step; stopping experimentation is not acceptance. Once handed over, maintain harness only for concrete failures in the writing journey, rather than a standing optimization backlog.
 
 If the audit finds no remaining failure requiring a change, proceed directly to user validation. Do not invent a code task just to complete all three priorities.
 
@@ -173,6 +179,8 @@ Automated tests cover the question gate, persistence across app instances, revie
 
 ## Milestone 2: Build an Editable Scene Outline — Planned
 
+This is the next product development priority after the #7/harness handoff and the existing pilot/PO transition conditions. Do not require embedding, more judges, another model comparison or full closure of #22 as additional prerequisites. Validate whether the selected story plan helps the creator write scenes; do not expand it just to improve an isolated critic score.
+
 - Develop the selected story plan into an ordered list of scenes.
 - Clarify what happens in each scene, its purpose, and how it connects to the story.
 - Let the creator add, remove, reorder, and revise scenes.
@@ -239,7 +247,7 @@ Measure completed screenplay drafts and export only when Milestones 3 and 4 are 
 
 Keep the existing Harness and domain assets as the foundation. Add persistence, contracts, and checks as required by each milestone. Reliability work, including error handling and pilot access, should support the writing journey.
 
-The [reduced harness plan](plans/harness-improvement.md) prioritizes #7 evidence, one confirmed high-impact failure and the user journey. Reader review of saved failures takes priority over another model benchmark. Integrate only a useful narrow fix; stop candidates without a demonstrated benefit instead of adding schema/judge layers. Source IDs, repair checks, new cases and timing measurements are used only as needed for the failure being addressed, not as an eight-project delivery sequence.
+The [reduced harness plan](plans/harness-improvement.md) closes the remaining #7 work, validates the existing journey and defines the handoff to scene-outline and screenplay features. Keep rejected prompt trials as evidence; do not keep optimizing story-plan critique as a separate product. Integrate only a useful narrow fix for a confirmed failure. Source IDs, repair checks, new cases and timing measurements are tools for that failure, not an eight-project delivery sequence. Respect the stopping point and unchanged acceptance conditions above.
 
 Keep snapshots, revision checks, unsaved buffers, history, both recovery paths and legacy compatibility. Invalid references cannot become verified edit links or acquire current context. All demo/pilot thresholds remain unchanged. Plan–screenplay revision in both directions remains a later author-approved direction. Only the harness plan and this roadmap change in this update; no code, runtime, model configuration, prototype, issue state or acceptance decision is changed.
 
