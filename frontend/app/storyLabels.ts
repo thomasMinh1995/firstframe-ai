@@ -9,3 +9,8 @@ export const rubricLabels: Record<string, string> = {
   emotional_impact: "Tác động cảm xúc", ending: "Kết thúc",
   production_feasibility: "Khả năng thực hiện",
 };
+
+export const feedbackGuidance = {
+  vi: "Góp ý và điểm AI chỉ để tham khảo, có thể sai hoặc bỏ sót. Chúng không đánh giá năng lực viết của bạn hay chứng minh bản thảo đã tốt hơn. Hãy đối chiếu với ý đồ của bạn; bạn quyết định giữ hay tự sửa.",
+  en: "AI feedback and scores are references and may be wrong or miss things. They do not assess your writing ability or prove that your draft has improved. Compare them with your intent; you decide what to keep or revise yourself.",
+};

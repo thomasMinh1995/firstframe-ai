@@ -46,3 +46,43 @@ duplicate.draft.sections.push({ ...duplicate.draft.sections[2] });
 assert.equal(validatedTargets({ ...note, targets: [{ target_id: 'section-3', quote: 'Cha bắt máy.' }] }, duplicate, 'f1')[0].target_id, 'section-3');
 assert.equal(validatedTargets({ ...note, targets: [{ target_id: 'section-3', quote: ' Cha bắt máy.' }] }, duplicate, 'f1'), null);
 console.log('Structured priority checks passed: artifact, question and exact target binding, duplicates, partial pairs and legacy metadata.');
+
+// AI verdicts must not be presented as a judgment of the writer or demo readiness.
+const React = require('react');
+const { renderToStaticMarkup } = require('react-dom/server');
+const { CardFeedback } = require(process.argv[2] + '/CardFeedback.js');
+const { StoryFeedback, StoryResultCards } = require(process.argv[2] + '/StoryResultCards.js');
+const evaluation = { artifact_id: 'f1', passed: true, rubric_scores: { story_clarity: 4 },
+  findings: [], revision_notes: [] };
+const noAction = () => assert.fail('Reading feedback must not trigger an edit or AI action');
+for (const language of ['vi', 'en']) {
+  for (const passed of [true, false, null]) {
+    const result = { analysis: { summary: 'Một khoảnh khắc.', notes: [], missing_information: [] },
+      story_plan: source.draft, evaluation: { ...evaluation, passed } };
+    const before = structuredClone(result);
+    const html = renderToStaticMarkup(React.createElement(StoryResultCards, { result, uiLanguage: language }));
+    assert.ok(!html.includes('Sẵn sàng cho bản demo') && !html.includes('Ready for demo pass'));
+    assert.ok(!html.includes('Cần chỉnh sửa') && !html.includes('Needs revision'));
+    assert.ok(!html.includes('result-pill'), 'AI passed is not a readiness badge');
+    assert.ok(html.includes(language === 'vi' ? 'không đánh giá năng lực viết' : 'do not assess your writing ability'));
+    assert.ok(html.includes(language === 'vi' ? 'chứng minh bản thảo đã tốt hơn' : 'prove that your draft has improved'));
+    assert.ok(html.includes('4/5'), 'Reference scores remain available');
+    assert.deepEqual(result, before);
+  }
+  for (const revision_notes of [null, []]) {
+    const html = renderToStaticMarkup(React.createElement(StoryFeedback, {
+      evaluation: { ...evaluation, revision_notes }, uiLanguage: language, onChoose: noAction, onTarget: noAction,
+    }));
+    assert.ok(html.includes(language === 'vi' ? 'có thể sai hoặc bỏ sót' : 'may be wrong or miss things'));
+    assert.ok(html.includes(language === 'vi' ? 'bạn quyết định giữ hay tự sửa' : 'you decide what to keep or revise yourself'));
+  }
+}
+for (const current of [true, false]) {
+  const html = renderToStaticMarkup(React.createElement(CardFeedback, {
+    cardId: 'section-2', label: 'Kết thúc', evaluation, source, current, onClose: noAction, onReview: noAction,
+  }));
+  assert.ok(html.includes('có thể sai hoặc bỏ sót'));
+  assert.ok(html.includes('không đánh giá năng lực viết'));
+  assert.ok(html.includes('bạn quyết định giữ hay tự sửa'));
+}
+console.log('HITL presentation checks passed: VI/EN, true/false/unknown AI verdicts, reference scores, legacy/structured feedback, current/stale cards, no actions or mutation.');

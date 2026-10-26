@@ -2,7 +2,7 @@
 
 import { AnalysisNote, GenerateResponse, StoryPlanSection, type EvaluationFinding } from "./apiClient";
 import type { UiLanguage } from "./language";
-import { rubricLabels } from "./storyLabels";
+import { feedbackGuidance, rubricLabels } from "./storyLabels";
 import type { ReactNode } from "react";
 import type { Feedback, FeedbackSource } from "./projectsApi";
 import type { RevisionNote } from "./apiClient";
@@ -38,10 +38,8 @@ const resultCopy = {
     storyPlan: "Story Plan",
     storyPlanTitle: "First structured pass",
     workingTitle: "Working Title",
-    evaluation: "Evaluation",
-    evaluationTitle: "Creative quality check",
-    ready: "Ready for demo pass",
-    needsRevision: "Needs revision",
+    evaluation: "AI feedback",
+    evaluationTitle: "Points to consider",
     strengths: "Strengths",
     weaknesses: "Weaknesses",
     suggestions: "Suggestions",
@@ -77,10 +75,8 @@ const resultCopy = {
     storyPlan: "Bản phát triển",
     storyPlanTitle: "Bản phát triển đầu tiên",
     workingTitle: "Tên tạm thời",
-    evaluation: "Đánh giá",
-    evaluationTitle: "Kiểm tra chất lượng sáng tạo",
-    ready: "Sẵn sàng cho bản demo",
-    needsRevision: "Cần chỉnh sửa",
+    evaluation: "Góp ý AI",
+    evaluationTitle: "Những điều cần cân nhắc",
     strengths: "Điểm mạnh",
     weaknesses: "Điểm yếu",
     suggestions: "Gợi ý cải thiện",
@@ -127,8 +123,7 @@ export function StoryFeedback({ evaluation, uiLanguage, onChoose, onTarget, sour
   return (
     <ReportCard eyebrow={copy.evaluation} title={uiLanguage === "vi" ? "Góp ý cho lần sửa tiếp theo" : copy.evaluationTitle}
       icon="✍️" delayClass="reveal-1">
-      <p>{uiLanguage === "vi" ? "Đây là gợi ý tham khảo. Bạn quyết định điều gì phù hợp với câu chuyện của mình."
-        : "These are suggestions. You decide what fits your story."}</p>
+      <p>{feedbackGuidance[uiLanguage]}</p>
       {onChoose && <p>Chọn một góp ý để xem cạnh bản thảo và tự quyết định phần muốn sửa.
         Đối chiếu với ý đồ của bạn: điều trái dữ kiện hoặc lựa chọn rõ, điều còn để mở và đề xuất sáng tạo cần được cân nhắc khác nhau.
         Bạn có thể bỏ qua góp ý không phù hợp; không cần sửa tất cả.</p>}
@@ -217,14 +212,10 @@ export function StoryResultCards({ result, uiLanguage }: StoryResultCardsProps) 
       </ReportCard>
 
       <ReportCard eyebrow={copy.evaluation} title={copy.evaluationTitle} icon="⭐" delayClass="reveal-3">
-        <div className="evaluation-summary">
-          <span className={result.evaluation.passed ? "result-pill is-pass" : "result-pill"}>
-            {result.evaluation.passed ? copy.ready : copy.needsRevision}
-          </span>
-        </div>
+        <p>{feedbackGuidance[uiLanguage]}</p>
 
         {evaluation.scores.length > 0 ? (
-          <div className="score-grid" aria-label={uiLanguage === "vi" ? "Điểm tham khảo" : "Rubric scores"}>
+          <div className="score-grid" aria-label={uiLanguage === "vi" ? "Điểm tham khảo" : "AI reference scores"}>
             {evaluation.scores.map((score) => (
               <article key={score.label} className="score-card">
                 <div className="score-row">
