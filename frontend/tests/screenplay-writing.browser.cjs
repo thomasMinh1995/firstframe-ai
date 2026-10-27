@@ -1,4 +1,5 @@
 // Synthetic API/SQLite and fake writer only. A fresh ui_workspace_fixture is required.
+const {openScriptScene}=require('./screenplay-browser-helpers.cjs');
 const {chromium}=require('playwright'),assert=require('node:assert/strict'),fs=require('node:fs/promises'),path=require('node:path');const {randomUUID:uuid}=require('node:crypto');
 (async()=>{
  const directory=process.env.FIRSTFRAME_QA_DIRECTORY;assert.ok(directory&&path.basename(directory).startsWith('firstframe-workspace-'));
@@ -16,7 +17,7 @@ const {chromium}=require('playwright'),assert=require('node:assert/strict'),fs=r
  const save=async()=>{await area.getByRole('button',{name:'Lưu kịch bản',exact:true}).click();await page.getByText('Đã lưu kịch bản và mọi sửa đang chờ.',{exact:true}).waitFor()};
  const generate=async()=>{await panel.getByRole('button',{name:'Nhờ FirstFrame viết thử cảnh này',exact:true}).click();await latest().getByRole('button',{name:'Chỉnh phương án',exact:true}).waitFor()};
  const nav=area.getByRole('navigation',{name:'Các cảnh kịch bản'});
- await main.getByRole('button',{name:'Thêm hành động',exact:true}).click();await main.getByLabel('Nội dung hành động',{exact:true}).fill('Tác giả viết trước khi gọi AI.');
+ await openScriptScene(area,0,{legacy:true});await main.getByRole('button',{name:'Thêm hành động',exact:true}).click();await main.getByLabel('Nội dung hành động',{exact:true}).fill('Tác giả viết trước khi gọi AI.');
  await generate();p=await read();const original=structuredClone(p.screenplay),proposal=p.screenplay_proposals.at(-1);
  assert.equal(proposal.source_screenplay.scenes[0].blocks[0].text,'Tác giả viết trước khi gọi AI.');assert.deepEqual(p.screenplay,original);
  const originalOutput=structuredClone(proposal.scene);
@@ -50,7 +51,7 @@ const {chromium}=require('playwright'),assert=require('node:assert/strict'),fs=r
  await panel.getByRole('button',{name:'Kiểm tra phương án đã lưu',exact:true}).click();await latest().getByText(/Lượt viết lỗi/).waitFor({state:'attached'});await latest().locator(':scope > summary').click();await latest().getByText(/Lượt viết lỗi/).waitFor();
  assert.equal((await read()).screenplay_proposals.at(-1).status,'failed');
  await main.getByLabel('Nội dung hành động',{exact:true}).fill('Tác giả vẫn tự sửa sau lỗi.');await save();
- await page.reload();await main.getByLabel('Nội dung hành động',{exact:true}).waitFor();assert.equal(await main.getByLabel('Nội dung hành động',{exact:true}).inputValue(),'Tác giả vẫn tự sửa sau lỗi.');
+ await page.reload();await openScriptScene(area,0,{legacy:true});await main.getByLabel('Nội dung hành động',{exact:true}).waitFor();assert.equal(await main.getByLabel('Nội dung hành động',{exact:true}).inputValue(),'Tác giả vẫn tự sửa sau lỗi.');
  p=await read();assert.equal(p.screenplay_proposals.length,4);assert.equal((await req('/__test/state')).writing_requests,4);
  assert.deepEqual(p.feedback_source,seed.feedback_source);
  // Closed/open proposal/source views do not write or generate.

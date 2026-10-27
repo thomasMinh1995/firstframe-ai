@@ -41,7 +41,7 @@ export function ScreenplayReading({saved,dirty,onSelect,onInspect,onEdit}: {
     <p className="storage-note">Không cần ảnh, góp ý AI hoặc điểm số để chọn nguồn. Đọc, đổi bản và chọn không gọi AI hay tự lưu buffer.</p>
   </section>;
 }
-function SavedScript({script}:{script:Screenplay}) {
+export function SavedScript({script,activeSceneId}:{script:Screenplay;activeSceneId?:string}) {
   const source=script.source_outline;
   return <div className="screenplay-full-text"><details><summary>Nguồn M2 và ý đồ đi cùng bản này</summary>
     <h4>{source.source.draft.title}</h4><p className="preserve-lines">{source.source.draft.logline}</p>
@@ -53,7 +53,7 @@ function SavedScript({script}:{script:Screenplay}) {
       {(['location','time','characters','goal','purpose','viewer_intent','keep_or_avoid'] as const).map((key,i)=>s[key]&&<p key={key} className="preserve-lines">{['Địa điểm','Thời điểm','Nhân vật','Mục tiêu','Đóng góp','Cảm nhận','Giữ/tránh'][i]}: {s[key]}</p>)}
       {Object.entries(s.staging_choices).map(([key,text])=><p key={key} className="preserve-lines">{stagingLabels[key as StagingKey]}: {text}</p>)}
     </div>)}
-  </details>{script.scenes.map((s,i)=><article key={s.id} data-reading-scene={s.id}>
+  </details>{script.scenes.map((s,i)=><article key={s.id} data-reading-scene={s.id} data-selected={s.id===activeSceneId?'true':undefined}>
     <h4>{i+1}. {s.heading.trim()?s.heading:'Cảnh chưa có tiêu đề'}</h4>
     {!s.blocks.length&&<p>Cảnh chưa viết.</p>}
     {s.blocks.map(b=><div key={b.id} className={`reading-block reading-${b.kind}`}>

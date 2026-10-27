@@ -1,9 +1,9 @@
 "use client";
 
-import {useEffect,useState} from "react";
+import {useEffect,useId,useState} from "react";
 import type {Project} from "./projectsApi";
 import type {Screenplay, ScriptScene, SceneWritingInput, ScreenplaySelectionInput} from "./screenplayTypes";
-import {ScreenplayReading} from "./ScreenplayReading";
+import {ScreenplayReading, SavedScript} from "./ScreenplayReading";
 import {stagingLabels, type StagingKey} from "./sceneTypes";
 import {ScriptSceneFields} from "./ScriptSceneFields";
 import {ContinuousSceneEditor} from "./ContinuousSceneEditor";
@@ -22,18 +22,25 @@ export function ScreenplayEditor({project, savedProject, onSelectSource, onSourc
   onPreview:(id:string,scene:ScriptScene)=>void;onDiscard:(id:string)=>void;canUse:boolean; onStart: (requestId: string) => Promise<void>;
   onRestore: (id: string) => void; onSave: () => void; onInspect: () => Promise<boolean>;
 }) {
+  const editorId=useId();
   const [pendingReference,setPendingReference]=useState<ReviewSource|null>(null);
   const [pendingEdit,setPendingEdit]=useState<string|null>(null);
-  const [selected, setSelected] = useState<string | null>(null);
-  const [continuousSceneId, setContinuousSceneId] = useState<string | null>(null);
+  const [selected, setSelected] = useState<{scriptId:string;sceneId:string} | null>(null);
+  const [useBlockEditor, setUseBlockEditor] = useState(false);
   const [replace, setReplace] = useState(false);
   const [undo, setUndo] = useState<{before: Screenplay; after: string; label:string} | null>(null);
   const [sent, setSent] = useState<string | null>(null);
   const script = project.screenplay;
   const uncertain = sent !== null && script?.id !== sent && !project.screenplay_versions?.some(v=>v.screenplay.id===sent);
-  const scene = script?.scenes.find(s=>s.id===selected) ?? script?.scenes[0];
+  const scene = selected?.scriptId===script?.id ? script?.scenes.find(s=>s.id===selected?.sceneId) : undefined;
   const source = script?.source_outline.scenes.find(s=>s.id===scene?.source_scene_id);
   const edit = (next: ScriptScene) => script && onChange({...script,scenes:script.scenes.map(s=>s.id===next.id?next:s)});
+  useEffect(()=>{setSelected(null);setUseBlockEditor(false);setPendingReference(null);setPendingEdit(null);},[script?.id]);
+  function chooseScene(id:string, focus=true) {
+    if(!script?.scenes.some(s=>s.id===id))return;
+    setSelected({scriptId:script.id,sceneId:id});
+    if(focus)setPendingEdit(id);
+  }
   useEffect(()=>{
     if(!pendingEdit||scene?.id!==pendingEdit)return;
     const frame=requestAnimationFrame(()=>{const node=document.querySelector<HTMLInputElement>('.screenplay-columns .screenplay-scene input');node?.scrollIntoView({block:'center'});node?.focus({preventScroll:true});setPendingEdit(null);});
@@ -72,12 +79,41 @@ export function ScreenplayEditor({project, savedProject, onSelectSource, onSourc
       onClick={()=>{const id=crypto.randomUUID();setSent(id);setReplace(false);void onStart(id);}}>{script?"Bắt đầu bản kịch bản khác":"Bắt đầu viết từ bản dàn cảnh này"}</button>
     <button type="button" className="secondary" onClick={async()=>{if(await onInspect())setSent(null);}}>Kiểm tra kịch bản đã lưu</button>
     {uncertain && <p role="status">Chưa rõ kết quả bắt đầu bản mới. Kiểm tra bản đã lưu trước; không tự gửi lại.</p>}
-    {script && scene && <>
+    {script && <>
       <p role="status">Bản kịch bản phiên bản {script.version} · {dirty?"Có sửa chưa lưu trong dự án":"Đang xem bản đã lưu"}.</p>
       {(!project.screenplay_source_is_current || sourceDirty) && <p role="status">Dàn cảnh hoặc ý đồ hiện tại khác nguồn kịch bản. Giữ bản nguồn trước; không tự đồng bộ.</p>}
-      <nav aria-label="Các cảnh kịch bản">{script.scenes.map((s,i)=><button key={s.id} type="button" aria-pressed={s.id===scene.id}
-        onClick={()=>setSelected(s.id)}>{i+1}. {s.heading || "Cảnh chưa đặt tiêu đề"}{!s.blocks.some(b=>b.text.trim())?" · chưa viết":""}</button>)}</nav>
+      <nav className="screenplay-scene-list" aria-label="Các cảnh kịch bản"><ol>{script.scenes.map((s,i)=><li key={s.id}>
+        {i>0&&<span className="screenplay-scene-arrow" aria-hidden="true">→</span>}
+        <button type="button" aria-pressed={s.id===scene?.id} aria-controls={editorId} data-script-scene={s.id}
+          onFocus={e=>e.currentTarget.scrollIntoView({block:'nearest',inline:'nearest'})} onClick={()=>chooseScene(s.id)}>
+          <span>Cảnh {i+1}</span><strong>{s.heading || "Cảnh chưa đặt tiêu đề"}</strong>
+          <span>{s.blocks.some(b=>b.text.trim())?'Đang viết':'Chưa viết'}</span>
+        </button>
+      </li>)}</ol></nav>
       <div className="screenplay-columns">
+        <div className="screenplay-scene" id={editorId}>
+          {scene ? <>
+            <button type="button" aria-pressed={useBlockEditor} onClick={()=>setUseBlockEditor(!useBlockEditor)}>
+              {useBlockEditor?'Dùng editor liền mạch':'Dùng editor dạng khối'}
+            </button>
+            {useBlockEditor
+              ? <ScriptSceneFields key={`${script.id}:${scene.id}`} scene={scene} onChange={edit} onDelete={remove}/>
+              : <ContinuousSceneEditor key={`${script.id}:${scene.id}`} scene={scene} scope={`${script.id}:${script.version}`}
+                  blockLimit={Math.min(200,1000-script.scenes.filter(s=>s.id!==scene.id).reduce((total,s)=>total+s.blocks.length,0))} onChange={edit}/>}
+            <button type="button" onClick={onSave}>Lưu kịch bản</button>
+            <p>Chuyển cảnh giữ phần đang viết; lưu để mở lại. Bản nháp không cần đủ mọi cảnh.</p>
+          </> : <div className="screenplay-empty" role="status"><h3>Chọn một cảnh để viết</h3><p>Chọn cảnh phía trên để mở form. Kịch bản đã lưu ở bên cạnh không bao gồm các sửa chưa lưu.</p></div>}
+        </div>
+        <aside className="screenplay-saved" aria-label="Kịch bản đã lưu để đối chiếu">
+          <h3>Kịch bản đã lưu</h3>
+          {savedProject.id===project.id&&savedProject.screenplay?.id===script.id ? <>
+            <p>Phiên bản {savedProject.screenplay.version} · {savedProject.screenplay.scenes.length} cảnh.</p>
+            {dirty&&<p role="status">Có sửa chưa lưu trong dự án. Cột này vẫn giữ bản server đã xác nhận.</p>}
+            <SavedScript script={savedProject.screenplay} activeSceneId={scene?.id}/>
+          </> : <p>Chưa có bản đã lưu tương ứng để đối chiếu. Phần đang viết vẫn được giữ.</p>}
+        </aside>
+      </div>
+      {scene && <>
         <details className="screenplay-source" open><summary>Nguồn M2 của cảnh đang viết</summary>
           <p>Đây là nguồn được giữ lúc bắt đầu, không phải bản soạn.</p>
           {source && <><h3>{source.title}</h3><p className="preserve-lines">{source.action}</p>
@@ -93,16 +129,6 @@ export function ScreenplayEditor({project, savedProject, onSelectSource, onSourc
             {script.source_outline.source.context.clarifications.map((c,i)=><p key={i} className="preserve-lines">{c.question} — {c.answer}</p>)}
           </details>
         </details>
-        <div className="screenplay-scene">
-          <button type="button" aria-pressed={continuousSceneId===scene.id} onClick={()=>setContinuousSceneId(continuousSceneId===scene.id?null:scene.id)}>
-            {continuousSceneId===scene.id?'Quay lại editor hiện có':'Thử editor liền mạch cho cảnh này'}
-          </button>
-          {continuousSceneId===scene.id
-            ? <ContinuousSceneEditor key={`${script.id}:${scene.id}`} scene={scene} scope={`${script.id}:${script.version}`}
-                blockLimit={Math.min(200,1000-script.scenes.filter(s=>s.id!==scene.id).reduce((total,s)=>total+s.blocks.length,0))} onChange={edit}/>
-            : <ScriptSceneFields key={`${script.id}:${scene.id}`} scene={scene} onChange={edit} onDelete={remove}/>}
-        </div>
-      </div>
       {undo && JSON.stringify(script)===undo.after && <button type="button" onClick={()=>{onChange(undo.before);setUndo(null);}}>{undo.label}</button>}
       <ScreenplayProposals key={`${script.id}:${scene.id}`} project={project} scene={scene} canUse={canUse}
         onWrite={onWrite} onInspect={onProposalInspect} onPreview={onPreview} onDiscard={onDiscard}
@@ -112,12 +138,11 @@ export function ScreenplayEditor({project, savedProject, onSelectSource, onSourc
         }}/>
       <ScreenplayFeedback key={`review:${script.id}:${scene.id}`} project={project} scene={scene} canNavigate={canNavigateReview}
         onReview={onReview} onInspect={onReviewInspect} onDiscard={onReviewDiscard} onAssess={onReviewAssess}
-        onNavigate={source=>{if(canNavigateReview&&source.scene_id){setSelected(source.scene_id);setPendingReference(source);}}}/>
-      <button type="button" onClick={onSave}>Lưu kịch bản</button>
-      <p>Chuyển cảnh chỉ giữ phần đang viết trên màn hình. Lưu để mở lại; bản nháp không cần đủ mọi cảnh. M4 xuất bản chưa triển khai.</p>
+        onNavigate={source=>{if(canNavigateReview&&source.scene_id){chooseScene(source.scene_id,false);setPendingReference(source);}}}/>
+      </>}
     </>}
     <ScreenplayReading saved={savedProject} dirty={dirty} onSelect={onSelectSource} onInspect={onSourceInspect}
-      onEdit={id=>{setSelected(id);setPendingEdit(id);}}/>
+      onEdit={id=>chooseScene(id)}/>
     {!!project.screenplay_versions?.length && <details className="screenplay-history"><summary>Lịch sử kịch bản ({project.screenplay_versions.length})</summary>
       <p>Khôi phục sẽ lưu mọi sửa đang chờ trước, giữ bản hiện tại trong lịch sử; không thay M1/M2.</p>
       {[...project.screenplay_versions].reverse().map(v=><div key={v.id}><span>Bản {v.screenplay.version} · {v.created_at} · nguồn M2 {v.screenplay.source_outline.version}</span>
