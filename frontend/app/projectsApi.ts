@@ -4,6 +4,8 @@ import type { UiLanguage } from "./language";
 import type { ResponseLanguage } from "./language";
 import { stagingLabels, type Scene, type SceneOutline, type SceneVersion, type SceneHandoff, type SceneProposal, type SceneSuggestionInput, type StagingIdea, type StagingUse, type SceneSketch } from "./sceneTypes";
 
+import type {Screenplay, ScreenplayVersion} from "./screenplayTypes";
+
 export type StoryDraft = { title: string; logline: string; sections: StoryPlanSection[] };
 export type Feedback = GenerateResponse["evaluation"] & { artifact_id?: string };
 export type AuthorContext = {
@@ -37,6 +39,7 @@ export type Project = {
   versions: DraftVersion[];
   clarification_history: ClarificationVersion[];
   plan_generations?: PlanGeneration[]; applicable_plan_ids?: string[];
+  screenplay?: Screenplay | null; screenplay_versions?: ScreenplayVersion[]; screenplay_source_is_current?: boolean;
   scene_outline?: SceneOutline | null; scene_versions?: SceneVersion[];
   staging_proposals?: SceneProposal[];
   scene_sketches?: SceneSketch[]; selected_scene_sketches?: Record<string, string>; applicable_sketch_ids?: string[];
@@ -145,6 +148,7 @@ export function editableProject(project: Project) {
     ...(project.pending_scene_previews && Object.keys(project.pending_scene_previews).length ? { scene_proposal_previews: project.pending_scene_previews } : {}),
     ...(project.pending_staging_use ? { staging_use: project.pending_staging_use } : {}),
     ...(project.pending_staging_edits && Object.keys(project.pending_staging_edits).length ? { staging_idea_edits: project.pending_staging_edits } : {}),
+    ...(project.screenplay == null ? {} : {screenplay: {id:project.screenplay.id, version:project.screenplay.version, scenes:project.screenplay.scenes}}),
     constraints: project.constraints, answers: project.answers, draft: project.draft,
     ...(project.scene_outline == null ? {} : { scene_outline: {
       id: project.scene_outline.id, version: project.scene_outline.version, scenes: project.scene_outline.scenes,
@@ -228,6 +232,9 @@ function isProject(value: unknown): value is Project {
       && Object.entries(value.selected_scene_sketches).every(([k,v]) => uuid(k) && uuid(v))))
     && (value.applicable_sketch_ids === undefined || (Array.isArray(value.applicable_sketch_ids) && value.applicable_sketch_ids.every(uuid)))
     && (value.applicable_scene_proposal_ids === undefined || strings(value.applicable_scene_proposal_ids))
+    && (value.screenplay == null || isScreenplay(value.screenplay))
+    && (value.screenplay_versions === undefined || (Array.isArray(value.screenplay_versions) && value.screenplay_versions.every(v=>isRecord(v)&&uuid(v.id)&&typeof v.created_at==="string"&&isScreenplay(v.screenplay))))
+    && (value.screenplay_source_is_current === undefined || typeof value.screenplay_source_is_current === "boolean")
     && (value.scene_outline == null || isSceneOutline(value.scene_outline))
     && (value.scene_versions === undefined || (Array.isArray(value.scene_versions)
       && value.scene_versions.every(v => isRecord(v) && typeof v.id === "string"
@@ -310,4 +317,24 @@ function isClarificationVersion(value: unknown): value is ClarificationVersion &
   return isRecord(value) && typeof value.id === "string" && typeof value.created_at === "string"
     && typeof value.idea === "string" && strings(value.constraints) && strings(value.questions)
     && strings(value.answers);
+}
+
+function isScreenplay(v: unknown): v is Screenplay {
+  if (!isRecord(v) || !uuid(v.id) || !positive(v.version) || !Number.isInteger(v.source_revision)
+      || Number(v.source_revision)<0 || !isSceneOutline(v.source_outline) || !Array.isArray(v.scenes)
+      || !v.scenes.length || v.scenes.length>60) return false;
+  const outline=v.source_outline;
+  const textLength=(text: string)=>Array.from(text).length;
+  const ids: string[]=[];let count=0,size=0;
+  const valid=v.scenes.every((s,i)=>{
+    if(!isRecord(s)||!uuid(s.id)||!uuid(s.source_scene_id)||typeof s.heading!=="string"||textLength(s.heading)>500
+      ||s.source_scene_id!==outline.scenes[i]?.id||!Array.isArray(s.blocks)||s.blocks.length>200)return false;
+    ids.push(s.id);size+=textLength(s.heading);
+    return s.blocks.every(b=>{
+      if(!isRecord(b)||!uuid(b.id)||!["action","dialogue"].includes(String(b.kind))||typeof b.text!=="string"||textLength(b.text)>10000
+        ||typeof b.speaker!=="string"||textLength(b.speaker)>200)return false;
+      ids.push(b.id);count++;size+=textLength(b.text)+textLength(b.speaker);return true;
+    });
+  });
+  return valid&&v.scenes.length===v.source_outline.scenes.length&&new Set(ids).size===ids.length&&count<=1000&&size<=200000;
 }

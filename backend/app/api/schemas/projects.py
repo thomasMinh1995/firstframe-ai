@@ -17,6 +17,8 @@ from app.api.schemas.scenes import Scene, SceneId, SceneOutlineEdit, SceneText, 
 from app.application.language import ResponseLanguage
 from app.application.clarification import MAX_CHOICES
 
+from app.api.schemas.screenplays import ScreenplayEdit
+
 ShortText = Annotated[str, Field(max_length=2000)]
 
 
@@ -49,6 +51,7 @@ class ProjectUpdate(RevisionRequest):
     constraints: list[ShortText] = Field(max_length=20)
     answers: list[ShortText] = Field(max_length=MAX_CHOICES)
     draft: StoryDraft | None
+    screenplay: ScreenplayEdit | None = None
     scene_outline: SceneOutlineEdit | None = None
     scene_proposal_id: SceneId | None = None
     staging_use: StagingUse | None = None
@@ -218,6 +221,17 @@ class SceneOutline(SceneOutlineEdit):
     source: ScenePlanSource
 
 
+class Screenplay(ScreenplayEdit):
+    source_revision: int
+    source_outline: SceneOutline
+
+
+class ScreenplayVersion(BaseModel):
+    id: SceneId
+    created_at: str
+    screenplay: Screenplay
+
+
 class SceneOutlineVersion(BaseModel):
     id: str
     created_at: str
@@ -287,11 +301,23 @@ class ProjectResponse(BaseModel):
     clarification_history: list[ClarificationVersion] = Field(default_factory=list)
     plan_generations: list[PlanGeneration] = Field(default_factory=list)
     scene_outline: SceneOutline | None = None
+    screenplay: Screenplay | None = None
+    screenplay_versions: list[ScreenplayVersion] = Field(default_factory=list)
     scene_versions: list[SceneOutlineVersion] = Field(default_factory=list)
     scene_proposals: list[SceneProposal] = Field(default_factory=list)
     staging_proposals: list[SceneProposal] = Field(default_factory=list)
     scene_sketches: list[SceneSketch] = Field(default_factory=list)
     selected_scene_sketches: dict[SceneId, SceneId] = Field(default_factory=dict)
+
+    @computed_field
+    @property
+    def screenplay_source_is_current(self) -> bool:
+        if not self.screenplay or not self.scene_outline:
+            return False
+        source, current = self.screenplay.source_outline, self.scene_outline
+        # Version/revision metadata can change without changing source content.
+        return (source.id == current.id and source.scenes == current.scenes
+                and source.source == current.source and self.scene_source_is_current)
 
     @computed_field
     @property

@@ -90,7 +90,7 @@ function copy(step: TourStep, p: Props) {
     case "choices": return p.questionCount
       ? "Mỗi lượt một câu hỏi. Câu trả lời cũ vẫn ở phía trên để bạn đọc và sửa; những lựa chọn này dẫn đường cho story plan."
       : "Chưa có câu hỏi bổ sung. Bạn vẫn có thể hỏi thêm, hoặc xem lại các lựa chọn trước khi đồng ý tạo bản phát triển.";
-    case "draft": return "Đọc các card ngắn theo đường chữ S, từ số nhỏ đến lớn. Trên điện thoại, card xếp thành một cột theo đúng thứ tự. Khi muốn phát triển từng cảnh, xem hướng dẫn ngắn tại vùng M2 Dàn cảnh. Kịch bản M3 chưa triển khai.";
+    case "draft": return "Đọc các card ngắn theo đường chữ S, từ số nhỏ đến lớn. Trên điện thoại, card xếp thành một cột theo đúng thứ tự. Khi muốn phát triển từng cảnh, xem hướng dẫn ngắn tại vùng M2 Dàn cảnh. M3 có vùng soạn kịch bản thủ công từ dàn cảnh đã lưu.";
     case "save": return "Xong chỉ đóng ô sửa. Dùng Lưu thay đổi để giữ nội dung trước khi rời đi. Trạng thái Đã lưu xác nhận bản trên máy này; chưa có đồng bộ tài khoản.";
   }
 }

@@ -1,0 +1,10 @@
+.screenplay { margin-top: 24px; overflow-wrap: anywhere; }
+.screenplay > button, .screenplay nav button, .script-block button { margin: 4px; }
+.screenplay nav { display: flex; gap: 8px; flex-wrap: wrap; margin: 16px 0; }
+.screenplay-columns { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 20px; }
+.screenplay-source { border: 1px solid var(--line); padding: 12px; align-self: start; }
+.screenplay label { display: block; margin: 8px 0; }
+.screenplay input:not([type=checkbox]), .screenplay textarea { width: 100%; box-sizing: border-box; }
+.script-block { min-width: 0; margin: 12px 0; border: 1px solid var(--line); padding: 12px; }
+.screenplay-history > div { margin: 12px 0; }
+@media (max-width: 700px) { .screenplay-columns { grid-template-columns: minmax(0, 1fr); } }
