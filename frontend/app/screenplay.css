@@ -16,3 +16,8 @@
 .screenplay-feedback { border-top: 1px solid var(--line); margin: 16px 0; padding-top: 12px; }
 .script-review, .script-review-note, .script-review-source { margin: 12px 0; padding: 12px; border: 1px solid var(--line); overflow-wrap: anywhere; }
 .script-review blockquote { margin: 8px 0; padding-left: 12px; border-left: 3px solid var(--accent); }
+.screenplay-reading { border-top: 1px solid var(--line); margin-top: 20px; padding-top: 12px; }
+.screenplay-reading select { width: 100%; max-width: 100%; }
+.screenplay-full-text, .screenplay-handoff { overflow-wrap: anywhere; }
+.screenplay-full-text article { border-bottom: 1px solid var(--line); padding: 12px 0; }
+.reading-dialogue { margin: 12px 10%; }

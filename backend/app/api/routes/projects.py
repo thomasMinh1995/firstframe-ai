@@ -155,6 +155,7 @@ def dataset_snapshot(project: ProjectResponse) -> dict[str, object]:
         "screenplay", "screenplay_versions", "screenplay_source_is_current",
         "screenplay_proposals", "applicable_screenplay_proposal_ids",
         "screenplay_reviews", "current_screenplay_review_ids",
+        "screenplay_selections", "screenplay_handoff",
     })
 
 

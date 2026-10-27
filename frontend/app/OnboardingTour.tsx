@@ -117,6 +117,7 @@ function instructions(step: TourStep, hasDraft: boolean): string[] {
       "Nhận phản hồi trên bản hiện tại lưu trước rồi mới gửi AI. Sửa tiếp khiến góp ý cũ chỉ còn để tham khảo; hãy lưu trước khi rời đi.",
       "Đề xuất và lịch sử cho xem bản AI, bản trước và câu trả lời cũ. Chỉ nhận hoặc khôi phục khi bạn chủ động chọn.",
       "Nếu hai tab xung đột revision, phần đang sửa được giữ. Đọc báo lỗi trước khi quyết định tiếp tục.",
+      "Lưu dàn cảnh M2 rồi bắt đầu M3: tự viết hoặc chọn phương án AI cho từng cảnh, lưu, đọc toàn bản đã lưu và chọn nguồn M4. Cảnh còn thiếu vẫn lưu nháp được; không cần AI để hoàn tất đường viết tay. Chọn nguồn chưa phải xuất bản.",
       "Hướng dẫn sử dụng luôn mở lại được. Khu Công cụ chứa các công cụ bổ sung."];
   }
 }

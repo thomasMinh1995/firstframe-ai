@@ -4,8 +4,8 @@ from uuid import uuid4
 from fastapi import APIRouter, HTTPException
 
 from app.api.routes import projects
-from app.api.schemas.projects import ProjectResponse, RevisionRequest, Screenplay, ScreenplayProposal
-from app.api.schemas.screenplays import ScriptScene, StartScreenplay, SceneWritingRequest
+from app.api.schemas.projects import ProjectResponse, RevisionRequest, Screenplay, ScreenplayProposal, ScreenplaySelection
+from app.api.schemas.screenplays import ScriptScene, StartScreenplay, SceneWritingRequest, SelectScreenplay
 from app.api.schemas.scenes import SceneId
 
 from app.application.dataset import capture_workflow, recording_provider
@@ -19,6 +19,35 @@ def get_screenplay_provider():
 
 
 router = APIRouter(prefix="/api/projects", tags=["screenplays"])
+
+
+@router.post("/{project_id}/screenplay-selections", response_model=ProjectResponse)
+def select_screenplay(project_id: str, request: SelectScreenplay):
+    with projects.project_errors():
+        project = projects.load_project(project_id)
+        existing = next((s for s in project.screenplay_selections if s.id == request.request_id), None)
+        if existing:
+            if existing.source_version_id != request.source_version_id:
+                raise HTTPException(409, "ID chọn bản đã dùng cho nguồn khác.")
+            return project
+        if project.revision != request.revision:
+            raise projects.ProjectConflict
+        script = project.screenplay if request.source_version_id == "current" else next(
+            (v.screenplay for v in project.screenplay_versions if v.id == request.source_version_id), None)
+        if script is None:
+            raise HTTPException(404, "Không tìm thấy bản kịch bản đã lưu trong dự án.")
+        incomplete = [str(i + 1) for i, s in enumerate(script.scenes)
+            if not s.heading.strip() or not s.blocks or any(
+                not b.text.strip() or (b.kind == "dialogue" and not b.speaker.strip()) for b in s.blocks)]
+        if incomplete:
+            raise HTTPException(422, "Cảnh chưa hoàn tất: " + ", ".join(incomplete)
+                + ". Cần tên cảnh, nội dung khối và người nói cho lời thoại. Bạn vẫn lưu nháp được.")
+        if len(project.screenplay_selections) >= 100:
+            raise HTTPException(422, "Đã đủ 100 lần chọn nguồn; nguồn đã chọn vẫn giữ, bạn vẫn tự sửa và lưu được.")
+        project.screenplay_selections.append(ScreenplaySelection(id=request.request_id,
+            created_at=datetime.now(UTC).isoformat(), source_revision=project.revision,
+            source_version_id=request.source_version_id, screenplay=script.model_copy(deep=True)))
+        return projects.save_project(project)
 
 
 @router.post("/{project_id}/screenplay", response_model=ProjectResponse)

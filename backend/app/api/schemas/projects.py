@@ -280,6 +280,14 @@ class ScreenplayVersion(BaseModel):
     screenplay: Screenplay
 
 
+class ScreenplaySelection(BaseModel):
+    id: SceneId
+    created_at: str
+    source_revision: int = Field(ge=0)
+    source_version_id: Literal["current"] | SceneId
+    screenplay: Screenplay
+
+
 class SceneOutlineVersion(BaseModel):
     id: str
     created_at: str
@@ -351,6 +359,7 @@ class ProjectResponse(BaseModel):
     scene_outline: SceneOutline | None = None
     screenplay: Screenplay | None = None
     screenplay_versions: list[ScreenplayVersion] = Field(default_factory=list)
+    screenplay_selections: list[ScreenplaySelection] = Field(default_factory=list)
     screenplay_proposals: list[ScreenplayProposal] = Field(default_factory=list)
     screenplay_reviews: list[ScreenplayReview] = Field(default_factory=list)
     scene_versions: list[SceneOutlineVersion] = Field(default_factory=list)
@@ -358,6 +367,11 @@ class ProjectResponse(BaseModel):
     staging_proposals: list[SceneProposal] = Field(default_factory=list)
     scene_sketches: list[SceneSketch] = Field(default_factory=list)
     selected_scene_sketches: dict[SceneId, SceneId] = Field(default_factory=dict)
+
+    @computed_field
+    @property
+    def screenplay_handoff(self) -> ScreenplaySelection | None:
+        return self.screenplay_selections[-1] if self.screenplay_selections else None
 
     @computed_field
     @property

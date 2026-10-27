@@ -62,6 +62,10 @@ class SceneWritingRequest(StartScreenplay):
     instructions: str = Field(default="", max_length=2000)
 
 
+class SelectScreenplay(StartScreenplay):
+    source_version_id: Literal["current"] | SceneId
+
+
 class WrittenScene(BaseModel):
     model_config = ConfigDict(extra="forbid")
     heading: str = Field(min_length=1, max_length=500)
