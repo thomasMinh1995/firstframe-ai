@@ -117,8 +117,20 @@ const {randomUUID: uuid} = require('node:crypto');
     await page.setViewportSize({width, height: 900}); assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
     await page.screenshot({path: path.join(directory, `continuous-editor-${width}.png`)});
   }
+  // Existing Windows line endings have different stored/displayed offsets. Do not delete the wrong characters.
+  project = await read(); const windows = structuredClone(project.screenplay);
+  windows.scenes[0].blocks = [{id: uuid(), kind: 'action', speaker: '', text: 'A\r\nBC\r\nD'}];
+  await request(url, 'PUT', {...payload(project), screenplay: {id: windows.id, version: windows.version, scenes: windows.scenes}});
+  await page.reload(); await enable(); assert.equal(await text(0).inputValue(), 'A\nBC\nD');
+  await text(0).focus(); await text(0).evaluate(e => e.setSelectionRange(2, 4)); await text(0).press('Enter');
+  await save(); project = await read();
+  assert.equal(project.screenplay.scenes[0].blocks[0].text, 'A\r\n');
+  assert.equal(project.screenplay.scenes[0].blocks[1].text, '\r\nD');
+  await text(1).focus(); await text(1).evaluate(e => e.setSelectionRange(0, 0)); await text(1).press('Backspace');
+  assert.equal(await text(0).evaluate(e => e.selectionStart), 2, 'merge restores the displayed boundary, not the raw CRLF offset');
+  await save(); assert.equal((await read()).screenplay.scenes[0].blocks[0].text, 'A\r\n\r\nD');
   const after = await state(); assert.deepEqual(after.provider_stages, []); assert.equal(after.image_requests, 0); assert.equal(after.writing_requests, 0); assert.equal(after.review_requests, 1);
   assert.deepEqual(errors, []);
-  console.log('PASS continuous editor: opt-in/no writes, exact round-trip/IDs, split/merge/undo, synthetic IME, Shift+Enter, multiline insertion, character/dialogue mapping, unfinished draft, conversion confirmation, reorder/delete, newer-edit guard, scene buffer, saved reload, fake review focus, offline/409, 3 widths, zero real model calls');
+  console.log('PASS continuous editor: opt-in/no writes, exact round-trip/IDs, split/merge/undo, synthetic IME, Shift+Enter, multiline insertion, character/dialogue mapping, unfinished draft, conversion confirmation, reorder/delete, newer-edit guard, scene buffer, saved reload, fake review focus, offline/409, CRLF selection/merge caret, 3 widths, zero real model calls');
   await context.close(); await browser.close();
 })().catch(e => {console.error(e); process.exit(1);});

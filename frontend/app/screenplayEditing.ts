@@ -1,14 +1,22 @@
 import type {ScriptScene} from './screenplayTypes';
 
-// Positions are native input offsets (UTF-16); text is never normalized or reparsed.
+// A textarea displays CRLF as LF; map its UTF-16 positions without changing stored text.
+function sourceOffset(text: string, inputOffset: number): number {
+  let index = 0;
+  for (let offset = 0; offset < inputOffset; offset++, index++) {
+    if (text[index] === '\r' && text[index + 1] === '\n') index++;
+  }
+  return index;
+}
+
 export function splitScriptBlock(scene: ScriptScene, id: string, start: number, end: number, newId: string): ScriptScene {
   const index = scene.blocks.findIndex(b => b.id === id), block = scene.blocks[index];
-  if (!block || start < 0 || end < start || end > block.text.length || scene.blocks.some(b => b.id === newId)) {
+  if (!block || start < 0 || end < start || end > block.text.replace(/\r\n/g, '\n').length || scene.blocks.some(b => b.id === newId)) {
     throw new Error('Không xác định được đoạn cần tách. Bản đang viết vẫn giữ.');
   }
   return {...scene, blocks: [
-    ...scene.blocks.slice(0, index), {...block, text: block.text.slice(0, start)},
-    {id: newId, kind: 'action', speaker: '', text: block.text.slice(end)}, ...scene.blocks.slice(index + 1),
+    ...scene.blocks.slice(0, index), {...block, text: block.text.slice(0, sourceOffset(block.text, start))},
+    {id: newId, kind: 'action', speaker: '', text: block.text.slice(sourceOffset(block.text, end))}, ...scene.blocks.slice(index + 1),
   ]};
 }
 

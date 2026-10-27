@@ -50,7 +50,7 @@ export function ContinuousSceneEditor({scene, scope, blockLimit, onChange}: {
   function join(id: string) {
     try {
       const index = scene.blocks.findIndex(b => b.id === id), previous = scene.blocks[index - 1];
-      change(mergeScriptBlock(scene, id), {id: previous.id, field: 'text', position: previous.text.length}, true);
+      change(mergeScriptBlock(scene, id), {id: previous.id, field: 'text', position: previous.text.replace(/\r\n/g, '\n').length}, true);
     } catch (caught) {setError((caught as Error).message);}
   }
   function key(event: KeyboardEvent<HTMLTextAreaElement>, b: ScriptBlock) {

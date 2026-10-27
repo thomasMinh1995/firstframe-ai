@@ -47,3 +47,9 @@ Review đường gọi `ScreenplayEditor` → editor mới → callback buffer c
 Chưa mặc định thay editor toàn M3; chưa đổi bố cục, danh sách cảnh, cột bản lưu, ảnh hoặc tour theo bước 2–3. Editor là các trường nhập có định danh trình bày liền nhau, chưa hỗ trợ một selection xuyên qua nhiều khối độc lập như phần mềm chế bản. Dán nhiều đoạn giữ xuống dòng trong cùng khối, không tự chia/suy đoán thoại. Không tuyên bố đã có editor chuyên dụng hoặc người mới dùng dễ hơn.
 
 IME mới kiểm tra bằng composition/keydown mô phỏng; multiline insertion dùng nhập native có kiểm soát, chưa thử IME hệ điều hành/clipboard thực, screen reader hoặc điện thoại thật. Chưa chạy Safari/Firefox. Chất lượng critic và nghiệm thu người dùng vẫn mở, không thay tiêu chí #7/#22/#26. Bước này không chạy thêm prompt/model, không triển khai M4 và không sửa plan/prototype.
+
+## Review cuối PR #58
+
+Phát hiện và sửa ca CRLF trước merge: textarea hiển thị `\r\n` thành `\n`, nên dùng thẳng offset con trỏ để cắt chuỗi nguồn có thể xóa sai ký tự khi chọn một đoạn sau xuống dòng. Editor nay ánh xạ offset hiển thị sang chuỗi nguồn, không chuẩn hóa text gốc; vị trí con trỏ sau gộp cũng tính theo giá trị hiển thị.
+
+Đã thêm contract và ca Chrome nhập fixture có `A\r\nBC\r\nD`: chọn đúng `BC`, Enter tách/xóa đúng phần đã chọn, lưu giữ các CRLF còn lại; gộp giữ nguyên chuỗi và đặt con trỏ đúng ranh giới. Bốn contract và toàn bộ bộ Chrome editor chạy lại đạt trên fixture mới, bao gồm các ca bảo vệ đã có. Build QA và build lại cấu hình mặc định đạt. Bốn suite Chrome hồi quy M3 cùng 59 test backend ở trên là bằng chứng trước sửa; backend và đường editor cũ không đổi, không chạy lại các suite đó. Không còn lỗi chặn đã biết trong phạm vi bước 1; các giới hạn kiểm chứng nêu trên vẫn giữ.
