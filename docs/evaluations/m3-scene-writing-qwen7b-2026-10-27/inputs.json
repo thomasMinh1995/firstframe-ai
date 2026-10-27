@@ -1,0 +1,1205 @@
+[
+  {
+    "name": "quiet-open-ending",
+    "project": {
+      "response_language": "vi",
+      "id": "733061bd-d285-4ef7-b4bf-5d2b0fce4f32",
+      "revision": 4,
+      "updated_at": "2026-10-27T05:17:01.286361+00:00",
+      "title": "Lá thư còn kín",
+      "idea": "Cha muốn xin lỗi, con gái chưa quyết định có đón nhận hay không.",
+      "constraints": [
+        "Chỉ cha và con gái trong một căn nhà.",
+        "Không nói tha thứ hoặc hòa giải xong.",
+        "Phong thư vẫn kín; kết mở, không thêm biến cố."
+      ],
+      "analysis": null,
+      "answers": [],
+      "clarifications": {},
+      "draft": {
+        "title": "Lá thư còn kín",
+        "logline": "Cha muốn xin lỗi, con gái chưa quyết định có đón nhận hay không.",
+        "sections": [
+          {
+            "title": "Đầu",
+            "purpose": "Mở",
+            "content": "Con gái về nhà, đặt túi cạnh cửa. Cha đứng bên bàn, cầm phong thư kín."
+          },
+          {
+            "title": "Cuối",
+            "purpose": "Diễn tiến",
+            "content": "Cha đặt phong thư kín lên bàn rồi lùi lại. Con gái đặt tay cạnh phong thư, chưa nhận hoặc mở; dừng ở đó."
+          }
+        ]
+      },
+      "feedback": null,
+      "feedback_source": null,
+      "reviewed_content": null,
+      "versions": [],
+      "clarification_history": [],
+      "plan_generations": [],
+      "scene_outline": {
+        "id": "3b9ce524-7ed6-4867-be54-618ecc273e25",
+        "version": 2,
+        "scenes": [
+          {
+            "id": "4590c9c1-a150-4a69-ac99-09a90a1b41ee",
+            "title": "Trước đó",
+            "action": "Con gái về nhà, đặt túi cạnh cửa. Cha đứng bên bàn, cầm phong thư kín.",
+            "location": "Một căn phòng",
+            "time": "",
+            "characters": "",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "",
+            "keep_or_avoid": "",
+            "staging_choices": {}
+          },
+          {
+            "id": "6b9d8dd8-c29b-43ef-af8d-d8fb94f45409",
+            "title": "Khoảnh khắc",
+            "action": "Cha đặt phong thư kín lên bàn rồi lùi lại. Con gái đặt tay cạnh phong thư, chưa nhận hoặc mở; dừng ở đó.",
+            "location": "Một căn phòng",
+            "time": "",
+            "characters": "",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "",
+            "keep_or_avoid": "",
+            "staging_choices": {}
+          }
+        ],
+        "source": {
+          "id": "b2bcdb0d-29a1-48f8-bac0-00622c1c9125",
+          "project_revision": 0,
+          "version_id": "current",
+          "draft": {
+            "title": "Lá thư còn kín",
+            "logline": "Cha muốn xin lỗi, con gái chưa quyết định có đón nhận hay không.",
+            "sections": [
+              {
+                "title": "Đầu",
+                "purpose": "Mở",
+                "content": "Con gái về nhà, đặt túi cạnh cửa. Cha đứng bên bàn, cầm phong thư kín."
+              },
+              {
+                "title": "Cuối",
+                "purpose": "Diễn tiến",
+                "content": "Cha đặt phong thư kín lên bàn rồi lùi lại. Con gái đặt tay cạnh phong thư, chưa nhận hoặc mở; dừng ở đó."
+              }
+            ]
+          },
+          "context": {
+            "idea": "Cha muốn xin lỗi, con gái chưa quyết định có đón nhận hay không.",
+            "constraints": [
+              "Chỉ cha và con gái trong một căn nhà.",
+              "Không nói tha thứ hoặc hòa giải xong.",
+              "Phong thư vẫn kín; kết mở, không thêm biến cố."
+            ],
+            "clarifications": [],
+            "pending_questions": []
+          },
+          "response_language": "vi"
+        }
+      },
+      "screenplay": {
+        "id": "8ebf3ab3-ae45-4da9-8ce0-17bd22829e7e",
+        "version": 2,
+        "scenes": [
+          {
+            "id": "0e936ebe-b41f-4f57-9494-300664f629ab",
+            "source_scene_id": "4590c9c1-a150-4a69-ac99-09a90a1b41ee",
+            "heading": "Trước đó",
+            "blocks": [
+              {
+                "kind": "action",
+                "text": "Con gái về nhà, đặt túi cạnh cửa. Cha đứng bên bàn, cầm phong thư kín.",
+                "speaker": "",
+                "id": "f5a28cc8-5b6e-43fc-ac7b-ffa8a885c525"
+              }
+            ]
+          },
+          {
+            "id": "c4a6954a-4405-4ca9-8698-84e83474e0bf",
+            "source_scene_id": "6b9d8dd8-c29b-43ef-af8d-d8fb94f45409",
+            "heading": "Khoảnh khắc",
+            "blocks": [
+              {
+                "kind": "action",
+                "text": "Cha đặt phong thư kín lên bàn rồi lùi lại.",
+                "speaker": "",
+                "id": "57fc509b-8e09-4280-bf99-2277ac58a27f"
+              }
+            ]
+          }
+        ],
+        "source_revision": 2,
+        "source_outline": {
+          "id": "3b9ce524-7ed6-4867-be54-618ecc273e25",
+          "version": 2,
+          "scenes": [
+            {
+              "id": "4590c9c1-a150-4a69-ac99-09a90a1b41ee",
+              "title": "Trước đó",
+              "action": "Con gái về nhà, đặt túi cạnh cửa. Cha đứng bên bàn, cầm phong thư kín.",
+              "location": "Một căn phòng",
+              "time": "",
+              "characters": "",
+              "goal": "",
+              "purpose": "",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {}
+            },
+            {
+              "id": "6b9d8dd8-c29b-43ef-af8d-d8fb94f45409",
+              "title": "Khoảnh khắc",
+              "action": "Cha đặt phong thư kín lên bàn rồi lùi lại. Con gái đặt tay cạnh phong thư, chưa nhận hoặc mở; dừng ở đó.",
+              "location": "Một căn phòng",
+              "time": "",
+              "characters": "",
+              "goal": "",
+              "purpose": "",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {}
+            }
+          ],
+          "source": {
+            "id": "b2bcdb0d-29a1-48f8-bac0-00622c1c9125",
+            "project_revision": 0,
+            "version_id": "current",
+            "draft": {
+              "title": "Lá thư còn kín",
+              "logline": "Cha muốn xin lỗi, con gái chưa quyết định có đón nhận hay không.",
+              "sections": [
+                {
+                  "title": "Đầu",
+                  "purpose": "Mở",
+                  "content": "Con gái về nhà, đặt túi cạnh cửa. Cha đứng bên bàn, cầm phong thư kín."
+                },
+                {
+                  "title": "Cuối",
+                  "purpose": "Diễn tiến",
+                  "content": "Cha đặt phong thư kín lên bàn rồi lùi lại. Con gái đặt tay cạnh phong thư, chưa nhận hoặc mở; dừng ở đó."
+                }
+              ]
+            },
+            "context": {
+              "idea": "Cha muốn xin lỗi, con gái chưa quyết định có đón nhận hay không.",
+              "constraints": [
+                "Chỉ cha và con gái trong một căn nhà.",
+                "Không nói tha thứ hoặc hòa giải xong.",
+                "Phong thư vẫn kín; kết mở, không thêm biến cố."
+              ],
+              "clarifications": [],
+              "pending_questions": []
+            },
+            "response_language": "vi"
+          }
+        }
+      },
+      "screenplay_versions": [
+        {
+          "id": "f1c5a3b0-1f09-4172-8a47-157be665f7f2",
+          "created_at": "2026-10-27T05:17:01.286095+00:00",
+          "screenplay": {
+            "id": "8ebf3ab3-ae45-4da9-8ce0-17bd22829e7e",
+            "version": 1,
+            "scenes": [
+              {
+                "id": "0e936ebe-b41f-4f57-9494-300664f629ab",
+                "source_scene_id": "4590c9c1-a150-4a69-ac99-09a90a1b41ee",
+                "heading": "Trước đó",
+                "blocks": []
+              },
+              {
+                "id": "c4a6954a-4405-4ca9-8698-84e83474e0bf",
+                "source_scene_id": "6b9d8dd8-c29b-43ef-af8d-d8fb94f45409",
+                "heading": "Khoảnh khắc",
+                "blocks": []
+              }
+            ],
+            "source_revision": 2,
+            "source_outline": {
+              "id": "3b9ce524-7ed6-4867-be54-618ecc273e25",
+              "version": 2,
+              "scenes": [
+                {
+                  "id": "4590c9c1-a150-4a69-ac99-09a90a1b41ee",
+                  "title": "Trước đó",
+                  "action": "Con gái về nhà, đặt túi cạnh cửa. Cha đứng bên bàn, cầm phong thư kín.",
+                  "location": "Một căn phòng",
+                  "time": "",
+                  "characters": "",
+                  "goal": "",
+                  "purpose": "",
+                  "viewer_intent": "",
+                  "keep_or_avoid": "",
+                  "staging_choices": {}
+                },
+                {
+                  "id": "6b9d8dd8-c29b-43ef-af8d-d8fb94f45409",
+                  "title": "Khoảnh khắc",
+                  "action": "Cha đặt phong thư kín lên bàn rồi lùi lại. Con gái đặt tay cạnh phong thư, chưa nhận hoặc mở; dừng ở đó.",
+                  "location": "Một căn phòng",
+                  "time": "",
+                  "characters": "",
+                  "goal": "",
+                  "purpose": "",
+                  "viewer_intent": "",
+                  "keep_or_avoid": "",
+                  "staging_choices": {}
+                }
+              ],
+              "source": {
+                "id": "b2bcdb0d-29a1-48f8-bac0-00622c1c9125",
+                "project_revision": 0,
+                "version_id": "current",
+                "draft": {
+                  "title": "Lá thư còn kín",
+                  "logline": "Cha muốn xin lỗi, con gái chưa quyết định có đón nhận hay không.",
+                  "sections": [
+                    {
+                      "title": "Đầu",
+                      "purpose": "Mở",
+                      "content": "Con gái về nhà, đặt túi cạnh cửa. Cha đứng bên bàn, cầm phong thư kín."
+                    },
+                    {
+                      "title": "Cuối",
+                      "purpose": "Diễn tiến",
+                      "content": "Cha đặt phong thư kín lên bàn rồi lùi lại. Con gái đặt tay cạnh phong thư, chưa nhận hoặc mở; dừng ở đó."
+                    }
+                  ]
+                },
+                "context": {
+                  "idea": "Cha muốn xin lỗi, con gái chưa quyết định có đón nhận hay không.",
+                  "constraints": [
+                    "Chỉ cha và con gái trong một căn nhà.",
+                    "Không nói tha thứ hoặc hòa giải xong.",
+                    "Phong thư vẫn kín; kết mở, không thêm biến cố."
+                  ],
+                  "clarifications": [],
+                  "pending_questions": []
+                },
+                "response_language": "vi"
+              }
+            }
+          }
+        }
+      ],
+      "screenplay_proposals": [],
+      "scene_versions": [
+        {
+          "id": "8f0176ea-400c-4707-88c2-8a44b6c5c096",
+          "created_at": "2026-10-27T05:17:01.281421+00:00",
+          "outline": {
+            "id": "3b9ce524-7ed6-4867-be54-618ecc273e25",
+            "version": 1,
+            "scenes": [],
+            "source": {
+              "id": "b2bcdb0d-29a1-48f8-bac0-00622c1c9125",
+              "project_revision": 0,
+              "version_id": "current",
+              "draft": {
+                "title": "Lá thư còn kín",
+                "logline": "Cha muốn xin lỗi, con gái chưa quyết định có đón nhận hay không.",
+                "sections": [
+                  {
+                    "title": "Đầu",
+                    "purpose": "Mở",
+                    "content": "Con gái về nhà, đặt túi cạnh cửa. Cha đứng bên bàn, cầm phong thư kín."
+                  },
+                  {
+                    "title": "Cuối",
+                    "purpose": "Diễn tiến",
+                    "content": "Cha đặt phong thư kín lên bàn rồi lùi lại. Con gái đặt tay cạnh phong thư, chưa nhận hoặc mở; dừng ở đó."
+                  }
+                ]
+              },
+              "context": {
+                "idea": "Cha muốn xin lỗi, con gái chưa quyết định có đón nhận hay không.",
+                "constraints": [
+                  "Chỉ cha và con gái trong một căn nhà.",
+                  "Không nói tha thứ hoặc hòa giải xong.",
+                  "Phong thư vẫn kín; kết mở, không thêm biến cố."
+                ],
+                "clarifications": [],
+                "pending_questions": []
+              },
+              "response_language": "vi"
+            }
+          }
+        }
+      ],
+      "scene_proposals": [],
+      "staging_proposals": [],
+      "scene_sketches": [],
+      "selected_scene_sketches": {},
+      "applicable_screenplay_proposal_ids": [],
+      "screenplay_source_is_current": true,
+      "applicable_sketch_ids": [],
+      "applicable_scene_proposal_ids": [],
+      "scene_source_is_current": true,
+      "scene_handoff": {
+        "outline_id": "3b9ce524-7ed6-4867-be54-618ecc273e25",
+        "version": 2,
+        "project_revision": 4,
+        "source_id": "b2bcdb0d-29a1-48f8-bac0-00622c1c9125",
+        "scenes": [
+          {
+            "id": "4590c9c1-a150-4a69-ac99-09a90a1b41ee",
+            "title": "Trước đó",
+            "action": "Con gái về nhà, đặt túi cạnh cửa. Cha đứng bên bàn, cầm phong thư kín.",
+            "location": "Một căn phòng",
+            "time": "",
+            "characters": "",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "",
+            "keep_or_avoid": "",
+            "staging_choices": {}
+          },
+          {
+            "id": "6b9d8dd8-c29b-43ef-af8d-d8fb94f45409",
+            "title": "Khoảnh khắc",
+            "action": "Cha đặt phong thư kín lên bàn rồi lùi lại. Con gái đặt tay cạnh phong thư, chưa nhận hoặc mở; dừng ở đó.",
+            "location": "Một căn phòng",
+            "time": "",
+            "characters": "",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "",
+            "keep_or_avoid": "",
+            "staging_choices": {}
+          }
+        ]
+      },
+      "applicable_plan_ids": [],
+      "author_context": {
+        "idea": "Cha muốn xin lỗi, con gái chưa quyết định có đón nhận hay không.",
+        "constraints": [
+          "Chỉ cha và con gái trong một căn nhà.",
+          "Không nói tha thứ hoặc hòa giải xong.",
+          "Phong thư vẫn kín; kết mở, không thêm biến cố."
+        ],
+        "clarifications": [],
+        "pending_questions": []
+      },
+      "feedback_is_current": false
+    },
+    "request": {
+      "revision": 4,
+      "request_id": "f2fad746-c755-4545-83e1-7efdb49655c4",
+      "target_scene_id": "c4a6954a-4405-4ca9-8698-84e83474e0bf",
+      "instructions": "Viết bằng hành động, không lời thoại. Giữ quyền quyết định của con gái."
+    },
+    "expected": [
+      "Đúng một cảnh; không kể lại cảnh trở về.",
+      "Thư kín, không lời tha thứ, không chốt hòa giải.",
+      "Bố trí/hành động đọc được; giữ kết mở."
+    ]
+  },
+  {
+    "name": "gentle-comedy",
+    "project": {
+      "response_language": "vi",
+      "id": "412b3c2e-75be-4d34-863b-bec65d9518cb",
+      "revision": 4,
+      "updated_at": "2026-10-27T05:17:01.294897+00:00",
+      "title": "Khóa áo",
+      "idea": "Nam mượn áo của chị Hà đi gặp bạn; khóa áo bị kẹt khiến cậu lúng túng.",
+      "constraints": [
+        "Chỉ Nam và chị Hà trong phòng khách.",
+        "Chuyện vui nhẹ, không làm nhục hoặc mắng em.",
+        "Không thêm người tới, không chuyển cảnh ra ngoài."
+      ],
+      "analysis": null,
+      "answers": [],
+      "clarifications": {},
+      "draft": {
+        "title": "Khóa áo",
+        "logline": "Nam mượn áo của chị Hà đi gặp bạn; khóa áo bị kẹt khiến cậu lúng túng.",
+        "sections": [
+          {
+            "title": "Đầu",
+            "purpose": "Mở",
+            "content": "Nam mặc thử áo khoác của chị Hà trong phòng khách. Khóa áo kẹt ở giữa, Hà chờ cạnh cửa."
+          },
+          {
+            "title": "Cuối",
+            "purpose": "Diễn tiến",
+            "content": "Nam lấy chiếc túi đang cầm che chỗ khóa kẹt. Hà nhìn thấy, đưa tay chờ Nam chịu nhờ giúp; Nam miễn cưỡng đưa vạt áo ra."
+          }
+        ]
+      },
+      "feedback": null,
+      "feedback_source": null,
+      "reviewed_content": null,
+      "versions": [],
+      "clarification_history": [],
+      "plan_generations": [],
+      "scene_outline": {
+        "id": "2081a418-5814-44ff-8d46-22dc7125902f",
+        "version": 2,
+        "scenes": [
+          {
+            "id": "76860157-b98f-439c-8796-f326179f5d5a",
+            "title": "Trước đó",
+            "action": "Nam mặc thử áo khoác của chị Hà trong phòng khách. Khóa áo kẹt ở giữa, Hà chờ cạnh cửa.",
+            "location": "Một căn phòng",
+            "time": "",
+            "characters": "",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "",
+            "keep_or_avoid": "",
+            "staging_choices": {}
+          },
+          {
+            "id": "474fcdcf-6fb1-485f-9293-03411fe34e66",
+            "title": "Khoảnh khắc",
+            "action": "Nam lấy chiếc túi đang cầm che chỗ khóa kẹt. Hà nhìn thấy, đưa tay chờ Nam chịu nhờ giúp; Nam miễn cưỡng đưa vạt áo ra.",
+            "location": "Một căn phòng",
+            "time": "",
+            "characters": "",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "",
+            "keep_or_avoid": "",
+            "staging_choices": {}
+          }
+        ],
+        "source": {
+          "id": "2139c0a7-cd25-45d8-96ef-88d7c832975c",
+          "project_revision": 0,
+          "version_id": "current",
+          "draft": {
+            "title": "Khóa áo",
+            "logline": "Nam mượn áo của chị Hà đi gặp bạn; khóa áo bị kẹt khiến cậu lúng túng.",
+            "sections": [
+              {
+                "title": "Đầu",
+                "purpose": "Mở",
+                "content": "Nam mặc thử áo khoác của chị Hà trong phòng khách. Khóa áo kẹt ở giữa, Hà chờ cạnh cửa."
+              },
+              {
+                "title": "Cuối",
+                "purpose": "Diễn tiến",
+                "content": "Nam lấy chiếc túi đang cầm che chỗ khóa kẹt. Hà nhìn thấy, đưa tay chờ Nam chịu nhờ giúp; Nam miễn cưỡng đưa vạt áo ra."
+              }
+            ]
+          },
+          "context": {
+            "idea": "Nam mượn áo của chị Hà đi gặp bạn; khóa áo bị kẹt khiến cậu lúng túng.",
+            "constraints": [
+              "Chỉ Nam và chị Hà trong phòng khách.",
+              "Chuyện vui nhẹ, không làm nhục hoặc mắng em.",
+              "Không thêm người tới, không chuyển cảnh ra ngoài."
+            ],
+            "clarifications": [],
+            "pending_questions": []
+          },
+          "response_language": "vi"
+        }
+      },
+      "screenplay": {
+        "id": "d2545035-e9cc-49b2-89a1-92c6454efbc2",
+        "version": 2,
+        "scenes": [
+          {
+            "id": "65570493-7e94-4c16-99e6-4ee2e37f151e",
+            "source_scene_id": "76860157-b98f-439c-8796-f326179f5d5a",
+            "heading": "Trước đó",
+            "blocks": [
+              {
+                "kind": "action",
+                "text": "Nam mặc thử áo khoác của chị Hà trong phòng khách. Khóa áo kẹt ở giữa, Hà chờ cạnh cửa.",
+                "speaker": "",
+                "id": "df5b21cb-d190-48da-b6eb-b9e9997d99b4"
+              }
+            ]
+          },
+          {
+            "id": "e40317cd-07a3-4a95-b7f6-0ba50f908d6f",
+            "source_scene_id": "474fcdcf-6fb1-485f-9293-03411fe34e66",
+            "heading": "Khoảnh khắc",
+            "blocks": [
+              {
+                "kind": "action",
+                "text": "Nam lấy chiếc túi đang cầm che chỗ khóa kẹt.",
+                "speaker": "",
+                "id": "28bcc1d7-199d-4eff-a4b1-9f7e774d50ae"
+              }
+            ]
+          }
+        ],
+        "source_revision": 2,
+        "source_outline": {
+          "id": "2081a418-5814-44ff-8d46-22dc7125902f",
+          "version": 2,
+          "scenes": [
+            {
+              "id": "76860157-b98f-439c-8796-f326179f5d5a",
+              "title": "Trước đó",
+              "action": "Nam mặc thử áo khoác của chị Hà trong phòng khách. Khóa áo kẹt ở giữa, Hà chờ cạnh cửa.",
+              "location": "Một căn phòng",
+              "time": "",
+              "characters": "",
+              "goal": "",
+              "purpose": "",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {}
+            },
+            {
+              "id": "474fcdcf-6fb1-485f-9293-03411fe34e66",
+              "title": "Khoảnh khắc",
+              "action": "Nam lấy chiếc túi đang cầm che chỗ khóa kẹt. Hà nhìn thấy, đưa tay chờ Nam chịu nhờ giúp; Nam miễn cưỡng đưa vạt áo ra.",
+              "location": "Một căn phòng",
+              "time": "",
+              "characters": "",
+              "goal": "",
+              "purpose": "",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {}
+            }
+          ],
+          "source": {
+            "id": "2139c0a7-cd25-45d8-96ef-88d7c832975c",
+            "project_revision": 0,
+            "version_id": "current",
+            "draft": {
+              "title": "Khóa áo",
+              "logline": "Nam mượn áo của chị Hà đi gặp bạn; khóa áo bị kẹt khiến cậu lúng túng.",
+              "sections": [
+                {
+                  "title": "Đầu",
+                  "purpose": "Mở",
+                  "content": "Nam mặc thử áo khoác của chị Hà trong phòng khách. Khóa áo kẹt ở giữa, Hà chờ cạnh cửa."
+                },
+                {
+                  "title": "Cuối",
+                  "purpose": "Diễn tiến",
+                  "content": "Nam lấy chiếc túi đang cầm che chỗ khóa kẹt. Hà nhìn thấy, đưa tay chờ Nam chịu nhờ giúp; Nam miễn cưỡng đưa vạt áo ra."
+                }
+              ]
+            },
+            "context": {
+              "idea": "Nam mượn áo của chị Hà đi gặp bạn; khóa áo bị kẹt khiến cậu lúng túng.",
+              "constraints": [
+                "Chỉ Nam và chị Hà trong phòng khách.",
+                "Chuyện vui nhẹ, không làm nhục hoặc mắng em.",
+                "Không thêm người tới, không chuyển cảnh ra ngoài."
+              ],
+              "clarifications": [],
+              "pending_questions": []
+            },
+            "response_language": "vi"
+          }
+        }
+      },
+      "screenplay_versions": [
+        {
+          "id": "6dfe647e-48b5-4311-974d-d9830b4ee690",
+          "created_at": "2026-10-27T05:17:01.294833+00:00",
+          "screenplay": {
+            "id": "d2545035-e9cc-49b2-89a1-92c6454efbc2",
+            "version": 1,
+            "scenes": [
+              {
+                "id": "65570493-7e94-4c16-99e6-4ee2e37f151e",
+                "source_scene_id": "76860157-b98f-439c-8796-f326179f5d5a",
+                "heading": "Trước đó",
+                "blocks": []
+              },
+              {
+                "id": "e40317cd-07a3-4a95-b7f6-0ba50f908d6f",
+                "source_scene_id": "474fcdcf-6fb1-485f-9293-03411fe34e66",
+                "heading": "Khoảnh khắc",
+                "blocks": []
+              }
+            ],
+            "source_revision": 2,
+            "source_outline": {
+              "id": "2081a418-5814-44ff-8d46-22dc7125902f",
+              "version": 2,
+              "scenes": [
+                {
+                  "id": "76860157-b98f-439c-8796-f326179f5d5a",
+                  "title": "Trước đó",
+                  "action": "Nam mặc thử áo khoác của chị Hà trong phòng khách. Khóa áo kẹt ở giữa, Hà chờ cạnh cửa.",
+                  "location": "Một căn phòng",
+                  "time": "",
+                  "characters": "",
+                  "goal": "",
+                  "purpose": "",
+                  "viewer_intent": "",
+                  "keep_or_avoid": "",
+                  "staging_choices": {}
+                },
+                {
+                  "id": "474fcdcf-6fb1-485f-9293-03411fe34e66",
+                  "title": "Khoảnh khắc",
+                  "action": "Nam lấy chiếc túi đang cầm che chỗ khóa kẹt. Hà nhìn thấy, đưa tay chờ Nam chịu nhờ giúp; Nam miễn cưỡng đưa vạt áo ra.",
+                  "location": "Một căn phòng",
+                  "time": "",
+                  "characters": "",
+                  "goal": "",
+                  "purpose": "",
+                  "viewer_intent": "",
+                  "keep_or_avoid": "",
+                  "staging_choices": {}
+                }
+              ],
+              "source": {
+                "id": "2139c0a7-cd25-45d8-96ef-88d7c832975c",
+                "project_revision": 0,
+                "version_id": "current",
+                "draft": {
+                  "title": "Khóa áo",
+                  "logline": "Nam mượn áo của chị Hà đi gặp bạn; khóa áo bị kẹt khiến cậu lúng túng.",
+                  "sections": [
+                    {
+                      "title": "Đầu",
+                      "purpose": "Mở",
+                      "content": "Nam mặc thử áo khoác của chị Hà trong phòng khách. Khóa áo kẹt ở giữa, Hà chờ cạnh cửa."
+                    },
+                    {
+                      "title": "Cuối",
+                      "purpose": "Diễn tiến",
+                      "content": "Nam lấy chiếc túi đang cầm che chỗ khóa kẹt. Hà nhìn thấy, đưa tay chờ Nam chịu nhờ giúp; Nam miễn cưỡng đưa vạt áo ra."
+                    }
+                  ]
+                },
+                "context": {
+                  "idea": "Nam mượn áo của chị Hà đi gặp bạn; khóa áo bị kẹt khiến cậu lúng túng.",
+                  "constraints": [
+                    "Chỉ Nam và chị Hà trong phòng khách.",
+                    "Chuyện vui nhẹ, không làm nhục hoặc mắng em.",
+                    "Không thêm người tới, không chuyển cảnh ra ngoài."
+                  ],
+                  "clarifications": [],
+                  "pending_questions": []
+                },
+                "response_language": "vi"
+              }
+            }
+          }
+        }
+      ],
+      "screenplay_proposals": [],
+      "scene_versions": [
+        {
+          "id": "1b3c88da-4443-4dd5-98f0-e0dcb6bef29f",
+          "created_at": "2026-10-27T05:17:01.291021+00:00",
+          "outline": {
+            "id": "2081a418-5814-44ff-8d46-22dc7125902f",
+            "version": 1,
+            "scenes": [],
+            "source": {
+              "id": "2139c0a7-cd25-45d8-96ef-88d7c832975c",
+              "project_revision": 0,
+              "version_id": "current",
+              "draft": {
+                "title": "Khóa áo",
+                "logline": "Nam mượn áo của chị Hà đi gặp bạn; khóa áo bị kẹt khiến cậu lúng túng.",
+                "sections": [
+                  {
+                    "title": "Đầu",
+                    "purpose": "Mở",
+                    "content": "Nam mặc thử áo khoác của chị Hà trong phòng khách. Khóa áo kẹt ở giữa, Hà chờ cạnh cửa."
+                  },
+                  {
+                    "title": "Cuối",
+                    "purpose": "Diễn tiến",
+                    "content": "Nam lấy chiếc túi đang cầm che chỗ khóa kẹt. Hà nhìn thấy, đưa tay chờ Nam chịu nhờ giúp; Nam miễn cưỡng đưa vạt áo ra."
+                  }
+                ]
+              },
+              "context": {
+                "idea": "Nam mượn áo của chị Hà đi gặp bạn; khóa áo bị kẹt khiến cậu lúng túng.",
+                "constraints": [
+                  "Chỉ Nam và chị Hà trong phòng khách.",
+                  "Chuyện vui nhẹ, không làm nhục hoặc mắng em.",
+                  "Không thêm người tới, không chuyển cảnh ra ngoài."
+                ],
+                "clarifications": [],
+                "pending_questions": []
+              },
+              "response_language": "vi"
+            }
+          }
+        }
+      ],
+      "scene_proposals": [],
+      "staging_proposals": [],
+      "scene_sketches": [],
+      "selected_scene_sketches": {},
+      "applicable_screenplay_proposal_ids": [],
+      "screenplay_source_is_current": true,
+      "applicable_sketch_ids": [],
+      "applicable_scene_proposal_ids": [],
+      "scene_source_is_current": true,
+      "scene_handoff": {
+        "outline_id": "2081a418-5814-44ff-8d46-22dc7125902f",
+        "version": 2,
+        "project_revision": 4,
+        "source_id": "2139c0a7-cd25-45d8-96ef-88d7c832975c",
+        "scenes": [
+          {
+            "id": "76860157-b98f-439c-8796-f326179f5d5a",
+            "title": "Trước đó",
+            "action": "Nam mặc thử áo khoác của chị Hà trong phòng khách. Khóa áo kẹt ở giữa, Hà chờ cạnh cửa.",
+            "location": "Một căn phòng",
+            "time": "",
+            "characters": "",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "",
+            "keep_or_avoid": "",
+            "staging_choices": {}
+          },
+          {
+            "id": "474fcdcf-6fb1-485f-9293-03411fe34e66",
+            "title": "Khoảnh khắc",
+            "action": "Nam lấy chiếc túi đang cầm che chỗ khóa kẹt. Hà nhìn thấy, đưa tay chờ Nam chịu nhờ giúp; Nam miễn cưỡng đưa vạt áo ra.",
+            "location": "Một căn phòng",
+            "time": "",
+            "characters": "",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "",
+            "keep_or_avoid": "",
+            "staging_choices": {}
+          }
+        ]
+      },
+      "applicable_plan_ids": [],
+      "author_context": {
+        "idea": "Nam mượn áo của chị Hà đi gặp bạn; khóa áo bị kẹt khiến cậu lúng túng.",
+        "constraints": [
+          "Chỉ Nam và chị Hà trong phòng khách.",
+          "Chuyện vui nhẹ, không làm nhục hoặc mắng em.",
+          "Không thêm người tới, không chuyển cảnh ra ngoài."
+        ],
+        "clarifications": [],
+        "pending_questions": []
+      },
+      "feedback_is_current": false
+    },
+    "request": {
+      "revision": 4,
+      "request_id": "e7bf3138-e672-4c72-971c-05437d30d76e",
+      "target_scene_id": "e40317cd-07a3-4a95-b7f6-0ba50f908d6f",
+      "instructions": "Có thể dùng lời thoại ngắn tự nhiên giữa chị và em, ưu tiên cử chỉ gây cười."
+    },
+    "expected": [
+      "Đúng một cảnh; tiếp diễn khóa kẹt.",
+      "Hài nhẹ, xưng hô chị/em, không mắng hoặc thêm người.",
+      "Có hành động cụ thể, không biến thành đoạn giải thích."
+    ]
+  },
+  {
+    "name": "limited-resources",
+    "project": {
+      "response_language": "vi",
+      "id": "7b13d162-661a-4d4b-b72c-162b446f1c63",
+      "revision": 4,
+      "updated_at": "2026-10-27T05:17:01.302746+00:00",
+      "title": "Chiếc đèn pin hỏng",
+      "idea": "Lan và Bình ở phòng trọ mất điện, cùng tìm cách đọc một tờ giấy mà không có đèn hoạt động.",
+      "constraints": [
+        "Chỉ Lan và Bình, một phòng trọ ban đêm.",
+        "Đèn pin hỏng không sáng, không điện thoại/đạo cụ mới.",
+        "Dùng bàn, tờ giấy và rèm đã có; ánh đèn đường từ cửa sổ, không đổi thành ban ngày."
+      ],
+      "analysis": null,
+      "answers": [],
+      "clarifications": {},
+      "draft": {
+        "title": "Chiếc đèn pin hỏng",
+        "logline": "Lan và Bình ở phòng trọ mất điện, cùng tìm cách đọc một tờ giấy mà không có đèn hoạt động.",
+        "sections": [
+          {
+            "title": "Đầu",
+            "purpose": "Mở",
+            "content": "Lan đặt tờ giấy lên bàn sát cửa sổ có rèm. Bình bấm chiếc đèn pin hỏng; đèn không sáng."
+          },
+          {
+            "title": "Cuối",
+            "purpose": "Diễn tiến",
+            "content": "Bình đặt đèn pin xuống. Lan kéo rèm để ánh đèn đường rọi vào bàn; cả hai nghiêng tờ giấy để đọc."
+          }
+        ]
+      },
+      "feedback": null,
+      "feedback_source": null,
+      "reviewed_content": null,
+      "versions": [],
+      "clarification_history": [],
+      "plan_generations": [],
+      "scene_outline": {
+        "id": "319f2d28-dd95-480b-8173-69a115771cfe",
+        "version": 2,
+        "scenes": [
+          {
+            "id": "aa65ef75-2377-4405-9011-7227895bdb60",
+            "title": "Trước đó",
+            "action": "Lan đặt tờ giấy lên bàn sát cửa sổ có rèm. Bình bấm chiếc đèn pin hỏng; đèn không sáng.",
+            "location": "Một căn phòng",
+            "time": "",
+            "characters": "",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "",
+            "keep_or_avoid": "",
+            "staging_choices": {}
+          },
+          {
+            "id": "c5d358ed-0a16-4b6f-8b27-6dc3600aedbf",
+            "title": "Khoảnh khắc",
+            "action": "Bình đặt đèn pin xuống. Lan kéo rèm để ánh đèn đường rọi vào bàn; cả hai nghiêng tờ giấy để đọc.",
+            "location": "Một căn phòng",
+            "time": "",
+            "characters": "",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "",
+            "keep_or_avoid": "",
+            "staging_choices": {}
+          }
+        ],
+        "source": {
+          "id": "555d504e-0c18-42d6-b777-d0b726b240bb",
+          "project_revision": 0,
+          "version_id": "current",
+          "draft": {
+            "title": "Chiếc đèn pin hỏng",
+            "logline": "Lan và Bình ở phòng trọ mất điện, cùng tìm cách đọc một tờ giấy mà không có đèn hoạt động.",
+            "sections": [
+              {
+                "title": "Đầu",
+                "purpose": "Mở",
+                "content": "Lan đặt tờ giấy lên bàn sát cửa sổ có rèm. Bình bấm chiếc đèn pin hỏng; đèn không sáng."
+              },
+              {
+                "title": "Cuối",
+                "purpose": "Diễn tiến",
+                "content": "Bình đặt đèn pin xuống. Lan kéo rèm để ánh đèn đường rọi vào bàn; cả hai nghiêng tờ giấy để đọc."
+              }
+            ]
+          },
+          "context": {
+            "idea": "Lan và Bình ở phòng trọ mất điện, cùng tìm cách đọc một tờ giấy mà không có đèn hoạt động.",
+            "constraints": [
+              "Chỉ Lan và Bình, một phòng trọ ban đêm.",
+              "Đèn pin hỏng không sáng, không điện thoại/đạo cụ mới.",
+              "Dùng bàn, tờ giấy và rèm đã có; ánh đèn đường từ cửa sổ, không đổi thành ban ngày."
+            ],
+            "clarifications": [],
+            "pending_questions": []
+          },
+          "response_language": "vi"
+        }
+      },
+      "screenplay": {
+        "id": "cb1e32ad-b047-48e5-9b69-b50a237d2736",
+        "version": 2,
+        "scenes": [
+          {
+            "id": "79b16475-551f-4a3b-a301-41caf247fb5f",
+            "source_scene_id": "aa65ef75-2377-4405-9011-7227895bdb60",
+            "heading": "Trước đó",
+            "blocks": [
+              {
+                "kind": "action",
+                "text": "Lan đặt tờ giấy lên bàn sát cửa sổ có rèm. Bình bấm chiếc đèn pin hỏng; đèn không sáng.",
+                "speaker": "",
+                "id": "f4b4cd32-eb4b-4fa9-bab5-94a6526f1bf5"
+              }
+            ]
+          },
+          {
+            "id": "309e1a8e-5563-4415-aed7-cb832abce7a8",
+            "source_scene_id": "c5d358ed-0a16-4b6f-8b27-6dc3600aedbf",
+            "heading": "Khoảnh khắc",
+            "blocks": [
+              {
+                "kind": "action",
+                "text": "Bình đặt đèn pin xuống.",
+                "speaker": "",
+                "id": "ab1f7a6a-426d-49e3-9ad2-faaf6e91c336"
+              }
+            ]
+          }
+        ],
+        "source_revision": 2,
+        "source_outline": {
+          "id": "319f2d28-dd95-480b-8173-69a115771cfe",
+          "version": 2,
+          "scenes": [
+            {
+              "id": "aa65ef75-2377-4405-9011-7227895bdb60",
+              "title": "Trước đó",
+              "action": "Lan đặt tờ giấy lên bàn sát cửa sổ có rèm. Bình bấm chiếc đèn pin hỏng; đèn không sáng.",
+              "location": "Một căn phòng",
+              "time": "",
+              "characters": "",
+              "goal": "",
+              "purpose": "",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {}
+            },
+            {
+              "id": "c5d358ed-0a16-4b6f-8b27-6dc3600aedbf",
+              "title": "Khoảnh khắc",
+              "action": "Bình đặt đèn pin xuống. Lan kéo rèm để ánh đèn đường rọi vào bàn; cả hai nghiêng tờ giấy để đọc.",
+              "location": "Một căn phòng",
+              "time": "",
+              "characters": "",
+              "goal": "",
+              "purpose": "",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {}
+            }
+          ],
+          "source": {
+            "id": "555d504e-0c18-42d6-b777-d0b726b240bb",
+            "project_revision": 0,
+            "version_id": "current",
+            "draft": {
+              "title": "Chiếc đèn pin hỏng",
+              "logline": "Lan và Bình ở phòng trọ mất điện, cùng tìm cách đọc một tờ giấy mà không có đèn hoạt động.",
+              "sections": [
+                {
+                  "title": "Đầu",
+                  "purpose": "Mở",
+                  "content": "Lan đặt tờ giấy lên bàn sát cửa sổ có rèm. Bình bấm chiếc đèn pin hỏng; đèn không sáng."
+                },
+                {
+                  "title": "Cuối",
+                  "purpose": "Diễn tiến",
+                  "content": "Bình đặt đèn pin xuống. Lan kéo rèm để ánh đèn đường rọi vào bàn; cả hai nghiêng tờ giấy để đọc."
+                }
+              ]
+            },
+            "context": {
+              "idea": "Lan và Bình ở phòng trọ mất điện, cùng tìm cách đọc một tờ giấy mà không có đèn hoạt động.",
+              "constraints": [
+                "Chỉ Lan và Bình, một phòng trọ ban đêm.",
+                "Đèn pin hỏng không sáng, không điện thoại/đạo cụ mới.",
+                "Dùng bàn, tờ giấy và rèm đã có; ánh đèn đường từ cửa sổ, không đổi thành ban ngày."
+              ],
+              "clarifications": [],
+              "pending_questions": []
+            },
+            "response_language": "vi"
+          }
+        }
+      },
+      "screenplay_versions": [
+        {
+          "id": "eeb5e017-25da-4753-819c-e67f7c18b9c9",
+          "created_at": "2026-10-27T05:17:01.302680+00:00",
+          "screenplay": {
+            "id": "cb1e32ad-b047-48e5-9b69-b50a237d2736",
+            "version": 1,
+            "scenes": [
+              {
+                "id": "79b16475-551f-4a3b-a301-41caf247fb5f",
+                "source_scene_id": "aa65ef75-2377-4405-9011-7227895bdb60",
+                "heading": "Trước đó",
+                "blocks": []
+              },
+              {
+                "id": "309e1a8e-5563-4415-aed7-cb832abce7a8",
+                "source_scene_id": "c5d358ed-0a16-4b6f-8b27-6dc3600aedbf",
+                "heading": "Khoảnh khắc",
+                "blocks": []
+              }
+            ],
+            "source_revision": 2,
+            "source_outline": {
+              "id": "319f2d28-dd95-480b-8173-69a115771cfe",
+              "version": 2,
+              "scenes": [
+                {
+                  "id": "aa65ef75-2377-4405-9011-7227895bdb60",
+                  "title": "Trước đó",
+                  "action": "Lan đặt tờ giấy lên bàn sát cửa sổ có rèm. Bình bấm chiếc đèn pin hỏng; đèn không sáng.",
+                  "location": "Một căn phòng",
+                  "time": "",
+                  "characters": "",
+                  "goal": "",
+                  "purpose": "",
+                  "viewer_intent": "",
+                  "keep_or_avoid": "",
+                  "staging_choices": {}
+                },
+                {
+                  "id": "c5d358ed-0a16-4b6f-8b27-6dc3600aedbf",
+                  "title": "Khoảnh khắc",
+                  "action": "Bình đặt đèn pin xuống. Lan kéo rèm để ánh đèn đường rọi vào bàn; cả hai nghiêng tờ giấy để đọc.",
+                  "location": "Một căn phòng",
+                  "time": "",
+                  "characters": "",
+                  "goal": "",
+                  "purpose": "",
+                  "viewer_intent": "",
+                  "keep_or_avoid": "",
+                  "staging_choices": {}
+                }
+              ],
+              "source": {
+                "id": "555d504e-0c18-42d6-b777-d0b726b240bb",
+                "project_revision": 0,
+                "version_id": "current",
+                "draft": {
+                  "title": "Chiếc đèn pin hỏng",
+                  "logline": "Lan và Bình ở phòng trọ mất điện, cùng tìm cách đọc một tờ giấy mà không có đèn hoạt động.",
+                  "sections": [
+                    {
+                      "title": "Đầu",
+                      "purpose": "Mở",
+                      "content": "Lan đặt tờ giấy lên bàn sát cửa sổ có rèm. Bình bấm chiếc đèn pin hỏng; đèn không sáng."
+                    },
+                    {
+                      "title": "Cuối",
+                      "purpose": "Diễn tiến",
+                      "content": "Bình đặt đèn pin xuống. Lan kéo rèm để ánh đèn đường rọi vào bàn; cả hai nghiêng tờ giấy để đọc."
+                    }
+                  ]
+                },
+                "context": {
+                  "idea": "Lan và Bình ở phòng trọ mất điện, cùng tìm cách đọc một tờ giấy mà không có đèn hoạt động.",
+                  "constraints": [
+                    "Chỉ Lan và Bình, một phòng trọ ban đêm.",
+                    "Đèn pin hỏng không sáng, không điện thoại/đạo cụ mới.",
+                    "Dùng bàn, tờ giấy và rèm đã có; ánh đèn đường từ cửa sổ, không đổi thành ban ngày."
+                  ],
+                  "clarifications": [],
+                  "pending_questions": []
+                },
+                "response_language": "vi"
+              }
+            }
+          }
+        }
+      ],
+      "screenplay_proposals": [],
+      "scene_versions": [
+        {
+          "id": "eb8db11d-3eb9-442f-b4b6-7ef13a27381e",
+          "created_at": "2026-10-27T05:17:01.298857+00:00",
+          "outline": {
+            "id": "319f2d28-dd95-480b-8173-69a115771cfe",
+            "version": 1,
+            "scenes": [],
+            "source": {
+              "id": "555d504e-0c18-42d6-b777-d0b726b240bb",
+              "project_revision": 0,
+              "version_id": "current",
+              "draft": {
+                "title": "Chiếc đèn pin hỏng",
+                "logline": "Lan và Bình ở phòng trọ mất điện, cùng tìm cách đọc một tờ giấy mà không có đèn hoạt động.",
+                "sections": [
+                  {
+                    "title": "Đầu",
+                    "purpose": "Mở",
+                    "content": "Lan đặt tờ giấy lên bàn sát cửa sổ có rèm. Bình bấm chiếc đèn pin hỏng; đèn không sáng."
+                  },
+                  {
+                    "title": "Cuối",
+                    "purpose": "Diễn tiến",
+                    "content": "Bình đặt đèn pin xuống. Lan kéo rèm để ánh đèn đường rọi vào bàn; cả hai nghiêng tờ giấy để đọc."
+                  }
+                ]
+              },
+              "context": {
+                "idea": "Lan và Bình ở phòng trọ mất điện, cùng tìm cách đọc một tờ giấy mà không có đèn hoạt động.",
+                "constraints": [
+                  "Chỉ Lan và Bình, một phòng trọ ban đêm.",
+                  "Đèn pin hỏng không sáng, không điện thoại/đạo cụ mới.",
+                  "Dùng bàn, tờ giấy và rèm đã có; ánh đèn đường từ cửa sổ, không đổi thành ban ngày."
+                ],
+                "clarifications": [],
+                "pending_questions": []
+              },
+              "response_language": "vi"
+            }
+          }
+        }
+      ],
+      "scene_proposals": [],
+      "staging_proposals": [],
+      "scene_sketches": [],
+      "selected_scene_sketches": {},
+      "applicable_screenplay_proposal_ids": [],
+      "screenplay_source_is_current": true,
+      "applicable_sketch_ids": [],
+      "applicable_scene_proposal_ids": [],
+      "scene_source_is_current": true,
+      "scene_handoff": {
+        "outline_id": "319f2d28-dd95-480b-8173-69a115771cfe",
+        "version": 2,
+        "project_revision": 4,
+        "source_id": "555d504e-0c18-42d6-b777-d0b726b240bb",
+        "scenes": [
+          {
+            "id": "aa65ef75-2377-4405-9011-7227895bdb60",
+            "title": "Trước đó",
+            "action": "Lan đặt tờ giấy lên bàn sát cửa sổ có rèm. Bình bấm chiếc đèn pin hỏng; đèn không sáng.",
+            "location": "Một căn phòng",
+            "time": "",
+            "characters": "",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "",
+            "keep_or_avoid": "",
+            "staging_choices": {}
+          },
+          {
+            "id": "c5d358ed-0a16-4b6f-8b27-6dc3600aedbf",
+            "title": "Khoảnh khắc",
+            "action": "Bình đặt đèn pin xuống. Lan kéo rèm để ánh đèn đường rọi vào bàn; cả hai nghiêng tờ giấy để đọc.",
+            "location": "Một căn phòng",
+            "time": "",
+            "characters": "",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "",
+            "keep_or_avoid": "",
+            "staging_choices": {}
+          }
+        ]
+      },
+      "applicable_plan_ids": [],
+      "author_context": {
+        "idea": "Lan và Bình ở phòng trọ mất điện, cùng tìm cách đọc một tờ giấy mà không có đèn hoạt động.",
+        "constraints": [
+          "Chỉ Lan và Bình, một phòng trọ ban đêm.",
+          "Đèn pin hỏng không sáng, không điện thoại/đạo cụ mới.",
+          "Dùng bàn, tờ giấy và rèm đã có; ánh đèn đường từ cửa sổ, không đổi thành ban ngày."
+        ],
+        "clarifications": [],
+        "pending_questions": []
+      },
+      "feedback_is_current": false
+    },
+    "request": {
+      "revision": 4,
+      "request_id": "340d705a-2409-4dcd-8f58-dd07eca9eb69",
+      "target_scene_id": "309e1a8e-5563-4415-aed7-cb832abce7a8",
+      "instructions": "Viết một cảnh ngắn, hành động rõ; có thể không cần lời thoại."
+    },
+    "expected": [
+      "Đúng một cảnh và giữ liên tục đồ vật.",
+      "Không làm đèn pin sáng, thêm điện thoại/người/địa điểm.",
+      "Ánh đèn đường ban đêm và hành động đọc giấy có thể hình dung."
+    ]
+  }
+]

@@ -1,0 +1,590 @@
+{
+  "response_language": "vi",
+  "id": "7b13d162-661a-4d4b-b72c-162b446f1c63",
+  "revision": 7,
+  "updated_at": "2026-10-27T05:18:39.450283+00:00",
+  "title": "Chiếc đèn pin hỏng",
+  "idea": "Lan và Bình ở phòng trọ mất điện, cùng tìm cách đọc một tờ giấy mà không có đèn hoạt động.",
+  "constraints": [
+    "Chỉ Lan và Bình, một phòng trọ ban đêm.",
+    "Đèn pin hỏng không sáng, không điện thoại/đạo cụ mới.",
+    "Dùng bàn, tờ giấy và rèm đã có; ánh đèn đường từ cửa sổ, không đổi thành ban ngày."
+  ],
+  "analysis": null,
+  "answers": [],
+  "clarifications": {},
+  "draft": {
+    "title": "Chiếc đèn pin hỏng",
+    "logline": "Lan và Bình ở phòng trọ mất điện, cùng tìm cách đọc một tờ giấy mà không có đèn hoạt động.",
+    "sections": [
+      {
+        "title": "Đầu",
+        "purpose": "Mở",
+        "content": "Lan đặt tờ giấy lên bàn sát cửa sổ có rèm. Bình bấm chiếc đèn pin hỏng; đèn không sáng."
+      },
+      {
+        "title": "Cuối",
+        "purpose": "Diễn tiến",
+        "content": "Bình đặt đèn pin xuống. Lan kéo rèm để ánh đèn đường rọi vào bàn; cả hai nghiêng tờ giấy để đọc."
+      }
+    ]
+  },
+  "feedback": null,
+  "feedback_source": null,
+  "reviewed_content": null,
+  "versions": [],
+  "clarification_history": [],
+  "plan_generations": [],
+  "scene_outline": {
+    "id": "319f2d28-dd95-480b-8173-69a115771cfe",
+    "version": 2,
+    "scenes": [
+      {
+        "id": "aa65ef75-2377-4405-9011-7227895bdb60",
+        "title": "Trước đó",
+        "action": "Lan đặt tờ giấy lên bàn sát cửa sổ có rèm. Bình bấm chiếc đèn pin hỏng; đèn không sáng.",
+        "location": "Một căn phòng",
+        "time": "",
+        "characters": "",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      },
+      {
+        "id": "c5d358ed-0a16-4b6f-8b27-6dc3600aedbf",
+        "title": "Khoảnh khắc",
+        "action": "Bình đặt đèn pin xuống. Lan kéo rèm để ánh đèn đường rọi vào bàn; cả hai nghiêng tờ giấy để đọc.",
+        "location": "Một căn phòng",
+        "time": "",
+        "characters": "",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      }
+    ],
+    "source": {
+      "id": "555d504e-0c18-42d6-b777-d0b726b240bb",
+      "project_revision": 0,
+      "version_id": "current",
+      "draft": {
+        "title": "Chiếc đèn pin hỏng",
+        "logline": "Lan và Bình ở phòng trọ mất điện, cùng tìm cách đọc một tờ giấy mà không có đèn hoạt động.",
+        "sections": [
+          {
+            "title": "Đầu",
+            "purpose": "Mở",
+            "content": "Lan đặt tờ giấy lên bàn sát cửa sổ có rèm. Bình bấm chiếc đèn pin hỏng; đèn không sáng."
+          },
+          {
+            "title": "Cuối",
+            "purpose": "Diễn tiến",
+            "content": "Bình đặt đèn pin xuống. Lan kéo rèm để ánh đèn đường rọi vào bàn; cả hai nghiêng tờ giấy để đọc."
+          }
+        ]
+      },
+      "context": {
+        "idea": "Lan và Bình ở phòng trọ mất điện, cùng tìm cách đọc một tờ giấy mà không có đèn hoạt động.",
+        "constraints": [
+          "Chỉ Lan và Bình, một phòng trọ ban đêm.",
+          "Đèn pin hỏng không sáng, không điện thoại/đạo cụ mới.",
+          "Dùng bàn, tờ giấy và rèm đã có; ánh đèn đường từ cửa sổ, không đổi thành ban ngày."
+        ],
+        "clarifications": [],
+        "pending_questions": []
+      },
+      "response_language": "vi"
+    }
+  },
+  "screenplay": {
+    "id": "cb1e32ad-b047-48e5-9b69-b50a237d2736",
+    "version": 2,
+    "scenes": [
+      {
+        "id": "79b16475-551f-4a3b-a301-41caf247fb5f",
+        "source_scene_id": "aa65ef75-2377-4405-9011-7227895bdb60",
+        "heading": "Trước đó",
+        "blocks": [
+          {
+            "kind": "action",
+            "text": "Lan đặt tờ giấy lên bàn sát cửa sổ có rèm. Bình bấm chiếc đèn pin hỏng; đèn không sáng.",
+            "speaker": "",
+            "id": "f4b4cd32-eb4b-4fa9-bab5-94a6526f1bf5"
+          }
+        ]
+      },
+      {
+        "id": "309e1a8e-5563-4415-aed7-cb832abce7a8",
+        "source_scene_id": "c5d358ed-0a16-4b6f-8b27-6dc3600aedbf",
+        "heading": "Khoảnh khắc",
+        "blocks": [
+          {
+            "kind": "action",
+            "text": "Bình đặt đèn pin xuống.",
+            "speaker": "",
+            "id": "ab1f7a6a-426d-49e3-9ad2-faaf6e91c336"
+          }
+        ]
+      }
+    ],
+    "source_revision": 2,
+    "source_outline": {
+      "id": "319f2d28-dd95-480b-8173-69a115771cfe",
+      "version": 2,
+      "scenes": [
+        {
+          "id": "aa65ef75-2377-4405-9011-7227895bdb60",
+          "title": "Trước đó",
+          "action": "Lan đặt tờ giấy lên bàn sát cửa sổ có rèm. Bình bấm chiếc đèn pin hỏng; đèn không sáng.",
+          "location": "Một căn phòng",
+          "time": "",
+          "characters": "",
+          "goal": "",
+          "purpose": "",
+          "viewer_intent": "",
+          "keep_or_avoid": "",
+          "staging_choices": {}
+        },
+        {
+          "id": "c5d358ed-0a16-4b6f-8b27-6dc3600aedbf",
+          "title": "Khoảnh khắc",
+          "action": "Bình đặt đèn pin xuống. Lan kéo rèm để ánh đèn đường rọi vào bàn; cả hai nghiêng tờ giấy để đọc.",
+          "location": "Một căn phòng",
+          "time": "",
+          "characters": "",
+          "goal": "",
+          "purpose": "",
+          "viewer_intent": "",
+          "keep_or_avoid": "",
+          "staging_choices": {}
+        }
+      ],
+      "source": {
+        "id": "555d504e-0c18-42d6-b777-d0b726b240bb",
+        "project_revision": 0,
+        "version_id": "current",
+        "draft": {
+          "title": "Chiếc đèn pin hỏng",
+          "logline": "Lan và Bình ở phòng trọ mất điện, cùng tìm cách đọc một tờ giấy mà không có đèn hoạt động.",
+          "sections": [
+            {
+              "title": "Đầu",
+              "purpose": "Mở",
+              "content": "Lan đặt tờ giấy lên bàn sát cửa sổ có rèm. Bình bấm chiếc đèn pin hỏng; đèn không sáng."
+            },
+            {
+              "title": "Cuối",
+              "purpose": "Diễn tiến",
+              "content": "Bình đặt đèn pin xuống. Lan kéo rèm để ánh đèn đường rọi vào bàn; cả hai nghiêng tờ giấy để đọc."
+            }
+          ]
+        },
+        "context": {
+          "idea": "Lan và Bình ở phòng trọ mất điện, cùng tìm cách đọc một tờ giấy mà không có đèn hoạt động.",
+          "constraints": [
+            "Chỉ Lan và Bình, một phòng trọ ban đêm.",
+            "Đèn pin hỏng không sáng, không điện thoại/đạo cụ mới.",
+            "Dùng bàn, tờ giấy và rèm đã có; ánh đèn đường từ cửa sổ, không đổi thành ban ngày."
+          ],
+          "clarifications": [],
+          "pending_questions": []
+        },
+        "response_language": "vi"
+      }
+    }
+  },
+  "screenplay_versions": [
+    {
+      "id": "eeb5e017-25da-4753-819c-e67f7c18b9c9",
+      "created_at": "2026-10-27T05:17:01.302680+00:00",
+      "screenplay": {
+        "id": "cb1e32ad-b047-48e5-9b69-b50a237d2736",
+        "version": 1,
+        "scenes": [
+          {
+            "id": "79b16475-551f-4a3b-a301-41caf247fb5f",
+            "source_scene_id": "aa65ef75-2377-4405-9011-7227895bdb60",
+            "heading": "Trước đó",
+            "blocks": []
+          },
+          {
+            "id": "309e1a8e-5563-4415-aed7-cb832abce7a8",
+            "source_scene_id": "c5d358ed-0a16-4b6f-8b27-6dc3600aedbf",
+            "heading": "Khoảnh khắc",
+            "blocks": []
+          }
+        ],
+        "source_revision": 2,
+        "source_outline": {
+          "id": "319f2d28-dd95-480b-8173-69a115771cfe",
+          "version": 2,
+          "scenes": [
+            {
+              "id": "aa65ef75-2377-4405-9011-7227895bdb60",
+              "title": "Trước đó",
+              "action": "Lan đặt tờ giấy lên bàn sát cửa sổ có rèm. Bình bấm chiếc đèn pin hỏng; đèn không sáng.",
+              "location": "Một căn phòng",
+              "time": "",
+              "characters": "",
+              "goal": "",
+              "purpose": "",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {}
+            },
+            {
+              "id": "c5d358ed-0a16-4b6f-8b27-6dc3600aedbf",
+              "title": "Khoảnh khắc",
+              "action": "Bình đặt đèn pin xuống. Lan kéo rèm để ánh đèn đường rọi vào bàn; cả hai nghiêng tờ giấy để đọc.",
+              "location": "Một căn phòng",
+              "time": "",
+              "characters": "",
+              "goal": "",
+              "purpose": "",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {}
+            }
+          ],
+          "source": {
+            "id": "555d504e-0c18-42d6-b777-d0b726b240bb",
+            "project_revision": 0,
+            "version_id": "current",
+            "draft": {
+              "title": "Chiếc đèn pin hỏng",
+              "logline": "Lan và Bình ở phòng trọ mất điện, cùng tìm cách đọc một tờ giấy mà không có đèn hoạt động.",
+              "sections": [
+                {
+                  "title": "Đầu",
+                  "purpose": "Mở",
+                  "content": "Lan đặt tờ giấy lên bàn sát cửa sổ có rèm. Bình bấm chiếc đèn pin hỏng; đèn không sáng."
+                },
+                {
+                  "title": "Cuối",
+                  "purpose": "Diễn tiến",
+                  "content": "Bình đặt đèn pin xuống. Lan kéo rèm để ánh đèn đường rọi vào bàn; cả hai nghiêng tờ giấy để đọc."
+                }
+              ]
+            },
+            "context": {
+              "idea": "Lan và Bình ở phòng trọ mất điện, cùng tìm cách đọc một tờ giấy mà không có đèn hoạt động.",
+              "constraints": [
+                "Chỉ Lan và Bình, một phòng trọ ban đêm.",
+                "Đèn pin hỏng không sáng, không điện thoại/đạo cụ mới.",
+                "Dùng bàn, tờ giấy và rèm đã có; ánh đèn đường từ cửa sổ, không đổi thành ban ngày."
+              ],
+              "clarifications": [],
+              "pending_questions": []
+            },
+            "response_language": "vi"
+          }
+        }
+      }
+    }
+  ],
+  "screenplay_proposals": [
+    {
+      "id": "340d705a-2409-4dcd-8f58-dd07eca9eb69",
+      "created_at": "2026-10-27T05:18:19.728937+00:00",
+      "source_revision": 4,
+      "source_content": "{\"answers\": [], \"clarifications\": {}, \"constraints\": [\"Chỉ Lan và Bình, một phòng trọ ban đêm.\", \"Đèn pin hỏng không sáng, không điện thoại/đạo cụ mới.\", \"Dùng bàn, tờ giấy và rèm đã có; ánh đèn đường từ cửa sổ, không đổi thành ban ngày.\"], \"draft\": {\"logline\": \"Lan và Bình ở phòng trọ mất điện, cùng tìm cách đọc một tờ giấy mà không có đèn hoạt động.\", \"sections\": [{\"content\": \"Lan đặt tờ giấy lên bàn sát cửa sổ có rèm. Bình bấm chiếc đèn pin hỏng; đèn không sáng.\", \"purpose\": \"Mở\", \"title\": \"Đầu\"}, {\"content\": \"Bình đặt đèn pin xuống. Lan kéo rèm để ánh đèn đường rọi vào bàn; cả hai nghiêng tờ giấy để đọc.\", \"purpose\": \"Diễn tiến\", \"title\": \"Cuối\"}], \"title\": \"Chiếc đèn pin hỏng\"}, \"idea\": \"Lan và Bình ở phòng trọ mất điện, cùng tìm cách đọc một tờ giấy mà không có đèn hoạt động.\", \"questions\": [], \"response_language\": \"vi\"}",
+      "source_screenplay": {
+        "id": "cb1e32ad-b047-48e5-9b69-b50a237d2736",
+        "version": 2,
+        "scenes": [
+          {
+            "id": "79b16475-551f-4a3b-a301-41caf247fb5f",
+            "source_scene_id": "aa65ef75-2377-4405-9011-7227895bdb60",
+            "heading": "Trước đó",
+            "blocks": [
+              {
+                "kind": "action",
+                "text": "Lan đặt tờ giấy lên bàn sát cửa sổ có rèm. Bình bấm chiếc đèn pin hỏng; đèn không sáng.",
+                "speaker": "",
+                "id": "f4b4cd32-eb4b-4fa9-bab5-94a6526f1bf5"
+              }
+            ]
+          },
+          {
+            "id": "309e1a8e-5563-4415-aed7-cb832abce7a8",
+            "source_scene_id": "c5d358ed-0a16-4b6f-8b27-6dc3600aedbf",
+            "heading": "Khoảnh khắc",
+            "blocks": [
+              {
+                "kind": "action",
+                "text": "Bình đặt đèn pin xuống.",
+                "speaker": "",
+                "id": "ab1f7a6a-426d-49e3-9ad2-faaf6e91c336"
+              }
+            ]
+          }
+        ],
+        "source_revision": 2,
+        "source_outline": {
+          "id": "319f2d28-dd95-480b-8173-69a115771cfe",
+          "version": 2,
+          "scenes": [
+            {
+              "id": "aa65ef75-2377-4405-9011-7227895bdb60",
+              "title": "Trước đó",
+              "action": "Lan đặt tờ giấy lên bàn sát cửa sổ có rèm. Bình bấm chiếc đèn pin hỏng; đèn không sáng.",
+              "location": "Một căn phòng",
+              "time": "",
+              "characters": "",
+              "goal": "",
+              "purpose": "",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {}
+            },
+            {
+              "id": "c5d358ed-0a16-4b6f-8b27-6dc3600aedbf",
+              "title": "Khoảnh khắc",
+              "action": "Bình đặt đèn pin xuống. Lan kéo rèm để ánh đèn đường rọi vào bàn; cả hai nghiêng tờ giấy để đọc.",
+              "location": "Một căn phòng",
+              "time": "",
+              "characters": "",
+              "goal": "",
+              "purpose": "",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {}
+            }
+          ],
+          "source": {
+            "id": "555d504e-0c18-42d6-b777-d0b726b240bb",
+            "project_revision": 0,
+            "version_id": "current",
+            "draft": {
+              "title": "Chiếc đèn pin hỏng",
+              "logline": "Lan và Bình ở phòng trọ mất điện, cùng tìm cách đọc một tờ giấy mà không có đèn hoạt động.",
+              "sections": [
+                {
+                  "title": "Đầu",
+                  "purpose": "Mở",
+                  "content": "Lan đặt tờ giấy lên bàn sát cửa sổ có rèm. Bình bấm chiếc đèn pin hỏng; đèn không sáng."
+                },
+                {
+                  "title": "Cuối",
+                  "purpose": "Diễn tiến",
+                  "content": "Bình đặt đèn pin xuống. Lan kéo rèm để ánh đèn đường rọi vào bàn; cả hai nghiêng tờ giấy để đọc."
+                }
+              ]
+            },
+            "context": {
+              "idea": "Lan và Bình ở phòng trọ mất điện, cùng tìm cách đọc một tờ giấy mà không có đèn hoạt động.",
+              "constraints": [
+                "Chỉ Lan và Bình, một phòng trọ ban đêm.",
+                "Đèn pin hỏng không sáng, không điện thoại/đạo cụ mới.",
+                "Dùng bàn, tờ giấy và rèm đã có; ánh đèn đường từ cửa sổ, không đổi thành ban ngày."
+              ],
+              "clarifications": [],
+              "pending_questions": []
+            },
+            "response_language": "vi"
+          }
+        }
+      },
+      "source_outline": {
+        "id": "319f2d28-dd95-480b-8173-69a115771cfe",
+        "version": 2,
+        "scenes": [
+          {
+            "id": "aa65ef75-2377-4405-9011-7227895bdb60",
+            "title": "Trước đó",
+            "action": "Lan đặt tờ giấy lên bàn sát cửa sổ có rèm. Bình bấm chiếc đèn pin hỏng; đèn không sáng.",
+            "location": "Một căn phòng",
+            "time": "",
+            "characters": "",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "",
+            "keep_or_avoid": "",
+            "staging_choices": {}
+          },
+          {
+            "id": "c5d358ed-0a16-4b6f-8b27-6dc3600aedbf",
+            "title": "Khoảnh khắc",
+            "action": "Bình đặt đèn pin xuống. Lan kéo rèm để ánh đèn đường rọi vào bàn; cả hai nghiêng tờ giấy để đọc.",
+            "location": "Một căn phòng",
+            "time": "",
+            "characters": "",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "",
+            "keep_or_avoid": "",
+            "staging_choices": {}
+          }
+        ],
+        "source": {
+          "id": "555d504e-0c18-42d6-b777-d0b726b240bb",
+          "project_revision": 0,
+          "version_id": "current",
+          "draft": {
+            "title": "Chiếc đèn pin hỏng",
+            "logline": "Lan và Bình ở phòng trọ mất điện, cùng tìm cách đọc một tờ giấy mà không có đèn hoạt động.",
+            "sections": [
+              {
+                "title": "Đầu",
+                "purpose": "Mở",
+                "content": "Lan đặt tờ giấy lên bàn sát cửa sổ có rèm. Bình bấm chiếc đèn pin hỏng; đèn không sáng."
+              },
+              {
+                "title": "Cuối",
+                "purpose": "Diễn tiến",
+                "content": "Bình đặt đèn pin xuống. Lan kéo rèm để ánh đèn đường rọi vào bàn; cả hai nghiêng tờ giấy để đọc."
+              }
+            ]
+          },
+          "context": {
+            "idea": "Lan và Bình ở phòng trọ mất điện, cùng tìm cách đọc một tờ giấy mà không có đèn hoạt động.",
+            "constraints": [
+              "Chỉ Lan và Bình, một phòng trọ ban đêm.",
+              "Đèn pin hỏng không sáng, không điện thoại/đạo cụ mới.",
+              "Dùng bàn, tờ giấy và rèm đã có; ánh đèn đường từ cửa sổ, không đổi thành ban ngày."
+            ],
+            "clarifications": [],
+            "pending_questions": []
+          },
+          "response_language": "vi"
+        }
+      },
+      "target_scene_id": "309e1a8e-5563-4415-aed7-cb832abce7a8",
+      "instructions": "Viết một cảnh ngắn, hành động rõ; có thể không cần lời thoại.",
+      "status": "ready",
+      "scene": {
+        "id": "309e1a8e-5563-4415-aed7-cb832abce7a8",
+        "source_scene_id": "c5d358ed-0a16-4b6f-8b27-6dc3600aedbf",
+        "heading": "Khoảnh khắc",
+        "blocks": [
+          {
+            "kind": "action",
+            "text": "Bình đặt đèn pin xuống. Ánh sáng yếu ớt từ cửa sổ rọi vào bàn, tạo ra những vệt sáng mờ ảo trên giấy.",
+            "speaker": "",
+            "id": "6b405496-a821-4812-a849-cdb440de6e0b"
+          },
+          {
+            "kind": "action",
+            "text": "Lan kéo rèm cửa nhẹ nhàng, tận dụng ánh đèn đường rọi vào bàn. Hai người nghiêng tờ giấy để đọc, ánh sáng mờ nhạt tạo nên những hình bóng lung linh.",
+            "speaker": "",
+            "id": "a6b82a35-ddaa-4de6-a245-d6d52001870f"
+          }
+        ]
+      },
+      "preview_scene": null,
+      "provider": "ollama",
+      "model": "qwen2.5:7b",
+      "parameters": {
+        "temperature": 0.3,
+        "timeout_seconds": 120,
+        "num_ctx": 16384
+      },
+      "prompt_version": "screenplay-scene-v1",
+      "error": null,
+      "applied_revision": null
+    }
+  ],
+  "scene_versions": [
+    {
+      "id": "eb8db11d-3eb9-442f-b4b6-7ef13a27381e",
+      "created_at": "2026-10-27T05:17:01.298857+00:00",
+      "outline": {
+        "id": "319f2d28-dd95-480b-8173-69a115771cfe",
+        "version": 1,
+        "scenes": [],
+        "source": {
+          "id": "555d504e-0c18-42d6-b777-d0b726b240bb",
+          "project_revision": 0,
+          "version_id": "current",
+          "draft": {
+            "title": "Chiếc đèn pin hỏng",
+            "logline": "Lan và Bình ở phòng trọ mất điện, cùng tìm cách đọc một tờ giấy mà không có đèn hoạt động.",
+            "sections": [
+              {
+                "title": "Đầu",
+                "purpose": "Mở",
+                "content": "Lan đặt tờ giấy lên bàn sát cửa sổ có rèm. Bình bấm chiếc đèn pin hỏng; đèn không sáng."
+              },
+              {
+                "title": "Cuối",
+                "purpose": "Diễn tiến",
+                "content": "Bình đặt đèn pin xuống. Lan kéo rèm để ánh đèn đường rọi vào bàn; cả hai nghiêng tờ giấy để đọc."
+              }
+            ]
+          },
+          "context": {
+            "idea": "Lan và Bình ở phòng trọ mất điện, cùng tìm cách đọc một tờ giấy mà không có đèn hoạt động.",
+            "constraints": [
+              "Chỉ Lan và Bình, một phòng trọ ban đêm.",
+              "Đèn pin hỏng không sáng, không điện thoại/đạo cụ mới.",
+              "Dùng bàn, tờ giấy và rèm đã có; ánh đèn đường từ cửa sổ, không đổi thành ban ngày."
+            ],
+            "clarifications": [],
+            "pending_questions": []
+          },
+          "response_language": "vi"
+        }
+      }
+    }
+  ],
+  "scene_proposals": [],
+  "staging_proposals": [],
+  "scene_sketches": [],
+  "selected_scene_sketches": {},
+  "applicable_screenplay_proposal_ids": [
+    "340d705a-2409-4dcd-8f58-dd07eca9eb69"
+  ],
+  "screenplay_source_is_current": true,
+  "applicable_sketch_ids": [],
+  "applicable_scene_proposal_ids": [],
+  "scene_source_is_current": true,
+  "scene_handoff": {
+    "outline_id": "319f2d28-dd95-480b-8173-69a115771cfe",
+    "version": 2,
+    "project_revision": 7,
+    "source_id": "555d504e-0c18-42d6-b777-d0b726b240bb",
+    "scenes": [
+      {
+        "id": "aa65ef75-2377-4405-9011-7227895bdb60",
+        "title": "Trước đó",
+        "action": "Lan đặt tờ giấy lên bàn sát cửa sổ có rèm. Bình bấm chiếc đèn pin hỏng; đèn không sáng.",
+        "location": "Một căn phòng",
+        "time": "",
+        "characters": "",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      },
+      {
+        "id": "c5d358ed-0a16-4b6f-8b27-6dc3600aedbf",
+        "title": "Khoảnh khắc",
+        "action": "Bình đặt đèn pin xuống. Lan kéo rèm để ánh đèn đường rọi vào bàn; cả hai nghiêng tờ giấy để đọc.",
+        "location": "Một căn phòng",
+        "time": "",
+        "characters": "",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      }
+    ]
+  },
+  "applicable_plan_ids": [],
+  "author_context": {
+    "idea": "Lan và Bình ở phòng trọ mất điện, cùng tìm cách đọc một tờ giấy mà không có đèn hoạt động.",
+    "constraints": [
+      "Chỉ Lan và Bình, một phòng trọ ban đêm.",
+      "Đèn pin hỏng không sáng, không điện thoại/đạo cụ mới.",
+      "Dùng bàn, tờ giấy và rèm đã có; ánh đèn đường từ cửa sổ, không đổi thành ban ngày."
+    ],
+    "clarifications": [],
+    "pending_questions": []
+  },
+  "feedback_is_current": false
+}

@@ -6,12 +6,15 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 from app.api.schemas.scenes import SceneId
 
 
-class ScriptBlock(BaseModel):
+class BlockText(BaseModel):
     model_config = ConfigDict(extra="forbid")
-    id: SceneId
     kind: Literal["action", "dialogue"]
     text: str = Field(default="", max_length=10000)
     speaker: str = Field(default="", max_length=200)
+
+
+class ScriptBlock(BlockText):
+    id: SceneId
 
 
 class ScriptScene(BaseModel):
@@ -20,6 +23,13 @@ class ScriptScene(BaseModel):
     source_scene_id: SceneId
     heading: str = Field(default="", max_length=500)
     blocks: list[ScriptBlock] = Field(default_factory=list, max_length=200)
+
+    @model_validator(mode="after")
+    def check_preview_limits(self):
+        ids = [self.id, *[b.id for b in self.blocks]]
+        if len(set(ids)) != len(ids) or len(self.heading) + sum(len(b.text) + len(b.speaker) for b in self.blocks) > 200000:
+            raise ValueError("Scene block IDs must be unique and text must fit the screenplay limit.")
+        return self
 
 
 class ScreenplayEdit(BaseModel):
@@ -45,3 +55,28 @@ class StartScreenplay(BaseModel):
     model_config = ConfigDict(extra="forbid")
     revision: int = Field(ge=0)
     request_id: SceneId
+
+
+class SceneWritingRequest(StartScreenplay):
+    target_scene_id: SceneId
+    instructions: str = Field(default="", max_length=2000)
+
+
+class WrittenScene(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    heading: str = Field(min_length=1, max_length=500)
+    blocks: list[BlockText] = Field(min_length=1, max_length=200)
+
+    @model_validator(mode="after")
+    def require_content(self):
+        if not self.heading.strip() or any(not b.text.strip() or (b.kind == "dialogue" and not b.speaker.strip())
+                                           or (b.kind == "action" and b.speaker != "") for b in self.blocks):
+            raise ValueError("Written scene requires nonempty blocks and dialogue speakers.")
+        if sum(len(b.text) + len(b.speaker) for b in self.blocks) + len(self.heading) > 200000:
+            raise ValueError("Scene exceeds text limit.")
+        return self
+
+
+class SceneWritingResult(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    scene: WrittenScene

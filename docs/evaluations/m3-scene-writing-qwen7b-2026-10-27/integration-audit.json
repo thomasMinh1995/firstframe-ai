@@ -1,0 +1,25 @@
+{
+  "model_calls": 3,
+  "retries": 0,
+  "automatic_application": false,
+  "original_inputs_outputs_manifest_unchanged": true,
+  "archived_source_hashes_match_manifest": true,
+  "post_run_change": "Added conservative input-byte guard, explicit oversize error, and preview scene size/unique-block-ID validation. Prompt/schema/request content unchanged; parity checked with fake provider on all 3 saved requests; no additional real calls.",
+  "current_core_hashes": {
+    "backend/app/application/screenplay_writing.py": "4abc0917e75b11a2be36d786f4a06fffe5594f1e45b1bdd52fc21bbcaa40fd43",
+    "backend/app/api/routes/screenplays.py": "793160dc997cca6f03841365150bdcf6e415ae52ef36a2224d3883987c20b2aa",
+    "backend/app/api/routes/projects.py": "ab18293aeff35e966d3ca0ffe9b3f4c99661409406fbf08b3c2a10d7758ae7f1",
+    "backend/app/api/schemas/projects.py": "291f544eaec6bd4b851bbce0437dc6494760cbf2b6896b4b02b66edf34cb2cd7",
+    "backend/app/api/schemas/screenplays.py": "164854475246188914e9628dadcb02527ac2e63894450eb6a6c5b49d3fb67162",
+    "backend/app/infrastructure/ollama_provider.py": "293d9fcc59051e06ddb6eebffd263d831817fe761506ca23a92ef21cf2630272",
+    "backend/app/application/ai_provider.py": "15249bd34c8ed12dc31897d1586bd2947c24a16f564ca81ae59871c1cff9929e",
+    "backend/app/application/project_store.py": "de4d7d0c5cffe3dcb91f7c08623a47d9ad1947db0f2b19b2d52fdb38a84a550b",
+    "domains/short-film/prompts/screenplay_scene_prompt.md": "acad6534b78d89829a5cf97aa8749c0a2be205165c354bcffe1b318d8cd73e45",
+    "docs/evaluations/m3-scene-writing-qwen7b-2026-10-27/run.py": "3a266fcebf5d3412e199ca5558df9c95e177bf6e3af80cf5c269273249e622d1"
+  },
+  "limitations": [
+    "Content still needs author review; not a 3/3 creative pass.",
+    "No seed exposed by existing provider; temperature/context frozen; no seed search.",
+    "Latencies observed during technical checks, not an isolated production benchmark."
+  ]
+}

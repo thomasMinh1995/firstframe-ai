@@ -2,38 +2,36 @@
 
 import {useState} from "react";
 import type {Project} from "./projectsApi";
-import type {Screenplay, ScriptBlock, ScriptScene} from "./screenplayTypes";
+import type {Screenplay, ScriptScene, SceneWritingInput} from "./screenplayTypes";
 import {stagingLabels, type StagingKey} from "./sceneTypes";
+import {ScriptSceneFields} from "./ScriptSceneFields";
+import {ScreenplayProposals} from "./ScreenplayProposals";
 import "./screenplay.css";
 
-export function ScreenplayEditor({project, dirty, sourceDirty, onChange, onStart, onRestore, onSave, onInspect}: {
+export function ScreenplayEditor({project, dirty, sourceDirty, onChange, onStart, onRestore, onSave, onInspect, onWrite, onProposalInspect, onPreview, onDiscard, canUse}: {
   project: Project; dirty: boolean; sourceDirty: boolean;
-  onChange: (script: Screenplay) => void; onStart: (requestId: string) => Promise<void>;
+  onChange: (script: Screenplay, proposalId?: string) => void;
+  onWrite:(input:SceneWritingInput)=>Promise<void>;onProposalInspect:()=>Promise<boolean>;
+  onPreview:(id:string,scene:ScriptScene)=>void;onDiscard:(id:string)=>void;canUse:boolean; onStart: (requestId: string) => Promise<void>;
   onRestore: (id: string) => void; onSave: () => void; onInspect: () => Promise<boolean>;
 }) {
   const [selected, setSelected] = useState<string | null>(null);
   const [replace, setReplace] = useState(false);
-  const [undo, setUndo] = useState<{before: Screenplay; after: string} | null>(null);
+  const [undo, setUndo] = useState<{before: Screenplay; after: string; label:string} | null>(null);
   const [sent, setSent] = useState<string | null>(null);
   const script = project.screenplay;
   const uncertain = sent !== null && script?.id !== sent && !project.screenplay_versions?.some(v=>v.screenplay.id===sent);
   const scene = script?.scenes.find(s=>s.id===selected) ?? script?.scenes[0];
   const source = script?.source_outline.scenes.find(s=>s.id===scene?.source_scene_id);
   const edit = (next: ScriptScene) => script && onChange({...script,scenes:script.scenes.map(s=>s.id===next.id?next:s)});
-  const blockEdit = (id: string, changes: Partial<ScriptBlock>) => scene && edit({...scene,blocks:scene.blocks.map(b=>b.id===id?{...b,...changes}:b)});
   function remove(id: string) {
     if (!scene || !script) return;
     const next={...script,scenes:script.scenes.map(s=>s.id===scene.id?{...s,blocks:s.blocks.filter(b=>b.id!==id)}:s)};
-    setUndo({before:structuredClone(script),after:JSON.stringify(next)});onChange(next);
-  }
-  const add = (kind: ScriptBlock["kind"]) => scene && edit({...scene,blocks:[...scene.blocks,{id:crypto.randomUUID(),kind,text:"",speaker:""}]});
-  function move(index: number, by: number) {
-    if (!scene) return;
-    const blocks=[...scene.blocks];[blocks[index],blocks[index+by]]=[blocks[index+by],blocks[index]];edit({...scene,blocks});
+    setUndo({before:structuredClone(script),after:JSON.stringify(next),label:"Hoàn tác xóa khối"});onChange(next);
   }
   return <section className="panel screenplay" data-workspace-stage="workspace-script" aria-label="M3 Kịch bản">
     <h2 id="workspace-script" tabIndex={-1}>M3 · Viết kịch bản</h2>
-    <p>Viết bằng hành động và lời thoại theo từng cảnh. Không bắt buộc có lời thoại hoặc hình phác. Bạn có thể soạn và lưu thủ công; viết thử và góp ý AI chưa được hỗ trợ.</p>
+    <p>Viết bằng hành động và lời thoại theo từng cảnh. Không bắt buộc có lời thoại hoặc hình phác. Bạn có thể tự viết hoặc nhờ AI viết thử một cảnh; góp ý AI cho kịch bản chưa được hỗ trợ.</p>
     <details><summary>Bắt đầu từ dàn cảnh nào?</summary>
       <p>Lưu mọi sửa đang chờ trước khi bắt đầu. Nguồn M2 được giữ riêng; sửa dàn cảnh sau đó không tự thay kịch bản. Muốn đổi cấu trúc cảnh, sửa M2 rồi chủ động bắt đầu bản khác.</p>
       {project.scene_handoff ? <p>M2 phiên bản {project.scene_handoff.version} · {project.scene_handoff.scenes.length} cảnh · {project.scene_outline?.source.draft.title}</p>
@@ -66,22 +64,15 @@ export function ScreenplayEditor({project, dirty, sourceDirty, onChange, onStart
             {script.source_outline.source.context.clarifications.map((c,i)=><p key={i} className="preserve-lines">{c.question} — {c.answer}</p>)}
           </details>
         </details>
-        <div className="screenplay-scene" key={scene.id}>
-          <label>Tiêu đề cảnh<input maxLength={500} value={scene.heading} onChange={e=>edit({...scene,heading:e.target.value})} /></label>
-          {!scene.blocks.length && <p>Cảnh chưa viết. Thêm một hành động để bắt đầu; không cần viết lại toàn bộ ghi chú nguồn.</p>}
-          {scene.blocks.map((b,i)=><fieldset key={b.id} className="script-block" data-script-block={b.id}>
-            <legend>{i+1}. {b.kind==="action"?"Hành động":"Lời thoại"}</legend>
-            {b.kind==="dialogue"&&<label>Người nói<input maxLength={200} value={b.speaker} onChange={e=>blockEdit(b.id,{speaker:e.target.value})} /></label>}
-            <label htmlFor={`script-block-${b.id}`}>{b.kind==="action"?"Nội dung hành động":"Nội dung lời thoại"}</label><textarea id={`script-block-${b.id}`} rows={4} maxLength={10000} value={b.text} onChange={e=>blockEdit(b.id,{text:e.target.value})} />
-            <button type="button" disabled={i===0} onClick={()=>move(i,-1)}>Đưa khối lên</button>
-            <button type="button" disabled={i===scene.blocks.length-1} onClick={()=>move(i,1)}>Đưa khối xuống</button>
-            <button type="button" onClick={()=>remove(b.id)}>Xóa khối</button>
-          </fieldset>)}
-          <button type="button" disabled={scene.blocks.length>=200} onClick={()=>add("action")}>Thêm hành động</button>
-          <button type="button" disabled={scene.blocks.length>=200} onClick={()=>add("dialogue")}>Thêm lời thoại</button>
-        </div>
+        <ScriptSceneFields key={scene.id} scene={scene} onChange={edit} onDelete={remove}/>
       </div>
-      {undo && JSON.stringify(script)===undo.after && <button type="button" onClick={()=>{onChange(undo.before);setUndo(null);}}>Hoàn tác xóa khối</button>}
+      {undo && JSON.stringify(script)===undo.after && <button type="button" onClick={()=>{onChange(undo.before);setUndo(null);}}>{undo.label}</button>}
+      <ScreenplayProposals key={`${script.id}:${scene.id}`} project={project} scene={scene} canUse={canUse}
+        onWrite={onWrite} onInspect={onProposalInspect} onPreview={onPreview} onDiscard={onDiscard}
+        onUse={(id,replacement)=>{
+          const next={...script,scenes:script.scenes.map(s=>s.id===replacement.id?replacement:s)};
+          setUndo({before:structuredClone(script),after:JSON.stringify(next),label:"Hoàn tác dùng phương án"});onChange(next,id);
+        }}/>
       <button type="button" onClick={onSave}>Lưu kịch bản</button>
       <p>Chuyển cảnh chỉ giữ phần đang viết trên màn hình. Lưu để mở lại; bản nháp không cần đủ mọi cảnh. M4 xuất bản chưa triển khai.</p>
     </>}
