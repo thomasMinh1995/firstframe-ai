@@ -7,6 +7,7 @@ import { readRevisionNotes, validatedTargets } from "./revisionNotes";
 import { StoryFeedback } from "./StoryResultCards";
 import { StoryPlanEditor, type DraftField } from "./StoryPlanEditor";
 import type { Scene, SceneSuggestionInput } from "./sceneTypes";
+import { ScreenplayEditor } from "./ScreenplayEditor";
 import { SceneOutlineEditor } from "./SceneOutlineEditor";
 import { ClarificationConversation } from "./ClarificationConversation";
 import "./storyWorkspace.css";
@@ -553,8 +554,32 @@ export default function Home() {
             onPrepare={() => void run("Đang lưu bản nguồn viết tiếp…", async () => {
               const next = await persist();
               if (!next?.scene_handoff) throw new Error("Cần tên và diễn tiến cho từng cảnh trước khi chuẩn bị bản viết tiếp.");
-              setNotice(`Đã lưu bản nguồn M2 phiên bản ${next.scene_handoff.version}. M3 chưa triển khai; chưa tạo kịch bản.`);
+              setNotice(`Đã lưu bản nguồn M2 phiên bản ${next.scene_handoff.version}. Có thể bắt đầu soạn thủ công tại M3; chưa tự tạo nội dung kịch bản.`);
+              const target=document.getElementById("workspace-script");target?.scrollIntoView({block:"start"});target?.focus({preventScroll:true});
             })} />}
+          {saved && <ScreenplayEditor key={`script:${project.id}`} project={project} dirty={dirty}
+            sourceDirty={feedbackChanged || JSON.stringify(project.scene_outline)!==JSON.stringify(saved.scene_outline)}
+            onChange={screenplay=>setProject(current=>current?{...current,screenplay}:current)}
+            onSave={()=>void run("Đang lưu kịch bản…",async()=>{await persist();setNotice("Đã lưu kịch bản và mọi sửa đang chờ.");})}
+            onStart={request_id=>run("Đang giữ nguồn M2 cho kịch bản…",async()=>{
+              const next=await persist();if(!next)return;
+              accept(await projectRequest(`/${next.id}/screenplay`,"POST",{revision:next.revision,request_id}));
+              setNotice("Đã giữ nguồn và khung cảnh M3. Chưa tạo nội dung hoặc gọi AI.");
+            })}
+            onRestore={id=>void run("Đang lưu và khôi phục kịch bản…",async()=>{
+              const next=await persist();if(!next)return;
+              accept(await projectRequest(`/${next.id}/screenplay-versions/${id}/restore`,"POST",{revision:next.revision}));
+              setNotice("Đã khôi phục kịch bản; M1/M2 và bản trước vẫn giữ.");
+            })}
+            onInspect={async()=>{let checked=false;await run("Đang kiểm tra kịch bản đã lưu…",async()=>{
+              const next=await projectRequest(`/${project.id}`);
+              if(dirty){
+                if(!sameEditableContent(saved,next))throw new Error("Nội dung đã đổi ở cửa sổ khác. Bản đang sửa vẫn giữ; hãy tải bản sao trước khi mở lại.");
+                setSaved(next);setProject(current=>current?{...current,revision:next.revision,screenplay_versions:next.screenplay_versions}:current);
+              }else accept(next);
+              checked=true;
+            });return checked;}}
+          />}
         </fieldset>
         <details className="workspace-library"><summary>Đề xuất và lịch sử ({(project.plan_generations?.length ?? 0) + project.versions.length + project.clarification_history.length})</summary>
         {proposals}
@@ -633,7 +658,7 @@ function WorkspaceNavigation({ project, briefChanged, creatingPlan }: { project:
     { id: "workspace-choices", label: "Làm rõ", available: !!project?.analysis && !briefChanged },
     { id: "workspace-draft", label: "Story plan", available: !!project?.draft || creatingPlan },
     { id: "workspace-outline", label: "Dàn cảnh", available: !!project },
-    { id: "workspace-script", label: "Kịch bản", available: false },
+    { id: "workspace-script", label: "Kịch bản", available: !!project },
   ];
   return <aside className="workspace-rail"><p className="eyebrow">Câu chuyện của bạn</p>
     <nav className="workspace-stage-nav" aria-label="Hành trình câu chuyện">

@@ -22,6 +22,7 @@ from app.api.schemas.projects import (
     ProjectUpdate,
     RevisionRequest,
     StoryDraft,
+    ScreenplayVersion,
     SceneOutline,
     SceneOutlineVersion,
     ScenePlanSource,
@@ -151,6 +152,7 @@ def dataset_snapshot(project: ProjectResponse) -> dict[str, object]:
         "versions", "clarification_history", "plan_generations", "applicable_plan_ids",
         "scene_proposals", "staging_proposals", "applicable_scene_proposal_ids",
         "scene_sketches", "selected_scene_sketches", "applicable_sketch_ids",
+        "screenplay", "screenplay_versions", "screenplay_source_is_current",
     })
 
 
@@ -302,6 +304,23 @@ def update_project(project_id: str, request: ProjectUpdate):
                 project.scene_outline = outline.model_copy(update={
                     "scenes": edit.scenes, "version": outline.version + 1,
                 })
+        if "screenplay" in request.model_fields_set:
+            edit, current = request.screenplay, project.screenplay
+            if edit is None:
+                if current is not None:
+                    raise HTTPException(422, "Không xóa bản kịch bản hoặc nguồn; hãy sửa nội dung từng khối.")
+            elif current is None:
+                raise HTTPException(422, "Chọn bản dàn cảnh đã lưu trước khi viết kịch bản.")
+            elif edit.id != current.id or edit.version != current.version:
+                raise ProjectConflict
+            elif [(s.id, s.source_scene_id) for s in edit.scenes] != [(s.id, s.source_scene_id) for s in current.scenes]:
+                raise HTTPException(422, "Giữ thứ tự và liên kết cảnh nguồn; thay cấu trúc ở M2 rồi bắt đầu bản khác.")
+            elif edit.scenes != current.scenes:
+                owners = {b.id: s.id for s in current.scenes for b in s.blocks}
+                if any(b.id in owners and owners[b.id] != s.id for s in edit.scenes for b in s.blocks):
+                    raise HTTPException(422, "Không chuyển ID khối sang cảnh khác.")
+                archive_screenplay(project)
+                project.screenplay = current.model_copy(update={"scenes": edit.scenes, "version": current.version + 1})
         brief_changed = project.idea != request.idea or project.constraints != request.constraints
         if brief_changed:
             archive_clarifications(project, request.answers)
@@ -322,6 +341,13 @@ def update_project(project_id: str, request: ProjectUpdate):
         else:
             project.answers = request.answers
         return save_project(project)
+
+
+def archive_screenplay(project: ProjectResponse) -> None:
+    if project.screenplay is not None:
+        project.screenplay_versions.append(ScreenplayVersion(
+            id=str(uuid4()), created_at=datetime.now(UTC).isoformat(),
+            screenplay=project.screenplay.model_copy(deep=True)))
 
 
 def archive_scene_outline(project: ProjectResponse) -> None:

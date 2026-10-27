@@ -201,7 +201,7 @@ export function SceneOutlineEditor({ project, saved, dirty, sourceCurrent, error
       </div>}
       <div className="scene-next"><button type="button" disabled={!outline.scenes.length || outline.scenes.some(s => !s.title.trim() || !s.action.trim())}
         onClick={onPrepare}>Lưu bản dàn cảnh để viết tiếp</button>
-        <p className="storage-note">M3 viết kịch bản chưa triển khai. Thao tác này chỉ lưu bản nguồn; không tạo kịch bản hoặc gọi AI.</p>
+        <p className="storage-note">Thao tác này lưu bản nguồn để đối chiếu; bắt đầu soạn thủ công tại M3. Không tạo nội dung hoặc gọi AI.</p>
         {saved.scene_handoff && <details className="scene-handoff">
           <summary>Đối chiếu bản dàn cảnh đã lưu để viết tiếp</summary>
           <p className="storage-note">Bản nguồn đã lưu: M2 phiên bản {saved.scene_handoff.version}, revision dự án {saved.scene_handoff.project_revision} · {saved.scene_handoff.scenes.length} cảnh.</p>
@@ -214,7 +214,7 @@ export function SceneOutlineEditor({ project, saved, dirty, sourceCurrent, error
               <strong>{["Địa điểm", "Thời điểm", "Nhân vật", "Nhân vật muốn gì", "Đóng góp của cảnh", "Cảm nhận người xem", "Điều muốn giữ/tránh"][i]}: </strong>{s[key]}</p>)}
             {Object.entries(s.staging_choices).map(([key, text]) => text && <p key={key} className="preserve-lines"><strong>{stagingLabels[key as StagingKey]}: </strong>{text}</p>)}
           </li>)}</ol>
-          <p className="storage-note">Chỉ những lựa chọn đã đưa vào cảnh và lưu mới có trong bản này; các đề xuất riêng không được tự nhận. Chưa có trình viết kịch bản M3.</p>
+          <p className="storage-note">Chỉ những lựa chọn đã đưa vào cảnh và lưu mới có trong bản này; các đề xuất riêng không được tự nhận. M3 hỗ trợ soạn thủ công từ bản này; AI viết thử chưa triển khai.</p>
         </details>}
       </div>
       {!!project.scene_versions?.length && <details className="scene-history"><summary>Lịch sử dàn cảnh ({project.scene_versions.length})</summary>

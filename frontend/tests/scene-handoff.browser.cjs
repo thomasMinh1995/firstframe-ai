@@ -92,7 +92,7 @@ const path=require('node:path');
  await page.reload();await handoff.locator('summary').click();
  assert.deepEqual(await handoff.locator('[data-handoff-scene]').evaluateAll(items=>items.map(n=>n.dataset.handoffScene)),saved.scene_handoff.scenes.map(s=>s.id));
  assert.match(await handoff.innerText(),/Cha lùi một bước/);assert.doesNotMatch(await handoff.innerText(),/Ý tự chỉnh chưa dùng/);
- assert.match(await handoff.innerText(),/Chưa có trình viết kịch bản M3/);
+ assert.match(await handoff.innerText(),/M3 hỗ trợ soạn thủ công/);
  for(const width of [1280,390,320]){
    await page.setViewportSize({width,height:900});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
  }
