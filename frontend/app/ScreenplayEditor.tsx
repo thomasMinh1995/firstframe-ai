@@ -6,6 +6,7 @@ import type {Screenplay, ScriptScene, SceneWritingInput, ScreenplaySelectionInpu
 import {ScreenplayReading} from "./ScreenplayReading";
 import {stagingLabels, type StagingKey} from "./sceneTypes";
 import {ScriptSceneFields} from "./ScriptSceneFields";
+import {ContinuousSceneEditor} from "./ContinuousSceneEditor";
 import {ScreenplayProposals} from "./ScreenplayProposals";
 import {ScreenplayFeedback} from "./ScreenplayFeedback";
 import type {ReviewAssessment,ReviewSource} from "./screenplayReviewTypes";
@@ -24,6 +25,7 @@ export function ScreenplayEditor({project, savedProject, onSelectSource, onSourc
   const [pendingReference,setPendingReference]=useState<ReviewSource|null>(null);
   const [pendingEdit,setPendingEdit]=useState<string|null>(null);
   const [selected, setSelected] = useState<string | null>(null);
+  const [continuousSceneId, setContinuousSceneId] = useState<string | null>(null);
   const [replace, setReplace] = useState(false);
   const [undo, setUndo] = useState<{before: Screenplay; after: string; label:string} | null>(null);
   const [sent, setSent] = useState<string | null>(null);
@@ -91,7 +93,15 @@ export function ScreenplayEditor({project, savedProject, onSelectSource, onSourc
             {script.source_outline.source.context.clarifications.map((c,i)=><p key={i} className="preserve-lines">{c.question} — {c.answer}</p>)}
           </details>
         </details>
-        <ScriptSceneFields key={scene.id} scene={scene} onChange={edit} onDelete={remove}/>
+        <div className="screenplay-scene">
+          <button type="button" aria-pressed={continuousSceneId===scene.id} onClick={()=>setContinuousSceneId(continuousSceneId===scene.id?null:scene.id)}>
+            {continuousSceneId===scene.id?'Quay lại editor hiện có':'Thử editor liền mạch cho cảnh này'}
+          </button>
+          {continuousSceneId===scene.id
+            ? <ContinuousSceneEditor key={`${script.id}:${scene.id}`} scene={scene} scope={`${script.id}:${script.version}`}
+                blockLimit={Math.min(200,1000-script.scenes.filter(s=>s.id!==scene.id).reduce((total,s)=>total+s.blocks.length,0))} onChange={edit}/>
+            : <ScriptSceneFields key={`${script.id}:${scene.id}`} scene={scene} onChange={edit} onDelete={remove}/>}
+        </div>
       </div>
       {undo && JSON.stringify(script)===undo.after && <button type="button" onClick={()=>{onChange(undo.before);setUndo(null);}}>{undo.label}</button>}
       <ScreenplayProposals key={`${script.id}:${scene.id}`} project={project} scene={scene} canUse={canUse}
