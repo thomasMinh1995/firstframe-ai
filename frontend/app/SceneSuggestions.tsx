@@ -16,8 +16,9 @@ export function SceneSuggestions({ project, dirty, onSuggest, onInspect, onDisca
   const [sent, setSent] = useState<string | null>(null);
   const outline = project.scene_outline!;
   const proposals = project.scene_proposals ?? [];
+  const allProposals = [...proposals, ...(project.staging_proposals ?? [])];
   const uncertain = sent !== null && !proposals.some(p => p.id === sent);
-  const pending = proposals.some(p => p.status === "pending");
+  const pending = allProposals.some(p => p.status === "pending");
   const targetExists = outline.scenes.some(s => s.id === target);
   const chosenTarget = targetExists ? target : "";
   return <section className="scene-suggestions" aria-label="FirstFrame gợi ý cảnh">
@@ -45,7 +46,7 @@ export function SceneSuggestions({ project, dirty, onSuggest, onInspect, onDisca
     {(uncertain || pending) && <p role="status">Yêu cầu đã gửi hoặc chưa rõ kết quả. Không tự chạy lại.
       Kiểm tra đề xuất đã lưu; nếu còn đang xử lý, bạn vẫn có thể tự viết và lưu cảnh.</p>}
     {dirty && <p className="storage-note">Có sửa chưa lưu, gồm cả chỉnh trong bản xem trước. Nút Lưu thay đổi giữ bản xem trước riêng; chỉ Dùng mới đưa vào dàn cảnh.</p>}
-    {project.pending_scene_proposal_id && <div><p className="storage-note">Đề xuất đang nằm trong bản sửa, chưa đánh dấu đã dùng cho tới khi lưu.
+    {(project.pending_scene_proposal_id || project.pending_staging_use) && <div><p className="storage-note">Đề xuất đang nằm trong bản sửa, chưa đánh dấu đã dùng cho tới khi lưu.
       Nếu muốn tiếp tục tự chỉnh cả story plan/ý đồ, có thể giữ cảnh như bản tự sửa; nguồn cũ và đề xuất gốc vẫn được giữ.</p>
       <button type="button" className="secondary" onClick={onKeepManual}>Giữ cảnh đang sửa như bản tự chỉnh</button></div>}
     {[...proposals].reverse().map(p => <details key={p.id} className="scene-proposal" open={p.status === "ready"}>

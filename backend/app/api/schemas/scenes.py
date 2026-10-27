@@ -51,7 +51,7 @@ class SceneSuggestionRequest(BaseModel):
 
     revision: int = Field(ge=0)
     request_id: SceneId
-    mode: Literal["list", "append", "develop"]
+    mode: Literal["list", "append", "develop", "staging"]
     target_scene_id: SceneId | None = None
     instructions: str = Field(default="", max_length=2000)
 
@@ -77,3 +77,45 @@ class SceneSuggestionResult(BaseModel):
 
 class SingleSceneSuggestionResult(SceneSuggestionResult):
     scenes: list[SuggestedScene] = Field(min_length=1, max_length=1)
+
+
+class StagingEvidence(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    source_id: str = Field(min_length=1, max_length=150)
+    quote: str = Field(min_length=1, max_length=2000)
+
+
+class StagingSuggestion(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    field: StagingKey
+    evidence: list[StagingEvidence] = Field(min_length=1, max_length=3)
+    reason: str = Field(min_length=1, max_length=2000)
+    suggestion: str = Field(min_length=1, max_length=2000)
+    purpose: str = Field(min_length=1, max_length=1000)
+
+
+class StagingResult(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    ideas: list[StagingSuggestion] = Field(default_factory=list, max_length=6)
+    question: str = Field(default="", max_length=2000)
+
+
+class StagingSource(BaseModel):
+    id: str
+    label: str
+    text: str
+
+
+class StagingIdea(StagingSuggestion):
+    id: SceneId
+    status: Literal["available", "applied", "discarded"] = "available"
+    preview_text: SceneText | None = None
+    applied_revision: int | None = None
+    applied_text: SceneText | None = None
+
+
+class StagingUse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    proposal_id: SceneId
+    idea_id: SceneId
+    value: SceneText = Field(min_length=1)

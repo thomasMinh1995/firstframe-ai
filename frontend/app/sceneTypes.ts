@@ -24,12 +24,26 @@ export function emptyScene(): Scene {
     characters: "", goal: "", purpose: "", viewer_intent: "", keep_or_avoid: "", staging_choices: {} };
 }
 
-export type SceneSuggestionInput = { request_id: string; mode: "list" | "append" | "develop";
+export type SceneSuggestionInput = { request_id: string; mode: "list" | "append" | "develop" | "staging";
   target_scene_id: string | null; instructions: string };
 export type SceneProposal = {
   id: string; created_at: string; source_revision: number; source_content: string; source_outline: SceneOutline;
   mode: SceneSuggestionInput["mode"]; target_scene_id: string | null; instructions: string;
   status: "pending" | "ready" | "failed" | "applied" | "discarded";
+  staging_ideas?: StagingIdea[]; staging_sources?: { id: string; label: string; text: string }[]; staging_question?: string;
   scenes: Scene[]; preview_scenes?: Scene[] | null; transitions: Record<string, string>; provider: string | null; model: string | null;
   parameters: Record<string, unknown>; prompt_version: string; error: string | null; applied_revision: number | null;
 };
+
+export const stagingGroups: { title: string; keys: StagingKey[] }[] = [
+  { title: "Hành động & diễn xuất", keys: ["blocking", "performance"] },
+  { title: "Không gian & chi tiết", keys: ["setting", "lighting", "color", "costume"] },
+  { title: "Cách nhìn qua máy quay", keys: ["composition", "shot", "angle", "moment"] },
+];
+export type StagingIdea = {
+  id: string; field: StagingKey; evidence: { source_id: string; quote: string }[];
+  reason: string; suggestion: string; purpose: string;
+  status: "available" | "applied" | "discarded"; preview_text: string | null;
+  applied_revision: number | null; applied_text: string | null;
+};
+export type StagingUse = { proposal_id: string; idea_id: string; value: string };

@@ -464,12 +464,30 @@ export default function Home() {
           </section>}
           {saved && <SceneOutlineEditor key={project.id} project={project} saved={saved} dirty={dirty} error={error}
             sourceCurrent={!feedbackChanged && !!project.scene_source_is_current}
-            canUseProposal={!feedbackChanged && !project.pending_scene_proposal_id && JSON.stringify(project.scene_outline) === JSON.stringify(saved.scene_outline)}
+            canUseProposal={!feedbackChanged && !project.pending_scene_proposal_id && !project.pending_staging_use && JSON.stringify(project.scene_outline) === JSON.stringify(saved.scene_outline)}
             onPreviewChange={(id: string, scenes: Scene[]) => setProject(current => current ? { ...current,
               pending_scene_previews: { ...current.pending_scene_previews, [id]: scenes } } : current)}
-            onChange={(outline, proposalId) => setProject(current => current ? {
-              ...current, scene_outline: outline, ...(proposalId !== undefined ? { pending_scene_proposal_id: proposalId ?? undefined } : {}),
-            } : current)}
+            onStagingEdit={(id, value) => setProject(current => current ? { ...current,
+              pending_staging_edits: { ...current.pending_staging_edits, [id]: value } } : current)}
+            onDiscardIdea={(proposalId, ideaId) => void run("Đang bỏ ý góp ý…", async () => {
+              const next = await projectRequest(`/${project.id}/scene-proposals/${proposalId}/ideas/${ideaId}/discard`, "POST", { revision: project.revision });
+              setSaved(next); setProject(current => {
+                if (!current) return current;
+                const edits = { ...current.pending_staging_edits }; delete edits[ideaId];
+                return { ...current, revision: next.revision, scene_proposals: next.scene_proposals, staging_proposals: next.staging_proposals,
+                  applicable_scene_proposal_ids: next.applicable_scene_proposal_ids, pending_staging_edits: edits };
+              });
+            })}
+            onChange={(outline, proposalId, stagingUse) => setProject(current => {
+              if (!current) return current;
+              const use = stagingUse === undefined ? current.pending_staging_use : stagingUse ?? undefined;
+              const owner = use && current.staging_proposals?.find(p => p.id === use.proposal_id);
+              const idea = owner?.staging_ideas?.find(i => i.id === use?.idea_id);
+              const value = idea && outline.scenes.find(s => s.id === owner?.target_scene_id)?.staging_choices[idea.field];
+              return { ...current, scene_outline: outline,
+                ...(proposalId !== undefined ? { pending_scene_proposal_id: proposalId ?? undefined } : {}),
+                pending_staging_use: use ? { ...use, value: value ?? use.value } : undefined };
+            })}
             onSuggest={(input: SceneSuggestionInput) => {
               setSteps([{ stage: "prepare", status: "active", occurrence: 1 }]); setOperationFailed(false);
               setOperationTiming({ kind: "scene-suggestions", startedAt: performance.now(), finishedAt: null });
@@ -491,7 +509,7 @@ export default function Home() {
               if (dirty) {
                 if (!saved || !sameEditableContent(saved, next)) throw new Error("Nội dung đã đổi ở cửa sổ khác. Bản đang sửa vẫn giữ nguyên; hãy tải bản sao trước khi mở lại.");
                 setSaved(next); setProject(current => current ? { ...current, revision: next.revision,
-                  scene_proposals: next.scene_proposals, applicable_scene_proposal_ids: next.applicable_scene_proposal_ids } : current);
+                  scene_proposals: next.scene_proposals, staging_proposals: next.staging_proposals, applicable_scene_proposal_ids: next.applicable_scene_proposal_ids } : current);
               } else accept(next);
               checked = true;
             }); return checked; }}
