@@ -1,0 +1,39 @@
+{
+  "frozen_at": "2026-10-27T09:02:25.526804+00:00",
+  "maximum_calls": 6,
+  "timeout_seconds_per_call": 60,
+  "retry": false,
+  "model": "gemma2:9b-instruct-q4_K_M",
+  "digest": "c20bec88025f3aefa420efd64dca0ee4abc8e36078d6b74b0f660cdcbd5d1982",
+  "parameters": {
+    "temperature": 0.3,
+    "timeout_seconds": 60,
+    "num_ctx": 16384
+  },
+  "seed": "not exposed/sent by existing provider",
+  "inputs_sha256": "89c3026998263feaff128f88bd4c3504dd571168be2d37eee1acfbec5a7024f2",
+  "schema_sha256": "291dcd309cfe613f2df47aa87a729d88bee35b3c7af6874d02a8cdca1cb8da6d",
+  "hashes": {
+    "backend/app/application/screenplay_review.py": "f325c42e41a8f2131256f4241c06132a86235d96d96527b9665e8be97452c171",
+    "backend/app/application/screenplay_context.py": "c4812f6ef35b715b88ca4e398d664c0ef17d5af540440cdd561adef16e38ef6d",
+    "backend/app/api/routes/screenplay_reviews.py": "faf27c183cbb69b90c27f4ac36940d92a26c923d4b9d281db37c6f0b013bb5b1",
+    "backend/app/api/routes/projects.py": "93a6d7addddbb59015f6d0511ca63ea72d10b6210808831b6227dcc2ffd1c6f2",
+    "backend/app/api/schemas/projects.py": "c9805a497c249a217189af59710264d3760167dd2fab9bdccede36ebfa1ea5bb",
+    "backend/app/api/schemas/screenplays.py": "0e7c08918379b3ca2cb79cf1b619a3838a230efc9419755085f8f37aafd6619d",
+    "backend/app/infrastructure/ollama_provider.py": "293d9fcc59051e06ddb6eebffd263d831817fe761506ca23a92ef21cf2630272",
+    "backend/app/application/ai_provider.py": "15249bd34c8ed12dc31897d1586bd2947c24a16f564ca81ae59871c1cff9929e",
+    "backend/app/application/project_store.py": "de4d7d0c5cffe3dcb91f7c08623a47d9ad1947db0f2b19b2d52fdb38a84a550b",
+    "domains/short-film/prompts/screenplay_review_prompt.md": "918b0ae77b9f590597acdcf3f96d2ced42221668bd833584ab6a0b3f34b2cf30",
+    "docs/evaluations/m3-scene-review-author-control-gemma2-2026-10-27/run.py": "be0dbfe4c17c799d1b4f1cf1b0a4814219561d9003058b4ec60f3ca033b17e29"
+  },
+  "baseline": "docs/evaluations/m3-scene-review-author-control-qwen7b-2026-10-27",
+  "baseline_hashes": {
+    "inputs.json": "89c3026998263feaff128f88bd4c3504dd571168be2d37eee1acfbec5a7024f2",
+    "schema.json": "291dcd309cfe613f2df47aa87a729d88bee35b3c7af6874d02a8cdca1cb8da6d",
+    "manifest.json": "6826d089021460d90ab69d3630ab758352349e42f8186ba43e4012dfc60402fd",
+    "results.json": "8cc96a59001f93561dcd4ffdb9a2241537d0047b985e12576bbc3ffb9c86d8ce",
+    "comparison.json": "b18f60e2533519fcbcc245cfc4afb0c906cbc055907d34756b7eafbc11060553"
+  },
+  "same_six_cases_project_request_expected": true,
+  "change": "Gemma 2 9B only; identical v4 prompt/input/schema and requested temperature/context/timeout to saved Qwen v4; no runtime change"
+}

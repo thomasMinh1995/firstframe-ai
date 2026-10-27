@@ -1,0 +1,21 @@
+{
+  "raw_output": "{\n  \"notes\": [\n    {\n      \"kind\": \"craft\",\n      \"observation\": \"Con gái ngồi xuống ghế nhưng vẫn chưa nói gì. Đây có thể là một cơ hội để cha xin lỗi thêm.\",\n      \"impact\": \"Cha có thể tận dụng tình huống này để thể hiện sự chân thành hơn, giúp tạo cảm xúc cho khán giả.\",\n      \"evidence\": [\n        {\n          \"source_id\": \"S4\",\n          \"quote\": \"Con gái nhìn cha, kéo ghế ngồi. Phong thư còn kín trên bàn.\"\n        }\n      ],\n      \"suggestion\": \"Cha có thể nói thêm một câu xin lỗi ngắn gọn trước khi con gái ngồi xuống.\"\n    }\n  ],\n  \"question\": \"\"\n}",
+  "output": {
+    "notes": [
+      {
+        "kind": "craft",
+        "observation": "Con gái ngồi xuống ghế nhưng vẫn chưa nói gì. Đây có thể là một cơ hội để cha xin lỗi thêm.",
+        "impact": "Cha có thể tận dụng tình huống này để thể hiện sự chân thành hơn, giúp tạo cảm xúc cho khán giả.",
+        "suggestion": "Cha có thể nói thêm một câu xin lỗi ngắn gọn trước khi con gái ngồi xuống.",
+        "evidence": [
+          {
+            "source_id": "S4",
+            "quote": "Con gái nhìn cha, kéo ghế ngồi. Phong thư còn kín trên bàn."
+          }
+        ]
+      }
+    ],
+    "question": ""
+  },
+  "model": "qwen2.5:7b"
+}

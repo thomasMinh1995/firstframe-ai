@@ -1,0 +1,732 @@
+{
+  "response_language": "vi",
+  "id": "faef828e-ca8e-40c9-87c0-82919a24860b",
+  "revision": 7,
+  "updated_at": "2026-10-27T07:35:53.212602+00:00",
+  "title": "Lá thư",
+  "idea": "Cha xin lỗi; con gái ở lại nhưng chưa nói đã tha thứ.",
+  "constraints": [
+    "Chỉ cha và con gái.",
+    "Kết mở; con gái không nói hoặc xác nhận đã tha thứ, không chốt hòa giải.",
+    "Lá thư vẫn kín."
+  ],
+  "analysis": null,
+  "answers": [],
+  "clarifications": {},
+  "draft": {
+    "title": "Lá thư",
+    "logline": "Cha xin lỗi; con gái ở lại nhưng chưa nói đã tha thứ.",
+    "sections": [
+      {
+        "title": "Đầu",
+        "purpose": "Mở",
+        "content": "Cha đặt phong thư kín lên bàn rồi lùi lại."
+      },
+      {
+        "title": "Cuối",
+        "purpose": "Diễn tiến",
+        "content": "Con gái ở lại, giữ khoảng lặng và chưa khẳng định đã tha thứ. Dừng ở kết mở."
+      }
+    ]
+  },
+  "feedback": null,
+  "feedback_source": null,
+  "reviewed_content": null,
+  "versions": [],
+  "clarification_history": [],
+  "plan_generations": [],
+  "scene_outline": {
+    "id": "281d2d83-e391-40cb-8d56-8792ccf00a64",
+    "version": 2,
+    "scenes": [
+      {
+        "id": "1d1cf0e1-8562-4293-98c6-df4931a2e451",
+        "title": "Trước đó",
+        "action": "Cha đặt phong thư kín lên bàn rồi lùi lại.",
+        "location": "",
+        "time": "",
+        "characters": "",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      },
+      {
+        "id": "179508ce-deeb-409f-9dc1-a030e6ee7924",
+        "title": "Khoảnh khắc",
+        "action": "Con gái ở lại, giữ khoảng lặng và chưa khẳng định đã tha thứ. Dừng ở kết mở.",
+        "location": "",
+        "time": "",
+        "characters": "",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      }
+    ],
+    "source": {
+      "id": "38c43c08-2428-4ee0-a418-f0e825a6794d",
+      "project_revision": 0,
+      "version_id": "current",
+      "draft": {
+        "title": "Lá thư",
+        "logline": "Cha xin lỗi; con gái ở lại nhưng chưa nói đã tha thứ.",
+        "sections": [
+          {
+            "title": "Đầu",
+            "purpose": "Mở",
+            "content": "Cha đặt phong thư kín lên bàn rồi lùi lại."
+          },
+          {
+            "title": "Cuối",
+            "purpose": "Diễn tiến",
+            "content": "Con gái ở lại, giữ khoảng lặng và chưa khẳng định đã tha thứ. Dừng ở kết mở."
+          }
+        ]
+      },
+      "context": {
+        "idea": "Cha xin lỗi; con gái ở lại nhưng chưa nói đã tha thứ.",
+        "constraints": [
+          "Chỉ cha và con gái.",
+          "Kết mở; con gái không nói hoặc xác nhận đã tha thứ, không chốt hòa giải.",
+          "Lá thư vẫn kín."
+        ],
+        "clarifications": [],
+        "pending_questions": []
+      },
+      "response_language": "vi"
+    }
+  },
+  "screenplay": {
+    "id": "974879b1-f694-4d86-ad0a-a8be65643506",
+    "version": 2,
+    "scenes": [
+      {
+        "id": "aaf1c0c1-dd71-415b-839f-958dedde03fc",
+        "source_scene_id": "1d1cf0e1-8562-4293-98c6-df4931a2e451",
+        "heading": "Trước đó",
+        "blocks": [
+          {
+            "kind": "action",
+            "text": "Cha đặt phong thư kín lên bàn rồi lùi lại.",
+            "speaker": "",
+            "id": "17ee4416-5390-484d-b100-6923baa6431c"
+          }
+        ]
+      },
+      {
+        "id": "f49eba0e-b0bf-459e-a840-60bf391f9d4b",
+        "source_scene_id": "179508ce-deeb-409f-9dc1-a030e6ee7924",
+        "heading": "Khoảnh khắc",
+        "blocks": [
+          {
+            "kind": "action",
+            "text": "Con gái nhìn cha, kéo ghế ngồi. Phong thư còn kín trên bàn.",
+            "speaker": "",
+            "id": "6ff34ab6-f637-4a16-a45c-c6322a0024b8"
+          },
+          {
+            "kind": "dialogue",
+            "text": "Con tha thứ cho cha. Mọi chuyện đã được giải quyết.",
+            "speaker": "Con gái",
+            "id": "39d53851-72e3-424f-b7e2-1ca7fe93e0bd"
+          }
+        ]
+      }
+    ],
+    "source_revision": 2,
+    "source_outline": {
+      "id": "281d2d83-e391-40cb-8d56-8792ccf00a64",
+      "version": 2,
+      "scenes": [
+        {
+          "id": "1d1cf0e1-8562-4293-98c6-df4931a2e451",
+          "title": "Trước đó",
+          "action": "Cha đặt phong thư kín lên bàn rồi lùi lại.",
+          "location": "",
+          "time": "",
+          "characters": "",
+          "goal": "",
+          "purpose": "",
+          "viewer_intent": "",
+          "keep_or_avoid": "",
+          "staging_choices": {}
+        },
+        {
+          "id": "179508ce-deeb-409f-9dc1-a030e6ee7924",
+          "title": "Khoảnh khắc",
+          "action": "Con gái ở lại, giữ khoảng lặng và chưa khẳng định đã tha thứ. Dừng ở kết mở.",
+          "location": "",
+          "time": "",
+          "characters": "",
+          "goal": "",
+          "purpose": "",
+          "viewer_intent": "",
+          "keep_or_avoid": "",
+          "staging_choices": {}
+        }
+      ],
+      "source": {
+        "id": "38c43c08-2428-4ee0-a418-f0e825a6794d",
+        "project_revision": 0,
+        "version_id": "current",
+        "draft": {
+          "title": "Lá thư",
+          "logline": "Cha xin lỗi; con gái ở lại nhưng chưa nói đã tha thứ.",
+          "sections": [
+            {
+              "title": "Đầu",
+              "purpose": "Mở",
+              "content": "Cha đặt phong thư kín lên bàn rồi lùi lại."
+            },
+            {
+              "title": "Cuối",
+              "purpose": "Diễn tiến",
+              "content": "Con gái ở lại, giữ khoảng lặng và chưa khẳng định đã tha thứ. Dừng ở kết mở."
+            }
+          ]
+        },
+        "context": {
+          "idea": "Cha xin lỗi; con gái ở lại nhưng chưa nói đã tha thứ.",
+          "constraints": [
+            "Chỉ cha và con gái.",
+            "Kết mở; con gái không nói hoặc xác nhận đã tha thứ, không chốt hòa giải.",
+            "Lá thư vẫn kín."
+          ],
+          "clarifications": [],
+          "pending_questions": []
+        },
+        "response_language": "vi"
+      }
+    }
+  },
+  "screenplay_versions": [
+    {
+      "id": "35d8500e-0a87-4ba6-96fb-2e6954de8a13",
+      "created_at": "2026-10-27T07:08:26.680994+00:00",
+      "screenplay": {
+        "id": "974879b1-f694-4d86-ad0a-a8be65643506",
+        "version": 1,
+        "scenes": [
+          {
+            "id": "aaf1c0c1-dd71-415b-839f-958dedde03fc",
+            "source_scene_id": "1d1cf0e1-8562-4293-98c6-df4931a2e451",
+            "heading": "Trước đó",
+            "blocks": []
+          },
+          {
+            "id": "f49eba0e-b0bf-459e-a840-60bf391f9d4b",
+            "source_scene_id": "179508ce-deeb-409f-9dc1-a030e6ee7924",
+            "heading": "Khoảnh khắc",
+            "blocks": []
+          }
+        ],
+        "source_revision": 2,
+        "source_outline": {
+          "id": "281d2d83-e391-40cb-8d56-8792ccf00a64",
+          "version": 2,
+          "scenes": [
+            {
+              "id": "1d1cf0e1-8562-4293-98c6-df4931a2e451",
+              "title": "Trước đó",
+              "action": "Cha đặt phong thư kín lên bàn rồi lùi lại.",
+              "location": "",
+              "time": "",
+              "characters": "",
+              "goal": "",
+              "purpose": "",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {}
+            },
+            {
+              "id": "179508ce-deeb-409f-9dc1-a030e6ee7924",
+              "title": "Khoảnh khắc",
+              "action": "Con gái ở lại, giữ khoảng lặng và chưa khẳng định đã tha thứ. Dừng ở kết mở.",
+              "location": "",
+              "time": "",
+              "characters": "",
+              "goal": "",
+              "purpose": "",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {}
+            }
+          ],
+          "source": {
+            "id": "38c43c08-2428-4ee0-a418-f0e825a6794d",
+            "project_revision": 0,
+            "version_id": "current",
+            "draft": {
+              "title": "Lá thư",
+              "logline": "Cha xin lỗi; con gái ở lại nhưng chưa nói đã tha thứ.",
+              "sections": [
+                {
+                  "title": "Đầu",
+                  "purpose": "Mở",
+                  "content": "Cha đặt phong thư kín lên bàn rồi lùi lại."
+                },
+                {
+                  "title": "Cuối",
+                  "purpose": "Diễn tiến",
+                  "content": "Con gái ở lại, giữ khoảng lặng và chưa khẳng định đã tha thứ. Dừng ở kết mở."
+                }
+              ]
+            },
+            "context": {
+              "idea": "Cha xin lỗi; con gái ở lại nhưng chưa nói đã tha thứ.",
+              "constraints": [
+                "Chỉ cha và con gái.",
+                "Kết mở; con gái không nói hoặc xác nhận đã tha thứ, không chốt hòa giải.",
+                "Lá thư vẫn kín."
+              ],
+              "clarifications": [],
+              "pending_questions": []
+            },
+            "response_language": "vi"
+          }
+        }
+      }
+    }
+  ],
+  "screenplay_proposals": [],
+  "screenplay_reviews": [
+    {
+      "id": "8e26b0f0-529e-4e8f-bd74-2832c151e1b8",
+      "created_at": "2026-10-27T07:35:43.218081+00:00",
+      "source_revision": 4,
+      "source_content": "{\"answers\": [], \"clarifications\": {}, \"constraints\": [\"Chỉ cha và con gái.\", \"Kết mở; con gái không nói hoặc xác nhận đã tha thứ, không chốt hòa giải.\", \"Lá thư vẫn kín.\"], \"draft\": {\"logline\": \"Cha xin lỗi; con gái ở lại nhưng chưa nói đã tha thứ.\", \"sections\": [{\"content\": \"Cha đặt phong thư kín lên bàn rồi lùi lại.\", \"purpose\": \"Mở\", \"title\": \"Đầu\"}, {\"content\": \"Con gái ở lại, giữ khoảng lặng và chưa khẳng định đã tha thứ. Dừng ở kết mở.\", \"purpose\": \"Diễn tiến\", \"title\": \"Cuối\"}], \"title\": \"Lá thư\"}, \"idea\": \"Cha xin lỗi; con gái ở lại nhưng chưa nói đã tha thứ.\", \"questions\": [], \"response_language\": \"vi\"}",
+      "source_screenplay": {
+        "id": "974879b1-f694-4d86-ad0a-a8be65643506",
+        "version": 2,
+        "scenes": [
+          {
+            "id": "aaf1c0c1-dd71-415b-839f-958dedde03fc",
+            "source_scene_id": "1d1cf0e1-8562-4293-98c6-df4931a2e451",
+            "heading": "Trước đó",
+            "blocks": [
+              {
+                "kind": "action",
+                "text": "Cha đặt phong thư kín lên bàn rồi lùi lại.",
+                "speaker": "",
+                "id": "17ee4416-5390-484d-b100-6923baa6431c"
+              }
+            ]
+          },
+          {
+            "id": "f49eba0e-b0bf-459e-a840-60bf391f9d4b",
+            "source_scene_id": "179508ce-deeb-409f-9dc1-a030e6ee7924",
+            "heading": "Khoảnh khắc",
+            "blocks": [
+              {
+                "kind": "action",
+                "text": "Con gái nhìn cha, kéo ghế ngồi. Phong thư còn kín trên bàn.",
+                "speaker": "",
+                "id": "6ff34ab6-f637-4a16-a45c-c6322a0024b8"
+              },
+              {
+                "kind": "dialogue",
+                "text": "Con tha thứ cho cha. Mọi chuyện đã được giải quyết.",
+                "speaker": "Con gái",
+                "id": "39d53851-72e3-424f-b7e2-1ca7fe93e0bd"
+              }
+            ]
+          }
+        ],
+        "source_revision": 2,
+        "source_outline": {
+          "id": "281d2d83-e391-40cb-8d56-8792ccf00a64",
+          "version": 2,
+          "scenes": [
+            {
+              "id": "1d1cf0e1-8562-4293-98c6-df4931a2e451",
+              "title": "Trước đó",
+              "action": "Cha đặt phong thư kín lên bàn rồi lùi lại.",
+              "location": "",
+              "time": "",
+              "characters": "",
+              "goal": "",
+              "purpose": "",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {}
+            },
+            {
+              "id": "179508ce-deeb-409f-9dc1-a030e6ee7924",
+              "title": "Khoảnh khắc",
+              "action": "Con gái ở lại, giữ khoảng lặng và chưa khẳng định đã tha thứ. Dừng ở kết mở.",
+              "location": "",
+              "time": "",
+              "characters": "",
+              "goal": "",
+              "purpose": "",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {}
+            }
+          ],
+          "source": {
+            "id": "38c43c08-2428-4ee0-a418-f0e825a6794d",
+            "project_revision": 0,
+            "version_id": "current",
+            "draft": {
+              "title": "Lá thư",
+              "logline": "Cha xin lỗi; con gái ở lại nhưng chưa nói đã tha thứ.",
+              "sections": [
+                {
+                  "title": "Đầu",
+                  "purpose": "Mở",
+                  "content": "Cha đặt phong thư kín lên bàn rồi lùi lại."
+                },
+                {
+                  "title": "Cuối",
+                  "purpose": "Diễn tiến",
+                  "content": "Con gái ở lại, giữ khoảng lặng và chưa khẳng định đã tha thứ. Dừng ở kết mở."
+                }
+              ]
+            },
+            "context": {
+              "idea": "Cha xin lỗi; con gái ở lại nhưng chưa nói đã tha thứ.",
+              "constraints": [
+                "Chỉ cha và con gái.",
+                "Kết mở; con gái không nói hoặc xác nhận đã tha thứ, không chốt hòa giải.",
+                "Lá thư vẫn kín."
+              ],
+              "clarifications": [],
+              "pending_questions": []
+            },
+            "response_language": "vi"
+          }
+        }
+      },
+      "source_outline": {
+        "id": "281d2d83-e391-40cb-8d56-8792ccf00a64",
+        "version": 2,
+        "scenes": [
+          {
+            "id": "1d1cf0e1-8562-4293-98c6-df4931a2e451",
+            "title": "Trước đó",
+            "action": "Cha đặt phong thư kín lên bàn rồi lùi lại.",
+            "location": "",
+            "time": "",
+            "characters": "",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "",
+            "keep_or_avoid": "",
+            "staging_choices": {}
+          },
+          {
+            "id": "179508ce-deeb-409f-9dc1-a030e6ee7924",
+            "title": "Khoảnh khắc",
+            "action": "Con gái ở lại, giữ khoảng lặng và chưa khẳng định đã tha thứ. Dừng ở kết mở.",
+            "location": "",
+            "time": "",
+            "characters": "",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "",
+            "keep_or_avoid": "",
+            "staging_choices": {}
+          }
+        ],
+        "source": {
+          "id": "38c43c08-2428-4ee0-a418-f0e825a6794d",
+          "project_revision": 0,
+          "version_id": "current",
+          "draft": {
+            "title": "Lá thư",
+            "logline": "Cha xin lỗi; con gái ở lại nhưng chưa nói đã tha thứ.",
+            "sections": [
+              {
+                "title": "Đầu",
+                "purpose": "Mở",
+                "content": "Cha đặt phong thư kín lên bàn rồi lùi lại."
+              },
+              {
+                "title": "Cuối",
+                "purpose": "Diễn tiến",
+                "content": "Con gái ở lại, giữ khoảng lặng và chưa khẳng định đã tha thứ. Dừng ở kết mở."
+              }
+            ]
+          },
+          "context": {
+            "idea": "Cha xin lỗi; con gái ở lại nhưng chưa nói đã tha thứ.",
+            "constraints": [
+              "Chỉ cha và con gái.",
+              "Kết mở; con gái không nói hoặc xác nhận đã tha thứ, không chốt hòa giải.",
+              "Lá thư vẫn kín."
+            ],
+            "clarifications": [],
+            "pending_questions": []
+          },
+          "response_language": "vi"
+        }
+      },
+      "target_scene_id": "f49eba0e-b0bf-459e-a840-60bf391f9d4b",
+      "instructions": "Chỉ nêu góp ý có bằng chứng về cảnh này; tác giả tự sửa.",
+      "status": "ready",
+      "sources": [
+        {
+          "id": "script:aaf1c0c1-dd71-415b-839f-958dedde03fc:heading",
+          "label": "Trước đó",
+          "text": "Trước đó",
+          "category": "screenplay",
+          "scene_id": "aaf1c0c1-dd71-415b-839f-958dedde03fc",
+          "block_id": null,
+          "field": "heading"
+        },
+        {
+          "id": "block:17ee4416-5390-484d-b100-6923baa6431c:text",
+          "label": "Trước đó · khối 1",
+          "text": "Cha đặt phong thư kín lên bàn rồi lùi lại.",
+          "category": "screenplay",
+          "scene_id": "aaf1c0c1-dd71-415b-839f-958dedde03fc",
+          "block_id": "17ee4416-5390-484d-b100-6923baa6431c",
+          "field": "text"
+        },
+        {
+          "id": "script:f49eba0e-b0bf-459e-a840-60bf391f9d4b:heading",
+          "label": "Khoảnh khắc",
+          "text": "Khoảnh khắc",
+          "category": "screenplay",
+          "scene_id": "f49eba0e-b0bf-459e-a840-60bf391f9d4b",
+          "block_id": null,
+          "field": "heading"
+        },
+        {
+          "id": "block:6ff34ab6-f637-4a16-a45c-c6322a0024b8:text",
+          "label": "Khoảnh khắc · khối 1",
+          "text": "Con gái nhìn cha, kéo ghế ngồi. Phong thư còn kín trên bàn.",
+          "category": "screenplay",
+          "scene_id": "f49eba0e-b0bf-459e-a840-60bf391f9d4b",
+          "block_id": "6ff34ab6-f637-4a16-a45c-c6322a0024b8",
+          "field": "text"
+        },
+        {
+          "id": "block:39d53851-72e3-424f-b7e2-1ca7fe93e0bd:text",
+          "label": "Khoảnh khắc · khối 2",
+          "text": "Con tha thứ cho cha. Mọi chuyện đã được giải quyết.",
+          "category": "screenplay",
+          "scene_id": "f49eba0e-b0bf-459e-a840-60bf391f9d4b",
+          "block_id": "39d53851-72e3-424f-b7e2-1ca7fe93e0bd",
+          "field": "text"
+        },
+        {
+          "id": "block:39d53851-72e3-424f-b7e2-1ca7fe93e0bd:speaker",
+          "label": "Khoảnh khắc · khối 2 · người nói",
+          "text": "Con gái",
+          "category": "screenplay",
+          "scene_id": "f49eba0e-b0bf-459e-a840-60bf391f9d4b",
+          "block_id": "39d53851-72e3-424f-b7e2-1ca7fe93e0bd",
+          "field": "speaker"
+        },
+        {
+          "id": "m2:179508ce-deeb-409f-9dc1-a030e6ee7924:action",
+          "label": "Diễn tiến M2 đã chọn",
+          "text": "Con gái ở lại, giữ khoảng lặng và chưa khẳng định đã tha thứ. Dừng ở kết mở.",
+          "category": "author_choice",
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "intent:idea",
+          "label": "Ý tưởng tác giả",
+          "text": "Cha xin lỗi; con gái ở lại nhưng chưa nói đã tha thứ.",
+          "category": "author_choice",
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "intent:constraint:0",
+          "label": "Giới hạn 1",
+          "text": "Chỉ cha và con gái.",
+          "category": "author_choice",
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "intent:constraint:1",
+          "label": "Giới hạn 2",
+          "text": "Kết mở; con gái không nói hoặc xác nhận đã tha thứ, không chốt hòa giải.",
+          "category": "author_choice",
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "intent:constraint:2",
+          "label": "Giới hạn 3",
+          "text": "Lá thư vẫn kín.",
+          "category": "author_choice",
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "plan:logline",
+          "label": "Logline nguồn",
+          "text": "Cha xin lỗi; con gái ở lại nhưng chưa nói đã tha thứ.",
+          "category": "context",
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        },
+        {
+          "id": "plan:section:0",
+          "label": "Đầu",
+          "text": "Cha đặt phong thư kín lên bàn rồi lùi lại.",
+          "category": "context",
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        },
+        {
+          "id": "plan:section:1",
+          "label": "Cuối",
+          "text": "Con gái ở lại, giữ khoảng lặng và chưa khẳng định đã tha thứ. Dừng ở kết mở.",
+          "category": "context",
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        }
+      ],
+      "notes": [
+        {
+          "kind": "intent_mismatch",
+          "observation": "Con gái đã tha thứ cho cha, nhưng tác giả yêu cầu giữ kết mở. Việc này tạo ra sự mâu thuẫn.",
+          "impact": "Đây có thể gây nhầm lẫn cho diễn viên và khán giả, vì họ có thể hiểu sai thông điệp của tác giả.",
+          "suggestion": "",
+          "evidence": [
+            {
+              "source_id": "block:39d53851-72e3-424f-b7e2-1ca7fe93e0bd:text",
+              "quote": "Con tha thứ cho cha. Mọi chuyện đã được giải quyết."
+            },
+            {
+              "source_id": "m2:179508ce-deeb-409f-9dc1-a030e6ee7924:action",
+              "quote": "Con gái ở lại, giữ khoảng lặng và chưa khẳng định đã tha thứ. Dừng ở kết mở."
+            }
+          ],
+          "id": "4af2c0e0-34d8-4e8f-bbaa-6b7502235225",
+          "assessment": null
+        }
+      ],
+      "question": "Tác giả có muốn giữ kết thúc này hay muốn thay đổi để phù hợp với ý tưởng ban đầu không?",
+      "provider": "ollama",
+      "model": "qwen2.5:7b",
+      "parameters": {
+        "temperature": 0.3,
+        "timeout_seconds": 60,
+        "num_ctx": 16384
+      },
+      "prompt_version": "screenplay-review-v2-short-sources",
+      "error": null
+    }
+  ],
+  "scene_versions": [
+    {
+      "id": "70b6d2f8-da82-4684-ae9a-1dc1e6f7d864",
+      "created_at": "2026-10-27T07:08:26.676717+00:00",
+      "outline": {
+        "id": "281d2d83-e391-40cb-8d56-8792ccf00a64",
+        "version": 1,
+        "scenes": [],
+        "source": {
+          "id": "38c43c08-2428-4ee0-a418-f0e825a6794d",
+          "project_revision": 0,
+          "version_id": "current",
+          "draft": {
+            "title": "Lá thư",
+            "logline": "Cha xin lỗi; con gái ở lại nhưng chưa nói đã tha thứ.",
+            "sections": [
+              {
+                "title": "Đầu",
+                "purpose": "Mở",
+                "content": "Cha đặt phong thư kín lên bàn rồi lùi lại."
+              },
+              {
+                "title": "Cuối",
+                "purpose": "Diễn tiến",
+                "content": "Con gái ở lại, giữ khoảng lặng và chưa khẳng định đã tha thứ. Dừng ở kết mở."
+              }
+            ]
+          },
+          "context": {
+            "idea": "Cha xin lỗi; con gái ở lại nhưng chưa nói đã tha thứ.",
+            "constraints": [
+              "Chỉ cha và con gái.",
+              "Kết mở; con gái không nói hoặc xác nhận đã tha thứ, không chốt hòa giải.",
+              "Lá thư vẫn kín."
+            ],
+            "clarifications": [],
+            "pending_questions": []
+          },
+          "response_language": "vi"
+        }
+      }
+    }
+  ],
+  "scene_proposals": [],
+  "staging_proposals": [],
+  "scene_sketches": [],
+  "selected_scene_sketches": {},
+  "current_screenplay_review_ids": [
+    "8e26b0f0-529e-4e8f-bd74-2832c151e1b8"
+  ],
+  "applicable_screenplay_proposal_ids": [],
+  "screenplay_source_is_current": true,
+  "applicable_sketch_ids": [],
+  "applicable_scene_proposal_ids": [],
+  "scene_source_is_current": true,
+  "scene_handoff": {
+    "outline_id": "281d2d83-e391-40cb-8d56-8792ccf00a64",
+    "version": 2,
+    "project_revision": 7,
+    "source_id": "38c43c08-2428-4ee0-a418-f0e825a6794d",
+    "scenes": [
+      {
+        "id": "1d1cf0e1-8562-4293-98c6-df4931a2e451",
+        "title": "Trước đó",
+        "action": "Cha đặt phong thư kín lên bàn rồi lùi lại.",
+        "location": "",
+        "time": "",
+        "characters": "",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      },
+      {
+        "id": "179508ce-deeb-409f-9dc1-a030e6ee7924",
+        "title": "Khoảnh khắc",
+        "action": "Con gái ở lại, giữ khoảng lặng và chưa khẳng định đã tha thứ. Dừng ở kết mở.",
+        "location": "",
+        "time": "",
+        "characters": "",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      }
+    ]
+  },
+  "applicable_plan_ids": [],
+  "author_context": {
+    "idea": "Cha xin lỗi; con gái ở lại nhưng chưa nói đã tha thứ.",
+    "constraints": [
+      "Chỉ cha và con gái.",
+      "Kết mở; con gái không nói hoặc xác nhận đã tha thứ, không chốt hòa giải.",
+      "Lá thư vẫn kín."
+    ],
+    "clarifications": [],
+    "pending_questions": []
+  },
+  "feedback_is_current": false
+}

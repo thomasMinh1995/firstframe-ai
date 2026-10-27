@@ -23,6 +23,8 @@ from test_generate_workflow import FakeProvider
 from test_projects import develop_project, start_project
 
 from app.api.routes import projects as routes
+from app.api.routes import screenplay_reviews
+from test_screenplay_review import ReviewProvider
 from app.api.routes import screenplays
 from test_screenplay_writing import WritingProvider
 from app.api.routes import scene_sketches
@@ -74,6 +76,8 @@ class WorkspaceProvider(FakeProvider):
 
 
 provider = WorkspaceProvider()
+review_provider = ReviewProvider()
+screenplay_reviews.get_review_provider = lambda: review_provider
 writing_provider = WritingProvider()
 screenplays.get_screenplay_provider = lambda: writing_provider
 image_provider = FakeImageProvider()
@@ -109,12 +113,18 @@ async def record(request: Request, call_next):
 
 @app.get("/__test/state")
 def inspect():
-    return {**state, "provider_stages": [r.stage for r in provider.requests], "image_requests": len(image_provider.requests), "writing_requests": len(writing_provider.requests)}
+    return {**state, "provider_stages": [r.stage for r in provider.requests], "image_requests": len(image_provider.requests), "writing_requests": len(writing_provider.requests), "review_requests": len(review_provider.requests)}
 
 
 @app.post("/__test/control")
 async def control(values: dict):
-    assert set(values) <= {"fail_critic", "hold_suffix", "lose_response_suffix", "release", "fail_scenes", "bad_staging", "empty_staging", "fail_sketch", "fail_writing"}
+    assert set(values) <= {"fail_critic", "hold_suffix", "lose_response_suffix", "release", "fail_scenes", "bad_staging", "empty_staging", "fail_sketch", "fail_writing", "fail_review", "bad_review", "empty_review"}
+    if "fail_review" in values:
+        review_provider.error = ProviderTimeoutError("fixture review timeout") if values["fail_review"] else None
+    if "bad_review" in values:
+        review_provider.mode = "bad_quote" if values["bad_review"] else "valid"
+    if "empty_review" in values:
+        review_provider.mode = "empty" if values["empty_review"] else "valid"
     if "fail_writing" in values:
         writing_provider.error = ProviderTimeoutError("fixture writing timeout") if values["fail_writing"] else None
     if "fail_sketch" in values:

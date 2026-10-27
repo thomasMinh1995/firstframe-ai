@@ -1,0 +1,702 @@
+{
+  "response_language": "vi",
+  "id": "bd6fdab3-4678-428d-9c6f-3315b2a9f3a1",
+  "revision": 7,
+  "updated_at": "2026-10-27T07:58:53.609508+00:00",
+  "title": "Lối đi",
+  "idea": "Người cha xin lỗi và để con gái tự quyết định ở lại hay ra đi.",
+  "constraints": [
+    "Chỉ cha và con gái trong nhà.",
+    "Cha không giữ giấy tờ hoặc ép con gái ở lại.",
+    "Con gái tự quyết định việc ra đi."
+  ],
+  "analysis": null,
+  "answers": [],
+  "clarifications": {},
+  "draft": {
+    "title": "Lối đi",
+    "logline": "Người cha xin lỗi và để con gái tự quyết định ở lại hay ra đi.",
+    "sections": [
+      {
+        "title": "Đầu",
+        "purpose": "Mở",
+        "content": "Con gái đặt túi cạnh cửa. Cha đứng bên bàn."
+      },
+      {
+        "title": "Cuối",
+        "purpose": "Diễn tiến",
+        "content": "Cha đặt lá thư xin lỗi lên bàn, lùi lại và để lối đi trống; con gái tự quyết định."
+      }
+    ]
+  },
+  "feedback": null,
+  "feedback_source": null,
+  "reviewed_content": null,
+  "versions": [],
+  "clarification_history": [],
+  "plan_generations": [],
+  "scene_outline": {
+    "id": "00b0f24a-91ec-4f2b-ac0c-144ec8735e38",
+    "version": 2,
+    "scenes": [
+      {
+        "id": "79befc08-14b5-451a-99aa-8e850c571261",
+        "title": "Trước đó",
+        "action": "Con gái đặt túi cạnh cửa. Cha đứng bên bàn.",
+        "location": "",
+        "time": "",
+        "characters": "",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      },
+      {
+        "id": "6ef7df96-80c4-4cc9-891c-65fb603a670d",
+        "title": "Khoảnh khắc",
+        "action": "Cha đặt lá thư xin lỗi lên bàn, lùi lại và để lối đi trống; con gái tự quyết định.",
+        "location": "",
+        "time": "",
+        "characters": "",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      }
+    ],
+    "source": {
+      "id": "d4c36b31-8f08-4470-b3ed-fd23648eaf01",
+      "project_revision": 0,
+      "version_id": "current",
+      "draft": {
+        "title": "Lối đi",
+        "logline": "Người cha xin lỗi và để con gái tự quyết định ở lại hay ra đi.",
+        "sections": [
+          {
+            "title": "Đầu",
+            "purpose": "Mở",
+            "content": "Con gái đặt túi cạnh cửa. Cha đứng bên bàn."
+          },
+          {
+            "title": "Cuối",
+            "purpose": "Diễn tiến",
+            "content": "Cha đặt lá thư xin lỗi lên bàn, lùi lại và để lối đi trống; con gái tự quyết định."
+          }
+        ]
+      },
+      "context": {
+        "idea": "Người cha xin lỗi và để con gái tự quyết định ở lại hay ra đi.",
+        "constraints": [
+          "Chỉ cha và con gái trong nhà.",
+          "Cha không giữ giấy tờ hoặc ép con gái ở lại.",
+          "Con gái tự quyết định việc ra đi."
+        ],
+        "clarifications": [],
+        "pending_questions": []
+      },
+      "response_language": "vi"
+    }
+  },
+  "screenplay": {
+    "id": "65b29b63-f68f-43f9-983f-6ce2216fe910",
+    "version": 2,
+    "scenes": [
+      {
+        "id": "b7940d9f-e5ab-4bdd-ba6c-eb7f148dfe81",
+        "source_scene_id": "79befc08-14b5-451a-99aa-8e850c571261",
+        "heading": "Trước đó",
+        "blocks": [
+          {
+            "kind": "action",
+            "text": "Con gái đặt túi cạnh cửa. Cha đứng bên bàn.",
+            "speaker": "",
+            "id": "ccd921b2-f5fe-436b-b8b3-7f29f1061ed1"
+          }
+        ]
+      },
+      {
+        "id": "31a2abaf-8a56-4c72-b4e5-121688122a71",
+        "source_scene_id": "6ef7df96-80c4-4cc9-891c-65fb603a670d",
+        "heading": "Khoảnh khắc",
+        "blocks": [
+          {
+            "kind": "action",
+            "text": "Con gái nhìn về cửa, chưa bước đi.",
+            "speaker": "",
+            "id": "86a65c6f-d51e-450b-8992-c5fb65f4d5f4"
+          },
+          {
+            "kind": "action",
+            "text": "Cha giấu hộ chiếu của con gái vào túi để cô không thể ra đi.",
+            "speaker": "",
+            "id": "e84adbfa-3b40-4ae9-8fc8-44b4c4791b21"
+          }
+        ]
+      }
+    ],
+    "source_revision": 2,
+    "source_outline": {
+      "id": "00b0f24a-91ec-4f2b-ac0c-144ec8735e38",
+      "version": 2,
+      "scenes": [
+        {
+          "id": "79befc08-14b5-451a-99aa-8e850c571261",
+          "title": "Trước đó",
+          "action": "Con gái đặt túi cạnh cửa. Cha đứng bên bàn.",
+          "location": "",
+          "time": "",
+          "characters": "",
+          "goal": "",
+          "purpose": "",
+          "viewer_intent": "",
+          "keep_or_avoid": "",
+          "staging_choices": {}
+        },
+        {
+          "id": "6ef7df96-80c4-4cc9-891c-65fb603a670d",
+          "title": "Khoảnh khắc",
+          "action": "Cha đặt lá thư xin lỗi lên bàn, lùi lại và để lối đi trống; con gái tự quyết định.",
+          "location": "",
+          "time": "",
+          "characters": "",
+          "goal": "",
+          "purpose": "",
+          "viewer_intent": "",
+          "keep_or_avoid": "",
+          "staging_choices": {}
+        }
+      ],
+      "source": {
+        "id": "d4c36b31-8f08-4470-b3ed-fd23648eaf01",
+        "project_revision": 0,
+        "version_id": "current",
+        "draft": {
+          "title": "Lối đi",
+          "logline": "Người cha xin lỗi và để con gái tự quyết định ở lại hay ra đi.",
+          "sections": [
+            {
+              "title": "Đầu",
+              "purpose": "Mở",
+              "content": "Con gái đặt túi cạnh cửa. Cha đứng bên bàn."
+            },
+            {
+              "title": "Cuối",
+              "purpose": "Diễn tiến",
+              "content": "Cha đặt lá thư xin lỗi lên bàn, lùi lại và để lối đi trống; con gái tự quyết định."
+            }
+          ]
+        },
+        "context": {
+          "idea": "Người cha xin lỗi và để con gái tự quyết định ở lại hay ra đi.",
+          "constraints": [
+            "Chỉ cha và con gái trong nhà.",
+            "Cha không giữ giấy tờ hoặc ép con gái ở lại.",
+            "Con gái tự quyết định việc ra đi."
+          ],
+          "clarifications": [],
+          "pending_questions": []
+        },
+        "response_language": "vi"
+      }
+    }
+  },
+  "screenplay_versions": [
+    {
+      "id": "f3bdbbaa-a3d5-49ec-b26d-52edf8738132",
+      "created_at": "2026-10-27T07:08:26.692114+00:00",
+      "screenplay": {
+        "id": "65b29b63-f68f-43f9-983f-6ce2216fe910",
+        "version": 1,
+        "scenes": [
+          {
+            "id": "b7940d9f-e5ab-4bdd-ba6c-eb7f148dfe81",
+            "source_scene_id": "79befc08-14b5-451a-99aa-8e850c571261",
+            "heading": "Trước đó",
+            "blocks": []
+          },
+          {
+            "id": "31a2abaf-8a56-4c72-b4e5-121688122a71",
+            "source_scene_id": "6ef7df96-80c4-4cc9-891c-65fb603a670d",
+            "heading": "Khoảnh khắc",
+            "blocks": []
+          }
+        ],
+        "source_revision": 2,
+        "source_outline": {
+          "id": "00b0f24a-91ec-4f2b-ac0c-144ec8735e38",
+          "version": 2,
+          "scenes": [
+            {
+              "id": "79befc08-14b5-451a-99aa-8e850c571261",
+              "title": "Trước đó",
+              "action": "Con gái đặt túi cạnh cửa. Cha đứng bên bàn.",
+              "location": "",
+              "time": "",
+              "characters": "",
+              "goal": "",
+              "purpose": "",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {}
+            },
+            {
+              "id": "6ef7df96-80c4-4cc9-891c-65fb603a670d",
+              "title": "Khoảnh khắc",
+              "action": "Cha đặt lá thư xin lỗi lên bàn, lùi lại và để lối đi trống; con gái tự quyết định.",
+              "location": "",
+              "time": "",
+              "characters": "",
+              "goal": "",
+              "purpose": "",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {}
+            }
+          ],
+          "source": {
+            "id": "d4c36b31-8f08-4470-b3ed-fd23648eaf01",
+            "project_revision": 0,
+            "version_id": "current",
+            "draft": {
+              "title": "Lối đi",
+              "logline": "Người cha xin lỗi và để con gái tự quyết định ở lại hay ra đi.",
+              "sections": [
+                {
+                  "title": "Đầu",
+                  "purpose": "Mở",
+                  "content": "Con gái đặt túi cạnh cửa. Cha đứng bên bàn."
+                },
+                {
+                  "title": "Cuối",
+                  "purpose": "Diễn tiến",
+                  "content": "Cha đặt lá thư xin lỗi lên bàn, lùi lại và để lối đi trống; con gái tự quyết định."
+                }
+              ]
+            },
+            "context": {
+              "idea": "Người cha xin lỗi và để con gái tự quyết định ở lại hay ra đi.",
+              "constraints": [
+                "Chỉ cha và con gái trong nhà.",
+                "Cha không giữ giấy tờ hoặc ép con gái ở lại.",
+                "Con gái tự quyết định việc ra đi."
+              ],
+              "clarifications": [],
+              "pending_questions": []
+            },
+            "response_language": "vi"
+          }
+        }
+      }
+    }
+  ],
+  "screenplay_proposals": [],
+  "screenplay_reviews": [
+    {
+      "id": "98df0209-56b9-4799-97a8-183eb052132b",
+      "created_at": "2026-10-27T07:57:52.381866+00:00",
+      "source_revision": 4,
+      "source_content": "{\"answers\": [], \"clarifications\": {}, \"constraints\": [\"Chỉ cha và con gái trong nhà.\", \"Cha không giữ giấy tờ hoặc ép con gái ở lại.\", \"Con gái tự quyết định việc ra đi.\"], \"draft\": {\"logline\": \"Người cha xin lỗi và để con gái tự quyết định ở lại hay ra đi.\", \"sections\": [{\"content\": \"Con gái đặt túi cạnh cửa. Cha đứng bên bàn.\", \"purpose\": \"Mở\", \"title\": \"Đầu\"}, {\"content\": \"Cha đặt lá thư xin lỗi lên bàn, lùi lại và để lối đi trống; con gái tự quyết định.\", \"purpose\": \"Diễn tiến\", \"title\": \"Cuối\"}], \"title\": \"Lối đi\"}, \"idea\": \"Người cha xin lỗi và để con gái tự quyết định ở lại hay ra đi.\", \"questions\": [], \"response_language\": \"vi\"}",
+      "source_screenplay": {
+        "id": "65b29b63-f68f-43f9-983f-6ce2216fe910",
+        "version": 2,
+        "scenes": [
+          {
+            "id": "b7940d9f-e5ab-4bdd-ba6c-eb7f148dfe81",
+            "source_scene_id": "79befc08-14b5-451a-99aa-8e850c571261",
+            "heading": "Trước đó",
+            "blocks": [
+              {
+                "kind": "action",
+                "text": "Con gái đặt túi cạnh cửa. Cha đứng bên bàn.",
+                "speaker": "",
+                "id": "ccd921b2-f5fe-436b-b8b3-7f29f1061ed1"
+              }
+            ]
+          },
+          {
+            "id": "31a2abaf-8a56-4c72-b4e5-121688122a71",
+            "source_scene_id": "6ef7df96-80c4-4cc9-891c-65fb603a670d",
+            "heading": "Khoảnh khắc",
+            "blocks": [
+              {
+                "kind": "action",
+                "text": "Con gái nhìn về cửa, chưa bước đi.",
+                "speaker": "",
+                "id": "86a65c6f-d51e-450b-8992-c5fb65f4d5f4"
+              },
+              {
+                "kind": "action",
+                "text": "Cha giấu hộ chiếu của con gái vào túi để cô không thể ra đi.",
+                "speaker": "",
+                "id": "e84adbfa-3b40-4ae9-8fc8-44b4c4791b21"
+              }
+            ]
+          }
+        ],
+        "source_revision": 2,
+        "source_outline": {
+          "id": "00b0f24a-91ec-4f2b-ac0c-144ec8735e38",
+          "version": 2,
+          "scenes": [
+            {
+              "id": "79befc08-14b5-451a-99aa-8e850c571261",
+              "title": "Trước đó",
+              "action": "Con gái đặt túi cạnh cửa. Cha đứng bên bàn.",
+              "location": "",
+              "time": "",
+              "characters": "",
+              "goal": "",
+              "purpose": "",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {}
+            },
+            {
+              "id": "6ef7df96-80c4-4cc9-891c-65fb603a670d",
+              "title": "Khoảnh khắc",
+              "action": "Cha đặt lá thư xin lỗi lên bàn, lùi lại và để lối đi trống; con gái tự quyết định.",
+              "location": "",
+              "time": "",
+              "characters": "",
+              "goal": "",
+              "purpose": "",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {}
+            }
+          ],
+          "source": {
+            "id": "d4c36b31-8f08-4470-b3ed-fd23648eaf01",
+            "project_revision": 0,
+            "version_id": "current",
+            "draft": {
+              "title": "Lối đi",
+              "logline": "Người cha xin lỗi và để con gái tự quyết định ở lại hay ra đi.",
+              "sections": [
+                {
+                  "title": "Đầu",
+                  "purpose": "Mở",
+                  "content": "Con gái đặt túi cạnh cửa. Cha đứng bên bàn."
+                },
+                {
+                  "title": "Cuối",
+                  "purpose": "Diễn tiến",
+                  "content": "Cha đặt lá thư xin lỗi lên bàn, lùi lại và để lối đi trống; con gái tự quyết định."
+                }
+              ]
+            },
+            "context": {
+              "idea": "Người cha xin lỗi và để con gái tự quyết định ở lại hay ra đi.",
+              "constraints": [
+                "Chỉ cha và con gái trong nhà.",
+                "Cha không giữ giấy tờ hoặc ép con gái ở lại.",
+                "Con gái tự quyết định việc ra đi."
+              ],
+              "clarifications": [],
+              "pending_questions": []
+            },
+            "response_language": "vi"
+          }
+        }
+      },
+      "source_outline": {
+        "id": "00b0f24a-91ec-4f2b-ac0c-144ec8735e38",
+        "version": 2,
+        "scenes": [
+          {
+            "id": "79befc08-14b5-451a-99aa-8e850c571261",
+            "title": "Trước đó",
+            "action": "Con gái đặt túi cạnh cửa. Cha đứng bên bàn.",
+            "location": "",
+            "time": "",
+            "characters": "",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "",
+            "keep_or_avoid": "",
+            "staging_choices": {}
+          },
+          {
+            "id": "6ef7df96-80c4-4cc9-891c-65fb603a670d",
+            "title": "Khoảnh khắc",
+            "action": "Cha đặt lá thư xin lỗi lên bàn, lùi lại và để lối đi trống; con gái tự quyết định.",
+            "location": "",
+            "time": "",
+            "characters": "",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "",
+            "keep_or_avoid": "",
+            "staging_choices": {}
+          }
+        ],
+        "source": {
+          "id": "d4c36b31-8f08-4470-b3ed-fd23648eaf01",
+          "project_revision": 0,
+          "version_id": "current",
+          "draft": {
+            "title": "Lối đi",
+            "logline": "Người cha xin lỗi và để con gái tự quyết định ở lại hay ra đi.",
+            "sections": [
+              {
+                "title": "Đầu",
+                "purpose": "Mở",
+                "content": "Con gái đặt túi cạnh cửa. Cha đứng bên bàn."
+              },
+              {
+                "title": "Cuối",
+                "purpose": "Diễn tiến",
+                "content": "Cha đặt lá thư xin lỗi lên bàn, lùi lại và để lối đi trống; con gái tự quyết định."
+              }
+            ]
+          },
+          "context": {
+            "idea": "Người cha xin lỗi và để con gái tự quyết định ở lại hay ra đi.",
+            "constraints": [
+              "Chỉ cha và con gái trong nhà.",
+              "Cha không giữ giấy tờ hoặc ép con gái ở lại.",
+              "Con gái tự quyết định việc ra đi."
+            ],
+            "clarifications": [],
+            "pending_questions": []
+          },
+          "response_language": "vi"
+        }
+      },
+      "target_scene_id": "31a2abaf-8a56-4c72-b4e5-121688122a71",
+      "instructions": "Chỉ nêu góp ý có bằng chứng về cảnh này; tác giả tự sửa.",
+      "status": "failed",
+      "sources": [
+        {
+          "id": "script:b7940d9f-e5ab-4bdd-ba6c-eb7f148dfe81:heading",
+          "label": "Trước đó",
+          "text": "Trước đó",
+          "category": "screenplay",
+          "scene_id": "b7940d9f-e5ab-4bdd-ba6c-eb7f148dfe81",
+          "block_id": null,
+          "field": "heading"
+        },
+        {
+          "id": "block:ccd921b2-f5fe-436b-b8b3-7f29f1061ed1:text",
+          "label": "Trước đó · khối 1",
+          "text": "Con gái đặt túi cạnh cửa. Cha đứng bên bàn.",
+          "category": "screenplay",
+          "scene_id": "b7940d9f-e5ab-4bdd-ba6c-eb7f148dfe81",
+          "block_id": "ccd921b2-f5fe-436b-b8b3-7f29f1061ed1",
+          "field": "text"
+        },
+        {
+          "id": "script:31a2abaf-8a56-4c72-b4e5-121688122a71:heading",
+          "label": "Khoảnh khắc",
+          "text": "Khoảnh khắc",
+          "category": "screenplay",
+          "scene_id": "31a2abaf-8a56-4c72-b4e5-121688122a71",
+          "block_id": null,
+          "field": "heading"
+        },
+        {
+          "id": "block:86a65c6f-d51e-450b-8992-c5fb65f4d5f4:text",
+          "label": "Khoảnh khắc · khối 1",
+          "text": "Con gái nhìn về cửa, chưa bước đi.",
+          "category": "screenplay",
+          "scene_id": "31a2abaf-8a56-4c72-b4e5-121688122a71",
+          "block_id": "86a65c6f-d51e-450b-8992-c5fb65f4d5f4",
+          "field": "text"
+        },
+        {
+          "id": "block:e84adbfa-3b40-4ae9-8fc8-44b4c4791b21:text",
+          "label": "Khoảnh khắc · khối 2",
+          "text": "Cha giấu hộ chiếu của con gái vào túi để cô không thể ra đi.",
+          "category": "screenplay",
+          "scene_id": "31a2abaf-8a56-4c72-b4e5-121688122a71",
+          "block_id": "e84adbfa-3b40-4ae9-8fc8-44b4c4791b21",
+          "field": "text"
+        },
+        {
+          "id": "m2:6ef7df96-80c4-4cc9-891c-65fb603a670d:action",
+          "label": "Diễn tiến M2 đã chọn",
+          "text": "Cha đặt lá thư xin lỗi lên bàn, lùi lại và để lối đi trống; con gái tự quyết định.",
+          "category": "author_choice",
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "intent:idea",
+          "label": "Ý tưởng tác giả",
+          "text": "Người cha xin lỗi và để con gái tự quyết định ở lại hay ra đi.",
+          "category": "author_choice",
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "intent:constraint:0",
+          "label": "Giới hạn 1",
+          "text": "Chỉ cha và con gái trong nhà.",
+          "category": "author_choice",
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "intent:constraint:1",
+          "label": "Giới hạn 2",
+          "text": "Cha không giữ giấy tờ hoặc ép con gái ở lại.",
+          "category": "author_choice",
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "intent:constraint:2",
+          "label": "Giới hạn 3",
+          "text": "Con gái tự quyết định việc ra đi.",
+          "category": "author_choice",
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "plan:logline",
+          "label": "Logline nguồn",
+          "text": "Người cha xin lỗi và để con gái tự quyết định ở lại hay ra đi.",
+          "category": "context",
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        },
+        {
+          "id": "plan:section:0",
+          "label": "Đầu",
+          "text": "Con gái đặt túi cạnh cửa. Cha đứng bên bàn.",
+          "category": "context",
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        },
+        {
+          "id": "plan:section:1",
+          "label": "Cuối",
+          "text": "Cha đặt lá thư xin lỗi lên bàn, lùi lại và để lối đi trống; con gái tự quyết định.",
+          "category": "context",
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        }
+      ],
+      "notes": [],
+      "question": "",
+      "provider": "ollama",
+      "model": "gemma2:9b-instruct-q4_K_M",
+      "parameters": {
+        "temperature": 0.3,
+        "timeout_seconds": 60,
+        "num_ctx": 16384
+      },
+      "prompt_version": "screenplay-review-v3-constraint-first",
+      "error": "ProviderTimeoutError"
+    }
+  ],
+  "scene_versions": [
+    {
+      "id": "8971fb2d-02b0-47cf-979a-c9f44de3219c",
+      "created_at": "2026-10-27T07:08:26.688078+00:00",
+      "outline": {
+        "id": "00b0f24a-91ec-4f2b-ac0c-144ec8735e38",
+        "version": 1,
+        "scenes": [],
+        "source": {
+          "id": "d4c36b31-8f08-4470-b3ed-fd23648eaf01",
+          "project_revision": 0,
+          "version_id": "current",
+          "draft": {
+            "title": "Lối đi",
+            "logline": "Người cha xin lỗi và để con gái tự quyết định ở lại hay ra đi.",
+            "sections": [
+              {
+                "title": "Đầu",
+                "purpose": "Mở",
+                "content": "Con gái đặt túi cạnh cửa. Cha đứng bên bàn."
+              },
+              {
+                "title": "Cuối",
+                "purpose": "Diễn tiến",
+                "content": "Cha đặt lá thư xin lỗi lên bàn, lùi lại và để lối đi trống; con gái tự quyết định."
+              }
+            ]
+          },
+          "context": {
+            "idea": "Người cha xin lỗi và để con gái tự quyết định ở lại hay ra đi.",
+            "constraints": [
+              "Chỉ cha và con gái trong nhà.",
+              "Cha không giữ giấy tờ hoặc ép con gái ở lại.",
+              "Con gái tự quyết định việc ra đi."
+            ],
+            "clarifications": [],
+            "pending_questions": []
+          },
+          "response_language": "vi"
+        }
+      }
+    }
+  ],
+  "scene_proposals": [],
+  "staging_proposals": [],
+  "scene_sketches": [],
+  "selected_scene_sketches": {},
+  "current_screenplay_review_ids": [],
+  "applicable_screenplay_proposal_ids": [],
+  "screenplay_source_is_current": true,
+  "applicable_sketch_ids": [],
+  "applicable_scene_proposal_ids": [],
+  "scene_source_is_current": true,
+  "scene_handoff": {
+    "outline_id": "00b0f24a-91ec-4f2b-ac0c-144ec8735e38",
+    "version": 2,
+    "project_revision": 7,
+    "source_id": "d4c36b31-8f08-4470-b3ed-fd23648eaf01",
+    "scenes": [
+      {
+        "id": "79befc08-14b5-451a-99aa-8e850c571261",
+        "title": "Trước đó",
+        "action": "Con gái đặt túi cạnh cửa. Cha đứng bên bàn.",
+        "location": "",
+        "time": "",
+        "characters": "",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      },
+      {
+        "id": "6ef7df96-80c4-4cc9-891c-65fb603a670d",
+        "title": "Khoảnh khắc",
+        "action": "Cha đặt lá thư xin lỗi lên bàn, lùi lại và để lối đi trống; con gái tự quyết định.",
+        "location": "",
+        "time": "",
+        "characters": "",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      }
+    ]
+  },
+  "applicable_plan_ids": [],
+  "author_context": {
+    "idea": "Người cha xin lỗi và để con gái tự quyết định ở lại hay ra đi.",
+    "constraints": [
+      "Chỉ cha và con gái trong nhà.",
+      "Cha không giữ giấy tờ hoặc ép con gái ở lại.",
+      "Con gái tự quyết định việc ra đi."
+    ],
+    "clarifications": [],
+    "pending_questions": []
+  },
+  "feedback_is_current": false
+}

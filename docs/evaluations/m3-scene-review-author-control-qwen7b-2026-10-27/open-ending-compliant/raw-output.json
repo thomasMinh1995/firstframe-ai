@@ -1,0 +1,21 @@
+{
+  "raw_output": "{\n  \"notes\": [\n    {\n      \"kind\": \"craft\",\n      \"observation\": \"Con gái nhìn cha, kéo ghế ngồi. Phong thư còn kín trên bàn.\",\n      \"impact\": \"Động tác ngồi xuống và nhìn cha thể hiện sự quan tâm, nhưng phong thư vẫn kín trên bàn không phản ánh đúng trạng thái của lá thư theo yêu cầu của tác giả.\",\n      \"evidence\": [\n        {\n          \"source_id\": \"S4\",\n          \"quote\": \"Phong thư còn kín trên bàn.\"\n        }\n      ],\n      \"suggestion\": \"Thay đổi thành: 'Phong thư kín vẫn nằm trên bàn.'\"\n    }\n  ],\n  \"question\": \"\"\n}",
+  "output": {
+    "notes": [
+      {
+        "kind": "craft",
+        "observation": "Con gái nhìn cha, kéo ghế ngồi. Phong thư còn kín trên bàn.",
+        "impact": "Động tác ngồi xuống và nhìn cha thể hiện sự quan tâm, nhưng phong thư vẫn kín trên bàn không phản ánh đúng trạng thái của lá thư theo yêu cầu của tác giả.",
+        "suggestion": "Thay đổi thành: 'Phong thư kín vẫn nằm trên bàn.'",
+        "evidence": [
+          {
+            "source_id": "S4",
+            "quote": "Phong thư còn kín trên bàn."
+          }
+        ]
+      }
+    ],
+    "question": ""
+  },
+  "model": "qwen2.5:7b"
+}

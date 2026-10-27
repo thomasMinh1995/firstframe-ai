@@ -1,0 +1,39 @@
+{
+  "frozen_at": "2026-10-27T08:14:23.801611+00:00",
+  "maximum_calls": 6,
+  "timeout_seconds_per_call": 60,
+  "retry": false,
+  "model": "qwen2.5:7b",
+  "digest": "845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
+  "parameters": {
+    "temperature": 0.3,
+    "timeout_seconds": 60,
+    "num_ctx": 16384
+  },
+  "seed": "not exposed/sent by existing provider",
+  "inputs_sha256": "89c3026998263feaff128f88bd4c3504dd571168be2d37eee1acfbec5a7024f2",
+  "schema_sha256": "291dcd309cfe613f2df47aa87a729d88bee35b3c7af6874d02a8cdca1cb8da6d",
+  "hashes": {
+    "backend/app/application/screenplay_review.py": "f325c42e41a8f2131256f4241c06132a86235d96d96527b9665e8be97452c171",
+    "backend/app/application/screenplay_context.py": "c4812f6ef35b715b88ca4e398d664c0ef17d5af540440cdd561adef16e38ef6d",
+    "backend/app/api/routes/screenplay_reviews.py": "faf27c183cbb69b90c27f4ac36940d92a26c923d4b9d281db37c6f0b013bb5b1",
+    "backend/app/api/routes/projects.py": "93a6d7addddbb59015f6d0511ca63ea72d10b6210808831b6227dcc2ffd1c6f2",
+    "backend/app/api/schemas/projects.py": "c9805a497c249a217189af59710264d3760167dd2fab9bdccede36ebfa1ea5bb",
+    "backend/app/api/schemas/screenplays.py": "0e7c08918379b3ca2cb79cf1b619a3838a230efc9419755085f8f37aafd6619d",
+    "backend/app/infrastructure/ollama_provider.py": "293d9fcc59051e06ddb6eebffd263d831817fe761506ca23a92ef21cf2630272",
+    "backend/app/application/ai_provider.py": "15249bd34c8ed12dc31897d1586bd2947c24a16f564ca81ae59871c1cff9929e",
+    "backend/app/application/project_store.py": "de4d7d0c5cffe3dcb91f7c08623a47d9ad1947db0f2b19b2d52fdb38a84a550b",
+    "domains/short-film/prompts/screenplay_review_prompt.md": "918b0ae77b9f590597acdcf3f96d2ced42221668bd833584ab6a0b3f34b2cf30",
+    "docs/evaluations/m3-scene-review-author-control-qwen7b-2026-10-27/run.py": "8476e65cb689b7404403c8a151fb4c68415713188b5d8864ca8abb61bfa8ed43"
+  },
+  "baseline": "docs/evaluations/m3-scene-review-constraint-first-qwen7b-2026-10-27",
+  "baseline_hashes": {
+    "inputs.json": "1d401a371cf27da659e8b908c2f5c3c6cbea21f54d1478ad21c19d807a75b249",
+    "schema.json": "291dcd309cfe613f2df47aa87a729d88bee35b3c7af6874d02a8cdca1cb8da6d",
+    "manifest.json": "62dd05aa7138b5b4f177d6d1cfc5bcbe20e46b3e754d7f0025c6ee6ef9bba36a",
+    "results.json": "e6b0d05b7772ed872457a45d294afe74dc6ee3845aecb35dc0833c376ae9cc23",
+    "comparison.json": "b4bda94c6af28bebd75a99a2d0359eea0ef602e0d52aab4f2f558c12aff9f825"
+  },
+  "same_six_cases_project_request_expected": true,
+  "change": "v4 author-control prompt only; same model-facing input, source aliases/metadata, output schema/model/parameters as Qwen v3"
+}

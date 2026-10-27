@@ -1,0 +1,13 @@
+{
+  "name": "broken-flashlight-compliant",
+  "pair": "broken-flashlight",
+  "variant": "compliant",
+  "status_code": 502,
+  "duration_seconds": 8.658,
+  "model_calls": 1,
+  "review_status": "failed",
+  "validated_notes": 0,
+  "error": "MalformedProviderResponseError",
+  "response_error": "{\"detail\":\"Chưa nhận được phản hồi hợp lệ từ AI. Hãy thử lại.\"}",
+  "author_script_unchanged": true
+}

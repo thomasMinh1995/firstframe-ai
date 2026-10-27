@@ -1,0 +1,21 @@
+{
+  "raw_output": "{\n  \"notes\": [\n    {\n      \"kind\": \"intent_mismatch\",\n      \"observation\": \"Bình bật đèn pin hỏng, nhưng theo author_choice, đèn pin bị hỏng không thể sáng.\",\n      \"impact\": \"Việc Bình bật đèn pin hỏng không phù hợp với giới hạn đã xác định, có thể gây hiểu lầm cho khán giả.\",\n      \"evidence\": [\n        {\n          \"source_id\": \"A4\",\n          \"quote\": \"Đèn pin bị hỏng, không thể sáng.\"\n        }\n      ]\n    }\n  ],\n  \"question\": \"\"\n}",
+  "output": {
+    "notes": [
+      {
+        "kind": "intent_mismatch",
+        "observation": "Bình bật đèn pin hỏng, nhưng theo author_choice, đèn pin bị hỏng không thể sáng.",
+        "impact": "Việc Bình bật đèn pin hỏng không phù hợp với giới hạn đã xác định, có thể gây hiểu lầm cho khán giả.",
+        "suggestion": "",
+        "evidence": [
+          {
+            "source_id": "A4",
+            "quote": "Đèn pin bị hỏng, không thể sáng."
+          }
+        ]
+      }
+    ],
+    "question": ""
+  },
+  "model": "qwen2.5:7b"
+}

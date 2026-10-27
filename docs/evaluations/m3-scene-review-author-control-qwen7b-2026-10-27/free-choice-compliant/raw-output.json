@@ -1,0 +1,21 @@
+{
+  "raw_output": "{\n  \"notes\": [\n    {\n      \"kind\": \"craft\",\n      \"observation\": \"Con gái nhìn về cửa, chưa bước đi.\",\n      \"impact\": \"Động tác này gợi lên sự do dự của con gái, nhưng không thể hiện quyết định cuối cùng của cô. Điều này có thể làm cho cảnh trở nên lủng củng.\",\n      \"evidence\": [\n        {\n          \"source_id\": \"S4\",\n          \"quote\": \"Con gái nhìn về cửa, chưa bước đi.\"\n        }\n      ],\n      \"suggestion\": \"Thêm một hành động nhỏ, như bước ra khỏi cửa một chút, để thể hiện quyết định của con gái.\"\n    }\n  ],\n  \"question\": \"\"\n}",
+  "output": {
+    "notes": [
+      {
+        "kind": "craft",
+        "observation": "Con gái nhìn về cửa, chưa bước đi.",
+        "impact": "Động tác này gợi lên sự do dự của con gái, nhưng không thể hiện quyết định cuối cùng của cô. Điều này có thể làm cho cảnh trở nên lủng củng.",
+        "suggestion": "Thêm một hành động nhỏ, như bước ra khỏi cửa một chút, để thể hiện quyết định của con gái.",
+        "evidence": [
+          {
+            "source_id": "S4",
+            "quote": "Con gái nhìn về cửa, chưa bước đi."
+          }
+        ]
+      }
+    ],
+    "question": ""
+  },
+  "model": "qwen2.5:7b"
+}

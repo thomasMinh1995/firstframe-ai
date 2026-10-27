@@ -13,9 +13,9 @@ export function ScreenplayProposals({project,scene,canUse,onWrite,onInspect,onPr
   const uncertain=sent!==null&&!all.some(p=>p.id===sent);
   return <section className="screenplay-proposals" aria-label="FirstFrame viết thử một cảnh">
     <h3>FirstFrame viết thử cảnh đang chọn</h3>
-    <p>AI chỉ đề xuất tiêu đề và nội dung cho một cảnh. Lưu mọi sửa đang chờ trước khi gửi; bạn đọc, chỉnh rồi tự quyết định dùng hay bỏ. Góp ý AI cho kịch bản chưa được hỗ trợ.</p>
+    <p>AI chỉ đề xuất tiêu đề và nội dung cho một cảnh. Lưu mọi sửa đang chờ trước khi gửi; bạn đọc, chỉnh rồi tự quyết định dùng hay bỏ.</p>
     <label htmlFor={`${id}-request`}>Bạn muốn viết thử theo hướng nào? · tùy chọn</label><textarea id={`${id}-request`} maxLength={2000} value={instructions} onChange={e=>setInstructions(e.target.value)}/>
-    <button type="button" disabled={uncertain||all.some(p=>p.status==='pending')||all.length>=100} onClick={()=>{
+    <button type="button" disabled={uncertain||[...all,...(project.screenplay_reviews??[])].some(p=>p.status==='pending')||all.length>=100} onClick={()=>{
       const request_id=crypto.randomUUID();setSent(request_id);void onWrite({request_id,target_scene_id:scene.id,instructions});
     }}>Nhờ FirstFrame viết thử cảnh này</button>
     <button type="button" className="secondary" onClick={async()=>{if(await onInspect())setSent(null);}}>Kiểm tra phương án đã lưu</button>

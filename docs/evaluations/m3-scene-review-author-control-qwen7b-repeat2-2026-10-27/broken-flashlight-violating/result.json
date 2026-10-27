@@ -1,0 +1,13 @@
+{
+  "name": "broken-flashlight-violating",
+  "pair": "broken-flashlight",
+  "variant": "violating",
+  "status_code": 200,
+  "duration_seconds": 7.838,
+  "model_calls": 1,
+  "review_status": "ready",
+  "validated_notes": 1,
+  "error": null,
+  "response_error": null,
+  "author_script_unchanged": true
+}

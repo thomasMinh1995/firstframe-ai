@@ -17,7 +17,7 @@ from app.api.schemas.scenes import Scene, SceneId, SceneOutlineEdit, SceneText, 
 from app.application.language import ResponseLanguage
 from app.application.clarification import MAX_CHOICES
 
-from app.api.schemas.screenplays import ScreenplayEdit, ScriptScene
+from app.api.schemas.screenplays import ScreenplayEdit, ScriptScene, ReviewSource, SavedReviewNote
 
 ShortText = Annotated[str, Field(max_length=2000)]
 
@@ -254,6 +254,26 @@ class ScreenplayProposal(BaseModel):
     applied_revision: int | None = None
 
 
+class ScreenplayReview(BaseModel):
+    id: SceneId
+    created_at: str
+    source_revision: int
+    source_content: str
+    source_screenplay: Screenplay
+    source_outline: SceneOutline | None
+    target_scene_id: SceneId
+    instructions: str = ""
+    status: Literal["pending", "ready", "failed", "discarded"] = "pending"
+    sources: list[ReviewSource] = Field(default_factory=list)
+    notes: list[SavedReviewNote] = Field(default_factory=list)
+    question: str = ""
+    provider: str | None = None
+    model: str | None = None
+    parameters: dict[str, object] = Field(default_factory=dict)
+    prompt_version: str
+    error: str | None = None
+
+
 class ScreenplayVersion(BaseModel):
     id: SceneId
     created_at: str
@@ -332,11 +352,23 @@ class ProjectResponse(BaseModel):
     screenplay: Screenplay | None = None
     screenplay_versions: list[ScreenplayVersion] = Field(default_factory=list)
     screenplay_proposals: list[ScreenplayProposal] = Field(default_factory=list)
+    screenplay_reviews: list[ScreenplayReview] = Field(default_factory=list)
     scene_versions: list[SceneOutlineVersion] = Field(default_factory=list)
     scene_proposals: list[SceneProposal] = Field(default_factory=list)
     staging_proposals: list[SceneProposal] = Field(default_factory=list)
     scene_sketches: list[SceneSketch] = Field(default_factory=list)
     selected_scene_sketches: dict[SceneId, SceneId] = Field(default_factory=dict)
+
+    @computed_field
+    @property
+    def current_screenplay_review_ids(self) -> list[str]:
+        if not self.screenplay:
+            return []
+        return [r.id for r in self.screenplay_reviews if r.status == "ready"
+                and screenplay_content(r.source_screenplay) == screenplay_content(self.screenplay)
+                and (r.source_outline.model_dump(exclude={"version"}) if r.source_outline else None)
+                == (self.scene_outline.model_dump(exclude={"version"}) if self.scene_outline else None)
+                and r.source_content == self.content_key()]
 
     @computed_field
     @property

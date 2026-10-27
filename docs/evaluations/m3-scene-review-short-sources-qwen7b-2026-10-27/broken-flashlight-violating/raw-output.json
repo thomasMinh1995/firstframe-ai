@@ -1,0 +1,25 @@
+{
+  "raw_output": "{\n  \"notes\": [\n    {\n      \"kind\": \"craft\",\n      \"observation\": \"Cảnh này thể hiện rõ ràng Lan và Bình đang cố gắng đọc giấy trong điều kiện ánh sáng hạn chế, nhưng có thể cải thiện về sự tự nhiên của lời thoại.\",\n      \"impact\": \"Sự tự nhiên của lời thoại có thể tăng cường cảm xúc và sự chân thực của cảnh.\",\n      \"evidence\": [\n        {\n          \"source_id\": \"S4\",\n          \"quote\": \"Lan kéo rèm, để ánh đèn đường rọi lên tờ giấy.\"\n        },\n        {\n          \"source_id\": \"S5\",\n          \"quote\": \"Bình bật chiếc đèn pin hỏng; đèn sáng rực, rọi rõ tờ giấy.\"\n        }\n      ],\n      \"suggestion\": \"Có thể thêm một đoạn thoại ngắn giữa hai nhân vật để họ thảo luận về việc tìm cách đọc giấy, như 'Lan: 'Đèn pin hỏng rồi, phải làm sao đây?' hoặc 'Bình: 'Ánh đèn đường qua rèm cũng đủ sáng để đọc.'\"\n    }\n  ],\n  \"question\": \"\"\n}",
+  "output": {
+    "notes": [
+      {
+        "kind": "craft",
+        "observation": "Cảnh này thể hiện rõ ràng Lan và Bình đang cố gắng đọc giấy trong điều kiện ánh sáng hạn chế, nhưng có thể cải thiện về sự tự nhiên của lời thoại.",
+        "impact": "Sự tự nhiên của lời thoại có thể tăng cường cảm xúc và sự chân thực của cảnh.",
+        "suggestion": "Có thể thêm một đoạn thoại ngắn giữa hai nhân vật để họ thảo luận về việc tìm cách đọc giấy, như 'Lan: 'Đèn pin hỏng rồi, phải làm sao đây?' hoặc 'Bình: 'Ánh đèn đường qua rèm cũng đủ sáng để đọc.'",
+        "evidence": [
+          {
+            "source_id": "S4",
+            "quote": "Lan kéo rèm, để ánh đèn đường rọi lên tờ giấy."
+          },
+          {
+            "source_id": "S5",
+            "quote": "Bình bật chiếc đèn pin hỏng; đèn sáng rực, rọi rõ tờ giấy."
+          }
+        ]
+      }
+    ],
+    "question": ""
+  },
+  "model": "qwen2.5:7b"
+}

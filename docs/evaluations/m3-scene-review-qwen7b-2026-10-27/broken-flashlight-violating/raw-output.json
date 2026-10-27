@@ -1,0 +1,21 @@
+{
+  "raw_output": "{\n  \"notes\": [\n    {\n      \"kind\": \"craft\",\n      \"observation\": \"Cảnh này thể hiện rõ ràng Lan và Bình đang cố gắng đọc giấy bằng ánh đèn đường, nhưng có thể thêm một chi tiết nhỏ để tăng tính chân thực.\",\n      \"impact\": \"Tăng tính chân thực và giúp khán giả hình dung rõ hơn về tình huống.\",\n      \"evidence\": [\n        {\n          \"source_id\": \"38215107-7405-48fc-9bce-270440eb27e3\",\n          \"quote\": \"Bình bật chiếc đèn pin hỏng; đèn sáng rực, rọi rõ tờ giấy.\"\n        }\n      ],\n      \"suggestion\": \"Thêm chi tiết Lan phải điều chỉnh ánh sáng từ đèn pin để phù hợp với ánh sáng đường phố.\"\n    }\n  ],\n  \"question\": \"\"\n}",
+  "output": {
+    "notes": [
+      {
+        "kind": "craft",
+        "observation": "Cảnh này thể hiện rõ ràng Lan và Bình đang cố gắng đọc giấy bằng ánh đèn đường, nhưng có thể thêm một chi tiết nhỏ để tăng tính chân thực.",
+        "impact": "Tăng tính chân thực và giúp khán giả hình dung rõ hơn về tình huống.",
+        "suggestion": "Thêm chi tiết Lan phải điều chỉnh ánh sáng từ đèn pin để phù hợp với ánh sáng đường phố.",
+        "evidence": [
+          {
+            "source_id": "38215107-7405-48fc-9bce-270440eb27e3",
+            "quote": "Bình bật chiếc đèn pin hỏng; đèn sáng rực, rọi rõ tờ giấy."
+          }
+        ]
+      }
+    ],
+    "question": ""
+  },
+  "model": "qwen2.5:7b"
+}

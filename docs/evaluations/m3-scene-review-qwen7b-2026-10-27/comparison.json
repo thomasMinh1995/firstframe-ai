@@ -1,0 +1,188 @@
+{
+  "reader": "Codex, chưa phải PO/người dùng nghiệm thu",
+  "all_six_frozen_calls_retained": true,
+  "automatic_repair_or_retry": false,
+  "model_calls": 6,
+  "schema_parsed": 6,
+  "reference_contract_accepted": 0,
+  "reference_contract_rejected": 6,
+  "violating_raw_observations_detecting_conflict": 2,
+  "violating_raw_missed_and_wrong_direction": 1,
+  "compliant_raw_false_factual_claims": 2,
+  "compliant_raw_low_utility": 1,
+  "useful_validated_feedback_delivered": 0,
+  "note": "Raw semantic đọc riêng để phân tích lỗi; không phục hồi ID/quote, không nới hợp đồng, không coi lỗi bị chặn là phát hiện hữu ích cho tác giả. Không có baseline M3 trước đó cùng hợp đồng để so sánh A/B.",
+  "cases": [
+    {
+      "name": "open-ending-compliant",
+      "pair": "open-ending",
+      "variant": "compliant",
+      "status_code": 502,
+      "duration_seconds": 15.427,
+      "model_calls": 1,
+      "review_status": "failed",
+      "validated_notes": 0,
+      "error": "MalformedProviderResponseError",
+      "response_error": "{\"detail\":\"Chưa nhận được phản hồi hợp lệ từ AI. Hãy thử lại.\"}",
+      "author_script_unchanged": true,
+      "invalid_evidence": [
+        {
+          "note": 0,
+          "source_id": "block:6ff34ab6-f637-4a16-a45c-c6322a0024b8",
+          "reason": "unknown_exact_source_id"
+        }
+      ],
+      "missing_required_evidence": [
+        {
+          "note": 0,
+          "reason": "missing_valid_target_text_evidence"
+        }
+      ],
+      "reader_verdict": "false_claim",
+      "reader_explanation": "Nhận xét nói không có hành động của con gái, dù chính quote có nhìn cha/kéo ghế; gợi ý thêm run tay/vuốt thư chưa có căn cứ cần thiết."
+    },
+    {
+      "name": "open-ending-violating",
+      "pair": "open-ending",
+      "variant": "violating",
+      "status_code": 502,
+      "duration_seconds": 11.83,
+      "model_calls": 1,
+      "review_status": "failed",
+      "validated_notes": 0,
+      "error": "MalformedProviderResponseError",
+      "response_error": "{\"detail\":\"Chưa nhận được phản hồi hợp lệ từ AI. Hãy thử lại.\"}",
+      "author_script_unchanged": true,
+      "invalid_evidence": [],
+      "missing_required_evidence": [
+        {
+          "note": 0,
+          "reason": "missing_valid_target_text_evidence"
+        }
+      ],
+      "reader_verdict": "detected_but_unusable",
+      "reader_explanation": "Nhận ra câu tha thứ đóng điều tác giả muốn để mở; gợi ý bỏ câu/giữ im lặng phù hợp, nhưng gật đầu có thể vẫn chốt tha thứ tùy diễn xuất. Thiếu dẫn câu kịch bản trong evidence."
+    },
+    {
+      "name": "free-choice-compliant",
+      "pair": "free-choice",
+      "variant": "compliant",
+      "status_code": 502,
+      "duration_seconds": 12.989,
+      "model_calls": 1,
+      "review_status": "failed",
+      "validated_notes": 0,
+      "error": "MalformedProviderResponseError",
+      "response_error": "{\"detail\":\"Chưa nhận được phản hồi hợp lệ từ AI. Hãy thử lại.\"}",
+      "author_script_unchanged": true,
+      "invalid_evidence": [
+        {
+          "note": 0,
+          "source_id": "block:86a65c6f-d51e-450b-8992-c5fb65f4d5f4",
+          "reason": "unknown_exact_source_id"
+        }
+      ],
+      "missing_required_evidence": [
+        {
+          "note": 0,
+          "reason": "missing_valid_target_text_evidence"
+        }
+      ],
+      "reader_verdict": "low_utility",
+      "reader_explanation": "Nhận xét đúng cử chỉ nhìn cửa, phần tác động mang tính gu; ví dụ sửa lẫn tiếng Trung và giải thích nội tâm thay vì hành vi thể hiện. Không cần buộc tác giả thêm thoại."
+    },
+    {
+      "name": "free-choice-violating",
+      "pair": "free-choice",
+      "variant": "violating",
+      "status_code": 502,
+      "duration_seconds": 12.484,
+      "model_calls": 1,
+      "review_status": "failed",
+      "validated_notes": 0,
+      "error": "MalformedProviderResponseError",
+      "response_error": "{\"detail\":\"Chưa nhận được phản hồi hợp lệ từ AI. Hãy thử lại.\"}",
+      "author_script_unchanged": true,
+      "invalid_evidence": [
+        {
+          "note": 0,
+          "source_id": "e84adbfa-3b40-4ae9-8fc8-44b4c4791b21",
+          "reason": "unknown_exact_source_id"
+        },
+        {
+          "note": 0,
+          "source_id": "m2:6ef7df96-80c4-4cc9-891c-65fb603a670d",
+          "reason": "unknown_exact_source_id"
+        }
+      ],
+      "missing_required_evidence": [
+        {
+          "note": 0,
+          "reason": "missing_valid_target_text_evidence"
+        },
+        {
+          "note": 0,
+          "reason": "missing_valid_author_choice_evidence"
+        }
+      ],
+      "reader_verdict": "detected_but_unusable",
+      "reader_explanation": "Nhận ra giấu hộ chiếu trái lựa chọn tự quyết. Không đề xuất hành động sửa cụ thể; câu hỏi giữ hành động không thay thế kết luận đối chiếu. Hai ID đều tự biến đổi."
+    },
+    {
+      "name": "broken-flashlight-compliant",
+      "pair": "broken-flashlight",
+      "variant": "compliant",
+      "status_code": 502,
+      "duration_seconds": 12.511,
+      "model_calls": 1,
+      "review_status": "failed",
+      "validated_notes": 0,
+      "error": "MalformedProviderResponseError",
+      "response_error": "{\"detail\":\"Chưa nhận được phản hồi hợp lệ từ AI. Hãy thử lại.\"}",
+      "author_script_unchanged": true,
+      "invalid_evidence": [
+        {
+          "note": 0,
+          "source_id": "38215107-7405-48fc-9bce-270440eb27e3",
+          "reason": "unknown_exact_source_id"
+        }
+      ],
+      "missing_required_evidence": [
+        {
+          "note": 0,
+          "reason": "missing_valid_target_text_evidence"
+        }
+      ],
+      "reader_verdict": "false_claim",
+      "reader_explanation": "Góp ý thoại cứng dù toàn cảnh chỉ có action, không có thoại; thêm câu giải thích chiếc đèn hỏng là dư và không xử lý lỗi tồn tại."
+    },
+    {
+      "name": "broken-flashlight-violating",
+      "pair": "broken-flashlight",
+      "variant": "violating",
+      "status_code": 502,
+      "duration_seconds": 11.526,
+      "model_calls": 1,
+      "review_status": "failed",
+      "validated_notes": 0,
+      "error": "MalformedProviderResponseError",
+      "response_error": "{\"detail\":\"Chưa nhận được phản hồi hợp lệ từ AI. Hãy thử lại.\"}",
+      "author_script_unchanged": true,
+      "invalid_evidence": [
+        {
+          "note": 0,
+          "source_id": "38215107-7405-48fc-9bce-270440eb27e3",
+          "reason": "unknown_exact_source_id"
+        }
+      ],
+      "missing_required_evidence": [
+        {
+          "note": 0,
+          "reason": "missing_valid_target_text_evidence"
+        }
+      ],
+      "reader_verdict": "miss_and_wrong_direction",
+      "reader_explanation": "Bỏ sót đèn pin hỏng không thể sáng; còn khuyên điều chỉnh ánh sáng đèn pin, dẫn tác giả tiếp tục vi phạm."
+    }
+  ]
+}

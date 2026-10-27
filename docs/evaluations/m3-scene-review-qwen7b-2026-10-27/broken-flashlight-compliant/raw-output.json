@@ -1,0 +1,21 @@
+{
+  "raw_output": "{\n  \"notes\": [\n    {\n      \"kind\": \"craft\",\n      \"observation\": \"Cảnh này thể hiện rõ ràng Lan và Bình đang cố gắng đọc giấy trong điều kiện ánh sáng hạn chế, nhưng có thể cải thiện về mặt tự nhiên của lời thoại.\",\n      \"impact\": \"Lời thoại hiện tại có thể làm cho cảnh trở nên hơi cứng nhắc, thiếu tự nhiên.\",\n      \"evidence\": [\n        {\n          \"source_id\": \"38215107-7405-48fc-9bce-270440eb27e3\",\n          \"quote\": \"Bình đặt đèn pin hỏng xuống, nghiêng tờ giấy về phía ánh đèn đường.\"\n        }\n      ],\n      \"suggestion\": \"Thêm một hành động nhỏ như Bình đặt đèn pin xuống bàn, sau đó tự nhiên nói với Lan: 'Đèn pin này hỏng rồi, chúng ta phải làm sao để đọc đây?'\"\n    }\n  ],\n  \"question\": \"\"\n}",
+  "output": {
+    "notes": [
+      {
+        "kind": "craft",
+        "observation": "Cảnh này thể hiện rõ ràng Lan và Bình đang cố gắng đọc giấy trong điều kiện ánh sáng hạn chế, nhưng có thể cải thiện về mặt tự nhiên của lời thoại.",
+        "impact": "Lời thoại hiện tại có thể làm cho cảnh trở nên hơi cứng nhắc, thiếu tự nhiên.",
+        "suggestion": "Thêm một hành động nhỏ như Bình đặt đèn pin xuống bàn, sau đó tự nhiên nói với Lan: 'Đèn pin này hỏng rồi, chúng ta phải làm sao để đọc đây?'",
+        "evidence": [
+          {
+            "source_id": "38215107-7405-48fc-9bce-270440eb27e3",
+            "quote": "Bình đặt đèn pin hỏng xuống, nghiêng tờ giấy về phía ánh đèn đường."
+          }
+        ]
+      }
+    ],
+    "question": ""
+  },
+  "model": "qwen2.5:7b"
+}

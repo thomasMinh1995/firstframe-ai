@@ -1,0 +1,21 @@
+{
+  "raw_output": "{\n  \"notes\": [\n    {\n      \"kind\": \"craft\",\n      \"observation\": \"Cha chỉ đơn giản đặt thư lên bàn và lùi lại, nhưng không có hành động nào từ con gái sau đó.\",\n      \"impact\": \"Đây có thể là một cơ hội để tạo ra một hành động nhỏ từ con gái, thể hiện sự quan tâm hoặc sự bất an của cô ấy.\",\n      \"evidence\": [\n        {\n          \"source_id\": \"block:6ff34ab6-f637-4a16-a45c-c6322a0024b8\",\n          \"quote\": \"Con gái nhìn cha, kéo ghế ngồi. Phong thư còn kín trên bàn.\"\n        }\n      ],\n      \"suggestion\": \"Con gái có thể nhìn thư một cách chăm chú, run rẩy tay, hoặc vuốt nhẹ lên bề mặt của nó.\"\n    }\n  ],\n  \"question\": \"\"\n}",
+  "output": {
+    "notes": [
+      {
+        "kind": "craft",
+        "observation": "Cha chỉ đơn giản đặt thư lên bàn và lùi lại, nhưng không có hành động nào từ con gái sau đó.",
+        "impact": "Đây có thể là một cơ hội để tạo ra một hành động nhỏ từ con gái, thể hiện sự quan tâm hoặc sự bất an của cô ấy.",
+        "suggestion": "Con gái có thể nhìn thư một cách chăm chú, run rẩy tay, hoặc vuốt nhẹ lên bề mặt của nó.",
+        "evidence": [
+          {
+            "source_id": "block:6ff34ab6-f637-4a16-a45c-c6322a0024b8",
+            "quote": "Con gái nhìn cha, kéo ghế ngồi. Phong thư còn kín trên bàn."
+          }
+        ]
+      }
+    ],
+    "question": ""
+  },
+  "model": "qwen2.5:7b"
+}

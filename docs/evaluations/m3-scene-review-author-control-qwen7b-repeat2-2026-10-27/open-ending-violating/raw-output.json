@@ -1,0 +1,25 @@
+{
+  "raw_output": "{\n  \"notes\": [\n    {\n      \"kind\": \"craft\",\n      \"observation\": \"Con gái đã xác nhận đã tha thứ trong cảnh này, trái với ý tưởng tác giả.\",\n      \"impact\": \"Đây là một vi phạm ý tưởng tác giả, vì tác giả muốn giữ cho kết thúc mở và không có xác nhận rõ ràng.\",\n      \"evidence\": [\n        {\n          \"source_id\": \"S5\",\n          \"quote\": \"Con tha thứ cho cha. Mọi chuyện đã được giải quyết.\"\n        },\n        {\n          \"source_id\": \"A2\",\n          \"quote\": \"Cha xin lỗi; con gái ở lại nhưng chưa nói đã tha thứ.\"\n        }\n      ],\n      \"suggestion\": \"\"\n    }\n  ],\n  \"question\": \"\"\n}",
+  "output": {
+    "notes": [
+      {
+        "kind": "craft",
+        "observation": "Con gái đã xác nhận đã tha thứ trong cảnh này, trái với ý tưởng tác giả.",
+        "impact": "Đây là một vi phạm ý tưởng tác giả, vì tác giả muốn giữ cho kết thúc mở và không có xác nhận rõ ràng.",
+        "suggestion": "",
+        "evidence": [
+          {
+            "source_id": "S5",
+            "quote": "Con tha thứ cho cha. Mọi chuyện đã được giải quyết."
+          },
+          {
+            "source_id": "A2",
+            "quote": "Cha xin lỗi; con gái ở lại nhưng chưa nói đã tha thứ."
+          }
+        ]
+      }
+    ],
+    "question": ""
+  },
+  "model": "qwen2.5:7b"
+}

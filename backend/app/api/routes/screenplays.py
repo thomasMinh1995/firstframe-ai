@@ -77,7 +77,7 @@ def propose_scene(project_id: str, request: SceneWritingRequest):
             script = project.screenplay
             if script is None or not any(s.id == request.target_scene_id for s in script.scenes):
                 raise HTTPException(422, "Chọn cảnh trong bản kịch bản đã lưu trước khi viết thử.")
-            if any(p.status == "pending" for p in project.screenplay_proposals):
+            if any(p.status == "pending" for p in [*project.screenplay_proposals, *project.screenplay_reviews]):
                 raise HTTPException(409, "Có lượt viết chưa rõ kết quả. Kiểm tra hoặc bỏ lượt đó trước; không tự chạy lại.")
             if len(project.screenplay_proposals) >= 100:
                 raise HTTPException(422, "Đã đủ 100 lượt viết thử; vẫn tự viết và lưu kịch bản được.")

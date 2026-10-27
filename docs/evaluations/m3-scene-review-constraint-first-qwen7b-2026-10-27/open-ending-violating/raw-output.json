@@ -1,0 +1,25 @@
+{
+  "raw_output": "{\n  \"notes\": [\n    {\n      \"kind\": \"intent_mismatch\",\n      \"observation\": \"Con gái đã xác nhận đã tha thứ trong cảnh này, trái với giới hạn 2 của tác giả.\",\n      \"impact\": \"Đây là một sự mâu thuẫn lớn với ý tưởng tác giả, có thể làm hỏng kết cấu mở của câu chuyện.\",\n      \"evidence\": [\n        {\n          \"source_id\": \"S5\",\n          \"quote\": \"Con tha thứ cho cha. Mọi chuyện đã được giải quyết.\"\n        },\n        {\n          \"source_id\": \"A4\",\n          \"quote\": \"Kết mở; con gái không nói hoặc xác nhận đã tha thứ, không chốt hòa giải.\"\n        }\n      ],\n      \"suggestion\": \"\"\n    }\n  ],\n  \"question\": \"\"\n}",
+  "output": {
+    "notes": [
+      {
+        "kind": "intent_mismatch",
+        "observation": "Con gái đã xác nhận đã tha thứ trong cảnh này, trái với giới hạn 2 của tác giả.",
+        "impact": "Đây là một sự mâu thuẫn lớn với ý tưởng tác giả, có thể làm hỏng kết cấu mở của câu chuyện.",
+        "suggestion": "",
+        "evidence": [
+          {
+            "source_id": "S5",
+            "quote": "Con tha thứ cho cha. Mọi chuyện đã được giải quyết."
+          },
+          {
+            "source_id": "A4",
+            "quote": "Kết mở; con gái không nói hoặc xác nhận đã tha thứ, không chốt hòa giải."
+          }
+        ]
+      }
+    ],
+    "question": ""
+  },
+  "model": "qwen2.5:7b"
+}

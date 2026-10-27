@@ -1,0 +1,25 @@
+{
+  "raw_output": "{\n  \"notes\": [\n    {\n      \"kind\": \"intent_mismatch\",\n      \"observation\": \"Trong cảnh này, Bình đặt đèn pin hỏng xuống, trái với quyết định của M2 trong A1.\",\n      \"impact\": \"Việc Bình đặt đèn pin hỏng xuống không tuân theo quyết định của M2, có thể gây hiểu lầm cho người xem về tình trạng đèn pin.\",\n      \"evidence\": [\n        {\n          \"source_id\": \"S5\",\n          \"quote\": \"Bình đặt đèn pin hỏng xuống, nghiêng tờ giấy về phía ánh đèn đường.\"\n        },\n        {\n          \"source_id\": \"A1\",\n          \"quote\": \"Bình đặt đèn pin hỏng xuống. Lan kéo rèm; hai người nghiêng giấy để đọc bằng ánh đèn đường.\"\n        }\n      ]\n    }\n  ],\n  \"question\": \"\"\n}",
+  "output": {
+    "notes": [
+      {
+        "kind": "intent_mismatch",
+        "observation": "Trong cảnh này, Bình đặt đèn pin hỏng xuống, trái với quyết định của M2 trong A1.",
+        "impact": "Việc Bình đặt đèn pin hỏng xuống không tuân theo quyết định của M2, có thể gây hiểu lầm cho người xem về tình trạng đèn pin.",
+        "suggestion": "",
+        "evidence": [
+          {
+            "source_id": "S5",
+            "quote": "Bình đặt đèn pin hỏng xuống, nghiêng tờ giấy về phía ánh đèn đường."
+          },
+          {
+            "source_id": "A1",
+            "quote": "Bình đặt đèn pin hỏng xuống. Lan kéo rèm; hai người nghiêng giấy để đọc bằng ánh đèn đường."
+          }
+        ]
+      }
+    ],
+    "question": ""
+  },
+  "model": "qwen2.5:7b"
+}

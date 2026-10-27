@@ -1,0 +1,33 @@
+{
+  "raw_output": "{\n  \"notes\": [\n    {\n      \"kind\": \"craft\",\n      \"observation\": \"Cha đặt lá thư xin lỗi lên bàn, lùi lại để lối đi trống.\",\n      \"impact\": \"Động tác này thể hiện sự tôn trọng và cho phép con gái tự quyết định, phù hợp với ý tưởng tác giả.\",\n      \"evidence\": [\n        {\n          \"source_id\": \"S5\",\n          \"quote\": \"Cha đặt lá thư xin lỗi lên bàn, lùi lại để lối đi trống.\"\n        }\n      ]\n    },\n    {\n      \"kind\": \"uncertain\",\n      \"observation\": \"Con gái nhìn về cửa, chưa bước đi.\",\n      \"impact\": \"Động tác này không rõ ràng về quyết định của con gái, có thể gây hiểu lầm về tâm lý nhân vật.\",\n      \"evidence\": [\n        {\n          \"source_id\": \"S4\",\n          \"quote\": \"Con gái nhìn về cửa, chưa bước đi.\"\n        }\n      ],\n      \"suggestion\": \"Tác giả có thể thêm một hành động nhỏ, như con gái nắm chặt túi hoặc ngước mắt nhìn cha, để thể hiện sự suy nghĩ của cô.\"\n    }\n  ],\n  \"question\": \"\"\n}",
+  "output": {
+    "notes": [
+      {
+        "kind": "craft",
+        "observation": "Cha đặt lá thư xin lỗi lên bàn, lùi lại để lối đi trống.",
+        "impact": "Động tác này thể hiện sự tôn trọng và cho phép con gái tự quyết định, phù hợp với ý tưởng tác giả.",
+        "suggestion": "",
+        "evidence": [
+          {
+            "source_id": "S5",
+            "quote": "Cha đặt lá thư xin lỗi lên bàn, lùi lại để lối đi trống."
+          }
+        ]
+      },
+      {
+        "kind": "uncertain",
+        "observation": "Con gái nhìn về cửa, chưa bước đi.",
+        "impact": "Động tác này không rõ ràng về quyết định của con gái, có thể gây hiểu lầm về tâm lý nhân vật.",
+        "suggestion": "Tác giả có thể thêm một hành động nhỏ, như con gái nắm chặt túi hoặc ngước mắt nhìn cha, để thể hiện sự suy nghĩ của cô.",
+        "evidence": [
+          {
+            "source_id": "S4",
+            "quote": "Con gái nhìn về cửa, chưa bước đi."
+          }
+        ]
+      }
+    ],
+    "question": ""
+  },
+  "model": "qwen2.5:7b"
+}

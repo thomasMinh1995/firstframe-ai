@@ -1,0 +1,25 @@
+{
+  "raw_output": "{\n  \"notes\": [\n    {\n      \"kind\": \"intent_mismatch\",\n      \"observation\": \"Trong cảnh này, Bình bật đèn pin hỏng, nhưng theo quyết định M2, đèn pin bị hỏng và không thể sáng.\",\n      \"impact\": \"Việc Bình bật đèn pin hỏng không phù hợp với giới hạn đã chọn, có thể gây hiểu lầm cho khán giả.\",\n      \"evidence\": [\n        {\n          \"source_id\": \"S5\",\n          \"quote\": \"Bình bật chiếc đèn pin hỏng; đèn sáng rực, rọi rõ tờ giấy.\"\n        },\n        {\n          \"source_id\": \"A4\",\n          \"quote\": \"Đèn pin bị hỏng, không thể sáng.\"\n        }\n      ],\n      \"suggestion\": \"Thay vì bật đèn pin, Bình có thể thử điều chỉnh ánh sáng từ bên ngoài thông qua rèm.\"\n    }\n  ],\n  \"question\": \"\"\n}",
+  "output": {
+    "notes": [
+      {
+        "kind": "intent_mismatch",
+        "observation": "Trong cảnh này, Bình bật đèn pin hỏng, nhưng theo quyết định M2, đèn pin bị hỏng và không thể sáng.",
+        "impact": "Việc Bình bật đèn pin hỏng không phù hợp với giới hạn đã chọn, có thể gây hiểu lầm cho khán giả.",
+        "suggestion": "Thay vì bật đèn pin, Bình có thể thử điều chỉnh ánh sáng từ bên ngoài thông qua rèm.",
+        "evidence": [
+          {
+            "source_id": "S5",
+            "quote": "Bình bật chiếc đèn pin hỏng; đèn sáng rực, rọi rõ tờ giấy."
+          },
+          {
+            "source_id": "A4",
+            "quote": "Đèn pin bị hỏng, không thể sáng."
+          }
+        ]
+      }
+    ],
+    "question": ""
+  },
+  "model": "qwen2.5:7b"
+}

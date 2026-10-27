@@ -1,0 +1,13 @@
+{
+  "name": "free-choice-violating",
+  "pair": "free-choice",
+  "variant": "violating",
+  "status_code": 504,
+  "duration_seconds": 61.417,
+  "model_calls": 1,
+  "review_status": "failed",
+  "validated_notes": 0,
+  "error": "ProviderTimeoutError",
+  "response_error": "{\"detail\":\"AI phản hồi quá lâu. Nội dung đã lưu vẫn được giữ; hãy thử lại.\"}",
+  "author_script_unchanged": true
+}

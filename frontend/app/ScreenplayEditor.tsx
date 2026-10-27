@@ -1,20 +1,25 @@
 "use client";
 
-import {useState} from "react";
+import {useEffect,useState} from "react";
 import type {Project} from "./projectsApi";
 import type {Screenplay, ScriptScene, SceneWritingInput} from "./screenplayTypes";
 import {stagingLabels, type StagingKey} from "./sceneTypes";
 import {ScriptSceneFields} from "./ScriptSceneFields";
 import {ScreenplayProposals} from "./ScreenplayProposals";
+import {ScreenplayFeedback} from "./ScreenplayFeedback";
+import type {ReviewAssessment,ReviewSource} from "./screenplayReviewTypes";
 import "./screenplay.css";
 
-export function ScreenplayEditor({project, dirty, sourceDirty, onChange, onStart, onRestore, onSave, onInspect, onWrite, onProposalInspect, onPreview, onDiscard, canUse}: {
+export function ScreenplayEditor({project, dirty, sourceDirty, onChange, onStart, onRestore, onSave, onInspect, onWrite, onProposalInspect, onPreview, onDiscard, canUse, onReview, onReviewInspect, onReviewDiscard, onReviewAssess, canNavigateReview}: {
+  onReview:(input:SceneWritingInput)=>Promise<void>;onReviewInspect:()=>Promise<boolean>;onReviewDiscard:(id:string)=>void;
+  onReviewAssess:(reviewId:string,noteId:string,value:ReviewAssessment)=>void;canNavigateReview:boolean;
   project: Project; dirty: boolean; sourceDirty: boolean;
   onChange: (script: Screenplay, proposalId?: string) => void;
   onWrite:(input:SceneWritingInput)=>Promise<void>;onProposalInspect:()=>Promise<boolean>;
   onPreview:(id:string,scene:ScriptScene)=>void;onDiscard:(id:string)=>void;canUse:boolean; onStart: (requestId: string) => Promise<void>;
   onRestore: (id: string) => void; onSave: () => void; onInspect: () => Promise<boolean>;
 }) {
+  const [pendingReference,setPendingReference]=useState<ReviewSource|null>(null);
   const [selected, setSelected] = useState<string | null>(null);
   const [replace, setReplace] = useState(false);
   const [undo, setUndo] = useState<{before: Screenplay; after: string; label:string} | null>(null);
@@ -24,6 +29,20 @@ export function ScreenplayEditor({project, dirty, sourceDirty, onChange, onStart
   const scene = script?.scenes.find(s=>s.id===selected) ?? script?.scenes[0];
   const source = script?.source_outline.scenes.find(s=>s.id===scene?.source_scene_id);
   const edit = (next: ScriptScene) => script && onChange({...script,scenes:script.scenes.map(s=>s.id===next.id?next:s)});
+  useEffect(()=>{
+    if(!pendingReference||!canNavigateReview)return;
+    const frame=requestAnimationFrame(()=>{
+      const ref=pendingReference;
+      const owner=script?.scenes.find(s=>s.id===ref.scene_id),block=owner?.blocks.find(b=>b.id===ref.block_id);
+      const text=ref.field==='heading'?owner?.heading:ref.field==='speaker'?block?.speaker:block?.text;
+      if(text===ref.text){
+        const node=ref.block_id?document.querySelector<HTMLElement>(`.screenplay-columns [data-script-block="${ref.block_id}"] ${ref.field==='speaker'?'input':'textarea'}`)
+          :document.querySelector<HTMLElement>('.screenplay-columns .screenplay-scene input');
+        node?.scrollIntoView({block:'center'});node?.focus({preventScroll:true});
+      }
+      setPendingReference(null);
+    });return()=>cancelAnimationFrame(frame);
+  },[pendingReference,scene?.id,script,canNavigateReview]);
   function remove(id: string) {
     if (!scene || !script) return;
     const next={...script,scenes:script.scenes.map(s=>s.id===scene.id?{...s,blocks:s.blocks.filter(b=>b.id!==id)}:s)};
@@ -31,7 +50,7 @@ export function ScreenplayEditor({project, dirty, sourceDirty, onChange, onStart
   }
   return <section className="panel screenplay" data-workspace-stage="workspace-script" aria-label="M3 Kịch bản">
     <h2 id="workspace-script" tabIndex={-1}>M3 · Viết kịch bản</h2>
-    <p>Viết bằng hành động và lời thoại theo từng cảnh. Không bắt buộc có lời thoại hoặc hình phác. Bạn có thể tự viết hoặc nhờ AI viết thử một cảnh; góp ý AI cho kịch bản chưa được hỗ trợ.</p>
+    <p>Viết bằng hành động và lời thoại theo từng cảnh. Không bắt buộc có lời thoại hoặc hình phác. Bạn có thể tự viết, nhờ AI viết thử một cảnh hoặc nhận góp ý để tự sửa. Quyết định vẫn thuộc về bạn.</p>
     <details><summary>Bắt đầu từ dàn cảnh nào?</summary>
       <p>Lưu mọi sửa đang chờ trước khi bắt đầu. Nguồn M2 được giữ riêng; sửa dàn cảnh sau đó không tự thay kịch bản. Muốn đổi cấu trúc cảnh, sửa M2 rồi chủ động bắt đầu bản khác.</p>
       {project.scene_handoff ? <p>M2 phiên bản {project.scene_handoff.version} · {project.scene_handoff.scenes.length} cảnh · {project.scene_outline?.source.draft.title}</p>
@@ -73,6 +92,9 @@ export function ScreenplayEditor({project, dirty, sourceDirty, onChange, onStart
           const next={...script,scenes:script.scenes.map(s=>s.id===replacement.id?replacement:s)};
           setUndo({before:structuredClone(script),after:JSON.stringify(next),label:"Hoàn tác dùng phương án"});onChange(next,id);
         }}/>
+      <ScreenplayFeedback key={`review:${script.id}:${scene.id}`} project={project} scene={scene} canNavigate={canNavigateReview}
+        onReview={onReview} onInspect={onReviewInspect} onDiscard={onReviewDiscard} onAssess={onReviewAssess}
+        onNavigate={source=>{if(canNavigateReview&&source.scene_id){setSelected(source.scene_id);setPendingReference(source);}}}/>
       <button type="button" onClick={onSave}>Lưu kịch bản</button>
       <p>Chuyển cảnh chỉ giữ phần đang viết trên màn hình. Lưu để mở lại; bản nháp không cần đủ mọi cảnh. M4 xuất bản chưa triển khai.</p>
     </>}
