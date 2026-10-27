@@ -101,6 +101,7 @@ const {randomUUID: uuid} = require('node:crypto');
   assert.equal(await page.evaluate(() => document.activeElement.tagName), 'SUMMARY', 'Tab remains native focus navigation');
   await editor.screenshot({path: path.join(directory, 'continuous-editor-current.png')});
   // Fake review references still focus the intended native field in the new editor.
+  await area.locator('.screenplay-feedback-tools > summary').click();
   const panel = area.locator('.screenplay-feedback'); await panel.getByRole('button', {name: 'Nhận góp ý cảnh này', exact: true}).click();
   const latest = panel.locator(':scope > .script-review').first(); await latest.getByRole('group', {name: 'Ghi nhận của tác giả'}).waitFor();
   const beforeLink = await state(); await latest.getByRole('button', {name: 'Đến phần đang viết', exact: true}).first().click();

@@ -1,10 +1,12 @@
 "use client";
 
-import {useEffect,useId,useState} from "react";
+import {useEffect,useId,useMemo,useRef,useState} from "react";
 import type {Project} from "./projectsApi";
 import type {Screenplay, ScriptScene, SceneWritingInput, ScreenplaySelectionInput} from "./screenplayTypes";
 import {ScreenplayReading, SavedScript} from "./ScreenplayReading";
 import {stagingLabels, type StagingKey} from "./sceneTypes";
+import {screenplaySketches} from "./screenplaySketches";
+import {SketchImage} from "./SceneSketchPanel";
 import {ScriptSceneFields} from "./ScriptSceneFields";
 import {ContinuousSceneEditor} from "./ContinuousSceneEditor";
 import {ScreenplayProposals} from "./ScreenplayProposals";
@@ -23,6 +25,7 @@ export function ScreenplayEditor({project, savedProject, onSelectSource, onSourc
   onRestore: (id: string) => void; onSave: () => void; onInspect: () => Promise<boolean>;
 }) {
   const editorId=useId();
+  const editOrigin=useRef<Element|null>(null);
   const [pendingReference,setPendingReference]=useState<ReviewSource|null>(null);
   const [pendingEdit,setPendingEdit]=useState<string|null>(null);
   const [selected, setSelected] = useState<{scriptId:string;sceneId:string} | null>(null);
@@ -33,19 +36,26 @@ export function ScreenplayEditor({project, savedProject, onSelectSource, onSourc
   const script = project.screenplay;
   const uncertain = sent !== null && script?.id !== sent && !project.screenplay_versions?.some(v=>v.screenplay.id===sent);
   const scene = selected?.scriptId===script?.id ? script?.scenes.find(s=>s.id===selected?.sceneId) : undefined;
+  const sketches = useMemo(()=>savedProject.id===project.id && script ? screenplaySketches(savedProject,script.source_outline) : {},[savedProject,project.id,script?.source_outline]);
+  const sketch = scene ? sketches[scene.source_scene_id] : undefined;
   const source = script?.source_outline.scenes.find(s=>s.id===scene?.source_scene_id);
   const edit = (next: ScriptScene) => script && onChange({...script,scenes:script.scenes.map(s=>s.id===next.id?next:s)});
   useEffect(()=>{setSelected(null);setUseBlockEditor(false);setPendingReference(null);setPendingEdit(null);},[script?.id]);
   function chooseScene(id:string, focus=true) {
     if(!script?.scenes.some(s=>s.id===id))return;
     setSelected({scriptId:script.id,sceneId:id});
-    if(focus)setPendingEdit(id);
+    if(focus){editOrigin.current=document.activeElement;setPendingEdit(id);}
   }
   useEffect(()=>{
     if(!pendingEdit||scene?.id!==pendingEdit)return;
-    const frame=requestAnimationFrame(()=>{const node=document.querySelector<HTMLInputElement>('.screenplay-columns .screenplay-scene input');node?.scrollIntoView({block:'center'});node?.focus({preventScroll:true});setPendingEdit(null);});
+    const frame=requestAnimationFrame(()=>{
+      const host=document.getElementById(editorId)?.querySelector('.screenplay-author-fields');
+      // Focus only while the author has not moved elsewhere since requesting navigation.
+      if(host&&document.activeElement===editOrigin.current&&!host.contains(document.activeElement)){const node=host.querySelector<HTMLInputElement>('input');node?.scrollIntoView({block:'center'});node?.focus({preventScroll:true});}
+      setPendingEdit(null);
+    });
     return()=>cancelAnimationFrame(frame);
-  },[pendingEdit,scene?.id]);
+  },[pendingEdit,scene?.id,editorId]);
   useEffect(()=>{
     if(!pendingReference||!canNavigateReview)return;
     const frame=requestAnimationFrame(()=>{
@@ -53,8 +63,8 @@ export function ScreenplayEditor({project, savedProject, onSelectSource, onSourc
       const owner=script?.scenes.find(s=>s.id===ref.scene_id),block=owner?.blocks.find(b=>b.id===ref.block_id);
       const text=ref.field==='heading'?owner?.heading:ref.field==='speaker'?block?.speaker:block?.text;
       if(text===ref.text){
-        const node=ref.block_id?document.querySelector<HTMLElement>(`.screenplay-columns [data-script-block="${ref.block_id}"] ${ref.field==='speaker'?'input':'textarea'}`)
-          :document.querySelector<HTMLElement>('.screenplay-columns .screenplay-scene input');
+        const node=ref.block_id?document.querySelector<HTMLElement>(`.screenplay-author-fields [data-script-block="${ref.block_id}"] ${ref.field==='speaker'?'input':'textarea'}`)
+          :document.querySelector<HTMLElement>('.screenplay-author-fields input');
         node?.scrollIntoView({block:'center'});node?.focus({preventScroll:true});
       }
       setPendingReference(null);
@@ -86,13 +96,16 @@ export function ScreenplayEditor({project, savedProject, onSelectSource, onSourc
         {i>0&&<span className="screenplay-scene-arrow" aria-hidden="true">→</span>}
         <button type="button" aria-pressed={s.id===scene?.id} aria-controls={editorId} data-script-scene={s.id}
           onFocus={e=>e.currentTarget.scrollIntoView({block:'nearest',inline:'nearest'})} onClick={()=>chooseScene(s.id)}>
-          <span>Cảnh {i+1}</span><strong>{s.heading || "Cảnh chưa đặt tiêu đề"}</strong>
+          <span>Cảnh {i+1}</span>
+          {sketches[s.source_scene_id]?.matches ? <SketchImage key={sketches[s.source_scene_id].sketch.id} projectId={project.id} sketchId={sketches[s.source_scene_id].sketch.id} alt={`Phác họa M2 tham khảo cho cảnh ${i+1}`}/> : <span className="screenplay-sketch-placeholder">{sketches[s.source_scene_id] ? "Ảnh M2 khác nguồn" : "Chưa có ảnh phù hợp"}</span>}
+          <strong>{s.heading || "Cảnh chưa đặt tiêu đề"}</strong>
           <span>{s.blocks.some(b=>b.text.trim())?'Đang viết':'Chưa viết'}</span>
         </button>
       </li>)}</ol></nav>
       <div className="screenplay-columns">
         <div className="screenplay-scene" id={editorId}>
           {scene ? <>
+            <div className="screenplay-author-fields">
             <button type="button" aria-pressed={useBlockEditor} onClick={()=>setUseBlockEditor(!useBlockEditor)}>
               {useBlockEditor?'Dùng editor liền mạch':'Dùng editor dạng khối'}
             </button>
@@ -100,8 +113,50 @@ export function ScreenplayEditor({project, savedProject, onSelectSource, onSourc
               ? <ScriptSceneFields key={`${script.id}:${scene.id}`} scene={scene} onChange={edit} onDelete={remove}/>
               : <ContinuousSceneEditor key={`${script.id}:${scene.id}`} scene={scene} scope={`${script.id}:${script.version}`}
                   blockLimit={Math.min(200,1000-script.scenes.filter(s=>s.id!==scene.id).reduce((total,s)=>total+s.blocks.length,0))} onChange={edit}/>}
+            </div>
             <button type="button" onClick={onSave}>Lưu kịch bản</button>
             <p>Chuyển cảnh giữ phần đang viết; lưu để mở lại. Bản nháp không cần đủ mọi cảnh.</p>
+            <p>Mở nguồn, ảnh hoặc góp ý bên dưới khi cần; tự quyết định điều muốn giữ.</p>
+            <div className="screenplay-tools" aria-label="Hỗ trợ cảnh đang viết">
+              <details className="screenplay-source"><summary>Nguồn M2 của cảnh đang viết</summary>
+                <p>Đây là nguồn được giữ lúc bắt đầu, không phải bản soạn.</p>
+                {source && <><h3>{source.title}</h3><p className="preserve-lines">{source.action}</p>
+                  {(["location","time","characters","goal","purpose","viewer_intent","keep_or_avoid"] as const).map((key,i)=>source[key]&&<p key={key} className="preserve-lines"><strong>{["Địa điểm","Thời điểm","Nhân vật","Mục tiêu","Đóng góp","Cảm nhận","Giữ/tránh"][i]}: </strong>{source[key]}</p>)}
+                  {Object.entries(source.staging_choices).map(([key,value])=><p key={key} className="preserve-lines"><strong>{stagingLabels[key as StagingKey]}: </strong>{value}</p>)}
+                </>}
+                <p>Ảnh tham khảo theo lựa chọn M2 đang lưu, có thể đổi khi bạn chọn ảnh khác. Ảnh không được giữ riêng cùng phiên bản kịch bản và có thể sai chi tiết.</p>
+                {sketch ? sketch.matches ? <figure className="screenplay-sketch">
+                  <SketchImage key={`${project.id}:${sketch.sketch.id}:${sketch.sketch.asset_id}`} projectId={project.id} sketchId={sketch.sketch.id} alt="Phác họa M2 khớp nguồn kịch bản"/>
+                  <figcaption>Ảnh M2 đang giữ · nguồn M2 bản {sketch.sketch.source_outline.version} · {sketch.sketch.model}</figcaption>
+                </figure> : <details className="screenplay-sketch-other"><summary>Đối chiếu ảnh M2 khác nguồn</summary>
+                  <p role="status">Ảnh này không khớp nguồn M3. Không dùng làm minh họa xác nhận cho cảnh đang viết.</p>
+                  <SketchImage key={`${project.id}:${sketch.sketch.id}:${sketch.sketch.asset_id}`} projectId={project.id} sketchId={sketch.sketch.id} alt="Ảnh M2 khác nguồn, chỉ để đối chiếu"/>
+                  <p>Nguồn ảnh: M2 bản {sketch.sketch.source_outline.version} · {sketch.sketch.source_outline.scenes.find(s=>s.id===sketch.sketch.scene_id)?.action}</p>
+                </details> : <p>Chưa có ảnh phù hợp. Bạn vẫn viết và lưu bình thường.</p>}
+                <details><summary>Story plan và ý đồ đi cùng nguồn</summary>
+                  <h4>{script.source_outline.source.draft.title}</h4><p className="preserve-lines">{script.source_outline.source.draft.logline}</p>
+                  {script.source_outline.source.draft.sections.map((s,i)=><p key={i} className="preserve-lines">{s.title}: {s.content}</p>)}
+                  <p className="preserve-lines">{script.source_outline.source.context.idea}</p>
+                  {script.source_outline.source.context.constraints.map((c,i)=><p key={i} className="preserve-lines">{c}</p>)}
+                  {script.source_outline.source.context.pending_questions.map((q,i)=><p key={i}>Chưa quyết định: {q.question}</p>)}
+                  {script.source_outline.source.context.clarifications.map((c,i)=><p key={i} className="preserve-lines">{c.question} — {c.answer}</p>)}
+                </details>
+              </details>
+            {undo && JSON.stringify(script)===undo.after && <button type="button" onClick={()=>{onChange(undo.before);setUndo(null);}}>{undo.label}</button>}
+            <details className="screenplay-writing-tools"><summary>Nhờ FirstFrame viết thử một cảnh</summary>
+            <ScreenplayProposals key={`${script.id}:${scene.id}`} project={project} scene={scene} canUse={canUse}
+              onWrite={onWrite} onInspect={onProposalInspect} onPreview={onPreview} onDiscard={onDiscard}
+              onUse={(id,replacement)=>{
+                const next={...script,scenes:script.scenes.map(s=>s.id===replacement.id?replacement:s)};
+                setUndo({before:structuredClone(script),after:JSON.stringify(next),label:"Hoàn tác dùng phương án"});onChange(next,id);
+              }}/>
+            </details>
+            <details className="screenplay-feedback-tools"><summary>Góp ý có bằng chứng để tự sửa</summary>
+            <ScreenplayFeedback key={`review:${script.id}:${scene.id}`} project={project} scene={scene} canNavigate={canNavigateReview}
+              onReview={onReview} onInspect={onReviewInspect} onDiscard={onReviewDiscard} onAssess={onReviewAssess}
+              onNavigate={source=>{if(canNavigateReview&&source.scene_id){chooseScene(source.scene_id,false);setPendingReference(source);}}}/>
+            </details>
+            </div>
           </> : <div className="screenplay-empty" role="status"><h3>Chọn một cảnh để viết</h3><p>Chọn cảnh phía trên để mở form. Kịch bản đã lưu ở bên cạnh không bao gồm các sửa chưa lưu.</p></div>}
         </div>
         <aside className="screenplay-saved" aria-label="Kịch bản đã lưu để đối chiếu">
@@ -113,33 +168,7 @@ export function ScreenplayEditor({project, savedProject, onSelectSource, onSourc
           </> : <p>Chưa có bản đã lưu tương ứng để đối chiếu. Phần đang viết vẫn được giữ.</p>}
         </aside>
       </div>
-      {scene && <>
-        <details className="screenplay-source" open><summary>Nguồn M2 của cảnh đang viết</summary>
-          <p>Đây là nguồn được giữ lúc bắt đầu, không phải bản soạn.</p>
-          {source && <><h3>{source.title}</h3><p className="preserve-lines">{source.action}</p>
-            {(["location","time","characters","goal","purpose","viewer_intent","keep_or_avoid"] as const).map((key,i)=>source[key]&&<p key={key} className="preserve-lines"><strong>{["Địa điểm","Thời điểm","Nhân vật","Mục tiêu","Đóng góp","Cảm nhận","Giữ/tránh"][i]}: </strong>{source[key]}</p>)}
-            {Object.entries(source.staging_choices).map(([key,value])=><p key={key} className="preserve-lines"><strong>{stagingLabels[key as StagingKey]}: </strong>{value}</p>)}
-          </>}
-          <details><summary>Story plan và ý đồ đi cùng nguồn</summary>
-            <h4>{script.source_outline.source.draft.title}</h4><p className="preserve-lines">{script.source_outline.source.draft.logline}</p>
-            {script.source_outline.source.draft.sections.map((s,i)=><p key={i} className="preserve-lines">{s.title}: {s.content}</p>)}
-            <p className="preserve-lines">{script.source_outline.source.context.idea}</p>
-            {script.source_outline.source.context.constraints.map((c,i)=><p key={i} className="preserve-lines">{c}</p>)}
-            {script.source_outline.source.context.pending_questions.map((q,i)=><p key={i}>Chưa quyết định: {q.question}</p>)}
-            {script.source_outline.source.context.clarifications.map((c,i)=><p key={i} className="preserve-lines">{c.question} — {c.answer}</p>)}
-          </details>
-        </details>
-      {undo && JSON.stringify(script)===undo.after && <button type="button" onClick={()=>{onChange(undo.before);setUndo(null);}}>{undo.label}</button>}
-      <ScreenplayProposals key={`${script.id}:${scene.id}`} project={project} scene={scene} canUse={canUse}
-        onWrite={onWrite} onInspect={onProposalInspect} onPreview={onPreview} onDiscard={onDiscard}
-        onUse={(id,replacement)=>{
-          const next={...script,scenes:script.scenes.map(s=>s.id===replacement.id?replacement:s)};
-          setUndo({before:structuredClone(script),after:JSON.stringify(next),label:"Hoàn tác dùng phương án"});onChange(next,id);
-        }}/>
-      <ScreenplayFeedback key={`review:${script.id}:${scene.id}`} project={project} scene={scene} canNavigate={canNavigateReview}
-        onReview={onReview} onInspect={onReviewInspect} onDiscard={onReviewDiscard} onAssess={onReviewAssess}
-        onNavigate={source=>{if(canNavigateReview&&source.scene_id){chooseScene(source.scene_id,false);setPendingReference(source);}}}/>
-      </>}
+
     </>}
     <ScreenplayReading saved={savedProject} dirty={dirty} onSelect={onSelectSource} onInspect={onSourceInspect}
       onEdit={id=>chooseScene(id)}/>
