@@ -1,0 +1,590 @@
+{
+  "response_language": "vi",
+  "id": "733061bd-d285-4ef7-b4bf-5d2b0fce4f32",
+  "revision": 7,
+  "updated_at": "2026-10-27T05:17:45.453376+00:00",
+  "title": "Lá thư còn kín",
+  "idea": "Cha muốn xin lỗi, con gái chưa quyết định có đón nhận hay không.",
+  "constraints": [
+    "Chỉ cha và con gái trong một căn nhà.",
+    "Không nói tha thứ hoặc hòa giải xong.",
+    "Phong thư vẫn kín; kết mở, không thêm biến cố."
+  ],
+  "analysis": null,
+  "answers": [],
+  "clarifications": {},
+  "draft": {
+    "title": "Lá thư còn kín",
+    "logline": "Cha muốn xin lỗi, con gái chưa quyết định có đón nhận hay không.",
+    "sections": [
+      {
+        "title": "Đầu",
+        "purpose": "Mở",
+        "content": "Con gái về nhà, đặt túi cạnh cửa. Cha đứng bên bàn, cầm phong thư kín."
+      },
+      {
+        "title": "Cuối",
+        "purpose": "Diễn tiến",
+        "content": "Cha đặt phong thư kín lên bàn rồi lùi lại. Con gái đặt tay cạnh phong thư, chưa nhận hoặc mở; dừng ở đó."
+      }
+    ]
+  },
+  "feedback": null,
+  "feedback_source": null,
+  "reviewed_content": null,
+  "versions": [],
+  "clarification_history": [],
+  "plan_generations": [],
+  "scene_outline": {
+    "id": "3b9ce524-7ed6-4867-be54-618ecc273e25",
+    "version": 2,
+    "scenes": [
+      {
+        "id": "4590c9c1-a150-4a69-ac99-09a90a1b41ee",
+        "title": "Trước đó",
+        "action": "Con gái về nhà, đặt túi cạnh cửa. Cha đứng bên bàn, cầm phong thư kín.",
+        "location": "Một căn phòng",
+        "time": "",
+        "characters": "",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      },
+      {
+        "id": "6b9d8dd8-c29b-43ef-af8d-d8fb94f45409",
+        "title": "Khoảnh khắc",
+        "action": "Cha đặt phong thư kín lên bàn rồi lùi lại. Con gái đặt tay cạnh phong thư, chưa nhận hoặc mở; dừng ở đó.",
+        "location": "Một căn phòng",
+        "time": "",
+        "characters": "",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      }
+    ],
+    "source": {
+      "id": "b2bcdb0d-29a1-48f8-bac0-00622c1c9125",
+      "project_revision": 0,
+      "version_id": "current",
+      "draft": {
+        "title": "Lá thư còn kín",
+        "logline": "Cha muốn xin lỗi, con gái chưa quyết định có đón nhận hay không.",
+        "sections": [
+          {
+            "title": "Đầu",
+            "purpose": "Mở",
+            "content": "Con gái về nhà, đặt túi cạnh cửa. Cha đứng bên bàn, cầm phong thư kín."
+          },
+          {
+            "title": "Cuối",
+            "purpose": "Diễn tiến",
+            "content": "Cha đặt phong thư kín lên bàn rồi lùi lại. Con gái đặt tay cạnh phong thư, chưa nhận hoặc mở; dừng ở đó."
+          }
+        ]
+      },
+      "context": {
+        "idea": "Cha muốn xin lỗi, con gái chưa quyết định có đón nhận hay không.",
+        "constraints": [
+          "Chỉ cha và con gái trong một căn nhà.",
+          "Không nói tha thứ hoặc hòa giải xong.",
+          "Phong thư vẫn kín; kết mở, không thêm biến cố."
+        ],
+        "clarifications": [],
+        "pending_questions": []
+      },
+      "response_language": "vi"
+    }
+  },
+  "screenplay": {
+    "id": "8ebf3ab3-ae45-4da9-8ce0-17bd22829e7e",
+    "version": 2,
+    "scenes": [
+      {
+        "id": "0e936ebe-b41f-4f57-9494-300664f629ab",
+        "source_scene_id": "4590c9c1-a150-4a69-ac99-09a90a1b41ee",
+        "heading": "Trước đó",
+        "blocks": [
+          {
+            "kind": "action",
+            "text": "Con gái về nhà, đặt túi cạnh cửa. Cha đứng bên bàn, cầm phong thư kín.",
+            "speaker": "",
+            "id": "f5a28cc8-5b6e-43fc-ac7b-ffa8a885c525"
+          }
+        ]
+      },
+      {
+        "id": "c4a6954a-4405-4ca9-8698-84e83474e0bf",
+        "source_scene_id": "6b9d8dd8-c29b-43ef-af8d-d8fb94f45409",
+        "heading": "Khoảnh khắc",
+        "blocks": [
+          {
+            "kind": "action",
+            "text": "Cha đặt phong thư kín lên bàn rồi lùi lại.",
+            "speaker": "",
+            "id": "57fc509b-8e09-4280-bf99-2277ac58a27f"
+          }
+        ]
+      }
+    ],
+    "source_revision": 2,
+    "source_outline": {
+      "id": "3b9ce524-7ed6-4867-be54-618ecc273e25",
+      "version": 2,
+      "scenes": [
+        {
+          "id": "4590c9c1-a150-4a69-ac99-09a90a1b41ee",
+          "title": "Trước đó",
+          "action": "Con gái về nhà, đặt túi cạnh cửa. Cha đứng bên bàn, cầm phong thư kín.",
+          "location": "Một căn phòng",
+          "time": "",
+          "characters": "",
+          "goal": "",
+          "purpose": "",
+          "viewer_intent": "",
+          "keep_or_avoid": "",
+          "staging_choices": {}
+        },
+        {
+          "id": "6b9d8dd8-c29b-43ef-af8d-d8fb94f45409",
+          "title": "Khoảnh khắc",
+          "action": "Cha đặt phong thư kín lên bàn rồi lùi lại. Con gái đặt tay cạnh phong thư, chưa nhận hoặc mở; dừng ở đó.",
+          "location": "Một căn phòng",
+          "time": "",
+          "characters": "",
+          "goal": "",
+          "purpose": "",
+          "viewer_intent": "",
+          "keep_or_avoid": "",
+          "staging_choices": {}
+        }
+      ],
+      "source": {
+        "id": "b2bcdb0d-29a1-48f8-bac0-00622c1c9125",
+        "project_revision": 0,
+        "version_id": "current",
+        "draft": {
+          "title": "Lá thư còn kín",
+          "logline": "Cha muốn xin lỗi, con gái chưa quyết định có đón nhận hay không.",
+          "sections": [
+            {
+              "title": "Đầu",
+              "purpose": "Mở",
+              "content": "Con gái về nhà, đặt túi cạnh cửa. Cha đứng bên bàn, cầm phong thư kín."
+            },
+            {
+              "title": "Cuối",
+              "purpose": "Diễn tiến",
+              "content": "Cha đặt phong thư kín lên bàn rồi lùi lại. Con gái đặt tay cạnh phong thư, chưa nhận hoặc mở; dừng ở đó."
+            }
+          ]
+        },
+        "context": {
+          "idea": "Cha muốn xin lỗi, con gái chưa quyết định có đón nhận hay không.",
+          "constraints": [
+            "Chỉ cha và con gái trong một căn nhà.",
+            "Không nói tha thứ hoặc hòa giải xong.",
+            "Phong thư vẫn kín; kết mở, không thêm biến cố."
+          ],
+          "clarifications": [],
+          "pending_questions": []
+        },
+        "response_language": "vi"
+      }
+    }
+  },
+  "screenplay_versions": [
+    {
+      "id": "f1c5a3b0-1f09-4172-8a47-157be665f7f2",
+      "created_at": "2026-10-27T05:17:01.286095+00:00",
+      "screenplay": {
+        "id": "8ebf3ab3-ae45-4da9-8ce0-17bd22829e7e",
+        "version": 1,
+        "scenes": [
+          {
+            "id": "0e936ebe-b41f-4f57-9494-300664f629ab",
+            "source_scene_id": "4590c9c1-a150-4a69-ac99-09a90a1b41ee",
+            "heading": "Trước đó",
+            "blocks": []
+          },
+          {
+            "id": "c4a6954a-4405-4ca9-8698-84e83474e0bf",
+            "source_scene_id": "6b9d8dd8-c29b-43ef-af8d-d8fb94f45409",
+            "heading": "Khoảnh khắc",
+            "blocks": []
+          }
+        ],
+        "source_revision": 2,
+        "source_outline": {
+          "id": "3b9ce524-7ed6-4867-be54-618ecc273e25",
+          "version": 2,
+          "scenes": [
+            {
+              "id": "4590c9c1-a150-4a69-ac99-09a90a1b41ee",
+              "title": "Trước đó",
+              "action": "Con gái về nhà, đặt túi cạnh cửa. Cha đứng bên bàn, cầm phong thư kín.",
+              "location": "Một căn phòng",
+              "time": "",
+              "characters": "",
+              "goal": "",
+              "purpose": "",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {}
+            },
+            {
+              "id": "6b9d8dd8-c29b-43ef-af8d-d8fb94f45409",
+              "title": "Khoảnh khắc",
+              "action": "Cha đặt phong thư kín lên bàn rồi lùi lại. Con gái đặt tay cạnh phong thư, chưa nhận hoặc mở; dừng ở đó.",
+              "location": "Một căn phòng",
+              "time": "",
+              "characters": "",
+              "goal": "",
+              "purpose": "",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {}
+            }
+          ],
+          "source": {
+            "id": "b2bcdb0d-29a1-48f8-bac0-00622c1c9125",
+            "project_revision": 0,
+            "version_id": "current",
+            "draft": {
+              "title": "Lá thư còn kín",
+              "logline": "Cha muốn xin lỗi, con gái chưa quyết định có đón nhận hay không.",
+              "sections": [
+                {
+                  "title": "Đầu",
+                  "purpose": "Mở",
+                  "content": "Con gái về nhà, đặt túi cạnh cửa. Cha đứng bên bàn, cầm phong thư kín."
+                },
+                {
+                  "title": "Cuối",
+                  "purpose": "Diễn tiến",
+                  "content": "Cha đặt phong thư kín lên bàn rồi lùi lại. Con gái đặt tay cạnh phong thư, chưa nhận hoặc mở; dừng ở đó."
+                }
+              ]
+            },
+            "context": {
+              "idea": "Cha muốn xin lỗi, con gái chưa quyết định có đón nhận hay không.",
+              "constraints": [
+                "Chỉ cha và con gái trong một căn nhà.",
+                "Không nói tha thứ hoặc hòa giải xong.",
+                "Phong thư vẫn kín; kết mở, không thêm biến cố."
+              ],
+              "clarifications": [],
+              "pending_questions": []
+            },
+            "response_language": "vi"
+          }
+        }
+      }
+    }
+  ],
+  "screenplay_proposals": [
+    {
+      "id": "f2fad746-c755-4545-83e1-7efdb49655c4",
+      "created_at": "2026-10-27T05:17:19.665800+00:00",
+      "source_revision": 4,
+      "source_content": "{\"answers\": [], \"clarifications\": {}, \"constraints\": [\"Chỉ cha và con gái trong một căn nhà.\", \"Không nói tha thứ hoặc hòa giải xong.\", \"Phong thư vẫn kín; kết mở, không thêm biến cố.\"], \"draft\": {\"logline\": \"Cha muốn xin lỗi, con gái chưa quyết định có đón nhận hay không.\", \"sections\": [{\"content\": \"Con gái về nhà, đặt túi cạnh cửa. Cha đứng bên bàn, cầm phong thư kín.\", \"purpose\": \"Mở\", \"title\": \"Đầu\"}, {\"content\": \"Cha đặt phong thư kín lên bàn rồi lùi lại. Con gái đặt tay cạnh phong thư, chưa nhận hoặc mở; dừng ở đó.\", \"purpose\": \"Diễn tiến\", \"title\": \"Cuối\"}], \"title\": \"Lá thư còn kín\"}, \"idea\": \"Cha muốn xin lỗi, con gái chưa quyết định có đón nhận hay không.\", \"questions\": [], \"response_language\": \"vi\"}",
+      "source_screenplay": {
+        "id": "8ebf3ab3-ae45-4da9-8ce0-17bd22829e7e",
+        "version": 2,
+        "scenes": [
+          {
+            "id": "0e936ebe-b41f-4f57-9494-300664f629ab",
+            "source_scene_id": "4590c9c1-a150-4a69-ac99-09a90a1b41ee",
+            "heading": "Trước đó",
+            "blocks": [
+              {
+                "kind": "action",
+                "text": "Con gái về nhà, đặt túi cạnh cửa. Cha đứng bên bàn, cầm phong thư kín.",
+                "speaker": "",
+                "id": "f5a28cc8-5b6e-43fc-ac7b-ffa8a885c525"
+              }
+            ]
+          },
+          {
+            "id": "c4a6954a-4405-4ca9-8698-84e83474e0bf",
+            "source_scene_id": "6b9d8dd8-c29b-43ef-af8d-d8fb94f45409",
+            "heading": "Khoảnh khắc",
+            "blocks": [
+              {
+                "kind": "action",
+                "text": "Cha đặt phong thư kín lên bàn rồi lùi lại.",
+                "speaker": "",
+                "id": "57fc509b-8e09-4280-bf99-2277ac58a27f"
+              }
+            ]
+          }
+        ],
+        "source_revision": 2,
+        "source_outline": {
+          "id": "3b9ce524-7ed6-4867-be54-618ecc273e25",
+          "version": 2,
+          "scenes": [
+            {
+              "id": "4590c9c1-a150-4a69-ac99-09a90a1b41ee",
+              "title": "Trước đó",
+              "action": "Con gái về nhà, đặt túi cạnh cửa. Cha đứng bên bàn, cầm phong thư kín.",
+              "location": "Một căn phòng",
+              "time": "",
+              "characters": "",
+              "goal": "",
+              "purpose": "",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {}
+            },
+            {
+              "id": "6b9d8dd8-c29b-43ef-af8d-d8fb94f45409",
+              "title": "Khoảnh khắc",
+              "action": "Cha đặt phong thư kín lên bàn rồi lùi lại. Con gái đặt tay cạnh phong thư, chưa nhận hoặc mở; dừng ở đó.",
+              "location": "Một căn phòng",
+              "time": "",
+              "characters": "",
+              "goal": "",
+              "purpose": "",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {}
+            }
+          ],
+          "source": {
+            "id": "b2bcdb0d-29a1-48f8-bac0-00622c1c9125",
+            "project_revision": 0,
+            "version_id": "current",
+            "draft": {
+              "title": "Lá thư còn kín",
+              "logline": "Cha muốn xin lỗi, con gái chưa quyết định có đón nhận hay không.",
+              "sections": [
+                {
+                  "title": "Đầu",
+                  "purpose": "Mở",
+                  "content": "Con gái về nhà, đặt túi cạnh cửa. Cha đứng bên bàn, cầm phong thư kín."
+                },
+                {
+                  "title": "Cuối",
+                  "purpose": "Diễn tiến",
+                  "content": "Cha đặt phong thư kín lên bàn rồi lùi lại. Con gái đặt tay cạnh phong thư, chưa nhận hoặc mở; dừng ở đó."
+                }
+              ]
+            },
+            "context": {
+              "idea": "Cha muốn xin lỗi, con gái chưa quyết định có đón nhận hay không.",
+              "constraints": [
+                "Chỉ cha và con gái trong một căn nhà.",
+                "Không nói tha thứ hoặc hòa giải xong.",
+                "Phong thư vẫn kín; kết mở, không thêm biến cố."
+              ],
+              "clarifications": [],
+              "pending_questions": []
+            },
+            "response_language": "vi"
+          }
+        }
+      },
+      "source_outline": {
+        "id": "3b9ce524-7ed6-4867-be54-618ecc273e25",
+        "version": 2,
+        "scenes": [
+          {
+            "id": "4590c9c1-a150-4a69-ac99-09a90a1b41ee",
+            "title": "Trước đó",
+            "action": "Con gái về nhà, đặt túi cạnh cửa. Cha đứng bên bàn, cầm phong thư kín.",
+            "location": "Một căn phòng",
+            "time": "",
+            "characters": "",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "",
+            "keep_or_avoid": "",
+            "staging_choices": {}
+          },
+          {
+            "id": "6b9d8dd8-c29b-43ef-af8d-d8fb94f45409",
+            "title": "Khoảnh khắc",
+            "action": "Cha đặt phong thư kín lên bàn rồi lùi lại. Con gái đặt tay cạnh phong thư, chưa nhận hoặc mở; dừng ở đó.",
+            "location": "Một căn phòng",
+            "time": "",
+            "characters": "",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "",
+            "keep_or_avoid": "",
+            "staging_choices": {}
+          }
+        ],
+        "source": {
+          "id": "b2bcdb0d-29a1-48f8-bac0-00622c1c9125",
+          "project_revision": 0,
+          "version_id": "current",
+          "draft": {
+            "title": "Lá thư còn kín",
+            "logline": "Cha muốn xin lỗi, con gái chưa quyết định có đón nhận hay không.",
+            "sections": [
+              {
+                "title": "Đầu",
+                "purpose": "Mở",
+                "content": "Con gái về nhà, đặt túi cạnh cửa. Cha đứng bên bàn, cầm phong thư kín."
+              },
+              {
+                "title": "Cuối",
+                "purpose": "Diễn tiến",
+                "content": "Cha đặt phong thư kín lên bàn rồi lùi lại. Con gái đặt tay cạnh phong thư, chưa nhận hoặc mở; dừng ở đó."
+              }
+            ]
+          },
+          "context": {
+            "idea": "Cha muốn xin lỗi, con gái chưa quyết định có đón nhận hay không.",
+            "constraints": [
+              "Chỉ cha và con gái trong một căn nhà.",
+              "Không nói tha thứ hoặc hòa giải xong.",
+              "Phong thư vẫn kín; kết mở, không thêm biến cố."
+            ],
+            "clarifications": [],
+            "pending_questions": []
+          },
+          "response_language": "vi"
+        }
+      },
+      "target_scene_id": "c4a6954a-4405-4ca9-8698-84e83474e0bf",
+      "instructions": "Viết bằng hành động, không lời thoại. Giữ quyền quyết định của con gái.",
+      "status": "ready",
+      "scene": {
+        "id": "c4a6954a-4405-4ca9-8698-84e83474e0bf",
+        "source_scene_id": "6b9d8dd8-c29b-43ef-af8d-d8fb94f45409",
+        "heading": "Khoảnh khắc",
+        "blocks": [
+          {
+            "kind": "action",
+            "text": "Cha bước nhẹ về phía bàn, đặt phong thư kín lên mặt bàn, rồi lùi về phía sau, đôi mắt nhìn về phía con gái, chờ đợi.",
+            "speaker": "",
+            "id": "6f1bdd11-6bcc-4dd1-9500-dbd0de0eff55"
+          },
+          {
+            "kind": "action",
+            "text": "Con gái đứng im lặng, tay đặt nhẹ lên mặt phong thư, không có động tác mở hay nhận.",
+            "speaker": "",
+            "id": "f2844092-0881-4d4f-9a5a-37f2622e487f"
+          }
+        ]
+      },
+      "preview_scene": null,
+      "provider": "ollama",
+      "model": "qwen2.5:7b",
+      "parameters": {
+        "temperature": 0.3,
+        "timeout_seconds": 120,
+        "num_ctx": 16384
+      },
+      "prompt_version": "screenplay-scene-v1",
+      "error": null,
+      "applied_revision": null
+    }
+  ],
+  "scene_versions": [
+    {
+      "id": "8f0176ea-400c-4707-88c2-8a44b6c5c096",
+      "created_at": "2026-10-27T05:17:01.281421+00:00",
+      "outline": {
+        "id": "3b9ce524-7ed6-4867-be54-618ecc273e25",
+        "version": 1,
+        "scenes": [],
+        "source": {
+          "id": "b2bcdb0d-29a1-48f8-bac0-00622c1c9125",
+          "project_revision": 0,
+          "version_id": "current",
+          "draft": {
+            "title": "Lá thư còn kín",
+            "logline": "Cha muốn xin lỗi, con gái chưa quyết định có đón nhận hay không.",
+            "sections": [
+              {
+                "title": "Đầu",
+                "purpose": "Mở",
+                "content": "Con gái về nhà, đặt túi cạnh cửa. Cha đứng bên bàn, cầm phong thư kín."
+              },
+              {
+                "title": "Cuối",
+                "purpose": "Diễn tiến",
+                "content": "Cha đặt phong thư kín lên bàn rồi lùi lại. Con gái đặt tay cạnh phong thư, chưa nhận hoặc mở; dừng ở đó."
+              }
+            ]
+          },
+          "context": {
+            "idea": "Cha muốn xin lỗi, con gái chưa quyết định có đón nhận hay không.",
+            "constraints": [
+              "Chỉ cha và con gái trong một căn nhà.",
+              "Không nói tha thứ hoặc hòa giải xong.",
+              "Phong thư vẫn kín; kết mở, không thêm biến cố."
+            ],
+            "clarifications": [],
+            "pending_questions": []
+          },
+          "response_language": "vi"
+        }
+      }
+    }
+  ],
+  "scene_proposals": [],
+  "staging_proposals": [],
+  "scene_sketches": [],
+  "selected_scene_sketches": {},
+  "applicable_screenplay_proposal_ids": [
+    "f2fad746-c755-4545-83e1-7efdb49655c4"
+  ],
+  "screenplay_source_is_current": true,
+  "applicable_sketch_ids": [],
+  "applicable_scene_proposal_ids": [],
+  "scene_source_is_current": true,
+  "scene_handoff": {
+    "outline_id": "3b9ce524-7ed6-4867-be54-618ecc273e25",
+    "version": 2,
+    "project_revision": 7,
+    "source_id": "b2bcdb0d-29a1-48f8-bac0-00622c1c9125",
+    "scenes": [
+      {
+        "id": "4590c9c1-a150-4a69-ac99-09a90a1b41ee",
+        "title": "Trước đó",
+        "action": "Con gái về nhà, đặt túi cạnh cửa. Cha đứng bên bàn, cầm phong thư kín.",
+        "location": "Một căn phòng",
+        "time": "",
+        "characters": "",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      },
+      {
+        "id": "6b9d8dd8-c29b-43ef-af8d-d8fb94f45409",
+        "title": "Khoảnh khắc",
+        "action": "Cha đặt phong thư kín lên bàn rồi lùi lại. Con gái đặt tay cạnh phong thư, chưa nhận hoặc mở; dừng ở đó.",
+        "location": "Một căn phòng",
+        "time": "",
+        "characters": "",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      }
+    ]
+  },
+  "applicable_plan_ids": [],
+  "author_context": {
+    "idea": "Cha muốn xin lỗi, con gái chưa quyết định có đón nhận hay không.",
+    "constraints": [
+      "Chỉ cha và con gái trong một căn nhà.",
+      "Không nói tha thứ hoặc hòa giải xong.",
+      "Phong thư vẫn kín; kết mở, không thêm biến cố."
+    ],
+    "clarifications": [],
+    "pending_questions": []
+  },
+  "feedback_is_current": false
+}

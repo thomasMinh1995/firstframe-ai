@@ -25,5 +25,16 @@ const script={id:uuid(),version:1,source_revision:1,source_outline:outline,scene
   p=>p.screenplay.source_outline.source.context={},
   p=>p.screenplay_versions=[{id:uuid(),created_at:'now',screenplay:{}}],
  ]){const bad=structuredClone(p);mutate(bad);await assert.rejects(()=>decode(bad),/không hợp lệ/);}
+ const proposal={id:uuid(),created_at:'now',source_revision:p.revision,source_content:'snapshot',source_screenplay:script,source_outline:outline,target_scene_id:script.scenes[0].id,instructions:'Giữ kết mở',status:'ready',scene:script.scenes[0],preview_scene:null,provider:'fake',model:'writer',parameters:{},prompt_version:'v1',error:null,applied_revision:null};
+ const withProposal={...p,screenplay_proposals:[proposal],applicable_screenplay_proposal_ids:[proposal.id]};
+ assert.deepEqual(await decode(withProposal),withProposal);assert.equal(sameEditableContent(p,withProposal),true);
+ assert.equal('screenplay_proposals' in editableProject(withProposal),false);
+ const preview={...withProposal,pending_screenplay_proposal_id:proposal.id,pending_screenplay_previews:{[proposal.id]:proposal.scene}};
+ assert.equal(editableProject(preview).screenplay_proposal_id,proposal.id);
+ assert.deepEqual(editableProject(preview).screenplay_proposal_previews,{[proposal.id]:proposal.scene});
+ await assert.rejects(()=>decode({...withProposal,screenplay_proposals:[{...proposal,scene:{...proposal.scene,id:uuid()}}]}),/không hợp lệ/);
+ assert.equal(sameEditableContent(withProposal,{...withProposal,screenplay_proposals:[{...proposal,preview_scene:{...proposal.scene,heading:'Other window preview'}}]}),false);
+ assert.equal(sameEditableContent(withProposal,{...withProposal,screenplay_proposals:[{...proposal,status:'discarded'}]}),false);
+ const oversized={...proposal.scene,blocks:Array.from({length:21},()=>({...block,id:uuid(),text:'x'.repeat(10000)}))};await assert.rejects(()=>decode({...withProposal,screenplay_proposals:[{...proposal,preview_scene:oversized}]}),/không hợp lệ/);
  console.log('PASS M3 contract: legacy, editable whitelist, Vietnamese whitespace, source/ID/kind/size/history validation, concurrent edits');
 })().catch(e=>{console.error(e);process.exit(1)});

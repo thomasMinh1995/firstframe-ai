@@ -153,6 +153,7 @@ def dataset_snapshot(project: ProjectResponse) -> dict[str, object]:
         "scene_proposals", "staging_proposals", "applicable_scene_proposal_ids",
         "scene_sketches", "selected_scene_sketches", "applicable_sketch_ids",
         "screenplay", "screenplay_versions", "screenplay_source_is_current",
+        "screenplay_proposals", "applicable_screenplay_proposal_ids",
     })
 
 
@@ -304,6 +305,26 @@ def update_project(project_id: str, request: ProjectUpdate):
                 project.scene_outline = outline.model_copy(update={
                     "scenes": edit.scenes, "version": outline.version + 1,
                 })
+        for proposal_id, scene in request.screenplay_proposal_previews.items():
+            proposal = next((p for p in project.screenplay_proposals if p.id == proposal_id), None)
+            if proposal is None or proposal.status != "ready" or proposal.scene is None:
+                raise HTTPException(409, "Phương án đã đổi trạng thái; bản tự chỉnh vẫn giữ.")
+            if (scene.id, scene.source_scene_id) != (proposal.scene.id, proposal.scene.source_scene_id):
+                raise HTTPException(422, "Giữ ID cảnh đích của phương án.")
+            proposal.preview_scene = scene
+        if request.screenplay_proposal_id is not None:
+            proposal = next((p for p in project.screenplay_proposals if p.id == request.screenplay_proposal_id), None)
+            if proposal is None or proposal.id not in project.applicable_screenplay_proposal_ids or proposal.scene is None:
+                raise HTTPException(409, "Phương án đã dùng/bỏ hoặc ngữ cảnh đã đổi; không nhận bản cũ.")
+            expected = project.screenplay.model_copy(deep=True)
+            replacement = proposal.preview_scene or proposal.scene
+            expected.scenes = [replacement if s.id == proposal.target_scene_id else s for s in expected.scenes]
+            if (request.screenplay is None or request.screenplay.model_dump() != expected.model_dump(include={"id", "version", "scenes"})
+                    or any(getattr(request, key) != getattr(project, key) for key in ("idea", "constraints", "answers", "draft", "response_language"))
+                    or (request.scene_outline is not None and request.scene_outline.model_dump() != project.scene_outline.model_dump(include={"id", "version", "scenes"}))
+                    or request.scene_proposal_id is not None or request.staging_use is not None):
+                raise HTTPException(409, "Dùng phương án chỉ thay đúng cảnh đã nêu. Giữ thành bản tự chỉnh nếu sửa các phần khác.")
+            proposal.status, proposal.applied_revision = "applied", project.revision + 1
         if "screenplay" in request.model_fields_set:
             edit, current = request.screenplay, project.screenplay
             if edit is None:

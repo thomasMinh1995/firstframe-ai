@@ -1,0 +1,626 @@
+{
+  "response_language": "vi",
+  "id": "412b3c2e-75be-4d34-863b-bec65d9518cb",
+  "revision": 7,
+  "updated_at": "2026-10-27T05:18:19.635385+00:00",
+  "title": "Khóa áo",
+  "idea": "Nam mượn áo của chị Hà đi gặp bạn; khóa áo bị kẹt khiến cậu lúng túng.",
+  "constraints": [
+    "Chỉ Nam và chị Hà trong phòng khách.",
+    "Chuyện vui nhẹ, không làm nhục hoặc mắng em.",
+    "Không thêm người tới, không chuyển cảnh ra ngoài."
+  ],
+  "analysis": null,
+  "answers": [],
+  "clarifications": {},
+  "draft": {
+    "title": "Khóa áo",
+    "logline": "Nam mượn áo của chị Hà đi gặp bạn; khóa áo bị kẹt khiến cậu lúng túng.",
+    "sections": [
+      {
+        "title": "Đầu",
+        "purpose": "Mở",
+        "content": "Nam mặc thử áo khoác của chị Hà trong phòng khách. Khóa áo kẹt ở giữa, Hà chờ cạnh cửa."
+      },
+      {
+        "title": "Cuối",
+        "purpose": "Diễn tiến",
+        "content": "Nam lấy chiếc túi đang cầm che chỗ khóa kẹt. Hà nhìn thấy, đưa tay chờ Nam chịu nhờ giúp; Nam miễn cưỡng đưa vạt áo ra."
+      }
+    ]
+  },
+  "feedback": null,
+  "feedback_source": null,
+  "reviewed_content": null,
+  "versions": [],
+  "clarification_history": [],
+  "plan_generations": [],
+  "scene_outline": {
+    "id": "2081a418-5814-44ff-8d46-22dc7125902f",
+    "version": 2,
+    "scenes": [
+      {
+        "id": "76860157-b98f-439c-8796-f326179f5d5a",
+        "title": "Trước đó",
+        "action": "Nam mặc thử áo khoác của chị Hà trong phòng khách. Khóa áo kẹt ở giữa, Hà chờ cạnh cửa.",
+        "location": "Một căn phòng",
+        "time": "",
+        "characters": "",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      },
+      {
+        "id": "474fcdcf-6fb1-485f-9293-03411fe34e66",
+        "title": "Khoảnh khắc",
+        "action": "Nam lấy chiếc túi đang cầm che chỗ khóa kẹt. Hà nhìn thấy, đưa tay chờ Nam chịu nhờ giúp; Nam miễn cưỡng đưa vạt áo ra.",
+        "location": "Một căn phòng",
+        "time": "",
+        "characters": "",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      }
+    ],
+    "source": {
+      "id": "2139c0a7-cd25-45d8-96ef-88d7c832975c",
+      "project_revision": 0,
+      "version_id": "current",
+      "draft": {
+        "title": "Khóa áo",
+        "logline": "Nam mượn áo của chị Hà đi gặp bạn; khóa áo bị kẹt khiến cậu lúng túng.",
+        "sections": [
+          {
+            "title": "Đầu",
+            "purpose": "Mở",
+            "content": "Nam mặc thử áo khoác của chị Hà trong phòng khách. Khóa áo kẹt ở giữa, Hà chờ cạnh cửa."
+          },
+          {
+            "title": "Cuối",
+            "purpose": "Diễn tiến",
+            "content": "Nam lấy chiếc túi đang cầm che chỗ khóa kẹt. Hà nhìn thấy, đưa tay chờ Nam chịu nhờ giúp; Nam miễn cưỡng đưa vạt áo ra."
+          }
+        ]
+      },
+      "context": {
+        "idea": "Nam mượn áo của chị Hà đi gặp bạn; khóa áo bị kẹt khiến cậu lúng túng.",
+        "constraints": [
+          "Chỉ Nam và chị Hà trong phòng khách.",
+          "Chuyện vui nhẹ, không làm nhục hoặc mắng em.",
+          "Không thêm người tới, không chuyển cảnh ra ngoài."
+        ],
+        "clarifications": [],
+        "pending_questions": []
+      },
+      "response_language": "vi"
+    }
+  },
+  "screenplay": {
+    "id": "d2545035-e9cc-49b2-89a1-92c6454efbc2",
+    "version": 2,
+    "scenes": [
+      {
+        "id": "65570493-7e94-4c16-99e6-4ee2e37f151e",
+        "source_scene_id": "76860157-b98f-439c-8796-f326179f5d5a",
+        "heading": "Trước đó",
+        "blocks": [
+          {
+            "kind": "action",
+            "text": "Nam mặc thử áo khoác của chị Hà trong phòng khách. Khóa áo kẹt ở giữa, Hà chờ cạnh cửa.",
+            "speaker": "",
+            "id": "df5b21cb-d190-48da-b6eb-b9e9997d99b4"
+          }
+        ]
+      },
+      {
+        "id": "e40317cd-07a3-4a95-b7f6-0ba50f908d6f",
+        "source_scene_id": "474fcdcf-6fb1-485f-9293-03411fe34e66",
+        "heading": "Khoảnh khắc",
+        "blocks": [
+          {
+            "kind": "action",
+            "text": "Nam lấy chiếc túi đang cầm che chỗ khóa kẹt.",
+            "speaker": "",
+            "id": "28bcc1d7-199d-4eff-a4b1-9f7e774d50ae"
+          }
+        ]
+      }
+    ],
+    "source_revision": 2,
+    "source_outline": {
+      "id": "2081a418-5814-44ff-8d46-22dc7125902f",
+      "version": 2,
+      "scenes": [
+        {
+          "id": "76860157-b98f-439c-8796-f326179f5d5a",
+          "title": "Trước đó",
+          "action": "Nam mặc thử áo khoác của chị Hà trong phòng khách. Khóa áo kẹt ở giữa, Hà chờ cạnh cửa.",
+          "location": "Một căn phòng",
+          "time": "",
+          "characters": "",
+          "goal": "",
+          "purpose": "",
+          "viewer_intent": "",
+          "keep_or_avoid": "",
+          "staging_choices": {}
+        },
+        {
+          "id": "474fcdcf-6fb1-485f-9293-03411fe34e66",
+          "title": "Khoảnh khắc",
+          "action": "Nam lấy chiếc túi đang cầm che chỗ khóa kẹt. Hà nhìn thấy, đưa tay chờ Nam chịu nhờ giúp; Nam miễn cưỡng đưa vạt áo ra.",
+          "location": "Một căn phòng",
+          "time": "",
+          "characters": "",
+          "goal": "",
+          "purpose": "",
+          "viewer_intent": "",
+          "keep_or_avoid": "",
+          "staging_choices": {}
+        }
+      ],
+      "source": {
+        "id": "2139c0a7-cd25-45d8-96ef-88d7c832975c",
+        "project_revision": 0,
+        "version_id": "current",
+        "draft": {
+          "title": "Khóa áo",
+          "logline": "Nam mượn áo của chị Hà đi gặp bạn; khóa áo bị kẹt khiến cậu lúng túng.",
+          "sections": [
+            {
+              "title": "Đầu",
+              "purpose": "Mở",
+              "content": "Nam mặc thử áo khoác của chị Hà trong phòng khách. Khóa áo kẹt ở giữa, Hà chờ cạnh cửa."
+            },
+            {
+              "title": "Cuối",
+              "purpose": "Diễn tiến",
+              "content": "Nam lấy chiếc túi đang cầm che chỗ khóa kẹt. Hà nhìn thấy, đưa tay chờ Nam chịu nhờ giúp; Nam miễn cưỡng đưa vạt áo ra."
+            }
+          ]
+        },
+        "context": {
+          "idea": "Nam mượn áo của chị Hà đi gặp bạn; khóa áo bị kẹt khiến cậu lúng túng.",
+          "constraints": [
+            "Chỉ Nam và chị Hà trong phòng khách.",
+            "Chuyện vui nhẹ, không làm nhục hoặc mắng em.",
+            "Không thêm người tới, không chuyển cảnh ra ngoài."
+          ],
+          "clarifications": [],
+          "pending_questions": []
+        },
+        "response_language": "vi"
+      }
+    }
+  },
+  "screenplay_versions": [
+    {
+      "id": "6dfe647e-48b5-4311-974d-d9830b4ee690",
+      "created_at": "2026-10-27T05:17:01.294833+00:00",
+      "screenplay": {
+        "id": "d2545035-e9cc-49b2-89a1-92c6454efbc2",
+        "version": 1,
+        "scenes": [
+          {
+            "id": "65570493-7e94-4c16-99e6-4ee2e37f151e",
+            "source_scene_id": "76860157-b98f-439c-8796-f326179f5d5a",
+            "heading": "Trước đó",
+            "blocks": []
+          },
+          {
+            "id": "e40317cd-07a3-4a95-b7f6-0ba50f908d6f",
+            "source_scene_id": "474fcdcf-6fb1-485f-9293-03411fe34e66",
+            "heading": "Khoảnh khắc",
+            "blocks": []
+          }
+        ],
+        "source_revision": 2,
+        "source_outline": {
+          "id": "2081a418-5814-44ff-8d46-22dc7125902f",
+          "version": 2,
+          "scenes": [
+            {
+              "id": "76860157-b98f-439c-8796-f326179f5d5a",
+              "title": "Trước đó",
+              "action": "Nam mặc thử áo khoác của chị Hà trong phòng khách. Khóa áo kẹt ở giữa, Hà chờ cạnh cửa.",
+              "location": "Một căn phòng",
+              "time": "",
+              "characters": "",
+              "goal": "",
+              "purpose": "",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {}
+            },
+            {
+              "id": "474fcdcf-6fb1-485f-9293-03411fe34e66",
+              "title": "Khoảnh khắc",
+              "action": "Nam lấy chiếc túi đang cầm che chỗ khóa kẹt. Hà nhìn thấy, đưa tay chờ Nam chịu nhờ giúp; Nam miễn cưỡng đưa vạt áo ra.",
+              "location": "Một căn phòng",
+              "time": "",
+              "characters": "",
+              "goal": "",
+              "purpose": "",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {}
+            }
+          ],
+          "source": {
+            "id": "2139c0a7-cd25-45d8-96ef-88d7c832975c",
+            "project_revision": 0,
+            "version_id": "current",
+            "draft": {
+              "title": "Khóa áo",
+              "logline": "Nam mượn áo của chị Hà đi gặp bạn; khóa áo bị kẹt khiến cậu lúng túng.",
+              "sections": [
+                {
+                  "title": "Đầu",
+                  "purpose": "Mở",
+                  "content": "Nam mặc thử áo khoác của chị Hà trong phòng khách. Khóa áo kẹt ở giữa, Hà chờ cạnh cửa."
+                },
+                {
+                  "title": "Cuối",
+                  "purpose": "Diễn tiến",
+                  "content": "Nam lấy chiếc túi đang cầm che chỗ khóa kẹt. Hà nhìn thấy, đưa tay chờ Nam chịu nhờ giúp; Nam miễn cưỡng đưa vạt áo ra."
+                }
+              ]
+            },
+            "context": {
+              "idea": "Nam mượn áo của chị Hà đi gặp bạn; khóa áo bị kẹt khiến cậu lúng túng.",
+              "constraints": [
+                "Chỉ Nam và chị Hà trong phòng khách.",
+                "Chuyện vui nhẹ, không làm nhục hoặc mắng em.",
+                "Không thêm người tới, không chuyển cảnh ra ngoài."
+              ],
+              "clarifications": [],
+              "pending_questions": []
+            },
+            "response_language": "vi"
+          }
+        }
+      }
+    }
+  ],
+  "screenplay_proposals": [
+    {
+      "id": "e7bf3138-e672-4c72-971c-05437d30d76e",
+      "created_at": "2026-10-27T05:17:45.584558+00:00",
+      "source_revision": 4,
+      "source_content": "{\"answers\": [], \"clarifications\": {}, \"constraints\": [\"Chỉ Nam và chị Hà trong phòng khách.\", \"Chuyện vui nhẹ, không làm nhục hoặc mắng em.\", \"Không thêm người tới, không chuyển cảnh ra ngoài.\"], \"draft\": {\"logline\": \"Nam mượn áo của chị Hà đi gặp bạn; khóa áo bị kẹt khiến cậu lúng túng.\", \"sections\": [{\"content\": \"Nam mặc thử áo khoác của chị Hà trong phòng khách. Khóa áo kẹt ở giữa, Hà chờ cạnh cửa.\", \"purpose\": \"Mở\", \"title\": \"Đầu\"}, {\"content\": \"Nam lấy chiếc túi đang cầm che chỗ khóa kẹt. Hà nhìn thấy, đưa tay chờ Nam chịu nhờ giúp; Nam miễn cưỡng đưa vạt áo ra.\", \"purpose\": \"Diễn tiến\", \"title\": \"Cuối\"}], \"title\": \"Khóa áo\"}, \"idea\": \"Nam mượn áo của chị Hà đi gặp bạn; khóa áo bị kẹt khiến cậu lúng túng.\", \"questions\": [], \"response_language\": \"vi\"}",
+      "source_screenplay": {
+        "id": "d2545035-e9cc-49b2-89a1-92c6454efbc2",
+        "version": 2,
+        "scenes": [
+          {
+            "id": "65570493-7e94-4c16-99e6-4ee2e37f151e",
+            "source_scene_id": "76860157-b98f-439c-8796-f326179f5d5a",
+            "heading": "Trước đó",
+            "blocks": [
+              {
+                "kind": "action",
+                "text": "Nam mặc thử áo khoác của chị Hà trong phòng khách. Khóa áo kẹt ở giữa, Hà chờ cạnh cửa.",
+                "speaker": "",
+                "id": "df5b21cb-d190-48da-b6eb-b9e9997d99b4"
+              }
+            ]
+          },
+          {
+            "id": "e40317cd-07a3-4a95-b7f6-0ba50f908d6f",
+            "source_scene_id": "474fcdcf-6fb1-485f-9293-03411fe34e66",
+            "heading": "Khoảnh khắc",
+            "blocks": [
+              {
+                "kind": "action",
+                "text": "Nam lấy chiếc túi đang cầm che chỗ khóa kẹt.",
+                "speaker": "",
+                "id": "28bcc1d7-199d-4eff-a4b1-9f7e774d50ae"
+              }
+            ]
+          }
+        ],
+        "source_revision": 2,
+        "source_outline": {
+          "id": "2081a418-5814-44ff-8d46-22dc7125902f",
+          "version": 2,
+          "scenes": [
+            {
+              "id": "76860157-b98f-439c-8796-f326179f5d5a",
+              "title": "Trước đó",
+              "action": "Nam mặc thử áo khoác của chị Hà trong phòng khách. Khóa áo kẹt ở giữa, Hà chờ cạnh cửa.",
+              "location": "Một căn phòng",
+              "time": "",
+              "characters": "",
+              "goal": "",
+              "purpose": "",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {}
+            },
+            {
+              "id": "474fcdcf-6fb1-485f-9293-03411fe34e66",
+              "title": "Khoảnh khắc",
+              "action": "Nam lấy chiếc túi đang cầm che chỗ khóa kẹt. Hà nhìn thấy, đưa tay chờ Nam chịu nhờ giúp; Nam miễn cưỡng đưa vạt áo ra.",
+              "location": "Một căn phòng",
+              "time": "",
+              "characters": "",
+              "goal": "",
+              "purpose": "",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {}
+            }
+          ],
+          "source": {
+            "id": "2139c0a7-cd25-45d8-96ef-88d7c832975c",
+            "project_revision": 0,
+            "version_id": "current",
+            "draft": {
+              "title": "Khóa áo",
+              "logline": "Nam mượn áo của chị Hà đi gặp bạn; khóa áo bị kẹt khiến cậu lúng túng.",
+              "sections": [
+                {
+                  "title": "Đầu",
+                  "purpose": "Mở",
+                  "content": "Nam mặc thử áo khoác của chị Hà trong phòng khách. Khóa áo kẹt ở giữa, Hà chờ cạnh cửa."
+                },
+                {
+                  "title": "Cuối",
+                  "purpose": "Diễn tiến",
+                  "content": "Nam lấy chiếc túi đang cầm che chỗ khóa kẹt. Hà nhìn thấy, đưa tay chờ Nam chịu nhờ giúp; Nam miễn cưỡng đưa vạt áo ra."
+                }
+              ]
+            },
+            "context": {
+              "idea": "Nam mượn áo của chị Hà đi gặp bạn; khóa áo bị kẹt khiến cậu lúng túng.",
+              "constraints": [
+                "Chỉ Nam và chị Hà trong phòng khách.",
+                "Chuyện vui nhẹ, không làm nhục hoặc mắng em.",
+                "Không thêm người tới, không chuyển cảnh ra ngoài."
+              ],
+              "clarifications": [],
+              "pending_questions": []
+            },
+            "response_language": "vi"
+          }
+        }
+      },
+      "source_outline": {
+        "id": "2081a418-5814-44ff-8d46-22dc7125902f",
+        "version": 2,
+        "scenes": [
+          {
+            "id": "76860157-b98f-439c-8796-f326179f5d5a",
+            "title": "Trước đó",
+            "action": "Nam mặc thử áo khoác của chị Hà trong phòng khách. Khóa áo kẹt ở giữa, Hà chờ cạnh cửa.",
+            "location": "Một căn phòng",
+            "time": "",
+            "characters": "",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "",
+            "keep_or_avoid": "",
+            "staging_choices": {}
+          },
+          {
+            "id": "474fcdcf-6fb1-485f-9293-03411fe34e66",
+            "title": "Khoảnh khắc",
+            "action": "Nam lấy chiếc túi đang cầm che chỗ khóa kẹt. Hà nhìn thấy, đưa tay chờ Nam chịu nhờ giúp; Nam miễn cưỡng đưa vạt áo ra.",
+            "location": "Một căn phòng",
+            "time": "",
+            "characters": "",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "",
+            "keep_or_avoid": "",
+            "staging_choices": {}
+          }
+        ],
+        "source": {
+          "id": "2139c0a7-cd25-45d8-96ef-88d7c832975c",
+          "project_revision": 0,
+          "version_id": "current",
+          "draft": {
+            "title": "Khóa áo",
+            "logline": "Nam mượn áo của chị Hà đi gặp bạn; khóa áo bị kẹt khiến cậu lúng túng.",
+            "sections": [
+              {
+                "title": "Đầu",
+                "purpose": "Mở",
+                "content": "Nam mặc thử áo khoác của chị Hà trong phòng khách. Khóa áo kẹt ở giữa, Hà chờ cạnh cửa."
+              },
+              {
+                "title": "Cuối",
+                "purpose": "Diễn tiến",
+                "content": "Nam lấy chiếc túi đang cầm che chỗ khóa kẹt. Hà nhìn thấy, đưa tay chờ Nam chịu nhờ giúp; Nam miễn cưỡng đưa vạt áo ra."
+              }
+            ]
+          },
+          "context": {
+            "idea": "Nam mượn áo của chị Hà đi gặp bạn; khóa áo bị kẹt khiến cậu lúng túng.",
+            "constraints": [
+              "Chỉ Nam và chị Hà trong phòng khách.",
+              "Chuyện vui nhẹ, không làm nhục hoặc mắng em.",
+              "Không thêm người tới, không chuyển cảnh ra ngoài."
+            ],
+            "clarifications": [],
+            "pending_questions": []
+          },
+          "response_language": "vi"
+        }
+      },
+      "target_scene_id": "e40317cd-07a3-4a95-b7f6-0ba50f908d6f",
+      "instructions": "Có thể dùng lời thoại ngắn tự nhiên giữa chị và em, ưu tiên cử chỉ gây cười.",
+      "status": "ready",
+      "scene": {
+        "id": "e40317cd-07a3-4a95-b7f6-0ba50f908d6f",
+        "source_scene_id": "474fcdcf-6fb1-485f-9293-03411fe34e66",
+        "heading": "Khoảnh khắc",
+        "blocks": [
+          {
+            "kind": "action",
+            "text": "Nam lấy chiếc túi đang cầm che chỗ khóa kẹt.",
+            "speaker": "",
+            "id": "5ec14dad-11c5-45bd-95b1-21aae26f2652"
+          },
+          {
+            "kind": "dialogue",
+            "text": "Chị Hà, em xin lỗi...",
+            "speaker": "Nam",
+            "id": "efabadc3-e286-47f7-a245-f5fd34a31ecc"
+          },
+          {
+            "kind": "action",
+            "text": "Hà mỉm cười, đưa tay ra.",
+            "speaker": "",
+            "id": "db3babfd-b360-4dc5-8170-8d5b38b32988"
+          },
+          {
+            "kind": "dialogue",
+            "text": "Để chị giúp em nhé.",
+            "speaker": "Chị Hà",
+            "id": "c1239d11-46f8-4191-a95f-5fbc9089f455"
+          },
+          {
+            "kind": "action",
+            "text": "Nam miễn cưỡng đưa vạt áo ra, Hà khéo léo mở khóa.",
+            "speaker": "",
+            "id": "4eb4f7b6-ae7e-46e5-9ced-82ba3df29130"
+          },
+          {
+            "kind": "dialogue",
+            "text": "Em thấy ngại quá.",
+            "speaker": "Nam",
+            "id": "84bd2ef7-53d9-4519-912b-a30415082209"
+          },
+          {
+            "kind": "action",
+            "text": "Hà vỗ vai Nam, mỉm cười.",
+            "speaker": "",
+            "id": "057657d8-36d5-4d27-9445-ae82735b63bf"
+          },
+          {
+            "kind": "dialogue",
+            "text": "Không sao, em cũng gặp phải chuyện này.",
+            "speaker": "Chị Hà",
+            "id": "b2c57f0e-d589-4db5-9fe1-1e6dc77e92eb"
+          }
+        ]
+      },
+      "preview_scene": null,
+      "provider": "ollama",
+      "model": "qwen2.5:7b",
+      "parameters": {
+        "temperature": 0.3,
+        "timeout_seconds": 120,
+        "num_ctx": 16384
+      },
+      "prompt_version": "screenplay-scene-v1",
+      "error": null,
+      "applied_revision": null
+    }
+  ],
+  "scene_versions": [
+    {
+      "id": "1b3c88da-4443-4dd5-98f0-e0dcb6bef29f",
+      "created_at": "2026-10-27T05:17:01.291021+00:00",
+      "outline": {
+        "id": "2081a418-5814-44ff-8d46-22dc7125902f",
+        "version": 1,
+        "scenes": [],
+        "source": {
+          "id": "2139c0a7-cd25-45d8-96ef-88d7c832975c",
+          "project_revision": 0,
+          "version_id": "current",
+          "draft": {
+            "title": "Khóa áo",
+            "logline": "Nam mượn áo của chị Hà đi gặp bạn; khóa áo bị kẹt khiến cậu lúng túng.",
+            "sections": [
+              {
+                "title": "Đầu",
+                "purpose": "Mở",
+                "content": "Nam mặc thử áo khoác của chị Hà trong phòng khách. Khóa áo kẹt ở giữa, Hà chờ cạnh cửa."
+              },
+              {
+                "title": "Cuối",
+                "purpose": "Diễn tiến",
+                "content": "Nam lấy chiếc túi đang cầm che chỗ khóa kẹt. Hà nhìn thấy, đưa tay chờ Nam chịu nhờ giúp; Nam miễn cưỡng đưa vạt áo ra."
+              }
+            ]
+          },
+          "context": {
+            "idea": "Nam mượn áo của chị Hà đi gặp bạn; khóa áo bị kẹt khiến cậu lúng túng.",
+            "constraints": [
+              "Chỉ Nam và chị Hà trong phòng khách.",
+              "Chuyện vui nhẹ, không làm nhục hoặc mắng em.",
+              "Không thêm người tới, không chuyển cảnh ra ngoài."
+            ],
+            "clarifications": [],
+            "pending_questions": []
+          },
+          "response_language": "vi"
+        }
+      }
+    }
+  ],
+  "scene_proposals": [],
+  "staging_proposals": [],
+  "scene_sketches": [],
+  "selected_scene_sketches": {},
+  "applicable_screenplay_proposal_ids": [
+    "e7bf3138-e672-4c72-971c-05437d30d76e"
+  ],
+  "screenplay_source_is_current": true,
+  "applicable_sketch_ids": [],
+  "applicable_scene_proposal_ids": [],
+  "scene_source_is_current": true,
+  "scene_handoff": {
+    "outline_id": "2081a418-5814-44ff-8d46-22dc7125902f",
+    "version": 2,
+    "project_revision": 7,
+    "source_id": "2139c0a7-cd25-45d8-96ef-88d7c832975c",
+    "scenes": [
+      {
+        "id": "76860157-b98f-439c-8796-f326179f5d5a",
+        "title": "Trước đó",
+        "action": "Nam mặc thử áo khoác của chị Hà trong phòng khách. Khóa áo kẹt ở giữa, Hà chờ cạnh cửa.",
+        "location": "Một căn phòng",
+        "time": "",
+        "characters": "",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      },
+      {
+        "id": "474fcdcf-6fb1-485f-9293-03411fe34e66",
+        "title": "Khoảnh khắc",
+        "action": "Nam lấy chiếc túi đang cầm che chỗ khóa kẹt. Hà nhìn thấy, đưa tay chờ Nam chịu nhờ giúp; Nam miễn cưỡng đưa vạt áo ra.",
+        "location": "Một căn phòng",
+        "time": "",
+        "characters": "",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      }
+    ]
+  },
+  "applicable_plan_ids": [],
+  "author_context": {
+    "idea": "Nam mượn áo của chị Hà đi gặp bạn; khóa áo bị kẹt khiến cậu lúng túng.",
+    "constraints": [
+      "Chỉ Nam và chị Hà trong phòng khách.",
+      "Chuyện vui nhẹ, không làm nhục hoặc mắng em.",
+      "Không thêm người tới, không chuyển cảnh ra ngoài."
+    ],
+    "clarifications": [],
+    "pending_questions": []
+  },
+  "feedback_is_current": false
+}

@@ -1,0 +1,71 @@
+{
+  "$defs": {
+    "BlockText": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "action",
+            "dialogue"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "text": {
+          "default": "",
+          "maxLength": 10000,
+          "title": "Text",
+          "type": "string"
+        },
+        "speaker": {
+          "default": "",
+          "maxLength": 200,
+          "title": "Speaker",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind"
+      ],
+      "title": "BlockText",
+      "type": "object"
+    },
+    "WrittenScene": {
+      "additionalProperties": false,
+      "properties": {
+        "heading": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Heading",
+          "type": "string"
+        },
+        "blocks": {
+          "items": {
+            "$ref": "#/$defs/BlockText"
+          },
+          "maxItems": 200,
+          "minItems": 1,
+          "title": "Blocks",
+          "type": "array"
+        }
+      },
+      "required": [
+        "heading",
+        "blocks"
+      ],
+      "title": "WrittenScene",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "scene": {
+      "$ref": "#/$defs/WrittenScene"
+    }
+  },
+  "required": [
+    "scene"
+  ],
+  "title": "SceneWritingResult",
+  "type": "object"
+}

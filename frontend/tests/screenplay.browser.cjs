@@ -95,7 +95,7 @@ const fs=require('node:fs/promises');const path=require('node:path');const {rand
  await page.getByRole('button',{name:'Dự án mới',exact:true}).click();await page.waitForFunction(id=>document.querySelector('#project-picker')?.value!==id,seed.id);
  await page.locator('#project-picker').selectOption(seed.id);await area.getByLabel('Tiêu đề cảnh',{exact:true}).waitFor();
  assert.equal(await area.getByLabel('Nội dung hành động',{exact:true}).inputValue(),'Lưu trước khi đổi dự án.');
- const after=await request('/__test/state');assert.deepEqual(after.provider_stages,before.provider_stages);assert.equal(after.image_requests,before.image_requests);
+ const after=await request('/__test/state');assert.deepEqual(after.provider_stages,before.provider_stages);assert.equal(after.image_requests,before.image_requests);assert.equal(after.writing_requests,before.writing_requests);
  assert.deepEqual(errors,[]);
  console.log('PASS M3 manual: source snapshot, Vietnamese/whitespace, blocks/reorder/delete/undo, scene buffer, save/reload/backup, network/409, project switch, M2 divergence, start lost-response inspect no retry, history/restore, 3 widths, zero model calls');
  await context.close();await browser.close();

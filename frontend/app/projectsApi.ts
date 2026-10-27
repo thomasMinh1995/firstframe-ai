@@ -4,7 +4,7 @@ import type { UiLanguage } from "./language";
 import type { ResponseLanguage } from "./language";
 import { stagingLabels, type Scene, type SceneOutline, type SceneVersion, type SceneHandoff, type SceneProposal, type SceneSuggestionInput, type StagingIdea, type StagingUse, type SceneSketch } from "./sceneTypes";
 
-import type {Screenplay, ScreenplayVersion} from "./screenplayTypes";
+import type {Screenplay, ScreenplayVersion, ScreenplayProposal, ScriptScene, SceneWritingInput} from "./screenplayTypes";
 
 export type StoryDraft = { title: string; logline: string; sections: StoryPlanSection[] };
 export type Feedback = GenerateResponse["evaluation"] & { artifact_id?: string };
@@ -39,6 +39,8 @@ export type Project = {
   versions: DraftVersion[];
   clarification_history: ClarificationVersion[];
   plan_generations?: PlanGeneration[]; applicable_plan_ids?: string[];
+  screenplay_proposals?:ScreenplayProposal[];applicable_screenplay_proposal_ids?:string[];
+  pending_screenplay_proposal_id?:string;pending_screenplay_previews?:Record<string,ScriptScene>;
   screenplay?: Screenplay | null; screenplay_versions?: ScreenplayVersion[]; screenplay_source_is_current?: boolean;
   scene_outline?: SceneOutline | null; scene_versions?: SceneVersion[];
   staging_proposals?: SceneProposal[];
@@ -56,8 +58,8 @@ export type ProgressEvent = {
 };
 
 export async function streamProjectOperation(
-  project: Project, kind: "analyze" | "plan" | "review" | "scene-suggestions" | "scene-sketches",
-  onProgress: (event: ProgressEvent) => void, language: UiLanguage = "vi", input?: SceneSuggestionInput | {request_id: string; scene_id: string; instructions: string},
+  project: Project, kind: "analyze" | "plan" | "review" | "scene-suggestions" | "scene-sketches" | "screenplay-proposals",
+  onProgress: (event: ProgressEvent) => void, language: UiLanguage = "vi", input?: SceneWritingInput | SceneSuggestionInput | {request_id: string; scene_id: string; instructions: string},
 ): Promise<Project> {
   const copy = progressCopy[language];
   // Backend heartbeats arrive every 15s. A silent connection must not lock the editor forever.
@@ -149,6 +151,8 @@ export function editableProject(project: Project) {
     ...(project.pending_staging_use ? { staging_use: project.pending_staging_use } : {}),
     ...(project.pending_staging_edits && Object.keys(project.pending_staging_edits).length ? { staging_idea_edits: project.pending_staging_edits } : {}),
     ...(project.screenplay == null ? {} : {screenplay: {id:project.screenplay.id, version:project.screenplay.version, scenes:project.screenplay.scenes}}),
+    ...(project.pending_screenplay_proposal_id?{screenplay_proposal_id:project.pending_screenplay_proposal_id}:{}),
+    ...(project.pending_screenplay_previews&&Object.keys(project.pending_screenplay_previews).length?{screenplay_proposal_previews:project.pending_screenplay_previews}:{}),
     constraints: project.constraints, answers: project.answers, draft: project.draft,
     ...(project.scene_outline == null ? {} : { scene_outline: {
       id: project.scene_outline.id, version: project.scene_outline.version, scenes: project.scene_outline.scenes,
@@ -166,8 +170,10 @@ export function sameEditableContent(a: Project, b: Project): boolean {
     .filter(i => i.status !== "available").map(i => [i.id, i.status, i.applied_text]));
   const imageDecisions = (p: Project) => [p.selected_scene_sketches ?? {},
     (p.scene_sketches ?? []).filter(s => s.status === "discarded").map(s => s.id)];
-  return JSON.stringify([left, previews(a), ideaEdits(a), ideaDecisions(a), imageDecisions(a)])
-    === JSON.stringify([right, previews(b), ideaEdits(b), ideaDecisions(b), imageDecisions(b)]);
+  const scriptDecisions=(p:Project)=>(p.screenplay_proposals??[]).filter(x=>x.preview_scene!==null||['applied','discarded'].includes(x.status))
+    .map(x=>[x.id,x.status==='applied'||x.status==='discarded'?x.status:null,x.preview_scene]);
+  return JSON.stringify([scriptDecisions(a),left, previews(a), ideaEdits(a), ideaDecisions(a), imageDecisions(a)])
+    === JSON.stringify([scriptDecisions(b),right, previews(b), ideaEdits(b), ideaDecisions(b), imageDecisions(b)]);
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -232,6 +238,8 @@ function isProject(value: unknown): value is Project {
       && Object.entries(value.selected_scene_sketches).every(([k,v]) => uuid(k) && uuid(v))))
     && (value.applicable_sketch_ids === undefined || (Array.isArray(value.applicable_sketch_ids) && value.applicable_sketch_ids.every(uuid)))
     && (value.applicable_scene_proposal_ids === undefined || strings(value.applicable_scene_proposal_ids))
+    && (value.screenplay_proposals===undefined||(Array.isArray(value.screenplay_proposals)&&value.screenplay_proposals.length<=100&&value.screenplay_proposals.every(isScreenplayProposal)))
+    && (value.applicable_screenplay_proposal_ids===undefined||(Array.isArray(value.applicable_screenplay_proposal_ids)&&value.applicable_screenplay_proposal_ids.every(uuid)))
     && (value.screenplay == null || isScreenplay(value.screenplay))
     && (value.screenplay_versions === undefined || (Array.isArray(value.screenplay_versions) && value.screenplay_versions.every(v=>isRecord(v)&&uuid(v.id)&&typeof v.created_at==="string"&&isScreenplay(v.screenplay))))
     && (value.screenplay_source_is_current === undefined || typeof value.screenplay_source_is_current === "boolean")
@@ -319,22 +327,31 @@ function isClarificationVersion(value: unknown): value is ClarificationVersion &
     && strings(value.answers);
 }
 
+function isScriptScene(v:unknown):v is ScriptScene {
+  if(!isRecord(v)||!uuid(v.id)||!uuid(v.source_scene_id)||typeof v.heading!=="string"||Array.from(v.heading).length>500
+    ||!Array.isArray(v.blocks)||v.blocks.length>200)return false;
+  return v.blocks.every(b=>isRecord(b)&&uuid(b.id)&&['action','dialogue'].includes(String(b.kind))
+    &&typeof b.text==='string'&&Array.from(b.text).length<=10000&&typeof b.speaker==='string'&&Array.from(b.speaker).length<=200)
+    &&new Set([v.id,...v.blocks.map(b=>b.id)]).size===v.blocks.length+1
+    &&Array.from(v.heading).length+v.blocks.reduce((n,b)=>n+Array.from(b.text).length+Array.from(b.speaker).length,0)<=200000;
+}
 function isScreenplay(v: unknown): v is Screenplay {
-  if (!isRecord(v) || !uuid(v.id) || !positive(v.version) || !Number.isInteger(v.source_revision)
-      || Number(v.source_revision)<0 || !isSceneOutline(v.source_outline) || !Array.isArray(v.scenes)
-      || !v.scenes.length || v.scenes.length>60) return false;
-  const outline=v.source_outline;
-  const textLength=(text: string)=>Array.from(text).length;
-  const ids: string[]=[];let count=0,size=0;
-  const valid=v.scenes.every((s,i)=>{
-    if(!isRecord(s)||!uuid(s.id)||!uuid(s.source_scene_id)||typeof s.heading!=="string"||textLength(s.heading)>500
-      ||s.source_scene_id!==outline.scenes[i]?.id||!Array.isArray(s.blocks)||s.blocks.length>200)return false;
-    ids.push(s.id);size+=textLength(s.heading);
-    return s.blocks.every(b=>{
-      if(!isRecord(b)||!uuid(b.id)||!["action","dialogue"].includes(String(b.kind))||typeof b.text!=="string"||textLength(b.text)>10000
-        ||typeof b.speaker!=="string"||textLength(b.speaker)>200)return false;
-      ids.push(b.id);count++;size+=textLength(b.text)+textLength(b.speaker);return true;
-    });
-  });
-  return valid&&v.scenes.length===v.source_outline.scenes.length&&new Set(ids).size===ids.length&&count<=1000&&size<=200000;
+  if(!isRecord(v)||!uuid(v.id)||!positive(v.version)||!Number.isInteger(v.source_revision)||Number(v.source_revision)<0
+    ||!isSceneOutline(v.source_outline)||!Array.isArray(v.scenes)||!v.scenes.length||v.scenes.length>60||!v.scenes.every(isScriptScene))return false;
+  const scenes=v.scenes,outline=v.source_outline;
+  const ids=scenes.flatMap(s=>[s.id,...s.blocks.map(b=>b.id)]);
+  return scenes.length===outline.scenes.length&&scenes.every((s,i)=>s.source_scene_id===outline.scenes[i].id)
+    &&new Set(ids).size===ids.length&&scenes.reduce((n,s)=>n+s.blocks.length,0)<=1000
+    &&scenes.reduce((n,s)=>n+Array.from(s.heading).length+s.blocks.reduce((n,b)=>n+Array.from(b.text).length+Array.from(b.speaker).length,0),0)<=200000;
+}
+function isScreenplayProposal(v:unknown):v is ScreenplayProposal {
+  if(!isRecord(v)||!uuid(v.id)||typeof v.created_at!=='string'||!Number.isInteger(v.source_revision)||Number(v.source_revision)<0
+    ||typeof v.source_content!=='string'||!isScreenplay(v.source_screenplay)||(v.source_outline!==null&&!isSceneOutline(v.source_outline))
+    ||!uuid(v.target_scene_id)||typeof v.instructions!=='string'||!['pending','ready','failed','applied','discarded'].includes(String(v.status))
+    ||typeof v.prompt_version!=='string'||!isRecord(v.parameters)||(v.provider!==null&&typeof v.provider!=='string')
+    ||(v.model!==null&&typeof v.model!=='string')||(v.error!==null&&typeof v.error!=='string')
+    ||(v.applied_revision!==null&&(!Number.isInteger(v.applied_revision)||Number(v.applied_revision)<0)))return false;
+  const target=v.source_screenplay.scenes.find(s=>s.id===v.target_scene_id);
+  return !!target&&[v.scene,v.preview_scene].every(s=>s===null||(isScriptScene(s)&&s.id===target.id&&s.source_scene_id===target.source_scene_id))
+    &&(!['ready','applied'].includes(String(v.status))||v.scene!==null);
 }

@@ -40,7 +40,7 @@ export default function Home() {
   const [steps, setSteps] = useState<OperationStep[]>([]);
   const [operationFailed, setOperationFailed] = useState(false);
   const [operationTiming, setOperationTiming] = useState<{
-    kind: "analyze" | "plan" | "review" | "scene-suggestions" | "scene-sketches"; startedAt: number; finishedAt: number | null;
+    kind: "analyze" | "plan" | "review" | "scene-suggestions" | "scene-sketches" | "screenplay-proposals"; startedAt: number; finishedAt: number | null;
   } | null>(null);
   const dirty = project !== null && saved !== null
     && JSON.stringify(editableProject(project)) !== JSON.stringify(editableProject(saved));
@@ -559,7 +559,33 @@ export default function Home() {
             })} />}
           {saved && <ScreenplayEditor key={`script:${project.id}`} project={project} dirty={dirty}
             sourceDirty={feedbackChanged || JSON.stringify(project.scene_outline)!==JSON.stringify(saved.scene_outline)}
-            onChange={screenplay=>setProject(current=>current?{...current,screenplay}:current)}
+            onChange={(screenplay,proposalId)=>setProject(current=>current?{...current,screenplay,pending_screenplay_proposal_id:proposalId}:current)}
+            canUse={!feedbackChanged&&!project.pending_screenplay_proposal_id&&!project.pending_scene_proposal_id&&!project.pending_staging_use
+              &&JSON.stringify(project.screenplay)===JSON.stringify(saved.screenplay)&&JSON.stringify(project.scene_outline)===JSON.stringify(saved.scene_outline)}
+            onPreview={(id,scene)=>setProject(current=>current?{...current,pending_screenplay_previews:{...current.pending_screenplay_previews,[id]:scene}}:current)}
+            onWrite={input=>{
+              setSteps([{stage:"prepare",status:"active",occurrence:1}]);setOperationFailed(false);
+              setOperationTiming({kind:"screenplay-proposals",startedAt:performance.now(),finishedAt:null});
+              return run("Đang viết thử một cảnh…",async()=>{
+                try{const next=await persist();if(!next)return;
+                  setSteps(items=>applyProgress(items,{stage:"prepare",status:"completed"}));
+                  accept(await streamProjectOperation(next,"screenplay-proposals",event=>setSteps(items=>applyProgress(items,event)),progressLanguage(next.response_language),input));
+                  setNotice("Đã giữ phương án riêng; bản tác giả chưa thay. Đọc, chỉnh rồi tự chọn dùng hoặc bỏ.");
+                }catch(caught){setOperationFailed(true);throw caught;}
+                finally{setOperationTiming(t=>t?{...t,finishedAt:performance.now()}:t);}
+              },true);
+            }}
+            onProposalInspect={async()=>{let checked=false;await run("Đang kiểm tra phương án đã lưu…",async()=>{
+              const next=await projectRequest(`/${project.id}`);
+              if(dirty){if(!sameEditableContent(saved,next))throw new Error("Nội dung đã đổi ở cửa sổ khác. Bản đang sửa vẫn giữ; hãy tải bản sao trước khi mở lại.");
+                setSaved(next);setProject(current=>current?{...current,revision:next.revision,screenplay_proposals:next.screenplay_proposals,
+                  applicable_screenplay_proposal_ids:next.applicable_screenplay_proposal_ids}:current);
+              }else accept(next);checked=true;
+            });return checked;}}
+            onDiscard={id=>void run("Đang lưu và bỏ phương án…",async()=>{
+              const next=await persist();if(!next)return;
+              accept(await projectRequest(`/${next.id}/screenplay-proposals/${id}/discard`,"POST",{revision:next.revision}));
+            })}
             onSave={()=>void run("Đang lưu kịch bản…",async()=>{await persist();setNotice("Đã lưu kịch bản và mọi sửa đang chờ.");})}
             onStart={request_id=>run("Đang giữ nguồn M2 cho kịch bản…",async()=>{
               const next=await persist();if(!next)return;
