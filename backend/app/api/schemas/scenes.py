@@ -119,3 +119,11 @@ class StagingUse(BaseModel):
     proposal_id: SceneId
     idea_id: SceneId
     value: SceneText = Field(min_length=1)
+
+
+class SketchRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    revision: int = Field(ge=0)
+    request_id: SceneId
+    scene_id: SceneId
+    instructions: str = Field(default="", max_length=1000)

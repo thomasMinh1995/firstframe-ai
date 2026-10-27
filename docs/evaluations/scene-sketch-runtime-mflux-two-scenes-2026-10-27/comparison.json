@@ -1,0 +1,120 @@
+{
+  "reviewed_at": "2026-10-27T03:47:23.712545+00:00",
+  "reviewer": "Codex manual image/source comparison; not AI scoring, PO or user acceptance",
+  "cases": {
+    "repair-workshop": {
+      "seconds": 29.141,
+      "common": [
+        {
+          "criterion": "graphite pencil drawing, not a photograph",
+          "label": "pass",
+          "evidence": "Visible pencil contours/hatching and white paper; not a photograph."
+        },
+        {
+          "criterion": "no labels/text/captions/panel grid",
+          "label": "fail",
+          "evidence": "Handwritten captions reproduce fragments of the source next to both figures."
+        },
+        {
+          "criterion": "no imported mother-daughter/envelope story",
+          "label": "pass",
+          "evidence": "No mother-daughter/envelope narrative visible."
+        }
+      ],
+      "specific": [
+        {
+          "criterion": "exactly two people",
+          "label": "pass",
+          "evidence": "Exactly two people visible."
+        },
+        {
+          "criterion": "older An reads as a generation older than Bình",
+          "label": "fail",
+          "evidence": "Both figures look young; the requested 68-versus-19 generation difference is not apparent."
+        },
+        {
+          "criterion": "An seated on right, Bình standing on left",
+          "label": "fail",
+          "evidence": "Left figure sits on the bicycle instead of standing; right figure crouches. The requested blocking is not preserved."
+        },
+        {
+          "criterion": "repairing bicycle action and attention to wheel/brake cable",
+          "label": "unclear",
+          "evidence": "Left figure grips handlebars and sits astride the bicycle; right figure crouches near the wheel. Brake-cable repair is not clearly shown."
+        },
+        {
+          "criterion": "single bicycle and no additional customer/vehicle",
+          "label": "pass",
+          "evidence": "One bicycle and no additional customer/vehicle visible."
+        },
+        {
+          "criterion": "close two-shot framing",
+          "label": "fail",
+          "evidence": "Frame shows a nearly complete bicycle and both figures rather than the requested close two-shot."
+        },
+        {
+          "criterion": "dawn intention if visually supportable",
+          "label": "unclear",
+          "evidence": "Monochrome linework gives no reliable dawn cue; printing Dawn is not depiction of dawn."
+        }
+      ]
+    },
+    "empty-platform": {
+      "seconds": 28.614,
+      "common": [
+        {
+          "criterion": "graphite pencil drawing, not a photograph",
+          "label": "pass",
+          "evidence": "Pencil linework/shading remains visible."
+        },
+        {
+          "criterion": "no labels/text/captions/panel grid",
+          "label": "fail",
+          "evidence": "A handwritten caption echoes the toolbox/no-people source."
+        },
+        {
+          "criterion": "no imported mother-daughter/envelope story",
+          "label": "pass",
+          "evidence": "No mother-daughter/envelope narrative visible."
+        }
+      ],
+      "specific": [
+        {
+          "criterion": "zero people",
+          "label": "pass",
+          "evidence": "No person is visible."
+        },
+        {
+          "criterion": "recognizable railway platform",
+          "label": "fail",
+          "evidence": "Rails/ties are visible beneath the box; no clear platform surface/edge, so the box appears on the tracks rather than on a railway platform."
+        },
+        {
+          "criterion": "one toolbox visible",
+          "label": "pass",
+          "evidence": "One toolbox is visible."
+        },
+        {
+          "criterion": "toolbox lid remains closed, contents not exposed",
+          "label": "pass",
+          "evidence": "Lid appears closed, with no exposed contents."
+        },
+        {
+          "criterion": "visible cue of locking rather than assuming a closed box is locked",
+          "label": "unclear",
+          "evidence": "Latches/fasteners are drawn, but no clear padlock or locking state; a closed lid is not proof it is locked."
+        },
+        {
+          "criterion": "no added opening or human interaction",
+          "label": "pass",
+          "evidence": "No human interaction/opening action is visible."
+        }
+      ]
+    }
+  },
+  "conclusion": "Technical dataflow succeeded; both images violate no-text constraint, and scene fidelity is not sufficient for demo acceptance.",
+  "comparison_limit": "Two different scenes, one call each, no matched manual-prompt image baseline. Cannot infer causal advantage/disadvantage versus the old mother-daughter prompt.",
+  "hypothesis_not_proven": "Quoted source passages and descriptive scaffolding may cue written captions; the outputs alone do not isolate the cause.",
+  "runtime_changed": false,
+  "retries": 0
+}

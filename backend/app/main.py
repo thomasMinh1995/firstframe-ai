@@ -8,6 +8,7 @@ from app.api.routes.demo import router as demo_router
 from app.api.routes.generate import router as generate_router
 from app.api.routes.health import router as health_router
 from app.api.routes.projects import router as projects_router
+from app.api.routes.scene_sketches import router as scene_sketches_router
 
 
 def create_app() -> FastAPI:
@@ -34,6 +35,7 @@ def create_app() -> FastAPI:
     app.include_router(dataset_transfer_router)
     app.include_router(dataset_branches_router)
     app.include_router(generate_router)
+    app.include_router(scene_sketches_router)
     app.include_router(projects_router)
     return app
 

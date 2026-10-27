@@ -39,7 +39,7 @@ export default function Home() {
   const [steps, setSteps] = useState<OperationStep[]>([]);
   const [operationFailed, setOperationFailed] = useState(false);
   const [operationTiming, setOperationTiming] = useState<{
-    kind: "analyze" | "plan" | "review" | "scene-suggestions"; startedAt: number; finishedAt: number | null;
+    kind: "analyze" | "plan" | "review" | "scene-suggestions" | "scene-sketches"; startedAt: number; finishedAt: number | null;
   } | null>(null);
   const dirty = project !== null && saved !== null
     && JSON.stringify(editableProject(project)) !== JSON.stringify(editableProject(saved));
@@ -463,6 +463,24 @@ export default function Home() {
 
           </section>}
           {saved && <SceneOutlineEditor key={project.id} project={project} saved={saved} dirty={dirty} error={error}
+            onSketch={input => {
+              setSteps([{stage:"prepare",status:"active",occurrence:1}]);setOperationFailed(false);
+              setOperationTiming({kind:"scene-sketches",startedAt:performance.now(),finishedAt:null});
+              return run("Đang phác một cảnh trên máy…",async()=>{
+                try {
+                  const next=await persist();if(!next)return;
+                  setSteps(items=>applyProgress(items,{stage:"prepare",status:"completed"}));
+                  accept(await streamProjectOperation(next,"scene-sketches",event=>setSteps(items=>applyProgress(items,event)),progressLanguage(next.response_language),input));
+                  setNotice("Đã giữ ảnh xem trước riêng; chưa thay ảnh đã chọn. Hãy đối chiếu nguồn rồi chọn giữ hoặc bỏ.");
+                } catch(caught){setOperationFailed(true);throw caught;}
+                finally{setOperationTiming(t=>t?{...t,finishedAt:performance.now()}:t);}
+              },true);
+            }}
+            onSketchDecision={(id,decision)=>void run("Đang lưu lựa chọn hình phác…",async()=>{
+              const next=await projectRequest(`/${project.id}/scene-sketches/${id}/${decision}`,"POST",{revision:project.revision});
+              setSaved(next);setProject(current=>current?{...current,revision:next.revision,scene_sketches:next.scene_sketches,
+                selected_scene_sketches:next.selected_scene_sketches,applicable_sketch_ids:next.applicable_sketch_ids}:current);
+            })}
             sourceCurrent={!feedbackChanged && !!project.scene_source_is_current}
             canUseProposal={!feedbackChanged && !project.pending_scene_proposal_id && !project.pending_staging_use && JSON.stringify(project.scene_outline) === JSON.stringify(saved.scene_outline)}
             onPreviewChange={(id: string, scenes: Scene[]) => setProject(current => current ? { ...current,
@@ -509,7 +527,8 @@ export default function Home() {
               if (dirty) {
                 if (!saved || !sameEditableContent(saved, next)) throw new Error("Nội dung đã đổi ở cửa sổ khác. Bản đang sửa vẫn giữ nguyên; hãy tải bản sao trước khi mở lại.");
                 setSaved(next); setProject(current => current ? { ...current, revision: next.revision,
-                  scene_proposals: next.scene_proposals, staging_proposals: next.staging_proposals, applicable_scene_proposal_ids: next.applicable_scene_proposal_ids } : current);
+                  scene_proposals: next.scene_proposals, staging_proposals: next.staging_proposals, applicable_scene_proposal_ids: next.applicable_scene_proposal_ids,
+                  scene_sketches: next.scene_sketches, selected_scene_sketches: next.selected_scene_sketches, applicable_sketch_ids: next.applicable_sketch_ids } : current);
               } else accept(next);
               checked = true;
             }); return checked; }}

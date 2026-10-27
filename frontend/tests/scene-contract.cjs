@@ -54,5 +54,13 @@ const outline={id:randomUUID(),version:1,scenes:[s],source:{id:randomUUID(),proj
  await assert.rejects(()=>decode({...withStaging,staging_proposals:[{...staging,staging_ideas:[{...idea,field:'action'}]}]}),/không hợp lệ/);
  assert.equal(sameEditableContent(withStaging,{...withStaging,staging_proposals:[{...staging,staging_ideas:[{...idea,preview_text:'Cửa sổ B'}]}]}),false);
  assert.equal(sameEditableContent(withStaging,{...withStaging,staging_proposals:[{...staging,staging_ideas:[{...idea,status:'discarded'}]}]}),false,'another author decision is not AI metadata');
- console.log('PASS M2 transport: legacy compatibility, read-only source/history excluded, text preserved, invalid sources/IDs/fields rejected');
+ const sketch={id:randomUUID(),scene_id:s.id,created_at:'2026-10-27T00:00:00Z',source_revision:1,source_content:'source',source_outline:outline,instructions:'',prompt:'Pencil sketch',prompt_version:'scene-sketch-v1',provider:'mflux',model:'local',parameters:{},status:'ready',asset_id:randomUUID(),error:null,duration_seconds:25};
+ const withImage={...project,scene_sketches:[sketch],selected_scene_sketches:{[s.id]:sketch.id},applicable_sketch_ids:[sketch.id]};
+ assert.deepEqual(await decode(withImage),withImage);
+ assert.equal('scene_sketches' in editableProject(withImage),false);assert.equal('selected_scene_sketches' in editableProject(withImage),false);
+ await assert.rejects(()=>decode({...withImage,scene_sketches:[{...sketch,asset_id:'../../path'}]}),/không hợp lệ/);
+ await assert.rejects(()=>decode({...withImage,selected_scene_sketches:{[s.id]:'https://example.com/evil'}}),/không hợp lệ/);
+ assert.equal(sameEditableContent(withImage,{...withImage,selected_scene_sketches:{}}),false,'another author image selection must not be rebased silently');
+ assert.equal(sameEditableContent(project,{...project,scene_sketches:[sketch]}),true,'new unselected image is metadata');
+ console.log('PASS M2 transport: legacy compatibility, read-only source/history/images excluded, text preserved, invalid sources/IDs/fields/images rejected');
 })().catch(e=>{console.error(e);process.exit(1)});

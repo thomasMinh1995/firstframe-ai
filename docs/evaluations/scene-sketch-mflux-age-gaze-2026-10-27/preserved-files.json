@@ -1,0 +1,9 @@
+{
+  "docs/plans/m2-scene-staging.md": "3651a20f8691f35e27788f9b5d524cbdbad4a393cdba2e7bd8ab74cd32b35357",
+  "docs/plans/harness-improvement.md": "e663e3e3ae406d1f2708a3afc19aaca2ea2c8d99305803e0e4742327149f1551",
+  "docs/plans/vietnam-first-screenplay-mvp.md": "db0103ebf944428df12ad3f928071bf2f7dc9c65f78cd19293f9d1919720ccf6",
+  "docs/roadmap.md": "6ab7dc8620fc2502ebc71db2a27d279d1709fb021328a497a5e740b040564062",
+  "backend/.env": "8e05e6af1f0aecba2e56ba5b37c808d31345836b1b27eaa16a53fad3d08b7907",
+  "frontend/app/prototype/prototype.module.css": "323f6ca72caa1f8e104e5a82e4474fa7ad978978d0c9c772bcef09b8cda26904",
+  "frontend/app/prototype/page.tsx": "ea3addc280d755e552be056ab79ef642580140b18a7fbc5795cda025258e0924"
+}

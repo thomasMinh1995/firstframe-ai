@@ -47,3 +47,11 @@ export type StagingIdea = {
   applied_revision: number | null; applied_text: string | null;
 };
 export type StagingUse = { proposal_id: string; idea_id: string; value: string };
+
+export type SceneSketch = {
+  id: string; scene_id: string; created_at: string; source_revision: number; source_content: string;
+  source_outline: SceneOutline; instructions: string; prompt: string; prompt_version: string;
+  provider: string; model: string; parameters: Record<string, unknown>;
+  status: "pending" | "ready" | "failed" | "discarded"; asset_id: string | null;
+  error: string | null; duration_seconds: number | null;
+};

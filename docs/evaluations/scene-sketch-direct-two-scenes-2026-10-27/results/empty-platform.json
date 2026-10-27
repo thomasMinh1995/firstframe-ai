@@ -1,0 +1,309 @@
+{
+  "name": "empty-platform",
+  "started_at": "2026-10-27T03:53:49.005015+00:00",
+  "request": {
+    "request_id": "bb7d10a0-9814-4436-bfa4-ad657d1fedf5",
+    "scene_id": "2a53efe7-be17-4199-845b-742b42ab56a7",
+    "instructions": "",
+    "revision": 3
+  },
+  "status": "ready",
+  "experiment_prompt_id": "direct-unquoted-v1",
+  "http_status": 200,
+  "api_seconds": 25.472,
+  "response": {
+    "response_language": "en",
+    "id": "57890f46-822c-49d4-8862-3e2bd1c9c4fa",
+    "revision": 5,
+    "updated_at": "2026-10-27T03:54:14.471404+00:00",
+    "title": "empty-platform",
+    "idea": "A quiet unresolved absence.",
+    "constraints": [
+      "No people and no opening the toolbox."
+    ],
+    "analysis": null,
+    "answers": [],
+    "clarifications": {},
+    "draft": {
+      "title": "empty-platform",
+      "logline": "A quiet unresolved absence.",
+      "sections": [
+        {
+          "title": "A moment",
+          "purpose": "Preserve the source constraints.",
+          "content": "A locked toolbox rests on an empty railway platform. No people are present."
+        }
+      ]
+    },
+    "feedback": null,
+    "feedback_source": null,
+    "reviewed_content": null,
+    "versions": [],
+    "clarification_history": [],
+    "plan_generations": [],
+    "scene_outline": {
+      "id": "6ac12640-35aa-4bc6-aa6a-504ccac142e3",
+      "version": 2,
+      "scenes": [
+        {
+          "id": "2a53efe7-be17-4199-845b-742b42ab56a7",
+          "title": "",
+          "action": "A locked toolbox rests on an empty railway platform. No people are present.",
+          "location": "An empty railway platform",
+          "time": "",
+          "characters": "No people.",
+          "goal": "",
+          "purpose": "",
+          "viewer_intent": "",
+          "keep_or_avoid": "",
+          "staging_choices": {
+            "moment": "The toolbox remains locked and untouched."
+          }
+        }
+      ],
+      "source": {
+        "id": "1cf55c28-ad01-454e-bb1f-1d4e857662a2",
+        "project_revision": 1,
+        "version_id": "current",
+        "draft": {
+          "title": "empty-platform",
+          "logline": "A quiet unresolved absence.",
+          "sections": [
+            {
+              "title": "A moment",
+              "purpose": "Preserve the source constraints.",
+              "content": "A locked toolbox rests on an empty railway platform. No people are present."
+            }
+          ]
+        },
+        "context": {
+          "idea": "A quiet unresolved absence.",
+          "constraints": [
+            "No people and no opening the toolbox."
+          ],
+          "clarifications": [],
+          "pending_questions": []
+        },
+        "response_language": "en"
+      }
+    },
+    "scene_versions": [
+      {
+        "id": "7b698949-1cfc-45be-9cfa-e69a83a6d91d",
+        "created_at": "2026-10-27T03:43:44.639850+00:00",
+        "outline": {
+          "id": "6ac12640-35aa-4bc6-aa6a-504ccac142e3",
+          "version": 1,
+          "scenes": [],
+          "source": {
+            "id": "1cf55c28-ad01-454e-bb1f-1d4e857662a2",
+            "project_revision": 1,
+            "version_id": "current",
+            "draft": {
+              "title": "empty-platform",
+              "logline": "A quiet unresolved absence.",
+              "sections": [
+                {
+                  "title": "A moment",
+                  "purpose": "Preserve the source constraints.",
+                  "content": "A locked toolbox rests on an empty railway platform. No people are present."
+                }
+              ]
+            },
+            "context": {
+              "idea": "A quiet unresolved absence.",
+              "constraints": [
+                "No people and no opening the toolbox."
+              ],
+              "clarifications": [],
+              "pending_questions": []
+            },
+            "response_language": "en"
+          }
+        }
+      }
+    ],
+    "scene_proposals": [],
+    "staging_proposals": [],
+    "scene_sketches": [
+      {
+        "id": "bb7d10a0-9814-4436-bfa4-ad657d1fedf5",
+        "scene_id": "2a53efe7-be17-4199-845b-742b42ab56a7",
+        "created_at": "2026-10-27T03:53:49.005926+00:00",
+        "source_revision": 3,
+        "source_content": "{\"answers\": [], \"clarifications\": {}, \"constraints\": [\"No people and no opening the toolbox.\"], \"draft\": {\"logline\": \"A quiet unresolved absence.\", \"sections\": [{\"content\": \"A locked toolbox rests on an empty railway platform. No people are present.\", \"purpose\": \"Preserve the source constraints.\", \"title\": \"A moment\"}], \"title\": \"empty-platform\"}, \"idea\": \"A quiet unresolved absence.\", \"questions\": [], \"response_language\": \"en\"}",
+        "source_outline": {
+          "id": "6ac12640-35aa-4bc6-aa6a-504ccac142e3",
+          "version": 2,
+          "scenes": [
+            {
+              "id": "2a53efe7-be17-4199-845b-742b42ab56a7",
+              "title": "",
+              "action": "A locked toolbox rests on an empty railway platform. No people are present.",
+              "location": "An empty railway platform",
+              "time": "",
+              "characters": "No people.",
+              "goal": "",
+              "purpose": "",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {
+                "moment": "The toolbox remains locked and untouched."
+              }
+            }
+          ],
+          "source": {
+            "id": "1cf55c28-ad01-454e-bb1f-1d4e857662a2",
+            "project_revision": 1,
+            "version_id": "current",
+            "draft": {
+              "title": "empty-platform",
+              "logline": "A quiet unresolved absence.",
+              "sections": [
+                {
+                  "title": "A moment",
+                  "purpose": "Preserve the source constraints.",
+                  "content": "A locked toolbox rests on an empty railway platform. No people are present."
+                }
+              ]
+            },
+            "context": {
+              "idea": "A quiet unresolved absence.",
+              "constraints": [
+                "No people and no opening the toolbox."
+              ],
+              "clarifications": [],
+              "pending_questions": []
+            },
+            "response_language": "en"
+          }
+        },
+        "instructions": "",
+        "prompt": "An unfinished HAND-DRAWN GRAPHITE PENCIL LINE DRAWING on plain white paper, not a photograph. Use visible thin, slightly irregular pencil contours, a few light hatch marks and large untouched white areas. Faces and surroundings are drawn with economical lines, without photographic skin/fabric textures, smooth photographic shading or solid black photographic shadows. One horizontal frame, one moment.\n\nA locked toolbox rests on an empty railway platform. No people are present. No people. An empty railway platform. The toolbox remains locked and untouched. A quiet unresolved absence. No people and no opening the toolbox.\n\nDo not invent an event or resolve an open ending. Only pencil strokes on white paper: no photograph, text, labels, captions, speech bubbles or panel grid.",
+        "prompt_version": "scene-sketch-visual-v2",
+        "provider": "mflux",
+        "model": "filipstrand/Z-Image-Turbo-mflux-4bit",
+        "parameters": {
+          "width": 768,
+          "height": 432,
+          "steps": 9,
+          "seed": 42,
+          "quantize": 4,
+          "low_ram": true,
+          "mlx_cache_limit_gb": 2,
+          "timeout_seconds": 180,
+          "model_revision": "b3a8f31115a11f2f9e2fa0bfbc8d78dcc3e6568b",
+          "mflux_version": "0.23.0",
+          "mlx_version": "0.32.4"
+        },
+        "status": "ready",
+        "asset_id": "ede1208e-f494-40b2-8c54-f444b5b5f4a4",
+        "error": null,
+        "diagnostic": null,
+        "duration_seconds": 25.46
+      }
+    ],
+    "selected_scene_sketches": {},
+    "applicable_sketch_ids": [
+      "bb7d10a0-9814-4436-bfa4-ad657d1fedf5"
+    ],
+    "applicable_scene_proposal_ids": [],
+    "scene_source_is_current": true,
+    "scene_handoff": null,
+    "applicable_plan_ids": [],
+    "author_context": {
+      "idea": "A quiet unresolved absence.",
+      "constraints": [
+        "No people and no opening the toolbox."
+      ],
+      "clarifications": [],
+      "pending_questions": []
+    },
+    "feedback_is_current": false
+  },
+  "sketch": {
+    "id": "bb7d10a0-9814-4436-bfa4-ad657d1fedf5",
+    "scene_id": "2a53efe7-be17-4199-845b-742b42ab56a7",
+    "created_at": "2026-10-27T03:53:49.005926+00:00",
+    "source_revision": 3,
+    "source_content": "{\"answers\": [], \"clarifications\": {}, \"constraints\": [\"No people and no opening the toolbox.\"], \"draft\": {\"logline\": \"A quiet unresolved absence.\", \"sections\": [{\"content\": \"A locked toolbox rests on an empty railway platform. No people are present.\", \"purpose\": \"Preserve the source constraints.\", \"title\": \"A moment\"}], \"title\": \"empty-platform\"}, \"idea\": \"A quiet unresolved absence.\", \"questions\": [], \"response_language\": \"en\"}",
+    "source_outline": {
+      "id": "6ac12640-35aa-4bc6-aa6a-504ccac142e3",
+      "version": 2,
+      "scenes": [
+        {
+          "id": "2a53efe7-be17-4199-845b-742b42ab56a7",
+          "title": "",
+          "action": "A locked toolbox rests on an empty railway platform. No people are present.",
+          "location": "An empty railway platform",
+          "time": "",
+          "characters": "No people.",
+          "goal": "",
+          "purpose": "",
+          "viewer_intent": "",
+          "keep_or_avoid": "",
+          "staging_choices": {
+            "moment": "The toolbox remains locked and untouched."
+          }
+        }
+      ],
+      "source": {
+        "id": "1cf55c28-ad01-454e-bb1f-1d4e857662a2",
+        "project_revision": 1,
+        "version_id": "current",
+        "draft": {
+          "title": "empty-platform",
+          "logline": "A quiet unresolved absence.",
+          "sections": [
+            {
+              "title": "A moment",
+              "purpose": "Preserve the source constraints.",
+              "content": "A locked toolbox rests on an empty railway platform. No people are present."
+            }
+          ]
+        },
+        "context": {
+          "idea": "A quiet unresolved absence.",
+          "constraints": [
+            "No people and no opening the toolbox."
+          ],
+          "clarifications": [],
+          "pending_questions": []
+        },
+        "response_language": "en"
+      }
+    },
+    "instructions": "",
+    "prompt": "An unfinished HAND-DRAWN GRAPHITE PENCIL LINE DRAWING on plain white paper, not a photograph. Use visible thin, slightly irregular pencil contours, a few light hatch marks and large untouched white areas. Faces and surroundings are drawn with economical lines, without photographic skin/fabric textures, smooth photographic shading or solid black photographic shadows. One horizontal frame, one moment.\n\nA locked toolbox rests on an empty railway platform. No people are present. No people. An empty railway platform. The toolbox remains locked and untouched. A quiet unresolved absence. No people and no opening the toolbox.\n\nDo not invent an event or resolve an open ending. Only pencil strokes on white paper: no photograph, text, labels, captions, speech bubbles or panel grid.",
+    "prompt_version": "scene-sketch-visual-v2",
+    "provider": "mflux",
+    "model": "filipstrand/Z-Image-Turbo-mflux-4bit",
+    "parameters": {
+      "width": 768,
+      "height": 432,
+      "steps": 9,
+      "seed": 42,
+      "quantize": 4,
+      "low_ram": true,
+      "mlx_cache_limit_gb": 2,
+      "timeout_seconds": 180,
+      "model_revision": "b3a8f31115a11f2f9e2fa0bfbc8d78dcc3e6568b",
+      "mflux_version": "0.23.0",
+      "mlx_version": "0.32.4"
+    },
+    "status": "ready",
+    "asset_id": "ede1208e-f494-40b2-8c54-f444b5b5f4a4",
+    "error": null,
+    "diagnostic": null,
+    "duration_seconds": 25.46
+  },
+  "checks": {
+    "source_unchanged": true,
+    "story_unchanged": true,
+    "no_automatic_selection": true,
+    "prompt_exact_match": true,
+    "version_matches": true,
+    "reload_identical": true
+  },
+  "image_sha256": "bd23ca3de186f5d2c4e6a1128c1837bbefa6d15fdf1d8ae27c281d547cb25255"
+}

@@ -1,0 +1,632 @@
+[
+  {
+    "name": "repair-workshop",
+    "started_at": "2026-10-27T03:53:24.803638+00:00",
+    "request": {
+      "request_id": "17fdf587-3798-4379-8789-ee090f7774d2",
+      "scene_id": "c885c294-fa98-48c2-b067-4854d120ea61",
+      "instructions": "",
+      "revision": 3
+    },
+    "status": "ready",
+    "experiment_prompt_id": "direct-unquoted-v1",
+    "http_status": 200,
+    "api_seconds": 24.16,
+    "response": {
+      "response_language": "en",
+      "id": "d157d6e9-36fc-4db6-a979-9e5b27bc7c98",
+      "revision": 5,
+      "updated_at": "2026-10-27T03:53:48.960481+00:00",
+      "title": "repair-workshop",
+      "idea": "A shared moment of concentration.",
+      "constraints": [
+        "Exactly two people.",
+        "No dialogue."
+      ],
+      "analysis": null,
+      "answers": [],
+      "clarifications": {},
+      "draft": {
+        "title": "repair-workshop",
+        "logline": "A shared moment of concentration.",
+        "sections": [
+          {
+            "title": "A moment",
+            "purpose": "Preserve the source constraints.",
+            "content": "An, 68, repairs a bicycle while Bình, 19, watches the wheel."
+          }
+        ]
+      },
+      "feedback": null,
+      "feedback_source": null,
+      "reviewed_content": null,
+      "versions": [],
+      "clarification_history": [],
+      "plan_generations": [],
+      "scene_outline": {
+        "id": "b7080558-63f8-4251-88f9-e61847f3bb17",
+        "version": 2,
+        "scenes": [
+          {
+            "id": "c885c294-fa98-48c2-b067-4854d120ea61",
+            "title": "",
+            "action": "An, 68, repairs a bicycle while Bình, 19, watches the wheel.",
+            "location": "A bicycle workshop",
+            "time": "Dawn",
+            "characters": "An, 68; Bình, 19.",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "",
+            "keep_or_avoid": "No customer or extra vehicle enters.",
+            "staging_choices": {
+              "blocking": "An sits right; Bình stands left with eyes on the wheel.",
+              "performance": "An looks down at the brake cable.",
+              "shot": "Close two-shot."
+            }
+          }
+        ],
+        "source": {
+          "id": "b0a634c4-077c-4a78-9ecb-b049eb1846a2",
+          "project_revision": 1,
+          "version_id": "current",
+          "draft": {
+            "title": "repair-workshop",
+            "logline": "A shared moment of concentration.",
+            "sections": [
+              {
+                "title": "A moment",
+                "purpose": "Preserve the source constraints.",
+                "content": "An, 68, repairs a bicycle while Bình, 19, watches the wheel."
+              }
+            ]
+          },
+          "context": {
+            "idea": "A shared moment of concentration.",
+            "constraints": [
+              "Exactly two people.",
+              "No dialogue."
+            ],
+            "clarifications": [],
+            "pending_questions": []
+          },
+          "response_language": "en"
+        }
+      },
+      "scene_versions": [
+        {
+          "id": "405aed30-02ce-4c66-b958-adb57aade3db",
+          "created_at": "2026-10-27T03:43:44.634319+00:00",
+          "outline": {
+            "id": "b7080558-63f8-4251-88f9-e61847f3bb17",
+            "version": 1,
+            "scenes": [],
+            "source": {
+              "id": "b0a634c4-077c-4a78-9ecb-b049eb1846a2",
+              "project_revision": 1,
+              "version_id": "current",
+              "draft": {
+                "title": "repair-workshop",
+                "logline": "A shared moment of concentration.",
+                "sections": [
+                  {
+                    "title": "A moment",
+                    "purpose": "Preserve the source constraints.",
+                    "content": "An, 68, repairs a bicycle while Bình, 19, watches the wheel."
+                  }
+                ]
+              },
+              "context": {
+                "idea": "A shared moment of concentration.",
+                "constraints": [
+                  "Exactly two people.",
+                  "No dialogue."
+                ],
+                "clarifications": [],
+                "pending_questions": []
+              },
+              "response_language": "en"
+            }
+          }
+        }
+      ],
+      "scene_proposals": [],
+      "staging_proposals": [],
+      "scene_sketches": [
+        {
+          "id": "17fdf587-3798-4379-8789-ee090f7774d2",
+          "scene_id": "c885c294-fa98-48c2-b067-4854d120ea61",
+          "created_at": "2026-10-27T03:53:24.805094+00:00",
+          "source_revision": 3,
+          "source_content": "{\"answers\": [], \"clarifications\": {}, \"constraints\": [\"Exactly two people.\", \"No dialogue.\"], \"draft\": {\"logline\": \"A shared moment of concentration.\", \"sections\": [{\"content\": \"An, 68, repairs a bicycle while Bình, 19, watches the wheel.\", \"purpose\": \"Preserve the source constraints.\", \"title\": \"A moment\"}], \"title\": \"repair-workshop\"}, \"idea\": \"A shared moment of concentration.\", \"questions\": [], \"response_language\": \"en\"}",
+          "source_outline": {
+            "id": "b7080558-63f8-4251-88f9-e61847f3bb17",
+            "version": 2,
+            "scenes": [
+              {
+                "id": "c885c294-fa98-48c2-b067-4854d120ea61",
+                "title": "",
+                "action": "An, 68, repairs a bicycle while Bình, 19, watches the wheel.",
+                "location": "A bicycle workshop",
+                "time": "Dawn",
+                "characters": "An, 68; Bình, 19.",
+                "goal": "",
+                "purpose": "",
+                "viewer_intent": "",
+                "keep_or_avoid": "No customer or extra vehicle enters.",
+                "staging_choices": {
+                  "blocking": "An sits right; Bình stands left with eyes on the wheel.",
+                  "performance": "An looks down at the brake cable.",
+                  "shot": "Close two-shot."
+                }
+              }
+            ],
+            "source": {
+              "id": "b0a634c4-077c-4a78-9ecb-b049eb1846a2",
+              "project_revision": 1,
+              "version_id": "current",
+              "draft": {
+                "title": "repair-workshop",
+                "logline": "A shared moment of concentration.",
+                "sections": [
+                  {
+                    "title": "A moment",
+                    "purpose": "Preserve the source constraints.",
+                    "content": "An, 68, repairs a bicycle while Bình, 19, watches the wheel."
+                  }
+                ]
+              },
+              "context": {
+                "idea": "A shared moment of concentration.",
+                "constraints": [
+                  "Exactly two people.",
+                  "No dialogue."
+                ],
+                "clarifications": [],
+                "pending_questions": []
+              },
+              "response_language": "en"
+            }
+          },
+          "instructions": "",
+          "prompt": "An unfinished HAND-DRAWN GRAPHITE PENCIL LINE DRAWING on plain white paper, not a photograph. Use visible thin, slightly irregular pencil contours, a few light hatch marks and large untouched white areas. Faces and surroundings are drawn with economical lines, without photographic skin/fabric textures, smooth photographic shading or solid black photographic shadows. One horizontal frame, one moment.\n\nAn, 68, repairs a bicycle while Bình, 19, watches the wheel. An, 68; Bình, 19. A bicycle workshop. Dawn. An sits right; Bình stands left with eyes on the wheel. An looks down at the brake cable. Close two-shot. A shared moment of concentration. No customer or extra vehicle enters. Exactly two people. No dialogue.\n\nDo not invent an event or resolve an open ending. Only pencil strokes on white paper: no photograph, text, labels, captions, speech bubbles or panel grid.",
+          "prompt_version": "scene-sketch-visual-v2",
+          "provider": "mflux",
+          "model": "filipstrand/Z-Image-Turbo-mflux-4bit",
+          "parameters": {
+            "width": 768,
+            "height": 432,
+            "steps": 9,
+            "seed": 42,
+            "quantize": 4,
+            "low_ram": true,
+            "mlx_cache_limit_gb": 2,
+            "timeout_seconds": 180,
+            "model_revision": "b3a8f31115a11f2f9e2fa0bfbc8d78dcc3e6568b",
+            "mflux_version": "0.23.0",
+            "mlx_version": "0.32.4"
+          },
+          "status": "ready",
+          "asset_id": "680a7d50-7b78-44f0-a2ed-aad45ee66676",
+          "error": null,
+          "diagnostic": null,
+          "duration_seconds": 24.152
+        }
+      ],
+      "selected_scene_sketches": {},
+      "applicable_sketch_ids": [
+        "17fdf587-3798-4379-8789-ee090f7774d2"
+      ],
+      "applicable_scene_proposal_ids": [],
+      "scene_source_is_current": true,
+      "scene_handoff": null,
+      "applicable_plan_ids": [],
+      "author_context": {
+        "idea": "A shared moment of concentration.",
+        "constraints": [
+          "Exactly two people.",
+          "No dialogue."
+        ],
+        "clarifications": [],
+        "pending_questions": []
+      },
+      "feedback_is_current": false
+    },
+    "sketch": {
+      "id": "17fdf587-3798-4379-8789-ee090f7774d2",
+      "scene_id": "c885c294-fa98-48c2-b067-4854d120ea61",
+      "created_at": "2026-10-27T03:53:24.805094+00:00",
+      "source_revision": 3,
+      "source_content": "{\"answers\": [], \"clarifications\": {}, \"constraints\": [\"Exactly two people.\", \"No dialogue.\"], \"draft\": {\"logline\": \"A shared moment of concentration.\", \"sections\": [{\"content\": \"An, 68, repairs a bicycle while Bình, 19, watches the wheel.\", \"purpose\": \"Preserve the source constraints.\", \"title\": \"A moment\"}], \"title\": \"repair-workshop\"}, \"idea\": \"A shared moment of concentration.\", \"questions\": [], \"response_language\": \"en\"}",
+      "source_outline": {
+        "id": "b7080558-63f8-4251-88f9-e61847f3bb17",
+        "version": 2,
+        "scenes": [
+          {
+            "id": "c885c294-fa98-48c2-b067-4854d120ea61",
+            "title": "",
+            "action": "An, 68, repairs a bicycle while Bình, 19, watches the wheel.",
+            "location": "A bicycle workshop",
+            "time": "Dawn",
+            "characters": "An, 68; Bình, 19.",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "",
+            "keep_or_avoid": "No customer or extra vehicle enters.",
+            "staging_choices": {
+              "blocking": "An sits right; Bình stands left with eyes on the wheel.",
+              "performance": "An looks down at the brake cable.",
+              "shot": "Close two-shot."
+            }
+          }
+        ],
+        "source": {
+          "id": "b0a634c4-077c-4a78-9ecb-b049eb1846a2",
+          "project_revision": 1,
+          "version_id": "current",
+          "draft": {
+            "title": "repair-workshop",
+            "logline": "A shared moment of concentration.",
+            "sections": [
+              {
+                "title": "A moment",
+                "purpose": "Preserve the source constraints.",
+                "content": "An, 68, repairs a bicycle while Bình, 19, watches the wheel."
+              }
+            ]
+          },
+          "context": {
+            "idea": "A shared moment of concentration.",
+            "constraints": [
+              "Exactly two people.",
+              "No dialogue."
+            ],
+            "clarifications": [],
+            "pending_questions": []
+          },
+          "response_language": "en"
+        }
+      },
+      "instructions": "",
+      "prompt": "An unfinished HAND-DRAWN GRAPHITE PENCIL LINE DRAWING on plain white paper, not a photograph. Use visible thin, slightly irregular pencil contours, a few light hatch marks and large untouched white areas. Faces and surroundings are drawn with economical lines, without photographic skin/fabric textures, smooth photographic shading or solid black photographic shadows. One horizontal frame, one moment.\n\nAn, 68, repairs a bicycle while Bình, 19, watches the wheel. An, 68; Bình, 19. A bicycle workshop. Dawn. An sits right; Bình stands left with eyes on the wheel. An looks down at the brake cable. Close two-shot. A shared moment of concentration. No customer or extra vehicle enters. Exactly two people. No dialogue.\n\nDo not invent an event or resolve an open ending. Only pencil strokes on white paper: no photograph, text, labels, captions, speech bubbles or panel grid.",
+      "prompt_version": "scene-sketch-visual-v2",
+      "provider": "mflux",
+      "model": "filipstrand/Z-Image-Turbo-mflux-4bit",
+      "parameters": {
+        "width": 768,
+        "height": 432,
+        "steps": 9,
+        "seed": 42,
+        "quantize": 4,
+        "low_ram": true,
+        "mlx_cache_limit_gb": 2,
+        "timeout_seconds": 180,
+        "model_revision": "b3a8f31115a11f2f9e2fa0bfbc8d78dcc3e6568b",
+        "mflux_version": "0.23.0",
+        "mlx_version": "0.32.4"
+      },
+      "status": "ready",
+      "asset_id": "680a7d50-7b78-44f0-a2ed-aad45ee66676",
+      "error": null,
+      "diagnostic": null,
+      "duration_seconds": 24.152
+    },
+    "checks": {
+      "source_unchanged": true,
+      "story_unchanged": true,
+      "no_automatic_selection": true,
+      "prompt_exact_match": true,
+      "version_matches": true,
+      "reload_identical": true
+    },
+    "image_sha256": "d5f685abaece103f7a8e235aee66d75e44f62f9ed04c8fc85df632ce13cecf98"
+  },
+  {
+    "name": "empty-platform",
+    "started_at": "2026-10-27T03:53:49.005015+00:00",
+    "request": {
+      "request_id": "bb7d10a0-9814-4436-bfa4-ad657d1fedf5",
+      "scene_id": "2a53efe7-be17-4199-845b-742b42ab56a7",
+      "instructions": "",
+      "revision": 3
+    },
+    "status": "ready",
+    "experiment_prompt_id": "direct-unquoted-v1",
+    "http_status": 200,
+    "api_seconds": 25.472,
+    "response": {
+      "response_language": "en",
+      "id": "57890f46-822c-49d4-8862-3e2bd1c9c4fa",
+      "revision": 5,
+      "updated_at": "2026-10-27T03:54:14.471404+00:00",
+      "title": "empty-platform",
+      "idea": "A quiet unresolved absence.",
+      "constraints": [
+        "No people and no opening the toolbox."
+      ],
+      "analysis": null,
+      "answers": [],
+      "clarifications": {},
+      "draft": {
+        "title": "empty-platform",
+        "logline": "A quiet unresolved absence.",
+        "sections": [
+          {
+            "title": "A moment",
+            "purpose": "Preserve the source constraints.",
+            "content": "A locked toolbox rests on an empty railway platform. No people are present."
+          }
+        ]
+      },
+      "feedback": null,
+      "feedback_source": null,
+      "reviewed_content": null,
+      "versions": [],
+      "clarification_history": [],
+      "plan_generations": [],
+      "scene_outline": {
+        "id": "6ac12640-35aa-4bc6-aa6a-504ccac142e3",
+        "version": 2,
+        "scenes": [
+          {
+            "id": "2a53efe7-be17-4199-845b-742b42ab56a7",
+            "title": "",
+            "action": "A locked toolbox rests on an empty railway platform. No people are present.",
+            "location": "An empty railway platform",
+            "time": "",
+            "characters": "No people.",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "",
+            "keep_or_avoid": "",
+            "staging_choices": {
+              "moment": "The toolbox remains locked and untouched."
+            }
+          }
+        ],
+        "source": {
+          "id": "1cf55c28-ad01-454e-bb1f-1d4e857662a2",
+          "project_revision": 1,
+          "version_id": "current",
+          "draft": {
+            "title": "empty-platform",
+            "logline": "A quiet unresolved absence.",
+            "sections": [
+              {
+                "title": "A moment",
+                "purpose": "Preserve the source constraints.",
+                "content": "A locked toolbox rests on an empty railway platform. No people are present."
+              }
+            ]
+          },
+          "context": {
+            "idea": "A quiet unresolved absence.",
+            "constraints": [
+              "No people and no opening the toolbox."
+            ],
+            "clarifications": [],
+            "pending_questions": []
+          },
+          "response_language": "en"
+        }
+      },
+      "scene_versions": [
+        {
+          "id": "7b698949-1cfc-45be-9cfa-e69a83a6d91d",
+          "created_at": "2026-10-27T03:43:44.639850+00:00",
+          "outline": {
+            "id": "6ac12640-35aa-4bc6-aa6a-504ccac142e3",
+            "version": 1,
+            "scenes": [],
+            "source": {
+              "id": "1cf55c28-ad01-454e-bb1f-1d4e857662a2",
+              "project_revision": 1,
+              "version_id": "current",
+              "draft": {
+                "title": "empty-platform",
+                "logline": "A quiet unresolved absence.",
+                "sections": [
+                  {
+                    "title": "A moment",
+                    "purpose": "Preserve the source constraints.",
+                    "content": "A locked toolbox rests on an empty railway platform. No people are present."
+                  }
+                ]
+              },
+              "context": {
+                "idea": "A quiet unresolved absence.",
+                "constraints": [
+                  "No people and no opening the toolbox."
+                ],
+                "clarifications": [],
+                "pending_questions": []
+              },
+              "response_language": "en"
+            }
+          }
+        }
+      ],
+      "scene_proposals": [],
+      "staging_proposals": [],
+      "scene_sketches": [
+        {
+          "id": "bb7d10a0-9814-4436-bfa4-ad657d1fedf5",
+          "scene_id": "2a53efe7-be17-4199-845b-742b42ab56a7",
+          "created_at": "2026-10-27T03:53:49.005926+00:00",
+          "source_revision": 3,
+          "source_content": "{\"answers\": [], \"clarifications\": {}, \"constraints\": [\"No people and no opening the toolbox.\"], \"draft\": {\"logline\": \"A quiet unresolved absence.\", \"sections\": [{\"content\": \"A locked toolbox rests on an empty railway platform. No people are present.\", \"purpose\": \"Preserve the source constraints.\", \"title\": \"A moment\"}], \"title\": \"empty-platform\"}, \"idea\": \"A quiet unresolved absence.\", \"questions\": [], \"response_language\": \"en\"}",
+          "source_outline": {
+            "id": "6ac12640-35aa-4bc6-aa6a-504ccac142e3",
+            "version": 2,
+            "scenes": [
+              {
+                "id": "2a53efe7-be17-4199-845b-742b42ab56a7",
+                "title": "",
+                "action": "A locked toolbox rests on an empty railway platform. No people are present.",
+                "location": "An empty railway platform",
+                "time": "",
+                "characters": "No people.",
+                "goal": "",
+                "purpose": "",
+                "viewer_intent": "",
+                "keep_or_avoid": "",
+                "staging_choices": {
+                  "moment": "The toolbox remains locked and untouched."
+                }
+              }
+            ],
+            "source": {
+              "id": "1cf55c28-ad01-454e-bb1f-1d4e857662a2",
+              "project_revision": 1,
+              "version_id": "current",
+              "draft": {
+                "title": "empty-platform",
+                "logline": "A quiet unresolved absence.",
+                "sections": [
+                  {
+                    "title": "A moment",
+                    "purpose": "Preserve the source constraints.",
+                    "content": "A locked toolbox rests on an empty railway platform. No people are present."
+                  }
+                ]
+              },
+              "context": {
+                "idea": "A quiet unresolved absence.",
+                "constraints": [
+                  "No people and no opening the toolbox."
+                ],
+                "clarifications": [],
+                "pending_questions": []
+              },
+              "response_language": "en"
+            }
+          },
+          "instructions": "",
+          "prompt": "An unfinished HAND-DRAWN GRAPHITE PENCIL LINE DRAWING on plain white paper, not a photograph. Use visible thin, slightly irregular pencil contours, a few light hatch marks and large untouched white areas. Faces and surroundings are drawn with economical lines, without photographic skin/fabric textures, smooth photographic shading or solid black photographic shadows. One horizontal frame, one moment.\n\nA locked toolbox rests on an empty railway platform. No people are present. No people. An empty railway platform. The toolbox remains locked and untouched. A quiet unresolved absence. No people and no opening the toolbox.\n\nDo not invent an event or resolve an open ending. Only pencil strokes on white paper: no photograph, text, labels, captions, speech bubbles or panel grid.",
+          "prompt_version": "scene-sketch-visual-v2",
+          "provider": "mflux",
+          "model": "filipstrand/Z-Image-Turbo-mflux-4bit",
+          "parameters": {
+            "width": 768,
+            "height": 432,
+            "steps": 9,
+            "seed": 42,
+            "quantize": 4,
+            "low_ram": true,
+            "mlx_cache_limit_gb": 2,
+            "timeout_seconds": 180,
+            "model_revision": "b3a8f31115a11f2f9e2fa0bfbc8d78dcc3e6568b",
+            "mflux_version": "0.23.0",
+            "mlx_version": "0.32.4"
+          },
+          "status": "ready",
+          "asset_id": "ede1208e-f494-40b2-8c54-f444b5b5f4a4",
+          "error": null,
+          "diagnostic": null,
+          "duration_seconds": 25.46
+        }
+      ],
+      "selected_scene_sketches": {},
+      "applicable_sketch_ids": [
+        "bb7d10a0-9814-4436-bfa4-ad657d1fedf5"
+      ],
+      "applicable_scene_proposal_ids": [],
+      "scene_source_is_current": true,
+      "scene_handoff": null,
+      "applicable_plan_ids": [],
+      "author_context": {
+        "idea": "A quiet unresolved absence.",
+        "constraints": [
+          "No people and no opening the toolbox."
+        ],
+        "clarifications": [],
+        "pending_questions": []
+      },
+      "feedback_is_current": false
+    },
+    "sketch": {
+      "id": "bb7d10a0-9814-4436-bfa4-ad657d1fedf5",
+      "scene_id": "2a53efe7-be17-4199-845b-742b42ab56a7",
+      "created_at": "2026-10-27T03:53:49.005926+00:00",
+      "source_revision": 3,
+      "source_content": "{\"answers\": [], \"clarifications\": {}, \"constraints\": [\"No people and no opening the toolbox.\"], \"draft\": {\"logline\": \"A quiet unresolved absence.\", \"sections\": [{\"content\": \"A locked toolbox rests on an empty railway platform. No people are present.\", \"purpose\": \"Preserve the source constraints.\", \"title\": \"A moment\"}], \"title\": \"empty-platform\"}, \"idea\": \"A quiet unresolved absence.\", \"questions\": [], \"response_language\": \"en\"}",
+      "source_outline": {
+        "id": "6ac12640-35aa-4bc6-aa6a-504ccac142e3",
+        "version": 2,
+        "scenes": [
+          {
+            "id": "2a53efe7-be17-4199-845b-742b42ab56a7",
+            "title": "",
+            "action": "A locked toolbox rests on an empty railway platform. No people are present.",
+            "location": "An empty railway platform",
+            "time": "",
+            "characters": "No people.",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "",
+            "keep_or_avoid": "",
+            "staging_choices": {
+              "moment": "The toolbox remains locked and untouched."
+            }
+          }
+        ],
+        "source": {
+          "id": "1cf55c28-ad01-454e-bb1f-1d4e857662a2",
+          "project_revision": 1,
+          "version_id": "current",
+          "draft": {
+            "title": "empty-platform",
+            "logline": "A quiet unresolved absence.",
+            "sections": [
+              {
+                "title": "A moment",
+                "purpose": "Preserve the source constraints.",
+                "content": "A locked toolbox rests on an empty railway platform. No people are present."
+              }
+            ]
+          },
+          "context": {
+            "idea": "A quiet unresolved absence.",
+            "constraints": [
+              "No people and no opening the toolbox."
+            ],
+            "clarifications": [],
+            "pending_questions": []
+          },
+          "response_language": "en"
+        }
+      },
+      "instructions": "",
+      "prompt": "An unfinished HAND-DRAWN GRAPHITE PENCIL LINE DRAWING on plain white paper, not a photograph. Use visible thin, slightly irregular pencil contours, a few light hatch marks and large untouched white areas. Faces and surroundings are drawn with economical lines, without photographic skin/fabric textures, smooth photographic shading or solid black photographic shadows. One horizontal frame, one moment.\n\nA locked toolbox rests on an empty railway platform. No people are present. No people. An empty railway platform. The toolbox remains locked and untouched. A quiet unresolved absence. No people and no opening the toolbox.\n\nDo not invent an event or resolve an open ending. Only pencil strokes on white paper: no photograph, text, labels, captions, speech bubbles or panel grid.",
+      "prompt_version": "scene-sketch-visual-v2",
+      "provider": "mflux",
+      "model": "filipstrand/Z-Image-Turbo-mflux-4bit",
+      "parameters": {
+        "width": 768,
+        "height": 432,
+        "steps": 9,
+        "seed": 42,
+        "quantize": 4,
+        "low_ram": true,
+        "mlx_cache_limit_gb": 2,
+        "timeout_seconds": 180,
+        "model_revision": "b3a8f31115a11f2f9e2fa0bfbc8d78dcc3e6568b",
+        "mflux_version": "0.23.0",
+        "mlx_version": "0.32.4"
+      },
+      "status": "ready",
+      "asset_id": "ede1208e-f494-40b2-8c54-f444b5b5f4a4",
+      "error": null,
+      "diagnostic": null,
+      "duration_seconds": 25.46
+    },
+    "checks": {
+      "source_unchanged": true,
+      "story_unchanged": true,
+      "no_automatic_selection": true,
+      "prompt_exact_match": true,
+      "version_matches": true,
+      "reload_identical": true
+    },
+    "image_sha256": "bd23ca3de186f5d2c4e6a1128c1837bbefa6d15fdf1d8ae27c281d547cb25255"
+  }
+]

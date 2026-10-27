@@ -1,0 +1,21 @@
+{
+  "fixed_before_run": true,
+  "reviewer": "Codex visual inspection, not PO or user acceptance",
+  "labels": [
+    "pass",
+    "fail",
+    "unclear"
+  ],
+  "criteria": [
+    "graphite pencil monochrome",
+    "exactly two people",
+    "mother left standing beside doorway",
+    "daughter right seated at small table",
+    "both people and envelope visible",
+    "sealed unopened envelope visually clear",
+    "no text captions or panel grid",
+    "no extra event/person or closed ending"
+  ],
+  "comparison": "Compare the tightened drawing/sealed-envelope prompt with the saved prose baseline; entire prompt variant, not a proof of any single phrase.",
+  "scope": "Same saved English synthetic scene; two repeats at seed 42. Both graphite line drawing and clearly sealed envelope must be supported visually; unclear is not acceptance."
+}

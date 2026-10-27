@@ -9,3 +9,6 @@ httpx~=0.28
 
 # Configuration
 python-dotenv~=1.2
+
+# Decode and validate local scene sketches before storing/serving them.
+Pillow~=12.3

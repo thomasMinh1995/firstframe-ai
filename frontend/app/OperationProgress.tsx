@@ -4,7 +4,7 @@ import { progressCopy, planProgressGroups, type OperationStep } from "./progress
 
 export function OperationProgress({ steps, failed, timing, language, dirty = false }: {
   steps: OperationStep[]; failed: boolean; language: UiLanguage; dirty?: boolean;
-  timing: { kind: "analyze" | "plan" | "review" | "scene-suggestions"; startedAt: number; finishedAt: number | null };
+  timing: { kind: "analyze" | "plan" | "review" | "scene-suggestions" | "scene-sketches"; startedAt: number; finishedAt: number | null };
 }) {
   const [now, setNow] = useState(timing.startedAt);
   useEffect(() => {

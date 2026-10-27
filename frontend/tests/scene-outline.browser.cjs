@@ -26,7 +26,7 @@ const path = require('node:path');
  await pop().getByRole('tab',{name:'Dàn cảnh',exact:true}).click();
  assert.equal(await pop().locator('[role=tabpanel]:visible textarea').count(),2);
  await pop().getByLabel('Bạn muốn người xem cảm nhận điều gì? · tùy chọn',{exact:true}).fill('Còn xa cách nhưng quan tâm.');
- await pop().getByRole('tab',{name:'Phác hình',exact:true}).click();assert.match(await pop().innerText(),/Chưa triển khai tạo ảnh/);
+ await pop().getByRole('tab',{name:'Phác hình',exact:true}).click();assert.match(await pop().innerText(),/Không cần ảnh để lưu/);
  await pop().getByRole('tab',{name:'Nội dung',exact:true}).click();assert.equal(await pop().getByLabel('Chuyện gì xảy ra trong cảnh này?',{exact:true}).inputValue(),'  Cha đặt thư.\n\nCon gái nhìn, chưa mở.  ');
  await pop().getByLabel('Tên cảnh',{exact:true}).press('Escape');assert.equal(await pop().count(),0);
  assert.equal((await read(`/api/projects/${seed.id}`)).scene_outline.scenes.length,0);

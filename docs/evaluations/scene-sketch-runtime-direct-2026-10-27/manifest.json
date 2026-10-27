@@ -1,0 +1,32 @@
+{
+  "prompt_version": "scene-sketch-direct-v3",
+  "model_calls": 0,
+  "provider_checks": "unit/API/browser with fake image provider",
+  "parameters_unchanged": {
+    "width": 768,
+    "height": 432,
+    "steps": 9,
+    "seed": 42,
+    "quantize": 4,
+    "low_ram": true,
+    "mlx_cache_limit_gb": 2,
+    "timeout_seconds": 180,
+    "model_revision": "b3a8f31115a11f2f9e2fa0bfbc8d78dcc3e6568b",
+    "mflux_version": "0.23.0",
+    "mlx_version": "0.32.4"
+  },
+  "exact_match_previous_real_trials": [
+    "repair-workshop",
+    "empty-platform"
+  ],
+  "previous_real_trial": "docs/evaluations/scene-sketch-direct-two-scenes-2026-10-27",
+  "hashes": {
+    "backend/app/infrastructure/scene_images.py": "a7b32bc0fa499703757677fd42b32c13e4c1359ac76db0f08cad591166c21e31",
+    "backend/app/api/routes/scene_sketches.py": "a197fd827be9c9b161f5064777b3039748b00a5bd292977a83f5782c6b1b3506",
+    "backend/tests/test_scene_sketch_prompt.py": "0fe784ec579466414ce8fed560e51f823017b0ce2a99f39c36b5ec93e4a04794",
+    "backend/tests/test_scene_sketches.py": "f999a6396708cb244ee461f8f15adb1f08c52a240b43569e007340388b76d389",
+    "backend/tests/fixtures/scene_sketch_direct_prompts.json": "c65abac1be212d3f378037f97d94bff71b418cce20354dcd37959f5918464db3",
+    "frontend/tests/scene-sketch.browser.cjs": "b852ea55aa727a10bdc5368cda1a9a4ee05683adc82745cbea1d3f54723c6a46"
+  },
+  "samples_sha256": "6570205424b7536fcdaa877c020fb6c1c47865cdb0c7e90e919659a1f95bee3d"
+}
