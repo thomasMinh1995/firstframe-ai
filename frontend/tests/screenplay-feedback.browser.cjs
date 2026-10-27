@@ -14,7 +14,7 @@ const {randomUUID:uuid}=require('node:crypto');
  p=await req(url,'PUT',{...payload(p),scene_outline:{id:p.scene_outline.id,version:p.scene_outline.version,scenes:[0,1].map(()=>({id:uuid(),title:'Cảnh trùng tên',action:'Cha đặt thư. Con gái chưa mở.'}))}});
  p=await req(url+'/screenplay','POST',{revision:p.revision,request_id:uuid()});
  const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto('http://127.0.0.1:3034');
- const area=page.locator('.screenplay'),main=area.locator('.screenplay-columns > .screenplay-scene'),panel=area.locator('.screenplay-feedback');
+ const area=page.locator('.screenplay'),main=area.locator('.screenplay-author-fields'),panel=area.locator('.screenplay-feedback');
  const latest=()=>panel.locator(':scope > .script-review').first(),text=()=>main.getByLabel('Nội dung hành động',{exact:true});
  const save=async()=>{await area.getByRole('button',{name:'Lưu kịch bản',exact:true}).click();await page.getByText('Đã lưu kịch bản và mọi sửa đang chờ.',{exact:true}).waitFor()};
  const generate=async()=>{await panel.getByRole('button',{name:'Nhận góp ý cảnh này',exact:true}).click();await latest().getByRole('group',{name:'Ghi nhận của tác giả'}).waitFor()};
@@ -41,6 +41,7 @@ const {randomUUID:uuid}=require('node:crypto');
  assert.equal(await latest().getByRole('button',{name:'Đến phần đang viết',exact:true}).count(),0);await latest().getByText(/Góp ý thuộc nguồn trước/).waitFor();
  await req('/__test/control','POST',{lose_response_suffix:url+'/screenplay-reviews/stream'});
  await panel.getByRole('button',{name:'Nhận góp ý cảnh này',exact:true}).click();await page.locator('.save-toolbar .error').waitFor();
+ await area.locator('.screenplay-feedback-tools > summary').click();await area.locator('.screenplay-feedback-tools > summary').click();
  assert.ok(await panel.getByRole('button',{name:'Nhận góp ý cảnh này',exact:true}).isDisabled());await inspect();
  await latest().getByRole('group',{name:'Ghi nhận của tác giả'}).waitFor();assert.equal((await req('/__test/state')).review_requests,3);
  // Invalid evidence and timeout are retained failures, never rendered as verified notes.

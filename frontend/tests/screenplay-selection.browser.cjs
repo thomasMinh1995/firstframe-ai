@@ -17,7 +17,7 @@ const {randomUUID:uuid}=require('node:crypto');
  p=await req(url,'PUT',{...payload(p),screenplay:{id:script.id,version:script.version,scenes:script.scenes}});
  const savedOutline=structuredClone(p.scene_outline);
  const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto('http://127.0.0.1:3034');
- const area=page.locator('.screenplay'),main=area.locator('.screenplay-columns > .screenplay-scene'),reader=area.locator('.screenplay-reading');
+ const area=page.locator('.screenplay'),main=area.locator('.screenplay-author-fields'),reader=area.locator('.screenplay-reading');
  const full=reader.locator(':scope > .screenplay-full-text'),nav=area.getByRole('navigation',{name:'Các cảnh kịch bản'});
  const action=()=>main.getByLabel('Nội dung hành động',{exact:true}),choose=()=>reader.getByRole('button',{name:'Chọn bản đã đọc cho M4',exact:true});
  const save=async()=>{await area.getByRole('button',{name:'Lưu kịch bản',exact:true}).click();await page.getByText('Đã lưu kịch bản và mọi sửa đang chờ.',{exact:true}).waitFor()};

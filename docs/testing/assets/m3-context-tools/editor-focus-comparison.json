@@ -1,0 +1,99 @@
+{
+  "scope": "Synthetic QA fixtures only; no real model. The original failing run has a DB snapshot but no event trace.",
+  "original_failed_run_saved_scene": {
+    "heading": "Lá thư  Cha đặt thư.  Con gái nhìn 🙂.  ",
+    "blocks": []
+  },
+  "unconditional_navigation_focus": {
+    "focus": {
+      "callbacks": [
+        "()=>{var n;let e=null==(n=document.getElementById(V))?void 0:n.querySelector(\".screenplay-author-fields\");if(e){let n=e.querySelector(\"input\");null==n||n.scrollIntoView({block:\"center\"}),null==n||n.focus({preventScroll:!0})}G(null)}",
+        "()=>{var n;let t=window.innerWidth<=760?190:130,i=document.activeElement,s=null==i?void 0:i.getBoundingClientRect(),c=s&&s.bottom>t&&s.top<window.innerHeight?null==i?void 0:i.closest(\"[data-workspace-stage]\"):null,a=null!=(n=null!=c?c:e.filter(n=>n.getBoundingClientRect().top<=t).at(-1))?n:e[0];a&&r(a.dataset.workspaceStage)}"
+      ],
+      "before": "TEXTAREA",
+      "host": "_r_5_",
+      "after": "INPUT"
+    },
+    "expected": {
+      "heading": "Lá thư",
+      "text": "  Cha đặt thư.\n\nCon gái nhìn 🙂.  "
+    },
+    "ui": {
+      "heading": "Lá thư  Cha đặt thư.  Con gái nhìn 🙂.  ",
+      "action": ""
+    },
+    "putScene": {
+      "id": "8e5d252b-20c9-4c79-95a7-17a9c3966308",
+      "source_scene_id": "1d4d70f0-f9f6-4334-bd1b-bf870e4fe55a",
+      "heading": "Lá thư  Cha đặt thư.  Con gái nhìn 🙂.  ",
+      "blocks": []
+    },
+    "savedScene": {
+      "id": "8e5d252b-20c9-4c79-95a7-17a9c3966308",
+      "source_scene_id": "1d4d70f0-f9f6-4334-bd1b-bf870e4fe55a",
+      "heading": "Lá thư  Cha đặt thư.  Con gái nhìn 🙂.  ",
+      "blocks": []
+    },
+    "sourceUnchanged": true,
+    "requests": {
+      "writing": 0,
+      "review": 0,
+      "image": 0
+    }
+  },
+  "guarded_navigation_focus": {
+    "focus": {
+      "callbacks": [
+        "()=>{var n;let e=null==(n=document.getElementById(V))?void 0:n.querySelector(\".screenplay-author-fields\");if(e&&document.activeElement===P.current&&!e.contains(document.activeElement)){let n=e.querySelector(\"input\");null==n||n.scrollIntoView({block:\"center\"}),null==n||n.focus({preventScroll:!0})}U(null)}",
+        "()=>{var n;let t=window.innerWidth<=760?190:130,i=document.activeElement,s=null==i?void 0:i.getBoundingClientRect(),c=s&&s.bottom>t&&s.top<window.innerHeight?null==i?void 0:i.closest(\"[data-workspace-stage]\"):null,a=null!=(n=null!=c?c:e.filter(n=>n.getBoundingClientRect().top<=t).at(-1))?n:e[0];a&&r(a.dataset.workspaceStage)}"
+      ],
+      "before": "TEXTAREA",
+      "host": "_r_5_",
+      "after": "TEXTAREA"
+    },
+    "expected": {
+      "heading": "Lá thư",
+      "text": "  Cha đặt thư.\n\nCon gái nhìn 🙂.  "
+    },
+    "ui": {
+      "heading": "Lá thư",
+      "action": "  Cha đặt thư.\n\nCon gái nhìn 🙂.  "
+    },
+    "putScene": {
+      "id": "473c978f-b32e-4fb0-805e-deb5b0775469",
+      "source_scene_id": "56e5a887-b1b6-4beb-af47-628d0031326d",
+      "heading": "Lá thư",
+      "blocks": [
+        {
+          "id": "344e4cf5-3f1c-48ee-8ba3-e908c0274cf0",
+          "kind": "action",
+          "text": "  Cha đặt thư.\n\nCon gái nhìn 🙂.  ",
+          "speaker": ""
+        }
+      ]
+    },
+    "savedScene": {
+      "id": "473c978f-b32e-4fb0-805e-deb5b0775469",
+      "source_scene_id": "56e5a887-b1b6-4beb-af47-628d0031326d",
+      "heading": "Lá thư",
+      "blocks": [
+        {
+          "kind": "action",
+          "text": "  Cha đặt thư.\n\nCon gái nhìn 🙂.  ",
+          "speaker": "",
+          "id": "344e4cf5-3f1c-48ee-8ba3-e908c0274cf0"
+        }
+      ]
+    },
+    "sourceUnchanged": true,
+    "requests": {
+      "writing": 0,
+      "review": 0,
+      "image": 0
+    },
+    "support": {
+      "heading": "Lá thư",
+      "instructions": "Giữ khoảng lặng."
+    }
+  }
+}

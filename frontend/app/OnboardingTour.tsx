@@ -90,7 +90,7 @@ function copy(step: TourStep, p: Props) {
     case "choices": return p.questionCount
       ? "Mỗi lượt một câu hỏi. Câu trả lời cũ vẫn ở phía trên để bạn đọc và sửa; những lựa chọn này dẫn đường cho story plan."
       : "Chưa có câu hỏi bổ sung. Bạn vẫn có thể hỏi thêm, hoặc xem lại các lựa chọn trước khi đồng ý tạo bản phát triển.";
-    case "draft": return "Đọc các card ngắn theo đường chữ S, từ số nhỏ đến lớn. Trên điện thoại, card xếp thành một cột theo đúng thứ tự. Khi muốn phát triển từng cảnh, xem hướng dẫn ngắn tại vùng M2 Dàn cảnh. M3 có vùng soạn kịch bản thủ công từ dàn cảnh đã lưu.";
+    case "draft": return "Đọc các card ngắn theo đường chữ S, từ số nhỏ đến lớn. Trên điện thoại, card xếp thành một cột theo đúng thứ tự. Khi muốn phát triển từng cảnh, xem hướng dẫn ngắn tại vùng M2 Dàn cảnh. Ở M3, chọn một cảnh trên danh sách thẳng rồi viết; bản đã lưu nằm bên cạnh. Mở nguồn dàn cảnh, phác họa hoặc góp ý khi cần.";
     case "save": return "Xong chỉ đóng ô sửa. Dùng Lưu thay đổi để giữ nội dung trước khi rời đi. Trạng thái Đã lưu xác nhận bản trên máy này; chưa có đồng bộ tài khoản.";
   }
 }
@@ -117,7 +117,7 @@ function instructions(step: TourStep, hasDraft: boolean): string[] {
       "Nhận phản hồi trên bản hiện tại lưu trước rồi mới gửi AI. Sửa tiếp khiến góp ý cũ chỉ còn để tham khảo; hãy lưu trước khi rời đi.",
       "Đề xuất và lịch sử cho xem bản AI, bản trước và câu trả lời cũ. Chỉ nhận hoặc khôi phục khi bạn chủ động chọn.",
       "Nếu hai tab xung đột revision, phần đang sửa được giữ. Đọc báo lỗi trước khi quyết định tiếp tục.",
-      "Lưu dàn cảnh M2 rồi bắt đầu M3: tự viết hoặc chọn phương án AI cho từng cảnh, lưu, đọc toàn bản đã lưu và chọn nguồn M4. Cảnh còn thiếu vẫn lưu nháp được; không cần AI để hoàn tất đường viết tay. Chọn nguồn chưa phải xuất bản.",
+      "Lưu dàn cảnh M2 rồi bắt đầu M3: chọn cảnh để tự viết; nguồn, ảnh và góp ý nằm trong phần hỗ trợ thu gọn. AI viết thử chỉ thay cảnh khi bạn chọn dùng. Lưu, đọc toàn bản đã lưu và chọn nguồn M4. Cảnh còn thiếu vẫn lưu nháp được; không cần AI để hoàn tất đường viết tay. Chọn nguồn chưa phải xuất bản.",
       "Hướng dẫn sử dụng luôn mở lại được. Khu Công cụ chứa các công cụ bổ sung."];
   }
 }
