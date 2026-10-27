@@ -6,6 +6,8 @@ import { stagingLabels, type Scene, type SceneOutline, type SceneVersion, type S
 
 import type {Screenplay, ScreenplayVersion, ScreenplayProposal, ScriptScene, SceneWritingInput} from "./screenplayTypes";
 
+import {reviewNoteSupported,reviewSourceMatches,type ScreenplayReview,type ReviewSource,type ReviewNote} from "./screenplayReviewTypes";
+
 export type StoryDraft = { title: string; logline: string; sections: StoryPlanSection[] };
 export type Feedback = GenerateResponse["evaluation"] & { artifact_id?: string };
 export type AuthorContext = {
@@ -39,6 +41,7 @@ export type Project = {
   versions: DraftVersion[];
   clarification_history: ClarificationVersion[];
   plan_generations?: PlanGeneration[]; applicable_plan_ids?: string[];
+  screenplay_reviews?:ScreenplayReview[];current_screenplay_review_ids?:string[];
   screenplay_proposals?:ScreenplayProposal[];applicable_screenplay_proposal_ids?:string[];
   pending_screenplay_proposal_id?:string;pending_screenplay_previews?:Record<string,ScriptScene>;
   screenplay?: Screenplay | null; screenplay_versions?: ScreenplayVersion[]; screenplay_source_is_current?: boolean;
@@ -58,7 +61,7 @@ export type ProgressEvent = {
 };
 
 export async function streamProjectOperation(
-  project: Project, kind: "analyze" | "plan" | "review" | "scene-suggestions" | "scene-sketches" | "screenplay-proposals",
+  project: Project, kind: "analyze" | "plan" | "review" | "scene-suggestions" | "scene-sketches" | "screenplay-proposals" | "screenplay-reviews",
   onProgress: (event: ProgressEvent) => void, language: UiLanguage = "vi", input?: SceneWritingInput | SceneSuggestionInput | {request_id: string; scene_id: string; instructions: string},
 ): Promise<Project> {
   const copy = progressCopy[language];
@@ -172,8 +175,9 @@ export function sameEditableContent(a: Project, b: Project): boolean {
     (p.scene_sketches ?? []).filter(s => s.status === "discarded").map(s => s.id)];
   const scriptDecisions=(p:Project)=>(p.screenplay_proposals??[]).filter(x=>x.preview_scene!==null||['applied','discarded'].includes(x.status))
     .map(x=>[x.id,x.status==='applied'||x.status==='discarded'?x.status:null,x.preview_scene]);
-  return JSON.stringify([scriptDecisions(a),left, previews(a), ideaEdits(a), ideaDecisions(a), imageDecisions(a)])
-    === JSON.stringify([scriptDecisions(b),right, previews(b), ideaEdits(b), ideaDecisions(b), imageDecisions(b)]);
+  const reviewDecisions=(p:Project)=>(p.screenplay_reviews??[]).filter(r=>r.status==='discarded'||r.notes.some(n=>n.assessment!==null)).map(r=>[r.id,r.status==='discarded',r.notes.map(n=>[n.id,n.assessment])]);
+  return JSON.stringify([reviewDecisions(a),scriptDecisions(a),left, previews(a), ideaEdits(a), ideaDecisions(a), imageDecisions(a)])
+    === JSON.stringify([reviewDecisions(b),scriptDecisions(b),right, previews(b), ideaEdits(b), ideaDecisions(b), imageDecisions(b)]);
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -238,6 +242,8 @@ function isProject(value: unknown): value is Project {
       && Object.entries(value.selected_scene_sketches).every(([k,v]) => uuid(k) && uuid(v))))
     && (value.applicable_sketch_ids === undefined || (Array.isArray(value.applicable_sketch_ids) && value.applicable_sketch_ids.every(uuid)))
     && (value.applicable_scene_proposal_ids === undefined || strings(value.applicable_scene_proposal_ids))
+    && (value.screenplay_reviews===undefined||(Array.isArray(value.screenplay_reviews)&&value.screenplay_reviews.length<=100&&value.screenplay_reviews.every(isScreenplayReview)))
+    && (value.current_screenplay_review_ids===undefined||(Array.isArray(value.current_screenplay_review_ids)&&value.current_screenplay_review_ids.every(uuid)))
     && (value.screenplay_proposals===undefined||(Array.isArray(value.screenplay_proposals)&&value.screenplay_proposals.length<=100&&value.screenplay_proposals.every(isScreenplayProposal)))
     && (value.applicable_screenplay_proposal_ids===undefined||(Array.isArray(value.applicable_screenplay_proposal_ids)&&value.applicable_screenplay_proposal_ids.every(uuid)))
     && (value.screenplay == null || isScreenplay(value.screenplay))
@@ -354,4 +360,26 @@ function isScreenplayProposal(v:unknown):v is ScreenplayProposal {
   const target=v.source_screenplay.scenes.find(s=>s.id===v.target_scene_id);
   return !!target&&[v.scene,v.preview_scene].every(s=>s===null||(isScriptScene(s)&&s.id===target.id&&s.source_scene_id===target.source_scene_id))
     &&(!['ready','applied'].includes(String(v.status))||v.scene!==null);
+}
+
+function isScreenplayReview(v:unknown):v is ScreenplayReview {
+  if(!isRecord(v)||!uuid(v.id)||typeof v.created_at!=='string'||!Number.isInteger(v.source_revision)||Number(v.source_revision)<0
+    ||typeof v.source_content!=='string'||!isScreenplay(v.source_screenplay)||(v.source_outline!==null&&!isSceneOutline(v.source_outline))
+    ||!uuid(v.target_scene_id)||!v.source_screenplay.scenes.some(s=>s.id===v.target_scene_id)||typeof v.instructions!=='string'
+    ||!['pending','ready','failed','discarded'].includes(String(v.status))||typeof v.question!=='string'||typeof v.prompt_version!=='string'
+    ||!isRecord(v.parameters)||(v.provider!==null&&typeof v.provider!=='string')||(v.model!==null&&typeof v.model!=='string')
+    ||(v.error!==null&&typeof v.error!=='string')||!Array.isArray(v.sources)||v.sources.length>1500||!Array.isArray(v.notes)||v.notes.length>6)return false;
+  const script=v.source_screenplay;
+  if(!v.sources.every(s=>isRecord(s)&&typeof s.id==='string'&&typeof s.label==='string'&&typeof s.text==='string'
+    &&['screenplay','author_choice','context'].includes(String(s.category))&&['text','speaker','heading','choice','context'].includes(String(s.field))
+    &&(s.scene_id===null||uuid(s.scene_id))&&(s.block_id===null||uuid(s.block_id))&&reviewSourceMatches(script,s as ReviewSource))
+    ||new Set(v.sources.map(s=>s.id)).size!==v.sources.length)return false;
+  return v.notes.every(n=>isRecord(n)&&uuid(n.id)&&['intent_mismatch','craft','uncertain'].includes(String(n.kind))
+    &&typeof n.observation==='string'&&!!n.observation.trim()&&Array.from(n.observation).length<=2000
+    &&typeof n.impact==='string'&&!!n.impact.trim()&&Array.from(n.impact).length<=2000
+    &&typeof n.suggestion==='string'&&Array.from(n.suggestion).length<=2000
+    &&(n.assessment===null||['helpful','misleading','uncertain','dismissed'].includes(String(n.assessment)))
+    &&Array.isArray(n.evidence)&&n.evidence.length>=1&&n.evidence.length<=4&&n.evidence.every(e=>isRecord(e)&&typeof e.source_id==='string'
+      &&typeof e.quote==='string'&&!!e.quote.trim()&&Array.from(e.quote).length<=1000)
+    &&reviewNoteSupported(v as ScreenplayReview,n as ReviewNote))&&new Set(v.notes.map(n=>n.id)).size===v.notes.length;
 }

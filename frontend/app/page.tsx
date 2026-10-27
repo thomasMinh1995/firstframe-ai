@@ -40,7 +40,7 @@ export default function Home() {
   const [steps, setSteps] = useState<OperationStep[]>([]);
   const [operationFailed, setOperationFailed] = useState(false);
   const [operationTiming, setOperationTiming] = useState<{
-    kind: "analyze" | "plan" | "review" | "scene-suggestions" | "scene-sketches" | "screenplay-proposals"; startedAt: number; finishedAt: number | null;
+    kind: "analyze" | "plan" | "review" | "scene-suggestions" | "scene-sketches" | "screenplay-proposals" | "screenplay-reviews"; startedAt: number; finishedAt: number | null;
   } | null>(null);
   const dirty = project !== null && saved !== null
     && JSON.stringify(editableProject(project)) !== JSON.stringify(editableProject(saved));
@@ -563,6 +563,34 @@ export default function Home() {
             canUse={!feedbackChanged&&!project.pending_screenplay_proposal_id&&!project.pending_scene_proposal_id&&!project.pending_staging_use
               &&JSON.stringify(project.screenplay)===JSON.stringify(saved.screenplay)&&JSON.stringify(project.scene_outline)===JSON.stringify(saved.scene_outline)}
             onPreview={(id,scene)=>setProject(current=>current?{...current,pending_screenplay_previews:{...current.pending_screenplay_previews,[id]:scene}}:current)}
+            canNavigateReview={!feedbackChanged&&JSON.stringify(project.screenplay)===JSON.stringify(saved.screenplay)&&JSON.stringify(project.scene_outline)===JSON.stringify(saved.scene_outline)}
+            onReview={input=>{
+              setSteps([{stage:"prepare",status:"active",occurrence:1}]);setOperationFailed(false);
+              setOperationTiming({kind:"screenplay-reviews",startedAt:performance.now(),finishedAt:null});
+              return run("Đang đọc cảnh đã lưu để góp ý…",async()=>{
+                try{const next=await persist();if(!next)return;
+                  setSteps(items=>applyProgress(items,{stage:"prepare",status:"completed"}));
+                  accept(await streamProjectOperation(next,"screenplay-reviews",event=>setSteps(items=>applyProgress(items,event)),progressLanguage(next.response_language),input));
+                  setNotice("Đã lưu góp ý riêng. Trích dẫn khớp nguồn không xác nhận nhận xét đúng; bạn tự cân nhắc và sửa.");
+                }catch(caught){setOperationFailed(true);throw caught;}
+                finally{setOperationTiming(t=>t?{...t,finishedAt:performance.now()}:t);}
+              },true);
+            }}
+            onReviewInspect={async()=>{let checked=false;await run("Đang kiểm tra góp ý đã lưu…",async()=>{
+              const next=await projectRequest(`/${project.id}`);
+              if(dirty){if(!sameEditableContent(saved,next))throw new Error("Nội dung đã đổi ở cửa sổ khác. Bản đang sửa vẫn giữ; hãy tải bản sao trước khi mở lại.");
+                setSaved(next);setProject(current=>current?{...current,revision:next.revision,screenplay_reviews:next.screenplay_reviews,current_screenplay_review_ids:next.current_screenplay_review_ids}:current);
+              }else accept(next);checked=true;
+            });return checked;}}
+            onReviewDiscard={id=>void run("Đang lưu và bỏ lượt góp ý…",async()=>{
+              const next=await persist();if(!next)return;
+              accept(await projectRequest(`/${next.id}/screenplay-reviews/${id}/discard`,"POST",{revision:next.revision}));
+            })}
+            onReviewAssess={(reviewId,noteId,assessment)=>void run("Đang lưu ghi nhận về góp ý…",async()=>{
+              const next=await projectRequest(`/${project.id}/screenplay-reviews/${reviewId}/notes/${noteId}/assessment`,"POST",{revision:project.revision,assessment});
+              setSaved(next);setProject(current=>current?{...current,revision:next.revision,screenplay_reviews:next.screenplay_reviews,current_screenplay_review_ids:next.current_screenplay_review_ids}:current);
+              setNotice("Đã lưu ghi nhận về góp ý; không sửa hoặc tự lưu kịch bản đang viết.");
+            })}
             onWrite={input=>{
               setSteps([{stage:"prepare",status:"active",occurrence:1}]);setOperationFailed(false);
               setOperationTiming({kind:"screenplay-proposals",startedAt:performance.now(),finishedAt:null});

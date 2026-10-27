@@ -80,3 +80,45 @@ class WrittenScene(BaseModel):
 class SceneWritingResult(BaseModel):
     model_config = ConfigDict(extra="forbid")
     scene: WrittenScene
+
+
+class ReviewSource(BaseModel):
+    id: str
+    label: str
+    text: str
+    category: Literal["screenplay", "author_choice", "context"]
+    scene_id: SceneId | None = None
+    block_id: SceneId | None = None
+    field: Literal["text", "speaker", "heading", "choice", "context"]
+
+
+class ReviewEvidence(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    source_id: str = Field(min_length=1, max_length=200)
+    quote: str = Field(min_length=1, max_length=1000)
+
+
+class ScriptReviewNote(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    kind: Literal["intent_mismatch", "craft", "uncertain"]
+    observation: str = Field(min_length=1, max_length=2000)
+    impact: str = Field(min_length=1, max_length=2000)
+    suggestion: str = Field(default="", max_length=2000)
+    evidence: list[ReviewEvidence] = Field(min_length=1, max_length=4)
+
+
+class SceneReviewResult(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    notes: list[ScriptReviewNote] = Field(max_length=6)
+    question: str = Field(default="", max_length=2000)
+
+
+class SavedReviewNote(ScriptReviewNote):
+    id: SceneId
+    assessment: Literal["helpful", "misleading", "uncertain", "dismissed"] | None = None
+
+
+class ReviewAssessment(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    revision: int = Field(ge=0)
+    assessment: Literal["helpful", "misleading", "uncertain", "dismissed"]
