@@ -1,4 +1,5 @@
 // Disposable API/SQLite and fake reviewer; no real model requests.
+const {openScriptScene}=require('./screenplay-browser-helpers.cjs');
 const {chromium}=require('playwright'),assert=require('node:assert/strict'),fs=require('node:fs/promises'),path=require('node:path');
 const {randomUUID:uuid}=require('node:crypto');
 (async()=>{
@@ -19,7 +20,7 @@ const {randomUUID:uuid}=require('node:crypto');
  const generate=async()=>{await panel.getByRole('button',{name:'Nhận góp ý cảnh này',exact:true}).click();await latest().getByRole('group',{name:'Ghi nhận của tác giả'}).waitFor()};
  const inspect=()=>panel.getByRole('button',{name:'Kiểm tra góp ý đã lưu',exact:true}).click();
  const writes=s=>s.calls.filter(c=>c.method!=='GET').length;
- await main.getByRole('button',{name:'Thêm hành động',exact:true}).click();await text().fill('Con gái nhìn thư, chưa mở.');await generate();
+ await openScriptScene(area,0,{legacy:true});await main.getByRole('button',{name:'Thêm hành động',exact:true}).click();await text().fill('Con gái nhìn thư, chưa mở.');await generate();
  p=await read();const original=structuredClone(p.screenplay),first=structuredClone(p.screenplay_reviews[0]);
  assert.equal(first.source_screenplay.scenes[0].blocks[0].text,'Con gái nhìn thư, chưa mở.');assert.deepEqual(p.screenplay,original);
  let before=await req('/__test/state');
@@ -50,7 +51,7 @@ const {randomUUID:uuid}=require('node:crypto');
  }
  await text().fill('Tác giả vẫn tự sửa sau lỗi.');await save();
  await req('/__test/control','POST',{fail_review:false,empty_review:true});await panel.getByRole('button',{name:'Nhận góp ý cảnh này',exact:true}).click();
- await latest().getByText(/Điều đó không chứng minh cảnh đúng ý hoặc hay/).waitFor();await page.reload();await text().waitFor();assert.equal(await text().inputValue(),'Tác giả vẫn tự sửa sau lỗi.');
+ await latest().getByText(/Điều đó không chứng minh cảnh đúng ý hoặc hay/).waitFor();await page.reload();await openScriptScene(area,0,{legacy:true});await text().waitFor();assert.equal(await text().inputValue(),'Tác giả vẫn tự sửa sau lỗi.');
  p=await read();assert.equal(p.screenplay_reviews.length,6);assert.equal(p.screenplay_reviews[0].notes[0].assessment,'misleading');assert.deepEqual(p.feedback_source,seed.feedback_source);
  const state=await req('/__test/state');assert.equal(state.review_requests,6);assert.equal(state.writing_requests,0);assert.equal(state.image_requests,0);assert.deepEqual(state.provider_stages,[]);
  for(const width of [1280,390,320]){await page.setViewportSize({width,height:900});await panel.scrollIntoViewIfNeeded();assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));await page.screenshot({path:`/tmp/firstframe-m3-feedback-${width}.png`});}

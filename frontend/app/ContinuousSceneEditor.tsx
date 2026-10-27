@@ -73,7 +73,7 @@ export function ContinuousSceneEditor({scene, scope, blockLimit, onChange}: {
     change({...scene, blocks: next}, {id: next[index]?.id ?? next[index - 1]?.id ?? placeholderId, field: 'text'}, true);
   }
 
-  return <div ref={host} className="screenplay-scene continuous-scene" aria-label="Editor liền mạch thử nghiệm">
+  return <div ref={host} className="screenplay-scene continuous-scene" aria-label="Editor liền mạch">
     <label>Tiêu đề cảnh<input maxLength={500} value={scene.heading} onChange={e => change({...scene, heading: e.target.value})}/></label>
     <div className="continuous-toolbar">
       <label htmlFor={`${prefix}-format`}>Đang viết</label>
@@ -106,6 +106,6 @@ export function ContinuousSceneEditor({scene, scope, blockLimit, onChange}: {
     {undo && undo.scope === scope && JSON.stringify(scene) === undo.after && <button type="button" onClick={() => {
       onChange(undo.before); setUndo(null); setError('');
     }}>Hoàn tác thao tác đoạn</button>}
-    <p className="storage-note">Đang thử editor cho cảnh này; lưu và bản nguồn vẫn dùng luồng hiện có. Không cần thêm thoại để lưu nháp.</p>
+    <p className="storage-note">Chuyển cảnh giữ phần đang viết. Chọn Lưu kịch bản để mở lại lần sau; không cần thêm thoại để lưu nháp.</p>
   </div>;
 }

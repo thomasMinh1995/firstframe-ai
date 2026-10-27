@@ -1,4 +1,5 @@
 // Disposable SQLite/API, no model calls. Run against a fresh ui_workspace_fixture.
+const {openScriptScene}=require('./screenplay-browser-helpers.cjs');
 const {chromium}=require('playwright');const assert=require('node:assert/strict');
 const fs=require('node:fs/promises');const path=require('node:path');const {randomUUID:uuid}=require('node:crypto');
 (async()=>{
@@ -20,7 +21,7 @@ const fs=require('node:fs/promises');const path=require('node:path');const {rand
  const save=async()=>{await area.getByRole('button',{name:'Lưu kịch bản',exact:true}).click();await page.getByText('Đã lưu kịch bản và mọi sửa đang chờ.',{exact:true}).waitFor()};
  const nav=area.getByRole('navigation',{name:'Các cảnh kịch bản'});
  await area.getByRole('button',{name:'Bắt đầu viết từ bản dàn cảnh này',exact:true}).click();
- await area.getByLabel('Tiêu đề cảnh',{exact:true}).waitFor();p=await read();const original=structuredClone(p.screenplay.source_outline);
+ await openScriptScene(area,0,{legacy:true});await area.getByLabel('Tiêu đề cảnh',{exact:true}).waitFor();p=await read();const original=structuredClone(p.screenplay.source_outline);
  assert.deepEqual(p.screenplay.scenes.map(s=>s.source_scene_id),scenes.map(s=>s.id));
  assert.equal(await area.locator('.script-block').count(),0);
  await area.getByRole('button',{name:'Thêm hành động',exact:true}).click();
@@ -58,12 +59,12 @@ const fs=require('node:fs/promises');const path=require('node:path');const {rand
  await area.getByRole('button',{name:'Kiểm tra kịch bản đã lưu',exact:true}).click();await page.locator('.save-toolbar .error').filter({hasText:'cửa sổ khác'}).waitFor();
  assert.equal(await area.getByLabel('Nội dung hành động',{exact:true}).inputValue(),'Bản chưa lưu cần giữ.');
  // Reload only the disposable buffer after verifying backup/rejection.
- await page.reload();await area.getByLabel('Tiêu đề cảnh',{exact:true}).waitFor();
+ await page.reload();await openScriptScene(area,0,{legacy:true});await area.getByLabel('Tiêu đề cảnh',{exact:true}).waitFor();
  assert.equal(await area.getByLabel('Nội dung hành động',{exact:true}).inputValue(),action);
  // Changed M2 text and current M1 do not replace the captured source or screenplay.
  p=await read();const changed=structuredClone(p.scene_outline);changed.scenes[0].action='Diễn tiến M2 mới.';
  await request(url,'PUT',{...payload(p),scene_outline:{id:changed.id,version:changed.version,scenes:changed.scenes}});
- await page.reload();await area.getByText(/Dàn cảnh hoặc ý đồ hiện tại khác nguồn/).waitFor();
+ await page.reload();await openScriptScene(area,0,{legacy:true});await area.getByText(/Dàn cảnh hoặc ý đồ hiện tại khác nguồn/).waitFor();
  assert.match(await area.locator('.screenplay-source').innerText(),/Cha đặt thư. Con gái chưa mở/);assert.doesNotMatch(await area.locator('.screenplay-source').innerText(),/Diễn tiến M2 mới/);
  assert.deepEqual((await read()).screenplay,savedScript);
  // Starting a new draft after editing checkpoints that work. Lost response is inspected, never retried.
@@ -81,7 +82,7 @@ const fs=require('node:fs/promises');const path=require('node:path');const {rand
  const previous=history.locator(':scope > div').first();await previous.getByText('Đọc phiên bản này',{exact:true}).click();
  assert.match(await previous.innerText(),/Sửa trước khi bắt đầu bản khác/);
  await previous.getByRole('button',{name:'Khôi phục kịch bản này',exact:true}).click();
- await page.getByText('Đã khôi phục kịch bản; M1/M2 và bản trước vẫn giữ.',{exact:true}).waitFor();
+ await page.getByText('Đã khôi phục kịch bản; M1/M2 và bản trước vẫn giữ.',{exact:true}).waitFor();await openScriptScene(area,0,{legacy:true});
  assert.equal(await area.getByLabel('Nội dung hành động',{exact:true}).inputValue(),'Sửa trước khi bắt đầu bản khác.');
  p=await read();assert.deepEqual(p.screenplay_versions.at(-1).screenplay,newScript);
  assert.deepEqual(p.screenplay.source_outline,original);assert.equal(p.scene_outline.scenes[0].action,'Diễn tiến M2 mới.');
@@ -93,7 +94,7 @@ const fs=require('node:fs/promises');const path=require('node:path');const {rand
  // Successful project switching saves the buffer before leaving and recovers it when reopened.
  await area.getByLabel('Nội dung hành động',{exact:true}).fill('Lưu trước khi đổi dự án.');
  await page.getByRole('button',{name:'Dự án mới',exact:true}).click();await page.waitForFunction(id=>document.querySelector('#project-picker')?.value!==id,seed.id);
- await page.locator('#project-picker').selectOption(seed.id);await area.getByLabel('Tiêu đề cảnh',{exact:true}).waitFor();
+ await page.locator('#project-picker').selectOption(seed.id);await openScriptScene(area,0,{legacy:true});await area.getByLabel('Tiêu đề cảnh',{exact:true}).waitFor();
  assert.equal(await area.getByLabel('Nội dung hành động',{exact:true}).inputValue(),'Lưu trước khi đổi dự án.');
  const after=await request('/__test/state');assert.deepEqual(after.provider_stages,before.provider_stages);assert.equal(after.image_requests,before.image_requests);assert.equal(after.writing_requests,before.writing_requests);
  assert.deepEqual(errors,[]);

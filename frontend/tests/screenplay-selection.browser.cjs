@@ -1,4 +1,5 @@
 // Disposable SQLite/API with fake providers: manual and AI-choice paths, no real model.
+const {openScriptScene}=require('./screenplay-browser-helpers.cjs');
 const {chromium}=require('playwright'),assert=require('node:assert/strict'),fs=require('node:fs/promises'),path=require('node:path');
 const {randomUUID:uuid}=require('node:crypto');
 (async()=>{
@@ -21,7 +22,7 @@ const {randomUUID:uuid}=require('node:crypto');
  const action=()=>main.getByLabel('Nội dung hành động',{exact:true}),choose=()=>reader.getByRole('button',{name:'Chọn bản đã đọc cho M4',exact:true});
  const save=async()=>{await area.getByRole('button',{name:'Lưu kịch bản',exact:true}).click();await page.getByText('Đã lưu kịch bản và mọi sửa đang chờ.',{exact:true}).waitFor()};
  const select=async()=>{await choose().click();await page.getByText('Đã giữ snapshot nguồn M4; chưa xuất bản và không tự lưu phần đang sửa.',{exact:true}).waitFor()};
- assert.equal(await full.locator('article').count(),2);await full.getByText('Cảnh chưa viết.',{exact:true}).waitFor();assert.ok(await choose().isDisabled());
+ await openScriptScene(area,0,{legacy:true});assert.equal(await full.locator('article').count(),2);await full.getByText('Cảnh chưa viết.',{exact:true}).waitFor();assert.ok(await choose().isDisabled());
  assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('firstframe:onboarding')).status),'completed','M3 must not reset an old completed tour');
  await action().fill('  Cha đặt thư.\n\nCon gái nhìn, chưa mở.  ');assert.match(await full.innerText(),/Bản lưu ban đầu/);assert.ok(!(await full.innerText()).includes('Con gái nhìn, chưa mở'));
  await reader.getByRole('button',{name:'Quay lại sửa cảnh 2',exact:true}).click();await main.getByRole('button',{name:'Thêm lời thoại',exact:true}).click();
@@ -51,7 +52,7 @@ const {randomUUID:uuid}=require('node:crypto');
  const pendingSaved=(await read()).screenplay;await select();p=await read();assert.deepEqual(p.screenplay_handoff.screenplay,pendingSaved);assert.equal(p.screenplay_proposals.at(-1).status,'ready');
  const beforeAiSave=structuredClone(p.screenplay_handoff);await save();assert.deepEqual((await read()).screenplay_handoff,beforeAiSave);await select();
  p=await read();assert.equal(p.screenplay_proposals.at(-1).status,'applied');assert.deepEqual(p.screenplay_handoff.screenplay,p.screenplay);assert.equal(p.screenplay_selections.length,5);
- assert.deepEqual(p.screenplay_selections[0].screenplay,manual);await page.reload();await reader.getByRole('button',{name:'Đã chọn nguồn này cho M4',exact:true}).waitFor();
+ assert.deepEqual(p.screenplay_selections[0].screenplay,manual);await page.reload();await openScriptScene(area,0,{legacy:true});await reader.getByRole('button',{name:'Đã chọn nguồn này cho M4',exact:true}).waitFor();
  const handoff=reader.locator('.screenplay-handoff');await handoff.locator(':scope > summary').click();assert.equal(await handoff.locator('[data-reading-scene]').count(),2);
  const state=await req('/__test/state');assert.equal(state.writing_requests,1);assert.equal(state.review_requests,0);assert.equal(state.image_requests,0);assert.deepEqual(state.provider_stages,[]);
  before=await req('/__test/state');const provenance=handoff.getByText('Nguồn M2 và ý đồ đi cùng bản này',{exact:true});await provenance.click();

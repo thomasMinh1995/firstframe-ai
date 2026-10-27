@@ -1,0 +1,16 @@
+const assert = require('node:assert/strict'), fs = require('node:fs');
+const React = require('react'), {renderToStaticMarkup} = require('react-dom/server');
+const {SavedScript} = require(process.argv[2] + '/ScreenplayReading.js');
+const saved = JSON.parse(fs.readFileSync('../docs/evaluations/m3-scene-review-qwen7b-2026-10-27/inputs.json', 'utf8'))[0].project.screenplay;
+const before = structuredClone(saved);
+const html = renderToStaticMarkup(React.createElement(SavedScript, {script: saved, activeSceneId: saved.scenes[1].id}));
+assert.equal((html.match(/data-reading-scene=/g) || []).length, saved.scenes.length);
+assert.deepEqual(Array.from(html.matchAll(/data-reading-scene="([^"]+)"/g), m => m[1]), saved.scenes.map(s => s.id));
+assert.equal((html.match(/data-selected="true"/g) || []).length, 1);
+assert.ok(!html.includes('<input') && !html.includes('<textarea'), 'comparison is read-only');
+assert.deepEqual(saved, before);
+const blank = structuredClone(saved); blank.scenes[0].blocks = []; blank.scenes[1].blocks[0].text = '<img src=x onerror=alert(1)>';
+const empty = renderToStaticMarkup(React.createElement(SavedScript, {script: blank}));
+assert.match(empty, /Cảnh chưa viết/); assert.match(empty, /&lt;img/); assert.ok(!empty.includes('<img'));
+assert.equal((empty.match(/data-selected="true"/g) || []).length, 0);
+console.log('PASS M3 comparison: saved snapshot only, read-only, scene order/completeness, active ID, escaped text, no mutation');
