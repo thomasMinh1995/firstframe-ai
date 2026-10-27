@@ -150,6 +150,7 @@ def dataset_snapshot(project: ProjectResponse) -> dict[str, object]:
     return project.model_dump(mode="json", exclude={
         "versions", "clarification_history", "plan_generations", "applicable_plan_ids",
         "scene_proposals", "staging_proposals", "applicable_scene_proposal_ids",
+        "scene_sketches", "selected_scene_sketches", "applicable_sketch_ids",
     })
 
 

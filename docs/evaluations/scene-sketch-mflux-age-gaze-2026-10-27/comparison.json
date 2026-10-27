@@ -1,0 +1,81 @@
+{
+  "reviewed_at": "2026-10-27T03:27:35.714695+00:00",
+  "reviewer": "Codex manual visual comparison; not model scoring, PO or user acceptance",
+  "rows": [
+    {
+      "criterion": "graphite pencil monochrome",
+      "baseline": "pass",
+      "candidate": "pass",
+      "observation": "Visible drawn contours, pencil hatching and white paper remain; no photographic skin/fabric texture."
+    },
+    {
+      "criterion": "exactly two people",
+      "baseline": "pass",
+      "candidate": "pass",
+      "observation": "Exactly two people remain."
+    },
+    {
+      "criterion": "mother left standing beside doorway",
+      "baseline": "pass",
+      "candidate": "pass",
+      "observation": "Mother remains standing at the left doorway."
+    },
+    {
+      "criterion": "daughter right seated at small table",
+      "baseline": "pass",
+      "candidate": "pass",
+      "observation": "Daughter remains seated at the right-hand table."
+    },
+    {
+      "criterion": "both people and envelope visible",
+      "baseline": "pass",
+      "candidate": "pass",
+      "observation": "Both people and the entire rectangular envelope between the daughter's hands are visible."
+    },
+    {
+      "criterion": "sealed unopened envelope visually clear",
+      "baseline": "pass",
+      "candidate": "pass",
+      "observation": "Envelope outline is flat and intact, triangular flap seam lies flat, with no raised flap or protruding contents; this is visual depiction, not proof of physical sealing."
+    },
+    {
+      "criterion": "no text captions or panel grid",
+      "baseline": "pass",
+      "candidate": "pass",
+      "observation": "No visible words, labels, speech bubbles or panel grid."
+    },
+    {
+      "criterion": "no extra event/person or closed ending",
+      "baseline": "pass",
+      "candidate": "pass",
+      "observation": "No extra actor, dialogue, event or explicit resolution is shown; a still frame cannot certify the whole story."
+    },
+    {
+      "criterion": "mother visually mature mid-fifties relative to adult daughter",
+      "baseline": "unclear",
+      "candidate": "pass",
+      "observation": "Compared with the youthful baseline mother, new face has mature eye/mouth lines and reads as a generation older than the daughter. Approximate mid-fifties appearance only, not proof of an exact age."
+    },
+    {
+      "criterion": "daughter head and gaze toward mother, not down at envelope",
+      "baseline": "fail",
+      "candidate": "pass",
+      "observation": "Daughter now turns her head left in three-quarter view, chin slightly raised and eyes toward her mother; baseline face was lowered toward the envelope."
+    }
+  ],
+  "focus_criteria_added_before_run": [
+    "mother visually mature mid-fifties relative to adult daughter",
+    "daughter head and gaze toward mother, not down at envelope"
+  ],
+  "old_scores_preserved": true,
+  "baseline_seconds": [
+    28.833,
+    31.356
+  ],
+  "candidate_seconds": [
+    29.295,
+    32.915
+  ],
+  "images_identical": true,
+  "scope": "One manually written English prompt for one synthetic scene. Two repeats with seed 42 are one repeated visual outcome, not independent content cases. No runtime changes."
+}

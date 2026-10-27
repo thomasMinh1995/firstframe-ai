@@ -1,0 +1,10 @@
+{
+  "freeze_verified": true,
+  "requests": 2,
+  "retries": 0,
+  "results_sha256": "5c41bb26e662884aac03c6910d858615f534d7e03b9bc5554bbfb17ad447af77",
+  "images": {
+    "empty-platform.png": "f69463b43d9632f7c8f9ece4f2223afc0da688ec3076a89180155c67029b4e63",
+    "repair-workshop.png": "f16efafa5b4cc982dd3186946cdd55f91b90c958cff18e4e00902fb2c1f2ac37"
+  }
+}

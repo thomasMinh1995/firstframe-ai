@@ -248,6 +248,26 @@ class SceneProposal(BaseModel):
     applied_revision: int | None = None
 
 
+class SceneSketch(BaseModel):
+    id: SceneId
+    scene_id: SceneId
+    created_at: str
+    source_revision: int
+    source_content: str
+    source_outline: SceneOutline
+    instructions: str = ""
+    prompt: str
+    prompt_version: str = "scene-sketch-v1"
+    provider: str = "mflux"
+    model: str = "filipstrand/Z-Image-Turbo-mflux-4bit"
+    parameters: dict[str, object] = Field(default_factory=dict)
+    status: Literal["pending", "ready", "failed", "discarded"] = "pending"
+    asset_id: SceneId | None = None
+    error: str | None = None
+    diagnostic: str | None = None
+    duration_seconds: float | None = None
+
+
 class ProjectResponse(BaseModel):
     response_language: ResponseLanguage = "auto"
     id: str
@@ -270,6 +290,14 @@ class ProjectResponse(BaseModel):
     scene_versions: list[SceneOutlineVersion] = Field(default_factory=list)
     scene_proposals: list[SceneProposal] = Field(default_factory=list)
     staging_proposals: list[SceneProposal] = Field(default_factory=list)
+    scene_sketches: list[SceneSketch] = Field(default_factory=list)
+    selected_scene_sketches: dict[SceneId, SceneId] = Field(default_factory=dict)
+
+    @computed_field
+    @property
+    def applicable_sketch_ids(self) -> list[str]:
+        return [s.id for s in self.scene_sketches if s.status == "ready"
+                and s.source_outline == self.scene_outline and s.source_content == self.content_key()]
 
     @computed_field
     @property

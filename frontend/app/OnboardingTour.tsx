@@ -90,7 +90,7 @@ function copy(step: TourStep, p: Props) {
     case "choices": return p.questionCount
       ? "Mỗi lượt một câu hỏi. Câu trả lời cũ vẫn ở phía trên để bạn đọc và sửa; những lựa chọn này dẫn đường cho story plan."
       : "Chưa có câu hỏi bổ sung. Bạn vẫn có thể hỏi thêm, hoặc xem lại các lựa chọn trước khi đồng ý tạo bản phát triển.";
-    case "draft": return "Đọc các card ngắn theo đường chữ S, từ số nhỏ đến lớn. Trên điện thoại, card xếp thành một cột theo đúng thứ tự. Dàn cảnh và Kịch bản sẽ có hướng dẫn riêng khi được hỗ trợ.";
+    case "draft": return "Đọc các card ngắn theo đường chữ S, từ số nhỏ đến lớn. Trên điện thoại, card xếp thành một cột theo đúng thứ tự. Khi muốn phát triển từng cảnh, xem hướng dẫn ngắn tại vùng M2 Dàn cảnh. Kịch bản M3 chưa triển khai.";
     case "save": return "Xong chỉ đóng ô sửa. Dùng Lưu thay đổi để giữ nội dung trước khi rời đi. Trạng thái Đã lưu xác nhận bản trên máy này; chưa có đồng bộ tài khoản.";
   }
 }
@@ -219,6 +219,12 @@ export function OnboardingTour(props: Props) {
       {record.stepId === "save" && <button className="secondary" onClick={() => {
         tour.pause(); focusAfter(".workspace-library > summary");
       }}>Khám phá đề xuất và lịch sử</button>}
+      {record.stepId === "save" && <button className="secondary" onClick={() => {
+        tour.pause();
+        const guide = document.querySelector<HTMLButtonElement>('.scene-outline .scene-info');
+        if (guide?.getAttribute("aria-expanded") === "false") guide.click();
+        focusAfter(guide ?? "#workspace-outline");
+      }}>Khám phá dàn cảnh</button>}
       <div className="tour-footer">
         <span>Bước {tourSteps.indexOf(record.stepId) + 1}/{tourSteps.length}</span>
         <button className="secondary" disabled={!previous} onClick={() => previous && tour.navigate(previous)}>Trước</button>

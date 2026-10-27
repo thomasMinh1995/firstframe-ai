@@ -2,7 +2,7 @@ import type { GenerateResponse, StoryPlanSection } from "./apiClient";
 import { progressCopy } from "./progressState";
 import type { UiLanguage } from "./language";
 import type { ResponseLanguage } from "./language";
-import { stagingLabels, type Scene, type SceneOutline, type SceneVersion, type SceneHandoff, type SceneProposal, type SceneSuggestionInput, type StagingIdea, type StagingUse } from "./sceneTypes";
+import { stagingLabels, type Scene, type SceneOutline, type SceneVersion, type SceneHandoff, type SceneProposal, type SceneSuggestionInput, type StagingIdea, type StagingUse, type SceneSketch } from "./sceneTypes";
 
 export type StoryDraft = { title: string; logline: string; sections: StoryPlanSection[] };
 export type Feedback = GenerateResponse["evaluation"] & { artifact_id?: string };
@@ -39,6 +39,7 @@ export type Project = {
   plan_generations?: PlanGeneration[]; applicable_plan_ids?: string[];
   scene_outline?: SceneOutline | null; scene_versions?: SceneVersion[];
   staging_proposals?: SceneProposal[];
+  scene_sketches?: SceneSketch[]; selected_scene_sketches?: Record<string, string>; applicable_sketch_ids?: string[];
   scene_proposals?: SceneProposal[]; applicable_scene_proposal_ids?: string[];
   pending_staging_use?: StagingUse; pending_staging_edits?: Record<string, string>;
   pending_scene_proposal_id?: string; pending_scene_previews?: Record<string, Scene[]>;
@@ -52,8 +53,8 @@ export type ProgressEvent = {
 };
 
 export async function streamProjectOperation(
-  project: Project, kind: "analyze" | "plan" | "review" | "scene-suggestions",
-  onProgress: (event: ProgressEvent) => void, language: UiLanguage = "vi", input?: SceneSuggestionInput,
+  project: Project, kind: "analyze" | "plan" | "review" | "scene-suggestions" | "scene-sketches",
+  onProgress: (event: ProgressEvent) => void, language: UiLanguage = "vi", input?: SceneSuggestionInput | {request_id: string; scene_id: string; instructions: string},
 ): Promise<Project> {
   const copy = progressCopy[language];
   // Backend heartbeats arrive every 15s. A silent connection must not lock the editor forever.
@@ -134,6 +135,9 @@ export async function projectRequest(path: string, method = "GET", body?: unknow
   if (!isProject(data)) throw new Error("Dự án trả về không hợp lệ. Nội dung đang sửa được giữ nguyên.");
   return data;
 }
+export function sceneSketchUrl(projectId: string, sketchId: string): string {
+  return `${baseUrl}/api/projects/${encodeURIComponent(projectId)}/scene-sketches/${encodeURIComponent(sketchId)}/image`;
+}
 export function editableProject(project: Project) {
   return { revision: project.revision, response_language: project.response_language,
     title: project.title, idea: project.idea,
@@ -156,8 +160,10 @@ export function sameEditableContent(a: Project, b: Project): boolean {
     .filter(i => i.preview_text !== null).map(i => [i.id, i.preview_text]));
   const ideaDecisions = (project: Project) => (project.staging_proposals ?? []).flatMap(p => (p.staging_ideas ?? [])
     .filter(i => i.status !== "available").map(i => [i.id, i.status, i.applied_text]));
-  return JSON.stringify([left, previews(a), ideaEdits(a), ideaDecisions(a)])
-    === JSON.stringify([right, previews(b), ideaEdits(b), ideaDecisions(b)]);
+  const imageDecisions = (p: Project) => [p.selected_scene_sketches ?? {},
+    (p.scene_sketches ?? []).filter(s => s.status === "discarded").map(s => s.id)];
+  return JSON.stringify([left, previews(a), ideaEdits(a), ideaDecisions(a), imageDecisions(a)])
+    === JSON.stringify([right, previews(b), ideaEdits(b), ideaDecisions(b), imageDecisions(b)]);
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -217,6 +223,10 @@ function isProject(value: unknown): value is Project {
     && (value.applicable_plan_ids === undefined || strings(value.applicable_plan_ids))
     && (value.scene_proposals === undefined || (Array.isArray(value.scene_proposals) && value.scene_proposals.every(isSceneProposal)))
     && (value.staging_proposals === undefined || (Array.isArray(value.staging_proposals) && value.staging_proposals.every(p => isSceneProposal(p) && p.mode === "staging")))
+    && (value.scene_sketches === undefined || (Array.isArray(value.scene_sketches) && value.scene_sketches.length <= 20 && value.scene_sketches.every(isSketch)))
+    && (value.selected_scene_sketches === undefined || (isRecord(value.selected_scene_sketches)
+      && Object.entries(value.selected_scene_sketches).every(([k,v]) => uuid(k) && uuid(v))))
+    && (value.applicable_sketch_ids === undefined || (Array.isArray(value.applicable_sketch_ids) && value.applicable_sketch_ids.every(uuid)))
     && (value.applicable_scene_proposal_ids === undefined || strings(value.applicable_scene_proposal_ids))
     && (value.scene_outline == null || isSceneOutline(value.scene_outline))
     && (value.scene_versions === undefined || (Array.isArray(value.scene_versions)
@@ -278,6 +288,14 @@ function isStagingIdea(v: unknown): v is StagingIdea {
 function isSceneHandoff(v: unknown): v is SceneHandoff {
   return isRecord(v) && uuid(v.outline_id) && uuid(v.source_id) && positive(v.version)
     && Number.isInteger(v.project_revision) && Number(v.project_revision) >= 0 && isScenes(v.scenes);
+}
+function isSketch(v: unknown): v is SceneSketch {
+  return isRecord(v) && uuid(v.id) && uuid(v.scene_id) && typeof v.created_at === "string"
+    && Number.isInteger(v.source_revision) && Number(v.source_revision) >= 0 && typeof v.source_content === "string"
+    && isSceneOutline(v.source_outline) && ["instructions", "prompt", "prompt_version", "provider", "model"].every(k => typeof v[k] === "string")
+    && isRecord(v.parameters) && ["pending", "ready", "failed", "discarded"].includes(String(v.status))
+    && (v.asset_id === null || uuid(v.asset_id)) && (v.error === null || typeof v.error === "string")
+    && (v.duration_seconds === null || (typeof v.duration_seconds === "number" && Number.isFinite(v.duration_seconds) && v.duration_seconds >= 0));
 }
 function isPlanGeneration(value: unknown): value is PlanGeneration {
   return isRecord(value) && typeof value.id === "string" && typeof value.created_at === "string"

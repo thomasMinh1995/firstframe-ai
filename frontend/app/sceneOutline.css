@@ -68,3 +68,8 @@
 .staging-idea blockquote { margin: 12px 0; padding-left: 12px; border-left: 3px solid var(--accent); }
 .staging-idea cite { color: var(--muted); font-size: 12px; }
 .staging-idea textarea { width: 100%; box-sizing: border-box; min-height: 88px; }
+.scene-handoff { margin-top: 16px; }
+.scene-handoff li { border-top: 1px solid var(--line); padding: 8px 0; overflow-wrap: anywhere; }
+.scene-sketch-image { display: block; width: 100%; height: auto; }
+.scene-sketches textarea { display: block; width: 100%; box-sizing: border-box; min-height: 80px; }
+.scene-sketches details { margin: 16px 0; overflow-wrap: anywhere; }

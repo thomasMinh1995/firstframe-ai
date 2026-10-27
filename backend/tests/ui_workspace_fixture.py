@@ -23,6 +23,8 @@ from test_generate_workflow import FakeProvider
 from test_projects import develop_project, start_project
 
 from app.api.routes import projects as routes
+from app.api.routes import scene_sketches
+from test_scene_sketches import FakeImageProvider
 from app.application import workflow
 from app.api.schemas.scenes import SceneSuggestionResult, StagingResult
 from app.application.ai_provider import ProviderTimeoutError, StructuredResult
@@ -70,6 +72,8 @@ class WorkspaceProvider(FakeProvider):
 
 
 provider = WorkspaceProvider()
+image_provider = FakeImageProvider()
+scene_sketches.get_image_provider = lambda: image_provider
 routes.get_project_store = lambda: ProjectStore(directory / "projects.sqlite3")
 workflow.create_provider = lambda: provider
 app = create_app()
@@ -101,12 +105,14 @@ async def record(request: Request, call_next):
 
 @app.get("/__test/state")
 def inspect():
-    return {**state, "provider_stages": [r.stage for r in provider.requests]}
+    return {**state, "provider_stages": [r.stage for r in provider.requests], "image_requests": len(image_provider.requests)}
 
 
 @app.post("/__test/control")
 async def control(values: dict):
-    assert set(values) <= {"fail_critic", "hold_suffix", "lose_response_suffix", "release", "fail_scenes", "bad_staging", "empty_staging"}
+    assert set(values) <= {"fail_critic", "hold_suffix", "lose_response_suffix", "release", "fail_scenes", "bad_staging", "empty_staging", "fail_sketch"}
+    if "fail_sketch" in values:
+        image_provider.error = ProviderTimeoutError("fixture image timeout") if values["fail_sketch"] else None
     for key in ("bad_staging", "empty_staging"):
         if key in values:
             setattr(provider, key, values[key])
