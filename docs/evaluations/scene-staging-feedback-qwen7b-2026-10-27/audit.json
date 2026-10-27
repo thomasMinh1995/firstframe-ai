@@ -1,0 +1,16 @@
+{
+  "audited_at": "2026-10-27T00:38:44.464079+00:00",
+  "freeze_verified": true,
+  "requests": 3,
+  "retries": 0,
+  "contract_valid": 3,
+  "all_under_120_seconds": true,
+  "quote_ids_and_literal_matches_verified": true,
+  "semantic_relevance_not_certified": true,
+  "result_sha256": {
+    "results.json": "45f725e4641c79e27582c21d2119e841c6363d24e743486f6ddecec4668bdad6",
+    "results/comedy-staging.json": "d5160a305b492e8959bea117663d609a1fe62a453b91d8bb51c5b960a6ee34a6",
+    "results/limits-staging.json": "2dd58d0f6adcf8c22d02b568575923fe340e5a8ea63804a7daded33af906e8ed",
+    "results/quiet-staging.json": "7ab381a98300a0a4848e05544953662a1c22b686ac59aced71299c09ea31ed2c"
+  }
+}

@@ -13,7 +13,7 @@ from pydantic import (
 )
 
 from app.api.schemas.story import AnalysisResponse, EvaluationResponse
-from app.api.schemas.scenes import Scene, SceneId, SceneOutlineEdit
+from app.api.schemas.scenes import Scene, SceneId, SceneOutlineEdit, SceneText, StagingIdea, StagingSource, StagingUse
 from app.application.language import ResponseLanguage
 from app.application.clarification import MAX_CHOICES
 
@@ -51,6 +51,8 @@ class ProjectUpdate(RevisionRequest):
     draft: StoryDraft | None
     scene_outline: SceneOutlineEdit | None = None
     scene_proposal_id: SceneId | None = None
+    staging_use: StagingUse | None = None
+    staging_idea_edits: dict[SceneId, SceneText] = Field(default_factory=dict, max_length=100)
     scene_proposal_previews: dict[SceneId, Annotated[list[Scene], Field(max_length=60)]] = Field(default_factory=dict, max_length=100)
 
 
@@ -228,12 +230,15 @@ class SceneProposal(BaseModel):
     source_revision: int
     source_content: str
     source_outline: SceneOutline
-    mode: Literal["list", "append", "develop"]
+    mode: Literal["list", "append", "develop", "staging"]
     target_scene_id: str | None = None
     instructions: str = ""
     status: Literal["pending", "ready", "failed", "applied", "discarded"] = "pending"
     scenes: list[Scene] = Field(default_factory=list)
     transitions: dict[str, str] = Field(default_factory=dict)
+    staging_ideas: list[StagingIdea] = Field(default_factory=list)
+    staging_sources: list[StagingSource] = Field(default_factory=list)
+    staging_question: str = ""
     preview_scenes: list[Scene] | None = None
     provider: str | None = None
     model: str | None = None
@@ -264,11 +269,12 @@ class ProjectResponse(BaseModel):
     scene_outline: SceneOutline | None = None
     scene_versions: list[SceneOutlineVersion] = Field(default_factory=list)
     scene_proposals: list[SceneProposal] = Field(default_factory=list)
+    staging_proposals: list[SceneProposal] = Field(default_factory=list)
 
     @computed_field
     @property
     def applicable_scene_proposal_ids(self) -> list[str]:
-        return [p.id for p in self.scene_proposals if p.status == "ready"
+        return [p.id for p in [*self.scene_proposals, *self.staging_proposals] if p.status == "ready"
                 and p.source_outline == self.scene_outline and p.source_content == self.content_key()]
 
     @computed_field

@@ -43,5 +43,16 @@ const outline={id:randomUUID(),version:1,scenes:[s],source:{id:randomUUID(),proj
  assert.deepEqual(await streamProjectOperation(project,'scene-suggestions',()=>{},'vi',input),withProposal);
  assert.equal(calls,1);
 
+ const idea={id:randomUUID(),field:'blocking',evidence:[{source_id:'anchor',quote:s.action}],reason:'Khoảng cách',suggestion:'Lùi tay',purpose:'Giữ lựa chọn',status:'available',preview_text:null,applied_text:null,applied_revision:null};
+ const staging={...proposal,mode:'staging',staging_ideas:[idea],staging_sources:[{id:'anchor',label:'Diễn tiến',text:s.action}],staging_question:''};
+ const withStaging={...project,staging_proposals:[staging]};
+ assert.deepEqual(await decode(withStaging),withStaging);
+ const use={proposal_id:staging.id,idea_id:idea.id,value:'Tự chỉnh'};
+ const stageEdit=editableProject({...withStaging,pending_staging_use:use,pending_staging_edits:{[idea.id]:'Tự chỉnh'}});
+ assert.deepEqual(stageEdit.staging_use,use);assert.deepEqual(stageEdit.staging_idea_edits,{[idea.id]:'Tự chỉnh'});
+ assert.equal('staging_sources' in stageEdit,false);
+ await assert.rejects(()=>decode({...withStaging,staging_proposals:[{...staging,staging_ideas:[{...idea,field:'action'}]}]}),/không hợp lệ/);
+ assert.equal(sameEditableContent(withStaging,{...withStaging,staging_proposals:[{...staging,staging_ideas:[{...idea,preview_text:'Cửa sổ B'}]}]}),false);
+ assert.equal(sameEditableContent(withStaging,{...withStaging,staging_proposals:[{...staging,staging_ideas:[{...idea,status:'discarded'}]}]}),false,'another author decision is not AI metadata');
  console.log('PASS M2 transport: legacy compatibility, read-only source/history excluded, text preserved, invalid sources/IDs/fields rejected');
 })().catch(e=>{console.error(e);process.exit(1)});

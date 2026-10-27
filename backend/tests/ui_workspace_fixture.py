@@ -24,7 +24,7 @@ from test_projects import develop_project, start_project
 
 from app.api.routes import projects as routes
 from app.application import workflow
-from app.api.schemas.scenes import SceneSuggestionResult
+from app.api.schemas.scenes import SceneSuggestionResult, StagingResult
 from app.application.ai_provider import ProviderTimeoutError, StructuredResult
 from app.application.project_store import ProjectStore
 from app.main import create_app
@@ -34,8 +34,21 @@ class WorkspaceProvider(FakeProvider):
     fail_critic = False
     plans = 0
     fail_scenes = False
+    bad_staging = False
+    empty_staging = False
 
     def request_structured(self, request):
+        if request.stage == "staging_generation":
+            self.requests.append(request)
+            data = json.loads(request.input_text)
+            anchor = next(s for s in data["sources"] if s["id"] == f"scene:{data['target_scene_id']}:action")
+            ideas = [{"field": key, "evidence": [{"source_id": anchor["id"], "quote": "Quote không có nguồn" if self.bad_staging else anchor["text"][:80]}],
+                      "reason": "Khoảng cách quanh lá thư giữ quyền lựa chọn.", "suggestion": text,
+                      "purpose": "Để người xem cảm nhận khoảng lặng."} for key, text in (
+                          ("blocking", "Cha lùi một bước, giữ lối đi trống."), ("setting", "Giữ mặt bàn trống quanh lá thư."),
+                          ("composition", "Để lá thư giữa hai nhân vật trong cùng khung."))]
+            return StructuredResult(output=StagingResult(ideas=[] if self.empty_staging else ideas,
+                question="Bạn muốn giữ khoảng cách giữa hai người thế nào?" if self.empty_staging else ""), model="fixture-staging")
         if request.stage == "scene_generation":
             self.requests.append(request)
             if self.fail_scenes:
@@ -93,7 +106,10 @@ def inspect():
 
 @app.post("/__test/control")
 async def control(values: dict):
-    assert set(values) <= {"fail_critic", "hold_suffix", "lose_response_suffix", "release", "fail_scenes"}
+    assert set(values) <= {"fail_critic", "hold_suffix", "lose_response_suffix", "release", "fail_scenes", "bad_staging", "empty_staging"}
+    for key in ("bad_staging", "empty_staging"):
+        if key in values:
+            setattr(provider, key, values[key])
     if "fail_scenes" in values:
         provider.fail_scenes = values["fail_scenes"]
     if "fail_critic" in values:

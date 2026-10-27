@@ -2,25 +2,23 @@
 
 import { useEffect, useId, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import type { Project } from "./projectsApi";
-import { emptyScene, stagingLabels, type Scene, type SceneOutline, type StagingKey, type SceneSuggestionInput } from "./sceneTypes";
+import { emptyScene, stagingLabels, type Scene, type SceneOutline, type StagingKey, type SceneSuggestionInput, type StagingUse, stagingGroups } from "./sceneTypes";
 import { StoryPath } from "./StoryPlanEditor";
+import { SceneStagingSuggestions } from "./SceneStagingSuggestions";
 import { SceneSuggestions } from "./SceneSuggestions";
 import { IntentDetails } from "./AuthorIntentCard";
 import "./sceneOutline.css";
 
 type Tab = "content" | "staging" | "sketch";
 const tabs: [Tab, string][] = [["content", "Nội dung"], ["staging", "Dàn cảnh"], ["sketch", "Phác hình"]];
-const groups: { title: string; keys: StagingKey[] }[] = [
-  { title: "Hành động & diễn xuất", keys: ["blocking", "performance"] },
-  { title: "Không gian & chi tiết", keys: ["setting", "lighting", "color", "costume"] },
-  { title: "Cách nhìn qua máy quay", keys: ["composition", "shot", "angle", "moment"] },
-];
+const groups = stagingGroups;
 
-export function SceneOutlineEditor({ project, saved, dirty, sourceCurrent, error, onChange, onStart, onRestore, onPrepare, onSave, onSuggest, onInspect, onDiscard, onPreviewChange, canUseProposal }: {
+export function SceneOutlineEditor({ project, saved, dirty, sourceCurrent, error, onChange, onStart, onRestore, onPrepare, onSave, onSuggest, onInspect, onDiscard, onPreviewChange, canUseProposal, onStagingEdit, onDiscardIdea }: {
   project: Project; saved: Project; dirty: boolean; sourceCurrent: boolean;
-  onChange: (outline: SceneOutline, proposalId?: string | null) => void; onStart: (versionId: string) => void;
+  onChange: (outline: SceneOutline, proposalId?: string | null, stagingUse?: StagingUse | null) => void; onStart: (versionId: string) => void;
   onRestore: (versionId: string) => void; onPrepare: () => void;
   onSave: () => void;
+  onStagingEdit: (id: string, text: string) => void; onDiscardIdea: (proposalId: string, ideaId: string) => void;
   error: string | null; canUseProposal: boolean; onPreviewChange: (id: string, scenes: Scene[]) => void;
   onSuggest: (input: SceneSuggestionInput) => Promise<void>; onInspect: () => Promise<boolean>; onDiscard: (id: string) => void;
 }) {
@@ -30,7 +28,7 @@ export function SceneOutlineEditor({ project, saved, dirty, sourceCurrent, error
   const [tab, setTab] = useState<Tab>("content");
   const [editingChoice, setEditingChoice] = useState<StagingKey | null>(null);
   const [notice, setNotice] = useState("");
-  const [undo, setUndo] = useState<{ before: Scene[]; after: string; proposalId?: string } | null>(null);
+  const [undo, setUndo] = useState<{ before: Scene[]; after: string; proposalId?: string; stagingUse?: StagingUse } | null>(null);
   const dialog = useRef<HTMLDivElement>(null);
   const list = useRef<HTMLOListElement>(null);
   const id = useId();
@@ -53,7 +51,7 @@ export function SceneOutlineEditor({ project, saved, dirty, sourceCurrent, error
   }
   function replace(scenes: Scene[], message: string) {
     if (!outline) return;
-    setUndo({ before: structuredClone(outline.scenes), after: JSON.stringify(scenes), proposalId: project.pending_scene_proposal_id });
+    setUndo({ before: structuredClone(outline.scenes), after: JSON.stringify(scenes), proposalId: project.pending_scene_proposal_id, stagingUse: project.pending_staging_use });
     onChange({ ...outline, scenes }); setNotice(message);
   }
   function add() {
@@ -77,7 +75,7 @@ export function SceneOutlineEditor({ project, saved, dirty, sourceCurrent, error
     if (JSON.stringify(outline.scenes) !== undo.after) {
       setNotice("Bạn đã sửa tiếp. Không tự ghi đè phần mới để hoàn tác."); return;
     }
-    onChange({ ...outline, scenes: structuredClone(undo.before) }, undo.proposalId ?? null); setUndo(null); setNotice("Đã hoàn tác trong bản chưa lưu.");
+    onChange({ ...outline, scenes: structuredClone(undo.before) }, undo.proposalId ?? null, undo.stagingUse ?? null); setUndo(null); setNotice("Đã hoàn tác trong bản chưa lưu.");
   }
   const fields = (key: keyof Omit<Scene, "id" | "staging_choices">, label: string, maxLength = 2000, rows = 2) => selectedScene &&
     <div className="scene-field" key={key}><label htmlFor={`${id}-${key}`}>{label}</label>
@@ -115,10 +113,10 @@ export function SceneOutlineEditor({ project, saved, dirty, sourceCurrent, error
         Dàn cảnh vẫn giữ nguồn riêng; không tự cập nhật hoặc ghi đè.</p>}
       <SceneSuggestions project={project} dirty={dirty} onSuggest={onSuggest} onInspect={onInspect} onDiscard={onDiscard}
         onPreviewChange={onPreviewChange} canUse={canUseProposal}
-        onKeepManual={() => { onChange(outline, null); setUndo(null);
+        onKeepManual={() => { onChange(outline, null, null); setUndo(null);
           setNotice("Đã giữ nội dung để tự chỉnh; chưa lưu và không đánh dấu đề xuất đã dùng. Nguồn dàn cảnh vẫn giữ nguyên."); }}
-        onUse={(scenes, proposalId) => { setUndo({ before: structuredClone(outline.scenes), after: JSON.stringify(scenes), proposalId: project.pending_scene_proposal_id });
-          onChange({ ...outline, scenes }, proposalId);
+        onUse={(scenes, proposalId) => { setUndo({ before: structuredClone(outline.scenes), after: JSON.stringify(scenes), proposalId: project.pending_scene_proposal_id, stagingUse: project.pending_staging_use });
+          onChange({ ...outline, scenes }, proposalId, null);
           setNotice("Đã đưa đề xuất vào bản đang sửa. Bạn tự chỉnh và lưu; AI chưa xác nhận chất lượng."); }} />
       <div className="scene-heading"><span>TRÌNH TỰ CẢNH · đọc theo mũi tên</span><span>{outline.scenes.length} cảnh</span></div>
       <div className="scene-canvas"><StoryPath list={list} count={outline.scenes.length} orderKey={outline.scenes.map(s => s.id).join()} />
@@ -161,9 +159,18 @@ export function SceneOutlineEditor({ project, saved, dirty, sourceCurrent, error
             <div className="scene-pair">{fields("location", "Địa điểm", 500)}{fields("time", "Thời điểm", 200)}</div>
             {fields("characters", "Nhân vật xuất hiện")}{fields("goal", "Nhân vật muốn gì?")}{fields("purpose", "Cảnh đóng góp gì cho câu chuyện?")}</>}
           {key === "staging" && <><SceneHint title="Kể cảnh này bằng hình ảnh">Không cần điền thuật ngữ điện ảnh.
-            Hai câu hỏi dưới đây đều tùy chọn; các gợi ý FirstFrame sẽ được triển khai ở gói sau.</SceneHint>
+            Hai câu hỏi dưới đây đều tùy chọn; FirstFrame dựa vào cảnh và ý đồ đã lưu để gợi ý, bạn tự quyết định.</SceneHint>
             {fields("viewer_intent", "Bạn muốn người xem cảm nhận điều gì? · tùy chọn")}
             {fields("keep_or_avoid", "Có chi tiết nào muốn giữ hoặc tránh? · tùy chọn")}
+            <SceneStagingSuggestions project={project} scene={selectedScene} canUse={canUseProposal}
+              onSuggest={onSuggest} onInspect={onInspect} onEdit={onStagingEdit} onDiscard={onDiscardIdea} onDiscardBatch={onDiscard}
+              onUse={(use, field) => {
+                const scenes = outline.scenes.map(s => s.id === selected ? { ...s,
+                  staging_choices: { ...s.staging_choices, [field]: use.value } } : s);
+                setUndo({ before: structuredClone(outline.scenes), after: JSON.stringify(scenes),
+                  proposalId: project.pending_scene_proposal_id, stagingUse: project.pending_staging_use });
+                onChange({ ...outline, scenes }, null, use); setNotice("Đã dùng một ý trong bản chưa lưu; chỉ thay mục đã nêu.");
+              }} />
             <details className="scene-choices"><summary>Các lựa chọn đang giữ · xem hoặc tự chỉnh</summary>
               {groups.map(group => <section key={group.title}><h4>{group.title}</h4>{group.keys.map(choice => <div className="scene-choice" key={choice}>
                 <div className="scene-heading"><span>{stagingLabels[choice]}</span>

@@ -61,3 +61,10 @@
 .scene-proposal-preview > ol { padding-left: 22px; }
 .scene-proposal-preview > ol > li { margin: 20px 0; }
 @media (max-width: 600px) { .scene-suggestions { padding: 12px; } .scene-suggestions textarea, .scene-suggestions select { font-size: 16px; } }
+
+.staging-feedback { margin: 20px 0; border-top: 1px solid var(--line); padding-top: 12px; }
+.staging-idea { padding: 14px 0; border-top: 1px solid var(--line); }
+.staging-idea h5 { font-size: 14px; margin: 8px 0; }
+.staging-idea blockquote { margin: 12px 0; padding-left: 12px; border-left: 3px solid var(--accent); }
+.staging-idea cite { color: var(--muted); font-size: 12px; }
+.staging-idea textarea { width: 100%; box-sizing: border-box; min-height: 88px; }

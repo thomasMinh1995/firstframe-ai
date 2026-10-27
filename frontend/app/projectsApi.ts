@@ -2,7 +2,7 @@ import type { GenerateResponse, StoryPlanSection } from "./apiClient";
 import { progressCopy } from "./progressState";
 import type { UiLanguage } from "./language";
 import type { ResponseLanguage } from "./language";
-import { stagingLabels, type Scene, type SceneOutline, type SceneVersion, type SceneHandoff, type SceneProposal, type SceneSuggestionInput } from "./sceneTypes";
+import { stagingLabels, type Scene, type SceneOutline, type SceneVersion, type SceneHandoff, type SceneProposal, type SceneSuggestionInput, type StagingIdea, type StagingUse } from "./sceneTypes";
 
 export type StoryDraft = { title: string; logline: string; sections: StoryPlanSection[] };
 export type Feedback = GenerateResponse["evaluation"] & { artifact_id?: string };
@@ -38,7 +38,9 @@ export type Project = {
   clarification_history: ClarificationVersion[];
   plan_generations?: PlanGeneration[]; applicable_plan_ids?: string[];
   scene_outline?: SceneOutline | null; scene_versions?: SceneVersion[];
+  staging_proposals?: SceneProposal[];
   scene_proposals?: SceneProposal[]; applicable_scene_proposal_ids?: string[];
+  pending_staging_use?: StagingUse; pending_staging_edits?: Record<string, string>;
   pending_scene_proposal_id?: string; pending_scene_previews?: Record<string, Scene[]>;
   scene_source_is_current?: boolean; scene_handoff?: SceneHandoff | null;
 };
@@ -137,6 +139,8 @@ export function editableProject(project: Project) {
     title: project.title, idea: project.idea,
     ...(project.pending_scene_proposal_id ? { scene_proposal_id: project.pending_scene_proposal_id } : {}),
     ...(project.pending_scene_previews && Object.keys(project.pending_scene_previews).length ? { scene_proposal_previews: project.pending_scene_previews } : {}),
+    ...(project.pending_staging_use ? { staging_use: project.pending_staging_use } : {}),
+    ...(project.pending_staging_edits && Object.keys(project.pending_staging_edits).length ? { staging_idea_edits: project.pending_staging_edits } : {}),
     constraints: project.constraints, answers: project.answers, draft: project.draft,
     ...(project.scene_outline == null ? {} : { scene_outline: {
       id: project.scene_outline.id, version: project.scene_outline.version, scenes: project.scene_outline.scenes,
@@ -148,7 +152,12 @@ export function sameEditableContent(a: Project, b: Project): boolean {
   const { revision: _b, ...right } = editableProject(b);
   const previews = (project: Project) => (project.scene_proposals ?? [])
     .filter(p => p.preview_scenes != null).map(p => [p.id, p.preview_scenes]);
-  return JSON.stringify([left, previews(a)]) === JSON.stringify([right, previews(b)]);
+  const ideaEdits = (project: Project) => (project.staging_proposals ?? []).flatMap(p => (p.staging_ideas ?? [])
+    .filter(i => i.preview_text !== null).map(i => [i.id, i.preview_text]));
+  const ideaDecisions = (project: Project) => (project.staging_proposals ?? []).flatMap(p => (p.staging_ideas ?? [])
+    .filter(i => i.status !== "available").map(i => [i.id, i.status, i.applied_text]));
+  return JSON.stringify([left, previews(a), ideaEdits(a), ideaDecisions(a)])
+    === JSON.stringify([right, previews(b), ideaEdits(b), ideaDecisions(b)]);
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -207,6 +216,7 @@ function isProject(value: unknown): value is Project {
       && value.plan_generations.every(isPlanGeneration)))
     && (value.applicable_plan_ids === undefined || strings(value.applicable_plan_ids))
     && (value.scene_proposals === undefined || (Array.isArray(value.scene_proposals) && value.scene_proposals.every(isSceneProposal)))
+    && (value.staging_proposals === undefined || (Array.isArray(value.staging_proposals) && value.staging_proposals.every(p => isSceneProposal(p) && p.mode === "staging")))
     && (value.applicable_scene_proposal_ids === undefined || strings(value.applicable_scene_proposal_ids))
     && (value.scene_outline == null || isSceneOutline(value.scene_outline))
     && (value.scene_versions === undefined || (Array.isArray(value.scene_versions)
@@ -242,13 +252,27 @@ function isSceneOutline(v: unknown): v is SceneOutline {
 function isSceneProposal(v: unknown): v is SceneProposal {
   return isRecord(v) && uuid(v.id) && typeof v.created_at === "string"
     && Number.isInteger(v.source_revision) && Number(v.source_revision) >= 0 && typeof v.source_content === "string"
-    && isSceneOutline(v.source_outline) && ["list", "append", "develop"].includes(String(v.mode))
+    && isSceneOutline(v.source_outline) && ["list", "append", "develop", "staging"].includes(String(v.mode))
     && (v.target_scene_id === null || uuid(v.target_scene_id)) && typeof v.instructions === "string"
     && ["pending", "ready", "failed", "applied", "discarded"].includes(String(v.status)) && isScenes(v.scenes)
+    && (v.staging_ideas === undefined || (Array.isArray(v.staging_ideas) && v.staging_ideas.length <= 6 && v.staging_ideas.every(isStagingIdea)))
+    && (v.staging_sources === undefined || (Array.isArray(v.staging_sources) && v.staging_sources.every(s => isRecord(s)
+      && typeof s.id === "string" && typeof s.label === "string" && typeof s.text === "string")))
+    && (v.staging_question === undefined || typeof v.staging_question === "string")
     && (v.preview_scenes == null || isScenes(v.preview_scenes))
     && isRecord(v.transitions) && Object.values(v.transitions).every(t => typeof t === "string")
     && (v.provider === null || typeof v.provider === "string") && (v.model === null || typeof v.model === "string")
     && isRecord(v.parameters) && typeof v.prompt_version === "string" && (v.error === null || typeof v.error === "string")
+    && (v.applied_revision === null || positive(v.applied_revision));
+}
+function isStagingIdea(v: unknown): v is StagingIdea {
+  return isRecord(v) && uuid(v.id) && typeof v.field === "string" && Object.hasOwn(stagingLabels, v.field)
+    && Array.isArray(v.evidence) && v.evidence.length >= 1 && v.evidence.length <= 3
+    && v.evidence.every(e => isRecord(e) && typeof e.source_id === "string" && typeof e.quote === "string" && !!e.quote.trim())
+    && ["reason", "suggestion", "purpose"].every(k => typeof v[k] === "string" && !!v[k].trim())
+    && ["available", "applied", "discarded"].includes(String(v.status))
+    && (v.preview_text === null || typeof v.preview_text === "string")
+    && (v.applied_text === null || typeof v.applied_text === "string")
     && (v.applied_revision === null || positive(v.applied_revision));
 }
 function isSceneHandoff(v: unknown): v is SceneHandoff {
