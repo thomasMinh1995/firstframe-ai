@@ -557,7 +557,20 @@ export default function Home() {
               setNotice(`Đã lưu bản nguồn M2 phiên bản ${next.scene_handoff.version}. Có thể bắt đầu soạn thủ công tại M3; chưa tự tạo nội dung kịch bản.`);
               const target=document.getElementById("workspace-script");target?.scrollIntoView({block:"start"});target?.focus({preventScroll:true});
             })} />}
-          {saved && <ScreenplayEditor key={`script:${project.id}`} project={project} dirty={dirty}
+          {saved && <ScreenplayEditor key={`script:${project.id}`} project={project} savedProject={saved} dirty={dirty}
+            onSelectSource={input=>run("Đang giữ bản đã lưu làm nguồn M4…",async()=>{
+              const next=await projectRequest(`/${project.id}/screenplay-selections`,"POST",{revision:project.revision,...input});
+              setSaved(next);setProject(current=>current?{...current,revision:next.revision,screenplay_selections:next.screenplay_selections,screenplay_handoff:next.screenplay_handoff}:current);
+              setNotice("Đã giữ snapshot nguồn M4; chưa xuất bản và không tự lưu phần đang sửa.");
+            })}
+            onSourceInspect={async()=>{let checked=false;await run("Đang kiểm tra nguồn M4 đã lưu…",async()=>{
+              const next=await projectRequest(`/${project.id}`);
+              if(dirty){
+                // Explicit inspection may refresh this isolated choice, never the author's buffer.
+                if(!sameEditableContent({...saved,screenplay_selections:next.screenplay_selections},next))throw new Error("Nội dung đã đổi ở cửa sổ khác. Bản đang sửa vẫn giữ; hãy tải bản sao trước khi mở lại.");
+                setSaved(next);setProject(current=>current?{...current,revision:next.revision,screenplay_selections:next.screenplay_selections,screenplay_handoff:next.screenplay_handoff}:current);
+              }else accept(next);checked=true;
+            });return checked;}}
             sourceDirty={feedbackChanged || JSON.stringify(project.scene_outline)!==JSON.stringify(saved.scene_outline)}
             onChange={(screenplay,proposalId)=>setProject(current=>current?{...current,screenplay,pending_screenplay_proposal_id:proposalId}:current)}
             canUse={!feedbackChanged&&!project.pending_screenplay_proposal_id&&!project.pending_scene_proposal_id&&!project.pending_staging_use

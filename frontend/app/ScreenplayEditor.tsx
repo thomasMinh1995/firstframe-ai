@@ -2,7 +2,8 @@
 
 import {useEffect,useState} from "react";
 import type {Project} from "./projectsApi";
-import type {Screenplay, ScriptScene, SceneWritingInput} from "./screenplayTypes";
+import type {Screenplay, ScriptScene, SceneWritingInput, ScreenplaySelectionInput} from "./screenplayTypes";
+import {ScreenplayReading} from "./ScreenplayReading";
 import {stagingLabels, type StagingKey} from "./sceneTypes";
 import {ScriptSceneFields} from "./ScriptSceneFields";
 import {ScreenplayProposals} from "./ScreenplayProposals";
@@ -10,7 +11,8 @@ import {ScreenplayFeedback} from "./ScreenplayFeedback";
 import type {ReviewAssessment,ReviewSource} from "./screenplayReviewTypes";
 import "./screenplay.css";
 
-export function ScreenplayEditor({project, dirty, sourceDirty, onChange, onStart, onRestore, onSave, onInspect, onWrite, onProposalInspect, onPreview, onDiscard, canUse, onReview, onReviewInspect, onReviewDiscard, onReviewAssess, canNavigateReview}: {
+export function ScreenplayEditor({project, savedProject, onSelectSource, onSourceInspect, dirty, sourceDirty, onChange, onStart, onRestore, onSave, onInspect, onWrite, onProposalInspect, onPreview, onDiscard, canUse, onReview, onReviewInspect, onReviewDiscard, onReviewAssess, canNavigateReview}: {
+  savedProject:Project;onSelectSource:(input:ScreenplaySelectionInput)=>Promise<void>;onSourceInspect:()=>Promise<boolean>;
   onReview:(input:SceneWritingInput)=>Promise<void>;onReviewInspect:()=>Promise<boolean>;onReviewDiscard:(id:string)=>void;
   onReviewAssess:(reviewId:string,noteId:string,value:ReviewAssessment)=>void;canNavigateReview:boolean;
   project: Project; dirty: boolean; sourceDirty: boolean;
@@ -20,6 +22,7 @@ export function ScreenplayEditor({project, dirty, sourceDirty, onChange, onStart
   onRestore: (id: string) => void; onSave: () => void; onInspect: () => Promise<boolean>;
 }) {
   const [pendingReference,setPendingReference]=useState<ReviewSource|null>(null);
+  const [pendingEdit,setPendingEdit]=useState<string|null>(null);
   const [selected, setSelected] = useState<string | null>(null);
   const [replace, setReplace] = useState(false);
   const [undo, setUndo] = useState<{before: Screenplay; after: string; label:string} | null>(null);
@@ -29,6 +32,11 @@ export function ScreenplayEditor({project, dirty, sourceDirty, onChange, onStart
   const scene = script?.scenes.find(s=>s.id===selected) ?? script?.scenes[0];
   const source = script?.source_outline.scenes.find(s=>s.id===scene?.source_scene_id);
   const edit = (next: ScriptScene) => script && onChange({...script,scenes:script.scenes.map(s=>s.id===next.id?next:s)});
+  useEffect(()=>{
+    if(!pendingEdit||scene?.id!==pendingEdit)return;
+    const frame=requestAnimationFrame(()=>{const node=document.querySelector<HTMLInputElement>('.screenplay-columns .screenplay-scene input');node?.scrollIntoView({block:'center'});node?.focus({preventScroll:true});setPendingEdit(null);});
+    return()=>cancelAnimationFrame(frame);
+  },[pendingEdit,scene?.id]);
   useEffect(()=>{
     if(!pendingReference||!canNavigateReview)return;
     const frame=requestAnimationFrame(()=>{
@@ -98,6 +106,8 @@ export function ScreenplayEditor({project, dirty, sourceDirty, onChange, onStart
       <button type="button" onClick={onSave}>Lưu kịch bản</button>
       <p>Chuyển cảnh chỉ giữ phần đang viết trên màn hình. Lưu để mở lại; bản nháp không cần đủ mọi cảnh. M4 xuất bản chưa triển khai.</p>
     </>}
+    <ScreenplayReading saved={savedProject} dirty={dirty} onSelect={onSelectSource} onInspect={onSourceInspect}
+      onEdit={id=>{setSelected(id);setPendingEdit(id);}}/>
     {!!project.screenplay_versions?.length && <details className="screenplay-history"><summary>Lịch sử kịch bản ({project.screenplay_versions.length})</summary>
       <p>Khôi phục sẽ lưu mọi sửa đang chờ trước, giữ bản hiện tại trong lịch sử; không thay M1/M2.</p>
       {[...project.screenplay_versions].reverse().map(v=><div key={v.id}><span>Bản {v.screenplay.version} · {v.created_at} · nguồn M2 {v.screenplay.source_outline.version}</span>
