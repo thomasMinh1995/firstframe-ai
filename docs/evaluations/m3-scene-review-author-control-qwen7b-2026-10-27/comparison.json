@@ -1,0 +1,356 @@
+{
+  "reader": "Codex; chưa phải tác giả/PO nghiệm thu",
+  "expected_and_old_grades_unchanged": true,
+  "v3": {
+    "calls": 6,
+    "parsed_outputs": 6,
+    "ready": 5,
+    "timeouts": 0,
+    "id_error_cases": 0,
+    "quote_error_cases": 0,
+    "missing_required_evidence_cases": 1,
+    "evidence_count": 11,
+    "exact_id_quote": 11,
+    "duration_seconds": {
+      "min": 8.18,
+      "max": 16.075,
+      "mean": 11.324
+    },
+    "cases": [
+      {
+        "name": "open-ending-compliant",
+        "pair": "open-ending",
+        "variant": "compliant",
+        "status_code": 200,
+        "duration_seconds": 16.075,
+        "model_calls": 1,
+        "review_status": "ready",
+        "validated_notes": 1,
+        "error": null,
+        "response_error": null,
+        "author_script_unchanged": true,
+        "parsed_output_available": true,
+        "evidence_count": 2,
+        "exact_id_quote": 2,
+        "id_quote_issues": [],
+        "missing_required_evidence": []
+      },
+      {
+        "name": "open-ending-violating",
+        "pair": "open-ending",
+        "variant": "violating",
+        "status_code": 200,
+        "duration_seconds": 8.18,
+        "model_calls": 1,
+        "review_status": "ready",
+        "validated_notes": 1,
+        "error": null,
+        "response_error": null,
+        "author_script_unchanged": true,
+        "parsed_output_available": true,
+        "evidence_count": 2,
+        "exact_id_quote": 2,
+        "id_quote_issues": [],
+        "missing_required_evidence": []
+      },
+      {
+        "name": "free-choice-compliant",
+        "pair": "free-choice",
+        "variant": "compliant",
+        "status_code": 200,
+        "duration_seconds": 11.335,
+        "model_calls": 1,
+        "review_status": "ready",
+        "validated_notes": 1,
+        "error": null,
+        "response_error": null,
+        "author_script_unchanged": true,
+        "parsed_output_available": true,
+        "evidence_count": 2,
+        "exact_id_quote": 2,
+        "id_quote_issues": [],
+        "missing_required_evidence": []
+      },
+      {
+        "name": "free-choice-violating",
+        "pair": "free-choice",
+        "variant": "violating",
+        "status_code": 200,
+        "duration_seconds": 10.391,
+        "model_calls": 1,
+        "review_status": "ready",
+        "validated_notes": 1,
+        "error": null,
+        "response_error": null,
+        "author_script_unchanged": true,
+        "parsed_output_available": true,
+        "evidence_count": 2,
+        "exact_id_quote": 2,
+        "id_quote_issues": [],
+        "missing_required_evidence": []
+      },
+      {
+        "name": "broken-flashlight-compliant",
+        "pair": "broken-flashlight",
+        "variant": "compliant",
+        "status_code": 502,
+        "duration_seconds": 10.512,
+        "model_calls": 1,
+        "review_status": "failed",
+        "validated_notes": 0,
+        "error": "MalformedProviderResponseError",
+        "response_error": "{\"detail\":\"Chưa nhận được phản hồi hợp lệ từ AI. Hãy thử lại.\"}",
+        "author_script_unchanged": true,
+        "parsed_output_available": true,
+        "evidence_count": 1,
+        "exact_id_quote": 1,
+        "id_quote_issues": [],
+        "missing_required_evidence": [
+          {
+            "note": 0,
+            "type": "missing_valid_target_text"
+          }
+        ]
+      },
+      {
+        "name": "broken-flashlight-violating",
+        "pair": "broken-flashlight",
+        "variant": "violating",
+        "status_code": 200,
+        "duration_seconds": 11.452,
+        "model_calls": 1,
+        "review_status": "ready",
+        "validated_notes": 1,
+        "error": null,
+        "response_error": null,
+        "author_script_unchanged": true,
+        "parsed_output_available": true,
+        "evidence_count": 2,
+        "exact_id_quote": 2,
+        "id_quote_issues": [],
+        "missing_required_evidence": []
+      }
+    ]
+  },
+  "v4": {
+    "calls": 6,
+    "parsed_outputs": 6,
+    "ready": 4,
+    "timeouts": 0,
+    "id_error_cases": 0,
+    "quote_error_cases": 1,
+    "missing_required_evidence_cases": 1,
+    "evidence_count": 11,
+    "exact_id_quote": 10,
+    "duration_seconds": {
+      "min": 8.575,
+      "max": 13.802,
+      "mean": 10.122
+    },
+    "cases": [
+      {
+        "name": "open-ending-compliant",
+        "pair": "open-ending",
+        "variant": "compliant",
+        "status_code": 200,
+        "duration_seconds": 13.802,
+        "model_calls": 1,
+        "review_status": "ready",
+        "validated_notes": 1,
+        "error": null,
+        "response_error": null,
+        "author_script_unchanged": true,
+        "parsed_output_available": true,
+        "evidence_count": 1,
+        "exact_id_quote": 1,
+        "id_quote_issues": [],
+        "missing_required_evidence": [],
+        "reader_assessment": {
+          "observation": "Claim sai rằng phong thư còn kín không phản ánh trạng thái tác giả yêu cầu, dù A5 nói lá thư vẫn kín.",
+          "detection": "false_compliance_claim_inside_craft",
+          "utility": "misleading_claim_and_unnecessary_paraphrase",
+          "suggestion": "Đổi thành Phong thư kín vẫn nằm trên bàn chỉ diễn đạt lại điều vốn đúng; không khuyên mở thư nữa nhưng vẫn tạo lỗi không tồn tại.",
+          "versus_v3": "Bỏ đề xuất mở thư trái ràng buộc; thay bằng nhận xét sai được gắn craft.",
+          "visible": true
+        }
+      },
+      {
+        "name": "open-ending-violating",
+        "pair": "open-ending",
+        "variant": "violating",
+        "status_code": 502,
+        "duration_seconds": 9.031,
+        "model_calls": 1,
+        "review_status": "failed",
+        "validated_notes": 0,
+        "error": "MalformedProviderResponseError",
+        "response_error": "{\"detail\":\"Chưa nhận được phản hồi hợp lệ từ AI. Hãy thử lại.\"}",
+        "author_script_unchanged": true,
+        "parsed_output_available": true,
+        "evidence_count": 4,
+        "exact_id_quote": 3,
+        "id_quote_issues": [
+          {
+            "note": 0,
+            "type": "quote_mismatch",
+            "id": "S4",
+            "actual_source_text": "Con gái nhìn cha, kéo ghế ngồi. Phong thư còn kín trên bàn.",
+            "quoted_text": "Con tha thứ cho cha. Mọi chuyện đã được giải quyết."
+          }
+        ],
+        "missing_required_evidence": [],
+        "reader_assessment": {
+          "observation": "Nhận ra xác nhận tha thứ làm mất kết mở, nhưng trả kind craft, không intent_mismatch, và không dẫn quyết định tác giả.",
+          "detection": "raw_conflict_recognized_wrong_kind_and_evidence",
+          "utility": "not_delivered_contract_failure",
+          "suggestion": "Rỗng, hợp lệ về quyền tác giả; không tự bổ sung để cứu ca.",
+          "versus_v3": "V3 phát hiện và có đủ nguồn; v4 quote câu tha thứ vào S4 vốn là hành động nhìn cha/kéo ghế, dù cũng dẫn đúng S5. Cả lượt bị từ chối.",
+          "visible": false
+        }
+      },
+      {
+        "name": "free-choice-compliant",
+        "pair": "free-choice",
+        "variant": "compliant",
+        "status_code": 200,
+        "duration_seconds": 8.876,
+        "model_calls": 1,
+        "review_status": "ready",
+        "validated_notes": 1,
+        "error": null,
+        "response_error": null,
+        "author_script_unchanged": true,
+        "parsed_output_available": true,
+        "evidence_count": 1,
+        "exact_id_quote": 1,
+        "id_quote_issues": [],
+        "missing_required_evidence": [],
+        "reader_assessment": {
+          "observation": "Vẫn coi chưa thể hiện quyết định cuối cùng là cảnh lủng củng, nay gắn craft thay intent_mismatch.",
+          "detection": "unsupported_pressure_for_immediate_decision",
+          "utility": "unnecessary_prescriptive_addition",
+          "suggestion": "Ép thêm bước ra cửa để quyết định thay cho khoảng chưa quyết định của tác giả; không chỉ ra vấn đề cụ thể cần sửa. Không coi đổi kind thành craft là sửa xong nội dung.",
+          "versus_v3": "Giảm lời cáo buộc lệch ý đồ rõ, nhưng giữ xu hướng ép quyết định/hành động thêm.",
+          "visible": true
+        }
+      },
+      {
+        "name": "free-choice-violating",
+        "pair": "free-choice",
+        "variant": "violating",
+        "status_code": 200,
+        "duration_seconds": 8.575,
+        "model_calls": 1,
+        "review_status": "ready",
+        "validated_notes": 1,
+        "error": null,
+        "response_error": null,
+        "author_script_unchanged": true,
+        "parsed_output_available": true,
+        "evidence_count": 2,
+        "exact_id_quote": 2,
+        "id_quote_issues": [],
+        "missing_required_evidence": [],
+        "reader_assessment": {
+          "observation": "Nhận ra giữ hộ chiếu trái tự quyết, đúng kind và đủ hai nguồn.",
+          "detection": "true_positive_supported",
+          "utility": "useful_observation",
+          "suggestion": "Rỗng, hợp lệ với HITL.",
+          "versus_v3": "Giữ phát hiện đúng; bỏ các ký hiệu phạm vi ID gây nhiễu ở observation v3.",
+          "visible": true
+        }
+      },
+      {
+        "name": "broken-flashlight-compliant",
+        "pair": "broken-flashlight",
+        "variant": "compliant",
+        "status_code": 200,
+        "duration_seconds": 11.609,
+        "model_calls": 1,
+        "review_status": "ready",
+        "validated_notes": 1,
+        "error": null,
+        "response_error": null,
+        "author_script_unchanged": true,
+        "parsed_output_available": true,
+        "evidence_count": 2,
+        "exact_id_quote": 2,
+        "id_quote_issues": [],
+        "missing_required_evidence": [],
+        "reader_assessment": {
+          "observation": "Nói đặt đèn pin hỏng xuống trái M2, trong khi chính quote M2 yêu cầu đặt đèn xuống.",
+          "detection": "false_intent_mismatch",
+          "utility": "misleading_claim",
+          "suggestion": "Rỗng nhưng nhận xét vẫn sai, không được gọi đạt chỉ vì không ép một phương án sửa.",
+          "versus_v3": "Hồi quy guard: v3 false claim về rèm bị chặn vì thiếu target evidence; v4 false claim về đèn có đủ hai nguồn và đến được UI.",
+          "visible": true
+        }
+      },
+      {
+        "name": "broken-flashlight-violating",
+        "pair": "broken-flashlight",
+        "variant": "violating",
+        "status_code": 502,
+        "duration_seconds": 8.84,
+        "model_calls": 1,
+        "review_status": "failed",
+        "validated_notes": 0,
+        "error": "MalformedProviderResponseError",
+        "response_error": "{\"detail\":\"Chưa nhận được phản hồi hợp lệ từ AI. Hãy thử lại.\"}",
+        "author_script_unchanged": true,
+        "parsed_output_available": true,
+        "evidence_count": 1,
+        "exact_id_quote": 1,
+        "id_quote_issues": [],
+        "missing_required_evidence": [
+          {
+            "note": 0,
+            "type": "missing_valid_target_text"
+          }
+        ],
+        "reader_assessment": {
+          "observation": "Nhận ra đèn hỏng không thể sáng, nhưng chỉ dẫn ràng buộc A4, thiếu quote hành động đèn sáng. Diễn đạt vẫn nhắm vào bật hơn là kết quả sáng.",
+          "detection": "raw_conflict_recognized_missing_target_evidence",
+          "utility": "not_delivered_contract_failure",
+          "suggestion": "Rỗng, không cứu được thiếu bằng chứng.",
+          "versus_v3": "V3 đủ hai nguồn và ready; v4 failed vì mất bằng chứng kịch bản.",
+          "visible": false
+        }
+      }
+    ]
+  },
+  "semantic_comparison": {
+    "raw_recognized_conflict_in_violating": {
+      "v3": 3,
+      "v4": 3,
+      "total": 3
+    },
+    "correct_violating_feedback_delivered_with_contract": {
+      "v3": 3,
+      "v4": 1,
+      "total": 3
+    },
+    "raw_false_claim_author_choice_violated_regardless_kind": {
+      "v3": 2,
+      "v4": 2,
+      "total_compliant": 3
+    },
+    "delivered_false_claim_author_choice_violated_regardless_kind": {
+      "v3": 1,
+      "v4": 2,
+      "total_compliant": 3
+    },
+    "compliant_feedback_still_wrong_or_unhelpful": {
+      "v3": 3,
+      "v4": 3,
+      "total_compliant": 3
+    },
+    "note": "Count the meaning, not only kind: v4 open-ending compliant claims a false source violation inside craft. V4 free-choice compliant still pressures an immediate decision without claiming a mandatory intent violation. No baseline labels/grades rewritten."
+  },
+  "conclusion": "V4 does not improve this sample; accepted references regress and useful supported violating feedback drops, while misleading compliant feedback persists. Do not mark critic/G3 quality accepted.",
+  "limits": [
+    "One sample/case, no seed exposed; no statistical claim.",
+    "Valid evidence and an optional/empty suggestion do not certify the observation.",
+    "No automatic rollback or further prompt/model runs."
+  ]
+}

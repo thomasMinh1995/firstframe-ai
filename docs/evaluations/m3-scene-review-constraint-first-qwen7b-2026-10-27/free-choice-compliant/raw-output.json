@@ -1,0 +1,25 @@
+{
+  "raw_output": "{\n  \"notes\": [\n    {\n      \"kind\": \"intent_mismatch\",\n      \"observation\": \"Trong cảnh này, cha đã đặt lá thư xin lỗi lên bàn và lùi lại để lối đi trống, nhưng không có sự tương tác trực tiếp nào từ con gái.\",\n      \"impact\": \"Theo ý tưởng tác giả, con gái nên tự quyết định ở lại hay ra đi, nhưng hiện tại cảnh này chỉ tập trung vào hành động của cha mà không phản ánh quyết định của con gái.\",\n      \"evidence\": [\n        {\n          \"source_id\": \"S5\",\n          \"quote\": \"Cha đặt lá thư xin lỗi lên bàn, lùi lại để lối đi trống.\"\n        },\n        {\n          \"source_id\": \"A2\",\n          \"quote\": \"Người cha xin lỗi và để con gái tự quyết định ở lại hay ra đi.\"\n        }\n      ],\n      \"suggestion\": \"Thêm một hành động hoặc lời nói từ con gái để thể hiện sự tự quyết định của cô ấy.\"\n    }\n  ],\n  \"question\": \"\"\n}",
+  "output": {
+    "notes": [
+      {
+        "kind": "intent_mismatch",
+        "observation": "Trong cảnh này, cha đã đặt lá thư xin lỗi lên bàn và lùi lại để lối đi trống, nhưng không có sự tương tác trực tiếp nào từ con gái.",
+        "impact": "Theo ý tưởng tác giả, con gái nên tự quyết định ở lại hay ra đi, nhưng hiện tại cảnh này chỉ tập trung vào hành động của cha mà không phản ánh quyết định của con gái.",
+        "suggestion": "Thêm một hành động hoặc lời nói từ con gái để thể hiện sự tự quyết định của cô ấy.",
+        "evidence": [
+          {
+            "source_id": "S5",
+            "quote": "Cha đặt lá thư xin lỗi lên bàn, lùi lại để lối đi trống."
+          },
+          {
+            "source_id": "A2",
+            "quote": "Người cha xin lỗi và để con gái tự quyết định ở lại hay ra đi."
+          }
+        ]
+      }
+    ],
+    "question": ""
+  },
+  "model": "qwen2.5:7b"
+}

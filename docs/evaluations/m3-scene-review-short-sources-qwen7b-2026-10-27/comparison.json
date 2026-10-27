@@ -1,0 +1,390 @@
+{
+  "reader": "Codex, chưa phải PO/người dùng nghiệm thu",
+  "expected_behavior_unchanged": true,
+  "baseline": {
+    "calls": 6,
+    "accepted": 0,
+    "id_error_cases": 5,
+    "quote_error_at_known_id_cases": 0,
+    "evidence_count": 8,
+    "exact_quote_at_known_id": 2,
+    "duration_seconds": {
+      "minimum": 11.526,
+      "maximum": 15.427,
+      "mean": 12.794
+    },
+    "cases": [
+      {
+        "name": "open-ending-compliant",
+        "pair": "open-ending",
+        "variant": "compliant",
+        "status_code": 502,
+        "duration_seconds": 15.427,
+        "model_calls": 1,
+        "review_status": "failed",
+        "validated_notes": 0,
+        "error": "MalformedProviderResponseError",
+        "response_error": "{\"detail\":\"Chưa nhận được phản hồi hợp lệ từ AI. Hãy thử lại.\"}",
+        "author_script_unchanged": true,
+        "evidence_count": 1,
+        "known_id_count": 0,
+        "exact_quote_at_known_id": 0,
+        "quote_found_somewhere_diagnostic_only": 1,
+        "reference_issues": [
+          {
+            "note": 0,
+            "type": "unknown_id",
+            "id": "block:6ff34ab6-f637-4a16-a45c-c6322a0024b8"
+          }
+        ],
+        "missing_required_evidence": [
+          {
+            "note": 0,
+            "type": "missing_valid_target_text"
+          }
+        ]
+      },
+      {
+        "name": "open-ending-violating",
+        "pair": "open-ending",
+        "variant": "violating",
+        "status_code": 502,
+        "duration_seconds": 11.83,
+        "model_calls": 1,
+        "review_status": "failed",
+        "validated_notes": 0,
+        "error": "MalformedProviderResponseError",
+        "response_error": "{\"detail\":\"Chưa nhận được phản hồi hợp lệ từ AI. Hãy thử lại.\"}",
+        "author_script_unchanged": true,
+        "evidence_count": 2,
+        "known_id_count": 2,
+        "exact_quote_at_known_id": 2,
+        "quote_found_somewhere_diagnostic_only": 2,
+        "reference_issues": [],
+        "missing_required_evidence": [
+          {
+            "note": 0,
+            "type": "missing_valid_target_text"
+          }
+        ]
+      },
+      {
+        "name": "free-choice-compliant",
+        "pair": "free-choice",
+        "variant": "compliant",
+        "status_code": 502,
+        "duration_seconds": 12.989,
+        "model_calls": 1,
+        "review_status": "failed",
+        "validated_notes": 0,
+        "error": "MalformedProviderResponseError",
+        "response_error": "{\"detail\":\"Chưa nhận được phản hồi hợp lệ từ AI. Hãy thử lại.\"}",
+        "author_script_unchanged": true,
+        "evidence_count": 1,
+        "known_id_count": 0,
+        "exact_quote_at_known_id": 0,
+        "quote_found_somewhere_diagnostic_only": 1,
+        "reference_issues": [
+          {
+            "note": 0,
+            "type": "unknown_id",
+            "id": "block:86a65c6f-d51e-450b-8992-c5fb65f4d5f4"
+          }
+        ],
+        "missing_required_evidence": [
+          {
+            "note": 0,
+            "type": "missing_valid_target_text"
+          }
+        ]
+      },
+      {
+        "name": "free-choice-violating",
+        "pair": "free-choice",
+        "variant": "violating",
+        "status_code": 502,
+        "duration_seconds": 12.484,
+        "model_calls": 1,
+        "review_status": "failed",
+        "validated_notes": 0,
+        "error": "MalformedProviderResponseError",
+        "response_error": "{\"detail\":\"Chưa nhận được phản hồi hợp lệ từ AI. Hãy thử lại.\"}",
+        "author_script_unchanged": true,
+        "evidence_count": 2,
+        "known_id_count": 0,
+        "exact_quote_at_known_id": 0,
+        "quote_found_somewhere_diagnostic_only": 2,
+        "reference_issues": [
+          {
+            "note": 0,
+            "type": "unknown_id",
+            "id": "e84adbfa-3b40-4ae9-8fc8-44b4c4791b21"
+          },
+          {
+            "note": 0,
+            "type": "unknown_id",
+            "id": "m2:6ef7df96-80c4-4cc9-891c-65fb603a670d"
+          }
+        ],
+        "missing_required_evidence": [
+          {
+            "note": 0,
+            "type": "missing_valid_target_text"
+          },
+          {
+            "note": 0,
+            "type": "missing_valid_author_choice"
+          }
+        ]
+      },
+      {
+        "name": "broken-flashlight-compliant",
+        "pair": "broken-flashlight",
+        "variant": "compliant",
+        "status_code": 502,
+        "duration_seconds": 12.511,
+        "model_calls": 1,
+        "review_status": "failed",
+        "validated_notes": 0,
+        "error": "MalformedProviderResponseError",
+        "response_error": "{\"detail\":\"Chưa nhận được phản hồi hợp lệ từ AI. Hãy thử lại.\"}",
+        "author_script_unchanged": true,
+        "evidence_count": 1,
+        "known_id_count": 0,
+        "exact_quote_at_known_id": 0,
+        "quote_found_somewhere_diagnostic_only": 1,
+        "reference_issues": [
+          {
+            "note": 0,
+            "type": "unknown_id",
+            "id": "38215107-7405-48fc-9bce-270440eb27e3"
+          }
+        ],
+        "missing_required_evidence": [
+          {
+            "note": 0,
+            "type": "missing_valid_target_text"
+          }
+        ]
+      },
+      {
+        "name": "broken-flashlight-violating",
+        "pair": "broken-flashlight",
+        "variant": "violating",
+        "status_code": 502,
+        "duration_seconds": 11.526,
+        "model_calls": 1,
+        "review_status": "failed",
+        "validated_notes": 0,
+        "error": "MalformedProviderResponseError",
+        "response_error": "{\"detail\":\"Chưa nhận được phản hồi hợp lệ từ AI. Hãy thử lại.\"}",
+        "author_script_unchanged": true,
+        "evidence_count": 1,
+        "known_id_count": 0,
+        "exact_quote_at_known_id": 0,
+        "quote_found_somewhere_diagnostic_only": 1,
+        "reference_issues": [
+          {
+            "note": 0,
+            "type": "unknown_id",
+            "id": "38215107-7405-48fc-9bce-270440eb27e3"
+          }
+        ],
+        "missing_required_evidence": [
+          {
+            "note": 0,
+            "type": "missing_valid_target_text"
+          }
+        ]
+      }
+    ]
+  },
+  "short_sources": {
+    "calls": 6,
+    "accepted": 6,
+    "id_error_cases": 0,
+    "quote_error_at_known_id_cases": 0,
+    "evidence_count": 11,
+    "exact_quote_at_known_id": 11,
+    "duration_seconds": {
+      "minimum": 10.015,
+      "maximum": 20.12,
+      "mean": 14.175
+    },
+    "cases": [
+      {
+        "name": "open-ending-compliant",
+        "pair": "open-ending",
+        "variant": "compliant",
+        "status_code": 200,
+        "duration_seconds": 14.471,
+        "model_calls": 1,
+        "review_status": "ready",
+        "validated_notes": 1,
+        "error": null,
+        "response_error": null,
+        "author_script_unchanged": true,
+        "evidence_count": 1,
+        "known_id_count": 1,
+        "exact_quote_at_known_id": 1,
+        "quote_found_somewhere_diagnostic_only": 1,
+        "reference_issues": [],
+        "missing_required_evidence": [],
+        "reader_assessment": {
+          "observation": "Không còn nói sai rằng con gái không hành động; đề nghị thêm tương tác để tăng căng thẳng là lựa chọn gu, chưa chứng minh cảnh có vấn đề.",
+          "detection": "no_false_intent_violation",
+          "utility": "optional_low_priority",
+          "suggestion": "Nhìn xin lỗi/chạm nhẹ thư không trực tiếp vi phạm thư kín hoặc kết mở, nhưng không cần làm theo.",
+          "baseline_change": "Giảm một nhận xét sai thực tế; không chứng minh cần thêm động tác."
+        }
+      },
+      {
+        "name": "open-ending-violating",
+        "pair": "open-ending",
+        "variant": "violating",
+        "status_code": 200,
+        "duration_seconds": 10.015,
+        "model_calls": 1,
+        "review_status": "ready",
+        "validated_notes": 1,
+        "error": null,
+        "response_error": null,
+        "author_script_unchanged": true,
+        "evidence_count": 2,
+        "known_id_count": 2,
+        "exact_quote_at_known_id": 2,
+        "quote_found_somewhere_diagnostic_only": 2,
+        "reference_issues": [],
+        "missing_required_evidence": [],
+        "reader_assessment": {
+          "observation": "Nhận ra lời tha thứ đóng kết mở, dẫn đúng câu thoại và lựa chọn M2.",
+          "detection": "correct_intent_mismatch",
+          "utility": "useful_observation_for_author",
+          "suggestion": "Không đưa phương án sửa; đây là hợp lệ trong HITL, không ép model viết thay. Câu hỏi giữ hay thay kết thúc thuộc quyết định tác giả.",
+          "baseline_change": "Từ nhận ra mâu thuẫn nhưng thiếu bằng chứng kịch bản sang nhận xét có đủ hai nguồn."
+        }
+      },
+      {
+        "name": "free-choice-compliant",
+        "pair": "free-choice",
+        "variant": "compliant",
+        "status_code": 200,
+        "duration_seconds": 13.852,
+        "model_calls": 1,
+        "review_status": "ready",
+        "validated_notes": 2,
+        "error": null,
+        "response_error": null,
+        "author_script_unchanged": true,
+        "evidence_count": 2,
+        "known_id_count": 2,
+        "exact_quote_at_known_id": 2,
+        "quote_found_somewhere_diagnostic_only": 2,
+        "reference_issues": [],
+        "missing_required_evidence": [],
+        "reader_assessment": {
+          "observation": "Một nhận xét ghi nhận cha giữ lối đi trống; nhận xét thứ hai uncertain về ý nghĩa nhìn cửa.",
+          "detection": "no_false_intent_violation",
+          "utility": "mixed_confirmation_and_optional_interpretation",
+          "suggestion": "Nắm túi/nhìn cha là tùy chọn, chưa đủ căn cứ buộc thêm để tránh hiểu lầm; không khuyên giữ giấy tờ.",
+          "baseline_change": "Không còn ví dụ lẫn tiếng Trung/nội tâm; vẫn thiên về thêm động tác."
+        }
+      },
+      {
+        "name": "free-choice-violating",
+        "pair": "free-choice",
+        "variant": "violating",
+        "status_code": 200,
+        "duration_seconds": 10.75,
+        "model_calls": 1,
+        "review_status": "ready",
+        "validated_notes": 1,
+        "error": null,
+        "response_error": null,
+        "author_script_unchanged": true,
+        "evidence_count": 2,
+        "known_id_count": 2,
+        "exact_quote_at_known_id": 2,
+        "quote_found_somewhere_diagnostic_only": 2,
+        "reference_issues": [],
+        "missing_required_evidence": [],
+        "reader_assessment": {
+          "observation": "Nhận ra giấu hộ chiếu trái quyền tự quyết, dẫn đúng hành động và ý tưởng.",
+          "detection": "correct_intent_mismatch",
+          "utility": "useful_observation_weak_suggestion",
+          "suggestion": "Đề nghị cha chỉ nói xin lỗi và không làm gì khác quá rộng, có thể làm mất hành động đặt thư đã chọn; nên để tác giả cân nhắc, chưa gọi phương án sửa tốt.",
+          "baseline_change": "Nhận xét đúng nay có thể hiển thị nhờ nguồn hợp lệ; gợi ý chưa phải cải thiện chắc chắn."
+        }
+      },
+      {
+        "name": "broken-flashlight-compliant",
+        "pair": "broken-flashlight",
+        "variant": "compliant",
+        "status_code": 200,
+        "duration_seconds": 15.841,
+        "model_calls": 1,
+        "review_status": "ready",
+        "validated_notes": 1,
+        "error": null,
+        "response_error": null,
+        "author_script_unchanged": true,
+        "evidence_count": 2,
+        "known_id_count": 2,
+        "exact_quote_at_known_id": 2,
+        "quote_found_somewhere_diagnostic_only": 2,
+        "reference_issues": [],
+        "missing_required_evidence": [],
+        "reader_assessment": {
+          "observation": "Không còn chê lời thoại hiện có là cứng; ghi nhận hành động phù hợp, nhưng lý do thêm thoại để tự nhiên hơn thiếu căn cứ cụ thể.",
+          "detection": "no_false_intent_violation",
+          "utility": "low_utility_explanatory_dialogue",
+          "suggestion": "Câu đèn pin hỏng/tận dụng ánh sáng ngoài lặp điều đã thể hiện bằng hành động; không cần thêm chỉ để giải thích.",
+          "baseline_change": "Giảm nhận xét sai về thoại đang có; còn xu hướng thêm thoại dư."
+        }
+      },
+      {
+        "name": "broken-flashlight-violating",
+        "pair": "broken-flashlight",
+        "variant": "violating",
+        "status_code": 200,
+        "duration_seconds": 20.12,
+        "model_calls": 1,
+        "review_status": "ready",
+        "validated_notes": 1,
+        "error": null,
+        "response_error": null,
+        "author_script_unchanged": true,
+        "evidence_count": 2,
+        "known_id_count": 2,
+        "exact_quote_at_known_id": 2,
+        "quote_found_somewhere_diagnostic_only": 2,
+        "reference_issues": [],
+        "missing_required_evidence": [],
+        "reader_assessment": {
+          "observation": "Vẫn bỏ sót hành động làm đèn pin hỏng sáng. Chuyển sang góp ý sự tự nhiên lời thoại dù cảnh chỉ có action.",
+          "detection": "missed_intent_violation",
+          "utility": "unsupported_focus_and_ineffective_repair",
+          "suggestion": "Thêm thoại đèn pin hỏng/đèn đường không loại bỏ hành động đèn pin sáng. Không còn trực tiếp khuyên chỉnh ánh đèn pin như baseline, nhưng chưa xử lý vi phạm.",
+          "baseline_change": "Lỗi bỏ sót giữ nguyên và nay qua hợp đồng nên có thể đến người dùng; rủi ro chất lượng vẫn chặn."
+        }
+      }
+    ]
+  },
+  "semantic_comparison": {
+    "raw_detected_violating_baseline": 2,
+    "raw_detected_violating_new": 2,
+    "violating_total": 3,
+    "raw_missed_violating_baseline": 1,
+    "raw_missed_violating_new": 1,
+    "compliant_false_factual_claims_baseline": 2,
+    "compliant_false_factual_claims_new": 0,
+    "compliant_low_priority_or_low_utility_suggestions_new": 3,
+    "note": "Không ép craft/uncertain thành vi phạm ý đồ; quan sát đúng không tự xác nhận phương án sửa tốt. Góp ý không có suggestion vẫn hợp lệ."
+  },
+  "limits": [
+    "One sample per case; no selective retry or paired seed available.",
+    "Short IDs, metadata and protocol prompt changed together; cannot isolate each contribution.",
+    "Quotes matching source do not certify reasoning; 6/6 contract success is not 6/6 quality acceptance.",
+    "Runtime configuration/plan/prototype unchanged."
+  ]
+}

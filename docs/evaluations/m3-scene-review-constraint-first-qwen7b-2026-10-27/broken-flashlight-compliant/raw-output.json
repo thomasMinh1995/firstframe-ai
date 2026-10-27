@@ -1,0 +1,21 @@
+{
+  "raw_output": "{\n  \"notes\": [\n    {\n      \"kind\": \"intent_mismatch\",\n      \"observation\": \"Trong cảnh này, Lan kéo rèm để ánh đèn đường rọi lên tờ giấy, nhưng trong giới hạn 3, đã xác định không thể thêm nguồn sáng mới, chỉ dùng ánh đèn đường qua rèm.\",\n      \"impact\": \"Việc kéo rèm để ánh sáng rọi lên giấy có thể tạo ra một nguồn sáng mới, không tuân theo giới hạn đã đặt ra.\",\n      \"evidence\": [\n        {\n          \"source_id\": \"A5\",\n          \"quote\": \"Không thêm điện thoại hoặc nguồn sáng mới; dùng ánh đèn đường qua rèm.\"\n        }\n      ],\n      \"suggestion\": \"Lan có thể nhẹ nhàng điều chỉnh tờ giấy để tăng cường ánh sáng từ bên ngoài, thay vì kéo rèm hoàn toàn.\"\n    }\n  ],\n  \"question\": \"\"\n}",
+  "output": {
+    "notes": [
+      {
+        "kind": "intent_mismatch",
+        "observation": "Trong cảnh này, Lan kéo rèm để ánh đèn đường rọi lên tờ giấy, nhưng trong giới hạn 3, đã xác định không thể thêm nguồn sáng mới, chỉ dùng ánh đèn đường qua rèm.",
+        "impact": "Việc kéo rèm để ánh sáng rọi lên giấy có thể tạo ra một nguồn sáng mới, không tuân theo giới hạn đã đặt ra.",
+        "suggestion": "Lan có thể nhẹ nhàng điều chỉnh tờ giấy để tăng cường ánh sáng từ bên ngoài, thay vì kéo rèm hoàn toàn.",
+        "evidence": [
+          {
+            "source_id": "A5",
+            "quote": "Không thêm điện thoại hoặc nguồn sáng mới; dùng ánh đèn đường qua rèm."
+          }
+        ]
+      }
+    ],
+    "question": ""
+  },
+  "model": "qwen2.5:7b"
+}

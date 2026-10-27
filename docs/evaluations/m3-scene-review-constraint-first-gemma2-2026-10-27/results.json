@@ -1,0 +1,80 @@
+[
+  {
+    "name": "open-ending-compliant",
+    "pair": "open-ending",
+    "variant": "compliant",
+    "status_code": 200,
+    "duration_seconds": 22.43,
+    "model_calls": 1,
+    "review_status": "ready",
+    "validated_notes": 1,
+    "error": null,
+    "response_error": null,
+    "author_script_unchanged": true
+  },
+  {
+    "name": "open-ending-violating",
+    "pair": "open-ending",
+    "variant": "violating",
+    "status_code": 200,
+    "duration_seconds": 39.548,
+    "model_calls": 1,
+    "review_status": "ready",
+    "validated_notes": 3,
+    "error": null,
+    "response_error": null,
+    "author_script_unchanged": true
+  },
+  {
+    "name": "free-choice-compliant",
+    "pair": "free-choice",
+    "variant": "compliant",
+    "status_code": 200,
+    "duration_seconds": 52.403,
+    "model_calls": 1,
+    "review_status": "ready",
+    "validated_notes": 1,
+    "error": null,
+    "response_error": null,
+    "author_script_unchanged": true
+  },
+  {
+    "name": "free-choice-violating",
+    "pair": "free-choice",
+    "variant": "violating",
+    "status_code": 504,
+    "duration_seconds": 61.417,
+    "model_calls": 1,
+    "review_status": "failed",
+    "validated_notes": 0,
+    "error": "ProviderTimeoutError",
+    "response_error": "{\"detail\":\"AI phản hồi quá lâu. Nội dung đã lưu vẫn được giữ; hãy thử lại.\"}",
+    "author_script_unchanged": true
+  },
+  {
+    "name": "broken-flashlight-compliant",
+    "pair": "broken-flashlight",
+    "variant": "compliant",
+    "status_code": 504,
+    "duration_seconds": 60.388,
+    "model_calls": 1,
+    "review_status": "failed",
+    "validated_notes": 0,
+    "error": "ProviderTimeoutError",
+    "response_error": "{\"detail\":\"AI phản hồi quá lâu. Nội dung đã lưu vẫn được giữ; hãy thử lại.\"}",
+    "author_script_unchanged": true
+  },
+  {
+    "name": "broken-flashlight-violating",
+    "pair": "broken-flashlight",
+    "variant": "violating",
+    "status_code": 504,
+    "duration_seconds": 60.323,
+    "model_calls": 1,
+    "review_status": "failed",
+    "validated_notes": 0,
+    "error": "ProviderTimeoutError",
+    "response_error": "{\"detail\":\"AI phản hồi quá lâu. Nội dung đã lưu vẫn được giữ; hãy thử lại.\"}",
+    "author_script_unchanged": true
+  }
+]

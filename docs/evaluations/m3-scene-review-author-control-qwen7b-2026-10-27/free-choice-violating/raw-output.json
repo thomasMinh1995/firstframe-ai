@@ -1,0 +1,25 @@
+{
+  "raw_output": "{\n  \"notes\": [\n    {\n      \"kind\": \"intent_mismatch\",\n      \"observation\": \"Cha giấu hộ chiếu của con gái vào túi, trái với ý tưởng tác giả.\",\n      \"impact\": \"Việc cha giấu hộ chiếu này vi phạm ý định của tác giả, khiến cha không còn để con gái tự quyết định.\",\n      \"evidence\": [\n        {\n          \"source_id\": \"S5\",\n          \"quote\": \"Cha giấu hộ chiếu của con gái vào túi để cô không thể ra đi.\"\n        },\n        {\n          \"source_id\": \"A2\",\n          \"quote\": \"Người cha xin lỗi và để con gái tự quyết định ở lại hay ra đi.\"\n        }\n      ]\n    }\n  ],\n  \"question\": \"\"\n}",
+  "output": {
+    "notes": [
+      {
+        "kind": "intent_mismatch",
+        "observation": "Cha giấu hộ chiếu của con gái vào túi, trái với ý tưởng tác giả.",
+        "impact": "Việc cha giấu hộ chiếu này vi phạm ý định của tác giả, khiến cha không còn để con gái tự quyết định.",
+        "suggestion": "",
+        "evidence": [
+          {
+            "source_id": "S5",
+            "quote": "Cha giấu hộ chiếu của con gái vào túi để cô không thể ra đi."
+          },
+          {
+            "source_id": "A2",
+            "quote": "Người cha xin lỗi và để con gái tự quyết định ở lại hay ra đi."
+          }
+        ]
+      }
+    ],
+    "question": ""
+  },
+  "model": "qwen2.5:7b"
+}

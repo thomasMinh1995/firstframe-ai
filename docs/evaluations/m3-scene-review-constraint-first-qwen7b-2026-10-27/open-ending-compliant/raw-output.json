@@ -1,0 +1,25 @@
+{
+  "raw_output": "{\n  \"notes\": [\n    {\n      \"kind\": \"craft\",\n      \"observation\": \"Cha chỉ đặt phong thư lên bàn và lùi lại, không có hành động nào khác. Con gái ngồi xuống nhưng không có lời nói hoặc hành động nào thể hiện thái độ của cô.\",\n      \"impact\": \"Hành động của cha và con gái thiếu sự tương tác, có thể làm giảm sự căng thẳng và cảm xúc trong cảnh.\",\n      \"evidence\": [\n        {\n          \"source_id\": \"S2\",\n          \"quote\": \"Cha đặt phong thư kín lên bàn rồi lùi lại.\"\n        },\n        {\n          \"source_id\": \"S4\",\n          \"quote\": \"Con gái nhìn cha, kéo ghế ngồi. Phong thư còn kín trên bàn.\"\n        }\n      ],\n      \"suggestion\": \"Cha có thể mở phong thư, đọc một đoạn ngắn, sau đó đặt lại lên bàn. Con gái có thể hỏi cha về nội dung thư hoặc bày tỏ sự quan tâm.\"\n    }\n  ],\n  \"question\": \"\"\n}",
+  "output": {
+    "notes": [
+      {
+        "kind": "craft",
+        "observation": "Cha chỉ đặt phong thư lên bàn và lùi lại, không có hành động nào khác. Con gái ngồi xuống nhưng không có lời nói hoặc hành động nào thể hiện thái độ của cô.",
+        "impact": "Hành động của cha và con gái thiếu sự tương tác, có thể làm giảm sự căng thẳng và cảm xúc trong cảnh.",
+        "suggestion": "Cha có thể mở phong thư, đọc một đoạn ngắn, sau đó đặt lại lên bàn. Con gái có thể hỏi cha về nội dung thư hoặc bày tỏ sự quan tâm.",
+        "evidence": [
+          {
+            "source_id": "S2",
+            "quote": "Cha đặt phong thư kín lên bàn rồi lùi lại."
+          },
+          {
+            "source_id": "S4",
+            "quote": "Con gái nhìn cha, kéo ghế ngồi. Phong thư còn kín trên bàn."
+          }
+        ]
+      }
+    ],
+    "question": ""
+  },
+  "model": "qwen2.5:7b"
+}

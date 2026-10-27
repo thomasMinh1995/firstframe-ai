@@ -1,0 +1,39 @@
+{
+  "frozen_at": "2026-10-27T07:46:28.170737+00:00",
+  "maximum_calls": 6,
+  "timeout_seconds_per_call": 60,
+  "retry": false,
+  "model": "qwen2.5:7b",
+  "digest": "845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
+  "parameters": {
+    "temperature": 0.3,
+    "timeout_seconds": 60,
+    "num_ctx": 16384
+  },
+  "seed": "not exposed/sent by existing provider",
+  "inputs_sha256": "1d401a371cf27da659e8b908c2f5c3c6cbea21f54d1478ad21c19d807a75b249",
+  "schema_sha256": "291dcd309cfe613f2df47aa87a729d88bee35b3c7af6874d02a8cdca1cb8da6d",
+  "hashes": {
+    "backend/app/application/screenplay_review.py": "3857ed9fceb23d5643175f16a9629839b48a6edb64f65e88c0dc2d5e43694522",
+    "backend/app/application/screenplay_context.py": "c4812f6ef35b715b88ca4e398d664c0ef17d5af540440cdd561adef16e38ef6d",
+    "backend/app/api/routes/screenplay_reviews.py": "faf27c183cbb69b90c27f4ac36940d92a26c923d4b9d281db37c6f0b013bb5b1",
+    "backend/app/api/routes/projects.py": "93a6d7addddbb59015f6d0511ca63ea72d10b6210808831b6227dcc2ffd1c6f2",
+    "backend/app/api/schemas/projects.py": "c9805a497c249a217189af59710264d3760167dd2fab9bdccede36ebfa1ea5bb",
+    "backend/app/api/schemas/screenplays.py": "0e7c08918379b3ca2cb79cf1b619a3838a230efc9419755085f8f37aafd6619d",
+    "backend/app/infrastructure/ollama_provider.py": "293d9fcc59051e06ddb6eebffd263d831817fe761506ca23a92ef21cf2630272",
+    "backend/app/application/ai_provider.py": "15249bd34c8ed12dc31897d1586bd2947c24a16f564ca81ae59871c1cff9929e",
+    "backend/app/application/project_store.py": "de4d7d0c5cffe3dcb91f7c08623a47d9ad1947db0f2b19b2d52fdb38a84a550b",
+    "domains/short-film/prompts/screenplay_review_prompt.md": "91e89fc14f646745541777b158e9bb5ff15eb515f55e7f004b896242ab7938b6",
+    "docs/evaluations/m3-scene-review-constraint-first-qwen7b-2026-10-27/run.py": "7bdd36c3a6d942e15ae0fbb8e0fd9710562631ad431220a1eb15fcdb47fe18a9"
+  },
+  "baseline": "docs/evaluations/m3-scene-review-short-sources-qwen7b-2026-10-27",
+  "baseline_hashes": {
+    "inputs.json": "ed5e02caf6b6317bd43df0552b2233f08ba8b890cfbed8c1bc1e1f33f561ed64",
+    "schema.json": "291dcd309cfe613f2df47aa87a729d88bee35b3c7af6874d02a8cdca1cb8da6d",
+    "manifest.json": "e2214ad96cfc8b348ed5631b31f25d4713335fba6839353478bba42bfe0c8f2f",
+    "results.json": "904cfae7a65d731b526e5cd624f1bd456ed8f4e18e9fa7b028fd5512c427e29b",
+    "comparison.json": "b4dcc71644192d3d0325e8781cdf7eb7b9a34abb98e1d6dcf0cb546bbd776241"
+  },
+  "same_six_cases_project_request_expected": true,
+  "change": "v3 constraint-first prompt only; same model-facing input, source aliases/metadata, output schema/model/parameters as v2"
+}

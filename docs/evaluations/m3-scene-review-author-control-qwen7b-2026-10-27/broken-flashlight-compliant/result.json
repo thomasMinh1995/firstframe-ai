@@ -1,0 +1,13 @@
+{
+  "name": "broken-flashlight-compliant",
+  "pair": "broken-flashlight",
+  "variant": "compliant",
+  "status_code": 200,
+  "duration_seconds": 11.609,
+  "model_calls": 1,
+  "review_status": "ready",
+  "validated_notes": 1,
+  "error": null,
+  "response_error": null,
+  "author_script_unchanged": true
+}

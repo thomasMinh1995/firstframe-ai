@@ -1,0 +1,5 @@
+{
+  "type": "ProviderTimeoutError",
+  "message": "Ollama timed out.",
+  "raw_output": null
+}
