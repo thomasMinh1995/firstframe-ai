@@ -40,3 +40,13 @@ Giữ prompt v4 đang có trên nhánh, không tự rollback/chọn model khác 
 Các lỗi này là hạn chế chất lượng được tác giả cho phép ghi rõ khi đóng gói phần kỹ thuật; không đánh dấu đã sửa hoặc đã nghiệm thu. Quote đúng, test fake qua, tác giả bỏ qua góp ý hoặc cảnh báo AI đều không thay thế việc khắc phục lỗi dẫn sai theo plan hiện có. Guard không xác nhận lập luận hoặc sự nhất quán giữa các note; UI hiện rõ cảnh báo này và giữ quyền tác giả tự quyết.
 
 Các đợt thử v1–v4 được giữ nguyên input/output/lỗi/manifest và source archive; chỉ fixture tổng hợp vào repo. Không sửa plan/roadmap/prototype, không đóng #7/#22/#26, không triển khai đọc toàn bản/chọn nguồn M4 của Gói 4. Nghiệm thu chất lượng AI và nghiệm thu người dùng tiếp tục mở.
+
+
+## Bổ sung bằng chứng Gemma v4 và lượt lặp Qwen v4
+
+Lần cập nhật PR #55 này chỉ thêm tài liệu và bằng chứng đã lưu, không sửa runtime hoặc chạy thêm model. Kết quả kiểm thử kỹ thuật ở trên thuộc lượt review trước, không được trình bày như đã chạy lại test trong lần bổ sung tài liệu.
+
+- [Gemma v4 so với Qwen v4](m3-gemma2-vs-qwen-v4.md): 4/6 qua hợp đồng, bằng Qwen v4; không có timeout trong đợt v4. Không lặp cáo buộc sai ý đồ trên ba bản tuân thủ, nhưng còn góp ý ít căn cứ, 3/6 phản hồi tiếng Anh, hai lượt bị note phụ thiếu bằng chứng cảnh đích làm failed. Ca đèn pin vi phạm chưa có nhận xét trực tiếp/đủ nguồn dùng được. Context thực Gemma 8192, Qwen 16384 nên không khẳng định đối chứng cùng effective context.
+- [Lượt lặp Qwen v4](m3-qwen-v4-repeat2.md): 5/6 qua hợp đồng so với 4/6 đầu, nhưng 3/6 ca đổi trạng thái ready/failed, nhận xét sai/ép thêm vẫn còn. Không chọn output tốt hơn giữa hai lượt để công bố một bộ đạt.
+
+**Chất lượng critic chưa đạt; nghiệm thu Gói 3 vẫn mở.** Những kết quả bổ sung không thay việc sửa và kiểm chứng lỗi dẫn sai theo plan hiện có, không đóng #7/#22/#26 hoặc triển khai Gói 4. Input/output/lỗi/manifest/audit của các lượt cũ và mới giữ nguyên; chỉ diễn giải tình trạng bổ sung vào PR trong các báo cáo này.

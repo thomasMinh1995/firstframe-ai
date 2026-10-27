@@ -1,0 +1,23 @@
+{
+  "name": "gemma2:9b-instruct-q4_K_M",
+  "model": "gemma2:9b-instruct-q4_K_M",
+  "modified_at": "2026-10-25T15:05:48.696320162+07:00",
+  "size": 5761067555,
+  "digest": "c20bec88025f3aefa420efd64dca0ee4abc8e36078d6b74b0f660cdcbd5d1982",
+  "details": {
+    "parent_model": "",
+    "format": "gguf",
+    "family": "gemma2",
+    "families": [
+      "gemma2"
+    ],
+    "parameter_size": "9.2B",
+    "quantization_level": "Q4_K_M",
+    "context_length": 8192,
+    "embedding_length": 3584,
+    "runner": "ggml"
+  },
+  "capabilities": [
+    "completion"
+  ]
+}

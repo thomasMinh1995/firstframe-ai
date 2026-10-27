@@ -1,0 +1,37 @@
+{
+  "raw_output": "{\"notes\": [{\"kind\": \"craft\", \"observation\": \"Sự sắp xếp hành động có thể được cải thiện để tăng cường cảm xúc. Hiện tại, cha đặt lá thư xin lỗi trước khi lùi lại để tạo lối đi. Có thể đảo ngược thứ tự này để thể hiện sự nhượng bộ của cha và sự căng thẳng của tình huống.\", \"impact\": \"Sự thay đổi thứ tự này có thể làm cho khoảnh khắc trở nên căng thẳng hơn và tăng thêm cảm xúc cho cảnh.\", \"evidence\": [{\"source_id\": \"S4\", \"quote\": \"Con gái nhìn về cửa, chưa bước đi.\"}, {\"source_id\": \"S5\", \"quote\": \"Cha đặt lá thư xin lỗi lên bàn, lùi lại để lối đi trống.\"}]}, {\"kind\": \"craft\", \"observation\": \"Có thể thêm một chút biểu cảm của con gái để thể hiện sự suy tư hoặc bất an của cô trước quyết định của mình.\", \"impact\": \"Sự biểu cảm này sẽ giúp khán giả hiểu rõ hơn tâm trạng của con gái và tạo thêm chiều sâu cho cảnh.\", \"evidence\": [{\"source_id\": \"S4\", \"quote\": \"Con gái nhìn về cửa, chưa bước đi.\"}]}], \"question\": \"\"}",
+  "output": {
+    "notes": [
+      {
+        "kind": "craft",
+        "observation": "Sự sắp xếp hành động có thể được cải thiện để tăng cường cảm xúc. Hiện tại, cha đặt lá thư xin lỗi trước khi lùi lại để tạo lối đi. Có thể đảo ngược thứ tự này để thể hiện sự nhượng bộ của cha và sự căng thẳng của tình huống.",
+        "impact": "Sự thay đổi thứ tự này có thể làm cho khoảnh khắc trở nên căng thẳng hơn và tăng thêm cảm xúc cho cảnh.",
+        "suggestion": "",
+        "evidence": [
+          {
+            "source_id": "S4",
+            "quote": "Con gái nhìn về cửa, chưa bước đi."
+          },
+          {
+            "source_id": "S5",
+            "quote": "Cha đặt lá thư xin lỗi lên bàn, lùi lại để lối đi trống."
+          }
+        ]
+      },
+      {
+        "kind": "craft",
+        "observation": "Có thể thêm một chút biểu cảm của con gái để thể hiện sự suy tư hoặc bất an của cô trước quyết định của mình.",
+        "impact": "Sự biểu cảm này sẽ giúp khán giả hiểu rõ hơn tâm trạng của con gái và tạo thêm chiều sâu cho cảnh.",
+        "suggestion": "",
+        "evidence": [
+          {
+            "source_id": "S4",
+            "quote": "Con gái nhìn về cửa, chưa bước đi."
+          }
+        ]
+      }
+    ],
+    "question": ""
+  },
+  "model": "gemma2:9b-instruct-q4_K_M"
+}

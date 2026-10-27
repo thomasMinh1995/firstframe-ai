@@ -1,0 +1,53 @@
+{
+  "raw_output": "{\"notes\": [{\"kind\": \"intent_mismatch\", \"observation\": \"Cha giấu hộ chiếu của con gái vào túi để cô không thể ra đi.\", \"impact\": \"Việc cha giấu hộ chiếu trái với giới hạn tác giả: 'Cha không giữ giấy tờ hoặc ép con gái ở lại.'\", \"evidence\": [{\"source_id\": \"S5\", \"quote\": \"Cha giấu hộ chiếu của con gái vào túi để cô không thể ra đi.\"}, {\"source_id\": \"A4\", \"quote\": \"Cha không giữ giấy tờ hoặc ép con gái ở lại.\"}]}, {\"kind\": \"craft\", \"observation\": \"Cảnh diễn ra khá nhanh và thiếu chi tiết về cảm xúc của hai nhân vật.\", \"impact\": \"Sự thiếu chi tiết có thể khiến khán giả khó đồng cảm với tình huống và cảm xúc của nhân vật.\", \"evidence\": [{\"source_id\": \"S4\", \"quote\": \"Con gái nhìn về cửa, chưa bước đi.\"}, {\"source_id\": \"S5\", \"quote\": \"Cha giấu hộ chiếu của con gái vào túi để cô không thể ra đi.\"}]}, {\"kind\": \"uncertain\", \"observation\": \"Tác giả có ý định thể hiện sự căng thẳng trong không khí hay không?\", \"impact\": \"Sự thể hiện rõ ràng hơn về sự căng thẳng có thể làm tăng hiệu quả của cảnh.\", \"evidence\": [{\"source_id\": \"S2\", \"quote\": \"Con gái đặt túi cạnh cửa. Cha đứng bên bàn.\"}]}], \"question\": \"\"}",
+  "output": {
+    "notes": [
+      {
+        "kind": "intent_mismatch",
+        "observation": "Cha giấu hộ chiếu của con gái vào túi để cô không thể ra đi.",
+        "impact": "Việc cha giấu hộ chiếu trái với giới hạn tác giả: 'Cha không giữ giấy tờ hoặc ép con gái ở lại.'",
+        "suggestion": "",
+        "evidence": [
+          {
+            "source_id": "S5",
+            "quote": "Cha giấu hộ chiếu của con gái vào túi để cô không thể ra đi."
+          },
+          {
+            "source_id": "A4",
+            "quote": "Cha không giữ giấy tờ hoặc ép con gái ở lại."
+          }
+        ]
+      },
+      {
+        "kind": "craft",
+        "observation": "Cảnh diễn ra khá nhanh và thiếu chi tiết về cảm xúc của hai nhân vật.",
+        "impact": "Sự thiếu chi tiết có thể khiến khán giả khó đồng cảm với tình huống và cảm xúc của nhân vật.",
+        "suggestion": "",
+        "evidence": [
+          {
+            "source_id": "S4",
+            "quote": "Con gái nhìn về cửa, chưa bước đi."
+          },
+          {
+            "source_id": "S5",
+            "quote": "Cha giấu hộ chiếu của con gái vào túi để cô không thể ra đi."
+          }
+        ]
+      },
+      {
+        "kind": "uncertain",
+        "observation": "Tác giả có ý định thể hiện sự căng thẳng trong không khí hay không?",
+        "impact": "Sự thể hiện rõ ràng hơn về sự căng thẳng có thể làm tăng hiệu quả của cảnh.",
+        "suggestion": "",
+        "evidence": [
+          {
+            "source_id": "S2",
+            "quote": "Con gái đặt túi cạnh cửa. Cha đứng bên bàn."
+          }
+        ]
+      }
+    ],
+    "question": ""
+  },
+  "model": "gemma2:9b-instruct-q4_K_M"
+}
