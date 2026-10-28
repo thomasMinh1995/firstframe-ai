@@ -53,6 +53,18 @@ const fs = require('node:fs/promises'), path = require('node:path'), {randomUUID
   assert.match(await savedScene(0).innerText(), /SAVED_A/); assert.match(await savedScene(1).innerText(), /SAVED_B/);
   assert.ok(!(await comparison.innerText()).includes('EDIT_A')); assert.ok(!(await comparison.innerText()).includes('EDIT_B'));
   assert.equal(writes(await state()), writes(beforeNavigation), 'scene navigation and typing never save or call AI');
+  // Prototype shortcuts reveal existing support/read regions without saving or replacing the editor.
+  const beforeShortcuts = await state();
+  await area.getByRole('button', {name: 'Dàn cảnh & góp ý', exact: true}).click();
+  assert.ok(await area.locator('.screenplay-source').evaluate(e => e.open));
+  assert.ok(await area.locator('.screenplay-feedback-tools').evaluate(e => e.open));
+  assert.ok(await area.locator('.screenplay-tools > details').first().locator(':scope > summary').evaluate(e => e === document.activeElement));
+  await area.getByRole('button', {name: 'Đọc toàn bộ', exact: true}).click();
+  assert.ok(await area.locator('.screenplay-reading').evaluate(e => e === document.activeElement));
+  assert.equal(await text().inputValue(), 'EDIT_A:  Con ga\u0301i nhìn thư.\n\nChưa mở.  ');
+  assert.match(await savedScene(0).innerText(), /SAVED_A/);
+  assert.equal(writes(await state()), writes(beforeShortcuts));
+  await area.locator('.screenplay-source > summary').click();await area.locator('.screenplay-feedback-tools > summary').click();
   // Hold a save response: even after server commit, comparison must not claim the pending buffer is saved.
   let release, entered;
   const ready = new Promise(resolve => {entered = resolve;}), held = new Promise(resolve => {release = resolve;});

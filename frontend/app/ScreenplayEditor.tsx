@@ -12,6 +12,7 @@ import {ContinuousSceneEditor} from "./ContinuousSceneEditor";
 import {ScreenplayProposals} from "./ScreenplayProposals";
 import {ScreenplayFeedback} from "./ScreenplayFeedback";
 import type {ReviewAssessment,ReviewSource} from "./screenplayReviewTypes";
+import {SceneHint} from "./SceneHint";
 import "./screenplay.css";
 
 export function ScreenplayEditor({project, savedProject, onSelectSource, onSourceInspect, dirty, sourceDirty, onChange, onStart, onRestore, onSave, onInspect, onWrite, onProposalInspect, onPreview, onDiscard, canUse, onReview, onReviewInspect, onReviewDiscard, onReviewAssess, canNavigateReview}: {
@@ -76,9 +77,22 @@ export function ScreenplayEditor({project, savedProject, onSelectSource, onSourc
     setUndo({before:structuredClone(script),after:JSON.stringify(next),label:"Hoàn tác xóa khối"});onChange(next);
   }
   return <section className="panel screenplay" data-workspace-stage="workspace-script" aria-label="M3 Kịch bản">
-    <h2 id="workspace-script" tabIndex={-1}>M3 · Viết kịch bản</h2>
-    <p>Viết bằng hành động và lời thoại theo từng cảnh. Không bắt buộc có lời thoại hoặc hình phác. Bạn có thể tự viết, nhờ AI viết thử một cảnh hoặc nhận góp ý để tự sửa. Quyết định vẫn thuộc về bạn.</p>
-    <details><summary>Bắt đầu từ dàn cảnh nào?</summary>
+    <header className="screenplay-heading"><div><p className="eyebrow">Kịch bản</p><h2 id="workspace-script" tabIndex={-1}>Viết kịch bản</h2></div>
+      <div className="screenplay-actions">
+        <button type="button" className="secondary" disabled={!scene} aria-controls={scene?`${editorId}-support`:undefined} onClick={e=>{
+          const host=e.currentTarget.closest('.screenplay')?.querySelector<HTMLElement>('.screenplay-tools');
+          host?.querySelectorAll<HTMLDetailsElement>('.screenplay-source, .screenplay-feedback-tools').forEach(node=>{node.open=true;});
+          host?.scrollIntoView({block:'start'});host?.querySelector<HTMLElement>('summary')?.focus({preventScroll:true});
+        }}>Dàn cảnh &amp; góp ý</button>
+        <button type="button" className="secondary" disabled={savedProject.id!==project.id||!savedProject.screenplay} onClick={e=>{
+          const reader=e.currentTarget.closest('.screenplay')?.querySelector<HTMLElement>('.screenplay-reading');
+          reader?.scrollIntoView({block:'start'});reader?.focus({preventScroll:true});
+        }}>Đọc toàn bộ</button>
+      </div>
+    </header>
+    <SceneHint title="Bắt đầu viết từ đâu?">Chọn cảnh → viết và sửa → lưu để cập nhật kịch bản bên cạnh.
+      Không bắt buộc có lời thoại hoặc hình phác. Mở nguồn, ảnh và góp ý khi cần; bạn có thể tự viết hoặc nhờ AI viết thử một cảnh. Quyết định vẫn thuộc về bạn.</SceneHint>
+    <details className="screenplay-start"><summary>Bắt đầu từ dàn cảnh nào?</summary>
       <p>Lưu mọi sửa đang chờ trước khi bắt đầu. Nguồn M2 được giữ riêng; sửa dàn cảnh sau đó không tự thay kịch bản. Muốn đổi cấu trúc cảnh, sửa M2 rồi chủ động bắt đầu bản khác.</p>
       {project.scene_handoff ? <p>M2 phiên bản {project.scene_handoff.version} · {project.scene_handoff.scenes.length} cảnh · {project.scene_outline?.source.draft.title}</p>
         : <p>Cần lưu tên và diễn tiến cho mọi cảnh M2 trước khi bắt đầu. Bạn vẫn lưu nháp M2 được.</p>}
@@ -105,6 +119,7 @@ export function ScreenplayEditor({project, savedProject, onSelectSource, onSourc
       <div className="screenplay-columns">
         <div className="screenplay-scene" id={editorId}>
           {scene ? <>
+            <div className="screenplay-writing-heading"><h3>Viết và sửa cảnh</h3><span>Cảnh {script.scenes.indexOf(scene)+1} / {script.scenes.length}</span></div>
             <div className="screenplay-author-fields">
             <button type="button" aria-pressed={useBlockEditor} onClick={()=>setUseBlockEditor(!useBlockEditor)}>
               {useBlockEditor?'Dùng editor liền mạch':'Dùng editor dạng khối'}
@@ -116,8 +131,7 @@ export function ScreenplayEditor({project, savedProject, onSelectSource, onSourc
             </div>
             <button type="button" onClick={onSave}>Lưu kịch bản</button>
             <p>Chuyển cảnh giữ phần đang viết; lưu để mở lại. Bản nháp không cần đủ mọi cảnh.</p>
-            <p>Mở nguồn, ảnh hoặc góp ý bên dưới khi cần; tự quyết định điều muốn giữ.</p>
-            <div className="screenplay-tools" aria-label="Hỗ trợ cảnh đang viết">
+            <div className="screenplay-tools" id={`${editorId}-support`} aria-label="Hỗ trợ cảnh đang viết">
               <details className="screenplay-source"><summary>Nguồn M2 của cảnh đang viết</summary>
                 <p>Đây là nguồn được giữ lúc bắt đầu, không phải bản soạn.</p>
                 {source && <><h3>{source.title}</h3><p className="preserve-lines">{source.action}</p>
