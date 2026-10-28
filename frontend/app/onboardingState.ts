@@ -39,11 +39,11 @@ export function available(step: TourStep, c: TourContext): boolean {
   return true;
 }
 function safeStep(step: TourStep, c: TourContext): TourStep {
-  if (tourSteps.indexOf(step) >= 3 && !validAnalysis(c)) return entryStep(c);
+  if (tourSteps.indexOf(step) >= tourSteps.indexOf("choices") && !validAnalysis(c)) return entryStep(c);
   return available(step, c) ? step : entryStep(c);
 }
 export function nextStep(step: TourStep, c: TourContext): TourStep | null {
-  if (tourSteps.indexOf(step) >= 3 && !validAnalysis(c)) return entryStep(c);
+  if (tourSteps.indexOf(step) >= tourSteps.indexOf("choices") && !validAnalysis(c)) return entryStep(c);
   const next = tourSteps[tourSteps.indexOf(step) + 1];
   return next && available(next, c) ? next : null;
 }
@@ -53,7 +53,7 @@ export function previousStep(step: TourStep, c: TourContext): TourStep | null {
 export function continuation(s: TourState, c: TourContext): TourStep | null {
   const r = s.record;
   if (!r || r.projectId !== c.projectId) return entryStep(c);
-  if (tourSteps.indexOf(r.stepId) >= 3 && !validAnalysis(c)) return entryStep(c);
+  if (tourSteps.indexOf(r.stepId) >= tourSteps.indexOf("choices") && !validAnalysis(c)) return entryStep(c);
   if (r.status === "waiting") return s.waitingReady ? nextStep(r.stepId, c) : null;
   return safeStep(r.stepId, c);
 }

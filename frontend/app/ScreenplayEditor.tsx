@@ -76,8 +76,8 @@ export function ScreenplayEditor({project, savedProject, onSelectSource, onSourc
     const next={...script,scenes:script.scenes.map(s=>s.id===scene.id?{...s,blocks:s.blocks.filter(b=>b.id!==id)}:s)};
     setUndo({before:structuredClone(script),after:JSON.stringify(next),label:"Hoàn tác xóa khối"});onChange(next);
   }
-  return <section className="panel screenplay" data-workspace-stage="workspace-script" data-tour="script" aria-label="M3 Kịch bản">
-    <header className="screenplay-heading"><div><p className="eyebrow">Kịch bản</p><h2 id="workspace-script" tabIndex={-1}>Viết kịch bản</h2></div>
+  return <section className="panel screenplay" data-workspace-stage="workspace-script" aria-label="M3 Kịch bản">
+    <header className="screenplay-heading"><div><p className="eyebrow">Kịch bản</p><h2 id="workspace-script" data-tour="script" tabIndex={-1}>Viết kịch bản</h2></div>
       <div className="screenplay-actions">
         <button type="button" className="secondary" disabled={!scene} aria-controls={scene?`${editorId}-support`:undefined} onClick={e=>{
           const host=e.currentTarget.closest('.screenplay')?.querySelector<HTMLElement>('.screenplay-tools');
