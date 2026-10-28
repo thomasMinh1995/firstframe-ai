@@ -37,6 +37,9 @@ export function SceneOutlineEditor({ project, saved, dirty, sourceCurrent, error
   const id = useId();
   const selectedScene = outline?.scenes.find(s => s.id === selected);
   useEffect(() => {
+    if (!dirty) setNotice("");
+  }, [dirty]);
+  useEffect(() => {
     const node = dialog.current;
     if (node && selectedScene && !node.matches(":popover-open")) {
       node.showPopover(); node.querySelector<HTMLButtonElement>("[data-close-scene]")?.focus();
