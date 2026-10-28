@@ -1,0 +1,25 @@
+{
+  "raw_output": "{\n  \"notes\": [\n    {\n      \"kind\": \"intent_mismatch\",\n      \"observation\": \"Con gái nói 'Con tha thứ cho cha. Mọi chuyện đã được giải quyết.' nhưng theo M2, con gái chưa khẳng định đã tha thứ.\",\n      \"impact\": \"Đây có thể gây hiểu lầm cho khán giả, cho rằng con gái đã tha thứ khi thực tế chưa chắc chắn.\",\n      \"evidence\": [\n        {\n          \"source_id\": \"m2:179508ce-deeb-409f-9dc1-a030e6ee7924:action\",\n          \"quote\": \"Con gái ở lại, giữ khoảng lặng và chưa khẳng định đã tha thứ. Dừng ở kết mở.\"\n        },\n        {\n          \"source_id\": \"intent:idea\",\n          \"quote\": \"Cha xin lỗi; con gái ở lại nhưng chưa nói đã tha thứ.\"\n        }\n      ],\n      \"suggestion\": \"Có thể cân nhắc để con gái giữ im lặng hoặc chỉ gật đầu thay vì nói lời tha thứ.\"\n    }\n  ],\n  \"question\": \"\"\n}",
+  "output": {
+    "notes": [
+      {
+        "kind": "intent_mismatch",
+        "observation": "Con gái nói 'Con tha thứ cho cha. Mọi chuyện đã được giải quyết.' nhưng theo M2, con gái chưa khẳng định đã tha thứ.",
+        "impact": "Đây có thể gây hiểu lầm cho khán giả, cho rằng con gái đã tha thứ khi thực tế chưa chắc chắn.",
+        "suggestion": "Có thể cân nhắc để con gái giữ im lặng hoặc chỉ gật đầu thay vì nói lời tha thứ.",
+        "evidence": [
+          {
+            "source_id": "m2:179508ce-deeb-409f-9dc1-a030e6ee7924:action",
+            "quote": "Con gái ở lại, giữ khoảng lặng và chưa khẳng định đã tha thứ. Dừng ở kết mở."
+          },
+          {
+            "source_id": "intent:idea",
+            "quote": "Cha xin lỗi; con gái ở lại nhưng chưa nói đã tha thứ."
+          }
+        ]
+      }
+    ],
+    "question": ""
+  },
+  "model": "qwen2.5:7b"
+}

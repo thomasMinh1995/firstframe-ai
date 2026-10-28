@@ -2,7 +2,7 @@
 
 import { AnalysisNote, GenerateResponse, StoryPlanSection, type EvaluationFinding } from "./apiClient";
 import type { UiLanguage } from "./language";
-import { rubricLabels } from "./storyLabels";
+import { feedbackGuidance, rubricLabels } from "./storyLabels";
 import type { ReactNode } from "react";
 import type { Feedback, FeedbackSource } from "./projectsApi";
 import type { RevisionNote } from "./apiClient";
@@ -38,13 +38,12 @@ const resultCopy = {
     storyPlan: "Story Plan",
     storyPlanTitle: "First structured pass",
     workingTitle: "Working Title",
-    evaluation: "Evaluation",
-    evaluationTitle: "Creative quality check",
-    ready: "Ready for demo pass",
-    needsRevision: "Needs revision",
+    evaluation: "AI feedback",
+    evaluationTitle: "Points to consider",
     strengths: "Strengths",
     weaknesses: "Weaknesses",
     suggestions: "Suggestions",
+    clarifications: "Not enough evidence — clarification needed",
     emptyMissing: "No major missing information returned.",
     emptyOpportunities: "No additional opportunities returned.",
     emptyStrengths: "No strengths returned yet.",
@@ -77,13 +76,12 @@ const resultCopy = {
     storyPlan: "Bản phát triển",
     storyPlanTitle: "Bản phát triển đầu tiên",
     workingTitle: "Tên tạm thời",
-    evaluation: "Đánh giá",
-    evaluationTitle: "Kiểm tra chất lượng sáng tạo",
-    ready: "Sẵn sàng cho bản demo",
-    needsRevision: "Cần chỉnh sửa",
+    evaluation: "Góp ý AI",
+    evaluationTitle: "Những điều cần cân nhắc",
     strengths: "Điểm mạnh",
     weaknesses: "Điểm yếu",
     suggestions: "Gợi ý cải thiện",
+    clarifications: "Chưa đủ căn cứ — cần làm rõ",
     emptyMissing: "Chưa có thông tin còn thiếu.",
     emptyOpportunities: "Chưa có cơ hội phát triển bổ sung.",
     emptyStrengths: "Chưa có điểm mạnh.",
@@ -124,24 +122,33 @@ export function StoryFeedback({ evaluation, uiLanguage, onChoose, onTarget, sour
   const weaknesses = evaluation.findings.filter(item => item.criterion_id.startsWith("weakness-"));
   const suggestions = evaluation.findings.filter(item => item.criterion_id.startsWith("suggestion-"));
   const notes = readRevisionNotes(evaluation);
+  const noteGroups = (["mismatch", "uncertain"] as const).map(comparison => ({
+    comparison,
+    title: comparison === "uncertain" ? copy.clarifications
+      : uiLanguage === "vi" ? "Điều có thể trái lựa chọn của bạn" : "Possible conflicts with your choices",
+    notes: notes?.filter(note => note.comparison === comparison) ?? [],
+  }));
   return (
     <ReportCard eyebrow={copy.evaluation} title={uiLanguage === "vi" ? "Góp ý cho lần sửa tiếp theo" : copy.evaluationTitle}
       icon="✍️" delayClass="reveal-1">
-      <p>{uiLanguage === "vi" ? "Đây là gợi ý tham khảo. Bạn quyết định điều gì phù hợp với câu chuyện của mình."
-        : "These are suggestions. You decide what fits your story."}</p>
+      <p>{feedbackGuidance[uiLanguage]}</p>
       {onChoose && <p>Chọn một góp ý để xem cạnh bản thảo và tự quyết định phần muốn sửa.
         Đối chiếu với ý đồ của bạn: điều trái dữ kiện hoặc lựa chọn rõ, điều còn để mở và đề xuất sáng tạo cần được cân nhắc khác nhau.
         Bạn có thể bỏ qua góp ý không phù hợp; không cần sửa tất cả.</p>}
       <div className="feedback-grid">
         <SectionList title={copy.strengths} items={shaped.strengths} emptyText={copy.emptyStrengths} />
-        {notes !== null ? <section className="list-section"><h3>Ưu tiên cân nhắc sửa ({notes.length})</h3>
+        {notes !== null ? <>
           {!notes.length && <p>Không có ưu tiên sửa được trả về. Bạn vẫn quyết định có giữ cách kể này hay không.</p>}
-          {notes.map(note => {
+          {noteGroups.filter(group => group.notes.length).map(group => <section key={group.comparison} className="list-section">
+          <h3>{group.title} ({group.notes.length})</h3>
+          {group.comparison === "uncertain" && <p>{uiLanguage === "vi"
+            ? "Chưa xác định đây là lỗi. Bạn có thể giữ nguyên hoặc làm rõ ý định."
+            : "This has not been established as a problem. You can keep the draft or clarify your intent."}</p>}
+          {group.notes.map(note => {
             const targets = validatedTargets(note, source, evaluation.artifact_id);
             return <article key={note.note_id} className="card-feedback-item">
-              <p>{note.comparison === "uncertain" ? "Điều cần làm rõ" : "Điều có thể trái lựa chọn của bạn"}</p>
               <p className="preserve-lines">{note.observation}</p>
-              <p className="preserve-lines"><strong>Bước tiếp theo: </strong>{note.suggestion}</p>
+              {note.suggestion.trim() && <p className="preserve-lines"><strong>{uiLanguage === "vi" ? "Gợi ý tùy chọn: " : "Optional suggestion: "}</strong>{note.suggestion}</p>}
               <details><summary>Xem nguồn đối chiếu</summary>
                 {note.decision_question && <p>{note.decision_question}</p>}
                 <p className="preserve-lines">{note.decision_quote}</p>
@@ -149,14 +156,15 @@ export function StoryFeedback({ evaluation, uiLanguage, onChoose, onTarget, sour
                 <p>Trích dẫn đúng chữ chưa chứng minh nhận xét đúng nghĩa. Bạn có thể giữ bản hiện tại.</p>
               </details>
               {onTarget && targets && !selectionDisabled ? <div>
-                {targets.length > 1 && <p>Chọn phần bạn muốn tự sửa:</p>}
+                {targets.length > 1 && <p>{note.comparison === "uncertain" ? "Chọn phần bạn muốn đối chiếu:" : "Chọn phần bạn muốn tự sửa:"}</p>}
                 {targets.map(target => <button key={target.target_id} type="button" className="secondary"
-                  onClick={() => onTarget(note, target.target_id)}>Sửa phần này: {target.label}</button>)}
+                  onClick={() => onTarget(note, target.target_id)}>{note.comparison === "uncertain" ? "Xem phần này" : "Sửa phần này"}: {target.label}</button>)}
               </div> : <p className="storage-note">{!targets ? "Chưa xác minh được nguồn và mục tiêu; góp ý này chỉ để đọc."
                 : "Góp ý thuộc bản trước hoặc đang chỉ đọc."}</p>}
             </article>;
           })}
-        </section> : <>
+        </section>)}
+        </> : <>
         <SectionList title={copy.weaknesses} items={shaped.weaknesses} emptyText={copy.emptyWeaknesses}
           onChoose={onChoose && (index => onChoose(weaknesses[index]))}
           selectedIndex={weaknesses.findIndex(item => item.criterion_id === selectedCriterion)}
@@ -166,6 +174,8 @@ export function StoryFeedback({ evaluation, uiLanguage, onChoose, onTarget, sour
           selectedIndex={suggestions.findIndex(item => item.criterion_id === selectedCriterion)}
           selectionDisabled={selectionDisabled} />
         </>}
+        {notes === null && shaped.clarifications.length > 0 && <SectionList title={copy.clarifications}
+          items={shaped.clarifications} emptyText="" />}
       </div>
       {shaped.scores.length > 0 && <details className="rubric-details">
         <summary>{uiLanguage === "vi" ? "Xem điểm tham khảo" : "Reference scores"}</summary>
@@ -217,14 +227,10 @@ export function StoryResultCards({ result, uiLanguage }: StoryResultCardsProps) 
       </ReportCard>
 
       <ReportCard eyebrow={copy.evaluation} title={copy.evaluationTitle} icon="⭐" delayClass="reveal-3">
-        <div className="evaluation-summary">
-          <span className={result.evaluation.passed ? "result-pill is-pass" : "result-pill"}>
-            {result.evaluation.passed ? copy.ready : copy.needsRevision}
-          </span>
-        </div>
+        <p>{feedbackGuidance[uiLanguage]}</p>
 
         {evaluation.scores.length > 0 ? (
-          <div className="score-grid" aria-label={uiLanguage === "vi" ? "Điểm tham khảo" : "Rubric scores"}>
+          <div className="score-grid" aria-label={uiLanguage === "vi" ? "Điểm tham khảo" : "AI reference scores"}>
             {evaluation.scores.map((score) => (
               <article key={score.label} className="score-card">
                 <div className="score-row">
@@ -240,6 +246,8 @@ export function StoryResultCards({ result, uiLanguage }: StoryResultCardsProps) 
         ) : null}
 
         <div className="feedback-grid">
+          {evaluation.clarifications.length > 0 && <SectionList title={copy.clarifications}
+            items={evaluation.clarifications} emptyText="" />}
           <SectionList
             title={copy.strengths}
             items={evaluation.strengths}
@@ -389,6 +397,9 @@ function shapeEvaluation(result: Pick<GenerateResponse, "evaluation">, uiLanguag
       .map((finding) => finding.message),
     suggestions: result.evaluation.findings
       .filter((finding) => finding.criterion_id.startsWith("suggestion-"))
+      .map((finding) => finding.message),
+    clarifications: result.evaluation.findings
+      .filter((finding) => finding.criterion_id.startsWith("clarification-"))
       .map((finding) => finding.message),
   };
 }

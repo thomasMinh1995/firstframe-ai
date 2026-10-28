@@ -1,0 +1,23 @@
+{
+  "fixed_before_run": true,
+  "reviewer": "Codex visual inspection, not PO or user acceptance",
+  "labels": [
+    "pass",
+    "fail",
+    "unclear"
+  ],
+  "criteria": [
+    "graphite pencil monochrome",
+    "exactly two people",
+    "mother left standing beside doorway",
+    "daughter right seated at small table",
+    "both people and envelope visible",
+    "sealed unopened envelope visually clear",
+    "no text captions or panel grid",
+    "no extra event/person or closed ending",
+    "mother visually mature mid-fifties relative to adult daughter",
+    "daughter head and gaze toward mother, not down at envelope"
+  ],
+  "comparison": "Compare age/gaze refinements with the saved pencil/sealed-envelope baseline. Original eight criteria are preserved; two focus criteria are explicitly added before running.",
+  "scope": "One fixed English synthetic scene, two repeats at seed 42. Approximate age is visual interpretation, not proof of an exact age. Unclear is not acceptance."
+}

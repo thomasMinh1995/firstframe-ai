@@ -40,9 +40,91 @@ assert.equal(readRevisionNotes({ revision_notes: [note, note] }), null);
 assert.equal(readRevisionNotes({ revision_notes: [{ ...note, targets: null }] }), null);
 assert.deepEqual(readRevisionNotes({ revision_notes: [] }), []);
 assert.deepEqual(readRevisionNotes({ revision_notes: [note] }), [note]);
+assert.deepEqual(readRevisionNotes({ revision_notes: [{ ...note, suggestion: '' }] }), [{ ...note, suggestion: '' }]);
+assert.equal(readRevisionNotes({ revision_notes: [{ ...note, comparison: 'mismatch', suggestion: '  ' }] }), null);
 // Whitespace and same-title sections are significant; never relocate a quote by text.
 const duplicate = structuredClone(source);
 duplicate.draft.sections.push({ ...duplicate.draft.sections[2] });
 assert.equal(validatedTargets({ ...note, targets: [{ target_id: 'section-3', quote: 'Cha bắt máy.' }] }, duplicate, 'f1')[0].target_id, 'section-3');
 assert.equal(validatedTargets({ ...note, targets: [{ target_id: 'section-3', quote: ' Cha bắt máy.' }] }, duplicate, 'f1'), null);
 console.log('Structured priority checks passed: artifact, question and exact target binding, duplicates, partial pairs and legacy metadata.');
+
+// AI verdicts must not be presented as a judgment of the writer or demo readiness.
+const React = require('react');
+const { renderToStaticMarkup } = require('react-dom/server');
+const { CardFeedback } = require(process.argv[2] + '/CardFeedback.js');
+const { StoryFeedback, StoryResultCards } = require(process.argv[2] + '/StoryResultCards.js');
+const evaluation = { artifact_id: 'f1', passed: true, rubric_scores: { story_clarity: 4 },
+  findings: [], revision_notes: [] };
+const noAction = () => assert.fail('Reading feedback must not trigger an edit or AI action');
+for (const language of ['vi', 'en']) {
+  for (const passed of [true, false, null]) {
+    const result = { analysis: { summary: 'Một khoảnh khắc.', notes: [], missing_information: [] },
+      story_plan: source.draft, evaluation: { ...evaluation, passed } };
+    const before = structuredClone(result);
+    const html = renderToStaticMarkup(React.createElement(StoryResultCards, { result, uiLanguage: language }));
+    assert.ok(!html.includes('Sẵn sàng cho bản demo') && !html.includes('Ready for demo pass'));
+    assert.ok(!html.includes('Cần chỉnh sửa') && !html.includes('Needs revision'));
+    assert.ok(!html.includes('result-pill'), 'AI passed is not a readiness badge');
+    assert.ok(html.includes(language === 'vi' ? 'không đánh giá năng lực viết' : 'do not assess your writing ability'));
+    assert.ok(html.includes(language === 'vi' ? 'chứng minh bản thảo đã tốt hơn' : 'prove that your draft has improved'));
+    assert.ok(html.includes('4/5'), 'Reference scores remain available');
+    assert.deepEqual(result, before);
+  }
+  for (const revision_notes of [null, []]) {
+    const html = renderToStaticMarkup(React.createElement(StoryFeedback, {
+      evaluation: { ...evaluation, revision_notes }, uiLanguage: language, onChoose: noAction, onTarget: noAction,
+    }));
+    assert.ok(html.includes(language === 'vi' ? 'có thể sai hoặc bỏ sót' : 'may be wrong or miss things'));
+    assert.ok(html.includes(language === 'vi' ? 'bạn quyết định giữ hay tự sửa' : 'you decide what to keep or revise yourself'));
+  }
+}
+for (const current of [true, false]) {
+  const html = renderToStaticMarkup(React.createElement(CardFeedback, {
+    cardId: 'section-2', label: 'Kết thúc', evaluation, source, current, onClose: noAction, onReview: noAction,
+  }));
+  assert.ok(html.includes('có thể sai hoặc bỏ sót'));
+  assert.ok(html.includes('không đánh giá năng lực viết'));
+  assert.ok(html.includes('bạn quyết định giữ hay tự sửa'));
+}
+console.log('HITL presentation checks passed: VI/EN, true/false/unknown AI verdicts, reference scores, legacy/structured feedback, current/stale cards, no actions or mutation.');
+
+// Uncertainty stays separate from confirmed conflicts, including optional questions and old notes.
+for (const suggestion of ['', 'Bạn muốn dừng ở đâu?']) {
+  const uncertain = { ...note, suggestion };
+  const feedback = { ...evaluation, passed: null, revision_notes: [uncertain], findings: [
+    { criterion_id: 'clarification-1', message: uncertain.observation, severity: 'info', score: null },
+  ] };
+  const before = structuredClone(feedback);
+  for (const language of ['vi', 'en']) {
+    const html = renderToStaticMarkup(React.createElement(StoryFeedback, {
+      evaluation: feedback, uiLanguage: language, source, onTarget: noAction,
+    }));
+    assert.ok(html.includes(language === 'vi' ? 'Chưa đủ căn cứ' : 'Not enough evidence'));
+    assert.ok(!html.includes('Ưu tiên cân nhắc sửa') && !html.includes('Possible conflicts'));
+    assert.ok(html.includes('Xem phần này') && !html.includes('Sửa phần này'));
+    assert.ok(html.includes('Anh buông tay.') && html.includes('Dừng khi bắt máy.'));
+    assert.equal(html.includes(language === 'vi' ? 'Gợi ý tùy chọn:' : 'Optional suggestion:'), !!suggestion);
+    for (const revision_notes of [null, undefined]) {
+      const fallback = renderToStaticMarkup(React.createElement(StoryFeedback, {
+        evaluation: { ...feedback, revision_notes }, uiLanguage: language,
+      }));
+      assert.ok(fallback.includes(uncertain.observation));
+      assert.ok(fallback.includes(language === 'vi' ? 'Chưa đủ căn cứ' : 'Not enough evidence'));
+    }
+  }
+  const html = renderToStaticMarkup(React.createElement(CardFeedback, {
+    cardId: 'section-2', label: 'Kết thúc', evaluation: feedback, source, current: true,
+    onClose: noAction, onReview: noAction,
+  }));
+  assert.ok(html.includes('Chưa đủ căn cứ') && html.includes('Chưa xác định đây là lỗi'));
+  assert.equal(html.includes('Gợi ý tùy chọn:'), !!suggestion);
+  assert.deepEqual(feedback, before);
+}
+const mixedFeedback = { ...evaluation, revision_notes: [note, { ...note, note_id: 'n2', comparison: 'mismatch' }] };
+const mixedHtml = renderToStaticMarkup(React.createElement(StoryFeedback, {
+  evaluation: mixedFeedback, uiLanguage: 'vi', source,
+}));
+assert.ok(mixedHtml.includes('Điều có thể trái lựa chọn của bạn (1)'));
+assert.ok(mixedHtml.includes('Chưa đủ căn cứ — cần làm rõ (1)'));
+console.log('Neutral feedback checks passed: empty/optional suggestions, old notes, separate groups, source binding and read-only rendering.');

@@ -1,0 +1,97 @@
+// Disposable real API/SQLite and fake provider only; never points at an author's DB.
+const {chromium}=require('playwright');
+const assert=require('node:assert/strict');
+const fs=require('node:fs/promises');
+const path=require('node:path');
+(async()=>{
+ const directory=process.env.FIRSTFRAME_QA_DIRECTORY;
+ assert.ok(directory&&path.basename(directory).startsWith('firstframe-workspace-'));
+ const seed=JSON.parse(await fs.readFile(path.join(directory,'seed.json'),'utf8'));
+ const browser=await chromium.launch({headless:true,channel:'chrome'});
+ const context=await browser.newContext({viewport:{width:1280,height:900},reducedMotion:'reduce'});
+ await context.addInitScript(()=>{try{localStorage.setItem('firstframe:onboarding',JSON.stringify({version:1,status:'dismissed',stepId:'new-project',projectId:null}));}catch{}});
+ const errors=[];context.on('page',p=>p.on('pageerror',e=>errors.push(e.message)));
+ const api='http://127.0.0.1:8034',base='http://127.0.0.1:3034';
+ const read=async()=>{const r=await context.request.get(`${api}/api/projects/${seed.id}`);assert.equal(r.status(),200);return r.json()};
+ const page=await context.newPage();await page.goto(base);await page.locator('#workspace-outline').waitFor();
+ await page.getByRole('button',{name:'Bắt đầu dàn cảnh từ bản đã chọn',exact:true}).click();
+ const area=page.locator('.scene-outline'),suggestions=page.locator('.scene-suggestions');
+ const generate=()=>suggestions.getByRole('button',{name:'Gợi ý danh sách cảnh ban đầu',exact:true}).click();
+ const ready=()=>suggestions.locator('.scene-proposal').filter({has:page.getByRole('button',{name:'Dùng danh sách này',exact:true})});
+ await generate();await ready().waitFor();
+ assert.equal((await read()).scene_outline.scenes.length,0);
+ assert.equal(await ready().locator('.scene-proposal-preview > ol > li').count(),2);
+ await ready().getByLabel('Diễn tiến cảnh',{exact:true}).first().fill('  Bản do tác giả sửa.\n\nKết mở.  ');
+ await ready().getByRole('button',{name:'Bỏ cảnh đề xuất 2',exact:true}).click();
+ await page.getByRole('button',{name:'Lưu thay đổi',exact:true}).click();await page.getByText('Đã lưu thay đổi.',{exact:true}).waitFor();
+ assert.equal((await read()).scene_outline.scenes.length,0);
+ assert.equal((await read()).scene_proposals[0].preview_scenes.length,1);
+ await page.reload();await ready().waitFor();
+ assert.equal(await ready().getByLabel('Diễn tiến cảnh',{exact:true}).inputValue(),'  Bản do tác giả sửa.\n\nKết mở.  ');
+ // Another window edits only the saved preview: inspect must not silently advance A's revision.
+ await ready().getByLabel('Diễn tiến cảnh',{exact:true}).fill('Bản chưa lưu cửa sổ A');
+ const other=await context.newPage();await other.goto(base);await other.locator('.scene-proposal-preview').first().waitFor();
+ await other.locator('.scene-proposal-preview').first().getByLabel('Diễn tiến cảnh',{exact:true}).fill('Bản đã lưu cửa sổ B');
+ await other.getByRole('button',{name:'Lưu thay đổi',exact:true}).click();await other.getByText('Đã lưu thay đổi.',{exact:true}).waitFor();
+ await suggestions.getByRole('button',{name:'Kiểm tra đề xuất đã lưu',exact:true}).click();
+ await page.locator('.save-toolbar .error').filter({hasText:'cửa sổ khác'}).waitFor();
+ assert.equal(await ready().getByLabel('Diễn tiến cảnh',{exact:true}).inputValue(),'Bản chưa lưu cửa sổ A');
+ assert.equal((await read()).scene_proposals[0].preview_scenes[0].action,'Bản đã lưu cửa sổ B');
+ await other.close();
+ // Discard only this disposable test buffer, then resume the regular flow.
+ await page.reload();await ready().waitFor();
+ await ready().getByLabel('Diễn tiến cảnh',{exact:true}).fill('  Bản do tác giả sửa.\n\nKết mở.  ');
+ await page.getByRole('button',{name:'Lưu thay đổi',exact:true}).click();await page.getByText('Đã lưu thay đổi.',{exact:true}).waitFor();
+ await ready().getByRole('button',{name:'Dùng danh sách này',exact:true}).click();
+ assert.equal(await area.locator('[data-scene-id]').count(),1);assert.equal((await read()).scene_outline.scenes.length,0);
+ await area.getByRole('button',{name:'Hoàn tác thao tác cảnh',exact:true}).click();assert.equal(await area.locator('[data-scene-id]').count(),0);
+ await ready().getByRole('button',{name:'Dùng danh sách này',exact:true}).click();
+ await page.getByRole('button',{name:'Lưu thay đổi',exact:true}).click();await page.getByText('Đã lưu thay đổi.',{exact:true}).waitFor();
+ let stored=await read();assert.equal(stored.scene_proposals[0].status,'applied');assert.equal(stored.scene_outline.scenes[0].action,'  Bản do tác giả sửa.\n\nKết mở.  ');
+ const originalId=stored.scene_outline.scenes[0].id;
+ await area.locator('[data-select-scene]').first().click();const pop=page.locator('.scene-popover:popover-open');
+ await pop.getByRole('tab',{name:'Dàn cảnh',exact:true}).click();await pop.getByLabel('Có chi tiết nào muốn giữ hoặc tránh? · tùy chọn',{exact:true}).fill('Không thêm tha thứ.');
+ await pop.getByRole('button',{name:'Lưu thay đổi dàn cảnh',exact:true}).click();await page.getByText('Đã lưu thay đổi dàn cảnh và mọi sửa đang chờ trong dự án.',{exact:true}).waitFor();await pop.getByRole('button',{name:'Đóng',exact:true}).click();
+ await suggestions.getByLabel('Loại gợi ý',{exact:true}).selectOption('develop');await suggestions.getByLabel('Cảnh cần phát triển',{exact:true}).selectOption(originalId);
+ await suggestions.getByRole('button',{name:'Gợi ý phát triển cảnh',exact:true}).click();
+ const develop=suggestions.locator('.scene-proposal').filter({has:page.getByRole('button',{name:'Dùng cảnh đề xuất này',exact:true})}).first();await develop.waitFor();
+ await develop.getByRole('button',{name:'Dùng cảnh đề xuất này',exact:true}).click();
+ await page.getByRole('button',{name:'Lưu thay đổi',exact:true}).click();await page.getByText('Đã lưu thay đổi.',{exact:true}).waitFor();
+ stored=await read();assert.equal(stored.scene_outline.scenes[0].id,originalId);assert.equal(stored.scene_outline.scenes[0].keep_or_avoid,'Không thêm tha thứ.');
+ await suggestions.getByLabel('Loại gợi ý',{exact:true}).selectOption('append');await suggestions.getByLabel('Thêm sau cảnh',{exact:true}).selectOption(originalId);
+ await suggestions.getByRole('button',{name:'Gợi ý thêm một cảnh',exact:true}).click();const append=suggestions.locator('.scene-proposal').filter({has:page.getByRole('button',{name:'Dùng cảnh đề xuất này',exact:true})}).first();await append.waitFor();
+ await append.getByRole('button',{name:'Dùng cảnh đề xuất này',exact:true}).click();
+ assert.equal(await area.locator('[data-scene-id]').count(),2);assert.equal(await area.locator('[data-scene-id]').first().getAttribute('data-scene-id'),originalId);
+ await page.getByRole('button',{name:'Lưu thay đổi',exact:true}).click();await page.getByText('Đã lưu thay đổi.',{exact:true}).waitFor();
+ // Explicitly keep adopted text as manual edits, without marking the proposal applied.
+ await suggestions.getByRole('button',{name:'Gợi ý thêm một cảnh',exact:true}).click();
+ const manual=suggestions.locator('.scene-proposal').filter({has:page.getByRole('button',{name:'Dùng cảnh đề xuất này',exact:true})}).first();await manual.waitFor();
+ await manual.getByRole('button',{name:'Dùng cảnh đề xuất này',exact:true}).click();
+ await suggestions.getByRole('button',{name:'Giữ cảnh đang sửa như bản tự chỉnh',exact:true}).click();
+ await page.getByRole('button',{name:'Lưu thay đổi',exact:true}).click();await page.getByText('Đã lưu thay đổi.',{exact:true}).waitFor();
+ assert.equal((await read()).scene_proposals.at(-1).status,'ready');
+ const manualCount=(await read()).scene_outline.scenes.length;assert.equal(manualCount,3);
+ // Lost response: reopen proposal, never generate twice.
+ await context.request.post(api+'/__test/control',{data:{lose_response_suffix:`/api/projects/${seed.id}/scene-suggestions/stream`}});
+ await suggestions.getByRole('button',{name:'Gợi ý thêm một cảnh',exact:true}).click();await page.locator('.save-toolbar .error').waitFor();
+ const before=(await read()).scene_proposals.length;await suggestions.getByRole('button',{name:'Kiểm tra đề xuất đã lưu',exact:true}).click();
+ await page.waitForFunction(n=>document.querySelectorAll('.scene-proposal').length===n,before);
+ assert.equal((await read()).scene_proposals.length,before);
+ assert.equal((await read()).scene_outline.scenes.length,manualCount);
+ // Discard doesn't modify scenes; failure still permits manual edits.
+ await suggestions.getByRole('button',{name:'Lưu sửa đang chờ và bỏ đề xuất',exact:true}).first().click();await page.waitForFunction(()=>!document.querySelector('.project-fields:disabled'));
+ await context.request.post(api+'/__test/control',{data:{fail_scenes:true}});
+ await suggestions.getByRole('button',{name:'Gợi ý thêm một cảnh',exact:true}).click();await page.locator('.save-toolbar .error').waitFor();
+ await area.getByRole('button',{name:'Tự thêm cảnh',exact:true}).click();await pop.getByLabel('Tên cảnh',{exact:true}).fill('Cảnh tự viết sau lỗi AI');
+ await pop.getByLabel('Chuyện gì xảy ra trong cảnh này?',{exact:true}).fill('Người viết tự tiếp tục.');await pop.getByRole('button',{name:'Đóng',exact:true}).click();
+ await suggestions.getByRole('button',{name:'Kiểm tra đề xuất đã lưu',exact:true}).click();
+ await suggestions.locator('.scene-proposal').filter({hasText:'Lượt này lỗi'}).locator('summary').first().click();await suggestions.getByText(/Lượt này lỗi/).waitFor();
+ assert.equal(await area.locator('[data-scene-id]').count(),manualCount+1);
+ await page.getByRole('button',{name:'Lưu thay đổi',exact:true}).click();await page.getByText('Đã lưu thay đổi.',{exact:true}).waitFor();
+ assert.equal((await read()).scene_outline.scenes.length,manualCount+1);
+ for(const width of [1280,390,320]){await page.setViewportSize({width,height:900});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false);}
+ assert.deepEqual(errors,[]);assert.equal((await read()).feedback_source.content_key,seed.feedback_source.content_key);
+ await page.screenshot({path:'/tmp/firstframe-scene-suggestions-320.png',fullPage:true});
+ console.log('PASS scene suggestions: separate editable preview/drop/use/undo/save, append order, develop ID/notes, lost response recovery, discard, manual after AI error, 3 widths');
+ await context.close();await browser.close();
+})().catch(e=>{console.error(e);process.exit(1)});

@@ -1,0 +1,21 @@
+{
+  "raw_output": "{\n  \"notes\": [\n    {\n      \"kind\": \"intent_mismatch\",\n      \"observation\": \"Lan kéo rèm để ánh đèn đường rọi lên tờ giấy, nhưng trong giới hạn 3, tác giả yêu cầu không thêm nguồn sáng mới, chỉ sử dụng ánh đèn đường qua rèm.\",\n      \"impact\": \"Việc kéo rèm và sử dụng ánh đèn đường trực tiếp không tuân theo giới hạn 3, có thể gây hiểu lầm cho khán giả rằng đã thêm một nguồn sáng mới.\",\n      \"evidence\": [\n        {\n          \"source_id\": \"A5\",\n          \"quote\": \"Không thêm điện thoại hoặc nguồn sáng mới; dùng ánh đèn đường qua rèm.\"\n        }\n      ],\n      \"suggestion\": \"\"\n    }\n  ],\n  \"question\": \"\"\n}",
+  "output": {
+    "notes": [
+      {
+        "kind": "intent_mismatch",
+        "observation": "Lan kéo rèm để ánh đèn đường rọi lên tờ giấy, nhưng trong giới hạn 3, tác giả yêu cầu không thêm nguồn sáng mới, chỉ sử dụng ánh đèn đường qua rèm.",
+        "impact": "Việc kéo rèm và sử dụng ánh đèn đường trực tiếp không tuân theo giới hạn 3, có thể gây hiểu lầm cho khán giả rằng đã thêm một nguồn sáng mới.",
+        "suggestion": "",
+        "evidence": [
+          {
+            "source_id": "A5",
+            "quote": "Không thêm điện thoại hoặc nguồn sáng mới; dùng ánh đèn đường qua rèm."
+          }
+        ]
+      }
+    ],
+    "question": ""
+  },
+  "model": "qwen2.5:7b"
+}

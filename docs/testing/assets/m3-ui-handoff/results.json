@@ -1,0 +1,155 @@
+{
+  "base": "e4e26bf0ccb8377c65e1520158338a1a4035854f",
+  "date": "2026-10-27",
+  "scope": "M3 UI step 4; synthetic QA fixtures and fake providers only; no runtime changes, real models or M4 implementation",
+  "backend": {
+    "passed": 100,
+    "files": [
+      "test_screenplays.py",
+      "test_screenplay_writing.py",
+      "test_screenplay_review.py",
+      "test_screenplay_review_priority.py",
+      "test_screenplay_selection.py",
+      "test_scene_handoff.py",
+      "test_scene_sketches.py"
+    ],
+    "warning": "Existing Starlette/httpx deprecation"
+  },
+  "frontendChecks": [
+    "screenplay-editing-contract",
+    "screenplay-contract",
+    "screenplay-review-contract",
+    "screenplay-selection-contract",
+    "screenplay-layout-contract",
+    "screenplay-sketch-contract",
+    "onboarding",
+    "progress"
+  ],
+  "chrome": {
+    "fixtureSuites": [
+      {
+        "test": "screenplay-handoff.browser.cjs",
+        "exitCode": 0
+      },
+      {
+        "test": "screenplay-focus.browser.cjs",
+        "exitCode": 0
+      },
+      {
+        "test": "screenplay-context.browser.cjs",
+        "exitCode": 0
+      },
+      {
+        "test": "screenplay-layout.browser.cjs",
+        "exitCode": 0
+      },
+      {
+        "test": "screenplay-continuous.browser.cjs",
+        "exitCode": 0
+      },
+      {
+        "test": "screenplay.browser.cjs",
+        "exitCode": 0
+      },
+      {
+        "test": "screenplay-writing.browser.cjs",
+        "exitCode": 0
+      },
+      {
+        "test": "screenplay-feedback.browser.cjs",
+        "exitCode": 0
+      },
+      {
+        "test": "screenplay-selection.browser.cjs",
+        "exitCode": 0
+      },
+      {
+        "test": "scene-handoff.browser.cjs",
+        "exitCode": 0
+      },
+      {
+        "test": "scene-sketch.browser.cjs",
+        "exitCode": 0
+      }
+    ],
+    "tourMockSuite": "passed",
+    "integrated": {
+      "engine": "chrome",
+      "version": "156.0.8078.48",
+      "viewportWidths": [
+        1440,
+        390,
+        320
+      ],
+      "sourceSceneIds": [
+        "e294d3bd-c9ff-4b01-b60a-1da4771042ce",
+        "08931c9a-9663-4c4c-a1c8-cdc74ab55f3a"
+      ],
+      "feedbackFields": [
+        "text",
+        "heading",
+        "speaker"
+      ],
+      "writingRequests": 1,
+      "reviewRequests": 2,
+      "imageRequests": 0,
+      "providerStages": [],
+      "pageErrors": [],
+      "legacyClientPreserved": true,
+      "m4SnapshotPreserved": true
+    }
+  },
+  "firefox": {
+    "engine": "firefox",
+    "version": "151.0",
+    "viewportWidths": [
+      1440,
+      390,
+      320
+    ],
+    "sourceSceneIds": [
+      "018d70b7-1737-4bdc-a00d-3266c7d0f9d5",
+      "33f2c04b-61f6-4f5b-b2d8-15d0cdadcb31"
+    ],
+    "feedbackFields": [
+      "text",
+      "heading",
+      "speaker"
+    ],
+    "writingRequests": 1,
+    "reviewRequests": 2,
+    "imageRequests": 0,
+    "providerStages": [],
+    "pageErrors": [],
+    "legacyClientPreserved": true,
+    "m4SnapshotPreserved": true
+  },
+  "webkit": {
+    "status": "not verified",
+    "reason": "Existing cached WebKit 2311 is incompatible with the available Playwright: Protocol error (Page.overrideSetting): Unknown setting: PushAPIEnabled. No browser package was installed."
+  },
+  "ruff": {
+    "newDiagnostics": 0,
+    "existingDiagnostics": 6,
+    "codes": [
+      "I001",
+      "F811",
+      "F841"
+    ],
+    "baselineCompared": "e4e26bf"
+  },
+  "preservation": {
+    "protectedFilesUnchanged": 7,
+    "runtimeDiffEmpty": true,
+    "prototypeSHA256": "ada78013199e3b794fa9e5f7cae03e0711a523b0f316956d96beff3fa5d08c7f"
+  },
+  "notVerified": [
+    "Operating-system IME",
+    "Real system clipboard",
+    "Real mobile/virtual keyboard",
+    "Screen reader",
+    "Full Safari",
+    "New-user acceptance",
+    "Real critic quality"
+  ]
+}

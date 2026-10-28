@@ -1,0 +1,33 @@
+{
+  "raw_output": "{\n  \"notes\": [\n    {\n      \"kind\": \"craft\",\n      \"observation\": \"Con gái đã xác nhận đã tha thứ trong cảnh này, trái với ý tưởng tác giả.\",\n      \"impact\": \"Việc này làm mất đi sự không chắc chắn và kết mở mà tác giả muốn duy trì.\",\n      \"evidence\": [\n        {\n          \"source_id\": \"S3\",\n          \"quote\": \"Khoảnh khắc\"\n        },\n        {\n          \"source_id\": \"S4\",\n          \"quote\": \"Con tha thứ cho cha. Mọi chuyện đã được giải quyết.\"\n        },\n        {\n          \"source_id\": \"S5\",\n          \"quote\": \"Con tha thứ cho cha. Mọi chuyện đã được giải quyết.\"\n        },\n        {\n          \"source_id\": \"S6\",\n          \"quote\": \"Con gái\"\n        }\n      ]\n    }\n  ],\n  \"question\": \"\"\n}",
+  "output": {
+    "notes": [
+      {
+        "kind": "craft",
+        "observation": "Con gái đã xác nhận đã tha thứ trong cảnh này, trái với ý tưởng tác giả.",
+        "impact": "Việc này làm mất đi sự không chắc chắn và kết mở mà tác giả muốn duy trì.",
+        "suggestion": "",
+        "evidence": [
+          {
+            "source_id": "S3",
+            "quote": "Khoảnh khắc"
+          },
+          {
+            "source_id": "S4",
+            "quote": "Con tha thứ cho cha. Mọi chuyện đã được giải quyết."
+          },
+          {
+            "source_id": "S5",
+            "quote": "Con tha thứ cho cha. Mọi chuyện đã được giải quyết."
+          },
+          {
+            "source_id": "S6",
+            "quote": "Con gái"
+          }
+        ]
+      }
+    ],
+    "question": ""
+  },
+  "model": "qwen2.5:7b"
+}

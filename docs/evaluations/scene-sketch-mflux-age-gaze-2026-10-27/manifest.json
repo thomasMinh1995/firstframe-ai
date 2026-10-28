@@ -1,0 +1,40 @@
+{
+  "frozen_at": "2026-10-27T03:24:57.557895+00:00",
+  "model": "filipstrand/Z-Image-Turbo-mflux-4bit",
+  "parameters": {
+    "width": 768,
+    "height": 432,
+    "steps": 9,
+    "seed": 42,
+    "quantize": 4,
+    "low_ram": true,
+    "mlx_cache_limit_gb": 2,
+    "timeout_seconds": 180,
+    "model_revision": "b3a8f31115a11f2f9e2fa0bfbc8d78dcc3e6568b",
+    "mflux_version": "0.23.0",
+    "mlx_version": "0.32.4"
+  },
+  "calls": 2,
+  "retries": 0,
+  "paid_api": false,
+  "private_store": "backend/.data/scene-sketch-age-gaze-trial-2026-10-27",
+  "prior_batch": "scene-sketch-mflux-pencil-sealed-2026-10-27",
+  "new_budget": "User approved at most two mother-age/daughter-gaze prompt calls, 180 seconds each",
+  "intent": "Same frozen scene/instructions/model/parameters; refine maternal age and daughter gaze while keeping drawing and sealed-envelope instructions verbatim.",
+  "hashes": {
+    "backend/app/infrastructure/scene_images.py": "e6dcb184a17b2d90e9c50251c66a7ece3b94349ca4c4fd3c9043490c6ae6791a",
+    "backend/app/api/routes/scene_sketches.py": "63618ec536dffe59578b2437cedb077069930d26a5f19ef171b67bc86a7c5ef6",
+    "backend/app/api/schemas/projects.py": "7da2657b7976cfb6475871a943d759f5455ef02b0529500823054b7b971e4e7c",
+    "backend/app/api/schemas/scenes.py": "83e771f24497099959ba4fd8df89dc3ba566584eebb44eeb40eb60e5e32ea435",
+    "backend/requirements-image.txt": "9902088a1439a928d631d7fdc2d87eae36ad0d7fc21309267292531c883c9144",
+    "backend/../docs/evaluations/scene-sketch-mflux-age-gaze-2026-10-27/run.py": "291aec4e1a6af83f7254a836fd487422ad02ddfe1aa08f1b329ce3340546def4"
+  },
+  "inputs_sha256": "eaffb7016bcc39c0aadb6110a840c882cbe702d64f75495dc77aeeadc7c26765",
+  "prompt_sha256": "84f6d8789a08033ec9c66b76cf0faa01e832c96a530ccfc8a5eddd2ff154c059",
+  "criteria_sha256": "60630220d2194383c59a89d28e3d2e34c8e8fb489a73bbfb83c3565ed280023e",
+  "baseline_hashes": {
+    "results.json": "e7c7d51b0b843b58e94a1d52cae2c35b618bcbb39a94e4274a4c45bd12d41031",
+    "results/image-1.png": "c05f3858f8a4f62af7827ad42b29eda9c38d916464b3731c64b1201da6867f23",
+    "results/image-2.png": "c05f3858f8a4f62af7827ad42b29eda9c38d916464b3731c64b1201da6867f23"
+  }
+}

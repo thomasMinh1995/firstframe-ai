@@ -1,0 +1,32 @@
+[
+  {
+    "name": "quiet-open-ending",
+    "status_code": 200,
+    "duration_seconds": 25.83,
+    "model_calls": 1,
+    "proposal_status": "ready",
+    "response_error": null,
+    "author_draft_unchanged": true,
+    "automatically_applied": false
+  },
+  {
+    "name": "gentle-comedy",
+    "status_code": 200,
+    "duration_seconds": 34.102,
+    "model_calls": 1,
+    "proposal_status": "ready",
+    "response_error": null,
+    "author_draft_unchanged": true,
+    "automatically_applied": false
+  },
+  {
+    "name": "limited-resources",
+    "status_code": 200,
+    "duration_seconds": 19.776,
+    "model_calls": 1,
+    "proposal_status": "ready",
+    "response_error": null,
+    "author_draft_unchanged": true,
+    "automatically_applied": false
+  }
+]

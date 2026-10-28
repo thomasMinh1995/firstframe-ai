@@ -1,0 +1,46 @@
+{
+  "reviewer": "Codex reading of saved source/output; not author/PO acceptance",
+  "cases": [
+    {
+      "name": "quiet-open-ending",
+      "technical": "ready, one scene, no auto apply",
+      "retained": [
+        "no dialogue",
+        "sealed letter",
+        "no explicit forgiveness/reconciliation",
+        "two characters"
+      ],
+      "source_quote": "Con gái đặt tay cạnh phong thư",
+      "output_quote": "tay đặt nhẹ lên mặt phong thư",
+      "concern": "Changed the specified hand position; author review needed. Negative wording about not receiving is not itself a visible action.",
+      "verdict": "needs_author_review"
+    },
+    {
+      "name": "gentle-comedy",
+      "technical": "ready, one scene, no auto apply",
+      "retained": [
+        "two characters",
+        "room",
+        "stuck zipper and bag",
+        "gentle interaction"
+      ],
+      "source_quote": "Nam miễn cưỡng đưa vạt áo ra.",
+      "output_quote": "Nam miễn cưỡng đưa vạt áo ra, Hà khéo léo mở khóa.",
+      "concern": "Adds resolution of zipper beyond source moment; may be a creative proposal but requires author choice. Final Hà line “Không sao, em cũng gặp phải chuyện này.” sounds awkward/possibly wrong self-reference.",
+      "verdict": "needs_author_review"
+    },
+    {
+      "name": "limited-resources",
+      "technical": "ready, one scene, no auto apply",
+      "retained": [
+        "two characters",
+        "broken flashlight stays off",
+        "curtain/streetlight/paper",
+        "no new phone or location"
+      ],
+      "output_quote": "Lan kéo rèm cửa nhẹ nhàng, tận dụng ánh đèn đường rọi vào bàn. Hai người nghiêng tờ giấy để đọc",
+      "concern": "Core actions follow source; decorative light/shadow language may need trimming. Only a small synthetic case, not proof of general quality.",
+      "verdict": "usable_reference_subject_to_author_review"
+    }
+  ]
+}

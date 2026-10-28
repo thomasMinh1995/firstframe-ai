@@ -1,0 +1,13 @@
+{
+  "name": "open-ending-violating",
+  "pair": "open-ending",
+  "variant": "violating",
+  "status_code": 200,
+  "duration_seconds": 10.015,
+  "model_calls": 1,
+  "review_status": "ready",
+  "validated_notes": 1,
+  "error": null,
+  "response_error": null,
+  "author_script_unchanged": true
+}

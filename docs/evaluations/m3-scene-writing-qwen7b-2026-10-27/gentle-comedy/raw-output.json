@@ -1,0 +1,51 @@
+{
+  "raw_output": "{\n  \"scene\": {\n    \"heading\": \"Khoảnh khắc\",\n    \"blocks\": [\n      {\n        \"kind\": \"action\",\n        \"text\": \"Nam lấy chiếc túi đang cầm che chỗ khóa kẹt.\",\n        \"speaker\": \"\"\n      },\n      {\n        \"kind\": \"dialogue\",\n        \"text\": \"Chị Hà, em xin lỗi...\",\n        \"speaker\": \"Nam\"\n      },\n      {\n        \"kind\": \"action\",\n        \"text\": \"Hà mỉm cười, đưa tay ra.\",\n        \"speaker\": \"\"\n      },\n      {\n        \"kind\": \"dialogue\",\n        \"text\": \"Để chị giúp em nhé.\",\n        \"speaker\": \"Chị Hà\"\n      },\n      {\n        \"kind\": \"action\",\n        \"text\": \"Nam miễn cưỡng đưa vạt áo ra, Hà khéo léo mở khóa.\",\n        \"speaker\": \"\"\n      },\n      {\n        \"kind\": \"dialogue\",\n        \"text\": \"Em thấy ngại quá.\",\n        \"speaker\": \"Nam\"\n      },\n      {\n        \"kind\": \"action\",\n        \"text\": \"Hà vỗ vai Nam, mỉm cười.\",\n        \"speaker\": \"\"\n      },\n      {\n        \"kind\": \"dialogue\",\n        \"text\": \"Không sao, em cũng gặp phải chuyện này.\",\n        \"speaker\": \"Chị Hà\"\n      }\n    ]\n  }\n}",
+  "output": {
+    "scene": {
+      "heading": "Khoảnh khắc",
+      "blocks": [
+        {
+          "kind": "action",
+          "text": "Nam lấy chiếc túi đang cầm che chỗ khóa kẹt.",
+          "speaker": ""
+        },
+        {
+          "kind": "dialogue",
+          "text": "Chị Hà, em xin lỗi...",
+          "speaker": "Nam"
+        },
+        {
+          "kind": "action",
+          "text": "Hà mỉm cười, đưa tay ra.",
+          "speaker": ""
+        },
+        {
+          "kind": "dialogue",
+          "text": "Để chị giúp em nhé.",
+          "speaker": "Chị Hà"
+        },
+        {
+          "kind": "action",
+          "text": "Nam miễn cưỡng đưa vạt áo ra, Hà khéo léo mở khóa.",
+          "speaker": ""
+        },
+        {
+          "kind": "dialogue",
+          "text": "Em thấy ngại quá.",
+          "speaker": "Nam"
+        },
+        {
+          "kind": "action",
+          "text": "Hà vỗ vai Nam, mỉm cười.",
+          "speaker": ""
+        },
+        {
+          "kind": "dialogue",
+          "text": "Không sao, em cũng gặp phải chuyện này.",
+          "speaker": "Chị Hà"
+        }
+      ]
+    }
+  },
+  "model": "qwen2.5:7b"
+}

@@ -1,0 +1,21 @@
+{
+  "raw_output": "{\n    \"notes\": [\n        {\n            \"kind\": \"craft\",\n            \"observation\": \"Con gái nhìn về cửa, chưa bước đi.\",\n            \"impact\": \"Động tác này tạo ra một cảm giác chờ đợi và bất an, phù hợp với tình huống của nhân vật. Tuy nhiên, việc không có thêm hành động hoặc đối thoại để hỗ trợ cảm xúc này có thể khiến khán giả cảm thấy thiếu sự liên kết.\",\n            \"evidence\": [\n                {\n                    \"source_id\": \"block:86a65c6f-d51e-450b-8992-c5fb65f4d5f4\",\n                    \"quote\": \"Con gái nhìn về cửa, chưa bước đi.\"\n                }\n            ],\n            \"suggestion\": \"Thêm một hành động nhỏ hoặc một câu đối thoại để tăng cường cảm xúc của nhân vật, ví dụ: 'Con gái nhìn về cửa, đôi mắt ướt漉漉的，她的心中充满了复杂的情绪。她不知道该不该迈出这一步，但又不想让父亲失望。' 这样的描述可以增加场景的情感深度。\"\n        }\n    ],\n    \"question\": \"\"\n}",
+  "output": {
+    "notes": [
+      {
+        "kind": "craft",
+        "observation": "Con gái nhìn về cửa, chưa bước đi.",
+        "impact": "Động tác này tạo ra một cảm giác chờ đợi và bất an, phù hợp với tình huống của nhân vật. Tuy nhiên, việc không có thêm hành động hoặc đối thoại để hỗ trợ cảm xúc này có thể khiến khán giả cảm thấy thiếu sự liên kết.",
+        "suggestion": "Thêm một hành động nhỏ hoặc một câu đối thoại để tăng cường cảm xúc của nhân vật, ví dụ: 'Con gái nhìn về cửa, đôi mắt ướt漉漉的，她的心中充满了复杂的情绪。她不知道该不该迈出这一步，但又不想让父亲失望。' 这样的描述可以增加场景的情感深度。",
+        "evidence": [
+          {
+            "source_id": "block:86a65c6f-d51e-450b-8992-c5fb65f4d5f4",
+            "quote": "Con gái nhìn về cửa, chưa bước đi."
+          }
+        ]
+      }
+    ],
+    "question": ""
+  },
+  "model": "qwen2.5:7b"
+}

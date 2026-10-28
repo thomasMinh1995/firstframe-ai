@@ -1,0 +1,103 @@
+{
+  "$defs": {
+    "StagingEvidence": {
+      "additionalProperties": false,
+      "properties": {
+        "source_id": {
+          "maxLength": 150,
+          "minLength": 1,
+          "title": "Source Id",
+          "type": "string"
+        },
+        "quote": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Quote",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_id",
+        "quote"
+      ],
+      "title": "StagingEvidence",
+      "type": "object"
+    },
+    "StagingSuggestion": {
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "enum": [
+            "blocking",
+            "performance",
+            "setting",
+            "lighting",
+            "color",
+            "costume",
+            "moment",
+            "shot",
+            "angle",
+            "composition"
+          ],
+          "title": "Field",
+          "type": "string"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/StagingEvidence"
+          },
+          "maxItems": 3,
+          "minItems": 1,
+          "title": "Evidence",
+          "type": "array"
+        },
+        "reason": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        },
+        "suggestion": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Suggestion",
+          "type": "string"
+        },
+        "purpose": {
+          "maxLength": 1000,
+          "minLength": 1,
+          "title": "Purpose",
+          "type": "string"
+        }
+      },
+      "required": [
+        "field",
+        "evidence",
+        "reason",
+        "suggestion",
+        "purpose"
+      ],
+      "title": "StagingSuggestion",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "ideas": {
+      "items": {
+        "$ref": "#/$defs/StagingSuggestion"
+      },
+      "maxItems": 6,
+      "title": "Ideas",
+      "type": "array"
+    },
+    "question": {
+      "default": "",
+      "maxLength": 2000,
+      "title": "Question",
+      "type": "string"
+    }
+  },
+  "title": "StagingResult",
+  "type": "object"
+}

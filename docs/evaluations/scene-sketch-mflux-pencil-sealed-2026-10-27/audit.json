@@ -1,0 +1,10 @@
+{
+  "freeze_verified": true,
+  "calls": 2,
+  "retries": 0,
+  "results_sha256": "e7c7d51b0b843b58e94a1d52cae2c35b618bcbb39a94e4274a4c45bd12d41031",
+  "images": {
+    "image-1.png": "c05f3858f8a4f62af7827ad42b29eda9c38d916464b3731c64b1201da6867f23",
+    "image-2.png": "c05f3858f8a4f62af7827ad42b29eda9c38d916464b3731c64b1201da6867f23"
+  }
+}

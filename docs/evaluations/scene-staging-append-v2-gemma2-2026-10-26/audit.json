@@ -1,0 +1,14 @@
+{
+  "audited_at": "2026-10-26T16:01:03.390085+00:00",
+  "freeze_verified": true,
+  "requests": 3,
+  "retries": 0,
+  "contract_valid": 3,
+  "all_under_120_seconds": true,
+  "result_sha256": {
+    "results.json": "2c19ddefcb521057ee08610789d825c312b6b4154abc2342ea45e10e5c6c6a0b",
+    "results/comedy-append.json": "91a940b7873e8d9cc0adb0a9c53269585a66f6e19553ac2011e48fb0660ae7bc",
+    "results/limits-append.json": "731b4d3d8d3da25020f0c51b4dd5af320a820d8d7600897706902b1dd30c280b",
+    "results/quiet-append.json": "7ba891528d1658568adedc566097009379072e033d4e9d199a3ffe257d3cf43c"
+  }
+}

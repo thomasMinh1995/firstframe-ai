@@ -1,0 +1,138 @@
+{
+  "reviewed_at": "2026-10-27T03:56:49.961874+00:00",
+  "reviewer": "Codex manual visual comparison; no AI score, PO or user acceptance",
+  "cases": {
+    "repair-workshop": {
+      "baseline_seconds": 29.141,
+      "candidate_seconds": 24.16,
+      "common": [
+        {
+          "criterion": "graphite pencil drawing, not a photograph",
+          "baseline": "pass",
+          "candidate": "pass",
+          "evidence": "Pencil contours/hatching and white paper retained."
+        },
+        {
+          "criterion": "no labels/text/captions/panel grid",
+          "baseline": "fail",
+          "candidate": "pass",
+          "evidence": "Old image had handwritten source captions; none visible in the direct variant."
+        },
+        {
+          "criterion": "no imported mother-daughter/envelope story",
+          "baseline": "pass",
+          "candidate": "pass",
+          "evidence": "No imported mother-daughter/envelope story."
+        }
+      ],
+      "specific": [
+        {
+          "criterion": "exactly two people",
+          "baseline": "pass",
+          "candidate": "pass",
+          "evidence": "Exactly two people in both."
+        },
+        {
+          "criterion": "older An reads as a generation older than Bình",
+          "baseline": "fail",
+          "candidate": "pass",
+          "evidence": "Right-hand person now has a more mature face than the younger left-hand person. Relative age contrast is clearer; exact 68/19 is not certified."
+        },
+        {
+          "criterion": "An seated on right, Bình standing on left",
+          "baseline": "fail",
+          "candidate": "pass",
+          "evidence": "Young figure stands on left; older figure sits on stool at right, unlike old left figure astride the bicycle."
+        },
+        {
+          "criterion": "repairing bicycle action and attention to wheel/brake cable",
+          "baseline": "unclear",
+          "candidate": "unclear",
+          "evidence": "Older figure now visibly works by the front wheel/brake area and younger figure watches; the exact brake cable remains hard to distinguish."
+        },
+        {
+          "criterion": "single bicycle and no additional customer/vehicle",
+          "baseline": "pass",
+          "candidate": "pass",
+          "evidence": "One bicycle; no extra customer or vehicle."
+        },
+        {
+          "criterion": "close two-shot framing",
+          "baseline": "fail",
+          "candidate": "fail",
+          "evidence": "Nearly whole bicycle and much of both figures remain in frame; not clearly the requested close two-shot."
+        },
+        {
+          "criterion": "dawn intention if visually supportable",
+          "baseline": "unclear",
+          "candidate": "unclear",
+          "evidence": "No reliable dawn lighting cue in either monochrome sketch."
+        }
+      ]
+    },
+    "empty-platform": {
+      "baseline_seconds": 28.614,
+      "candidate_seconds": 25.472,
+      "common": [
+        {
+          "criterion": "graphite pencil drawing, not a photograph",
+          "baseline": "pass",
+          "candidate": "pass",
+          "evidence": "Pencil drawing retained."
+        },
+        {
+          "criterion": "no labels/text/captions/panel grid",
+          "baseline": "fail",
+          "candidate": "pass",
+          "evidence": "Old toolbox image had a handwritten caption; none visible in direct variant."
+        },
+        {
+          "criterion": "no imported mother-daughter/envelope story",
+          "baseline": "pass",
+          "candidate": "pass",
+          "evidence": "No imported mother-daughter/envelope story."
+        }
+      ],
+      "specific": [
+        {
+          "criterion": "zero people",
+          "baseline": "pass",
+          "candidate": "pass",
+          "evidence": "No people."
+        },
+        {
+          "criterion": "recognizable railway platform",
+          "baseline": "fail",
+          "candidate": "unclear",
+          "evidence": "Direct variant shows a broader flat surface and a rail-like edge in foreground. More spatial separation, but the drawing could still read as planks/sleepers by a track; a railway platform is not unambiguous."
+        },
+        {
+          "criterion": "one toolbox visible",
+          "baseline": "pass",
+          "candidate": "pass",
+          "evidence": "One toolbox."
+        },
+        {
+          "criterion": "toolbox lid remains closed, contents not exposed",
+          "baseline": "pass",
+          "candidate": "pass",
+          "evidence": "Closed lid with no exposed contents."
+        },
+        {
+          "criterion": "visible cue of locking rather than assuming a closed box is locked",
+          "baseline": "unclear",
+          "candidate": "unclear",
+          "evidence": "Closed fasteners/latches, including a clearer central fitting, are visible. No sufficiently clear engaged lock; do not infer locked solely from closed."
+        },
+        {
+          "criterion": "no added opening or human interaction",
+          "baseline": "pass",
+          "candidate": "pass",
+          "evidence": "No opening/human interaction."
+        }
+      ]
+    }
+  },
+  "interpretation": "Same-scene paired images support fewer caption artifacts for this direct-description variant, not a general proof about all scenes or the causal role of quote marks alone.",
+  "scope": "Two English synthetic scenes, one call per variant per scene at the same model and seed; runtime unchanged; no retries."
+}

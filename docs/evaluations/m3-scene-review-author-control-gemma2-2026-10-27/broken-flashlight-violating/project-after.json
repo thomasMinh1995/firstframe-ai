@@ -1,0 +1,702 @@
+{
+  "response_language": "vi",
+  "id": "f6f7325c-ef95-42a7-a4af-a27801606a5e",
+  "revision": 7,
+  "updated_at": "2026-10-27T09:05:39.834354+00:00",
+  "title": "Đọc giấy",
+  "idea": "Lan và Bình đọc giấy nhờ ánh đèn đường trong phòng trọ mất điện.",
+  "constraints": [
+    "Chỉ Lan và Bình, một phòng trọ ban đêm.",
+    "Đèn pin bị hỏng, không thể sáng.",
+    "Không thêm điện thoại hoặc nguồn sáng mới; dùng ánh đèn đường qua rèm."
+  ],
+  "analysis": null,
+  "answers": [],
+  "clarifications": {},
+  "draft": {
+    "title": "Đọc giấy",
+    "logline": "Lan và Bình đọc giấy nhờ ánh đèn đường trong phòng trọ mất điện.",
+    "sections": [
+      {
+        "title": "Đầu",
+        "purpose": "Mở",
+        "content": "Lan đặt tờ giấy lên bàn gần cửa sổ có rèm. Bình cầm chiếc đèn pin hỏng."
+      },
+      {
+        "title": "Cuối",
+        "purpose": "Diễn tiến",
+        "content": "Bình đặt đèn pin hỏng xuống. Lan kéo rèm; hai người nghiêng giấy để đọc bằng ánh đèn đường."
+      }
+    ]
+  },
+  "feedback": null,
+  "feedback_source": null,
+  "reviewed_content": null,
+  "versions": [],
+  "clarification_history": [],
+  "plan_generations": [],
+  "scene_outline": {
+    "id": "f7ac7cea-bb23-48ec-a150-86c964ebf188",
+    "version": 2,
+    "scenes": [
+      {
+        "id": "9911a401-9531-458c-879d-0e3fe66e62dd",
+        "title": "Trước đó",
+        "action": "Lan đặt tờ giấy lên bàn gần cửa sổ có rèm. Bình cầm chiếc đèn pin hỏng.",
+        "location": "",
+        "time": "",
+        "characters": "",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      },
+      {
+        "id": "4f78a8eb-3a26-498d-87d8-bfefcf1fdcf2",
+        "title": "Khoảnh khắc",
+        "action": "Bình đặt đèn pin hỏng xuống. Lan kéo rèm; hai người nghiêng giấy để đọc bằng ánh đèn đường.",
+        "location": "",
+        "time": "",
+        "characters": "",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      }
+    ],
+    "source": {
+      "id": "b00b8851-37f5-4811-ab02-80f5e428fa54",
+      "project_revision": 0,
+      "version_id": "current",
+      "draft": {
+        "title": "Đọc giấy",
+        "logline": "Lan và Bình đọc giấy nhờ ánh đèn đường trong phòng trọ mất điện.",
+        "sections": [
+          {
+            "title": "Đầu",
+            "purpose": "Mở",
+            "content": "Lan đặt tờ giấy lên bàn gần cửa sổ có rèm. Bình cầm chiếc đèn pin hỏng."
+          },
+          {
+            "title": "Cuối",
+            "purpose": "Diễn tiến",
+            "content": "Bình đặt đèn pin hỏng xuống. Lan kéo rèm; hai người nghiêng giấy để đọc bằng ánh đèn đường."
+          }
+        ]
+      },
+      "context": {
+        "idea": "Lan và Bình đọc giấy nhờ ánh đèn đường trong phòng trọ mất điện.",
+        "constraints": [
+          "Chỉ Lan và Bình, một phòng trọ ban đêm.",
+          "Đèn pin bị hỏng, không thể sáng.",
+          "Không thêm điện thoại hoặc nguồn sáng mới; dùng ánh đèn đường qua rèm."
+        ],
+        "clarifications": [],
+        "pending_questions": []
+      },
+      "response_language": "vi"
+    }
+  },
+  "screenplay": {
+    "id": "bcd585fd-2de6-4fab-9667-4a80fd68308b",
+    "version": 2,
+    "scenes": [
+      {
+        "id": "86578679-d2e2-4787-980b-9a0e97e676df",
+        "source_scene_id": "9911a401-9531-458c-879d-0e3fe66e62dd",
+        "heading": "Trước đó",
+        "blocks": [
+          {
+            "kind": "action",
+            "text": "Lan đặt tờ giấy lên bàn gần cửa sổ có rèm. Bình cầm chiếc đèn pin hỏng.",
+            "speaker": "",
+            "id": "c201739a-f73a-4767-a3ff-415d855d25d1"
+          }
+        ]
+      },
+      {
+        "id": "9779354a-a862-4f55-a64c-49b5caad5a9e",
+        "source_scene_id": "4f78a8eb-3a26-498d-87d8-bfefcf1fdcf2",
+        "heading": "Khoảnh khắc",
+        "blocks": [
+          {
+            "kind": "action",
+            "text": "Lan kéo rèm, để ánh đèn đường rọi lên tờ giấy.",
+            "speaker": "",
+            "id": "6c006961-c867-4bba-babd-e64454cc5389"
+          },
+          {
+            "kind": "action",
+            "text": "Bình bật chiếc đèn pin hỏng; đèn sáng rực, rọi rõ tờ giấy.",
+            "speaker": "",
+            "id": "38215107-7405-48fc-9bce-270440eb27e3"
+          }
+        ]
+      }
+    ],
+    "source_revision": 2,
+    "source_outline": {
+      "id": "f7ac7cea-bb23-48ec-a150-86c964ebf188",
+      "version": 2,
+      "scenes": [
+        {
+          "id": "9911a401-9531-458c-879d-0e3fe66e62dd",
+          "title": "Trước đó",
+          "action": "Lan đặt tờ giấy lên bàn gần cửa sổ có rèm. Bình cầm chiếc đèn pin hỏng.",
+          "location": "",
+          "time": "",
+          "characters": "",
+          "goal": "",
+          "purpose": "",
+          "viewer_intent": "",
+          "keep_or_avoid": "",
+          "staging_choices": {}
+        },
+        {
+          "id": "4f78a8eb-3a26-498d-87d8-bfefcf1fdcf2",
+          "title": "Khoảnh khắc",
+          "action": "Bình đặt đèn pin hỏng xuống. Lan kéo rèm; hai người nghiêng giấy để đọc bằng ánh đèn đường.",
+          "location": "",
+          "time": "",
+          "characters": "",
+          "goal": "",
+          "purpose": "",
+          "viewer_intent": "",
+          "keep_or_avoid": "",
+          "staging_choices": {}
+        }
+      ],
+      "source": {
+        "id": "b00b8851-37f5-4811-ab02-80f5e428fa54",
+        "project_revision": 0,
+        "version_id": "current",
+        "draft": {
+          "title": "Đọc giấy",
+          "logline": "Lan và Bình đọc giấy nhờ ánh đèn đường trong phòng trọ mất điện.",
+          "sections": [
+            {
+              "title": "Đầu",
+              "purpose": "Mở",
+              "content": "Lan đặt tờ giấy lên bàn gần cửa sổ có rèm. Bình cầm chiếc đèn pin hỏng."
+            },
+            {
+              "title": "Cuối",
+              "purpose": "Diễn tiến",
+              "content": "Bình đặt đèn pin hỏng xuống. Lan kéo rèm; hai người nghiêng giấy để đọc bằng ánh đèn đường."
+            }
+          ]
+        },
+        "context": {
+          "idea": "Lan và Bình đọc giấy nhờ ánh đèn đường trong phòng trọ mất điện.",
+          "constraints": [
+            "Chỉ Lan và Bình, một phòng trọ ban đêm.",
+            "Đèn pin bị hỏng, không thể sáng.",
+            "Không thêm điện thoại hoặc nguồn sáng mới; dùng ánh đèn đường qua rèm."
+          ],
+          "clarifications": [],
+          "pending_questions": []
+        },
+        "response_language": "vi"
+      }
+    }
+  },
+  "screenplay_versions": [
+    {
+      "id": "cde31f15-9321-4029-b05b-bcfaf4d0d4f4",
+      "created_at": "2026-10-27T07:08:26.701516+00:00",
+      "screenplay": {
+        "id": "bcd585fd-2de6-4fab-9667-4a80fd68308b",
+        "version": 1,
+        "scenes": [
+          {
+            "id": "86578679-d2e2-4787-980b-9a0e97e676df",
+            "source_scene_id": "9911a401-9531-458c-879d-0e3fe66e62dd",
+            "heading": "Trước đó",
+            "blocks": []
+          },
+          {
+            "id": "9779354a-a862-4f55-a64c-49b5caad5a9e",
+            "source_scene_id": "4f78a8eb-3a26-498d-87d8-bfefcf1fdcf2",
+            "heading": "Khoảnh khắc",
+            "blocks": []
+          }
+        ],
+        "source_revision": 2,
+        "source_outline": {
+          "id": "f7ac7cea-bb23-48ec-a150-86c964ebf188",
+          "version": 2,
+          "scenes": [
+            {
+              "id": "9911a401-9531-458c-879d-0e3fe66e62dd",
+              "title": "Trước đó",
+              "action": "Lan đặt tờ giấy lên bàn gần cửa sổ có rèm. Bình cầm chiếc đèn pin hỏng.",
+              "location": "",
+              "time": "",
+              "characters": "",
+              "goal": "",
+              "purpose": "",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {}
+            },
+            {
+              "id": "4f78a8eb-3a26-498d-87d8-bfefcf1fdcf2",
+              "title": "Khoảnh khắc",
+              "action": "Bình đặt đèn pin hỏng xuống. Lan kéo rèm; hai người nghiêng giấy để đọc bằng ánh đèn đường.",
+              "location": "",
+              "time": "",
+              "characters": "",
+              "goal": "",
+              "purpose": "",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {}
+            }
+          ],
+          "source": {
+            "id": "b00b8851-37f5-4811-ab02-80f5e428fa54",
+            "project_revision": 0,
+            "version_id": "current",
+            "draft": {
+              "title": "Đọc giấy",
+              "logline": "Lan và Bình đọc giấy nhờ ánh đèn đường trong phòng trọ mất điện.",
+              "sections": [
+                {
+                  "title": "Đầu",
+                  "purpose": "Mở",
+                  "content": "Lan đặt tờ giấy lên bàn gần cửa sổ có rèm. Bình cầm chiếc đèn pin hỏng."
+                },
+                {
+                  "title": "Cuối",
+                  "purpose": "Diễn tiến",
+                  "content": "Bình đặt đèn pin hỏng xuống. Lan kéo rèm; hai người nghiêng giấy để đọc bằng ánh đèn đường."
+                }
+              ]
+            },
+            "context": {
+              "idea": "Lan và Bình đọc giấy nhờ ánh đèn đường trong phòng trọ mất điện.",
+              "constraints": [
+                "Chỉ Lan và Bình, một phòng trọ ban đêm.",
+                "Đèn pin bị hỏng, không thể sáng.",
+                "Không thêm điện thoại hoặc nguồn sáng mới; dùng ánh đèn đường qua rèm."
+              ],
+              "clarifications": [],
+              "pending_questions": []
+            },
+            "response_language": "vi"
+          }
+        }
+      }
+    }
+  ],
+  "screenplay_proposals": [],
+  "screenplay_reviews": [
+    {
+      "id": "744c8d12-3f71-4add-83d4-a51b642054c1",
+      "created_at": "2026-10-27T09:04:55.234728+00:00",
+      "source_revision": 4,
+      "source_content": "{\"answers\": [], \"clarifications\": {}, \"constraints\": [\"Chỉ Lan và Bình, một phòng trọ ban đêm.\", \"Đèn pin bị hỏng, không thể sáng.\", \"Không thêm điện thoại hoặc nguồn sáng mới; dùng ánh đèn đường qua rèm.\"], \"draft\": {\"logline\": \"Lan và Bình đọc giấy nhờ ánh đèn đường trong phòng trọ mất điện.\", \"sections\": [{\"content\": \"Lan đặt tờ giấy lên bàn gần cửa sổ có rèm. Bình cầm chiếc đèn pin hỏng.\", \"purpose\": \"Mở\", \"title\": \"Đầu\"}, {\"content\": \"Bình đặt đèn pin hỏng xuống. Lan kéo rèm; hai người nghiêng giấy để đọc bằng ánh đèn đường.\", \"purpose\": \"Diễn tiến\", \"title\": \"Cuối\"}], \"title\": \"Đọc giấy\"}, \"idea\": \"Lan và Bình đọc giấy nhờ ánh đèn đường trong phòng trọ mất điện.\", \"questions\": [], \"response_language\": \"vi\"}",
+      "source_screenplay": {
+        "id": "bcd585fd-2de6-4fab-9667-4a80fd68308b",
+        "version": 2,
+        "scenes": [
+          {
+            "id": "86578679-d2e2-4787-980b-9a0e97e676df",
+            "source_scene_id": "9911a401-9531-458c-879d-0e3fe66e62dd",
+            "heading": "Trước đó",
+            "blocks": [
+              {
+                "kind": "action",
+                "text": "Lan đặt tờ giấy lên bàn gần cửa sổ có rèm. Bình cầm chiếc đèn pin hỏng.",
+                "speaker": "",
+                "id": "c201739a-f73a-4767-a3ff-415d855d25d1"
+              }
+            ]
+          },
+          {
+            "id": "9779354a-a862-4f55-a64c-49b5caad5a9e",
+            "source_scene_id": "4f78a8eb-3a26-498d-87d8-bfefcf1fdcf2",
+            "heading": "Khoảnh khắc",
+            "blocks": [
+              {
+                "kind": "action",
+                "text": "Lan kéo rèm, để ánh đèn đường rọi lên tờ giấy.",
+                "speaker": "",
+                "id": "6c006961-c867-4bba-babd-e64454cc5389"
+              },
+              {
+                "kind": "action",
+                "text": "Bình bật chiếc đèn pin hỏng; đèn sáng rực, rọi rõ tờ giấy.",
+                "speaker": "",
+                "id": "38215107-7405-48fc-9bce-270440eb27e3"
+              }
+            ]
+          }
+        ],
+        "source_revision": 2,
+        "source_outline": {
+          "id": "f7ac7cea-bb23-48ec-a150-86c964ebf188",
+          "version": 2,
+          "scenes": [
+            {
+              "id": "9911a401-9531-458c-879d-0e3fe66e62dd",
+              "title": "Trước đó",
+              "action": "Lan đặt tờ giấy lên bàn gần cửa sổ có rèm. Bình cầm chiếc đèn pin hỏng.",
+              "location": "",
+              "time": "",
+              "characters": "",
+              "goal": "",
+              "purpose": "",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {}
+            },
+            {
+              "id": "4f78a8eb-3a26-498d-87d8-bfefcf1fdcf2",
+              "title": "Khoảnh khắc",
+              "action": "Bình đặt đèn pin hỏng xuống. Lan kéo rèm; hai người nghiêng giấy để đọc bằng ánh đèn đường.",
+              "location": "",
+              "time": "",
+              "characters": "",
+              "goal": "",
+              "purpose": "",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {}
+            }
+          ],
+          "source": {
+            "id": "b00b8851-37f5-4811-ab02-80f5e428fa54",
+            "project_revision": 0,
+            "version_id": "current",
+            "draft": {
+              "title": "Đọc giấy",
+              "logline": "Lan và Bình đọc giấy nhờ ánh đèn đường trong phòng trọ mất điện.",
+              "sections": [
+                {
+                  "title": "Đầu",
+                  "purpose": "Mở",
+                  "content": "Lan đặt tờ giấy lên bàn gần cửa sổ có rèm. Bình cầm chiếc đèn pin hỏng."
+                },
+                {
+                  "title": "Cuối",
+                  "purpose": "Diễn tiến",
+                  "content": "Bình đặt đèn pin hỏng xuống. Lan kéo rèm; hai người nghiêng giấy để đọc bằng ánh đèn đường."
+                }
+              ]
+            },
+            "context": {
+              "idea": "Lan và Bình đọc giấy nhờ ánh đèn đường trong phòng trọ mất điện.",
+              "constraints": [
+                "Chỉ Lan và Bình, một phòng trọ ban đêm.",
+                "Đèn pin bị hỏng, không thể sáng.",
+                "Không thêm điện thoại hoặc nguồn sáng mới; dùng ánh đèn đường qua rèm."
+              ],
+              "clarifications": [],
+              "pending_questions": []
+            },
+            "response_language": "vi"
+          }
+        }
+      },
+      "source_outline": {
+        "id": "f7ac7cea-bb23-48ec-a150-86c964ebf188",
+        "version": 2,
+        "scenes": [
+          {
+            "id": "9911a401-9531-458c-879d-0e3fe66e62dd",
+            "title": "Trước đó",
+            "action": "Lan đặt tờ giấy lên bàn gần cửa sổ có rèm. Bình cầm chiếc đèn pin hỏng.",
+            "location": "",
+            "time": "",
+            "characters": "",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "",
+            "keep_or_avoid": "",
+            "staging_choices": {}
+          },
+          {
+            "id": "4f78a8eb-3a26-498d-87d8-bfefcf1fdcf2",
+            "title": "Khoảnh khắc",
+            "action": "Bình đặt đèn pin hỏng xuống. Lan kéo rèm; hai người nghiêng giấy để đọc bằng ánh đèn đường.",
+            "location": "",
+            "time": "",
+            "characters": "",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "",
+            "keep_or_avoid": "",
+            "staging_choices": {}
+          }
+        ],
+        "source": {
+          "id": "b00b8851-37f5-4811-ab02-80f5e428fa54",
+          "project_revision": 0,
+          "version_id": "current",
+          "draft": {
+            "title": "Đọc giấy",
+            "logline": "Lan và Bình đọc giấy nhờ ánh đèn đường trong phòng trọ mất điện.",
+            "sections": [
+              {
+                "title": "Đầu",
+                "purpose": "Mở",
+                "content": "Lan đặt tờ giấy lên bàn gần cửa sổ có rèm. Bình cầm chiếc đèn pin hỏng."
+              },
+              {
+                "title": "Cuối",
+                "purpose": "Diễn tiến",
+                "content": "Bình đặt đèn pin hỏng xuống. Lan kéo rèm; hai người nghiêng giấy để đọc bằng ánh đèn đường."
+              }
+            ]
+          },
+          "context": {
+            "idea": "Lan và Bình đọc giấy nhờ ánh đèn đường trong phòng trọ mất điện.",
+            "constraints": [
+              "Chỉ Lan và Bình, một phòng trọ ban đêm.",
+              "Đèn pin bị hỏng, không thể sáng.",
+              "Không thêm điện thoại hoặc nguồn sáng mới; dùng ánh đèn đường qua rèm."
+            ],
+            "clarifications": [],
+            "pending_questions": []
+          },
+          "response_language": "vi"
+        }
+      },
+      "target_scene_id": "9779354a-a862-4f55-a64c-49b5caad5a9e",
+      "instructions": "Chỉ nêu góp ý có bằng chứng về cảnh này; tác giả tự sửa.",
+      "status": "failed",
+      "sources": [
+        {
+          "id": "script:86578679-d2e2-4787-980b-9a0e97e676df:heading",
+          "label": "Trước đó",
+          "text": "Trước đó",
+          "category": "screenplay",
+          "scene_id": "86578679-d2e2-4787-980b-9a0e97e676df",
+          "block_id": null,
+          "field": "heading"
+        },
+        {
+          "id": "block:c201739a-f73a-4767-a3ff-415d855d25d1:text",
+          "label": "Trước đó · khối 1",
+          "text": "Lan đặt tờ giấy lên bàn gần cửa sổ có rèm. Bình cầm chiếc đèn pin hỏng.",
+          "category": "screenplay",
+          "scene_id": "86578679-d2e2-4787-980b-9a0e97e676df",
+          "block_id": "c201739a-f73a-4767-a3ff-415d855d25d1",
+          "field": "text"
+        },
+        {
+          "id": "script:9779354a-a862-4f55-a64c-49b5caad5a9e:heading",
+          "label": "Khoảnh khắc",
+          "text": "Khoảnh khắc",
+          "category": "screenplay",
+          "scene_id": "9779354a-a862-4f55-a64c-49b5caad5a9e",
+          "block_id": null,
+          "field": "heading"
+        },
+        {
+          "id": "block:6c006961-c867-4bba-babd-e64454cc5389:text",
+          "label": "Khoảnh khắc · khối 1",
+          "text": "Lan kéo rèm, để ánh đèn đường rọi lên tờ giấy.",
+          "category": "screenplay",
+          "scene_id": "9779354a-a862-4f55-a64c-49b5caad5a9e",
+          "block_id": "6c006961-c867-4bba-babd-e64454cc5389",
+          "field": "text"
+        },
+        {
+          "id": "block:38215107-7405-48fc-9bce-270440eb27e3:text",
+          "label": "Khoảnh khắc · khối 2",
+          "text": "Bình bật chiếc đèn pin hỏng; đèn sáng rực, rọi rõ tờ giấy.",
+          "category": "screenplay",
+          "scene_id": "9779354a-a862-4f55-a64c-49b5caad5a9e",
+          "block_id": "38215107-7405-48fc-9bce-270440eb27e3",
+          "field": "text"
+        },
+        {
+          "id": "m2:4f78a8eb-3a26-498d-87d8-bfefcf1fdcf2:action",
+          "label": "Diễn tiến M2 đã chọn",
+          "text": "Bình đặt đèn pin hỏng xuống. Lan kéo rèm; hai người nghiêng giấy để đọc bằng ánh đèn đường.",
+          "category": "author_choice",
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "intent:idea",
+          "label": "Ý tưởng tác giả",
+          "text": "Lan và Bình đọc giấy nhờ ánh đèn đường trong phòng trọ mất điện.",
+          "category": "author_choice",
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "intent:constraint:0",
+          "label": "Giới hạn 1",
+          "text": "Chỉ Lan và Bình, một phòng trọ ban đêm.",
+          "category": "author_choice",
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "intent:constraint:1",
+          "label": "Giới hạn 2",
+          "text": "Đèn pin bị hỏng, không thể sáng.",
+          "category": "author_choice",
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "intent:constraint:2",
+          "label": "Giới hạn 3",
+          "text": "Không thêm điện thoại hoặc nguồn sáng mới; dùng ánh đèn đường qua rèm.",
+          "category": "author_choice",
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "plan:logline",
+          "label": "Logline nguồn",
+          "text": "Lan và Bình đọc giấy nhờ ánh đèn đường trong phòng trọ mất điện.",
+          "category": "context",
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        },
+        {
+          "id": "plan:section:0",
+          "label": "Đầu",
+          "text": "Lan đặt tờ giấy lên bàn gần cửa sổ có rèm. Bình cầm chiếc đèn pin hỏng.",
+          "category": "context",
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        },
+        {
+          "id": "plan:section:1",
+          "label": "Cuối",
+          "text": "Bình đặt đèn pin hỏng xuống. Lan kéo rèm; hai người nghiêng giấy để đọc bằng ánh đèn đường.",
+          "category": "context",
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        }
+      ],
+      "notes": [],
+      "question": "",
+      "provider": "ollama",
+      "model": "gemma2:9b-instruct-q4_K_M",
+      "parameters": {
+        "temperature": 0.3,
+        "timeout_seconds": 60,
+        "num_ctx": 16384
+      },
+      "prompt_version": "screenplay-review-v4-author-control",
+      "error": "MalformedProviderResponseError"
+    }
+  ],
+  "scene_versions": [
+    {
+      "id": "b73e5f31-e339-41a9-bc31-8d9c8f030e54",
+      "created_at": "2026-10-27T07:08:26.697855+00:00",
+      "outline": {
+        "id": "f7ac7cea-bb23-48ec-a150-86c964ebf188",
+        "version": 1,
+        "scenes": [],
+        "source": {
+          "id": "b00b8851-37f5-4811-ab02-80f5e428fa54",
+          "project_revision": 0,
+          "version_id": "current",
+          "draft": {
+            "title": "Đọc giấy",
+            "logline": "Lan và Bình đọc giấy nhờ ánh đèn đường trong phòng trọ mất điện.",
+            "sections": [
+              {
+                "title": "Đầu",
+                "purpose": "Mở",
+                "content": "Lan đặt tờ giấy lên bàn gần cửa sổ có rèm. Bình cầm chiếc đèn pin hỏng."
+              },
+              {
+                "title": "Cuối",
+                "purpose": "Diễn tiến",
+                "content": "Bình đặt đèn pin hỏng xuống. Lan kéo rèm; hai người nghiêng giấy để đọc bằng ánh đèn đường."
+              }
+            ]
+          },
+          "context": {
+            "idea": "Lan và Bình đọc giấy nhờ ánh đèn đường trong phòng trọ mất điện.",
+            "constraints": [
+              "Chỉ Lan và Bình, một phòng trọ ban đêm.",
+              "Đèn pin bị hỏng, không thể sáng.",
+              "Không thêm điện thoại hoặc nguồn sáng mới; dùng ánh đèn đường qua rèm."
+            ],
+            "clarifications": [],
+            "pending_questions": []
+          },
+          "response_language": "vi"
+        }
+      }
+    }
+  ],
+  "scene_proposals": [],
+  "staging_proposals": [],
+  "scene_sketches": [],
+  "selected_scene_sketches": {},
+  "current_screenplay_review_ids": [],
+  "applicable_screenplay_proposal_ids": [],
+  "screenplay_source_is_current": true,
+  "applicable_sketch_ids": [],
+  "applicable_scene_proposal_ids": [],
+  "scene_source_is_current": true,
+  "scene_handoff": {
+    "outline_id": "f7ac7cea-bb23-48ec-a150-86c964ebf188",
+    "version": 2,
+    "project_revision": 7,
+    "source_id": "b00b8851-37f5-4811-ab02-80f5e428fa54",
+    "scenes": [
+      {
+        "id": "9911a401-9531-458c-879d-0e3fe66e62dd",
+        "title": "Trước đó",
+        "action": "Lan đặt tờ giấy lên bàn gần cửa sổ có rèm. Bình cầm chiếc đèn pin hỏng.",
+        "location": "",
+        "time": "",
+        "characters": "",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      },
+      {
+        "id": "4f78a8eb-3a26-498d-87d8-bfefcf1fdcf2",
+        "title": "Khoảnh khắc",
+        "action": "Bình đặt đèn pin hỏng xuống. Lan kéo rèm; hai người nghiêng giấy để đọc bằng ánh đèn đường.",
+        "location": "",
+        "time": "",
+        "characters": "",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      }
+    ]
+  },
+  "applicable_plan_ids": [],
+  "author_context": {
+    "idea": "Lan và Bình đọc giấy nhờ ánh đèn đường trong phòng trọ mất điện.",
+    "constraints": [
+      "Chỉ Lan và Bình, một phòng trọ ban đêm.",
+      "Đèn pin bị hỏng, không thể sáng.",
+      "Không thêm điện thoại hoặc nguồn sáng mới; dùng ánh đèn đường qua rèm."
+    ],
+    "clarifications": [],
+    "pending_questions": []
+  },
+  "feedback_is_current": false
+}

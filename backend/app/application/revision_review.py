@@ -105,16 +105,16 @@ def review_context(draft: dict, previous: dict | None, author: dict, vietnamese:
             "focus_card_ids": [card["id"] for card in cards if card["changed"]]}
 
 
-def feedback_messages(reviews: list[CardReview], context: dict) -> tuple[list[str], list[str], list[str]]:
+def feedback_messages(reviews: list[CardReview], context: dict) -> tuple[list[str], list[str], list[str], list[str]]:
     cards = {card["id"]: card for card in context["cards"]}
     decisions = {decision["id"]: decision for decision in context["decisions"]}
-    strengths, weaknesses, suggestions = [], [], []
+    strengths, weaknesses, suggestions, clarifications = [], [], [], []
     for review in reviews:
         if (review.card_id not in cards or review.decision_id not in decisions
                 or review.related_card_id is not None and review.related_card_id not in cards
                 or review.related_card_id == review.card_id
                 or review.comparison == "aligned" and review.suggestion.strip()
-                or review.comparison != "aligned" and not review.suggestion.strip()):
+                or review.comparison == "mismatch" and not review.suggestion.strip()):
             raise MalformedProviderResponseError("Card review contains an invalid anchor or missing next step.")
         card, decision = cards[review.card_id], decisions[review.decision_id]
         anchor = f'{card["label"]}: “{card["text"]}”'
@@ -124,6 +124,10 @@ def feedback_messages(reviews: list[CardReview], context: dict) -> tuple[list[st
         message = f'{anchor}\n{decision["label"]}: “{decision["text"]}”\n{review.observation}'
         if review.comparison == "aligned":
             strengths.append(message)
+        elif review.comparison == "uncertain":
+            clarifications.append(message)
+            if review.suggestion.strip():
+                suggestions.append(f'{card["label"]} — {review.suggestion}')
         else:
             weaknesses.append(message)
             suggestions.append(f'{card["label"]} — {review.suggestion}')
@@ -138,7 +142,7 @@ def feedback_messages(reviews: list[CardReview], context: dict) -> tuple[list[st
                             or {"card_id": review.related_card_id, "related_card_id": review.card_id} in neighbors
                             for review in reviews):
         raise MalformedProviderResponseError("Card review skipped continuity with neighboring cards.")
-    return strengths, weaknesses, suggestions
+    return strengths, weaknesses, suggestions, clarifications
 
 
 def revision_notes(reviews: list[CardReview], context: dict, artifact_id: str) -> tuple[RevisionNote, ...]:

@@ -1,0 +1,21 @@
+{
+  "raw_output": "{\"notes\": [{\"kind\": \"craft\", \"observation\": \"Hành động của cha đặt lá thư xin lỗi lên bàn và lùi lại để lối đi trống có thể được thể hiện rõ ràng hơn bằng cách sử dụng hành động cụ thể hơn.\", \"impact\": \"Sự cụ thể hơn trong hành động có thể giúp người xem hình dung rõ ràng hơn tình huống và cảm xúc của cha.\", \"evidence\": [{\"source_id\": \"S5\", \"quote\": \"Cha đặt lá thư xin lỗi lên bàn, lùi lại để lối đi trống.\"}]}], \"question\": \"Có thể thêm hành động cụ thể hơn cho cha khi đặt lá thư xin lỗi lên bàn và lùi lại không?\"}",
+  "output": {
+    "notes": [
+      {
+        "kind": "craft",
+        "observation": "Hành động của cha đặt lá thư xin lỗi lên bàn và lùi lại để lối đi trống có thể được thể hiện rõ ràng hơn bằng cách sử dụng hành động cụ thể hơn.",
+        "impact": "Sự cụ thể hơn trong hành động có thể giúp người xem hình dung rõ ràng hơn tình huống và cảm xúc của cha.",
+        "suggestion": "",
+        "evidence": [
+          {
+            "source_id": "S5",
+            "quote": "Cha đặt lá thư xin lỗi lên bàn, lùi lại để lối đi trống."
+          }
+        ]
+      }
+    ],
+    "question": "Có thể thêm hành động cụ thể hơn cho cha khi đặt lá thư xin lỗi lên bàn và lùi lại không?"
+  },
+  "model": "gemma2:9b-instruct-q4_K_M"
+}

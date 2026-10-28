@@ -1,0 +1,24 @@
+const assert=require('node:assert/strict'),fs=require('node:fs');
+const {screenplaySketches}=require(process.argv[2]+'/screenplaySketches.js');
+const p=JSON.parse(fs.readFileSync('../docs/evaluations/m3-scene-review-qwen7b-2026-10-27/inputs.json','utf8'))[0].project;
+const outline=structuredClone(p.screenplay.source_outline),id=outline.scenes[0].id;
+const image={id:'image',scene_id:id,status:'ready',asset_id:'asset',source_outline:structuredClone(outline)};
+const saved={...p,scene_sketches:[image],selected_scene_sketches:{[id]:'image'},applicable_sketch_ids:[]};
+const original=JSON.stringify({saved,outline});
+assert.equal(screenplaySketches(saved,outline)[id].matches,true,'frozen M3 source, independent of current M2 applicability');
+assert.equal(JSON.stringify({saved,outline}),original,'selection lookup does not mutate either source');
+image.source_outline.version+=1;
+assert.equal(screenplaySketches(saved,outline)[id].matches,true,'save counter does not change content');
+image.source_outline.scenes[0].staging_choices={angle:'ngang',shot:'toàn'};
+outline.scenes[0].staging_choices={shot:'toàn',angle:'ngang'};
+assert.equal(screenplaySketches(saved,outline)[id].matches,true,'object insertion order is irrelevant');
+image.source_outline.scenes[0].action+=' Changed';
+assert.equal(screenplaySketches(saved,outline)[id].matches,false,'same name/ID but changed action is stale');
+image.source_outline=structuredClone(outline);image.source_outline.source.context.idea+=' Changed';
+assert.equal(screenplaySketches(saved,outline)[id].matches,false,'author intent is part of source');
+image.source_outline=structuredClone(outline);image.scene_id=outline.scenes[1].id;
+assert.deepEqual(screenplaySketches(saved,outline),{},'never join by title/position');image.scene_id=id;
+for(const status of ['failed','discarded','pending']){image.status=status;assert.deepEqual(screenplaySketches(saved,outline),{});}
+image.status='ready';image.asset_id=null;assert.deepEqual(screenplaySketches(saved,outline),{});image.asset_id='asset';
+saved.selected_scene_sketches={};assert.deepEqual(screenplaySketches(saved,outline),{},'never choose an unselected image');
+console.log('PASS M3 sketch contract: exact snapshot + intent, stable key order, ID selection, status/asset guards, no mutation of sources');

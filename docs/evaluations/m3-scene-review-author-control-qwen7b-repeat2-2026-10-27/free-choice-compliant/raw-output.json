@@ -1,0 +1,29 @@
+{
+  "raw_output": "{\n  \"notes\": [\n    {\n      \"kind\": \"craft\",\n      \"observation\": \"Con gái nhìn về cửa, chưa bước đi. Cha đặt lá thư xin lỗi lên bàn, lùi lại để lối đi trống.\",\n      \"impact\": \"Cảnh này thể hiện sự hồi hộp và quyết định của con gái, nhưng chưa rõ ràng về động tác của cha và con gái.\",\n      \"evidence\": [\n        {\n          \"source_id\": \"S3\",\n          \"quote\": \"Khoảnh khắc\"\n        },\n        {\n          \"source_id\": \"S4\",\n          \"quote\": \"Con gái nhìn về cửa, chưa bước đi.\"\n        },\n        {\n          \"source_id\": \"S5\",\n          \"quote\": \"Cha đặt lá thư xin lỗi lên bàn, lùi lại để lối đi trống.\"\n        }\n      ],\n      \"suggestion\": \"Thêm chi tiết về cử chỉ của con gái khi nhìn về cửa, như là nghiêng người về phía cửa hoặc nhíu mày, để tăng tính chân thực và cảm xúc.\"\n    }\n  ],\n  \"question\": \"\"\n}",
+  "output": {
+    "notes": [
+      {
+        "kind": "craft",
+        "observation": "Con gái nhìn về cửa, chưa bước đi. Cha đặt lá thư xin lỗi lên bàn, lùi lại để lối đi trống.",
+        "impact": "Cảnh này thể hiện sự hồi hộp và quyết định của con gái, nhưng chưa rõ ràng về động tác của cha và con gái.",
+        "suggestion": "Thêm chi tiết về cử chỉ của con gái khi nhìn về cửa, như là nghiêng người về phía cửa hoặc nhíu mày, để tăng tính chân thực và cảm xúc.",
+        "evidence": [
+          {
+            "source_id": "S3",
+            "quote": "Khoảnh khắc"
+          },
+          {
+            "source_id": "S4",
+            "quote": "Con gái nhìn về cửa, chưa bước đi."
+          },
+          {
+            "source_id": "S5",
+            "quote": "Cha đặt lá thư xin lỗi lên bàn, lùi lại để lối đi trống."
+          }
+        ]
+      }
+    ],
+    "question": ""
+  },
+  "model": "qwen2.5:7b"
+}

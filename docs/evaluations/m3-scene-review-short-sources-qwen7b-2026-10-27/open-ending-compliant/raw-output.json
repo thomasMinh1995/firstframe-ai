@@ -1,0 +1,21 @@
+{
+  "raw_output": "{\n  \"notes\": [\n    {\n      \"kind\": \"craft\",\n      \"observation\": \"Cha và con gái có thể tạo ra một không khí căng thẳng hơn bằng cách thêm một chút tương tác nhỏ trong hành động.\",\n      \"impact\": \"Đây sẽ giúp khán giả cảm nhận rõ hơn về tình cảm giữa hai nhân vật và tạo ra một không khí chờ đợi.\",\n      \"evidence\": [\n        {\n          \"source_id\": \"S4\",\n          \"quote\": \"Con gái nhìn cha, kéo ghế ngồi. Phong thư còn kín trên bàn.\"\n        }\n      ],\n      \"suggestion\": \"Cha có thể đưa ra một cử chỉ nhỏ như nhìn con gái với vẻ xin lỗi, hoặc con gái có thể chạm nhẹ vào phong thư.\"\n    }\n  ],\n  \"question\": \"\"\n}",
+  "output": {
+    "notes": [
+      {
+        "kind": "craft",
+        "observation": "Cha và con gái có thể tạo ra một không khí căng thẳng hơn bằng cách thêm một chút tương tác nhỏ trong hành động.",
+        "impact": "Đây sẽ giúp khán giả cảm nhận rõ hơn về tình cảm giữa hai nhân vật và tạo ra một không khí chờ đợi.",
+        "suggestion": "Cha có thể đưa ra một cử chỉ nhỏ như nhìn con gái với vẻ xin lỗi, hoặc con gái có thể chạm nhẹ vào phong thư.",
+        "evidence": [
+          {
+            "source_id": "S4",
+            "quote": "Con gái nhìn cha, kéo ghế ngồi. Phong thư còn kín trên bàn."
+          }
+        ]
+      }
+    ],
+    "question": ""
+  },
+  "model": "qwen2.5:7b"
+}

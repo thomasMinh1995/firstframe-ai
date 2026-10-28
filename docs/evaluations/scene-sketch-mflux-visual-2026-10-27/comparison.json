@@ -1,0 +1,72 @@
+{
+  "reviewed_at": "2026-10-27T03:17:25.161736+00:00",
+  "reviewer": "Codex manual visual inspection; not a model score, PO decision or user acceptance",
+  "frozen_criteria_unchanged": true,
+  "rows": [
+    {
+      "criterion": "graphite pencil monochrome",
+      "baseline": "pass",
+      "candidate": "fail",
+      "observation": "Baseline has pencil linework; candidate is monochrome but resembles a photograph, with photographic skin/clothing/shadows rather than clear graphite strokes."
+    },
+    {
+      "criterion": "exactly two people",
+      "baseline": "pass",
+      "candidate": "pass",
+      "observation": "Both images show exactly two people."
+    },
+    {
+      "criterion": "mother left standing beside doorway",
+      "baseline": "fail",
+      "candidate": "pass",
+      "observation": "Baseline draws both people sitting around a table. Candidate clearly has the older woman standing on the left at the doorway."
+    },
+    {
+      "criterion": "daughter right seated at small table",
+      "baseline": "pass",
+      "candidate": "pass",
+      "observation": "Candidate clearly shows the younger woman seated on the right at a small table; baseline also has a right-hand seated figure."
+    },
+    {
+      "criterion": "both people and envelope visible",
+      "baseline": "unclear",
+      "candidate": "unclear",
+      "observation": "Both people and a paper-like object are visible in the candidate; its identity as an envelope is not secure."
+    },
+    {
+      "criterion": "sealed unopened envelope visually clear",
+      "baseline": "unclear",
+      "candidate": "unclear",
+      "observation": "Neither image clearly demonstrates a sealed unopened envelope. Candidate resembles folded paper or an open flap; do not infer that sealedness was preserved."
+    },
+    {
+      "criterion": "no text captions or panel grid",
+      "baseline": "fail",
+      "candidate": "pass",
+      "observation": "Baseline contains a title and field labels. Candidate has no visible text/captions/panel grid."
+    },
+    {
+      "criterion": "no extra event/person or closed ending",
+      "baseline": "pass",
+      "candidate": "pass",
+      "observation": "No extra person, dialogue or explicit closure is visible in either frame. A still image does not certify the whole story."
+    }
+  ],
+  "baseline_seconds": [
+    35.347,
+    31.99
+  ],
+  "candidate_seconds": [
+    26.095,
+    27.236
+  ],
+  "candidate_images_identical": true,
+  "no_runtime_prompt_change": true,
+  "limitations": [
+    "One English synthetic scene; hand-written prose, not an automatic formatter.",
+    "Two repeats share the same seed and image hash, not two independent content cases.",
+    "Whole-prompt comparison does not prove JSON alone caused the earlier problems.",
+    "Kitchen context and precise character ages are not certified by the image.",
+    "Image fidelity remains insufficient for full acceptance; do not count fixture keep as author approval."
+  ]
+}

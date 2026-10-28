@@ -1,0 +1,13 @@
+{
+  "name": "broken-flashlight-violating",
+  "pair": "broken-flashlight",
+  "variant": "violating",
+  "status_code": 504,
+  "duration_seconds": 60.323,
+  "model_calls": 1,
+  "review_status": "failed",
+  "validated_notes": 0,
+  "error": "ProviderTimeoutError",
+  "response_error": "{\"detail\":\"AI phản hồi quá lâu. Nội dung đã lưu vẫn được giữ; hãy thử lại.\"}",
+  "author_script_unchanged": true
+}

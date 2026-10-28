@@ -1,0 +1,753 @@
+[
+  {
+    "index": 1,
+    "http_status": 200,
+    "response": {
+      "response_language": "en",
+      "id": "f04663a2-d40e-4093-86df-ed76eecf8af5",
+      "revision": 5,
+      "updated_at": "2026-10-27T03:25:39.861067+00:00",
+      "title": "Synthetic pencil trial",
+      "idea": "A mother and her adult daughter share a quiet moment in a modest Vietnamese kitchen.",
+      "constraints": [
+        "Exactly two people: mother aged about 55, adult daughter aged about 25.",
+        "The envelope remains sealed and unopened. No dialogue or resolved ending.",
+        "One kitchen only."
+      ],
+      "analysis": null,
+      "answers": [],
+      "clarifications": {},
+      "draft": {
+        "title": "The unopened letter",
+        "logline": "A mother waits while her daughter decides whether to open a letter.",
+        "sections": [
+          {
+            "title": "A quiet pause",
+            "purpose": "Preserve the daughter's choice.",
+            "content": "In a modest Vietnamese kitchen, the mother waits beside the doorway. Her adult daughter holds an unopened envelope at the table. Cut before she opens it or answers."
+          }
+        ]
+      },
+      "feedback": null,
+      "feedback_source": null,
+      "reviewed_content": null,
+      "versions": [],
+      "clarification_history": [],
+      "plan_generations": [],
+      "scene_outline": {
+        "id": "e69ee3e9-21e2-402a-a58a-9cec62e90976",
+        "version": 2,
+        "scenes": [
+          {
+            "id": "ab27f458-fd7d-4879-a019-b976ab8d95f4",
+            "title": "The unopened letter",
+            "action": "A middle-aged mother stands beside the doorway on the left. Her adult daughter sits at a small table on the right, holding one sealed unopened envelope in both hands. They look toward each other and wait. No one opens the envelope.",
+            "location": "A modest Vietnamese kitchen",
+            "time": "Daytime",
+            "characters": "Mother, 55. Daughter, 25.",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "Quiet hesitation; each person has space to choose.",
+            "keep_or_avoid": "Two people only. Do not open the envelope or add dialogue.",
+            "staging_choices": {
+              "blocking": "Mother stands on the left by the doorway; daughter sits on the right at the table.",
+              "shot": "Eye-level medium wide shot; both people and the unopened envelope visible."
+            }
+          }
+        ],
+        "source": {
+          "id": "849cb56b-e0c0-4643-9d29-e611e5f9f00a",
+          "project_revision": 1,
+          "version_id": "current",
+          "draft": {
+            "title": "The unopened letter",
+            "logline": "A mother waits while her daughter decides whether to open a letter.",
+            "sections": [
+              {
+                "title": "A quiet pause",
+                "purpose": "Preserve the daughter's choice.",
+                "content": "In a modest Vietnamese kitchen, the mother waits beside the doorway. Her adult daughter holds an unopened envelope at the table. Cut before she opens it or answers."
+              }
+            ]
+          },
+          "context": {
+            "idea": "A mother and her adult daughter share a quiet moment in a modest Vietnamese kitchen.",
+            "constraints": [
+              "Exactly two people: mother aged about 55, adult daughter aged about 25.",
+              "The envelope remains sealed and unopened. No dialogue or resolved ending.",
+              "One kitchen only."
+            ],
+            "clarifications": [],
+            "pending_questions": []
+          },
+          "response_language": "en"
+        }
+      },
+      "scene_versions": [
+        {
+          "id": "f10e2f3f-7837-4ea1-b118-eaa406edf9b4",
+          "created_at": "2026-10-27T02:57:19.168587+00:00",
+          "outline": {
+            "id": "e69ee3e9-21e2-402a-a58a-9cec62e90976",
+            "version": 1,
+            "scenes": [],
+            "source": {
+              "id": "849cb56b-e0c0-4643-9d29-e611e5f9f00a",
+              "project_revision": 1,
+              "version_id": "current",
+              "draft": {
+                "title": "The unopened letter",
+                "logline": "A mother waits while her daughter decides whether to open a letter.",
+                "sections": [
+                  {
+                    "title": "A quiet pause",
+                    "purpose": "Preserve the daughter's choice.",
+                    "content": "In a modest Vietnamese kitchen, the mother waits beside the doorway. Her adult daughter holds an unopened envelope at the table. Cut before she opens it or answers."
+                  }
+                ]
+              },
+              "context": {
+                "idea": "A mother and her adult daughter share a quiet moment in a modest Vietnamese kitchen.",
+                "constraints": [
+                  "Exactly two people: mother aged about 55, adult daughter aged about 25.",
+                  "The envelope remains sealed and unopened. No dialogue or resolved ending.",
+                  "One kitchen only."
+                ],
+                "clarifications": [],
+                "pending_questions": []
+              },
+              "response_language": "en"
+            }
+          }
+        }
+      ],
+      "scene_proposals": [],
+      "staging_proposals": [],
+      "scene_sketches": [
+        {
+          "id": "2fab9f6a-8995-4bea-83d7-90553e921a4f",
+          "scene_id": "ab27f458-fd7d-4879-a019-b976ab8d95f4",
+          "created_at": "2026-10-27T03:25:10.560428+00:00",
+          "source_revision": 3,
+          "source_content": "{\"answers\": [], \"clarifications\": {}, \"constraints\": [\"Exactly two people: mother aged about 55, adult daughter aged about 25.\", \"The envelope remains sealed and unopened. No dialogue or resolved ending.\", \"One kitchen only.\"], \"draft\": {\"logline\": \"A mother waits while her daughter decides whether to open a letter.\", \"sections\": [{\"content\": \"In a modest Vietnamese kitchen, the mother waits beside the doorway. Her adult daughter holds an unopened envelope at the table. Cut before she opens it or answers.\", \"purpose\": \"Preserve the daughter's choice.\", \"title\": \"A quiet pause\"}], \"title\": \"The unopened letter\"}, \"idea\": \"A mother and her adult daughter share a quiet moment in a modest Vietnamese kitchen.\", \"questions\": [], \"response_language\": \"en\"}",
+          "source_outline": {
+            "id": "e69ee3e9-21e2-402a-a58a-9cec62e90976",
+            "version": 2,
+            "scenes": [
+              {
+                "id": "ab27f458-fd7d-4879-a019-b976ab8d95f4",
+                "title": "The unopened letter",
+                "action": "A middle-aged mother stands beside the doorway on the left. Her adult daughter sits at a small table on the right, holding one sealed unopened envelope in both hands. They look toward each other and wait. No one opens the envelope.",
+                "location": "A modest Vietnamese kitchen",
+                "time": "Daytime",
+                "characters": "Mother, 55. Daughter, 25.",
+                "goal": "",
+                "purpose": "",
+                "viewer_intent": "Quiet hesitation; each person has space to choose.",
+                "keep_or_avoid": "Two people only. Do not open the envelope or add dialogue.",
+                "staging_choices": {
+                  "blocking": "Mother stands on the left by the doorway; daughter sits on the right at the table.",
+                  "shot": "Eye-level medium wide shot; both people and the unopened envelope visible."
+                }
+              }
+            ],
+            "source": {
+              "id": "849cb56b-e0c0-4643-9d29-e611e5f9f00a",
+              "project_revision": 1,
+              "version_id": "current",
+              "draft": {
+                "title": "The unopened letter",
+                "logline": "A mother waits while her daughter decides whether to open a letter.",
+                "sections": [
+                  {
+                    "title": "A quiet pause",
+                    "purpose": "Preserve the daughter's choice.",
+                    "content": "In a modest Vietnamese kitchen, the mother waits beside the doorway. Her adult daughter holds an unopened envelope at the table. Cut before she opens it or answers."
+                  }
+                ]
+              },
+              "context": {
+                "idea": "A mother and her adult daughter share a quiet moment in a modest Vietnamese kitchen.",
+                "constraints": [
+                  "Exactly two people: mother aged about 55, adult daughter aged about 25.",
+                  "The envelope remains sealed and unopened. No dialogue or resolved ending.",
+                  "One kitchen only."
+                ],
+                "clarifications": [],
+                "pending_questions": []
+              },
+              "response_language": "en"
+            }
+          },
+          "instructions": "One rough graphite pencil frame on white paper. Keep the mother's age and the sealed envelope clear.",
+          "prompt": "An unfinished HAND-DRAWN GRAPHITE PENCIL LINE DRAWING for a film storyboard, on plain white paper. This is a drawing made of visible thin, slightly irregular pencil contour strokes, NOT a photograph. Simple outlined figures and objects, a few light hatch marks, large untouched white areas. Faces use only a few drawn lines. No realistic skin or fabric texture, no smooth photographic shading, no grayscale photo, no photorealistic rendering. The doorway and kitchen are suggested with light outlines, not solid black photographic shadows.\n\nOne horizontal frame, eye-level medium wide composition, inside a modest Vietnamese kitchen. Exactly two people. On the LEFT, a visibly middle-aged mother in her mid-fifties stands naturally upright beside the doorway, looking RIGHT toward her daughter. She is clearly one generation older than her adult daughter: a mature face, a few deliberate pencil marks for eye-corner wrinkles and smile lines, slightly heavier eyelids, and a few grey hair strands. She must not look like a young woman or the daughter's same-age friend; she is middle-aged, not frail or very elderly. On the RIGHT, her adult daughter about 25 sits at a small table. The daughter's torso stays at the table, but her HEAD is turned LEFT in three-quarter view toward her mother. Her chin is slightly raised; her EYES ARE OPEN and her gaze is directed up-left toward her mother's face. The daughter looks at her mother, NOT down at the envelope. Her hands continue holding the sealed envelope while her attention is on her mother. Both people are visible. They look toward each other and wait, quietly, without speaking.\n\nThe daughter holds ONE CLOSED, SEALED RECTANGULAR ENVELOPE in both hands. Draw the entire envelope clearly: a flat, intact rectangular outer outline, with its triangular flap lying completely FLAT and CLOSED against the back. The flap edges form a simple closed seam. All paper contents remain completely inside. No raised flap, no opening, no protruding paper, no loose letter or unfolded sheet. Keep the sealed envelope visible between her hands.\n\nQuiet hesitation, with space for each person to choose. This is one paused moment before any answer or resolution. Preserve the unopened envelope and the open ending.\n\nOnly pencil strokes on white paper: one image, no panels, no text, no captions, no labels, no speech bubbles. No extra people or events.\n",
+          "prompt_version": "scene-sketch-v1",
+          "provider": "mflux",
+          "model": "filipstrand/Z-Image-Turbo-mflux-4bit",
+          "parameters": {
+            "width": 768,
+            "height": 432,
+            "steps": 9,
+            "seed": 42,
+            "quantize": 4,
+            "low_ram": true,
+            "mlx_cache_limit_gb": 2,
+            "timeout_seconds": 180,
+            "model_revision": "b3a8f31115a11f2f9e2fa0bfbc8d78dcc3e6568b",
+            "mflux_version": "0.23.0",
+            "mlx_version": "0.32.4"
+          },
+          "status": "ready",
+          "asset_id": "7a58175b-6b3e-4819-9f1a-20e1b74b9380",
+          "error": null,
+          "diagnostic": null,
+          "duration_seconds": 29.295
+        }
+      ],
+      "selected_scene_sketches": {},
+      "applicable_sketch_ids": [
+        "2fab9f6a-8995-4bea-83d7-90553e921a4f"
+      ],
+      "applicable_scene_proposal_ids": [],
+      "scene_source_is_current": true,
+      "scene_handoff": {
+        "outline_id": "e69ee3e9-21e2-402a-a58a-9cec62e90976",
+        "version": 2,
+        "project_revision": 5,
+        "source_id": "849cb56b-e0c0-4643-9d29-e611e5f9f00a",
+        "scenes": [
+          {
+            "id": "ab27f458-fd7d-4879-a019-b976ab8d95f4",
+            "title": "The unopened letter",
+            "action": "A middle-aged mother stands beside the doorway on the left. Her adult daughter sits at a small table on the right, holding one sealed unopened envelope in both hands. They look toward each other and wait. No one opens the envelope.",
+            "location": "A modest Vietnamese kitchen",
+            "time": "Daytime",
+            "characters": "Mother, 55. Daughter, 25.",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "Quiet hesitation; each person has space to choose.",
+            "keep_or_avoid": "Two people only. Do not open the envelope or add dialogue.",
+            "staging_choices": {
+              "blocking": "Mother stands on the left by the doorway; daughter sits on the right at the table.",
+              "shot": "Eye-level medium wide shot; both people and the unopened envelope visible."
+            }
+          }
+        ]
+      },
+      "applicable_plan_ids": [],
+      "author_context": {
+        "idea": "A mother and her adult daughter share a quiet moment in a modest Vietnamese kitchen.",
+        "constraints": [
+          "Exactly two people: mother aged about 55, adult daughter aged about 25.",
+          "The envelope remains sealed and unopened. No dialogue or resolved ending.",
+          "One kitchen only."
+        ],
+        "clarifications": [],
+        "pending_questions": []
+      },
+      "feedback_is_current": false
+    },
+    "sketch": {
+      "id": "2fab9f6a-8995-4bea-83d7-90553e921a4f",
+      "scene_id": "ab27f458-fd7d-4879-a019-b976ab8d95f4",
+      "created_at": "2026-10-27T03:25:10.560428+00:00",
+      "source_revision": 3,
+      "source_content": "{\"answers\": [], \"clarifications\": {}, \"constraints\": [\"Exactly two people: mother aged about 55, adult daughter aged about 25.\", \"The envelope remains sealed and unopened. No dialogue or resolved ending.\", \"One kitchen only.\"], \"draft\": {\"logline\": \"A mother waits while her daughter decides whether to open a letter.\", \"sections\": [{\"content\": \"In a modest Vietnamese kitchen, the mother waits beside the doorway. Her adult daughter holds an unopened envelope at the table. Cut before she opens it or answers.\", \"purpose\": \"Preserve the daughter's choice.\", \"title\": \"A quiet pause\"}], \"title\": \"The unopened letter\"}, \"idea\": \"A mother and her adult daughter share a quiet moment in a modest Vietnamese kitchen.\", \"questions\": [], \"response_language\": \"en\"}",
+      "source_outline": {
+        "id": "e69ee3e9-21e2-402a-a58a-9cec62e90976",
+        "version": 2,
+        "scenes": [
+          {
+            "id": "ab27f458-fd7d-4879-a019-b976ab8d95f4",
+            "title": "The unopened letter",
+            "action": "A middle-aged mother stands beside the doorway on the left. Her adult daughter sits at a small table on the right, holding one sealed unopened envelope in both hands. They look toward each other and wait. No one opens the envelope.",
+            "location": "A modest Vietnamese kitchen",
+            "time": "Daytime",
+            "characters": "Mother, 55. Daughter, 25.",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "Quiet hesitation; each person has space to choose.",
+            "keep_or_avoid": "Two people only. Do not open the envelope or add dialogue.",
+            "staging_choices": {
+              "blocking": "Mother stands on the left by the doorway; daughter sits on the right at the table.",
+              "shot": "Eye-level medium wide shot; both people and the unopened envelope visible."
+            }
+          }
+        ],
+        "source": {
+          "id": "849cb56b-e0c0-4643-9d29-e611e5f9f00a",
+          "project_revision": 1,
+          "version_id": "current",
+          "draft": {
+            "title": "The unopened letter",
+            "logline": "A mother waits while her daughter decides whether to open a letter.",
+            "sections": [
+              {
+                "title": "A quiet pause",
+                "purpose": "Preserve the daughter's choice.",
+                "content": "In a modest Vietnamese kitchen, the mother waits beside the doorway. Her adult daughter holds an unopened envelope at the table. Cut before she opens it or answers."
+              }
+            ]
+          },
+          "context": {
+            "idea": "A mother and her adult daughter share a quiet moment in a modest Vietnamese kitchen.",
+            "constraints": [
+              "Exactly two people: mother aged about 55, adult daughter aged about 25.",
+              "The envelope remains sealed and unopened. No dialogue or resolved ending.",
+              "One kitchen only."
+            ],
+            "clarifications": [],
+            "pending_questions": []
+          },
+          "response_language": "en"
+        }
+      },
+      "instructions": "One rough graphite pencil frame on white paper. Keep the mother's age and the sealed envelope clear.",
+      "prompt": "An unfinished HAND-DRAWN GRAPHITE PENCIL LINE DRAWING for a film storyboard, on plain white paper. This is a drawing made of visible thin, slightly irregular pencil contour strokes, NOT a photograph. Simple outlined figures and objects, a few light hatch marks, large untouched white areas. Faces use only a few drawn lines. No realistic skin or fabric texture, no smooth photographic shading, no grayscale photo, no photorealistic rendering. The doorway and kitchen are suggested with light outlines, not solid black photographic shadows.\n\nOne horizontal frame, eye-level medium wide composition, inside a modest Vietnamese kitchen. Exactly two people. On the LEFT, a visibly middle-aged mother in her mid-fifties stands naturally upright beside the doorway, looking RIGHT toward her daughter. She is clearly one generation older than her adult daughter: a mature face, a few deliberate pencil marks for eye-corner wrinkles and smile lines, slightly heavier eyelids, and a few grey hair strands. She must not look like a young woman or the daughter's same-age friend; she is middle-aged, not frail or very elderly. On the RIGHT, her adult daughter about 25 sits at a small table. The daughter's torso stays at the table, but her HEAD is turned LEFT in three-quarter view toward her mother. Her chin is slightly raised; her EYES ARE OPEN and her gaze is directed up-left toward her mother's face. The daughter looks at her mother, NOT down at the envelope. Her hands continue holding the sealed envelope while her attention is on her mother. Both people are visible. They look toward each other and wait, quietly, without speaking.\n\nThe daughter holds ONE CLOSED, SEALED RECTANGULAR ENVELOPE in both hands. Draw the entire envelope clearly: a flat, intact rectangular outer outline, with its triangular flap lying completely FLAT and CLOSED against the back. The flap edges form a simple closed seam. All paper contents remain completely inside. No raised flap, no opening, no protruding paper, no loose letter or unfolded sheet. Keep the sealed envelope visible between her hands.\n\nQuiet hesitation, with space for each person to choose. This is one paused moment before any answer or resolution. Preserve the unopened envelope and the open ending.\n\nOnly pencil strokes on white paper: one image, no panels, no text, no captions, no labels, no speech bubbles. No extra people or events.\n",
+      "prompt_version": "scene-sketch-v1",
+      "provider": "mflux",
+      "model": "filipstrand/Z-Image-Turbo-mflux-4bit",
+      "parameters": {
+        "width": 768,
+        "height": 432,
+        "steps": 9,
+        "seed": 42,
+        "quantize": 4,
+        "low_ram": true,
+        "mlx_cache_limit_gb": 2,
+        "timeout_seconds": 180,
+        "model_revision": "b3a8f31115a11f2f9e2fa0bfbc8d78dcc3e6568b",
+        "mflux_version": "0.23.0",
+        "mlx_version": "0.32.4"
+      },
+      "status": "ready",
+      "asset_id": "7a58175b-6b3e-4819-9f1a-20e1b74b9380",
+      "error": null,
+      "diagnostic": null,
+      "duration_seconds": 29.295
+    },
+    "source_unchanged": true,
+    "checks": {
+      "keep_status": 200,
+      "reopen_kept_first": true
+    },
+    "image_sha256": "a4a306fecad9d41370d78261d3559fa6c7b5ed13a2e50d392f72c8621bb73a53"
+  },
+  {
+    "index": 2,
+    "http_status": 200,
+    "response": {
+      "response_language": "en",
+      "id": "f04663a2-d40e-4093-86df-ed76eecf8af5",
+      "revision": 8,
+      "updated_at": "2026-10-27T03:26:12.853604+00:00",
+      "title": "Synthetic pencil trial",
+      "idea": "A mother and her adult daughter share a quiet moment in a modest Vietnamese kitchen.",
+      "constraints": [
+        "Exactly two people: mother aged about 55, adult daughter aged about 25.",
+        "The envelope remains sealed and unopened. No dialogue or resolved ending.",
+        "One kitchen only."
+      ],
+      "analysis": null,
+      "answers": [],
+      "clarifications": {},
+      "draft": {
+        "title": "The unopened letter",
+        "logline": "A mother waits while her daughter decides whether to open a letter.",
+        "sections": [
+          {
+            "title": "A quiet pause",
+            "purpose": "Preserve the daughter's choice.",
+            "content": "In a modest Vietnamese kitchen, the mother waits beside the doorway. Her adult daughter holds an unopened envelope at the table. Cut before she opens it or answers."
+          }
+        ]
+      },
+      "feedback": null,
+      "feedback_source": null,
+      "reviewed_content": null,
+      "versions": [],
+      "clarification_history": [],
+      "plan_generations": [],
+      "scene_outline": {
+        "id": "e69ee3e9-21e2-402a-a58a-9cec62e90976",
+        "version": 2,
+        "scenes": [
+          {
+            "id": "ab27f458-fd7d-4879-a019-b976ab8d95f4",
+            "title": "The unopened letter",
+            "action": "A middle-aged mother stands beside the doorway on the left. Her adult daughter sits at a small table on the right, holding one sealed unopened envelope in both hands. They look toward each other and wait. No one opens the envelope.",
+            "location": "A modest Vietnamese kitchen",
+            "time": "Daytime",
+            "characters": "Mother, 55. Daughter, 25.",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "Quiet hesitation; each person has space to choose.",
+            "keep_or_avoid": "Two people only. Do not open the envelope or add dialogue.",
+            "staging_choices": {
+              "blocking": "Mother stands on the left by the doorway; daughter sits on the right at the table.",
+              "shot": "Eye-level medium wide shot; both people and the unopened envelope visible."
+            }
+          }
+        ],
+        "source": {
+          "id": "849cb56b-e0c0-4643-9d29-e611e5f9f00a",
+          "project_revision": 1,
+          "version_id": "current",
+          "draft": {
+            "title": "The unopened letter",
+            "logline": "A mother waits while her daughter decides whether to open a letter.",
+            "sections": [
+              {
+                "title": "A quiet pause",
+                "purpose": "Preserve the daughter's choice.",
+                "content": "In a modest Vietnamese kitchen, the mother waits beside the doorway. Her adult daughter holds an unopened envelope at the table. Cut before she opens it or answers."
+              }
+            ]
+          },
+          "context": {
+            "idea": "A mother and her adult daughter share a quiet moment in a modest Vietnamese kitchen.",
+            "constraints": [
+              "Exactly two people: mother aged about 55, adult daughter aged about 25.",
+              "The envelope remains sealed and unopened. No dialogue or resolved ending.",
+              "One kitchen only."
+            ],
+            "clarifications": [],
+            "pending_questions": []
+          },
+          "response_language": "en"
+        }
+      },
+      "scene_versions": [
+        {
+          "id": "f10e2f3f-7837-4ea1-b118-eaa406edf9b4",
+          "created_at": "2026-10-27T02:57:19.168587+00:00",
+          "outline": {
+            "id": "e69ee3e9-21e2-402a-a58a-9cec62e90976",
+            "version": 1,
+            "scenes": [],
+            "source": {
+              "id": "849cb56b-e0c0-4643-9d29-e611e5f9f00a",
+              "project_revision": 1,
+              "version_id": "current",
+              "draft": {
+                "title": "The unopened letter",
+                "logline": "A mother waits while her daughter decides whether to open a letter.",
+                "sections": [
+                  {
+                    "title": "A quiet pause",
+                    "purpose": "Preserve the daughter's choice.",
+                    "content": "In a modest Vietnamese kitchen, the mother waits beside the doorway. Her adult daughter holds an unopened envelope at the table. Cut before she opens it or answers."
+                  }
+                ]
+              },
+              "context": {
+                "idea": "A mother and her adult daughter share a quiet moment in a modest Vietnamese kitchen.",
+                "constraints": [
+                  "Exactly two people: mother aged about 55, adult daughter aged about 25.",
+                  "The envelope remains sealed and unopened. No dialogue or resolved ending.",
+                  "One kitchen only."
+                ],
+                "clarifications": [],
+                "pending_questions": []
+              },
+              "response_language": "en"
+            }
+          }
+        }
+      ],
+      "scene_proposals": [],
+      "staging_proposals": [],
+      "scene_sketches": [
+        {
+          "id": "2fab9f6a-8995-4bea-83d7-90553e921a4f",
+          "scene_id": "ab27f458-fd7d-4879-a019-b976ab8d95f4",
+          "created_at": "2026-10-27T03:25:10.560428+00:00",
+          "source_revision": 3,
+          "source_content": "{\"answers\": [], \"clarifications\": {}, \"constraints\": [\"Exactly two people: mother aged about 55, adult daughter aged about 25.\", \"The envelope remains sealed and unopened. No dialogue or resolved ending.\", \"One kitchen only.\"], \"draft\": {\"logline\": \"A mother waits while her daughter decides whether to open a letter.\", \"sections\": [{\"content\": \"In a modest Vietnamese kitchen, the mother waits beside the doorway. Her adult daughter holds an unopened envelope at the table. Cut before she opens it or answers.\", \"purpose\": \"Preserve the daughter's choice.\", \"title\": \"A quiet pause\"}], \"title\": \"The unopened letter\"}, \"idea\": \"A mother and her adult daughter share a quiet moment in a modest Vietnamese kitchen.\", \"questions\": [], \"response_language\": \"en\"}",
+          "source_outline": {
+            "id": "e69ee3e9-21e2-402a-a58a-9cec62e90976",
+            "version": 2,
+            "scenes": [
+              {
+                "id": "ab27f458-fd7d-4879-a019-b976ab8d95f4",
+                "title": "The unopened letter",
+                "action": "A middle-aged mother stands beside the doorway on the left. Her adult daughter sits at a small table on the right, holding one sealed unopened envelope in both hands. They look toward each other and wait. No one opens the envelope.",
+                "location": "A modest Vietnamese kitchen",
+                "time": "Daytime",
+                "characters": "Mother, 55. Daughter, 25.",
+                "goal": "",
+                "purpose": "",
+                "viewer_intent": "Quiet hesitation; each person has space to choose.",
+                "keep_or_avoid": "Two people only. Do not open the envelope or add dialogue.",
+                "staging_choices": {
+                  "blocking": "Mother stands on the left by the doorway; daughter sits on the right at the table.",
+                  "shot": "Eye-level medium wide shot; both people and the unopened envelope visible."
+                }
+              }
+            ],
+            "source": {
+              "id": "849cb56b-e0c0-4643-9d29-e611e5f9f00a",
+              "project_revision": 1,
+              "version_id": "current",
+              "draft": {
+                "title": "The unopened letter",
+                "logline": "A mother waits while her daughter decides whether to open a letter.",
+                "sections": [
+                  {
+                    "title": "A quiet pause",
+                    "purpose": "Preserve the daughter's choice.",
+                    "content": "In a modest Vietnamese kitchen, the mother waits beside the doorway. Her adult daughter holds an unopened envelope at the table. Cut before she opens it or answers."
+                  }
+                ]
+              },
+              "context": {
+                "idea": "A mother and her adult daughter share a quiet moment in a modest Vietnamese kitchen.",
+                "constraints": [
+                  "Exactly two people: mother aged about 55, adult daughter aged about 25.",
+                  "The envelope remains sealed and unopened. No dialogue or resolved ending.",
+                  "One kitchen only."
+                ],
+                "clarifications": [],
+                "pending_questions": []
+              },
+              "response_language": "en"
+            }
+          },
+          "instructions": "One rough graphite pencil frame on white paper. Keep the mother's age and the sealed envelope clear.",
+          "prompt": "An unfinished HAND-DRAWN GRAPHITE PENCIL LINE DRAWING for a film storyboard, on plain white paper. This is a drawing made of visible thin, slightly irregular pencil contour strokes, NOT a photograph. Simple outlined figures and objects, a few light hatch marks, large untouched white areas. Faces use only a few drawn lines. No realistic skin or fabric texture, no smooth photographic shading, no grayscale photo, no photorealistic rendering. The doorway and kitchen are suggested with light outlines, not solid black photographic shadows.\n\nOne horizontal frame, eye-level medium wide composition, inside a modest Vietnamese kitchen. Exactly two people. On the LEFT, a visibly middle-aged mother in her mid-fifties stands naturally upright beside the doorway, looking RIGHT toward her daughter. She is clearly one generation older than her adult daughter: a mature face, a few deliberate pencil marks for eye-corner wrinkles and smile lines, slightly heavier eyelids, and a few grey hair strands. She must not look like a young woman or the daughter's same-age friend; she is middle-aged, not frail or very elderly. On the RIGHT, her adult daughter about 25 sits at a small table. The daughter's torso stays at the table, but her HEAD is turned LEFT in three-quarter view toward her mother. Her chin is slightly raised; her EYES ARE OPEN and her gaze is directed up-left toward her mother's face. The daughter looks at her mother, NOT down at the envelope. Her hands continue holding the sealed envelope while her attention is on her mother. Both people are visible. They look toward each other and wait, quietly, without speaking.\n\nThe daughter holds ONE CLOSED, SEALED RECTANGULAR ENVELOPE in both hands. Draw the entire envelope clearly: a flat, intact rectangular outer outline, with its triangular flap lying completely FLAT and CLOSED against the back. The flap edges form a simple closed seam. All paper contents remain completely inside. No raised flap, no opening, no protruding paper, no loose letter or unfolded sheet. Keep the sealed envelope visible between her hands.\n\nQuiet hesitation, with space for each person to choose. This is one paused moment before any answer or resolution. Preserve the unopened envelope and the open ending.\n\nOnly pencil strokes on white paper: one image, no panels, no text, no captions, no labels, no speech bubbles. No extra people or events.\n",
+          "prompt_version": "scene-sketch-v1",
+          "provider": "mflux",
+          "model": "filipstrand/Z-Image-Turbo-mflux-4bit",
+          "parameters": {
+            "width": 768,
+            "height": 432,
+            "steps": 9,
+            "seed": 42,
+            "quantize": 4,
+            "low_ram": true,
+            "mlx_cache_limit_gb": 2,
+            "timeout_seconds": 180,
+            "model_revision": "b3a8f31115a11f2f9e2fa0bfbc8d78dcc3e6568b",
+            "mflux_version": "0.23.0",
+            "mlx_version": "0.32.4"
+          },
+          "status": "ready",
+          "asset_id": "7a58175b-6b3e-4819-9f1a-20e1b74b9380",
+          "error": null,
+          "diagnostic": null,
+          "duration_seconds": 29.295
+        },
+        {
+          "id": "7c6489f0-41c0-4dc6-b282-7ec72c218cf4",
+          "scene_id": "ab27f458-fd7d-4879-a019-b976ab8d95f4",
+          "created_at": "2026-10-27T03:25:39.933054+00:00",
+          "source_revision": 6,
+          "source_content": "{\"answers\": [], \"clarifications\": {}, \"constraints\": [\"Exactly two people: mother aged about 55, adult daughter aged about 25.\", \"The envelope remains sealed and unopened. No dialogue or resolved ending.\", \"One kitchen only.\"], \"draft\": {\"logline\": \"A mother waits while her daughter decides whether to open a letter.\", \"sections\": [{\"content\": \"In a modest Vietnamese kitchen, the mother waits beside the doorway. Her adult daughter holds an unopened envelope at the table. Cut before she opens it or answers.\", \"purpose\": \"Preserve the daughter's choice.\", \"title\": \"A quiet pause\"}], \"title\": \"The unopened letter\"}, \"idea\": \"A mother and her adult daughter share a quiet moment in a modest Vietnamese kitchen.\", \"questions\": [], \"response_language\": \"en\"}",
+          "source_outline": {
+            "id": "e69ee3e9-21e2-402a-a58a-9cec62e90976",
+            "version": 2,
+            "scenes": [
+              {
+                "id": "ab27f458-fd7d-4879-a019-b976ab8d95f4",
+                "title": "The unopened letter",
+                "action": "A middle-aged mother stands beside the doorway on the left. Her adult daughter sits at a small table on the right, holding one sealed unopened envelope in both hands. They look toward each other and wait. No one opens the envelope.",
+                "location": "A modest Vietnamese kitchen",
+                "time": "Daytime",
+                "characters": "Mother, 55. Daughter, 25.",
+                "goal": "",
+                "purpose": "",
+                "viewer_intent": "Quiet hesitation; each person has space to choose.",
+                "keep_or_avoid": "Two people only. Do not open the envelope or add dialogue.",
+                "staging_choices": {
+                  "blocking": "Mother stands on the left by the doorway; daughter sits on the right at the table.",
+                  "shot": "Eye-level medium wide shot; both people and the unopened envelope visible."
+                }
+              }
+            ],
+            "source": {
+              "id": "849cb56b-e0c0-4643-9d29-e611e5f9f00a",
+              "project_revision": 1,
+              "version_id": "current",
+              "draft": {
+                "title": "The unopened letter",
+                "logline": "A mother waits while her daughter decides whether to open a letter.",
+                "sections": [
+                  {
+                    "title": "A quiet pause",
+                    "purpose": "Preserve the daughter's choice.",
+                    "content": "In a modest Vietnamese kitchen, the mother waits beside the doorway. Her adult daughter holds an unopened envelope at the table. Cut before she opens it or answers."
+                  }
+                ]
+              },
+              "context": {
+                "idea": "A mother and her adult daughter share a quiet moment in a modest Vietnamese kitchen.",
+                "constraints": [
+                  "Exactly two people: mother aged about 55, adult daughter aged about 25.",
+                  "The envelope remains sealed and unopened. No dialogue or resolved ending.",
+                  "One kitchen only."
+                ],
+                "clarifications": [],
+                "pending_questions": []
+              },
+              "response_language": "en"
+            }
+          },
+          "instructions": "One rough graphite pencil frame on white paper. Keep the mother's age and the sealed envelope clear.",
+          "prompt": "An unfinished HAND-DRAWN GRAPHITE PENCIL LINE DRAWING for a film storyboard, on plain white paper. This is a drawing made of visible thin, slightly irregular pencil contour strokes, NOT a photograph. Simple outlined figures and objects, a few light hatch marks, large untouched white areas. Faces use only a few drawn lines. No realistic skin or fabric texture, no smooth photographic shading, no grayscale photo, no photorealistic rendering. The doorway and kitchen are suggested with light outlines, not solid black photographic shadows.\n\nOne horizontal frame, eye-level medium wide composition, inside a modest Vietnamese kitchen. Exactly two people. On the LEFT, a visibly middle-aged mother in her mid-fifties stands naturally upright beside the doorway, looking RIGHT toward her daughter. She is clearly one generation older than her adult daughter: a mature face, a few deliberate pencil marks for eye-corner wrinkles and smile lines, slightly heavier eyelids, and a few grey hair strands. She must not look like a young woman or the daughter's same-age friend; she is middle-aged, not frail or very elderly. On the RIGHT, her adult daughter about 25 sits at a small table. The daughter's torso stays at the table, but her HEAD is turned LEFT in three-quarter view toward her mother. Her chin is slightly raised; her EYES ARE OPEN and her gaze is directed up-left toward her mother's face. The daughter looks at her mother, NOT down at the envelope. Her hands continue holding the sealed envelope while her attention is on her mother. Both people are visible. They look toward each other and wait, quietly, without speaking.\n\nThe daughter holds ONE CLOSED, SEALED RECTANGULAR ENVELOPE in both hands. Draw the entire envelope clearly: a flat, intact rectangular outer outline, with its triangular flap lying completely FLAT and CLOSED against the back. The flap edges form a simple closed seam. All paper contents remain completely inside. No raised flap, no opening, no protruding paper, no loose letter or unfolded sheet. Keep the sealed envelope visible between her hands.\n\nQuiet hesitation, with space for each person to choose. This is one paused moment before any answer or resolution. Preserve the unopened envelope and the open ending.\n\nOnly pencil strokes on white paper: one image, no panels, no text, no captions, no labels, no speech bubbles. No extra people or events.\n",
+          "prompt_version": "scene-sketch-v1",
+          "provider": "mflux",
+          "model": "filipstrand/Z-Image-Turbo-mflux-4bit",
+          "parameters": {
+            "width": 768,
+            "height": 432,
+            "steps": 9,
+            "seed": 42,
+            "quantize": 4,
+            "low_ram": true,
+            "mlx_cache_limit_gb": 2,
+            "timeout_seconds": 180,
+            "model_revision": "b3a8f31115a11f2f9e2fa0bfbc8d78dcc3e6568b",
+            "mflux_version": "0.23.0",
+            "mlx_version": "0.32.4"
+          },
+          "status": "ready",
+          "asset_id": "19905a0d-891f-4007-bd15-a579f3c6e31a",
+          "error": null,
+          "diagnostic": null,
+          "duration_seconds": 32.915
+        }
+      ],
+      "selected_scene_sketches": {
+        "ab27f458-fd7d-4879-a019-b976ab8d95f4": "2fab9f6a-8995-4bea-83d7-90553e921a4f"
+      },
+      "applicable_sketch_ids": [
+        "2fab9f6a-8995-4bea-83d7-90553e921a4f",
+        "7c6489f0-41c0-4dc6-b282-7ec72c218cf4"
+      ],
+      "applicable_scene_proposal_ids": [],
+      "scene_source_is_current": true,
+      "scene_handoff": {
+        "outline_id": "e69ee3e9-21e2-402a-a58a-9cec62e90976",
+        "version": 2,
+        "project_revision": 8,
+        "source_id": "849cb56b-e0c0-4643-9d29-e611e5f9f00a",
+        "scenes": [
+          {
+            "id": "ab27f458-fd7d-4879-a019-b976ab8d95f4",
+            "title": "The unopened letter",
+            "action": "A middle-aged mother stands beside the doorway on the left. Her adult daughter sits at a small table on the right, holding one sealed unopened envelope in both hands. They look toward each other and wait. No one opens the envelope.",
+            "location": "A modest Vietnamese kitchen",
+            "time": "Daytime",
+            "characters": "Mother, 55. Daughter, 25.",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "Quiet hesitation; each person has space to choose.",
+            "keep_or_avoid": "Two people only. Do not open the envelope or add dialogue.",
+            "staging_choices": {
+              "blocking": "Mother stands on the left by the doorway; daughter sits on the right at the table.",
+              "shot": "Eye-level medium wide shot; both people and the unopened envelope visible."
+            }
+          }
+        ]
+      },
+      "applicable_plan_ids": [],
+      "author_context": {
+        "idea": "A mother and her adult daughter share a quiet moment in a modest Vietnamese kitchen.",
+        "constraints": [
+          "Exactly two people: mother aged about 55, adult daughter aged about 25.",
+          "The envelope remains sealed and unopened. No dialogue or resolved ending.",
+          "One kitchen only."
+        ],
+        "clarifications": [],
+        "pending_questions": []
+      },
+      "feedback_is_current": false
+    },
+    "sketch": {
+      "id": "7c6489f0-41c0-4dc6-b282-7ec72c218cf4",
+      "scene_id": "ab27f458-fd7d-4879-a019-b976ab8d95f4",
+      "created_at": "2026-10-27T03:25:39.933054+00:00",
+      "source_revision": 6,
+      "source_content": "{\"answers\": [], \"clarifications\": {}, \"constraints\": [\"Exactly two people: mother aged about 55, adult daughter aged about 25.\", \"The envelope remains sealed and unopened. No dialogue or resolved ending.\", \"One kitchen only.\"], \"draft\": {\"logline\": \"A mother waits while her daughter decides whether to open a letter.\", \"sections\": [{\"content\": \"In a modest Vietnamese kitchen, the mother waits beside the doorway. Her adult daughter holds an unopened envelope at the table. Cut before she opens it or answers.\", \"purpose\": \"Preserve the daughter's choice.\", \"title\": \"A quiet pause\"}], \"title\": \"The unopened letter\"}, \"idea\": \"A mother and her adult daughter share a quiet moment in a modest Vietnamese kitchen.\", \"questions\": [], \"response_language\": \"en\"}",
+      "source_outline": {
+        "id": "e69ee3e9-21e2-402a-a58a-9cec62e90976",
+        "version": 2,
+        "scenes": [
+          {
+            "id": "ab27f458-fd7d-4879-a019-b976ab8d95f4",
+            "title": "The unopened letter",
+            "action": "A middle-aged mother stands beside the doorway on the left. Her adult daughter sits at a small table on the right, holding one sealed unopened envelope in both hands. They look toward each other and wait. No one opens the envelope.",
+            "location": "A modest Vietnamese kitchen",
+            "time": "Daytime",
+            "characters": "Mother, 55. Daughter, 25.",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "Quiet hesitation; each person has space to choose.",
+            "keep_or_avoid": "Two people only. Do not open the envelope or add dialogue.",
+            "staging_choices": {
+              "blocking": "Mother stands on the left by the doorway; daughter sits on the right at the table.",
+              "shot": "Eye-level medium wide shot; both people and the unopened envelope visible."
+            }
+          }
+        ],
+        "source": {
+          "id": "849cb56b-e0c0-4643-9d29-e611e5f9f00a",
+          "project_revision": 1,
+          "version_id": "current",
+          "draft": {
+            "title": "The unopened letter",
+            "logline": "A mother waits while her daughter decides whether to open a letter.",
+            "sections": [
+              {
+                "title": "A quiet pause",
+                "purpose": "Preserve the daughter's choice.",
+                "content": "In a modest Vietnamese kitchen, the mother waits beside the doorway. Her adult daughter holds an unopened envelope at the table. Cut before she opens it or answers."
+              }
+            ]
+          },
+          "context": {
+            "idea": "A mother and her adult daughter share a quiet moment in a modest Vietnamese kitchen.",
+            "constraints": [
+              "Exactly two people: mother aged about 55, adult daughter aged about 25.",
+              "The envelope remains sealed and unopened. No dialogue or resolved ending.",
+              "One kitchen only."
+            ],
+            "clarifications": [],
+            "pending_questions": []
+          },
+          "response_language": "en"
+        }
+      },
+      "instructions": "One rough graphite pencil frame on white paper. Keep the mother's age and the sealed envelope clear.",
+      "prompt": "An unfinished HAND-DRAWN GRAPHITE PENCIL LINE DRAWING for a film storyboard, on plain white paper. This is a drawing made of visible thin, slightly irregular pencil contour strokes, NOT a photograph. Simple outlined figures and objects, a few light hatch marks, large untouched white areas. Faces use only a few drawn lines. No realistic skin or fabric texture, no smooth photographic shading, no grayscale photo, no photorealistic rendering. The doorway and kitchen are suggested with light outlines, not solid black photographic shadows.\n\nOne horizontal frame, eye-level medium wide composition, inside a modest Vietnamese kitchen. Exactly two people. On the LEFT, a visibly middle-aged mother in her mid-fifties stands naturally upright beside the doorway, looking RIGHT toward her daughter. She is clearly one generation older than her adult daughter: a mature face, a few deliberate pencil marks for eye-corner wrinkles and smile lines, slightly heavier eyelids, and a few grey hair strands. She must not look like a young woman or the daughter's same-age friend; she is middle-aged, not frail or very elderly. On the RIGHT, her adult daughter about 25 sits at a small table. The daughter's torso stays at the table, but her HEAD is turned LEFT in three-quarter view toward her mother. Her chin is slightly raised; her EYES ARE OPEN and her gaze is directed up-left toward her mother's face. The daughter looks at her mother, NOT down at the envelope. Her hands continue holding the sealed envelope while her attention is on her mother. Both people are visible. They look toward each other and wait, quietly, without speaking.\n\nThe daughter holds ONE CLOSED, SEALED RECTANGULAR ENVELOPE in both hands. Draw the entire envelope clearly: a flat, intact rectangular outer outline, with its triangular flap lying completely FLAT and CLOSED against the back. The flap edges form a simple closed seam. All paper contents remain completely inside. No raised flap, no opening, no protruding paper, no loose letter or unfolded sheet. Keep the sealed envelope visible between her hands.\n\nQuiet hesitation, with space for each person to choose. This is one paused moment before any answer or resolution. Preserve the unopened envelope and the open ending.\n\nOnly pencil strokes on white paper: one image, no panels, no text, no captions, no labels, no speech bubbles. No extra people or events.\n",
+      "prompt_version": "scene-sketch-v1",
+      "provider": "mflux",
+      "model": "filipstrand/Z-Image-Turbo-mflux-4bit",
+      "parameters": {
+        "width": 768,
+        "height": 432,
+        "steps": 9,
+        "seed": 42,
+        "quantize": 4,
+        "low_ram": true,
+        "mlx_cache_limit_gb": 2,
+        "timeout_seconds": 180,
+        "model_revision": "b3a8f31115a11f2f9e2fa0bfbc8d78dcc3e6568b",
+        "mflux_version": "0.23.0",
+        "mlx_version": "0.32.4"
+      },
+      "status": "ready",
+      "asset_id": "19905a0d-891f-4007-bd15-a579f3c6e31a",
+      "error": null,
+      "diagnostic": null,
+      "duration_seconds": 32.915
+    },
+    "source_unchanged": true,
+    "checks": {
+      "new_preview_did_not_replace_first": true,
+      "discard_preserved_first": true,
+      "reopen_kept_first": true
+    },
+    "image_sha256": "a4a306fecad9d41370d78261d3559fa6c7b5ed13a2e50d392f72c8621bb73a53"
+  }
+]

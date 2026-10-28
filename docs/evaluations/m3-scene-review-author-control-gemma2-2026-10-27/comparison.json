@@ -1,0 +1,361 @@
+{
+  "reader": "Codex, chưa phải tác giả/PO nghiệm thu",
+  "old_grades_expected_unchanged": true,
+  "same_frozen_prompt_input_schema": true,
+  "qwen_v4": {
+    "calls": 6,
+    "parsed_outputs": 6,
+    "ready": 4,
+    "timeouts": 0,
+    "id_error_cases": 0,
+    "quote_error_cases": 1,
+    "missing_required_evidence_cases": 1,
+    "raw_note_count": 6,
+    "evidence_count": 11,
+    "exact_id_quote": 10,
+    "duration_seconds": {
+      "min": 8.575,
+      "max": 13.802,
+      "mean": 10.122
+    },
+    "cases": [
+      {
+        "name": "open-ending-compliant",
+        "pair": "open-ending",
+        "variant": "compliant",
+        "status_code": 200,
+        "duration_seconds": 13.802,
+        "model_calls": 1,
+        "review_status": "ready",
+        "validated_notes": 1,
+        "error": null,
+        "response_error": null,
+        "author_script_unchanged": true,
+        "parsed_output_available": true,
+        "raw_note_count": 1,
+        "evidence_count": 1,
+        "exact_id_quote": 1,
+        "id_quote_issues": [],
+        "missing_required_evidence": []
+      },
+      {
+        "name": "open-ending-violating",
+        "pair": "open-ending",
+        "variant": "violating",
+        "status_code": 502,
+        "duration_seconds": 9.031,
+        "model_calls": 1,
+        "review_status": "failed",
+        "validated_notes": 0,
+        "error": "MalformedProviderResponseError",
+        "response_error": "{\"detail\":\"Chưa nhận được phản hồi hợp lệ từ AI. Hãy thử lại.\"}",
+        "author_script_unchanged": true,
+        "parsed_output_available": true,
+        "raw_note_count": 1,
+        "evidence_count": 4,
+        "exact_id_quote": 3,
+        "id_quote_issues": [
+          {
+            "note": 0,
+            "type": "quote_mismatch",
+            "id": "S4"
+          }
+        ],
+        "missing_required_evidence": []
+      },
+      {
+        "name": "free-choice-compliant",
+        "pair": "free-choice",
+        "variant": "compliant",
+        "status_code": 200,
+        "duration_seconds": 8.876,
+        "model_calls": 1,
+        "review_status": "ready",
+        "validated_notes": 1,
+        "error": null,
+        "response_error": null,
+        "author_script_unchanged": true,
+        "parsed_output_available": true,
+        "raw_note_count": 1,
+        "evidence_count": 1,
+        "exact_id_quote": 1,
+        "id_quote_issues": [],
+        "missing_required_evidence": []
+      },
+      {
+        "name": "free-choice-violating",
+        "pair": "free-choice",
+        "variant": "violating",
+        "status_code": 200,
+        "duration_seconds": 8.575,
+        "model_calls": 1,
+        "review_status": "ready",
+        "validated_notes": 1,
+        "error": null,
+        "response_error": null,
+        "author_script_unchanged": true,
+        "parsed_output_available": true,
+        "raw_note_count": 1,
+        "evidence_count": 2,
+        "exact_id_quote": 2,
+        "id_quote_issues": [],
+        "missing_required_evidence": []
+      },
+      {
+        "name": "broken-flashlight-compliant",
+        "pair": "broken-flashlight",
+        "variant": "compliant",
+        "status_code": 200,
+        "duration_seconds": 11.609,
+        "model_calls": 1,
+        "review_status": "ready",
+        "validated_notes": 1,
+        "error": null,
+        "response_error": null,
+        "author_script_unchanged": true,
+        "parsed_output_available": true,
+        "raw_note_count": 1,
+        "evidence_count": 2,
+        "exact_id_quote": 2,
+        "id_quote_issues": [],
+        "missing_required_evidence": []
+      },
+      {
+        "name": "broken-flashlight-violating",
+        "pair": "broken-flashlight",
+        "variant": "violating",
+        "status_code": 502,
+        "duration_seconds": 8.84,
+        "model_calls": 1,
+        "review_status": "failed",
+        "validated_notes": 0,
+        "error": "MalformedProviderResponseError",
+        "response_error": "{\"detail\":\"Chưa nhận được phản hồi hợp lệ từ AI. Hãy thử lại.\"}",
+        "author_script_unchanged": true,
+        "parsed_output_available": true,
+        "raw_note_count": 1,
+        "evidence_count": 1,
+        "exact_id_quote": 1,
+        "id_quote_issues": [],
+        "missing_required_evidence": [
+          {
+            "note": 0,
+            "type": "missing_valid_target_text"
+          }
+        ]
+      }
+    ]
+  },
+  "gemma_v4": {
+    "calls": 6,
+    "parsed_outputs": 6,
+    "ready": 4,
+    "timeouts": 0,
+    "id_error_cases": 0,
+    "quote_error_cases": 0,
+    "missing_required_evidence_cases": 2,
+    "raw_note_count": 11,
+    "evidence_count": 18,
+    "exact_id_quote": 18,
+    "duration_seconds": {
+      "min": 23.094,
+      "max": 44.644,
+      "mean": 30.71
+    },
+    "cases": [
+      {
+        "name": "open-ending-compliant",
+        "pair": "open-ending",
+        "variant": "compliant",
+        "status_code": 200,
+        "duration_seconds": 23.401,
+        "model_calls": 1,
+        "review_status": "ready",
+        "validated_notes": 1,
+        "error": null,
+        "response_error": null,
+        "author_script_unchanged": true,
+        "parsed_output_available": true,
+        "raw_note_count": 1,
+        "evidence_count": 2,
+        "exact_id_quote": 2,
+        "id_quote_issues": [],
+        "missing_required_evidence": [],
+        "reader_assessment": {
+          "detection": "no_false_author_choice_conflict",
+          "utility": "optional_pacing_choice_not_verified_defect",
+          "explanation": "Ghi nhận kết mở phù hợp; đề nghị khoảng dừng trước Cha… là lựa chọn nhịp có thể cân nhắc, không chứng minh cảnh đang sai. Giữ thư kín/kết mở, không ép quyết định.",
+          "language": "en_despite_vi_request",
+          "visible": true
+        }
+      },
+      {
+        "name": "open-ending-violating",
+        "pair": "open-ending",
+        "variant": "violating",
+        "status_code": 200,
+        "duration_seconds": 23.094,
+        "model_calls": 1,
+        "review_status": "ready",
+        "validated_notes": 2,
+        "error": null,
+        "response_error": null,
+        "author_script_unchanged": true,
+        "parsed_output_available": true,
+        "raw_note_count": 2,
+        "evidence_count": 3,
+        "exact_id_quote": 3,
+        "id_quote_issues": [],
+        "missing_required_evidence": [],
+        "reader_assessment": {
+          "detection": "clear_true_positive_primary_note",
+          "utility": "useful_detection_with_weak_secondary_craft",
+          "explanation": "Note đầu chỉ đúng câu tha thứ và lựa chọn M2. Note phụ đề nghị im lặng/ánh mắt thêm để mơ hồ, nhưng thêm biểu cảm không tự loại bỏ câu chốt tha thứ; không coi cả phản hồi đạt chỉ vì note đầu đúng.",
+          "language": "en_despite_vi_request",
+          "visible": true
+        }
+      },
+      {
+        "name": "free-choice-compliant",
+        "pair": "free-choice",
+        "variant": "compliant",
+        "status_code": 200,
+        "duration_seconds": 23.097,
+        "model_calls": 1,
+        "review_status": "ready",
+        "validated_notes": 2,
+        "error": null,
+        "response_error": null,
+        "author_script_unchanged": true,
+        "parsed_output_available": true,
+        "raw_note_count": 2,
+        "evidence_count": 3,
+        "exact_id_quote": 3,
+        "id_quote_issues": [],
+        "missing_required_evidence": [],
+        "reader_assessment": {
+          "detection": "no_false_author_choice_conflict",
+          "utility": "low_utility_creative_rearrangement_and_expression",
+          "explanation": "Không đòi con gái quyết định ngay như Qwen. Đề nghị đảo thứ tự đặt thư/lùi lại để tăng cảm xúc và thêm biểu cảm chưa chỉ ra vấn đề cụ thể; thay lựa chọn dàn cảnh cần tác giả cân nhắc, không là sửa lỗi bắt buộc.",
+          "language": "vi",
+          "visible": true
+        }
+      },
+      {
+        "name": "free-choice-violating",
+        "pair": "free-choice",
+        "variant": "violating",
+        "status_code": 502,
+        "duration_seconds": 31.344,
+        "model_calls": 1,
+        "review_status": "failed",
+        "validated_notes": 0,
+        "error": "MalformedProviderResponseError",
+        "response_error": "{\"detail\":\"Chưa nhận được phản hồi hợp lệ từ AI. Hãy thử lại.\"}",
+        "author_script_unchanged": true,
+        "parsed_output_available": true,
+        "raw_note_count": 3,
+        "evidence_count": 5,
+        "exact_id_quote": 5,
+        "id_quote_issues": [],
+        "missing_required_evidence": [
+          {
+            "note": 2,
+            "type": "missing_valid_target_text"
+          }
+        ],
+        "reader_assessment": {
+          "detection": "clear_true_positive_primary_note_not_delivered",
+          "utility": "contract_failure_from_secondary_note",
+          "explanation": "Note đầu nhận ra giữ hộ chiếu trái giới hạn, đủ S5/A4. Note uncertain cuối chỉ dẫn S2 cảnh trước, thiếu text cảnh đích; cả lượt failed, không lọc/giữ riêng note đầu để đổi kết quả.",
+          "language": "vi",
+          "visible": false
+        }
+      },
+      {
+        "name": "broken-flashlight-compliant",
+        "pair": "broken-flashlight",
+        "variant": "compliant",
+        "status_code": 200,
+        "duration_seconds": 38.683,
+        "model_calls": 1,
+        "review_status": "ready",
+        "validated_notes": 1,
+        "error": null,
+        "response_error": null,
+        "author_script_unchanged": true,
+        "parsed_output_available": true,
+        "raw_note_count": 1,
+        "evidence_count": 2,
+        "exact_id_quote": 2,
+        "id_quote_issues": [],
+        "missing_required_evidence": [],
+        "reader_assessment": {
+          "detection": "no_false_author_choice_conflict",
+          "utility": "low_utility_added_detail_and_speech",
+          "explanation": "Không phán đặt đèn xuống trái M2 như Qwen. Tuy nhiên đòi làm rõ cách đọc, thêm cúi người/đọc to từng câu, dù ánh đèn/giấy đã thể hiện cách đọc; lợi ích chưa có căn cứ, không ép thành yêu cầu.",
+          "language": "vi",
+          "visible": true
+        }
+      },
+      {
+        "name": "broken-flashlight-violating",
+        "pair": "broken-flashlight",
+        "variant": "violating",
+        "status_code": 502,
+        "duration_seconds": 44.644,
+        "model_calls": 1,
+        "review_status": "failed",
+        "validated_notes": 0,
+        "error": "MalformedProviderResponseError",
+        "response_error": "{\"detail\":\"Chưa nhận được phản hồi hợp lệ từ AI. Hãy thử lại.\"}",
+        "author_script_unchanged": true,
+        "parsed_output_available": true,
+        "raw_note_count": 2,
+        "evidence_count": 3,
+        "exact_id_quote": 3,
+        "id_quote_issues": [],
+        "missing_required_evidence": [
+          {
+            "note": 1,
+            "type": "missing_valid_target_text"
+          }
+        ],
+        "reader_assessment": {
+          "detection": "partial_conflict_recognition_wrong_evidence_anchor",
+          "utility": "weakly_supported_primary_note_and_invalid_secondary",
+          "explanation": "Nhắc dùng đèn pin hỏng cộng đèn đường khác M2, nhưng không nói rõ kết quả đèn hỏng sáng là điều bất khả. Note chính dẫn S4 kéo rèm thay S5 đèn pin sáng, nên quote đúng chưa hỗ trợ trực tiếp nhận xét. Note craft phụ chỉ dẫn S2 cảnh trước làm cả lượt failed.",
+          "language": "en_despite_vi_request",
+          "visible": false
+        }
+      }
+    ]
+  },
+  "semantic_comparison": {
+    "qwen_raw_conflicts_recognized_in_violating": 3,
+    "gemma_clear_raw_conflicts_recognized": 2,
+    "gemma_partial_raw_conflict_recognition": 1,
+    "violating_cases": 3,
+    "correct_primary_violating_feedback_delivered": {
+      "qwen": 1,
+      "gemma": 1
+    },
+    "false_author_choice_conflict_claims_on_compliant_regardless_kind": {
+      "qwen": 2,
+      "gemma": 0
+    },
+    "gemma_english_responses_despite_vi": 3,
+    "note": "No label repair or selective note salvage; raw detection and delivered supported usefulness are distinct. Optional craft is not automatically an intent violation."
+  },
+  "context_observation": {
+    "requested_both": 16384,
+    "qwen_effective_after": 16384,
+    "gemma_effective_after": 8192
+  },
+  "conclusion": "Gemma reduces false author-choice allegations on these compliant samples, but does not improve ready-case count or delivered primary conflict detection; secondary invalid evidence, unnecessary creative additions and language failures remain. No basis for automatic runtime model switch or quality acceptance.",
+  "limits": [
+    "One unseeded sample per case; no statistical superiority claim.",
+    "Effective context differs (Gemma 8192, Qwen 16384); cannot claim equal effective context or prove all text processed from byte guard alone.",
+    "No model reruns, no filtering invalid notes to count a failed case as success, no runtime/PR updates."
+  ]
+}

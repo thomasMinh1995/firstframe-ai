@@ -1,0 +1,25 @@
+{
+  "prompt_version": "scene-sketch-visual-v2",
+  "model_calls": 0,
+  "provider_checks": "unit/API/browser with fake image provider",
+  "parameters_unchanged": {
+    "width": 768,
+    "height": 432,
+    "steps": 9,
+    "seed": 42,
+    "quantize": 4,
+    "low_ram": true,
+    "mlx_cache_limit_gb": 2,
+    "timeout_seconds": 180,
+    "model_revision": "b3a8f31115a11f2f9e2fa0bfbc8d78dcc3e6568b",
+    "mflux_version": "0.23.0",
+    "mlx_version": "0.32.4"
+  },
+  "hashes": {
+    "backend/app/infrastructure/scene_images.py": "e063a78c62ca986accecee6eb750c513714c349afb5646a4dc6e9848e54e2ddd",
+    "backend/app/api/routes/scene_sketches.py": "a197fd827be9c9b161f5064777b3039748b00a5bd292977a83f5782c6b1b3506",
+    "backend/tests/test_scene_sketch_prompt.py": "11ff22cee15edbf298bc4f75bded42597fea27c5c06c289d9c0c12474ee0ad35",
+    "backend/tests/test_scene_sketches.py": "ea4b3ee83a5418bc73556f1d54b55804b31d64a576a839aa68646a937099c836"
+  },
+  "samples_sha256": "13aeed5553f1c538901ee88109fca9ea95fbfb7e550e894bf155f3c549f07d80"
+}

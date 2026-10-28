@@ -1,0 +1,69 @@
+{
+  "reviewed_at": "2026-10-27T03:23:04.046653+00:00",
+  "reviewer": "Codex manual visual comparison; not model scoring or author/PO acceptance",
+  "rows": [
+    {
+      "criterion": "graphite pencil monochrome",
+      "baseline": "fail",
+      "candidate": "pass",
+      "observation": "Candidate has visible outlined pencil strokes, light hatch shading and white paper; baseline resembles a monochrome photograph."
+    },
+    {
+      "criterion": "exactly two people",
+      "baseline": "pass",
+      "candidate": "pass",
+      "observation": "Exactly two people in both frames."
+    },
+    {
+      "criterion": "mother left standing beside doorway",
+      "baseline": "pass",
+      "candidate": "pass",
+      "observation": "Mother stands on the left beside the doorway."
+    },
+    {
+      "criterion": "daughter right seated at small table",
+      "baseline": "pass",
+      "candidate": "pass",
+      "observation": "Daughter is seated on the right behind the table."
+    },
+    {
+      "criterion": "both people and envelope visible",
+      "baseline": "unclear",
+      "candidate": "pass",
+      "observation": "Candidate clearly outlines a single rectangular envelope between both hands; baseline object looked like folded or opened paper."
+    },
+    {
+      "criterion": "sealed unopened envelope visually clear",
+      "baseline": "unclear",
+      "candidate": "pass",
+      "observation": "Candidate has a flat rectangular outline and closed triangular flap seam; no contents or lifted flap are visible. This is visual depiction, not proof of physical sealing."
+    },
+    {
+      "criterion": "no text captions or panel grid",
+      "baseline": "pass",
+      "candidate": "pass",
+      "observation": "Neither prose image has visible labels, captions or multiple panels."
+    },
+    {
+      "criterion": "no extra event/person or closed ending",
+      "baseline": "pass",
+      "candidate": "pass",
+      "observation": "No extra actor, dialogue, added event or explicit resolution is visible. A still frame does not certify the whole narrative."
+    }
+  ],
+  "additional_source_observations_not_new_scoring_criteria": [
+    "The mother is drawn as fairly young; the source age of about 55 is not clearly conveyed.",
+    "The daughter looks downward at the envelope rather than toward the mother, unlike the saved scene action.",
+    "The candidate satisfies the drawing/envelope depiction goals more clearly but does not certify full-scene fidelity."
+  ],
+  "baseline_seconds": [
+    26.095,
+    27.236
+  ],
+  "candidate_seconds": [
+    28.833,
+    31.356
+  ],
+  "images_identical": true,
+  "scope": "One English synthetic scene, one hand-written prompt, two repeat runs at the same seed; not independent content cases. No runtime changes."
+}

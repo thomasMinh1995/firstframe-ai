@@ -1,0 +1,21 @@
+{
+  "fixed_before_run": true,
+  "reviewer": "Codex visual inspection, not PO or user acceptance",
+  "labels": [
+    "pass",
+    "fail",
+    "unclear"
+  ],
+  "criteria": [
+    "graphite pencil monochrome",
+    "exactly two people",
+    "mother left standing beside doorway",
+    "daughter right seated at small table",
+    "both people and envelope visible",
+    "sealed unopened envelope visually clear",
+    "no text captions or panel grid",
+    "no extra event/person or closed ending"
+  ],
+  "comparison": "Compare the whole prose prompt with the saved JSON baseline; not a controlled proof that JSON alone caused the difference.",
+  "scope": "One manually written prompt for the exact saved English synthetic scene. Two runs share seed 42, so they are not independent scene samples."
+}

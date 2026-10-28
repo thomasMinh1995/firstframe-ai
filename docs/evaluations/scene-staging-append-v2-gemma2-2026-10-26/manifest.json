@@ -1,0 +1,32 @@
+{
+  "frozen_at": "2026-10-26T15:56:28.640818+00:00",
+  "model": "gemma2:9b-instruct-q4_K_M",
+  "model_digest": "c20bec88025f3aefa420efd64dca0ee4abc8e36078d6b74b0f660cdcbd5d1982",
+  "base_url": "http://127.0.0.1:11434",
+  "parameters": {
+    "temperature": 0.3,
+    "num_ctx": 16384,
+    "timeout_seconds": 120
+  },
+  "requests": 3,
+  "order": [
+    "quiet-append",
+    "comedy-append",
+    "limits-append"
+  ],
+  "retries": 0,
+  "scope": "Finite closure: exactly three saved append cases with prompt/input v2, one Gemma 2 model, 120 seconds per request, no retries. Source inputs unchanged; prompt and reference/insertion input structure changed.",
+  "prompt_sha256": "e4b8428963a10dd4c0cf3c0354e3231d584a872fee871224cf5398ab8d4de0b5",
+  "service_sha256": "99ba9652a6fc3378d93ef7bf73ad72f12d058c90bdd21eb24d07e48c0c6978b0",
+  "files": {
+    "inputs.json": "ceff45930938c1323b2efebad9c82e520ba634eae10ce97f2f3b6737a701b586",
+    "baseline.json": "62ea70925596843e5d8bc563c62e935d3aad5e4b117335e5e91b1ec34c5d78a9",
+    "schema.json": "de495c7d05fa161e31150b55ef4f433c826b0d0fc5e2bb2e6b2593b2939586a4",
+    "single-schema.json": "350341f3f5814c89cd9aa10b9375173334da1c4202a5534b75550c6b41e109cb",
+    "prompt.md": "e4b8428963a10dd4c0cf3c0354e3231d584a872fee871224cf5398ab8d4de0b5",
+    "run.py": "8c160fc1b1577f1f2556879e55cf040f3d4587e9561404043cbe06ce2546c992"
+  },
+  "native_context_length": 8192,
+  "single_schema_sha256": "350341f3f5814c89cd9aa10b9375173334da1c4202a5534b75550c6b41e109cb",
+  "baseline": "baseline.json"
+}

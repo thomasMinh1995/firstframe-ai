@@ -13,8 +13,11 @@ from pydantic import (
 )
 
 from app.api.schemas.story import AnalysisResponse, EvaluationResponse
+from app.api.schemas.scenes import Scene, SceneId, SceneOutlineEdit, SceneText, StagingIdea, StagingSource, StagingUse
 from app.application.language import ResponseLanguage
 from app.application.clarification import MAX_CHOICES
+
+from app.api.schemas.screenplays import ScreenplayEdit, ScriptScene, ReviewSource, SavedReviewNote
 
 ShortText = Annotated[str, Field(max_length=2000)]
 
@@ -48,6 +51,14 @@ class ProjectUpdate(RevisionRequest):
     constraints: list[ShortText] = Field(max_length=20)
     answers: list[ShortText] = Field(max_length=MAX_CHOICES)
     draft: StoryDraft | None
+    screenplay: ScreenplayEdit | None = None
+    screenplay_proposal_id: SceneId | None = None
+    screenplay_proposal_previews: dict[SceneId, ScriptScene] = Field(default_factory=dict, max_length=100)
+    scene_outline: SceneOutlineEdit | None = None
+    scene_proposal_id: SceneId | None = None
+    staging_use: StagingUse | None = None
+    staging_idea_edits: dict[SceneId, SceneText] = Field(default_factory=dict, max_length=100)
+    scene_proposal_previews: dict[SceneId, Annotated[list[Scene], Field(max_length=60)]] = Field(default_factory=dict, max_length=100)
 
 
 class AuthorAnswer(BaseModel):
@@ -199,6 +210,134 @@ class PlanGeneration(BaseModel):
         return self
 
 
+class ScenePlanSource(BaseModel):
+    id: str
+    project_revision: int
+    version_id: str
+    draft: StoryDraft
+    context: AuthorContext
+    response_language: ResponseLanguage
+
+
+class SceneOutline(SceneOutlineEdit):
+    source: ScenePlanSource
+
+
+class Screenplay(ScreenplayEdit):
+    source_revision: int
+    source_outline: SceneOutline
+
+
+def screenplay_content(script: Screenplay) -> dict:
+    data = script.model_dump(exclude={"version", "source_revision"})
+    data["source_outline"].pop("version", None)
+    return data
+
+
+class ScreenplayProposal(BaseModel):
+    id: SceneId
+    created_at: str
+    source_revision: int
+    source_content: str
+    source_screenplay: Screenplay
+    source_outline: SceneOutline | None
+    target_scene_id: SceneId
+    instructions: str = ""
+    status: Literal["pending", "ready", "failed", "applied", "discarded"] = "pending"
+    scene: ScriptScene | None = None
+    preview_scene: ScriptScene | None = None
+    provider: str | None = None
+    model: str | None = None
+    parameters: dict[str, object] = Field(default_factory=dict)
+    prompt_version: str
+    error: str | None = None
+    applied_revision: int | None = None
+
+
+class ScreenplayReview(BaseModel):
+    id: SceneId
+    created_at: str
+    source_revision: int
+    source_content: str
+    source_screenplay: Screenplay
+    source_outline: SceneOutline | None
+    target_scene_id: SceneId
+    instructions: str = ""
+    status: Literal["pending", "ready", "failed", "discarded"] = "pending"
+    sources: list[ReviewSource] = Field(default_factory=list)
+    notes: list[SavedReviewNote] = Field(default_factory=list)
+    question: str = ""
+    provider: str | None = None
+    model: str | None = None
+    parameters: dict[str, object] = Field(default_factory=dict)
+    prompt_version: str
+    error: str | None = None
+
+
+class ScreenplayVersion(BaseModel):
+    id: SceneId
+    created_at: str
+    screenplay: Screenplay
+
+
+class ScreenplaySelection(BaseModel):
+    id: SceneId
+    created_at: str
+    source_revision: int = Field(ge=0)
+    source_version_id: Literal["current"] | SceneId
+    screenplay: Screenplay
+
+
+class SceneOutlineVersion(BaseModel):
+    id: str
+    created_at: str
+    outline: SceneOutline
+
+
+class SceneProposal(BaseModel):
+    id: str
+    created_at: str
+    source_revision: int
+    source_content: str
+    source_outline: SceneOutline
+    mode: Literal["list", "append", "develop", "staging"]
+    target_scene_id: str | None = None
+    instructions: str = ""
+    status: Literal["pending", "ready", "failed", "applied", "discarded"] = "pending"
+    scenes: list[Scene] = Field(default_factory=list)
+    transitions: dict[str, str] = Field(default_factory=dict)
+    staging_ideas: list[StagingIdea] = Field(default_factory=list)
+    staging_sources: list[StagingSource] = Field(default_factory=list)
+    staging_question: str = ""
+    preview_scenes: list[Scene] | None = None
+    provider: str | None = None
+    model: str | None = None
+    parameters: dict[str, object] = Field(default_factory=dict)
+    prompt_version: str = "scene-suggestions-v1"
+    error: str | None = None
+    applied_revision: int | None = None
+
+
+class SceneSketch(BaseModel):
+    id: SceneId
+    scene_id: SceneId
+    created_at: str
+    source_revision: int
+    source_content: str
+    source_outline: SceneOutline
+    instructions: str = ""
+    prompt: str
+    prompt_version: str = "scene-sketch-v1"
+    provider: str = "mflux"
+    model: str = "filipstrand/Z-Image-Turbo-mflux-4bit"
+    parameters: dict[str, object] = Field(default_factory=dict)
+    status: Literal["pending", "ready", "failed", "discarded"] = "pending"
+    asset_id: SceneId | None = None
+    error: str | None = None
+    diagnostic: str | None = None
+    duration_seconds: float | None = None
+
+
 class ProjectResponse(BaseModel):
     response_language: ResponseLanguage = "auto"
     id: str
@@ -217,6 +356,86 @@ class ProjectResponse(BaseModel):
     versions: list[DraftVersion] = Field(default_factory=list)
     clarification_history: list[ClarificationVersion] = Field(default_factory=list)
     plan_generations: list[PlanGeneration] = Field(default_factory=list)
+    scene_outline: SceneOutline | None = None
+    screenplay: Screenplay | None = None
+    screenplay_versions: list[ScreenplayVersion] = Field(default_factory=list)
+    screenplay_selections: list[ScreenplaySelection] = Field(default_factory=list)
+    screenplay_proposals: list[ScreenplayProposal] = Field(default_factory=list)
+    screenplay_reviews: list[ScreenplayReview] = Field(default_factory=list)
+    scene_versions: list[SceneOutlineVersion] = Field(default_factory=list)
+    scene_proposals: list[SceneProposal] = Field(default_factory=list)
+    staging_proposals: list[SceneProposal] = Field(default_factory=list)
+    scene_sketches: list[SceneSketch] = Field(default_factory=list)
+    selected_scene_sketches: dict[SceneId, SceneId] = Field(default_factory=dict)
+
+    @computed_field
+    @property
+    def screenplay_handoff(self) -> ScreenplaySelection | None:
+        return self.screenplay_selections[-1] if self.screenplay_selections else None
+
+    @computed_field
+    @property
+    def current_screenplay_review_ids(self) -> list[str]:
+        if not self.screenplay:
+            return []
+        return [r.id for r in self.screenplay_reviews if r.status == "ready"
+                and screenplay_content(r.source_screenplay) == screenplay_content(self.screenplay)
+                and (r.source_outline.model_dump(exclude={"version"}) if r.source_outline else None)
+                == (self.scene_outline.model_dump(exclude={"version"}) if self.scene_outline else None)
+                and r.source_content == self.content_key()]
+
+    @computed_field
+    @property
+    def applicable_screenplay_proposal_ids(self) -> list[str]:
+        if not self.screenplay:
+            return []
+        return [p.id for p in self.screenplay_proposals if p.status == "ready"
+                and screenplay_content(p.source_screenplay) == screenplay_content(self.screenplay)
+                and (p.source_outline.model_dump(exclude={"version"}) if p.source_outline else None)
+                == (self.scene_outline.model_dump(exclude={"version"}) if self.scene_outline else None)
+                and p.source_content == self.content_key()]
+
+    @computed_field
+    @property
+    def screenplay_source_is_current(self) -> bool:
+        if not self.screenplay or not self.scene_outline:
+            return False
+        source, current = self.screenplay.source_outline, self.scene_outline
+        # Version/revision metadata can change without changing source content.
+        return (source.id == current.id and source.scenes == current.scenes
+                and source.source == current.source and self.scene_source_is_current)
+
+    @computed_field
+    @property
+    def applicable_sketch_ids(self) -> list[str]:
+        return [s.id for s in self.scene_sketches if s.status == "ready"
+                and s.source_outline == self.scene_outline and s.source_content == self.content_key()]
+
+    @computed_field
+    @property
+    def applicable_scene_proposal_ids(self) -> list[str]:
+        return [p.id for p in [*self.scene_proposals, *self.staging_proposals] if p.status == "ready"
+                and p.source_outline == self.scene_outline and p.source_content == self.content_key()]
+
+    @computed_field
+    @property
+    def scene_source_is_current(self) -> bool:
+        source = self.scene_outline.source if self.scene_outline else None
+        return bool(source and source.draft == self.draft
+                    and source.context == self.author_context
+                    and source.response_language == self.response_language)
+
+    @computed_field
+    @property
+    def scene_handoff(self) -> dict[str, object] | None:
+        outline = self.scene_outline
+        if not outline or not outline.scenes or any(
+            not scene.title.strip() or not scene.action.strip() for scene in outline.scenes
+        ):
+            return None
+        return {"outline_id": outline.id, "version": outline.version,
+                "project_revision": self.revision, "source_id": outline.source.id,
+                "scenes": [scene.model_dump() for scene in outline.scenes]}
 
     _parse_source = field_validator("feedback_source", mode="before")(parse_feedback_source)
 

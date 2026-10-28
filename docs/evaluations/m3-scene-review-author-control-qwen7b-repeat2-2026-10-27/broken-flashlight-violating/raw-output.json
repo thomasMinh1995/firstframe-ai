@@ -1,0 +1,25 @@
+{
+  "raw_output": "{\n  \"notes\": [\n    {\n      \"kind\": \"intent_mismatch\",\n      \"observation\": \"Bình bật đèn pin hỏng, nhưng tác giả đã chọn Bình đặt đèn pin hỏng xuống.\",\n      \"impact\": \"Việc Bình bật đèn pin hỏng không phù hợp với diễn tiến M2 đã chọn, có thể gây nhầm lẫn cho khán giả.\",\n      \"evidence\": [\n        {\n          \"source_id\": \"S5\",\n          \"quote\": \"Bình bật chiếc đèn pin hỏng; đèn sáng rực, rọi rõ tờ giấy.\"\n        },\n        {\n          \"source_id\": \"A1\",\n          \"quote\": \"Bình đặt đèn pin hỏng xuống.\"\n        }\n      ]\n    }\n  ],\n  \"question\": \"\"\n}",
+  "output": {
+    "notes": [
+      {
+        "kind": "intent_mismatch",
+        "observation": "Bình bật đèn pin hỏng, nhưng tác giả đã chọn Bình đặt đèn pin hỏng xuống.",
+        "impact": "Việc Bình bật đèn pin hỏng không phù hợp với diễn tiến M2 đã chọn, có thể gây nhầm lẫn cho khán giả.",
+        "suggestion": "",
+        "evidence": [
+          {
+            "source_id": "S5",
+            "quote": "Bình bật chiếc đèn pin hỏng; đèn sáng rực, rọi rõ tờ giấy."
+          },
+          {
+            "source_id": "A1",
+            "quote": "Bình đặt đèn pin hỏng xuống."
+          }
+        ]
+      }
+    ],
+    "question": ""
+  },
+  "model": "qwen2.5:7b"
+}

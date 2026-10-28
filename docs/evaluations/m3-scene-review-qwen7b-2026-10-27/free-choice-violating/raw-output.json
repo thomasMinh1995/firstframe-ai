@@ -1,0 +1,25 @@
+{
+  "raw_output": "{\n  \"notes\": [\n    {\n      \"kind\": \"intent_mismatch\",\n      \"observation\": \"Cha giấu hộ chiếu của con gái vào túi, nhưng trong M2 đã chọn, cha không giữ giấy tờ hoặc ép con gái ở lại.\",\n      \"impact\": \"Đây có thể tạo ra sự mâu thuẫn với ý tưởng tác giả, vì cha không nên giấu giấy tờ của con gái.\",\n      \"evidence\": [\n        {\n          \"source_id\": \"e84adbfa-3b40-4ae9-8fc8-44b4c4791b21\",\n          \"quote\": \"Cha giấu hộ chiếu của con gái vào túi để cô không thể ra đi.\"\n        },\n        {\n          \"source_id\": \"m2:6ef7df96-80c4-4cc9-891c-65fb603a670d\",\n          \"quote\": \"Cha đặt lá thư xin lỗi lên bàn, lùi lại và để lối đi trống; con gái tự quyết định.\"\n        }\n      ]\n    }\n  ],\n  \"question\": \"Tác giả có muốn giữ lại hành động cha giấu hộ chiếu của con gái không?\"\n}",
+  "output": {
+    "notes": [
+      {
+        "kind": "intent_mismatch",
+        "observation": "Cha giấu hộ chiếu của con gái vào túi, nhưng trong M2 đã chọn, cha không giữ giấy tờ hoặc ép con gái ở lại.",
+        "impact": "Đây có thể tạo ra sự mâu thuẫn với ý tưởng tác giả, vì cha không nên giấu giấy tờ của con gái.",
+        "suggestion": "",
+        "evidence": [
+          {
+            "source_id": "e84adbfa-3b40-4ae9-8fc8-44b4c4791b21",
+            "quote": "Cha giấu hộ chiếu của con gái vào túi để cô không thể ra đi."
+          },
+          {
+            "source_id": "m2:6ef7df96-80c4-4cc9-891c-65fb603a670d",
+            "quote": "Cha đặt lá thư xin lỗi lên bàn, lùi lại và để lối đi trống; con gái tự quyết định."
+          }
+        ]
+      }
+    ],
+    "question": "Tác giả có muốn giữ lại hành động cha giấu hộ chiếu của con gái không?"
+  },
+  "model": "qwen2.5:7b"
+}

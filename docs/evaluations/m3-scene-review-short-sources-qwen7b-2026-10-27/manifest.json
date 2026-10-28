@@ -1,0 +1,39 @@
+{
+  "frozen_at": "2026-10-27T07:35:16.000141+00:00",
+  "maximum_calls": 6,
+  "timeout_seconds_per_call": 60,
+  "retry": false,
+  "model": "qwen2.5:7b",
+  "digest": "845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
+  "parameters": {
+    "temperature": 0.3,
+    "timeout_seconds": 60,
+    "num_ctx": 16384
+  },
+  "seed": "not exposed/sent by existing provider",
+  "inputs_sha256": "ed5e02caf6b6317bd43df0552b2233f08ba8b890cfbed8c1bc1e1f33f561ed64",
+  "schema_sha256": "291dcd309cfe613f2df47aa87a729d88bee35b3c7af6874d02a8cdca1cb8da6d",
+  "hashes": {
+    "backend/app/application/screenplay_review.py": "b04576dacc10d6c0d847249f667c49ac3493a9ef4c001a5899e8756e376838a2",
+    "backend/app/application/screenplay_context.py": "c4812f6ef35b715b88ca4e398d664c0ef17d5af540440cdd561adef16e38ef6d",
+    "backend/app/api/routes/screenplay_reviews.py": "faf27c183cbb69b90c27f4ac36940d92a26c923d4b9d281db37c6f0b013bb5b1",
+    "backend/app/api/routes/projects.py": "93a6d7addddbb59015f6d0511ca63ea72d10b6210808831b6227dcc2ffd1c6f2",
+    "backend/app/api/schemas/projects.py": "c9805a497c249a217189af59710264d3760167dd2fab9bdccede36ebfa1ea5bb",
+    "backend/app/api/schemas/screenplays.py": "0e7c08918379b3ca2cb79cf1b619a3838a230efc9419755085f8f37aafd6619d",
+    "backend/app/infrastructure/ollama_provider.py": "293d9fcc59051e06ddb6eebffd263d831817fe761506ca23a92ef21cf2630272",
+    "backend/app/application/ai_provider.py": "15249bd34c8ed12dc31897d1586bd2947c24a16f564ca81ae59871c1cff9929e",
+    "backend/app/application/project_store.py": "de4d7d0c5cffe3dcb91f7c08623a47d9ad1947db0f2b19b2d52fdb38a84a550b",
+    "domains/short-film/prompts/screenplay_review_prompt.md": "bdb73b95008cc3a54ee51da0fe94ec0a167c6aff2beca5d6ca275549ab004dd5",
+    "docs/evaluations/m3-scene-review-short-sources-qwen7b-2026-10-27/run.py": "f5500ec6ba32109953f3ad39a2ea24e122ac2442b7a82e28d953e2405d910329"
+  },
+  "baseline": "docs/evaluations/m3-scene-review-qwen7b-2026-10-27",
+  "baseline_hashes": {
+    "inputs.json": "b3f8341d79d66feeabbd37d49948e022a0ed0282ab44c1d440a49112f391844d",
+    "schema.json": "291dcd309cfe613f2df47aa87a729d88bee35b3c7af6874d02a8cdca1cb8da6d",
+    "manifest.json": "4d749c81fae0d0b5269ca7770145c91481c118f0ce790c47937322efdfaa0f37",
+    "results.json": "ea720246900f1d488608168a5fb9417372718e3424d6588cf59dfa0791203931",
+    "comparison.json": "2a07f1ddbc856747e0de49289c0648be476a0bf23fcecb98d6dddbf021891389"
+  },
+  "same_six_cases_project_request_expected": true,
+  "change": "short transport IDs plus explicit block_kind/is_target and corresponding protocol prompt; same output schema/model/parameters"
+}

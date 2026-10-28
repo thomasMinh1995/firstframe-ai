@@ -1,0 +1,48 @@
+{
+  "frozen_at": "2026-10-27T03:43:44.641473+00:00",
+  "model": "filipstrand/Z-Image-Turbo-mflux-4bit",
+  "parameters": {
+    "width": 768,
+    "height": 432,
+    "steps": 9,
+    "seed": 42,
+    "quantize": 4,
+    "low_ram": true,
+    "mlx_cache_limit_gb": 2,
+    "timeout_seconds": 180,
+    "model_revision": "b3a8f31115a11f2f9e2fa0bfbc8d78dcc3e6568b",
+    "mflux_version": "0.23.0",
+    "mlx_version": "0.32.4"
+  },
+  "prompt_version": "scene-sketch-visual-v2",
+  "max_requests": 2,
+  "requests_per_scene": 1,
+  "retries": 0,
+  "paid_api": false,
+  "private_store": "backend/.data/scene-sketch-runtime-two-scenes-2026-10-27",
+  "runtime_prompt_override": false,
+  "samples_sha256": "13aeed5553f1c538901ee88109fca9ea95fbfb7e550e894bf155f3c549f07d80",
+  "inputs_sha256": "4afb154c012515d320fcc7fb79b76d0cde8b3711a5b5c1463e79f2d31acfe40c",
+  "criteria_sha256": "489da28537e24370bcf63c79648065adfb10685e68cc31cfa2bde2682e34beef",
+  "hashes": {
+    "backend/app/infrastructure/scene_images.py": "e063a78c62ca986accecee6eb750c513714c349afb5646a4dc6e9848e54e2ddd",
+    "backend/app/api/routes/scene_sketches.py": "a197fd827be9c9b161f5064777b3039748b00a5bd292977a83f5782c6b1b3506",
+    "backend/app/api/schemas/projects.py": "7da2657b7976cfb6475871a943d759f5455ef02b0529500823054b7b971e4e7c",
+    "backend/app/api/schemas/scenes.py": "83e771f24497099959ba4fd8df89dc3ba566584eebb44eeb40eb60e5e32ea435",
+    "backend/requirements-image.txt": "9902088a1439a928d631d7fdc2d87eae36ad0d7fc21309267292531c883c9144",
+    "docs/evaluations/scene-sketch-runtime-mflux-two-scenes-2026-10-27/run.py": "88c8474ecff387a31204ef1e25313a73dc330b38dc4184403349206b8802ab19"
+  },
+  "preserved_files": {
+    "docs/plans/m2-scene-staging.md": "3651a20f8691f35e27788f9b5d524cbdbad4a393cdba2e7bd8ab74cd32b35357",
+    "docs/plans/harness-improvement.md": "e663e3e3ae406d1f2708a3afc19aaca2ea2c8d99305803e0e4742327149f1551",
+    "docs/plans/vietnam-first-screenplay-mvp.md": "db0103ebf944428df12ad3f928071bf2f7dc9c65f78cd19293f9d1919720ccf6",
+    "docs/roadmap.md": "6ab7dc8620fc2502ebc71db2a27d279d1709fb021328a497a5e740b040564062",
+    "backend/.env": "8e05e6af1f0aecba2e56ba5b37c808d31345836b1b27eaa16a53fad3d08b7907",
+    "frontend/app/prototype/prototype.module.css": "323f6ca72caa1f8e104e5a82e4474fa7ad978978d0c9c772bcef09b8cda26904",
+    "frontend/app/prototype/page.tsx": "ea3addc280d755e552be056ab79ef642580140b18a7fbc5795cda025258e0924"
+  },
+  "prompts": {
+    "repair-workshop": "c9da27fdb57ab9c33e586af89259c382eeb3a9d1390633f70be8362f6e25f0a5",
+    "empty-platform": "2d4eee03cc9e5c9fa459e1951296d569423bb2a6a52b659c1f9b852a1ecd6f2e"
+  }
+}

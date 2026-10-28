@@ -1,0 +1,21 @@
+{
+  "raw_output": "{\n  \"scene\": {\n    \"heading\": \"Khoảnh khắc\",\n    \"blocks\": [\n      {\n        \"kind\": \"action\",\n        \"text\": \"Bình đặt đèn pin xuống. Ánh sáng yếu ớt từ cửa sổ rọi vào bàn, tạo ra những vệt sáng mờ ảo trên giấy.\",\n        \"speaker\": \"\"\n      },\n      {\n        \"kind\": \"action\",\n        \"text\": \"Lan kéo rèm cửa nhẹ nhàng, tận dụng ánh đèn đường rọi vào bàn. Hai người nghiêng tờ giấy để đọc, ánh sáng mờ nhạt tạo nên những hình bóng lung linh.\",\n        \"speaker\": \"\"\n      }\n    ]\n  }\n}",
+  "output": {
+    "scene": {
+      "heading": "Khoảnh khắc",
+      "blocks": [
+        {
+          "kind": "action",
+          "text": "Bình đặt đèn pin xuống. Ánh sáng yếu ớt từ cửa sổ rọi vào bàn, tạo ra những vệt sáng mờ ảo trên giấy.",
+          "speaker": ""
+        },
+        {
+          "kind": "action",
+          "text": "Lan kéo rèm cửa nhẹ nhàng, tận dụng ánh đèn đường rọi vào bàn. Hai người nghiêng tờ giấy để đọc, ánh sáng mờ nhạt tạo nên những hình bóng lung linh.",
+          "speaker": ""
+        }
+      ]
+    }
+  },
+  "model": "qwen2.5:7b"
+}

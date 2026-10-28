@@ -1,0 +1,24 @@
+{
+  "models": [
+    {
+      "name": "gemma2:9b-instruct-q4_K_M",
+      "model": "gemma2:9b-instruct-q4_K_M",
+      "size": 6707866500,
+      "digest": "c20bec88025f3aefa420efd64dca0ee4abc8e36078d6b74b0f660cdcbd5d1982",
+      "details": {
+        "parent_model": "",
+        "format": "gguf",
+        "family": "gemma2",
+        "families": [
+          "gemma2"
+        ],
+        "parameter_size": "9.2B",
+        "quantization_level": "Q4_K_M"
+      },
+      "expires_at": "2026-10-27T16:10:39.779221+07:00",
+      "size_vram": 6707866500,
+      "context_length": 8192,
+      "runner": "llamacpp"
+    }
+  ]
+}

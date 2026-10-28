@@ -22,7 +22,15 @@ from app.api.schemas.projects import (
     ProjectUpdate,
     RevisionRequest,
     StoryDraft,
+    ScreenplayVersion,
+    SceneOutline,
+    SceneOutlineVersion,
+    ScenePlanSource,
+    SceneProposal,
+    author_context,
 )
+from app.api.schemas.scenes import StartSceneOutline, SceneSuggestionRequest
+from app.application.scene_staging import PROMPT_VERSION as STAGING_PROMPT_VERSION, suggest_staging
 from app.api.schemas.story import AnalysisNoteResponse, AnalysisResponse, EvaluationResponse
 from app.application.ai_provider import (
     MalformedProviderResponseError,
@@ -31,7 +39,9 @@ from app.application.ai_provider import (
     ProviderTimeoutError,
     ProviderError,
 )
-from app.application.dataset import capture_workflow
+from app.application.dataset import capture_workflow, recording_provider
+from app.application.scene_suggestions import PROMPT_VERSION, suggest_scenes
+from app.infrastructure.provider_factory import create_provider
 from app.application.clarification import MAX_CHOICES, conversation_questions
 from app.application.language import LanguageSelectionRequired, resolve_response_language
 from app.application.progress import progress_listener, report_progress, progress_step
@@ -42,10 +52,20 @@ from app.core.artifacts import Constraint, PlanSection, StoryPlanArtifact
 router = APIRouter(prefix="/api/projects", tags=["projects"])
 
 
+@router.post("/{project_id}/scene-suggestions/stream")
+async def stream_scene_suggestions(project_id: str, request: SceneSuggestionRequest):
+    return project_stream(lambda: scene_suggestions(project_id, request))
+
+
 @router.post("/{project_id}/{operation}/stream")
 async def stream_project_operation(
     project_id: str, operation: Literal["analyze", "clarify", "plan", "review"], request: RevisionRequest
 ):
+    handler = {"analyze": analyze_project, "clarify": clarify_project, "plan": plan_project, "review": review_project}
+    return project_stream(lambda: handler[operation](project_id, request))
+
+
+def project_stream(action):
     events: asyncio.Queue = asyncio.Queue()
     loop = asyncio.get_running_loop()
 
@@ -55,8 +75,7 @@ async def stream_project_operation(
 
         token = progress_listener.set(publish)
         try:
-            handler = {"analyze": analyze_project, "clarify": clarify_project, "plan": plan_project, "review": review_project}
-            result = handler[operation](project_id, request)
+            result = action()
             publish({"type": "result", "project": result.model_dump(mode="json")})
         except HTTPException as error:
             publish({"type": "error", "detail": error.detail})
@@ -131,6 +150,12 @@ def save_project(project: ProjectResponse, stage: str = "saving") -> ProjectResp
 def dataset_snapshot(project: ProjectResponse) -> dict[str, object]:
     return project.model_dump(mode="json", exclude={
         "versions", "clarification_history", "plan_generations", "applicable_plan_ids",
+        "scene_proposals", "staging_proposals", "applicable_scene_proposal_ids",
+        "scene_sketches", "selected_scene_sketches", "applicable_sketch_ids",
+        "screenplay", "screenplay_versions", "screenplay_source_is_current",
+        "screenplay_proposals", "applicable_screenplay_proposal_ids",
+        "screenplay_reviews", "current_screenplay_review_ids",
+        "screenplay_selections", "screenplay_handoff",
     })
 
 
@@ -220,6 +245,105 @@ def update_project(project_id: str, request: ProjectUpdate):
         questions = project.analysis.missing_information if project.analysis else []
         if len(request.answers) != len(questions):
             raise HTTPException(422, "Câu trả lời phải khớp với bộ câu hỏi hiện tại.")
+        if request.staging_use is not None:
+            use = request.staging_use
+            proposal = next((p for p in project.staging_proposals if p.id == use.proposal_id), None)
+            idea = next((i for i in proposal.staging_ideas if i.id == use.idea_id), None) if proposal else None
+            if (proposal is None or proposal.mode != "staging" or idea is None or idea.status != "available"
+                    or use.proposal_id not in project.applicable_scene_proposal_ids):
+                raise HTTPException(409, "Ý góp ý đã dùng/bỏ hoặc nguồn đã đổi. Bản đang sửa vẫn được giữ.")
+            if request.scene_proposal_id is not None or request.scene_outline is None or not use.value.strip():
+                raise HTTPException(422, "Chỉ dùng một ý góp ý có nội dung mỗi lần lưu.")
+            expected = project.scene_outline.model_copy(deep=True)
+            target = next(s for s in expected.scenes if s.id == proposal.target_scene_id)
+            target.staging_choices[idea.field] = use.value
+            if (request.scene_outline.id != expected.id or request.scene_outline.version != expected.version
+                    or request.scene_outline.scenes != expected.scenes
+                    or any(getattr(request, key) != getattr(project, key)
+                           for key in ("idea", "constraints", "answers", "draft", "response_language"))):
+                raise HTTPException(409, "Dùng ý chỉ thay đúng mục đã nêu. Giữ thành bản tự chỉnh nếu muốn sửa các phần khác.")
+            idea.status = "applied"
+            idea.applied_text = use.value
+            idea.applied_revision = project.revision + 1
+        for idea_id, text in request.staging_idea_edits.items():
+            owner = next((p for p in project.staging_proposals if any(i.id == idea_id for i in p.staging_ideas)), None)
+            idea = next((i for i in owner.staging_ideas if i.id == idea_id), None) if owner else None
+            if (owner is None or owner.status != "ready" or idea is None
+                    or (idea.status != "available" and not (request.staging_use and request.staging_use.idea_id == idea_id))):
+                raise HTTPException(409, "Ý góp ý đã đổi trạng thái; phần tự chỉnh vẫn được giữ.")
+            idea.preview_text = text
+        for proposal_id, scenes in request.scene_proposal_previews.items():
+            proposal = next((p for p in project.scene_proposals if p.id == proposal_id), None)
+            if proposal is None or proposal.mode == "staging" or proposal.status != "ready":
+                raise HTTPException(409, "Đề xuất đã đổi trạng thái; bản xem trước đang sửa vẫn được giữ.")
+            ids = [s.id for s in scenes]
+            if len(set(ids)) != len(ids) or not set(ids) <= {s.id for s in proposal.scenes}:
+                raise HTTPException(422, "Bản xem trước phải giữ ID cảnh của đề xuất.")
+            proposal.preview_scenes = scenes
+        if request.scene_proposal_id is not None:
+            if any(p.id == request.scene_proposal_id for p in project.staging_proposals):
+                raise HTTPException(422, "Chọn từng ý dàn cảnh, không áp dụng cả lô.")
+            if request.scene_proposal_id not in project.applicable_scene_proposal_ids or request.scene_outline is None:
+                raise HTTPException(409, "Đề xuất đã dùng hoặc nguồn đã đổi. Bản đang sửa vẫn được giữ.")
+            if any(getattr(request, key) != getattr(project, key)
+                   for key in ("idea", "constraints", "answers", "draft", "response_language")):
+                raise HTTPException(409, "Ý đồ hoặc story plan đã đổi; hãy lưu riêng và đối chiếu lại đề xuất.")
+            proposal = next(p for p in project.scene_proposals if p.id == request.scene_proposal_id)
+            if proposal.mode == "staging":
+                raise HTTPException(422, "Chọn từng ý dàn cảnh, không áp dụng cả lô.")
+            proposal.status = "applied"
+            proposal.applied_revision = project.revision + 1
+        if "scene_outline" in request.model_fields_set:
+            edit, outline = request.scene_outline, project.scene_outline
+            if edit is None:
+                if outline is not None:
+                    raise HTTPException(422, "Không xóa nguồn dàn cảnh; bạn có thể bỏ từng cảnh.")
+            elif outline is None:
+                raise HTTPException(422, "Chọn nguồn story plan trước khi sửa dàn cảnh.")
+            elif edit.id != outline.id or edit.version != outline.version:
+                raise ProjectConflict
+            elif edit.scenes != outline.scenes:
+                archive_scene_outline(project)
+                project.scene_outline = outline.model_copy(update={
+                    "scenes": edit.scenes, "version": outline.version + 1,
+                })
+        for proposal_id, scene in request.screenplay_proposal_previews.items():
+            proposal = next((p for p in project.screenplay_proposals if p.id == proposal_id), None)
+            if proposal is None or proposal.status != "ready" or proposal.scene is None:
+                raise HTTPException(409, "Phương án đã đổi trạng thái; bản tự chỉnh vẫn giữ.")
+            if (scene.id, scene.source_scene_id) != (proposal.scene.id, proposal.scene.source_scene_id):
+                raise HTTPException(422, "Giữ ID cảnh đích của phương án.")
+            proposal.preview_scene = scene
+        if request.screenplay_proposal_id is not None:
+            proposal = next((p for p in project.screenplay_proposals if p.id == request.screenplay_proposal_id), None)
+            if proposal is None or proposal.id not in project.applicable_screenplay_proposal_ids or proposal.scene is None:
+                raise HTTPException(409, "Phương án đã dùng/bỏ hoặc ngữ cảnh đã đổi; không nhận bản cũ.")
+            expected = project.screenplay.model_copy(deep=True)
+            replacement = proposal.preview_scene or proposal.scene
+            expected.scenes = [replacement if s.id == proposal.target_scene_id else s for s in expected.scenes]
+            if (request.screenplay is None or request.screenplay.model_dump() != expected.model_dump(include={"id", "version", "scenes"})
+                    or any(getattr(request, key) != getattr(project, key) for key in ("idea", "constraints", "answers", "draft", "response_language"))
+                    or (request.scene_outline is not None and request.scene_outline.model_dump() != project.scene_outline.model_dump(include={"id", "version", "scenes"}))
+                    or request.scene_proposal_id is not None or request.staging_use is not None):
+                raise HTTPException(409, "Dùng phương án chỉ thay đúng cảnh đã nêu. Giữ thành bản tự chỉnh nếu sửa các phần khác.")
+            proposal.status, proposal.applied_revision = "applied", project.revision + 1
+        if "screenplay" in request.model_fields_set:
+            edit, current = request.screenplay, project.screenplay
+            if edit is None:
+                if current is not None:
+                    raise HTTPException(422, "Không xóa bản kịch bản hoặc nguồn; hãy sửa nội dung từng khối.")
+            elif current is None:
+                raise HTTPException(422, "Chọn bản dàn cảnh đã lưu trước khi viết kịch bản.")
+            elif edit.id != current.id or edit.version != current.version:
+                raise ProjectConflict
+            elif [(s.id, s.source_scene_id) for s in edit.scenes] != [(s.id, s.source_scene_id) for s in current.scenes]:
+                raise HTTPException(422, "Giữ thứ tự và liên kết cảnh nguồn; thay cấu trúc ở M2 rồi bắt đầu bản khác.")
+            elif edit.scenes != current.scenes:
+                owners = {b.id: s.id for s in current.scenes for b in s.blocks}
+                if any(b.id in owners and owners[b.id] != s.id for s in edit.scenes for b in s.blocks):
+                    raise HTTPException(422, "Không chuyển ID khối sang cảnh khác.")
+                archive_screenplay(project)
+                project.screenplay = current.model_copy(update={"scenes": edit.scenes, "version": current.version + 1})
         brief_changed = project.idea != request.idea or project.constraints != request.constraints
         if brief_changed:
             archive_clarifications(project, request.answers)
@@ -239,6 +363,163 @@ def update_project(project_id: str, request: ProjectUpdate):
             project.clarifications = {}
         else:
             project.answers = request.answers
+        return save_project(project)
+
+
+def archive_screenplay(project: ProjectResponse) -> None:
+    if project.screenplay is not None:
+        project.screenplay_versions.append(ScreenplayVersion(
+            id=str(uuid4()), created_at=datetime.now(UTC).isoformat(),
+            screenplay=project.screenplay.model_copy(deep=True)))
+
+
+def archive_scene_outline(project: ProjectResponse) -> None:
+    if project.scene_outline is not None:
+        project.scene_versions.append(SceneOutlineVersion(
+            id=str(uuid4()), created_at=datetime.now(UTC).isoformat(),
+            outline=project.scene_outline.model_copy(deep=True),
+        ))
+
+
+@router.post("/{project_id}/scene-outline", response_model=ProjectResponse)
+def start_scene_outline(project_id: str, request: StartSceneOutline):
+    with project_errors():
+        project = load_project(project_id, request.revision)
+        if project.scene_outline is not None:
+            raise HTTPException(409, "Dự án đã có dàn cảnh. Bản hiện tại được giữ nguyên.")
+        if request.source_version_id == "current":
+            draft, context, language = project.draft, project.author_context, project.response_language
+        else:
+            version = next((v for v in project.versions if v.id == request.source_version_id), None)
+            if version is None:
+                raise HTTPException(404, "Không tìm thấy phiên bản story plan đã chọn.")
+            draft, language = version.draft, version.response_language
+            choices = {**version.clarifications, **dict(zip(version.questions, version.answers))}
+            context = author_context(version.idea, version.constraints,
+                                     ((q, a) for q, a in choices.items() if a.strip()),
+                                     version.questions, version.answers)
+        if draft is None:
+            raise HTTPException(422, "Cần một bản story plan đã lưu để bắt đầu dàn cảnh.")
+        project.scene_outline = SceneOutline(
+            id=str(uuid4()), version=1, scenes=[], source=ScenePlanSource(
+                id=str(uuid4()), project_revision=project.revision,
+                version_id=request.source_version_id, draft=draft.model_copy(deep=True),
+                context=context.model_copy(deep=True), response_language=language,
+            ),
+        )
+        return save_project(project)
+
+
+@router.post("/{project_id}/scene-versions/{version_id}/restore", response_model=ProjectResponse)
+def restore_scene_outline(project_id: str, version_id: str, request: RevisionRequest):
+    with project_errors():
+        project = load_project(project_id, request.revision)
+        version = next((v for v in project.scene_versions if v.id == version_id), None)
+        if project.scene_outline is None or version is None:
+            raise HTTPException(404, "Không tìm thấy bản dàn cảnh đã lưu.")
+        current_version = project.scene_outline.version
+        archive_scene_outline(project)
+        project.scene_outline = version.outline.model_copy(deep=True, update={
+            "version": current_version + 1,
+        })
+        return save_project(project)
+
+
+def get_scene_provider():
+    return create_provider()
+
+
+@router.post("/{project_id}/scene-suggestions", response_model=ProjectResponse)
+def scene_suggestions(project_id: str, request: SceneSuggestionRequest):
+    with project_errors():
+        with progress_step("scene_source"):
+            project = load_project(project_id)
+            pool_name = "staging_proposals" if request.mode == "staging" else "scene_proposals"
+            pool = getattr(project, pool_name)
+            existing = next((p for p in [*project.scene_proposals, *project.staging_proposals] if p.id == request.request_id), None)
+            if existing:
+                if (existing.mode, existing.target_scene_id, existing.instructions) != (
+                    request.mode, request.target_scene_id, request.instructions
+                ):
+                    raise HTTPException(409, "ID tác vụ đã được dùng cho yêu cầu khác.")
+                return project
+            if request.revision != project.revision:
+                raise ProjectConflict
+            outline = project.scene_outline
+            if outline is None:
+                raise HTTPException(422, "Chọn nguồn story plan trước khi nhận gợi ý cảnh.")
+            if request.mode == "list" and (outline.scenes or request.target_scene_id is not None):
+                raise HTTPException(422, "Chỉ gợi ý danh sách ban đầu khi dàn cảnh chưa có cảnh.")
+            if request.mode == "append" and len(outline.scenes) >= 60:
+                raise HTTPException(422, "Dàn cảnh đã có tối đa 60 cảnh.")
+            if (request.target_scene_id is not None or request.mode in {"develop", "staging"}) and not any(
+                s.id == request.target_scene_id for s in outline.scenes
+            ):
+                raise HTTPException(422, "Không tìm thấy cảnh đích trong bản nguồn.")
+            if any(p.status == "pending" for p in [*project.scene_proposals, *project.staging_proposals]):
+                raise HTTPException(409, "Đang có yêu cầu chưa rõ kết quả; mở lại đề xuất, không tự chạy thêm.")
+            proposal = SceneProposal(
+                id=request.request_id, created_at=datetime.now(UTC).isoformat(),
+                prompt_version=STAGING_PROMPT_VERSION if request.mode == "staging" else PROMPT_VERSION,
+                source_revision=project.revision, source_content=project.content_key(),
+                source_outline=outline.model_copy(deep=True), mode=request.mode,
+                target_scene_id=request.target_scene_id, instructions=request.instructions,
+            )
+            pool.append(proposal)
+            project = save_project(project, "scene_checkpoint")
+
+        def keep_result(raw):
+            # This transaction changes only the proposal; concurrent author edits stay intact.
+            for index, item in enumerate(raw.get(pool_name, [])):
+                if item["id"] == proposal.id and item["status"] in {"pending", "discarded"}:
+                    stored = proposal.model_copy(update={"status": "discarded"}) if item["status"] == "discarded" else proposal
+                    raw[pool_name][index] = stored.model_dump(mode="json")
+                    break
+
+        try:
+            with capture_workflow("scene_suggestions", {"id": project.id, "revision": project.revision,
+                                                       "proposal": proposal.model_dump(mode="json")}) as dataset:
+                provider = recording_provider(get_scene_provider())
+                metadata = provider.metadata
+                proposal.provider, proposal.model, proposal.parameters = metadata.provider, metadata.model, metadata.parameters
+                proposal = (suggest_staging(proposal, provider) if request.mode == "staging"
+                            else suggest_scenes(proposal, provider))
+                with progress_step("scene_proposal_save"):
+                    project = ProjectResponse.model_validate(get_project_store().update(project_id, keep_result))
+                stored = next(p for p in getattr(project, pool_name) if p.id == proposal.id)
+                dataset.complete({"id": project.id, "revision": project.revision,
+                                  "proposal": stored.model_dump(mode="json")}, workflow_complete=False)
+        except Exception as error:
+            proposal.status = "failed"
+            proposal.error = type(error).__name__
+            get_project_store().update(project_id, keep_result)
+            raise
+        return project
+
+
+@router.post("/{project_id}/scene-proposals/{proposal_id}/discard", response_model=ProjectResponse)
+def discard_scene_proposal(project_id: str, proposal_id: str, request: RevisionRequest):
+    with project_errors():
+        project = load_project(project_id, request.revision)
+        proposal = next((p for p in [*project.scene_proposals, *project.staging_proposals] if p.id == proposal_id), None)
+        if proposal is None:
+            raise HTTPException(404, "Không tìm thấy đề xuất cảnh.")
+        if proposal.status != "applied":
+            proposal.status = "discarded"
+        return save_project(project)
+
+
+@router.post("/{project_id}/scene-proposals/{proposal_id}/ideas/{idea_id}/discard", response_model=ProjectResponse)
+def discard_staging_idea(project_id: str, proposal_id: str, idea_id: str, request: RevisionRequest):
+    with project_errors():
+        project = load_project(project_id, request.revision)
+        proposal = next((p for p in project.staging_proposals if p.id == proposal_id and p.mode == "staging"), None)
+        idea = next((i for i in proposal.staging_ideas if i.id == idea_id), None) if proposal else None
+        if idea is None:
+            raise HTTPException(404, "Không tìm thấy ý góp ý trong bản nguồn này.")
+        if idea.status == "applied":
+            raise HTTPException(409, "Ý đã dùng được giữ trong lịch sử; không đổi thành đã bỏ.")
+        idea.status = "discarded"
         return save_project(project)
 
 

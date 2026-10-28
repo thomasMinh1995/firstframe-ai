@@ -1,0 +1,76 @@
+{
+  "frozen_hashes_still_match": true,
+  "inputs_schema_unchanged": true,
+  "previous_documents_config_prototype_preserved": true,
+  "previous_preserved_files": 331,
+  "calls": 6,
+  "retry": 0,
+  "all_author_scripts_unchanged": true,
+  "frozen_hashes": {
+    "backend/app/application/screenplay_review.py": "e443d60e5c94ed779275125f6a1265c8d0b9079e2ee6e0a01a8b0b0f04a89a6a",
+    "backend/app/application/screenplay_context.py": "c4812f6ef35b715b88ca4e398d664c0ef17d5af540440cdd561adef16e38ef6d",
+    "backend/app/api/routes/screenplay_reviews.py": "faf27c183cbb69b90c27f4ac36940d92a26c923d4b9d281db37c6f0b013bb5b1",
+    "backend/app/api/routes/projects.py": "93a6d7addddbb59015f6d0511ca63ea72d10b6210808831b6227dcc2ffd1c6f2",
+    "backend/app/api/schemas/projects.py": "c9805a497c249a217189af59710264d3760167dd2fab9bdccede36ebfa1ea5bb",
+    "backend/app/api/schemas/screenplays.py": "0e7c08918379b3ca2cb79cf1b619a3838a230efc9419755085f8f37aafd6619d",
+    "backend/app/infrastructure/ollama_provider.py": "293d9fcc59051e06ddb6eebffd263d831817fe761506ca23a92ef21cf2630272",
+    "backend/app/application/ai_provider.py": "15249bd34c8ed12dc31897d1586bd2947c24a16f564ca81ae59871c1cff9929e",
+    "backend/app/application/project_store.py": "de4d7d0c5cffe3dcb91f7c08623a47d9ad1947db0f2b19b2d52fdb38a84a550b",
+    "domains/short-film/prompts/screenplay_review_prompt.md": "f323c84606c3acf05ce4b40441619461dce4ea774d04656077c4d23716b0fc80",
+    "docs/evaluations/m3-scene-review-qwen7b-2026-10-27/run.py": "5384dba820675fa43d5867b8f8cb738fe3e16f39ba0925c3df7cc0cd3290c796"
+  },
+  "artifacts_sha256": {
+    "broken-flashlight-compliant/project-after.json": "c44e1c590d43a0388215301d6be05fb87b0e6b943ca86ef6c3b96f616f221e26",
+    "broken-flashlight-compliant/raw-output.json": "4c8bc918be4214f27d75c4d06893dda1b328506fb29160f3469437639e3b0bdd",
+    "broken-flashlight-compliant/request.json": "64a31f487fad6ae852a4053928fb2cd84a9f648e92748d0932f8f2be20b6a805",
+    "broken-flashlight-compliant/result.json": "fef14ec469604e85edba07e8282859ef4e1a40fd6af678b183d161110a28348f",
+    "broken-flashlight-violating/project-after.json": "0c7d29a1078dd702962dfb77577bf7ba79d71da01efb5d4c60a4769a13d9017d",
+    "broken-flashlight-violating/raw-output.json": "afbde66feff6c7301307c85c5422c16baf2ad4730728c5c9fe927f0c240765a6",
+    "broken-flashlight-violating/request.json": "2a966052545a9edd006700b0de3b4a054219d0ba4bd4ee0e862ff68bc09069a9",
+    "broken-flashlight-violating/result.json": "c12212863be127174bf719118d6ad43a82503253beca94f80e534f8ad4df0f94",
+    "comparison.json": "2a07f1ddbc856747e0de49289c0648be476a0bf23fcecb98d6dddbf021891389",
+    "free-choice-compliant/project-after.json": "ffc16ff43acb5909633c3d3b99a30a437a2e26ad0e9c85b21494e789e645b02d",
+    "free-choice-compliant/raw-output.json": "7e7db805bacb74ef08e16602c1b2bdbfd2829b09b886536412b87ae3cb272884",
+    "free-choice-compliant/request.json": "053e92428cbc82e4fe7cf3dfa8a82a367478ae748665c036fa05c1dd9508c427",
+    "free-choice-compliant/result.json": "504683bc8302ca1b6226be828d1cd9a426a9befa151a41822707f0d7ff162e16",
+    "free-choice-violating/project-after.json": "d47ef0f3c1d92ffd42c1e9c8e43d4ee1617b9f4c51f24c1e021fb2ae04fbc8da",
+    "free-choice-violating/raw-output.json": "6251cf8030183f89b29941a55adc73a5b091f114f038649c47810c9700d2d906",
+    "free-choice-violating/request.json": "5999f87ef2245d930dee33d5d66a58023dd1cccafc116aa14985df0ed39c92a4",
+    "free-choice-violating/result.json": "0e93e5ba15c12e34d9150004a79a41cd441c425e90868959b9e88fe8229d82c8",
+    "inputs.json": "b3f8341d79d66feeabbd37d49948e022a0ed0282ab44c1d440a49112f391844d",
+    "manifest.json": "4d749c81fae0d0b5269ca7770145c91481c118f0ce790c47937322efdfaa0f37",
+    "open-ending-compliant/project-after.json": "cc97227ddc2c07d1c2876e2c43fb46ac5694b7840df3222725e45a86f582c3d3",
+    "open-ending-compliant/raw-output.json": "7361d98755cdf29e35316b38ca5c391619a421ba6e86ddabf92b8d42007abc41",
+    "open-ending-compliant/request.json": "811dfa9598c8606054ab3055060d497dc154eec9385fb54ff3e090ff4adcea61",
+    "open-ending-compliant/result.json": "86b7b72a83a161c630b808559a90796c89c5d271851a5f510ed647f59038c833",
+    "open-ending-violating/project-after.json": "137749c7039e194993b1249279d646005f185157862bef76cadecca7f4d4ece4",
+    "open-ending-violating/raw-output.json": "05a7bb5e1576420f486e775071262e1ca5e3b66955e6d2e8637deaad232da4fd",
+    "open-ending-violating/request.json": "3e5de796c4e84e74a2962b5d5ef636a244d426272b2795783a0371b46596820a",
+    "open-ending-violating/result.json": "17e8194fa16a4c06454db8470c74cad880a96091c6f9d7d323ef552d5adc09bd",
+    "results.json": "ea720246900f1d488608168a5fb9417372718e3424d6588cf59dfa0791203931",
+    "run-started.json": "4b96f6380763c19515d164051d430a434092c636349160560c211adc24ed596c",
+    "run.py": "5384dba820675fa43d5867b8f8cb738fe3e16f39ba0925c3df7cc0cd3290c796",
+    "schema.json": "291dcd309cfe613f2df47aa87a729d88bee35b3c7af6874d02a8cdca1cb8da6d"
+  },
+  "tests": {
+    "backend": "477 passed, 1 skipped",
+    "frontend_contracts": [
+      "M3 feedback",
+      "M3 screenplay",
+      "M2 scenes",
+      "progress",
+      "onboarding"
+    ],
+    "browser": [
+      "M3 feedback",
+      "M3 manual",
+      "M3 writing"
+    ],
+    "widths": [
+      1280,
+      390,
+      320
+    ]
+  },
+  "quality": "Qwen review not accepted: 0/6 passed reference contract; no user acceptance"
+}

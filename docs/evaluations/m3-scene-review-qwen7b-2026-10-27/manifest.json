@@ -1,0 +1,28 @@
+{
+  "frozen_at": "2026-10-27T07:08:26.765767+00:00",
+  "maximum_calls": 6,
+  "timeout_seconds_per_call": 60,
+  "retry": false,
+  "model": "qwen2.5:7b",
+  "digest": "845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
+  "parameters": {
+    "temperature": 0.3,
+    "timeout_seconds": 60,
+    "num_ctx": 16384
+  },
+  "inputs_sha256": "b3f8341d79d66feeabbd37d49948e022a0ed0282ab44c1d440a49112f391844d",
+  "schema_sha256": "291dcd309cfe613f2df47aa87a729d88bee35b3c7af6874d02a8cdca1cb8da6d",
+  "hashes": {
+    "backend/app/application/screenplay_review.py": "e443d60e5c94ed779275125f6a1265c8d0b9079e2ee6e0a01a8b0b0f04a89a6a",
+    "backend/app/application/screenplay_context.py": "c4812f6ef35b715b88ca4e398d664c0ef17d5af540440cdd561adef16e38ef6d",
+    "backend/app/api/routes/screenplay_reviews.py": "faf27c183cbb69b90c27f4ac36940d92a26c923d4b9d281db37c6f0b013bb5b1",
+    "backend/app/api/routes/projects.py": "93a6d7addddbb59015f6d0511ca63ea72d10b6210808831b6227dcc2ffd1c6f2",
+    "backend/app/api/schemas/projects.py": "c9805a497c249a217189af59710264d3760167dd2fab9bdccede36ebfa1ea5bb",
+    "backend/app/api/schemas/screenplays.py": "0e7c08918379b3ca2cb79cf1b619a3838a230efc9419755085f8f37aafd6619d",
+    "backend/app/infrastructure/ollama_provider.py": "293d9fcc59051e06ddb6eebffd263d831817fe761506ca23a92ef21cf2630272",
+    "backend/app/application/ai_provider.py": "15249bd34c8ed12dc31897d1586bd2947c24a16f564ca81ae59871c1cff9929e",
+    "backend/app/application/project_store.py": "de4d7d0c5cffe3dcb91f7c08623a47d9ad1947db0f2b19b2d52fdb38a84a550b",
+    "domains/short-film/prompts/screenplay_review_prompt.md": "f323c84606c3acf05ce4b40441619461dce4ea774d04656077c4d23716b0fc80",
+    "docs/evaluations/m3-scene-review-qwen7b-2026-10-27/run.py": "5384dba820675fa43d5867b8f8cb738fe3e16f39ba0925c3df7cc0cd3290c796"
+  }
+}

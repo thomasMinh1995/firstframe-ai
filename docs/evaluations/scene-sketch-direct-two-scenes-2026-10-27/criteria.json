@@ -1,0 +1,32 @@
+{
+  "fixed_before_run": true,
+  "reviewer": "Codex manual visual inspection; not AI scoring or PO/user acceptance",
+  "labels": [
+    "pass",
+    "fail",
+    "unclear"
+  ],
+  "common": [
+    "graphite pencil drawing, not a photograph",
+    "no labels/text/captions/panel grid",
+    "no imported mother-daughter/envelope story"
+  ],
+  "repair-workshop": [
+    "exactly two people",
+    "older An reads as a generation older than Bình",
+    "An seated on right, Bình standing on left",
+    "repairing bicycle action and attention to wheel/brake cable",
+    "single bicycle and no additional customer/vehicle",
+    "close two-shot framing",
+    "dawn intention if visually supportable"
+  ],
+  "empty-platform": [
+    "zero people",
+    "recognizable railway platform",
+    "one toolbox visible",
+    "toolbox lid remains closed, contents not exposed",
+    "visible cue of locking rather than assuming a closed box is locked",
+    "no added opening or human interaction"
+  ],
+  "comparison": "Paired with saved runtime baseline on the same two scenes, model and seed. Remove cue sentences and quote wrappers; preserve scene field values. This tests the whole direct-description variant, not the causal effect of any one token."
+}

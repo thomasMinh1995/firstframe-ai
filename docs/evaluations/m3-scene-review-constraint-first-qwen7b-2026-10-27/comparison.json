@@ -1,0 +1,328 @@
+{
+  "reader": "Codex; chưa phải tác giả/PO nghiệm thu",
+  "expected_labels_and_prior_grades_unchanged": true,
+  "v2": {
+    "model_calls": 6,
+    "parsed_schema": 6,
+    "accepted_review_cases": 6,
+    "id_error_cases": 0,
+    "quote_error_cases": 0,
+    "missing_required_evidence_cases": 0,
+    "evidence_count": 11,
+    "exact_id_quote": 11,
+    "duration_seconds": {
+      "min": 10.015,
+      "max": 20.12,
+      "mean": 14.175
+    },
+    "cases": [
+      {
+        "name": "open-ending-compliant",
+        "pair": "open-ending",
+        "variant": "compliant",
+        "status_code": 200,
+        "duration_seconds": 14.471,
+        "model_calls": 1,
+        "review_status": "ready",
+        "validated_notes": 1,
+        "error": null,
+        "response_error": null,
+        "author_script_unchanged": true,
+        "evidence_count": 1,
+        "exact_id_quote": 1,
+        "id_quote_issues": [],
+        "missing_required_evidence": []
+      },
+      {
+        "name": "open-ending-violating",
+        "pair": "open-ending",
+        "variant": "violating",
+        "status_code": 200,
+        "duration_seconds": 10.015,
+        "model_calls": 1,
+        "review_status": "ready",
+        "validated_notes": 1,
+        "error": null,
+        "response_error": null,
+        "author_script_unchanged": true,
+        "evidence_count": 2,
+        "exact_id_quote": 2,
+        "id_quote_issues": [],
+        "missing_required_evidence": []
+      },
+      {
+        "name": "free-choice-compliant",
+        "pair": "free-choice",
+        "variant": "compliant",
+        "status_code": 200,
+        "duration_seconds": 13.852,
+        "model_calls": 1,
+        "review_status": "ready",
+        "validated_notes": 2,
+        "error": null,
+        "response_error": null,
+        "author_script_unchanged": true,
+        "evidence_count": 2,
+        "exact_id_quote": 2,
+        "id_quote_issues": [],
+        "missing_required_evidence": []
+      },
+      {
+        "name": "free-choice-violating",
+        "pair": "free-choice",
+        "variant": "violating",
+        "status_code": 200,
+        "duration_seconds": 10.75,
+        "model_calls": 1,
+        "review_status": "ready",
+        "validated_notes": 1,
+        "error": null,
+        "response_error": null,
+        "author_script_unchanged": true,
+        "evidence_count": 2,
+        "exact_id_quote": 2,
+        "id_quote_issues": [],
+        "missing_required_evidence": []
+      },
+      {
+        "name": "broken-flashlight-compliant",
+        "pair": "broken-flashlight",
+        "variant": "compliant",
+        "status_code": 200,
+        "duration_seconds": 15.841,
+        "model_calls": 1,
+        "review_status": "ready",
+        "validated_notes": 1,
+        "error": null,
+        "response_error": null,
+        "author_script_unchanged": true,
+        "evidence_count": 2,
+        "exact_id_quote": 2,
+        "id_quote_issues": [],
+        "missing_required_evidence": []
+      },
+      {
+        "name": "broken-flashlight-violating",
+        "pair": "broken-flashlight",
+        "variant": "violating",
+        "status_code": 200,
+        "duration_seconds": 20.12,
+        "model_calls": 1,
+        "review_status": "ready",
+        "validated_notes": 1,
+        "error": null,
+        "response_error": null,
+        "author_script_unchanged": true,
+        "evidence_count": 2,
+        "exact_id_quote": 2,
+        "id_quote_issues": [],
+        "missing_required_evidence": []
+      }
+    ]
+  },
+  "v3": {
+    "model_calls": 6,
+    "parsed_schema": 6,
+    "accepted_review_cases": 5,
+    "id_error_cases": 0,
+    "quote_error_cases": 0,
+    "missing_required_evidence_cases": 1,
+    "evidence_count": 11,
+    "exact_id_quote": 11,
+    "duration_seconds": {
+      "min": 8.18,
+      "max": 16.075,
+      "mean": 11.324
+    },
+    "cases": [
+      {
+        "name": "open-ending-compliant",
+        "pair": "open-ending",
+        "variant": "compliant",
+        "status_code": 200,
+        "duration_seconds": 16.075,
+        "model_calls": 1,
+        "review_status": "ready",
+        "validated_notes": 1,
+        "error": null,
+        "response_error": null,
+        "author_script_unchanged": true,
+        "evidence_count": 2,
+        "exact_id_quote": 2,
+        "id_quote_issues": [],
+        "missing_required_evidence": [],
+        "reader_assessment": {
+          "observation": "Đòi thêm tương tác/cảm xúc, chưa có căn cứ biến khoảng lặng thành vấn đề.",
+          "intent_detection": "no_explicit_false_mismatch_label",
+          "utility": "misleading_suggestion",
+          "suggestion": "Khuyên cha mở thư, đọc một đoạn trái ràng buộc thư vẫn kín; đề xuất đi sai dù evidence hợp lệ.",
+          "versus_v2": "Hồi quy: v2 chỉ đề nghị nhìn/chạm thư, không buộc mở thư.",
+          "visible": true
+        }
+      },
+      {
+        "name": "open-ending-violating",
+        "pair": "open-ending",
+        "variant": "violating",
+        "status_code": 200,
+        "duration_seconds": 8.18,
+        "model_calls": 1,
+        "review_status": "ready",
+        "validated_notes": 1,
+        "error": null,
+        "response_error": null,
+        "author_script_unchanged": true,
+        "evidence_count": 2,
+        "exact_id_quote": 2,
+        "id_quote_issues": [],
+        "missing_required_evidence": [],
+        "reader_assessment": {
+          "observation": "Nhận ra câu xác nhận tha thứ trái kết mở, dẫn đúng câu thoại và ràng buộc.",
+          "intent_detection": "true_positive",
+          "utility": "useful_observation",
+          "suggestion": "Rỗng, hợp lệ với HITL; không bắt model viết phương án thay.",
+          "versus_v2": "Giữ được phát hiện đúng và hai nguồn, chọn giới hạn rõ hơn.",
+          "visible": true
+        }
+      },
+      {
+        "name": "free-choice-compliant",
+        "pair": "free-choice",
+        "variant": "compliant",
+        "status_code": 200,
+        "duration_seconds": 11.335,
+        "model_calls": 1,
+        "review_status": "ready",
+        "validated_notes": 1,
+        "error": null,
+        "response_error": null,
+        "author_script_unchanged": true,
+        "evidence_count": 2,
+        "exact_id_quote": 2,
+        "id_quote_issues": [],
+        "missing_required_evidence": [],
+        "reader_assessment": {
+          "observation": "Gán intent_mismatch vì con gái chưa thể hiện quyết định ngay, dù cha đã để lối đi trống. Quyền tự quyết không bắt cô phải quyết định/nói rõ trong cảnh này.",
+          "intent_detection": "false_positive",
+          "utility": "misleading_claim",
+          "suggestion": "Ép thêm hành động/thoại để coi là đúng ý; thiếu căn cứ cho kết luận vi phạm.",
+          "versus_v2": "Hồi quy từ uncertain/nhận xét tùy chọn sang phán lệch ý đồ.",
+          "visible": true
+        }
+      },
+      {
+        "name": "free-choice-violating",
+        "pair": "free-choice",
+        "variant": "violating",
+        "status_code": 200,
+        "duration_seconds": 10.391,
+        "model_calls": 1,
+        "review_status": "ready",
+        "validated_notes": 1,
+        "error": null,
+        "response_error": null,
+        "author_script_unchanged": true,
+        "evidence_count": 2,
+        "exact_id_quote": 2,
+        "id_quote_issues": [],
+        "missing_required_evidence": [],
+        "reader_assessment": {
+          "observation": "Nhận ra giấu hộ chiếu trái quyền tự quyết, đủ nguồn hành động và ý tưởng.",
+          "intent_detection": "true_positive",
+          "utility": "useful_observation",
+          "suggestion": "Rỗng, hợp lệ; quan sát chứa ký hiệu S3:S5/A2:A5 ngoài evidence gây nhiễu, không coi đó là ID bằng chứng được validator xác nhận.",
+          "versus_v2": "Giữ phát hiện đúng, không còn phương án quá rộng chỉ nói xin lỗi/không làm gì khác.",
+          "visible": true
+        }
+      },
+      {
+        "name": "broken-flashlight-compliant",
+        "pair": "broken-flashlight",
+        "variant": "compliant",
+        "status_code": 502,
+        "duration_seconds": 10.512,
+        "model_calls": 1,
+        "review_status": "failed",
+        "validated_notes": 0,
+        "error": "MalformedProviderResponseError",
+        "response_error": "{\"detail\":\"Chưa nhận được phản hồi hợp lệ từ AI. Hãy thử lại.\"}",
+        "author_script_unchanged": true,
+        "evidence_count": 1,
+        "exact_id_quote": 1,
+        "id_quote_issues": [],
+        "missing_required_evidence": [
+          {
+            "note": 0,
+            "type": "missing_valid_target_text"
+          }
+        ],
+        "reader_assessment": {
+          "observation": "Gán intent_mismatch vì kéo rèm bị hiểu là tạo nguồn sáng mới, trong khi ràng buộc và M2 cho dùng ánh đèn đường qua rèm.",
+          "intent_detection": "false_positive",
+          "utility": "misleading_claim_and_unnecessary_repair",
+          "suggestion": "Khuyên tránh kéo rèm, trái cách thể hiện M2 đã chọn.",
+          "versus_v2": "Hồi quy từ gợi ý thêm thoại ít ích lợi sang cáo buộc sai; thiếu target evidence nên cả lượt bị từ chối.",
+          "visible": false
+        }
+      },
+      {
+        "name": "broken-flashlight-violating",
+        "pair": "broken-flashlight",
+        "variant": "violating",
+        "status_code": 200,
+        "duration_seconds": 11.452,
+        "model_calls": 1,
+        "review_status": "ready",
+        "validated_notes": 1,
+        "error": null,
+        "response_error": null,
+        "author_script_unchanged": true,
+        "evidence_count": 2,
+        "exact_id_quote": 2,
+        "id_quote_issues": [],
+        "missing_required_evidence": [],
+        "reader_assessment": {
+          "observation": "Nhận ra hành động đèn pin hỏng sáng trái giới hạn không thể sáng; dẫn đúng hành động và ràng buộc.",
+          "intent_detection": "true_positive",
+          "utility": "useful_detection_with_imprecise_wording",
+          "suggestion": "Đề nghị dùng ánh sáng ngoài/rèm thay bật đèn là hướng phù hợp, nhưng cần nói rõ bỏ kết quả đèn sáng; chỉ bấm công tắc đèn hỏng tự nó chưa phải mâu thuẫn.",
+          "versus_v2": "Cải thiện lỗi mục tiêu: từ bỏ sót/chuyển sang thoại sang nhận xét mâu thuẫn có hai nguồn.",
+          "visible": true
+        }
+      }
+    ]
+  },
+  "semantic_comparison": {
+    "raw_true_positive_violating": {
+      "v2": 2,
+      "v3": 3,
+      "total": 3
+    },
+    "raw_false_positive_intent_on_compliant": {
+      "v2": 0,
+      "v3": 2,
+      "total": 3
+    },
+    "delivered_false_positive_intent_on_compliant": {
+      "v2": 0,
+      "v3": 1,
+      "total": 3
+    },
+    "raw_missed_violation": {
+      "v2": 1,
+      "v3": 0,
+      "total": 3
+    },
+    "clear_constraint_breaking_suggestion_on_compliant": {
+      "v2": 0,
+      "v3": 1,
+      "total": 3
+    }
+  },
+  "conclusion": "V3 fixes the target flashlight miss in this sample but regresses on compliant cases and evidence coverage; do not treat it as quality accepted.",
+  "limits": [
+    "One unseeded sample per case, no retry; no statistical claim.",
+    "Source/quote validation does not certify interpretation or suggested changes.",
+    "No prompt/runtime modifications during or after run; no automatic rollback."
+  ]
+}

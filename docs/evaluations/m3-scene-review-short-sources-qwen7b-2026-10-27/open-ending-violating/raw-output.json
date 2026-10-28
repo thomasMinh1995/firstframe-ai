@@ -1,0 +1,25 @@
+{
+  "raw_output": "{\n  \"notes\": [\n    {\n      \"kind\": \"intent_mismatch\",\n      \"observation\": \"Con gái đã tha thứ cho cha, nhưng tác giả yêu cầu giữ kết mở. Việc này tạo ra sự mâu thuẫn.\",\n      \"impact\": \"Đây có thể gây nhầm lẫn cho diễn viên và khán giả, vì họ có thể hiểu sai thông điệp của tác giả.\",\n      \"evidence\": [\n        {\n          \"source_id\": \"S5\",\n          \"quote\": \"Con tha thứ cho cha. Mọi chuyện đã được giải quyết.\"\n        },\n        {\n          \"source_id\": \"A1\",\n          \"quote\": \"Con gái ở lại, giữ khoảng lặng và chưa khẳng định đã tha thứ. Dừng ở kết mở.\"\n        }\n      ]\n    }\n  ],\n  \"question\": \"Tác giả có muốn giữ kết thúc này hay muốn thay đổi để phù hợp với ý tưởng ban đầu không?\"\n}",
+  "output": {
+    "notes": [
+      {
+        "kind": "intent_mismatch",
+        "observation": "Con gái đã tha thứ cho cha, nhưng tác giả yêu cầu giữ kết mở. Việc này tạo ra sự mâu thuẫn.",
+        "impact": "Đây có thể gây nhầm lẫn cho diễn viên và khán giả, vì họ có thể hiểu sai thông điệp của tác giả.",
+        "suggestion": "",
+        "evidence": [
+          {
+            "source_id": "S5",
+            "quote": "Con tha thứ cho cha. Mọi chuyện đã được giải quyết."
+          },
+          {
+            "source_id": "A1",
+            "quote": "Con gái ở lại, giữ khoảng lặng và chưa khẳng định đã tha thứ. Dừng ở kết mở."
+          }
+        ]
+      }
+    ],
+    "question": "Tác giả có muốn giữ kết thúc này hay muốn thay đổi để phù hợp với ý tưởng ban đầu không?"
+  },
+  "model": "qwen2.5:7b"
+}

@@ -1,0 +1,21 @@
+{
+  "raw_output": "{\n  \"scene\": {\n    \"heading\": \"Khoảnh khắc\",\n    \"blocks\": [\n      {\n        \"kind\": \"action\",\n        \"text\": \"Cha bước nhẹ về phía bàn, đặt phong thư kín lên mặt bàn, rồi lùi về phía sau, đôi mắt nhìn về phía con gái, chờ đợi.\",\n        \"speaker\": \"\"\n      },\n      {\n        \"kind\": \"action\",\n        \"text\": \"Con gái đứng im lặng, tay đặt nhẹ lên mặt phong thư, không có động tác mở hay nhận.\",\n        \"speaker\": \"\"\n      }\n    ]\n  }\n}",
+  "output": {
+    "scene": {
+      "heading": "Khoảnh khắc",
+      "blocks": [
+        {
+          "kind": "action",
+          "text": "Cha bước nhẹ về phía bàn, đặt phong thư kín lên mặt bàn, rồi lùi về phía sau, đôi mắt nhìn về phía con gái, chờ đợi.",
+          "speaker": ""
+        },
+        {
+          "kind": "action",
+          "text": "Con gái đứng im lặng, tay đặt nhẹ lên mặt phong thư, không có động tác mở hay nhận.",
+          "speaker": ""
+        }
+      ]
+    }
+  },
+  "model": "qwen2.5:7b"
+}

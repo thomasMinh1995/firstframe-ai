@@ -1,0 +1,25 @@
+{
+  "raw_output": "{\"notes\": [{\"kind\": \"craft\", \"observation\": \"Cảnh này có thể được diễn đạt rõ ràng hơn về cách Lan và Bình đọc giấy. Hiện tại, chúng ta chỉ biết họ nghiêng giấy, nhưng không rõ họ đọc như thế nào.\", \"impact\": \"Sự thiếu rõ ràng về cách đọc giấy có thể khiến khán giả khó hình dung được tình huống.\", \"evidence\": [{\"source_id\": \"S4\", \"quote\": \"Lan kéo rèm, để ánh đèn đường rọi lên tờ giấy.\"}, {\"source_id\": \"S5\", \"quote\": \"Bình đặt đèn pin hỏng xuống, nghiêng tờ giấy về phía ánh đèn đường.\"}], \"suggestion\": \"Thêm một dòng mô tả chi tiết hơn về cách Lan và Bình đọc giấy, ví dụ: 'Lan và Bình cúi người xuống, ánh đèn đường phản chiếu trên tờ giấy, họ đọc to từng câu một.'\"}], \"question\": \"\"}",
+  "output": {
+    "notes": [
+      {
+        "kind": "craft",
+        "observation": "Cảnh này có thể được diễn đạt rõ ràng hơn về cách Lan và Bình đọc giấy. Hiện tại, chúng ta chỉ biết họ nghiêng giấy, nhưng không rõ họ đọc như thế nào.",
+        "impact": "Sự thiếu rõ ràng về cách đọc giấy có thể khiến khán giả khó hình dung được tình huống.",
+        "suggestion": "Thêm một dòng mô tả chi tiết hơn về cách Lan và Bình đọc giấy, ví dụ: 'Lan và Bình cúi người xuống, ánh đèn đường phản chiếu trên tờ giấy, họ đọc to từng câu một.'",
+        "evidence": [
+          {
+            "source_id": "S4",
+            "quote": "Lan kéo rèm, để ánh đèn đường rọi lên tờ giấy."
+          },
+          {
+            "source_id": "S5",
+            "quote": "Bình đặt đèn pin hỏng xuống, nghiêng tờ giấy về phía ánh đèn đường."
+          }
+        ]
+      }
+    ],
+    "question": ""
+  },
+  "model": "gemma2:9b-instruct-q4_K_M"
+}

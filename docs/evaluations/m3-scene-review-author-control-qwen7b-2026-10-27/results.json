@@ -1,0 +1,80 @@
+[
+  {
+    "name": "open-ending-compliant",
+    "pair": "open-ending",
+    "variant": "compliant",
+    "status_code": 200,
+    "duration_seconds": 13.802,
+    "model_calls": 1,
+    "review_status": "ready",
+    "validated_notes": 1,
+    "error": null,
+    "response_error": null,
+    "author_script_unchanged": true
+  },
+  {
+    "name": "open-ending-violating",
+    "pair": "open-ending",
+    "variant": "violating",
+    "status_code": 502,
+    "duration_seconds": 9.031,
+    "model_calls": 1,
+    "review_status": "failed",
+    "validated_notes": 0,
+    "error": "MalformedProviderResponseError",
+    "response_error": "{\"detail\":\"Chưa nhận được phản hồi hợp lệ từ AI. Hãy thử lại.\"}",
+    "author_script_unchanged": true
+  },
+  {
+    "name": "free-choice-compliant",
+    "pair": "free-choice",
+    "variant": "compliant",
+    "status_code": 200,
+    "duration_seconds": 8.876,
+    "model_calls": 1,
+    "review_status": "ready",
+    "validated_notes": 1,
+    "error": null,
+    "response_error": null,
+    "author_script_unchanged": true
+  },
+  {
+    "name": "free-choice-violating",
+    "pair": "free-choice",
+    "variant": "violating",
+    "status_code": 200,
+    "duration_seconds": 8.575,
+    "model_calls": 1,
+    "review_status": "ready",
+    "validated_notes": 1,
+    "error": null,
+    "response_error": null,
+    "author_script_unchanged": true
+  },
+  {
+    "name": "broken-flashlight-compliant",
+    "pair": "broken-flashlight",
+    "variant": "compliant",
+    "status_code": 200,
+    "duration_seconds": 11.609,
+    "model_calls": 1,
+    "review_status": "ready",
+    "validated_notes": 1,
+    "error": null,
+    "response_error": null,
+    "author_script_unchanged": true
+  },
+  {
+    "name": "broken-flashlight-violating",
+    "pair": "broken-flashlight",
+    "variant": "violating",
+    "status_code": 502,
+    "duration_seconds": 8.84,
+    "model_calls": 1,
+    "review_status": "failed",
+    "validated_notes": 0,
+    "error": "MalformedProviderResponseError",
+    "response_error": "{\"detail\":\"Chưa nhận được phản hồi hợp lệ từ AI. Hãy thử lại.\"}",
+    "author_script_unchanged": true
+  }
+]

@@ -1,0 +1,98 @@
+{
+  "$defs": {
+    "ReviewEvidence": {
+      "additionalProperties": false,
+      "properties": {
+        "source_id": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Source Id",
+          "type": "string"
+        },
+        "quote": {
+          "maxLength": 1000,
+          "minLength": 1,
+          "title": "Quote",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_id",
+        "quote"
+      ],
+      "title": "ReviewEvidence",
+      "type": "object"
+    },
+    "ScriptReviewNote": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "intent_mismatch",
+            "craft",
+            "uncertain"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "observation": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Observation",
+          "type": "string"
+        },
+        "impact": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Impact",
+          "type": "string"
+        },
+        "suggestion": {
+          "default": "",
+          "maxLength": 2000,
+          "title": "Suggestion",
+          "type": "string"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/ReviewEvidence"
+          },
+          "maxItems": 4,
+          "minItems": 1,
+          "title": "Evidence",
+          "type": "array"
+        }
+      },
+      "required": [
+        "kind",
+        "observation",
+        "impact",
+        "evidence"
+      ],
+      "title": "ScriptReviewNote",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "notes": {
+      "items": {
+        "$ref": "#/$defs/ScriptReviewNote"
+      },
+      "maxItems": 6,
+      "title": "Notes",
+      "type": "array"
+    },
+    "question": {
+      "default": "",
+      "maxLength": 2000,
+      "title": "Question",
+      "type": "string"
+    }
+  },
+  "required": [
+    "notes"
+  ],
+  "title": "SceneReviewResult",
+  "type": "object"
+}

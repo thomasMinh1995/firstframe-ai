@@ -6,17 +6,21 @@ import { CardFeedback } from "./CardFeedback";
 import { readRevisionNotes, validatedTargets } from "./revisionNotes";
 import { StoryFeedback } from "./StoryResultCards";
 import { StoryPlanEditor, type DraftField } from "./StoryPlanEditor";
+import type { Scene, SceneSuggestionInput } from "./sceneTypes";
+import { ScreenplayEditor } from "./ScreenplayEditor";
+import { SceneOutlineEditor } from "./SceneOutlineEditor";
 import { ClarificationConversation } from "./ClarificationConversation";
 import "./storyWorkspace.css";
 import { AuthorIntentCard, FeedbackIntent, IntentDetails } from "./AuthorIntentCard";
 import { OperationProgress } from "./OperationProgress";
 import { OnboardingTour, useOnboarding } from "./OnboardingTour";
+import type { TourStep } from "./onboardingState";
 import { applyProgress, progressLanguage, type OperationStep } from "./progressState";
-import { sectionLabels } from "./storyLabels";
+import { feedbackGuidance, sectionLabels } from "./storyLabels";
 import { responseLanguageLabels, type ResponseLanguage } from "./language";
 import type { EvaluationFinding, RevisionNote } from "./apiClient";
 import {
-  editableProject, listProjects, projectRequest, streamProjectOperation,
+  editableProject, sameEditableContent, listProjects, projectRequest, streamProjectOperation,
   type Project, type ProjectSummary,
 } from "./projectsApi";
 
@@ -37,7 +41,7 @@ export default function Home() {
   const [steps, setSteps] = useState<OperationStep[]>([]);
   const [operationFailed, setOperationFailed] = useState(false);
   const [operationTiming, setOperationTiming] = useState<{
-    kind: "analyze" | "plan" | "review"; startedAt: number; finishedAt: number | null;
+    kind: "analyze" | "plan" | "review" | "scene-suggestions" | "scene-sketches" | "screenplay-proposals" | "screenplay-reviews"; startedAt: number; finishedAt: number | null;
   } | null>(null);
   const dirty = project !== null && saved !== null
     && JSON.stringify(editableProject(project)) !== JSON.stringify(editableProject(saved));
@@ -298,7 +302,8 @@ export default function Home() {
         </details>
       </header>
       <div className="workspace-layout">
-      <WorkspaceNavigation project={project} briefChanged={briefChanged} creatingPlan={!!busy && operationTiming?.kind === "plan"} />
+      <WorkspaceNavigation project={project} briefChanged={briefChanged} creatingPlan={!!busy && operationTiming?.kind === "plan"}
+        tourStep={tour.state.record?.status === "active" && !busy ? tour.state.record.stepId : undefined} />
       <div className="workspace-content">
       <OnboardingTour tour={tour} context={tourContext} ready={workspaceLoadState === "ready"}
         empty={projectsListed && !projects.length} busy={!!busy} error={error}
@@ -360,7 +365,7 @@ export default function Home() {
       {!!steps.length && operationTiming && <OperationProgress steps={steps} failed={operationFailed}
         timing={operationTiming} dirty={dirty} language={progressLanguage(project?.response_language ?? "auto")} />}
         <fieldset disabled={!!busy} className="project-fields">
-          <WorkspaceStage key={`${project.id}:idea`} id="workspace-idea" title="1. Khoảnh khắc bạn muốn kể"
+          <WorkspaceStage key={`${project.id}:idea`} id="workspace-idea" tourStep="idea" title="1. Khoảnh khắc bạn muốn kể"
             complete={!!project.analysis && !briefChanged} preview={project.idea || "Bắt đầu bằng một khoảnh khắc nhỏ."}>
             <label htmlFor="project-title">Tên dự án</label>
             <input id="project-title" maxLength={200} value={project.title}
@@ -381,7 +386,7 @@ export default function Home() {
             <label htmlFor="idea">Khoảnh khắc, kỷ niệm hoặc tình huống của bạn</label>
             <p className="storage-note" id="idea-help">Một cử chỉ, âm thanh hay chuyện vui/khó xử đều có thể bắt đầu câu chuyện.
               Chưa cần có cốt truyện hoặc biết cách viết kịch bản.</p>
-            <textarea id="idea" data-tour="idea" maxLength={5000} value={project.idea} rows={5}
+            <textarea id="idea" maxLength={5000} value={project.idea} rows={5}
               aria-describedby="idea-help"
               placeholder="Ví dụ: Tôi về muộn. Mẹ để phần cơm trên bàn, chỉ hỏi có cần hâm lại không. Tôi nhớ tiếng chiếc quạt quay trong lúc hai mẹ con ngồi ăn."
               onChange={(event) => setProject({ ...project, idea: event.target.value })} />
@@ -400,9 +405,9 @@ export default function Home() {
             <AuthorIntentCard context={saved.author_context} revision={saved.revision} dirty={dirty} canEditAnswers={!briefChanged} />
           </details>}
           {project.analysis && !briefChanged && <WorkspaceStage key={`${project.id}:choices:${project.analysis.artifact_id}`}
-            id="workspace-choices" title="2. Những lựa chọn của bạn" complete={!!project.draft}
+            id="workspace-choices" tourStep="choices" title="2. Những lựa chọn của bạn" complete={!!project.draft}
             preview={`${project.analysis.missing_information.filter((_, i) => project.answers[i]?.trim()).length}/${project.analysis.missing_information.length} câu đã trả lời · Mở để xem hoặc sửa`}>
-            <div data-tour="choices">
+            <div>
             <ClarificationConversation key={`${project.id}:${project.analysis.artifact_id}`}
               summary={project.analysis.summary} questions={project.analysis.missing_information} answers={project.answers}
               confirmationKey={decisionKey} idea={project.idea} constraints={project.constraints} hasDraft={!!project.draft}
@@ -422,6 +427,7 @@ export default function Home() {
             {operationTiming?.kind === "plan" && operationTiming.finishedAt !== null && <a className="storage-note" href="#workspace-operation">Xem lại tiến trình tạo bản này</a>}
             {selectedFeedback && !selectedCard && <aside className="revision-note" aria-labelledby="selected-feedback-title">
               <h4 id="selected-feedback-title" tabIndex={-1}>Góp ý bạn đang cân nhắc</h4>
+              <p>{feedbackGuidance.vi}</p>
               <p className={currentFeedback ? "operation-status" : "form-message"} role="status">
                 {currentFeedback ? "Góp ý đọc bản hiện tại. Bạn tự chọn phần muốn sửa bên dưới."
                   : "Góp ý này thuộc bản trước. Giữ làm tham khảo; chưa có đánh giá cho nội dung đang sửa."}</p>
@@ -459,6 +465,190 @@ export default function Home() {
         </details>}
 
           </section>}
+          {saved && <SceneOutlineEditor key={project.id} project={project} saved={saved} dirty={dirty} error={error}
+            onSketch={input => {
+              setSteps([{stage:"prepare",status:"active",occurrence:1}]);setOperationFailed(false);
+              setOperationTiming({kind:"scene-sketches",startedAt:performance.now(),finishedAt:null});
+              return run("Đang phác một cảnh trên máy…",async()=>{
+                try {
+                  const next=await persist();if(!next)return;
+                  setSteps(items=>applyProgress(items,{stage:"prepare",status:"completed"}));
+                  accept(await streamProjectOperation(next,"scene-sketches",event=>setSteps(items=>applyProgress(items,event)),progressLanguage(next.response_language),input));
+                  setNotice("Đã giữ ảnh xem trước riêng; chưa thay ảnh đã chọn. Hãy đối chiếu nguồn rồi chọn giữ hoặc bỏ.");
+                } catch(caught){setOperationFailed(true);throw caught;}
+                finally{setOperationTiming(t=>t?{...t,finishedAt:performance.now()}:t);}
+              },true);
+            }}
+            onSketchDecision={(id,decision)=>void run("Đang lưu lựa chọn hình phác…",async()=>{
+              const next=await projectRequest(`/${project.id}/scene-sketches/${id}/${decision}`,"POST",{revision:project.revision});
+              setSaved(next);setProject(current=>current?{...current,revision:next.revision,scene_sketches:next.scene_sketches,
+                selected_scene_sketches:next.selected_scene_sketches,applicable_sketch_ids:next.applicable_sketch_ids}:current);
+            })}
+            sourceCurrent={!feedbackChanged && !!project.scene_source_is_current}
+            canUseProposal={!feedbackChanged && !project.pending_scene_proposal_id && !project.pending_staging_use && JSON.stringify(project.scene_outline) === JSON.stringify(saved.scene_outline)}
+            onPreviewChange={(id: string, scenes: Scene[]) => setProject(current => current ? { ...current,
+              pending_scene_previews: { ...current.pending_scene_previews, [id]: scenes } } : current)}
+            onStagingEdit={(id, value) => setProject(current => current ? { ...current,
+              pending_staging_edits: { ...current.pending_staging_edits, [id]: value } } : current)}
+            onDiscardIdea={(proposalId, ideaId) => void run("Đang bỏ ý góp ý…", async () => {
+              const next = await projectRequest(`/${project.id}/scene-proposals/${proposalId}/ideas/${ideaId}/discard`, "POST", { revision: project.revision });
+              setSaved(next); setProject(current => {
+                if (!current) return current;
+                const edits = { ...current.pending_staging_edits }; delete edits[ideaId];
+                return { ...current, revision: next.revision, scene_proposals: next.scene_proposals, staging_proposals: next.staging_proposals,
+                  applicable_scene_proposal_ids: next.applicable_scene_proposal_ids, pending_staging_edits: edits };
+              });
+            })}
+            onChange={(outline, proposalId, stagingUse) => setProject(current => {
+              if (!current) return current;
+              const use = stagingUse === undefined ? current.pending_staging_use : stagingUse ?? undefined;
+              const owner = use && current.staging_proposals?.find(p => p.id === use.proposal_id);
+              const idea = owner?.staging_ideas?.find(i => i.id === use?.idea_id);
+              const value = idea && outline.scenes.find(s => s.id === owner?.target_scene_id)?.staging_choices[idea.field];
+              return { ...current, scene_outline: outline,
+                ...(proposalId !== undefined ? { pending_scene_proposal_id: proposalId ?? undefined } : {}),
+                pending_staging_use: use ? { ...use, value: value ?? use.value } : undefined };
+            })}
+            onSuggest={(input: SceneSuggestionInput) => {
+              setSteps([{ stage: "prepare", status: "active", occurrence: 1 }]); setOperationFailed(false);
+              setOperationTiming({ kind: "scene-suggestions", startedAt: performance.now(), finishedAt: null });
+              return run("Đang gợi ý cảnh từ nguồn đã chọn…", async () => {
+                try {
+                  const next = await persist(); if (!next) return;
+                  setSteps(items => applyProgress(items, { stage: "prepare", status: "completed" }));
+                  const result = await streamProjectOperation(next, "scene-suggestions",
+                    event => setSteps(items => applyProgress(items, event)), progressLanguage(next.response_language), input);
+                  accept(result); setNotice("Đã giữ đề xuất riêng. Hãy đọc, tự chỉnh rồi chọn dùng; cảnh đang viết chưa đổi.");
+                } catch (caught) {
+                  setOperationFailed(true); setSteps(items => items.map(s => s.status === "active" ? { ...s, status: "failed" } : s));
+                  throw caught;
+                } finally { setOperationTiming(t => t ? { ...t, finishedAt: performance.now() } : t); }
+              }, true);
+            }}
+            onInspect={async () => { let checked = false; await run("Đang kiểm tra đề xuất đã lưu…", async () => {
+              const next = await projectRequest(`/${project.id}`);
+              if (dirty) {
+                if (!saved || !sameEditableContent(saved, next)) throw new Error("Nội dung đã đổi ở cửa sổ khác. Bản đang sửa vẫn giữ nguyên; hãy tải bản sao trước khi mở lại.");
+                setSaved(next); setProject(current => current ? { ...current, revision: next.revision,
+                  scene_proposals: next.scene_proposals, staging_proposals: next.staging_proposals, applicable_scene_proposal_ids: next.applicable_scene_proposal_ids,
+                  scene_sketches: next.scene_sketches, selected_scene_sketches: next.selected_scene_sketches, applicable_sketch_ids: next.applicable_sketch_ids } : current);
+              } else accept(next);
+              checked = true;
+            }); return checked; }}
+            onDiscard={proposalId => void run("Đang bỏ đề xuất cảnh…", async () => {
+              const next = await persist(); if (!next) return;
+              accept(await projectRequest(`/${next.id}/scene-proposals/${proposalId}/discard`, "POST", { revision: next.revision }));
+            })}
+            onStart={versionId => void run("Đang giữ nguồn và mở dàn cảnh…", async () => {
+              const next = await persist(); if (!next) return;
+              accept(await projectRequest(`/${next.id}/scene-outline`, "POST", {
+                revision: next.revision, source_version_id: versionId,
+              })); setNotice("Đã giữ nguồn story plan. Bạn có thể tự thêm cảnh; không gọi AI.");
+            })}
+            onRestore={versionId => void run("Đang lưu và khôi phục dàn cảnh…", async () => {
+              const next = await persist(); if (!next) return;
+              accept(await projectRequest(`/${next.id}/scene-versions/${versionId}/restore`, "POST", { revision: next.revision }));
+              setNotice("Đã khôi phục dàn cảnh. Story plan và các bản dàn cảnh trước vẫn được giữ.");
+            })}
+            onSave={() => void run("Đang lưu dàn cảnh…", async () => {
+              await persist(); setNotice("Đã lưu thay đổi dàn cảnh và mọi sửa đang chờ trong dự án.");
+            })}
+            onPrepare={() => void run("Đang lưu bản nguồn viết tiếp…", async () => {
+              const next = await persist();
+              if (!next?.scene_handoff) throw new Error("Cần tên và diễn tiến cho từng cảnh trước khi chuẩn bị bản viết tiếp.");
+              setNotice(`Đã lưu bản nguồn M2 phiên bản ${next.scene_handoff.version}. Có thể bắt đầu soạn thủ công tại M3; chưa tự tạo nội dung kịch bản.`);
+              const target=document.getElementById("workspace-script");target?.scrollIntoView({block:"start"});target?.focus({preventScroll:true});
+            })} />}
+          {saved && <ScreenplayEditor key={`script:${project.id}`} project={project} savedProject={saved} dirty={dirty}
+            onSelectSource={input=>run("Đang giữ bản đã lưu làm nguồn M4…",async()=>{
+              const next=await projectRequest(`/${project.id}/screenplay-selections`,"POST",{revision:project.revision,...input});
+              setSaved(next);setProject(current=>current?{...current,revision:next.revision,screenplay_selections:next.screenplay_selections,screenplay_handoff:next.screenplay_handoff}:current);
+              setNotice("Đã giữ snapshot nguồn M4; chưa xuất bản và không tự lưu phần đang sửa.");
+            })}
+            onSourceInspect={async()=>{let checked=false;await run("Đang kiểm tra nguồn M4 đã lưu…",async()=>{
+              const next=await projectRequest(`/${project.id}`);
+              if(dirty){
+                // Explicit inspection may refresh this isolated choice, never the author's buffer.
+                if(!sameEditableContent({...saved,screenplay_selections:next.screenplay_selections},next))throw new Error("Nội dung đã đổi ở cửa sổ khác. Bản đang sửa vẫn giữ; hãy tải bản sao trước khi mở lại.");
+                setSaved(next);setProject(current=>current?{...current,revision:next.revision,screenplay_selections:next.screenplay_selections,screenplay_handoff:next.screenplay_handoff}:current);
+              }else accept(next);checked=true;
+            });return checked;}}
+            sourceDirty={feedbackChanged || JSON.stringify(project.scene_outline)!==JSON.stringify(saved.scene_outline)}
+            onChange={(screenplay,proposalId)=>setProject(current=>current?{...current,screenplay,pending_screenplay_proposal_id:proposalId}:current)}
+            canUse={!feedbackChanged&&!project.pending_screenplay_proposal_id&&!project.pending_scene_proposal_id&&!project.pending_staging_use
+              &&JSON.stringify(project.screenplay)===JSON.stringify(saved.screenplay)&&JSON.stringify(project.scene_outline)===JSON.stringify(saved.scene_outline)}
+            onPreview={(id,scene)=>setProject(current=>current?{...current,pending_screenplay_previews:{...current.pending_screenplay_previews,[id]:scene}}:current)}
+            canNavigateReview={!feedbackChanged&&JSON.stringify(project.screenplay)===JSON.stringify(saved.screenplay)&&JSON.stringify(project.scene_outline)===JSON.stringify(saved.scene_outline)}
+            onReview={input=>{
+              setSteps([{stage:"prepare",status:"active",occurrence:1}]);setOperationFailed(false);
+              setOperationTiming({kind:"screenplay-reviews",startedAt:performance.now(),finishedAt:null});
+              return run("Đang đọc cảnh đã lưu để góp ý…",async()=>{
+                try{const next=await persist();if(!next)return;
+                  setSteps(items=>applyProgress(items,{stage:"prepare",status:"completed"}));
+                  accept(await streamProjectOperation(next,"screenplay-reviews",event=>setSteps(items=>applyProgress(items,event)),progressLanguage(next.response_language),input));
+                  setNotice("Đã lưu góp ý riêng. Trích dẫn khớp nguồn không xác nhận nhận xét đúng; bạn tự cân nhắc và sửa.");
+                }catch(caught){setOperationFailed(true);throw caught;}
+                finally{setOperationTiming(t=>t?{...t,finishedAt:performance.now()}:t);}
+              },true);
+            }}
+            onReviewInspect={async()=>{let checked=false;await run("Đang kiểm tra góp ý đã lưu…",async()=>{
+              const next=await projectRequest(`/${project.id}`);
+              if(dirty){if(!sameEditableContent(saved,next))throw new Error("Nội dung đã đổi ở cửa sổ khác. Bản đang sửa vẫn giữ; hãy tải bản sao trước khi mở lại.");
+                setSaved(next);setProject(current=>current?{...current,revision:next.revision,screenplay_reviews:next.screenplay_reviews,current_screenplay_review_ids:next.current_screenplay_review_ids}:current);
+              }else accept(next);checked=true;
+            });return checked;}}
+            onReviewDiscard={id=>void run("Đang lưu và bỏ lượt góp ý…",async()=>{
+              const next=await persist();if(!next)return;
+              accept(await projectRequest(`/${next.id}/screenplay-reviews/${id}/discard`,"POST",{revision:next.revision}));
+            })}
+            onReviewAssess={(reviewId,noteId,assessment)=>void run("Đang lưu ghi nhận về góp ý…",async()=>{
+              const next=await projectRequest(`/${project.id}/screenplay-reviews/${reviewId}/notes/${noteId}/assessment`,"POST",{revision:project.revision,assessment});
+              setSaved(next);setProject(current=>current?{...current,revision:next.revision,screenplay_reviews:next.screenplay_reviews,current_screenplay_review_ids:next.current_screenplay_review_ids}:current);
+              setNotice("Đã lưu ghi nhận về góp ý; không sửa hoặc tự lưu kịch bản đang viết.");
+            })}
+            onWrite={input=>{
+              setSteps([{stage:"prepare",status:"active",occurrence:1}]);setOperationFailed(false);
+              setOperationTiming({kind:"screenplay-proposals",startedAt:performance.now(),finishedAt:null});
+              return run("Đang viết thử một cảnh…",async()=>{
+                try{const next=await persist();if(!next)return;
+                  setSteps(items=>applyProgress(items,{stage:"prepare",status:"completed"}));
+                  accept(await streamProjectOperation(next,"screenplay-proposals",event=>setSteps(items=>applyProgress(items,event)),progressLanguage(next.response_language),input));
+                  setNotice("Đã giữ phương án riêng; bản tác giả chưa thay. Đọc, chỉnh rồi tự chọn dùng hoặc bỏ.");
+                }catch(caught){setOperationFailed(true);throw caught;}
+                finally{setOperationTiming(t=>t?{...t,finishedAt:performance.now()}:t);}
+              },true);
+            }}
+            onProposalInspect={async()=>{let checked=false;await run("Đang kiểm tra phương án đã lưu…",async()=>{
+              const next=await projectRequest(`/${project.id}`);
+              if(dirty){if(!sameEditableContent(saved,next))throw new Error("Nội dung đã đổi ở cửa sổ khác. Bản đang sửa vẫn giữ; hãy tải bản sao trước khi mở lại.");
+                setSaved(next);setProject(current=>current?{...current,revision:next.revision,screenplay_proposals:next.screenplay_proposals,
+                  applicable_screenplay_proposal_ids:next.applicable_screenplay_proposal_ids}:current);
+              }else accept(next);checked=true;
+            });return checked;}}
+            onDiscard={id=>void run("Đang lưu và bỏ phương án…",async()=>{
+              const next=await persist();if(!next)return;
+              accept(await projectRequest(`/${next.id}/screenplay-proposals/${id}/discard`,"POST",{revision:next.revision}));
+            })}
+            onSave={()=>void run("Đang lưu kịch bản…",async()=>{await persist();setNotice("Đã lưu kịch bản và mọi sửa đang chờ.");})}
+            onStart={request_id=>run("Đang giữ nguồn M2 cho kịch bản…",async()=>{
+              const next=await persist();if(!next)return;
+              accept(await projectRequest(`/${next.id}/screenplay`,"POST",{revision:next.revision,request_id}));
+              setNotice("Đã giữ nguồn và khung cảnh M3. Chưa tạo nội dung hoặc gọi AI.");
+            })}
+            onRestore={id=>void run("Đang lưu và khôi phục kịch bản…",async()=>{
+              const next=await persist();if(!next)return;
+              accept(await projectRequest(`/${next.id}/screenplay-versions/${id}/restore`,"POST",{revision:next.revision}));
+              setNotice("Đã khôi phục kịch bản; M1/M2 và bản trước vẫn giữ.");
+            })}
+            onInspect={async()=>{let checked=false;await run("Đang kiểm tra kịch bản đã lưu…",async()=>{
+              const next=await projectRequest(`/${project.id}`);
+              if(dirty){
+                if(!sameEditableContent(saved,next))throw new Error("Nội dung đã đổi ở cửa sổ khác. Bản đang sửa vẫn giữ; hãy tải bản sao trước khi mở lại.");
+                setSaved(next);setProject(current=>current?{...current,revision:next.revision,screenplay_versions:next.screenplay_versions}:current);
+              }else accept(next);
+              checked=true;
+            });return checked;}}
+          />}
         </fieldset>
         <details className="workspace-library"><summary>Đề xuất và lịch sử ({(project.plan_generations?.length ?? 0) + project.versions.length + project.clarification_history.length})</summary>
         {proposals}
@@ -506,7 +696,7 @@ export default function Home() {
   );
 }
 
-function WorkspaceNavigation({ project, briefChanged, creatingPlan }: { project: Project | null; briefChanged: boolean; creatingPlan: boolean }) {
+function WorkspaceNavigation({ project, briefChanged, creatingPlan, tourStep }: { project: Project | null; briefChanged: boolean; creatingPlan: boolean; tourStep?: TourStep }) {
   const [active, setActive] = useState("workspace-idea");
   useEffect(() => {
     let frame = 0;
@@ -536,20 +726,22 @@ function WorkspaceNavigation({ project, briefChanged, creatingPlan }: { project:
     { id: "workspace-idea", label: "Ý tưởng", available: !!project },
     { id: "workspace-choices", label: "Làm rõ", available: !!project?.analysis && !briefChanged },
     { id: "workspace-draft", label: "Story plan", available: !!project?.draft || creatingPlan },
-    { id: "workspace-outline", label: "Dàn cảnh", available: false },
-    { id: "workspace-script", label: "Kịch bản", available: false },
+    { id: "workspace-outline", label: "Dàn cảnh", available: !!project },
+    { id: "workspace-script", label: "Kịch bản", available: !!project },
   ];
+  const currentStage = creatingPlan ? "workspace-draft"
+    : items.some(item => item.id === `workspace-${tourStep}`) ? `workspace-${tourStep}` : active;
   return <aside className="workspace-rail"><p className="eyebrow">Câu chuyện của bạn</p>
     <nav className="workspace-stage-nav" aria-label="Hành trình câu chuyện">
       {items.map((item, index) => <button key={item.id} type="button" disabled={!item.available}
-        aria-current={item.available && item.id === (creatingPlan ? "workspace-draft" : active) ? "step" : undefined}
+        aria-current={item.available && item.id === currentStage ? "step" : undefined}
         onClick={() => {
           const target = document.getElementById(creatingPlan && item.id === "workspace-draft" ? "workspace-operation" : item.id);
           revealWorkspaceTarget(target); setActive(item.id);
           target?.scrollIntoView({ block: "start" }); target?.focus({ preventScroll: true });
         }}>
         <span className="workspace-stage-number" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
-        <span>{item.label}<small>{index > 2 ? "Chưa hỗ trợ" : item.available ? (item.id === (creatingPlan ? "workspace-draft" : active) ? (creatingPlan ? "Đang tạo" : "Đang làm việc") : "Xem lại") : "Chưa có nội dung"}</small></span>
+        <span>{item.label}<small>{!item.available && index > 2 ? "Chưa hỗ trợ" : item.available ? (item.id === currentStage ? (creatingPlan ? "Đang tạo" : "Đang làm việc") : "Xem lại") : "Chưa có nội dung"}</small></span>
       </button>)}
     </nav>
     <p className="workspace-rail-note">Câu chuyện và lựa chọn của bạn làm chủ đạo.<br />Các bước sau mở khi sản phẩm hỗ trợ.</p>
