@@ -118,7 +118,9 @@ def inspect():
 
 @app.post("/__test/control")
 async def control(values: dict):
-    assert set(values) <= {"fail_critic", "hold_suffix", "lose_response_suffix", "release", "fail_scenes", "bad_staging", "empty_staging", "fail_sketch", "fail_writing", "fail_review", "bad_review", "empty_review"}
+    assert set(values) <= {"fail_critic", "hold_suffix", "lose_response_suffix", "release", "fail_scenes", "bad_staging", "empty_staging", "fail_sketch", "fail_writing", "fail_review", "bad_review", "empty_review", "review_all_fields"}
+    if "review_all_fields" in values:
+        review_provider.mode = "ui_all_fields" if values["review_all_fields"] else "valid"
     if "fail_review" in values:
         review_provider.error = ProviderTimeoutError("fixture review timeout") if values["fail_review"] else None
     if "bad_review" in values:

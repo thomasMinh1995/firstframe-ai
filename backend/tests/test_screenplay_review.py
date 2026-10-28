@@ -24,6 +24,10 @@ class ReviewProvider:
         choice=next(s for s in sources if s['category']=='author_choice')
         note={'kind':'craft','observation':'Cử chỉ hiện tại để lại khoảng lặng.','impact':'Người xem có thể tự hiểu sự đón nhận.','suggestion':'Cân nhắc giữ khoảng dừng, không bắt thêm lời giải thích.',
               'evidence':[{'source_id':anchor['id'],'quote':anchor['text'][:500]}]}
+        if self.mode=='ui_all_fields':
+            for field in ('heading','speaker'):
+                source=next(s for s in sources if s['is_target'] and s['field']==field)
+                note['evidence'].append({'source_id':source['id'],'quote':source['text'][:500]})
         if self.mode=='bad_id':note['evidence'][0]['source_id']='made-up'
         if self.mode=='lowercase_id':note['evidence'][0]['source_id']=anchor['id'].lower()
         if self.mode=='padded_id':note['evidence'][0]['source_id']=' '+anchor['id']+' '
@@ -245,3 +249,17 @@ def test_old_reviews_reopen_unchanged_without_provider(project_client,monkeypatc
         assert reopened['screenplay']==old['screenplay']
         assert reopened['screenplay_reviews'][-1]['prompt_version']==version
     assert not provider.requests
+
+
+def test_ui_all_fields_evidence_keeps_script_and_sources(reviewing):
+    client,provider,p,_=reviewing
+    body=edit(p)
+    body['screenplay']['scenes'][0]['blocks'].append(block(kind='dialogue',text='Cha cứ để đó.'))
+    p=client.put(f"/api/projects/{p['id']}",json=body).json()
+    provider.mode='ui_all_fields'
+    result,_=review(client,p)
+    assert result.status_code==200,result.text
+    saved=result.json();reviewed=saved['screenplay_reviews'][-1]
+    sources={s['id']:s for s in reviewed['sources']}
+    assert [sources[e['source_id']]['field'] for e in reviewed['notes'][0]['evidence']]==['text','heading','speaker']
+    assert saved['screenplay']==p['screenplay'] and reviewed['source_screenplay']==p['screenplay']
