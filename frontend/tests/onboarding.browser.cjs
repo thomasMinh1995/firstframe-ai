@@ -73,6 +73,14 @@ const toggle = async (page, details) => {
   await reveal(page, details); await details.locator(':scope > summary').click();
 };
 const step = (page, n) => page.getByText(`Bước ${n}/7`, { exact: true }).waitFor({ state: 'visible' });
+async function openTour(page, destination) {
+  await click(page, 'Hướng dẫn sử dụng');
+  await step(page, 1);
+  assert.equal(await page.locator('#tour-title').innerText(), 'Dự án mới');
+  for (let n = 2; n <= destination; n++) {
+    await click(page, 'Tiếp'); await step(page, n);
+  }
+}
 const focused = (page, selector) => page.waitForFunction(selector => document.activeElement.matches(selector), selector);
 const status = (page, expected) => page.waitForFunction(({ key, expected }) => JSON.parse(localStorage.getItem(key))?.status === expected, { key, expected });
 
@@ -206,19 +214,19 @@ if (require.main === module) (async () => {
     await click(page, 'Đóng hướng dẫn'); await focused(page, '#tour-help');
     await t.close();
     t = await setup(browser, { projects: [project()] }); ({ page, mock } = t);
-    await click(page, 'Hướng dẫn sử dụng'); await click(page, 'Thực hành');
+    await openTour(page, 2); await click(page, 'Thực hành');
     await fill(page, '#idea', 'Nội dung chưa lưu khi dùng Escape.');
     const practiceBuffer = await buffer(page);
     await page.keyboard.press('Escape'); await status(page, 'dismissed');
     await focused(page, '#idea');
     assert.deepEqual(await buffer(page), practiceBuffer); assert.equal(countWrites(mock), 0);
-    await click(page, 'Hướng dẫn sử dụng'); await click(page, 'Thực hành');
+    await openTour(page, 2); await click(page, 'Thực hành');
     assert.equal(await page.getByRole('button', { name: 'Tiếp tục hướng dẫn', exact: true }).isDisabled(), true);
     await focused(page, '#idea');
     await page.keyboard.press('Escape'); await focused(page, '#idea');
     // Dismiss during an actual pending request; its later result must not revive the tour.
     let releaseEscape; mock.hold = new Promise(resolve => { releaseEscape = resolve; });
-    await click(page, 'Hướng dẫn sử dụng'); await click(page, 'Thực hành');
+    await openTour(page, 2); await click(page, 'Thực hành');
     await click(page, 'Cùng làm rõ ý tưởng');
     await page.waitForFunction(() => document.querySelector('#tour-help').disabled);
     await page.getByRole('button', { name: 'Bỏ qua', exact: true }).focus();
@@ -295,7 +303,7 @@ if (require.main === module) (async () => {
     assert.equal(countWrites(mock), writes, 'finishing never saves or reviews');
     await focused(page, '[data-tour-action="save"]');
     await click(page, 'Lưu thay đổi');
-    await page.reload(); await click(page, 'Hướng dẫn sử dụng'); await step(page, 4);
+    await page.reload(); await openTour(page, 4);
     assert.equal(await page.getByText('Bắt đầu cùng FirstFrame', { exact: true }).count(), 0);
     await click(page, 'Tiếp'); await step(page, 5); await click(page, 'Tiếp'); await step(page, 6); await click(page, 'Tiếp'); await step(page, 7);
     await click(page, 'Hoàn tất hướng dẫn');
@@ -305,7 +313,7 @@ if (require.main === module) (async () => {
     // Existing analysis keeps language help available and focuses the first unanswered question.
     const questions = { ...project(), analysis: { ...analysis(), missing_information: ['Bạn muốn kết thúc thế nào?', 'Điều gì cần giữ?'] }, answers: ['Kết thúc mở', ''] };
     t = await setup(browser, { projects: [questions] }); ({ page, mock } = t);
-    await click(page, 'Hướng dẫn sử dụng'); await step(page, 3);
+    await openTour(page, 3);
     before = await buffer(page); writes = countWrites(mock);
     await click(page, 'Trước'); await step(page, 2); await click(page, 'Thực hành');
     await focused(page, '#idea');
@@ -325,7 +333,7 @@ if (require.main === module) (async () => {
     // A saved draft must not outrank a changed brief, even after the save clears analysis.
     t = await setup(browser, { projects: [fullProject('p1')] }); ({ page, mock } = t);
     assert.equal(await page.getByText('Bắt đầu cùng FirstFrame', { exact: true }).count(), 0);
-    await click(page, 'Hướng dẫn sử dụng'); await step(page, 4); await click(page, 'Thực hành');
+    await openTour(page, 4); await click(page, 'Thực hành');
     await fill(page, '#idea', 'Một ý tưởng hoàn toàn khác.');
     await page.getByText(/Ý tưởng đã thay đổi\. Làm rõ lại/).waitFor();
     before = await buffer(page); writes = countWrites(mock);
@@ -333,13 +341,13 @@ if (require.main === module) (async () => {
     await page.keyboard.press('Escape'); await status(page, 'dismissed');
     assert.deepEqual(await buffer(page), before); assert.equal(countWrites(mock), writes);
     await click(page, 'Lưu thay đổi');
-    await click(page, 'Hướng dẫn sử dụng'); await step(page, 2);
+    await openTour(page, 2);
     assert.ok(mock.projects[0].draft); assert.equal(mock.projects[0].analysis, null);
     await t.close();
 
     // Save rejection prevents analyze; a later AI rejection does not unlock the next step.
     t = await setup(browser, { projects: [project()] }); ({ page, mock } = t);
-    await click(page, 'Hướng dẫn sử dụng'); await step(page, 2); await click(page, 'Thực hành');
+    await openTour(page, 2); await click(page, 'Thực hành');
     await fill(page, '#idea', 'Ý tưởng đã sửa nhưng chưa lưu.');
     before = await buffer(page); mock.failSave = true;
     await click(page, 'Cùng làm rõ ý tưởng'); await status(page, 'paused');
@@ -350,14 +358,14 @@ if (require.main === module) (async () => {
     await click(page, 'Cùng làm rõ ý tưởng'); await status(page, 'paused');
     assert.equal(JSON.parse(await page.evaluate(key => localStorage.getItem(key), key)).stepId, 'idea');
     const errorBeforeHelp = await page.locator('.error[role="alert"]').innerText();
-    await click(page, 'Hướng dẫn sử dụng'); await step(page, 2);
+    await openTour(page, 2);
     assert.equal(await page.locator('.error[role="alert"]').innerText(), errorBeforeHelp, 'manual help preserves existing error');
     assert.deepEqual(await buffer(page), before);
     await t.close();
 
     // Reload resumes only on request, and switching projects resolves the new project's entry.
     t = await setup(browser, { projects: [project(), fullProject('p2')] }); ({ page, mock } = t);
-    await click(page, 'Hướng dẫn sử dụng'); await click(page, 'Thực hành');
+    await openTour(page, 2); await click(page, 'Thực hành');
     writes = countWrites(mock);
     await page.reload();
     await page.getByRole('button', { name: 'Tiếp tục hướng dẫn', exact: true }).waitFor();
@@ -369,7 +377,7 @@ if (require.main === module) (async () => {
     // Another tab dismisses the tour while its analyze request is pending.
     t = await setup(browser, { projects: [project()] }); ({ page, mock } = t);
     let release; mock.hold = new Promise(resolve => { release = resolve; });
-    await click(page, 'Hướng dẫn sử dụng'); await click(page, 'Thực hành');
+    await openTour(page, 2); await click(page, 'Thực hành');
     await click(page, 'Cùng làm rõ ý tưởng');
     await page.waitForFunction(() => document.querySelector('[data-tour="new-project"]').disabled);
     const second = await t.context.newPage(); await second.goto(url);
@@ -396,12 +404,12 @@ if (require.main === module) (async () => {
 
     // Missing targets pause safely; a tiny viewport falls back to a scrollable modal.
     t = await setup(browser, { projects: [project()] }); ({ page } = t);
-    await click(page, 'Hướng dẫn sử dụng'); await step(page, 2);
+    await openTour(page, 2);
     await page.locator('[data-tour="idea"]').evaluate(n => n.remove());
     await status(page, 'paused'); assert.equal(await page.locator('dialog[open]').count(), 0);
     await t.close();
     t = await setup(browser, { projects: [fullProject('p1')], viewport: { width: 390, height: 844 } }); ({ page } = t);
-    await click(page, 'Hướng dẫn sử dụng'); await step(page, 4);
+    await openTour(page, 4);
     await page.screenshot({ path: path.join(screenshots, 'mobile.png') });
     await page.setViewportSize({ width: 320, height: 260 });
     await page.waitForFunction(() => {
@@ -420,7 +428,7 @@ if (require.main === module) (async () => {
       await page.locator('.scene-outline, .screenplay, .clarification-conversation').evaluateAll(nodes => {
         for (const node of nodes) node.style.minHeight = '2400px';
       });
-      await click(page, 'Hướng dẫn sử dụng'); await step(page, 4);
+      await openTour(page, 4);
       await click(page, 'Trước'); await click(page, 'Trước'); await step(page, 2);
       for (const [index, name] of ['idea', 'choices', 'draft', 'outline', 'script'].entries()) {
         await step(page, index + 2);
@@ -463,7 +471,7 @@ if (require.main === module) (async () => {
       assert.equal(await reading.locator('.story-draft-path .story-field-value').first().textContent(), 'Con mở cửa.');
       assert.equal(await reading.locator('.story-draft-path > li').count(), 4);
       const tourCalls = clone(mock.calls), tourBuffer = await buffer(page);
-      await click(page, 'Hướng dẫn sử dụng'); await step(page, 4);
+      await openTour(page, 4);
       assert.match(await page.getByRole('list', { name: 'Cách thực hiện' }).innerText(), /Sửa từng card.*Xong.*Lưu thay đổi/s);
       await page.screenshot({ path: path.join(screenshots, `new-workflow-tour-${viewport.width}.png`) });
       await click(page, 'Thử xem góp ý');
