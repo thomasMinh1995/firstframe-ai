@@ -1,6 +1,7 @@
 "use client";
 
 import {useEffect, useId, useRef, useState, type KeyboardEvent} from 'react';
+import {SceneHint} from './SceneHint';
 import type {ScriptBlock, ScriptScene} from './screenplayTypes';
 import {checkScriptSceneEdit, mergeScriptBlock, splitScriptBlock} from './screenplayEditing';
 
@@ -80,7 +81,7 @@ export function ContinuousSceneEditor({scene, scope, blockLimit, onChange}: {
       <select id={`${prefix}-format`} value={part} onChange={e => convert(e.target.value as Part)}>
         <option value="action">Hành động</option><option value="character">Nhân vật</option><option value="dialogue">Lời thoại</option>
       </select>
-      <details><summary>Cách viết</summary><p>Enter sang đoạn hành động tiếp. Chọn Nhân vật, gõ tên rồi Enter để viết lời thoại. Shift+Enter xuống dòng trong cùng đoạn. Tab chuyển focus. Dán văn bản giữ các xuống dòng trong đoạn, không tự đoán người nói.</p></details>
+      <SceneHint title="Cách viết">Enter sang đoạn hành động tiếp. Chọn Nhân vật, gõ tên rồi Enter để viết lời thoại. Shift+Enter xuống dòng trong cùng đoạn. Tab chuyển focus. Dán văn bản giữ các xuống dòng trong đoạn, không tự đoán người nói. Chuyển cảnh giữ phần đang viết; lưu kịch bản để mở lại lần sau. Không cần thoại để lưu nháp.</SceneHint>
     </div>
     {error && <p role="alert">{error}</p>}
     <div className="continuous-page">
@@ -106,6 +107,5 @@ export function ContinuousSceneEditor({scene, scope, blockLimit, onChange}: {
     {undo && undo.scope === scope && JSON.stringify(scene) === undo.after && <button type="button" onClick={() => {
       onChange(undo.before); setUndo(null); setError('');
     }}>Hoàn tác thao tác đoạn</button>}
-    <p className="storage-note">Chuyển cảnh giữ phần đang viết. Chọn Lưu kịch bản để mở lại lần sau; không cần thêm thoại để lưu nháp.</p>
   </div>;
 }

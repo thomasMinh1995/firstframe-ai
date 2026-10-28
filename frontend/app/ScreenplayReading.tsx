@@ -15,7 +15,7 @@ export function ScreenplayReading({saved,dirty,onSelect,onInspect,onEdit}: {
   const script=selected.screenplay,incomplete=unfinishedScriptScenes(script),handoff=saved.screenplay_handoff;
   const uncertain=sent!==null&&!(saved.screenplay_selections??[]).some(s=>s.id===sent);
   const alreadySelected=handoff?.screenplay.id===script.id&&handoff.screenplay.version===script.version;
-  return <section className="screenplay-reading" aria-label="Đọc bản đã lưu và chọn nguồn M4">
+  return <section className="screenplay-reading" tabIndex={-1} aria-label="Đọc bản đã lưu và chọn nguồn M4">
     <h3>Đọc toàn kịch bản đã lưu</h3>
     <p>Đọc đúng bản đã lưu, gồm cả cảnh/khối chưa viết. Chọn nguồn chỉ giữ một bản riêng cho M4, chưa xuất bản và không xác nhận chất lượng tác phẩm.</p>
     {dirty&&<p role="status">Có sửa chưa lưu. Phần đọc và chọn nguồn bên dưới vẫn dùng bản đã lưu; lưu kịch bản nếu muốn dùng các sửa mới.</p>}
