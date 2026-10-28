@@ -397,7 +397,7 @@ if (require.main === module) (async () => {
     // Missing targets pause safely; a tiny viewport falls back to a scrollable modal.
     t = await setup(browser, { projects: [project()] }); ({ page } = t);
     await click(page, 'Hướng dẫn sử dụng'); await step(page, 2);
-    await page.locator('#idea').evaluate(n => n.remove());
+    await page.locator('[data-tour="idea"]').evaluate(n => n.remove());
     await status(page, 'paused'); assert.equal(await page.locator('dialog[open]').count(), 0);
     await t.close();
     t = await setup(browser, { projects: [fullProject('p1')], viewport: { width: 390, height: 844 } }); ({ page } = t);
@@ -413,24 +413,28 @@ if (require.main === module) (async () => {
     await click(page, 'Tiếp'); await step(page, 5); await click(page, 'Tiếp'); await step(page, 6); await click(page, 'Tiếp'); await step(page, 7); await click(page, 'Hoàn tất hướng dẫn');
     await t.close();
 
-    // Long sections must not swallow the spotlight or keyboard focus.
-    for (const viewport of [{ width: 1280, height: 900 }, { width: 390, height: 844 }]) {
+    // Every stage stays highlighted and agrees with the rail, even with long content.
+    for (const viewport of [{ width: 897, height: 771 }, { width: 1280, height: 900 }, { width: 390, height: 844 }]) {
       t = await setup(browser, { projects: [fullProject('p1')], viewport }); ({ page, mock } = t);
       const calls = clone(mock.calls);
-      await page.locator('.scene-outline, .screenplay').evaluateAll(nodes => {
+      await page.locator('.scene-outline, .screenplay, .clarification-conversation').evaluateAll(nodes => {
         for (const node of nodes) node.style.minHeight = '2400px';
       });
       await click(page, 'Hướng dẫn sử dụng'); await step(page, 4);
-      for (const [name, number, anchor] of [['outline', 5, '#workspace-outline'], ['script', 6, '#workspace-script']]) {
-        await click(page, 'Tiếp'); await step(page, number);
+      await click(page, 'Trước'); await click(page, 'Trước'); await step(page, 2);
+      for (const [index, name] of ['idea', 'choices', 'draft', 'outline', 'script'].entries()) {
+        await step(page, index + 2);
         assert.equal(await page.locator(`[data-tour="${name}"]`).evaluate(n => n.tagName), 'H2');
         await page.locator('.tour-spotlight').waitFor({ state: 'visible' });
-        await click(page, 'Thực hành'); await focused(page, anchor);
-        await click(page, 'Hướng dẫn sử dụng'); await step(page, 4);
-        await click(page, 'Tiếp'); await step(page, 5);
-        if (name === 'script') { await click(page, 'Tiếp'); await step(page, 6); }
+        assert.equal(await page.locator('.workspace-stage-nav [aria-current="step"]').count(), 1);
+        const label = await page.locator('#tour-title').innerText();
+        assert.ok((await page.locator('.workspace-stage-nav [aria-current="step"]').innerText()).includes(label));
+        await page.screenshot({ path: path.join(screenshots, `tour-${name}-${viewport.width}.png`) });
+        await click(page, 'Thực hành');
+        await focused(page, { idea: '#idea', choices: '[data-choice-review]', draft: '#draft-logline', outline: '#workspace-outline', script: '#workspace-script' }[name]);
+        await click(page, 'Tiếp tục hướng dẫn');
       }
-      await click(page, 'Tiếp'); await step(page, 7);
+      await step(page, 7);
       await click(page, 'Hoàn tất hướng dẫn'); await status(page, 'completed');
       assert.deepEqual(mock.calls, calls, 'tour navigation makes no API requests');
       await t.close();

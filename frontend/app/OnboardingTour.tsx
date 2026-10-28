@@ -136,6 +136,7 @@ export function OnboardingTour(props: Props) {
     if (!record) return;
     const step = record.stepId;
     let selector = `[data-tour="${step}"]`;
+    if (step === "idea") selector = "#idea";
     if (step === "choices") {
       const index = Array.from({ length: props.questionCount }, (_, i) => i).find(i => !props.answers[i]?.trim());
       selector = index === undefined ? '[data-choice-review]' : `#answer-${index}`;

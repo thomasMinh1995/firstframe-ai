@@ -14,6 +14,7 @@ import "./storyWorkspace.css";
 import { AuthorIntentCard, FeedbackIntent, IntentDetails } from "./AuthorIntentCard";
 import { OperationProgress } from "./OperationProgress";
 import { OnboardingTour, useOnboarding } from "./OnboardingTour";
+import type { TourStep } from "./onboardingState";
 import { applyProgress, progressLanguage, type OperationStep } from "./progressState";
 import { feedbackGuidance, sectionLabels } from "./storyLabels";
 import { responseLanguageLabels, type ResponseLanguage } from "./language";
@@ -301,7 +302,8 @@ export default function Home() {
         </details>
       </header>
       <div className="workspace-layout">
-      <WorkspaceNavigation project={project} briefChanged={briefChanged} creatingPlan={!!busy && operationTiming?.kind === "plan"} />
+      <WorkspaceNavigation project={project} briefChanged={briefChanged} creatingPlan={!!busy && operationTiming?.kind === "plan"}
+        tourStep={tour.state.record?.status === "active" && !busy ? tour.state.record.stepId : undefined} />
       <div className="workspace-content">
       <OnboardingTour tour={tour} context={tourContext} ready={workspaceLoadState === "ready"}
         empty={projectsListed && !projects.length} busy={!!busy} error={error}
@@ -363,7 +365,7 @@ export default function Home() {
       {!!steps.length && operationTiming && <OperationProgress steps={steps} failed={operationFailed}
         timing={operationTiming} dirty={dirty} language={progressLanguage(project?.response_language ?? "auto")} />}
         <fieldset disabled={!!busy} className="project-fields">
-          <WorkspaceStage key={`${project.id}:idea`} id="workspace-idea" title="1. Khoảnh khắc bạn muốn kể"
+          <WorkspaceStage key={`${project.id}:idea`} id="workspace-idea" tourStep="idea" title="1. Khoảnh khắc bạn muốn kể"
             complete={!!project.analysis && !briefChanged} preview={project.idea || "Bắt đầu bằng một khoảnh khắc nhỏ."}>
             <label htmlFor="project-title">Tên dự án</label>
             <input id="project-title" maxLength={200} value={project.title}
@@ -384,7 +386,7 @@ export default function Home() {
             <label htmlFor="idea">Khoảnh khắc, kỷ niệm hoặc tình huống của bạn</label>
             <p className="storage-note" id="idea-help">Một cử chỉ, âm thanh hay chuyện vui/khó xử đều có thể bắt đầu câu chuyện.
               Chưa cần có cốt truyện hoặc biết cách viết kịch bản.</p>
-            <textarea id="idea" data-tour="idea" maxLength={5000} value={project.idea} rows={5}
+            <textarea id="idea" maxLength={5000} value={project.idea} rows={5}
               aria-describedby="idea-help"
               placeholder="Ví dụ: Tôi về muộn. Mẹ để phần cơm trên bàn, chỉ hỏi có cần hâm lại không. Tôi nhớ tiếng chiếc quạt quay trong lúc hai mẹ con ngồi ăn."
               onChange={(event) => setProject({ ...project, idea: event.target.value })} />
@@ -403,9 +405,9 @@ export default function Home() {
             <AuthorIntentCard context={saved.author_context} revision={saved.revision} dirty={dirty} canEditAnswers={!briefChanged} />
           </details>}
           {project.analysis && !briefChanged && <WorkspaceStage key={`${project.id}:choices:${project.analysis.artifact_id}`}
-            id="workspace-choices" title="2. Những lựa chọn của bạn" complete={!!project.draft}
+            id="workspace-choices" tourStep="choices" title="2. Những lựa chọn của bạn" complete={!!project.draft}
             preview={`${project.analysis.missing_information.filter((_, i) => project.answers[i]?.trim()).length}/${project.analysis.missing_information.length} câu đã trả lời · Mở để xem hoặc sửa`}>
-            <div data-tour="choices">
+            <div>
             <ClarificationConversation key={`${project.id}:${project.analysis.artifact_id}`}
               summary={project.analysis.summary} questions={project.analysis.missing_information} answers={project.answers}
               confirmationKey={decisionKey} idea={project.idea} constraints={project.constraints} hasDraft={!!project.draft}
@@ -694,7 +696,7 @@ export default function Home() {
   );
 }
 
-function WorkspaceNavigation({ project, briefChanged, creatingPlan }: { project: Project | null; briefChanged: boolean; creatingPlan: boolean }) {
+function WorkspaceNavigation({ project, briefChanged, creatingPlan, tourStep }: { project: Project | null; briefChanged: boolean; creatingPlan: boolean; tourStep?: TourStep }) {
   const [active, setActive] = useState("workspace-idea");
   useEffect(() => {
     let frame = 0;
@@ -727,17 +729,19 @@ function WorkspaceNavigation({ project, briefChanged, creatingPlan }: { project:
     { id: "workspace-outline", label: "Dàn cảnh", available: !!project },
     { id: "workspace-script", label: "Kịch bản", available: !!project },
   ];
+  const currentStage = creatingPlan ? "workspace-draft"
+    : items.some(item => item.id === `workspace-${tourStep}`) ? `workspace-${tourStep}` : active;
   return <aside className="workspace-rail"><p className="eyebrow">Câu chuyện của bạn</p>
     <nav className="workspace-stage-nav" aria-label="Hành trình câu chuyện">
       {items.map((item, index) => <button key={item.id} type="button" disabled={!item.available}
-        aria-current={item.available && item.id === (creatingPlan ? "workspace-draft" : active) ? "step" : undefined}
+        aria-current={item.available && item.id === currentStage ? "step" : undefined}
         onClick={() => {
           const target = document.getElementById(creatingPlan && item.id === "workspace-draft" ? "workspace-operation" : item.id);
           revealWorkspaceTarget(target); setActive(item.id);
           target?.scrollIntoView({ block: "start" }); target?.focus({ preventScroll: true });
         }}>
         <span className="workspace-stage-number" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
-        <span>{item.label}<small>{!item.available && index > 2 ? "Chưa hỗ trợ" : item.available ? (item.id === (creatingPlan ? "workspace-draft" : active) ? (creatingPlan ? "Đang tạo" : "Đang làm việc") : "Xem lại") : "Chưa có nội dung"}</small></span>
+        <span>{item.label}<small>{!item.available && index > 2 ? "Chưa hỗ trợ" : item.available ? (item.id === currentStage ? (creatingPlan ? "Đang tạo" : "Đang làm việc") : "Xem lại") : "Chưa có nội dung"}</small></span>
       </button>)}
     </nav>
     <p className="workspace-rail-note">Câu chuyện và lựa chọn của bạn làm chủ đạo.<br />Các bước sau mở khi sản phẩm hỗ trợ.</p>
