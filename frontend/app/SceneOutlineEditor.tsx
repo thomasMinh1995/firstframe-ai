@@ -87,7 +87,7 @@ export function SceneOutlineEditor({ project, saved, dirty, sourceCurrent, error
         : <textarea id={`${id}-${key}`} value={selectedScene[key]} rows={rows} maxLength={maxLength}
           onChange={e => changeScene({ [key]: e.target.value })} />}</div>;
 
-  return <section className="scene-outline panel" data-workspace-stage="workspace-outline" aria-labelledby="workspace-outline">
+  return <section className="scene-outline panel" data-workspace-stage="workspace-outline" data-tour="outline" aria-labelledby="workspace-outline">
     <header className="scene-heading"><div><p className="eyebrow">Dàn cảnh</p>
       <h2 id="workspace-outline" tabIndex={-1}>Kể câu chuyện qua từng cảnh</h2></div>
       {outline && <button type="button" onClick={add} disabled={outline.scenes.length >= 60}>Tự thêm cảnh</button>}</header>

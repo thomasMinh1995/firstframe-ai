@@ -4,7 +4,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react
 import { revealWorkspaceTarget } from "./WorkspaceStage";
 import { createPortal } from "react-dom";
 import {
-  available, continuation, initialTour, nextStep, previousStep, reduceTour, tourSteps, tourStorageKey, validAnalysis,
+  available, continuation, initialTour, nextStep, previousStep, reduceTour, tourSteps, tourStorageKey,
   type TourContext, type TourOperation, type TourRequest, type TourStep,
 } from "./onboardingState";
 
@@ -70,55 +70,34 @@ type Props = {
   idea: string; answers: string[]; questionCount: number;
 };
 const titles: Record<TourStep, string> = {
-  "new-project": "Bắt đầu câu chuyện đầu tiên", idea: "Câu chuyện bạn muốn kể", language: "Cùng làm rõ ý tưởng",
-  choices: "Trò chuyện, xem lại rồi đồng ý", draft: "Story plan chữ S và góp ý AI", save: "Lưu, đề xuất và lịch sử",
+  "new-project": "Bắt đầu", idea: "Ý tưởng", choices: "Làm rõ", draft: "Story plan",
+  outline: "Dàn cảnh", script: "Kịch bản", save: "Lưu",
 };
 const targetLabels: Record<TourStep, string> = {
-  "new-project": "Nút Dự án mới", idea: "Ô Khoảnh khắc, kỷ niệm hoặc tình huống của bạn",
-  language: "Ngôn ngữ đầu ra", choices: "Những lựa chọn của bạn",
-  draft: "Đọc và sửa ngay tại card", save: "Thanh lưu thay đổi",
+  "new-project": "Dự án mới", idea: "Vùng Ý tưởng", choices: "Vùng Làm rõ",
+  draft: "Vùng Story plan", outline: "Vùng Dàn cảnh", script: "Vùng Kịch bản", save: "Thanh lưu",
 };
 function copy(step: TourStep, p: Props) {
   switch (step) {
-    case "new-project": return p.context.projectId
-      ? "Dự án mới tạo không gian cho một câu chuyện khác. Nút này sẽ lưu thay đổi của dự án đang mở trước khi tạo dự án mới."
-      : "Tạo không gian riêng cho câu chuyện của bạn. Bạn có thể lưu và quay lại viết tiếp bất cứ lúc nào.";
-    case "idea": return "Ghi lại một khoảnh khắc bạn thấy, nghe hoặc nhớ, kèm điều muốn giữ ở ô bên dưới. Chưa cần có cốt truyện. Dùng Lưu thay đổi để quay lại viết tiếp, kể cả khi chưa chạy AI.";
-    case "language": return validAnalysis(p.context)
-      ? "Ngôn ngữ này áp dụng cho lần AI tiếp theo, không dịch nội dung đã có. Ý tưởng đã được làm rõ; bạn có thể tiếp tục xem các lựa chọn mà không chạy AI lại."
-      : "Chọn Tiếng Việt hoặc English nếu ý tưởng quá ngắn hay chưa rõ ngôn ngữ. Sau đó tự bấm Cùng làm rõ ý tưởng; FirstFrame sẽ lưu trước khi gửi AI.";
-    case "choices": return p.questionCount
-      ? "Mỗi lượt một câu hỏi. Câu trả lời cũ vẫn ở phía trên để bạn đọc và sửa; những lựa chọn này dẫn đường cho story plan."
-      : "Chưa có câu hỏi bổ sung. Bạn vẫn có thể hỏi thêm, hoặc xem lại các lựa chọn trước khi đồng ý tạo bản phát triển.";
-    case "draft": return "Đọc các card ngắn theo đường chữ S, từ số nhỏ đến lớn. Trên điện thoại, card xếp thành một cột theo đúng thứ tự. Khi muốn phát triển từng cảnh, xem hướng dẫn ngắn tại vùng M2 Dàn cảnh. Ở M3, chọn một cảnh trên danh sách thẳng rồi viết; bản đã lưu nằm bên cạnh. Mở nguồn dàn cảnh, phác họa hoặc góp ý khi cần.";
-    case "save": return "Xong chỉ đóng ô sửa. Dùng Lưu thay đổi để giữ nội dung trước khi rời đi. Trạng thái Đã lưu xác nhận bản trên máy này; chưa có đồng bộ tài khoản.";
+    case "new-project": return p.context.projectId ? "Tạo câu chuyện mới; thay đổi hiện tại sẽ được lưu trước." : "Tạo nơi viết cho câu chuyện của bạn.";
+    case "idea": return "Ghi lại khoảnh khắc, điều muốn giữ và giới hạn nếu có.";
+    case "choices": return p.questionCount ? "Trả lời từng câu hỏi để chọn hướng phát triển." : "Xem lại lựa chọn trước khi tạo Story plan.";
+    case "draft": return "Đọc và sửa trực tiếp trên từng card.";
+    case "outline": return "Chia Story plan thành các cảnh. Tự viết trước; AI là tùy chọn.";
+    case "script": return "Chọn một cảnh để viết và lưu kịch bản.";
+    case "save": return "Lưu thay đổi trước khi rời đi hoặc mở lại dự án.";
   }
 }
 
 function instructions(step: TourStep, hasDraft: boolean): string[] {
   switch (step) {
-    case "new-project": return ["Dùng Dự án của bạn để mở lại câu chuyện; Dự án mới bắt đầu câu chuyện khác.",
-      "Thanh Ý tưởng → Làm rõ → Story plan đưa bạn tới từng vùng trên cùng màn hình."];
-    case "idea": return ["Kể một ý tưởng ngắn. Điều muốn giữ hoặc giới hạn thực hiện là tùy chọn.",
-      "Vùng đã xong có thể thu gọn. Bấm tiêu đề vùng để mở lại và sửa."];
-    case "language": return ["Cùng làm rõ ý tưởng lưu bản hiện tại rồi hỏi AI. Hướng dẫn không tự chạy AI.",
-      "Điều FirstFrame đã hiểu cho bạn đọc lại cách hệ thống hiểu ý tưởng."];
-    case "choices": return ["Trả lời rồi bấm Tiếp tục; chưa chắc thì chọn Để quyết định sau. Sửa câu trả lời hoặc số câu hỏi mở lại câu cũ.",
-      "Khi trả lời hết, Hỏi thêm từ câu trả lời của tôi sẽ nối câu hỏi mới và giữ câu cũ, tối đa 20 câu.",
-      "Xem lại các lựa chọn chỉ mở bản tổng hợp. FirstFrame chỉ tạo khi bạn bấm Đồng ý; sửa lựa chọn cần xem lại và đồng ý lại.",
-      "Sau Đồng ý, xem ba nhóm cùng các bước con: chuẩn bị lựa chọn → phát triển story plan → đối chiếu và giữ kết quả. Bước chưa chạy vẫn hiện chờ.",
-      hasDraft ? "Tạo lại sẽ giữ một đề xuất riêng; bản đang viết chỉ đổi khi bạn chọn nhận." : "Khi hoàn tất, story plan xuất hiện ngay bên dưới."];
-    case "draft": return ["Đọc ý đồ đã lưu và nguồn được dùng cho góp ý. Đây là story plan để phát triển tiếp, chưa phải kịch bản theo cảnh.",
-      "Trong Toàn bộ góp ý, đọc nhận xét, nguồn đối chiếu và bước sửa đi cùng nhau. Bạn có thể từ chối góp ý hoặc giữ cách kể hiện tại.",
-      "Sửa phần này chỉ mở đúng ô sửa, không lưu hay gọi AI. Nếu góp ý liên quan nhiều phần, bạn tự chọn phần muốn sửa; góp ý cũ hoặc thiếu nguồn chỉ để đọc.",
-      "Sửa trên card. Xong giữ phần đang viết; Hủy hoặc Escape hoàn tác riêng card đó. Sửa tiếp làm góp ý thuộc bản trước.",
-      "Bấm Xem góp ý trên card rồi tự bấm nhận phản hồi. FirstFrame lưu trước khi gửi AI; bạn không cần chạy review để hoàn tất hướng dẫn."];
-    case "save": return ["Tùy chọn bản lưu có tải JSON và Mở lại bản đã lưu. Không thể mở lại khi còn thay đổi chưa lưu.",
-      "Nhận phản hồi trên bản hiện tại lưu trước rồi mới gửi AI. Sửa tiếp khiến góp ý cũ chỉ còn để tham khảo; hãy lưu trước khi rời đi.",
-      "Đề xuất và lịch sử cho xem bản AI, bản trước và câu trả lời cũ. Chỉ nhận hoặc khôi phục khi bạn chủ động chọn.",
-      "Nếu hai tab xung đột revision, phần đang sửa được giữ. Đọc báo lỗi trước khi quyết định tiếp tục.",
-      "Lưu dàn cảnh M2 rồi bắt đầu M3: chọn cảnh để tự viết; nguồn, ảnh và góp ý nằm trong phần hỗ trợ thu gọn. AI viết thử chỉ thay cảnh khi bạn chọn dùng. Lưu, đọc toàn bản đã lưu và chọn nguồn M4. Cảnh còn thiếu vẫn lưu nháp được; không cần AI để hoàn tất đường viết tay. Chọn nguồn chưa phải xuất bản.",
-      "Hướng dẫn sử dụng luôn mở lại được. Khu Công cụ chứa các công cụ bổ sung."];
+    case "new-project": return ["Chọn Dự án mới để bắt đầu."];
+    case "idea": return ["Viết ý tưởng, rồi chọn Cùng làm rõ ý tưởng."];
+    case "choices": return ["Trả lời hoặc để quyết định sau."];
+    case "draft": return [hasDraft ? "Sửa từng card; Xong để giữ, Lưu thay đổi để lưu." : "Story plan sẽ xuất hiện sau bước Làm rõ."];
+    case "outline": return ["Chọn nguồn, thêm cảnh, rồi lưu dàn cảnh."];
+    case "script": return ["Chọn cảnh, viết, rồi lưu kịch bản."];
+    case "save": return ["Lưu bản đang sửa trước khi đóng hoặc chuyển dự án."];
   }
 }
 
@@ -157,8 +136,6 @@ export function OnboardingTour(props: Props) {
     if (!record) return;
     const step = record.stepId;
     let selector = `[data-tour="${step}"]`;
-    if (step === "language") selector = !props.idea.trim() ? "#idea"
-      : document.querySelector('[data-tour-action="analyze"]:enabled') ? '[data-tour-action="analyze"]' : "#response-language";
     if (step === "choices") {
       const index = Array.from({ length: props.questionCount }, (_, i) => i).find(i => !props.answers[i]?.trim());
       selector = index === undefined ? '[data-choice-review]' : `#answer-${index}`;
