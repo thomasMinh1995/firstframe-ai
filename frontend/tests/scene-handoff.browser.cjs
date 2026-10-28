@@ -37,7 +37,7 @@ const path=require('node:path');
  await pop.getByLabel('Tên cảnh',{exact:true}).fill('Lá thư');
  await pop.getByLabel('Chuyện gì xảy ra trong cảnh này?',{exact:true}).fill('  Cha đặt thư.\n\nCon chưa mở.  ');
  await pop.getByRole('tab',{name:'Phác hình',exact:true}).click();
- assert.match(await pop.innerText(),/Runtime\/model cần được cài/);
+ await pop.getByRole('button',{name:'Thông tin: Phác hình theo yêu cầu',exact:true}).click();assert.match(await pop.innerText(),/Runtime\/model cần được cài/);
  assert.equal(await pop.locator('img').count(),0);
  await pop.getByRole('button',{name:'Đóng',exact:true}).click();
  const prepare=()=>area.getByRole('button',{name:'Lưu bản dàn cảnh để viết tiếp',exact:true}).click();
@@ -92,7 +92,7 @@ const path=require('node:path');
  await page.reload();await handoff.locator('summary').click();
  assert.deepEqual(await handoff.locator('[data-handoff-scene]').evaluateAll(items=>items.map(n=>n.dataset.handoffScene)),saved.scene_handoff.scenes.map(s=>s.id));
  assert.match(await handoff.innerText(),/Cha lùi một bước/);assert.doesNotMatch(await handoff.innerText(),/Ý tự chỉnh chưa dùng/);
- assert.match(await handoff.innerText(),/Sang M3 để tự viết hoặc chủ động chọn phương án AI/);
+ await handoff.getByRole('button',{name:'Thông tin: Cách dùng bản nguồn',exact:true}).click();assert.match(await handoff.innerText(),/Sang M3 để tự viết hoặc chủ động chọn phương án AI/);
  for(const width of [1280,390,320]){
    await page.setViewportSize({width,height:900});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
  }

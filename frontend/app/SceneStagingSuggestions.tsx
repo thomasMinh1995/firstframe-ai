@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, useState } from "react";
+import { SceneHint } from "./SceneHint";
 import type { Project } from "./projectsApi";
 import { stagingGroups, stagingLabels, type Scene, type SceneSuggestionInput, type StagingIdea, type StagingUse } from "./sceneTypes";
 
@@ -15,9 +16,8 @@ export function SceneStagingSuggestions({ project, scene, canUse, onSuggest, onI
   const batches = (project.staging_proposals ?? []).filter(p => p.mode === "staging" && p.target_scene_id === scene.id);
   const uncertain = sent !== null && !all.some(p => p.id === sent);
   return <section className="staging-feedback" aria-label="Góp ý dàn cảnh có căn cứ">
-    <h4>Thử cách thể hiện bằng hình ảnh</h4>
-    <p className="storage-note">FirstFrame đưa phương án để bạn cân nhắc. Trích đoạn khớp nguồn không chứng minh cách diễn giải hoặc phương án là đúng.
-      Chỉ dùng điều có ích; bạn vẫn tự viết và lưu được khi AI lỗi.</p>
+    <SceneHint title="Thử cách thể hiện bằng hình ảnh"><p>FirstFrame đưa phương án để bạn cân nhắc. Trích đoạn khớp nguồn không chứng minh cách diễn giải hoặc phương án là đúng.
+      Chỉ dùng điều có ích; bạn vẫn tự viết và lưu được khi AI lỗi.</p><p>Các phương án được giữ riêng, chưa tự thay cảnh.</p></SceneHint>
     <div className="scene-heading"><button type="button" disabled={uncertain || all.some(p => p.status === "pending")}
       onClick={() => { const request_id = crypto.randomUUID(); setSent(request_id);
         void onSuggest({ request_id, mode: "staging", target_scene_id: scene.id, instructions: "" }); }}>Gợi ý cách dàn cảnh</button>
@@ -25,7 +25,6 @@ export function SceneStagingSuggestions({ project, scene, canUse, onSuggest, onI
     {uncertain && <p role="status">Chưa rõ kết quả yêu cầu. Kiểm tra góp ý đã lưu; không tự gọi AI lại.</p>}
     {[...batches].reverse().map(p => <details key={p.id} className="scene-proposal" open={p.status === "ready"}>
       <summary>Góp ý cảnh · nguồn M2 phiên bản {p.source_outline.version} · {p.status === "pending" ? "đang chờ" : p.status === "failed" ? "lỗi" : p.status === "discarded" ? "đã bỏ" : "đã giữ kết quả"}</summary>
-      <p className="storage-note">Các phương án được giữ riêng, chưa tự thay cảnh.</p>
       {p.status === "pending" && <div><p role="status">Chưa rõ kết quả. Bỏ yêu cầu chỉ dừng chờ; model có thể vẫn chạy, kết quả đến sau sẽ không được dùng.</p>
         <button type="button" className="secondary" onClick={() => onDiscardBatch(p.id)}>Lưu sửa và bỏ yêu cầu dàn cảnh đang chờ</button></div>}
       {p.status === "failed" && <p role="status">Chưa có góp ý có nguồn hợp lệ ({p.error}). Bản đang viết vẫn được giữ.</p>}
