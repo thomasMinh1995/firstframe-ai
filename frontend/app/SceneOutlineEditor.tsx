@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import { useEffect, useId, useRef, useState, type CSSProperties } from "react";
 import type { Project } from "./projectsApi";
 import { emptyScene, stagingLabels, type Scene, type SceneOutline, type StagingKey, type SceneSuggestionInput, type StagingUse, stagingGroups } from "./sceneTypes";
 import { StoryPath } from "./StoryPlanEditor";
@@ -8,6 +8,7 @@ import { SceneStagingSuggestions } from "./SceneStagingSuggestions";
 import { SceneSuggestions } from "./SceneSuggestions";
 import {SceneSketchPanel, SketchImage, type SketchInput} from "./SceneSketchPanel";
 import { IntentDetails } from "./AuthorIntentCard";
+import { SceneHint } from "./SceneHint";
 import "./sceneOutline.css";
 
 type Tab = "content" | "staging" | "sketch";
@@ -87,7 +88,7 @@ export function SceneOutlineEditor({ project, saved, dirty, sourceCurrent, error
           onChange={e => changeScene({ [key]: e.target.value })} />}</div>;
 
   return <section className="scene-outline panel" data-workspace-stage="workspace-outline" aria-labelledby="workspace-outline">
-    <header className="scene-heading"><div><p className="eyebrow">M2 · Dàn cảnh</p>
+    <header className="scene-heading"><div><p className="eyebrow">Dàn cảnh</p>
       <h2 id="workspace-outline" tabIndex={-1}>Kể câu chuyện qua từng cảnh</h2></div>
       {outline && <button type="button" onClick={add} disabled={outline.scenes.length >= 60}>Tự thêm cảnh</button>}</header>
     <SceneHint title="Bắt đầu từ đâu?">
@@ -98,6 +99,7 @@ export function SceneOutlineEditor({ project, saved, dirty, sourceCurrent, error
         <li>Lưu thay đổi rồi đối chiếu bản đã lưu để viết tiếp. Đóng card hoặc Xong giữ phần đang viết, chưa lưu.
           Bạn không cần dùng AI hoặc có ảnh để hoàn tất dàn cảnh.</li>
       </ol>
+      {!outline && <p>Tạo bản dàn cảnh rỗng và giữ nguồn trên máy; không tự tạo cảnh hoặc gọi AI.</p>}
       <p>Gợi ý AI sẽ lưu các sửa đang chờ trước khi gửi yêu cầu. Nếu lỗi, kiểm tra góp ý đã lưu; không tự chạy lại.</p>
     </SceneHint>
     {!outline ? <div className="scene-start">
@@ -110,7 +112,6 @@ export function SceneOutlineEditor({ project, saved, dirty, sourceCurrent, error
       {!saved.draft && !saved.versions.length && <p>Chưa có story plan đã lưu để chọn làm nguồn.</p>}
       <button type="button" disabled={source === "current" && !saved.draft} onClick={() => onStart(source)}>
         {dirty ? "Lưu thay đổi và bắt đầu dàn cảnh" : "Bắt đầu dàn cảnh từ bản đã chọn"}</button>
-      <p className="storage-note">Tạo bản dàn cảnh rỗng và giữ nguồn trên máy; không tự tạo cảnh hoặc gọi AI.</p>
     </div> : <>
       <details className="scene-source"><summary>Story plan và ý đồ nguồn · M2 phiên bản {outline.version}</summary>
         <p>Nguồn {outline.source.version_id === "current" ? "bản hiện tại khi bắt đầu" : "bản lịch sử đã chọn"}, revision dự án {outline.source.project_revision}.</p>
@@ -127,7 +128,7 @@ export function SceneOutlineEditor({ project, saved, dirty, sourceCurrent, error
         onUse={(scenes, proposalId) => { setUndo({ before: structuredClone(outline.scenes), after: JSON.stringify(scenes), proposalId: project.pending_scene_proposal_id, stagingUse: project.pending_staging_use });
           onChange({ ...outline, scenes }, proposalId, null);
           setNotice("Đã đưa đề xuất vào bản đang sửa. Bạn tự chỉnh và lưu; AI chưa xác nhận chất lượng."); }} />
-      <div className="scene-heading"><span>TRÌNH TỰ CẢNH · đọc theo mũi tên</span><span>{outline.scenes.length} cảnh</span></div>
+      <div className="story-draft-caption"><span>TRÌNH TỰ CẢNH · đọc theo mũi tên</span><span>{outline.scenes.length} cảnh</span></div>
       <div className="scene-canvas"><StoryPath list={list} count={outline.scenes.length} orderKey={outline.scenes.map(s => s.id).join()} />
         <ol ref={list} className="scene-path" aria-label="Danh sách cảnh">
           {outline.scenes.map((s, i) => <li key={s.id} data-scene-id={s.id} style={{
@@ -136,7 +137,7 @@ export function SceneOutlineEditor({ project, saved, dirty, sourceCurrent, error
           } as CSSProperties}>
             <button type="button" className="scene-select" data-select-scene={s.id} aria-haspopup="dialog"
               aria-expanded={selected === s.id} onClick={() => choose(s.id)}>
-              <span className="eyebrow">Cảnh {i + 1}</span>{project.selected_scene_sketches?.[s.id]
+              <span className="story-card-number"><span className="scene-sr-only">Cảnh </span>{i + 1}</span>{project.selected_scene_sketches?.[s.id]
                 ? <><SketchImage key={project.selected_scene_sketches[s.id]} projectId={project.id} sketchId={project.selected_scene_sketches[s.id]} alt={`Hình phác đã giữ: ${s.title}`} />
                   {(dirty || !(project.applicable_sketch_ids??[]).includes(project.selected_scene_sketches[s.id])) && <span>Hình đã giữ thuộc bản nguồn trước; xem lại trong Phác hình.</span>}</>
                 : <span className="scene-image-empty">Chưa có hình phác</span>}
@@ -151,10 +152,10 @@ export function SceneOutlineEditor({ project, saved, dirty, sourceCurrent, error
       <div className="scene-heading"><p role="status">{notice}</p>{undo && <button type="button" className="secondary" onClick={undoChange}>Hoàn tác thao tác cảnh</button>}</div>
       {selectedScene && <div ref={dialog} popover="auto" className="scene-popover" role="dialog" aria-labelledby={`${id}-dialog-title`}
         onToggle={e => { if (e.target === e.currentTarget && (e.nativeEvent as ToggleEvent).newState === "closed") { setSelected(null); setEditingChoice(null); } }}>
-        <header className="scene-heading"><h3 id={`${id}-dialog-title`}>Chi tiết cảnh {outline.scenes.findIndex(s => s.id === selected) + 1}</h3>
+        <header className="scene-heading"><SceneHint title={`Chi tiết cảnh ${outline.scenes.findIndex(s => s.id === selected) + 1}`} heading="h3" titleId={`${id}-dialog-title`}>Đóng hoặc Esc giữ phần đang sửa.</SceneHint>
           <button type="button" data-close-scene className="secondary" onClick={close}>Đóng</button></header>
         {error && <p className="error" role="alert">{error}</p>}
-        <div className="scene-heading"><span className="storage-note">Đóng hoặc Esc giữ phần đang sửa.</span><div className="scene-order">
+        <div className="scene-heading"><div className="scene-order">
           <button type="button" disabled={outline.scenes[0].id === selected} onClick={() => move(-1)}>Lên trước</button>
           <button type="button" disabled={outline.scenes.at(-1)?.id === selected} onClick={() => move(1)}>Xuống sau</button></div></div>
         {fields("title", "Tên cảnh", 200)}
@@ -201,7 +202,7 @@ export function SceneOutlineEditor({ project, saved, dirty, sourceCurrent, error
       </div>}
       <div className="scene-next"><button type="button" disabled={!outline.scenes.length || outline.scenes.some(s => !s.title.trim() || !s.action.trim())}
         onClick={onPrepare}>Lưu bản dàn cảnh để viết tiếp</button>
-        <p className="storage-note">Thao tác này lưu bản nguồn để đối chiếu; bắt đầu viết từng cảnh tại M3, lưu rồi đọc toàn bản và chọn nguồn M4. Bạn có thể đi hết đường viết tay, không cần AI hay ảnh. Chọn nguồn chưa phải xuất bản.</p>
+        <SceneHint title="Viết tiếp từ bản đã lưu">Thao tác này lưu bản nguồn để đối chiếu; bắt đầu viết từng cảnh tại M3, lưu rồi đọc toàn bản và chọn nguồn M4. Bạn có thể đi hết đường viết tay, không cần AI hay ảnh. Chọn nguồn chưa phải xuất bản.</SceneHint>
         {saved.scene_handoff && <details className="scene-handoff">
           <summary>Đối chiếu bản dàn cảnh đã lưu để viết tiếp</summary>
           <p className="storage-note">Bản nguồn đã lưu: M2 phiên bản {saved.scene_handoff.version}, revision dự án {saved.scene_handoff.project_revision} · {saved.scene_handoff.scenes.length} cảnh.</p>
@@ -214,7 +215,7 @@ export function SceneOutlineEditor({ project, saved, dirty, sourceCurrent, error
               <strong>{["Địa điểm", "Thời điểm", "Nhân vật", "Nhân vật muốn gì", "Đóng góp của cảnh", "Cảm nhận người xem", "Điều muốn giữ/tránh"][i]}: </strong>{s[key]}</p>)}
             {Object.entries(s.staging_choices).map(([key, text]) => text && <p key={key} className="preserve-lines"><strong>{stagingLabels[key as StagingKey]}: </strong>{text}</p>)}
           </li>)}</ol>
-          <p className="storage-note">Chỉ những lựa chọn đã đưa vào cảnh và lưu mới có trong bản này; đề xuất riêng không được tự nhận. Sang M3 để tự viết hoặc chủ động chọn phương án AI, rồi lưu và đọc toàn bản trước khi chọn nguồn M4.</p>
+          <SceneHint title="Cách dùng bản nguồn">Chỉ những lựa chọn đã đưa vào cảnh và lưu mới có trong bản này; đề xuất riêng không được tự nhận. Sang M3 để tự viết hoặc chủ động chọn phương án AI, rồi lưu và đọc toàn bản trước khi chọn nguồn M4.</SceneHint>
         </details>}
       </div>
       {!!project.scene_versions?.length && <details className="scene-history"><summary>Lịch sử dàn cảnh ({project.scene_versions.length})</summary>
@@ -224,13 +225,4 @@ export function SceneOutlineEditor({ project, saved, dirty, sourceCurrent, error
       </details>}
     </>}
   </section>;
-}
-
-function SceneHint({ title, children }: { title: string; children: ReactNode }) {
-  const [open, setOpen] = useState(false); const id = useId();
-  return <div className="scene-help"><div className="scene-help-heading"><h4>{title}</h4>
-    <button type="button" className="scene-info" aria-label={`Thông tin: ${title}`} aria-expanded={open} aria-controls={id}
-      onClick={() => setOpen(!open)}>ⓘ</button></div>
-    <div className={`scene-help-content${open ? " is-open" : ""}`} id={id} aria-hidden={!open}><div><div className="storage-note">{children}</div></div></div>
-  </div>;
 }

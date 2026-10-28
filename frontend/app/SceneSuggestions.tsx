@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, useState } from "react";
+import { SceneHint } from "./SceneHint";
 import type { Project } from "./projectsApi";
 import type { Scene, SceneProposal, SceneSuggestionInput } from "./sceneTypes";
 
@@ -22,9 +23,8 @@ export function SceneSuggestions({ project, dirty, onSuggest, onInspect, onDisca
   const targetExists = outline.scenes.some(s => s.id === target);
   const chosenTarget = targetExists ? target : "";
   return <section className="scene-suggestions" aria-label="FirstFrame gợi ý cảnh">
-    <h3>FirstFrame gợi ý cảnh</h3>
-    <p className="storage-note">Lưu mọi sửa đang chờ, rồi dùng story plan và ý đồ nguồn ở trên để gợi ý.
-      Đề xuất được giữ riêng; bạn tự đọc, chỉnh, bỏ hoặc chọn dùng. Không có điểm chứng nhận chất lượng.</p>
+    <SceneHint title="FirstFrame gợi ý cảnh" heading="h3"><p>Lưu mọi sửa đang chờ, rồi dùng story plan và ý đồ nguồn ở trên để gợi ý.
+      Đề xuất được giữ riêng; bạn tự đọc, chỉnh, bỏ hoặc chọn dùng. Không có điểm chứng nhận chất lượng.</p></SceneHint>
     {!!outline.scenes.length && <div className="scene-pair">
       <div><label htmlFor={`${id}-mode`}>Loại gợi ý</label><select id={`${id}-mode`} value={mode} onChange={e => setMode(e.target.value as typeof mode)}>
         <option value="append">Thêm một cảnh</option><option value="develop">Phát triển một cảnh</option></select></div>

@@ -21,7 +21,7 @@ const fs=require('node:fs/promises');const path=require('node:path');
  for(const title of ['Hành động & diễn xuất','Không gian & chi tiết','Cách nhìn qua máy quay'])assert.equal(await feedback.getByRole('heading',{name:title,exact:true}).count(),1);
  assert.equal(await feedback.locator('blockquote').count(),3);
  let stored=await read();const original=structuredClone(stored.scene_outline);assert.deepEqual(original.scenes[0].staging_choices,{});
- assert.match(await feedback.innerText(),/không chứng minh/);
+ const info=feedback.getByRole('button',{name:'Thông tin: Thử cách thể hiện bằng hình ảnh',exact:true});assert.equal(await info.getAttribute('aria-expanded'),'false');await info.click();assert.match(await feedback.innerText(),/không chứng minh/);await info.click();
  const first=()=>feedback.getByRole('article',{name:'Ý góp ý: Vị trí & chuyển động',exact:true}).first();
  await first().getByRole('button',{name:'Chỉnh ý',exact:true}).click();
  const editBox=first().getByLabel('Phương án tự chỉnh: Vị trí & chuyển động',{exact:true});
