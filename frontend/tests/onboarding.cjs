@@ -31,6 +31,16 @@ assert.equal(reduce(load(record('dismissed')), { type: 'load', raw: null }).reco
 assert.deepEqual([entryStep(empty), entryStep(idea), entryStep(analyzed), entryStep(draft), entryStep(changed)],
   ['new-project', 'idea', 'choices', 'draft', 'idea']);
 assert.equal(entryStep({ ...draft, hasAnalysis: false }), 'idea');
+// Help always restarts at creation, regardless of data or saved tour progress.
+for (const context of [empty, idea, analyzed, draft, changed]) {
+  for (const status of ['active', 'waiting', 'paused', 'dismissed', 'completed']) {
+    const restarted = reduce(load(record(status, 'script')), { type: 'open', resume: false, context });
+    assert.equal(restarted.record.stepId, 'new-project');
+    assert.equal(restarted.record.projectId, context.projectId);
+    assert.equal(restarted.record.status, 'active');
+  }
+}
+assert.equal(reduce(load(record('paused', 'script')), { type: 'open', resume: true, context: draft }).record.stepId, 'script');
 assert.equal(nextStep('idea', idea), null);
 assert.equal(nextStep('idea', analyzed), 'choices');
 assert.equal(previousStep('draft', changed), 'idea');

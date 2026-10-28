@@ -70,7 +70,7 @@ type Props = {
   idea: string; answers: string[]; questionCount: number;
 };
 const titles: Record<TourStep, string> = {
-  "new-project": "Bắt đầu", idea: "Ý tưởng", choices: "Làm rõ", draft: "Story plan",
+  "new-project": "Dự án mới", idea: "Ý tưởng", choices: "Làm rõ", draft: "Story plan",
   outline: "Dàn cảnh", script: "Kịch bản", save: "Lưu",
 };
 const targetLabels: Record<TourStep, string> = {

@@ -96,7 +96,7 @@ export function reduceTour(s: TourState, a: Action): TourState {
       return r ? s : { ...paused(s), offerAllowed: false };
     }
     case "open": {
-      const step = a.resume ? continuation(s, a.context) : entryStep(a.context);
+      const step = a.resume ? continuation(s, a.context) : "new-project";
       if (!step) return s;
       return { ...s, offerAllowed: false, session: s.session + 1, request: null, waitingReady: false, hint: null,
         record: { version: 2, status: "active", stepId: step, projectId: a.context.projectId } };
