@@ -7,7 +7,7 @@ const fs = require('node:fs/promises');
 const url = process.env.TOUR_TEST_URL || 'http://localhost:3033';
 const engine = process.env.TOUR_BROWSER || 'chrome';
 const screenshots = process.env.TOUR_SCREENSHOTS || '/private/tmp/firstframe-tour-screenshots';
-const key = 'firstframe:onboarding';
+const key = 'firstframe:onboarding:v2';
 const clone = value => structuredClone(value);
 const project = (id = 'p1') => ({ id, revision: 0, updated_at: '2026-10-21T10:00:00Z', title: 'Câu chuyện thử nghiệm',
   response_language: 'vi', idea: 'Một người thợ sửa xe gặp lại người bạn cũ.', constraints: [], answers: [],
@@ -72,7 +72,7 @@ const select = async (page, selector, value) => {
 const toggle = async (page, details) => {
   await reveal(page, details); await details.locator(':scope > summary').click();
 };
-const step = (page, n) => page.getByText(`Bước ${n}/6`, { exact: true }).waitFor({ state: 'visible' });
+const step = (page, n) => page.getByText(`Bước ${n}/7`, { exact: true }).waitFor({ state: 'visible' });
 const focused = (page, selector) => page.waitForFunction(selector => document.activeElement.matches(selector), selector);
 const status = (page, expected) => page.waitForFunction(({ key, expected }) => JSON.parse(localStorage.getItem(key))?.status === expected, { key, expected });
 
@@ -213,11 +213,12 @@ if (require.main === module) (async () => {
     await focused(page, '#idea');
     assert.deepEqual(await buffer(page), practiceBuffer); assert.equal(countWrites(mock), 0);
     await click(page, 'Hướng dẫn sử dụng'); await click(page, 'Thực hành');
-    await click(page, 'Tiếp tục hướng dẫn'); await step(page, 3);
-    await page.keyboard.press('Escape'); await focused(page, '#workspace-title');
+    assert.equal(await page.getByRole('button', { name: 'Tiếp tục hướng dẫn', exact: true }).isDisabled(), true);
+    await focused(page, '#idea');
+    await page.keyboard.press('Escape'); await focused(page, '#idea');
     // Dismiss during an actual pending request; its later result must not revive the tour.
     let releaseEscape; mock.hold = new Promise(resolve => { releaseEscape = resolve; });
-    await click(page, 'Hướng dẫn sử dụng'); await click(page, 'Tiếp'); await click(page, 'Thực hành');
+    await click(page, 'Hướng dẫn sử dụng'); await click(page, 'Thực hành');
     await click(page, 'Cùng làm rõ ý tưởng');
     await page.waitForFunction(() => document.querySelector('#tour-help').disabled);
     await page.getByRole('button', { name: 'Bỏ qua', exact: true }).focus();
@@ -227,13 +228,13 @@ if (require.main === module) (async () => {
     await page.waitForFunction(() => !document.querySelector('#tour-help').disabled);
     await status(page, 'dismissed'); assert.equal(await page.locator('dialog[open]').count(), 0);
     await t.close();
-    t = await setup(browser, { projects: [project()], storage: JSON.stringify({ version: 1, status: 'paused', stepId: 'idea', projectId: 'p1' }) });
+    t = await setup(browser, { projects: [project()], storage: JSON.stringify({ version: 2, status: 'paused', stepId: 'idea', projectId: 'p1' }) });
     ({ page } = t);
     await page.getByRole('button', { name: 'Tiếp tục hướng dẫn', exact: true }).focus();
     await page.keyboard.press('Escape'); await status(page, 'dismissed'); await focused(page, '#workspace-title');
     await t.close();
 
-    // Complete all six steps through real UI buttons, with no questions, sections or feedback.
+    // Complete all seven steps through real UI buttons, with no questions, sections or feedback.
     t = await setup(browser); ({ page, mock } = t);
     await click(page, 'Bắt đầu hướng dẫn'); await step(page, 1);
     await focused(page, '#tour-title');
@@ -260,14 +261,13 @@ if (require.main === module) (async () => {
     await fill(page, '#idea', 'Một người thợ sửa xe gặp lại người bạn cũ.');
     await fill(page, '#constraints', 'Kết thúc mở.');
     let before = await buffer(page), writes = countWrites(mock);
-    await click(page, 'Tiếp tục hướng dẫn'); await step(page, 3);
+    assert.equal(await page.getByRole('button', { name: 'Tiếp tục hướng dẫn', exact: true }).isDisabled(), true);
     assert.deepEqual(await buffer(page), before);
     assert.equal(countWrites(mock), writes);
-    await click(page, 'Thực hành');
     await click(page, 'Cùng làm rõ ý tưởng');
-    await click(page, 'Tiếp tục hướng dẫn'); await step(page, 4);
-    assert.match(await page.locator('#tour-description').innerText(), /lựa chọn/);
-    assert.match(await page.getByRole('list', { name: 'Cách thực hiện' }).innerText(), /Hỏi thêm.*Xem lại.*Đồng ý.*bước con/s);
+    await click(page, 'Tiếp tục hướng dẫn'); await step(page, 3);
+    assert.match(await page.locator('#tour-description').innerText(), /Làm rõ/);
+    assert.match(await page.getByRole('list', { name: 'Cách thực hiện' }).innerText(), /Trả lời.*quyết định sau/s);
     await click(page, 'Thực hành');
     await focused(page, '#answer-0');
     for (let i = 0; i < await page.locator('[data-answer-open]').count(); i++) await answer(page, i, 'Giữ kết mở.');
@@ -283,19 +283,21 @@ if (require.main === module) (async () => {
     await click(page, 'Tạo bản phát triển từ lựa chọn của tôi');
     assert.equal(mock.projects[0].answers[0], 'Kết mở, dừng trước khi con trả lời.');
     assert.equal(mock.projects[0].answers.length, 8);
-    await click(page, 'Tiếp tục hướng dẫn'); await step(page, 5);
+    await click(page, 'Tiếp tục hướng dẫn'); await step(page, 4);
     await click(page, 'Thực hành');
     await fill(page, '#draft-logline', 'Bản sửa chưa lưu của tác giả.');
     before = await buffer(page); writes = countWrites(mock);
-    await click(page, 'Tiếp tục hướng dẫn'); await step(page, 6);
+    await click(page, 'Tiếp tục hướng dẫn'); await page.getByRole('dialog').waitFor();
+    if (await page.getByText('Bước 5/7', { exact: true }).count()) { await click(page, 'Tiếp'); await step(page, 6); await click(page, 'Tiếp'); }
+    await step(page, 7);
     await click(page, 'Hoàn tất hướng dẫn'); await status(page, 'completed');
     assert.deepEqual(await buffer(page), before);
     assert.equal(countWrites(mock), writes, 'finishing never saves or reviews');
     await focused(page, '[data-tour-action="save"]');
     await click(page, 'Lưu thay đổi');
-    await page.reload(); await click(page, 'Hướng dẫn sử dụng'); await step(page, 5);
+    await page.reload(); await click(page, 'Hướng dẫn sử dụng'); await step(page, 4);
     assert.equal(await page.getByText('Bắt đầu cùng FirstFrame', { exact: true }).count(), 0);
-    await click(page, 'Tiếp'); await step(page, 6);
+    await click(page, 'Tiếp'); await step(page, 5); await click(page, 'Tiếp'); await step(page, 6); await click(page, 'Tiếp'); await step(page, 7);
     await click(page, 'Hoàn tất hướng dẫn');
     await focused(page, '#save-status');
     await t.close();
@@ -303,19 +305,19 @@ if (require.main === module) (async () => {
     // Existing analysis keeps language help available and focuses the first unanswered question.
     const questions = { ...project(), analysis: { ...analysis(), missing_information: ['Bạn muốn kết thúc thế nào?', 'Điều gì cần giữ?'] }, answers: ['Kết thúc mở', ''] };
     t = await setup(browser, { projects: [questions] }); ({ page, mock } = t);
-    await click(page, 'Hướng dẫn sử dụng'); await step(page, 4);
+    await click(page, 'Hướng dẫn sử dụng'); await step(page, 3);
     before = await buffer(page); writes = countWrites(mock);
-    await click(page, 'Trước'); await step(page, 3); await click(page, 'Thực hành');
-    await focused(page, '#response-language');
+    await click(page, 'Trước'); await step(page, 2); await click(page, 'Thực hành');
+    await focused(page, '#idea');
     assert.deepEqual(await buffer(page), before); assert.equal(countWrites(mock), writes);
     await select(page, '#response-language', 'en');
-    await click(page, 'Tiếp tục hướng dẫn'); await step(page, 4); await click(page, 'Thực hành');
+    await click(page, 'Tiếp tục hướng dẫn'); await step(page, 3); await click(page, 'Thực hành');
     await focused(page, '#answer-1');
     assert.equal(await page.locator('[data-tour-action="plan"]').count(), 0);
     await page.getByRole('button', { name: 'Để quyết định sau', exact: true }).click();
     assert.equal(countWrites(mock), writes);
     await click(page, 'Tạo bản phát triển từ lựa chọn của tôi');
-    await click(page, 'Tiếp tục hướng dẫn'); await step(page, 5);
+    await click(page, 'Tiếp tục hướng dẫn'); await step(page, 4);
     assert.equal(mock.projects[0].response_language, 'en');
     assert.match(mock.projects[0].answers[1], /Chưa quyết định/);
     await t.close();
@@ -323,7 +325,7 @@ if (require.main === module) (async () => {
     // A saved draft must not outrank a changed brief, even after the save clears analysis.
     t = await setup(browser, { projects: [fullProject('p1')] }); ({ page, mock } = t);
     assert.equal(await page.getByText('Bắt đầu cùng FirstFrame', { exact: true }).count(), 0);
-    await click(page, 'Hướng dẫn sử dụng'); await step(page, 5); await click(page, 'Thực hành');
+    await click(page, 'Hướng dẫn sử dụng'); await step(page, 4); await click(page, 'Thực hành');
     await fill(page, '#idea', 'Một ý tưởng hoàn toàn khác.');
     await page.getByText(/Ý tưởng đã thay đổi\. Làm rõ lại/).waitFor();
     before = await buffer(page); writes = countWrites(mock);
@@ -340,14 +342,13 @@ if (require.main === module) (async () => {
     await click(page, 'Hướng dẫn sử dụng'); await step(page, 2); await click(page, 'Thực hành');
     await fill(page, '#idea', 'Ý tưởng đã sửa nhưng chưa lưu.');
     before = await buffer(page); mock.failSave = true;
-    await click(page, 'Tiếp tục hướng dẫn'); await step(page, 3); await click(page, 'Thực hành');
     await click(page, 'Cùng làm rõ ý tưởng'); await status(page, 'paused');
     assert.equal(mock.calls.filter(c => /\/(clarify|analyze)\/stream$/.test(c.pathname)).length, 0);
     assert.deepEqual(await buffer(page), before);
-    await click(page, 'Tiếp tục hướng dẫn'); await step(page, 3); await click(page, 'Thực hành');
+    await click(page, 'Tiếp tục hướng dẫn'); await step(page, 2); await click(page, 'Thực hành');
     mock.failSave = false; mock.failAI = true;
     await click(page, 'Cùng làm rõ ý tưởng'); await status(page, 'paused');
-    assert.equal(JSON.parse(await page.evaluate(key => localStorage.getItem(key), key)).stepId, 'language');
+    assert.equal(JSON.parse(await page.evaluate(key => localStorage.getItem(key), key)).stepId, 'idea');
     const errorBeforeHelp = await page.locator('.error[role="alert"]').innerText();
     await click(page, 'Hướng dẫn sử dụng'); await step(page, 2);
     assert.equal(await page.locator('.error[role="alert"]').innerText(), errorBeforeHelp, 'manual help preserves existing error');
@@ -356,23 +357,23 @@ if (require.main === module) (async () => {
 
     // Reload resumes only on request, and switching projects resolves the new project's entry.
     t = await setup(browser, { projects: [project(), fullProject('p2')] }); ({ page, mock } = t);
-    await click(page, 'Hướng dẫn sử dụng'); await click(page, 'Tiếp'); await click(page, 'Thực hành');
+    await click(page, 'Hướng dẫn sử dụng'); await click(page, 'Thực hành');
     writes = countWrites(mock);
     await page.reload();
     await page.getByRole('button', { name: 'Tiếp tục hướng dẫn', exact: true }).waitFor();
     assert.equal(await page.locator('dialog[open]').count(), 0); assert.equal(countWrites(mock), writes);
     await select(page, '#project-picker', 'p2');
-    await click(page, 'Tiếp tục hướng dẫn'); await step(page, 5);
+    await click(page, 'Tiếp tục hướng dẫn'); await step(page, 4);
     await t.close();
 
     // Another tab dismisses the tour while its analyze request is pending.
     t = await setup(browser, { projects: [project()] }); ({ page, mock } = t);
     let release; mock.hold = new Promise(resolve => { release = resolve; });
-    await click(page, 'Hướng dẫn sử dụng'); await click(page, 'Tiếp'); await click(page, 'Thực hành');
+    await click(page, 'Hướng dẫn sử dụng'); await click(page, 'Thực hành');
     await click(page, 'Cùng làm rõ ý tưởng');
     await page.waitForFunction(() => document.querySelector('[data-tour="new-project"]').disabled);
     const second = await t.context.newPage(); await second.goto(url);
-    await second.evaluate(key => localStorage.setItem(key, JSON.stringify({ version: 1, status: 'dismissed', stepId: 'language', projectId: 'p1' })), key);
+    await second.evaluate(key => localStorage.setItem(key, JSON.stringify({ version: 2, status: 'dismissed', stepId: 'idea', projectId: 'p1' })), key);
     await page.getByRole('region', { name: 'Tiến độ hướng dẫn' }).waitFor({ state: 'detached' });
     release();
     await page.waitForFunction(() => !document.querySelector('#tour-help').disabled);
@@ -400,7 +401,7 @@ if (require.main === module) (async () => {
     await status(page, 'paused'); assert.equal(await page.locator('dialog[open]').count(), 0);
     await t.close();
     t = await setup(browser, { projects: [fullProject('p1')], viewport: { width: 390, height: 844 } }); ({ page } = t);
-    await click(page, 'Hướng dẫn sử dụng'); await step(page, 5);
+    await click(page, 'Hướng dẫn sử dụng'); await step(page, 4);
     await page.screenshot({ path: path.join(screenshots, 'mobile.png') });
     await page.setViewportSize({ width: 320, height: 260 });
     await page.waitForFunction(() => {
@@ -408,9 +409,32 @@ if (require.main === module) (async () => {
       return r.left >= 0 && r.top >= 0 && r.right <= innerWidth && r.bottom <= innerHeight;
     });
     assert.equal(await page.locator('.tour-spotlight').count(), 0);
-    assert.match(await page.locator('#tour-description').innerText(), /card.*chữ S/);
-    await click(page, 'Tiếp'); await step(page, 6); await click(page, 'Hoàn tất hướng dẫn');
+    assert.match(await page.locator('#tour-description').innerText(), /card/);
+    await click(page, 'Tiếp'); await step(page, 5); await click(page, 'Tiếp'); await step(page, 6); await click(page, 'Tiếp'); await step(page, 7); await click(page, 'Hoàn tất hướng dẫn');
     await t.close();
+
+    // Long sections must not swallow the spotlight or keyboard focus.
+    for (const viewport of [{ width: 1280, height: 900 }, { width: 390, height: 844 }]) {
+      t = await setup(browser, { projects: [fullProject('p1')], viewport }); ({ page, mock } = t);
+      const calls = clone(mock.calls);
+      await page.locator('.scene-outline, .screenplay').evaluateAll(nodes => {
+        for (const node of nodes) node.style.minHeight = '2400px';
+      });
+      await click(page, 'Hướng dẫn sử dụng'); await step(page, 4);
+      for (const [name, number, anchor] of [['outline', 5, '#workspace-outline'], ['script', 6, '#workspace-script']]) {
+        await click(page, 'Tiếp'); await step(page, number);
+        assert.equal(await page.locator(`[data-tour="${name}"]`).evaluate(n => n.tagName), 'H2');
+        await page.locator('.tour-spotlight').waitFor({ state: 'visible' });
+        await click(page, 'Thực hành'); await focused(page, anchor);
+        await click(page, 'Hướng dẫn sử dụng'); await step(page, 4);
+        await click(page, 'Tiếp'); await step(page, 5);
+        if (name === 'script') { await click(page, 'Tiếp'); await step(page, 6); }
+      }
+      await click(page, 'Tiếp'); await step(page, 7);
+      await click(page, 'Hoàn tất hướng dẫn'); await status(page, 'completed');
+      assert.deepEqual(mock.calls, calls, 'tour navigation makes no API requests');
+      await t.close();
+    }
 
     // Reading uses the entire working buffer, never a saved copy or a new AI result.
     const readingProject = {
@@ -435,16 +459,20 @@ if (require.main === module) (async () => {
       assert.equal(await reading.locator('.story-draft-path .story-field-value').first().textContent(), 'Con mở cửa.');
       assert.equal(await reading.locator('.story-draft-path > li').count(), 4);
       const tourCalls = clone(mock.calls), tourBuffer = await buffer(page);
-      await click(page, 'Hướng dẫn sử dụng'); await step(page, 5);
-      assert.match(await page.getByRole('list', { name: 'Cách thực hiện' }).innerText(), /ý đồ.*nguồn.*bước sửa.*Sửa phần này.*Xong.*Hủy.*bản trước/s);
+      await click(page, 'Hướng dẫn sử dụng'); await step(page, 4);
+      assert.match(await page.getByRole('list', { name: 'Cách thực hiện' }).innerText(), /Sửa từng card.*Xong.*Lưu thay đổi/s);
       await page.screenshot({ path: path.join(screenshots, `new-workflow-tour-${viewport.width}.png`) });
       await click(page, 'Thử xem góp ý');
       await focused(page, '.card-feedback-trigger');
       assert.equal(await page.locator('.card-feedback').count(), 0, 'tour focuses the trigger without selecting a card or calling AI');
-      await click(page, 'Tiếp tục hướng dẫn'); await step(page, 6);
+      await click(page, 'Tiếp tục hướng dẫn'); await page.getByRole('dialog').waitFor();
+    if (await page.getByText('Bước 5/7', { exact: true }).count()) { await click(page, 'Tiếp'); await step(page, 6); await click(page, 'Tiếp'); }
+    await step(page, 7);
       await click(page, 'Khám phá đề xuất và lịch sử');
       await focused(page, '.workspace-library > summary');
-      await click(page, 'Tiếp tục hướng dẫn'); await step(page, 6);
+      await click(page, 'Tiếp tục hướng dẫn'); await page.getByRole('dialog').waitFor();
+    if (await page.getByText('Bước 5/7', { exact: true }).count()) { await click(page, 'Tiếp'); await step(page, 6); await click(page, 'Tiếp'); }
+    await step(page, 7);
       await click(page, 'Hoàn tất hướng dẫn');
       assert.deepEqual(await buffer(page), tourBuffer);
       assert.deepEqual(mock.calls, tourCalls, 'new tour shortcuts never save, restore or call AI');

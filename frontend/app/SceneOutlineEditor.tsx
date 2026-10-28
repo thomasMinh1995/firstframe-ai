@@ -89,7 +89,7 @@ export function SceneOutlineEditor({ project, saved, dirty, sourceCurrent, error
 
   return <section className="scene-outline panel" data-workspace-stage="workspace-outline" aria-labelledby="workspace-outline">
     <header className="scene-heading"><div><p className="eyebrow">Dàn cảnh</p>
-      <h2 id="workspace-outline" tabIndex={-1}>Kể câu chuyện qua từng cảnh</h2></div>
+      <h2 id="workspace-outline" data-tour="outline" tabIndex={-1}>Kể câu chuyện qua từng cảnh</h2></div>
       {outline && <button type="button" onClick={add} disabled={outline.scenes.length >= 60}>Tự thêm cảnh</button>}</header>
     <SceneHint title="Bắt đầu từ đâu?">
       <ol aria-label="Ba bước dàn cảnh">
