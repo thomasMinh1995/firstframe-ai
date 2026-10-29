@@ -32,7 +32,7 @@ export function ScreenplayEditor({project, savedProject, onSelectSource, onSourc
   const editorId=useId();
   const [toolsOpen,setToolsOpen]=useState(false);
   const toolsOpener=useRef<HTMLElement|null>(null);
-  useEffect(()=>{if(window.innerWidth>760)setToolsOpen(true)},[]);
+  useEffect(()=>{if(window.innerWidth>1000)setToolsOpen(true)},[]);
   function closeTools(){setToolsOpen(false);requestAnimationFrame(()=>toolsOpener.current?.focus({preventScroll:true}))}
 
   const editOrigin=useRef<Element|null>(null);

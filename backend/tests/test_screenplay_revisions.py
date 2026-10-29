@@ -153,3 +153,15 @@ def test_undo_refuses_reused_original_block_ids(writing):
     result=client.post(url+f"/screenplay-proposals/{proposal['id']}/undo",json={'revision':p['revision']})
     assert result.status_code==409,result.text
     assert client.get(url).json()==p
+
+
+def test_apply_rejects_preview_colliding_with_neighbor_without_writing(writing):
+    client,provider,p,_=writing;url=f"/api/projects/{p['id']}"
+    data=edit(p);data['screenplay']['scenes'][1]['blocks']=[block(text='Cảnh bên cạnh.')]
+    p=client.put(url,json=data).json()
+    ready=generate(client,p)[0].json();proposal=ready['screenplay_proposals'][-1]
+    preview=deepcopy(proposal['scene'])
+    preview['blocks'][0]['id']=ready['screenplay']['scenes'][1]['blocks'][0]['id']
+    result=client.post(url+f"/screenplay-proposals/{proposal['id']}/apply",json={'revision':ready['revision'],'scene':preview})
+    assert result.status_code==422,result.text
+    assert client.get(url).json()==ready

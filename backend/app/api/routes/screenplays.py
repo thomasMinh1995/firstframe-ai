@@ -1,6 +1,8 @@
 from datetime import UTC, datetime
 from uuid import uuid4
 
+from pydantic import ValidationError
+
 from fastapi import APIRouter, HTTPException
 
 from app.api.routes import projects
@@ -199,9 +201,13 @@ def apply_proposal(project_id: str, proposal_id: SceneId, request: ApplyProposal
         script = p.screenplay.model_copy(deep=True)
         script.scenes = [replacement if s.id == proposal.target_scene_id else s for s in script.scenes]
         body = {key:getattr(p,key) for key in ("title","idea","constraints","answers","draft","response_language")}
-        return projects.update_project(project_id, ProjectUpdate(**body, revision=p.revision,
-            screenplay=script.model_dump(include={"id","version","scenes"}), screenplay_proposal_id=proposal_id,
-            screenplay_proposal_previews={proposal_id:replacement}))
+        try:
+            update = ProjectUpdate(**body, revision=p.revision,
+                screenplay=script.model_dump(include={"id","version","scenes"}), screenplay_proposal_id=proposal_id,
+                screenplay_proposal_previews={proposal_id:replacement})
+        except ValidationError as error:
+            raise HTTPException(422, "Phương án không khớp giới hạn hoặc ID của toàn bộ kịch bản; bản đang viết vẫn giữ nguyên.") from error
+        return projects.update_project(project_id, update)
 
 
 @router.post("/{project_id}/screenplay-proposals/{proposal_id}/undo", response_model=ProjectResponse)
@@ -226,7 +232,6 @@ def undo_proposal(project_id: str, proposal_id: SceneId, request: RevisionReques
             **{k:v for k,v in proposal.source_screenplay.provenance.items() if k in affected}}
         p.screenplay.scenes = [before.model_copy(deep=True) if s.id == before.id else s for s in p.screenplay.scenes]
         p.screenplay.version += 1
-        from pydantic import ValidationError
         try:
             p.screenplay = Screenplay.model_validate(p.screenplay.model_dump())
         except ValidationError as error:

@@ -38,3 +38,11 @@ IAB/Chromium desktop 1280×900 và mobile 390×844, API 8034/frontend 3034, fixt
 Resolver dùng số cảnh và nhóm từ khóa cấu trúc Việt/Anh, không suy luận tên nhân vật hay mọi cách diễn đạt tự nhiên; tác giả xem/chọn phạm vi trước khi gửi. Thay đổi cấu trúc tái tạo candidate toàn bộ tối đa 6 cảnh và vẫn chịu giới hạn ngữ cảnh của pipeline; chưa có sửa cấu trúc tự do trên nhiều cảnh đang viết.
 
 Chưa thử model thật/chất lượng sáng tác, IME thiết bị thật, Safari hoặc screen reader. Repository chưa cấu hình GitHub Actions; kết quả kiểm tra là local. PDF, vật liệu kính hoàn thiện, cập nhật tour và nghiệm thu QA-01 thuộc giai đoạn sau.
+
+
+## Review cuối PR #73 — 29/10/2026
+
+- Tái hiện preview hợp lệ ở cấp cảnh nhưng trùng ID khối của cảnh bên cạnh: endpoint apply dựng ProjectUpdate nội bộ và làm rơi ValidationError thành HTTP 500. Đã trả HTTP 422 trước khi ghi, giữ nguyên toàn bộ project. Test hồi quy thất bại trước sửa và qua sau sửa.
+- Đồng bộ ngưỡng tự mở panel desktop với ngưỡng sheet 1000px; màn hình 761–1000px không tự bật modal khi vừa chọn cảnh.
+- Kiểm tra GitHub: không có workflow run, check run hoặc status check; không có review/comment đang chờ xử lý. Repository chưa cấu hình CI, không coi đó là CI đã chạy thành công.
+- Sau sửa: **544 backend passed, 1 skipped; 14/14 bộ frontend, TypeScript và production build qua**. Hai cảnh báo có sẵn ở trên giữ nguyên. Lượt review này kiểm tra mã và kiểm thử local; không chạy lại QA thiết bị/model thật.
