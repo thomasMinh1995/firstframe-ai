@@ -1,6 +1,6 @@
 # Kế hoạch cập nhật Bản nháp và Review theo prototype đã chọn
 
-Ngày 29/10/2026. Trạng thái: đã chọn hướng thiết kế, chưa triển khai. Phạm vi là tiến độ tạo nháp và cách đọc, nhận bản nháp trong Bản nháp & Review; tiếp nối các task hệ thống và UI đã giao của workflow AI chủ động.
+Ngày 29/10/2026. Trạng thái: DR-01 và DR-02 đã triển khai trên nhánh `fix/draft-workflow-progress`; DR-03–DR-10 chưa triển khai. Xem [hợp đồng và kiểm chứng giai đoạn 1](../testing/draft-workflow-progress-2026-10-29.md). Phạm vi là tiến độ tạo nháp và cách đọc, nhận bản nháp trong Bản nháp & Review; tiếp nối các task hệ thống và UI đã giao của workflow AI chủ động.
 
 Áp dụng bố cục card nối theo đường chữ S, trạng thái thinking cho công việc đang chạy và skeleton được thay bằng kết quả từng bước. Người dùng phải biết hệ thống đang làm gì, phần nào đã có thể đọc và khi nào cần quyết định. Tiến độ phản ánh checkpoint backend; hiệu ứng chỉ trình bày kết quả đã có.
 
@@ -52,7 +52,7 @@ Phần bản thảo đã có luôn đọc được khi review còn chạy. Đi�
 
 Bổ sung `progress_version`, `progress_revision` và `workflow_items` vào response run; các trường cũ được giữ. Mỗi item có `id`, `kind`, `scene_id` khi liên quan, `status`, `started_at`, `finished_at`, tham chiếu artifact/candidate revision và mã lỗi an toàn khi có. ID dùng định danh công đoạn và scene thực, không dùng số thứ tự hiển thị. Không lặp toàn bộ văn bản hoặc raw call trong response tiến độ.
 
-Trạng thái item gồm `pending`, `running`, `needs_input`, `completed`, `warning`, `failed`, `interrupted`, `cancelled`, `skipped`. Chỉ ghi completed khi artifact hoặc kết quả tương ứng đã được lưu hợp lệ. Review lỗi riêng dùng warning khi phần tạo nội dung tiếp tục được. Mục chưa thực hiện khi hủy không được tô xanh hoặc tính thành hoàn tất.
+Trạng thái item gồm `pending`, `running`, `needs_input`, `completed`, `warning`, `failed`, `interrupted`, `cancelled`, `skipped`; `unknown` dành cho phần lịch sử không xác định được. Chỉ ghi completed khi artifact hoặc kết quả tương ứng đã được lưu hợp lệ. Review lỗi riêng dùng warning khi phần tạo nội dung tiếp tục được. Mục chưa thực hiện khi hủy không được tô xanh hoặc tính thành hoàn tất.
 
 `progress_revision` tăng khi trạng thái thay đổi, độc lập với candidate revision. Client lấy trạng thái mới dù chưa có văn bản mới; chỉ tải lại candidate khi candidate revision thay đổi. Cập nhật artifact và trạng thái completed trong cùng giao dịch để tránh card báo có nội dung nhưng candidate chưa đọc được.
 
@@ -64,7 +64,7 @@ Tiếp tục dùng poll hiện có, không thêm SSE/WebSocket trong đợt này
 
 ## Các giai đoạn triển khai
 
-Tất cả task dưới đây là backlog mới của đợt áp dụng prototype, chưa phải issue đã tạo. Các task SYS và UI cũ giữ trạng thái đã triển khai.
+Các task dưới đây là backlog tiếp nối của đợt áp dụng prototype, chưa phải issue đã tạo. DR-01/DR-02 đã có triển khai và kiểm chứng kỹ thuật; các task còn lại chưa triển khai. Các task SYS và UI cũ giữ trạng thái đã triển khai.
 
 | Giai đoạn | Task | Ưu tiên | Kết quả bàn giao | Phụ thuộc |
 | --- | --- | --- | --- | --- |
