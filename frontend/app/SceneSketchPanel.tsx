@@ -34,7 +34,7 @@ export function SceneSketchPanel({project, scene, dirty, onGenerate, onInspect, 
     {all.length>=20 && <p role="status">Đã đủ 20 lượt phác của dự án; vẫn lưu và viết tiếp được.</p>}
     {uncertain && <p role="status">Chưa rõ kết quả. Kiểm tra ảnh đã lưu trước khi yêu cầu lượt mới.</p>}
     {[...all].reverse().filter(s=>s.scene_id===scene.id).map(s=><details key={s.id} open={s.status==='ready'}>
-      <summary>Hình phác · nguồn M2 phiên bản {s.source_outline.version} · {selected===s.id?'đang giữ':s.status==='pending'?'đang chờ':s.status==='failed'?'lỗi':s.status==='discarded'?'đã bỏ':'xem trước'}</summary>
+      <summary>Hình phác · nguồn dàn cảnh phiên bản {s.source_outline.version} · {selected===s.id?'đang giữ':s.status==='pending'?'đang chờ':s.status==='failed'?'lỗi':s.status==='discarded'?'đã bỏ':'xem trước'}</summary>
       <p className="storage-note">{s.duration_seconds!==null?`${s.duration_seconds.toFixed(1)} giây. `:''}Nguồn được giữ tại lúc yêu cầu; không gồm góp ý chưa dùng.</p>
       {s.error && <p role="status">Lượt này lỗi ({s.error}); text và ảnh đã giữ không đổi. Kiểm tra cấu hình hoặc nguyên nhân trước khi chủ động tạo lượt mới.</p>}
       {s.status==='pending' && <p role="status">Bỏ yêu cầu chỉ ngừng chờ/chọn kết quả; tiến trình có thể vẫn đang chạy. Không tự retry.</p>}

@@ -1,6 +1,7 @@
 import asyncio
 import json
 import logging
+from hashlib import sha256
 from contextlib import contextmanager
 from datetime import UTC, datetime
 from pathlib import Path
@@ -41,6 +42,7 @@ from app.application.ai_provider import (
 )
 from app.application.dataset import capture_workflow, recording_provider
 from app.application.scene_suggestions import PROMPT_VERSION, suggest_scenes
+from app.application.provenance import attribute_edits, scene_fields, draft_fields, ai_draft
 from app.infrastructure.provider_factory import create_provider
 from app.application.clarification import MAX_CHOICES, conversation_questions
 from app.application.language import LanguageSelectionRequired, resolve_response_language
@@ -143,12 +145,15 @@ def load_project(project_id: str, revision: int | None = None) -> ProjectRespons
 
 def save_project(project: ProjectResponse, stage: str = "saving") -> ProjectResponse:
     with progress_step(stage):
+        if stage != "autosaving":
+            project.edit_sessions = {}
         data = project.model_dump(exclude_computed_fields=True)
         return ProjectResponse.model_validate(get_project_store().save(data, project.revision))
 
 
 def dataset_snapshot(project: ProjectResponse) -> dict[str, object]:
     return project.model_dump(mode="json", exclude={
+        "last_save_id", "last_save_revision", "last_save_fingerprint", "edit_sessions",
         "versions", "clarification_history", "plan_generations", "applicable_plan_ids",
         "scene_proposals", "staging_proposals", "applicable_scene_proposal_ids",
         "scene_sketches", "selected_scene_sketches", "applicable_sketch_ids",
@@ -188,6 +193,7 @@ def add_version(project: ProjectResponse) -> None:
             answers=project.answers,
             clarifications=dict(project.creator_answers()),
             draft=project.draft.model_copy(deep=True),
+            draft_provenance=project.draft_provenance.copy(),
             feedback=project.feedback if project.feedback_is_current else None,
             feedback_source=project.feedback_source.model_copy(deep=True)
             if project.feedback_is_current and project.feedback_source else None,
@@ -241,7 +247,26 @@ def get_project(project_id: str):
 @router.put("/{project_id}", response_model=ProjectResponse)
 def update_project(project_id: str, request: ProjectUpdate):
     with project_errors():
-        project = load_project(project_id, request.revision)
+        project = load_project(project_id)
+        fingerprint = sha256(json.dumps(request.model_dump(exclude={"revision"}, exclude_unset=True),
+            sort_keys=True, ensure_ascii=False).encode()).hexdigest()
+        if request.save_id and request.save_id == project.last_save_id:
+            if fingerprint != project.last_save_fingerprint:
+                raise HTTPException(409, "Mã lưu đã dùng cho nội dung khác.")
+            return project
+        if project.revision != request.revision:
+            raise ProjectConflict
+        if request.save_mode == "autosave" and request.edit_session_id is None:
+            raise HTTPException(422, "Lưu tự động cần mã phiên chỉnh sửa.")
+        boundary = bool(request.scene_proposal_id or request.staging_use
+                        or request.screenplay_proposal_id or request.restore_draft_id)
+        def checkpoint(artifact):
+            needed = (boundary or request.save_mode != "autosave"
+                      or project.edit_sessions.get(artifact) != request.edit_session_id)
+            if request.edit_session_id:
+                project.edit_sessions[artifact] = request.edit_session_id
+            return needed
+        ai_scene_fields, ai_script_fields, confirmed = None, None, set()
         questions = project.analysis.missing_information if project.analysis else []
         if len(request.answers) != len(questions):
             raise HTTPException(422, "Câu trả lời phải khớp với bộ câu hỏi hiện tại.")
@@ -265,6 +290,9 @@ def update_project(project_id: str, request: ProjectUpdate):
             idea.status = "applied"
             idea.applied_text = use.value
             idea.applied_revision = project.revision + 1
+            key = f"m2:{proposal.target_scene_id}:staging:{idea.field}"
+            ai_scene_fields = {key: idea.suggestion}
+            confirmed.add(key)
         for idea_id, text in request.staging_idea_edits.items():
             owner = next((p for p in project.staging_proposals if any(i.id == idea_id for i in p.staging_ideas)), None)
             idea = next((i for i in owner.staging_ideas if i.id == idea_id), None) if owner else None
@@ -293,6 +321,7 @@ def update_project(project_id: str, request: ProjectUpdate):
                 raise HTTPException(422, "Chọn từng ý dàn cảnh, không áp dụng cả lô.")
             proposal.status = "applied"
             proposal.applied_revision = project.revision + 1
+            ai_scene_fields = scene_fields(proposal.scenes)
         if "scene_outline" in request.model_fields_set:
             edit, outline = request.scene_outline, project.scene_outline
             if edit is None:
@@ -302,10 +331,13 @@ def update_project(project_id: str, request: ProjectUpdate):
                 raise HTTPException(422, "Chọn nguồn story plan trước khi sửa dàn cảnh.")
             elif edit.id != outline.id or edit.version != outline.version:
                 raise ProjectConflict
-            elif edit.scenes != outline.scenes:
-                archive_scene_outline(project)
+            elif edit.scenes != outline.scenes or confirmed:
+                if checkpoint("scene_outline"):
+                    archive_scene_outline(project)
                 project.scene_outline = outline.model_copy(update={
                     "scenes": edit.scenes, "version": outline.version + 1,
+                    "provenance": attribute_edits(outline.provenance, scene_fields(outline.scenes),
+                        scene_fields(edit.scenes), ai_scene_fields, confirmed),
                 })
         for proposal_id, scene in request.screenplay_proposal_previews.items():
             proposal = next((p for p in project.screenplay_proposals if p.id == proposal_id), None)
@@ -327,6 +359,7 @@ def update_project(project_id: str, request: ProjectUpdate):
                     or request.scene_proposal_id is not None or request.staging_use is not None):
                 raise HTTPException(409, "Dùng phương án chỉ thay đúng cảnh đã nêu. Giữ thành bản tự chỉnh nếu sửa các phần khác.")
             proposal.status, proposal.applied_revision = "applied", project.revision + 1
+            ai_script_fields = scene_fields([proposal.scene], screenplay=True)
         if "screenplay" in request.model_fields_set:
             edit, current = request.screenplay, project.screenplay
             if edit is None:
@@ -337,13 +370,16 @@ def update_project(project_id: str, request: ProjectUpdate):
             elif edit.id != current.id or edit.version != current.version:
                 raise ProjectConflict
             elif [(s.id, s.source_scene_id) for s in edit.scenes] != [(s.id, s.source_scene_id) for s in current.scenes]:
-                raise HTTPException(422, "Giữ thứ tự và liên kết cảnh nguồn; thay cấu trúc ở M2 rồi bắt đầu bản khác.")
+                raise HTTPException(422, "Giữ thứ tự và liên kết cảnh nguồn; thay cấu trúc ở phần Dàn cảnh rồi bắt đầu bản khác.")
             elif edit.scenes != current.scenes:
                 owners = {b.id: s.id for s in current.scenes for b in s.blocks}
                 if any(b.id in owners and owners[b.id] != s.id for s in edit.scenes for b in s.blocks):
                     raise HTTPException(422, "Không chuyển ID khối sang cảnh khác.")
-                archive_screenplay(project)
-                project.screenplay = current.model_copy(update={"scenes": edit.scenes, "version": current.version + 1})
+                if checkpoint("screenplay"):
+                    archive_screenplay(project)
+                project.screenplay = current.model_copy(update={"scenes": edit.scenes, "version": current.version + 1,
+                    "provenance": attribute_edits(current.provenance, scene_fields(current.scenes, True),
+                        scene_fields(edit.scenes, True), ai_script_fields)})
         brief_changed = project.idea != request.idea or project.constraints != request.constraints
         if brief_changed:
             archive_clarifications(project, request.answers)
@@ -352,7 +388,13 @@ def update_project(project_id: str, request: ProjectUpdate):
             and project.response_language != request.response_language
         )
         if project.draft != request.draft or language_changed:
-            add_version(project)
+            if checkpoint("draft"):
+                add_version(project)
+        restored = next((v for v in project.versions if v.id == request.restore_draft_id), None)
+        if request.restore_draft_id and (restored is None or restored.draft != request.draft):
+            raise HTTPException(409, "Bản khôi phục không khớp phiên bản đã lưu.")
+        project.draft_provenance = (restored.draft_provenance.copy() if restored else
+            attribute_edits(project.draft_provenance, draft_fields(project.draft), draft_fields(request.draft)))
         for key in ("title", "idea", "constraints", "draft"):
             setattr(project, key, getattr(request, key))
         if "response_language" in request.model_fields_set:
@@ -363,7 +405,10 @@ def update_project(project_id: str, request: ProjectUpdate):
             project.clarifications = {}
         else:
             project.answers = request.answers
-        return save_project(project)
+        project.last_save_id = request.save_id
+        project.last_save_revision = project.revision + 1 if request.save_id else None
+        project.last_save_fingerprint = fingerprint if request.save_id else None
+        return save_project(project, "autosaving" if request.save_mode == "autosave" and not boundary else "saving")
 
 
 def archive_screenplay(project: ProjectResponse) -> None:
@@ -405,6 +450,8 @@ def start_scene_outline(project_id: str, request: StartSceneOutline):
                 id=str(uuid4()), project_revision=project.revision,
                 version_id=request.source_version_id, draft=draft.model_copy(deep=True),
                 context=context.model_copy(deep=True), response_language=language,
+                draft_provenance=(project.draft_provenance.copy() if request.source_version_id == "current"
+                                  else version.draft_provenance.copy()),
             ),
         )
         return save_project(project)
@@ -600,6 +647,7 @@ def plan_project(project_id: str, request: RevisionRequest):
             )
             if project.draft is None:
                 project.draft = generation.draft.model_copy(deep=True)
+                project.draft_provenance = ai_draft(generation.draft)
                 project.feedback = project.feedback_source = project.reviewed_content = None
                 generation.applied_revision = project.revision + 1
             project.plan_generations.append(generation)
@@ -654,6 +702,7 @@ def accept_plan(project_id: str, generation_id: str, request: RevisionRequest):
             )
         add_version(project)
         project.draft = generation.draft.model_copy(deep=True)
+        project.draft_provenance = ai_draft(generation.draft)
         source = generation.feedback_source
         project.feedback = generation.feedback if source is not None else None
         project.feedback_source = source.model_copy(deep=True) if source is not None else None

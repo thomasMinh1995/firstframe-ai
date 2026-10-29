@@ -1,9 +1,10 @@
 """Editable screenplay text; source snapshots are supplied only by the server."""
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, model_validator, model_serializer
 
 from app.api.schemas.scenes import SceneId
+from app.api.schemas.provenance import TextProvenance
 
 
 class BlockText(BaseModel):
@@ -91,9 +92,17 @@ class ReviewSource(BaseModel):
     label: str
     text: str
     category: Literal["screenplay", "author_choice", "context"]
+    provenance: TextProvenance | None = None
     scene_id: SceneId | None = None
     block_id: SceneId | None = None
     field: Literal["text", "speaker", "heading", "choice", "context"]
+
+    @model_serializer(mode="wrap")
+    def serialize(self, handler):
+        data = handler(self)
+        if self.provenance is None:
+            data.pop("provenance", None)
+        return data
 
 
 class ReviewEvidence(BaseModel):

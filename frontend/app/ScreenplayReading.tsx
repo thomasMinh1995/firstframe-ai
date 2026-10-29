@@ -15,35 +15,35 @@ export function ScreenplayReading({saved,dirty,onSelect,onInspect,onEdit}: {
   const script=selected.screenplay,incomplete=unfinishedScriptScenes(script),handoff=saved.screenplay_handoff;
   const uncertain=sent!==null&&!(saved.screenplay_selections??[]).some(s=>s.id===sent);
   const alreadySelected=handoff?.screenplay.id===script.id&&handoff.screenplay.version===script.version;
-  return <section className="screenplay-reading" tabIndex={-1} aria-label="Đọc bản đã lưu và chọn nguồn M4">
+  return <section className="screenplay-reading" tabIndex={-1} aria-label="Đọc bản đã lưu và chọn bản để xuất">
     <h3>Đọc toàn kịch bản đã lưu</h3>
-    <p>Đọc đúng bản đã lưu, gồm cả cảnh/khối chưa viết. Chọn nguồn chỉ giữ một bản riêng cho M4, chưa xuất bản và không xác nhận chất lượng tác phẩm.</p>
+    <p>Đọc đúng bản đã lưu, gồm cả cảnh/khối chưa viết. Chọn nguồn chỉ giữ một bản riêng để xuất kịch bản, chưa xuất bản và không xác nhận chất lượng tác phẩm.</p>
     {dirty&&<p role="status">Có sửa chưa lưu. Phần đọc và chọn nguồn bên dưới vẫn dùng bản đã lưu; lưu kịch bản nếu muốn dùng các sửa mới.</p>}
     <label htmlFor={`${id}-version`}>Bản để đọc và đối chiếu</label><select id={`${id}-version`} value={selected.id} onChange={e=>setVersion(e.target.value)}>
       {versions.map(v=><option key={v.id} value={v.id}>{v.label}</option>)}
     </select>
-    <p>Kịch bản phiên bản {script.version} · {script.scenes.length} cảnh · nguồn M2 phiên bản {script.source_outline.version}.</p>
+    <p>Kịch bản phiên bản {script.version} · {script.scenes.length} cảnh · nguồn dàn cảnh phiên bản {script.source_outline.version}.</p>
     <SavedScript script={script}/>
     {incomplete.length>0&&<div role="status"><p>Chưa chọn được nguồn: cần tên cảnh, nội dung mỗi khối và người nói cho lời thoại. Bạn vẫn lưu nháp được.</p>
       <ul>{incomplete.map(s=><li key={s.id}>Cảnh {script.scenes.indexOf(s)+1}: {s.heading||'Chưa có tiêu đề'}
         {selected.id==='current'&&<button type="button" className="secondary" onClick={()=>onEdit(s.id)}>Quay lại sửa cảnh {script.scenes.indexOf(s)+1}</button>}</li>)}</ul>
-      {selected.id!=='current'&&<p>Muốn sửa bản lịch sử, dùng thao tác khôi phục ở Lịch sử kịch bản; nguồn đã chọn trước vẫn giữ.</p>}
+      {selected.id!=='current'&&<p>Muốn sửa bản lịch sử, dùng thao tác khôi phục ở trang Bản đã lưu; nguồn đã chọn trước vẫn giữ.</p>}
     </div>}
-    <button type="button" disabled={!!incomplete.length||uncertain||alreadySelected||(saved.screenplay_selections?.length??0)>=100}
-      onClick={()=>{const request_id=crypto.randomUUID();setSent(request_id);void onSelect({request_id,source_version_id:selected.id});}}>{alreadySelected?'Đã chọn nguồn này cho M4':'Chọn bản đã đọc cho M4'}</button>
-    <button type="button" className="secondary" onClick={async()=>{if(await onInspect())setSent(null);}}>Kiểm tra nguồn M4 đã lưu</button>
-    {uncertain&&<p role="status">Chưa rõ kết quả chọn nguồn. Kiểm tra nguồn M4 đã lưu trước lượt chọn mới; không tự gửi lại.</p>}
+    <button type="button" disabled={dirty||!!incomplete.length||uncertain||alreadySelected||(saved.screenplay_selections?.length??0)>=100}
+      onClick={()=>{const request_id=crypto.randomUUID();setSent(request_id);void onSelect({request_id,source_version_id:selected.id});}}>{alreadySelected?'Đã chọn bản này để xuất':'Chọn bản đã đọc để xuất'}</button>
+    <button type="button" className="secondary" onClick={async()=>{if(await onInspect())setSent(null);}}>Kiểm tra nguồn xuất kịch bản đã lưu</button>
+    {uncertain&&<p role="status">Chưa rõ kết quả chọn nguồn. Kiểm tra nguồn xuất kịch bản đã lưu trước lượt chọn mới; không tự gửi lại.</p>}
     {(saved.screenplay_selections?.length??0)>=100&&<p>Đã đủ 100 lần chọn nguồn; bạn vẫn tự viết/lưu và đọc nguồn đã chọn được.</p>}
-    {handoff&&<details className="screenplay-handoff"><summary>Nguồn đã chọn cho M4 · kịch bản phiên bản {handoff.screenplay.version}</summary>
-      <p>Đã chọn lúc {new Date(handoff.created_at).toLocaleString('vi-VN')}. Bản nguồn này không tự đổi khi sửa hoặc khôi phục kịch bản. M4 chưa triển khai, chưa có xuất bản.</p>
+    {handoff&&<details className="screenplay-handoff"><summary>Kịch bản đã chọn để xuất · kịch bản phiên bản {handoff.screenplay.version}</summary>
+      <p>Đã chọn lúc {new Date(handoff.created_at).toLocaleString('vi-VN')}. Bản nguồn này không tự đổi khi sửa hoặc khôi phục kịch bản. Chức năng xuất kịch bản chưa khả dụng.</p>
       <SavedScript script={handoff.screenplay}/>
     </details>}
-    <p className="storage-note">Không cần ảnh, góp ý AI hoặc điểm số để chọn nguồn. Đọc, đổi bản và chọn không gọi AI hay tự lưu buffer.</p>
+    <p className="storage-note">Không cần ảnh, góp ý AI hoặc điểm số để chọn nguồn. Chờ trạng thái Đã lưu rồi đọc và chọn đúng bản; các thao tác này không gọi AI.</p>
   </section>;
 }
 export function SavedScript({script,activeSceneId}:{script:Screenplay;activeSceneId?:string}) {
   const source=script.source_outline;
-  return <div className="screenplay-full-text"><details><summary>Nguồn M2 và ý đồ đi cùng bản này</summary>
+  return <div className="screenplay-full-text"><details><summary>Nguồn dàn cảnh và ý đồ đi cùng bản này</summary>
     <h4>{source.source.draft.title}</h4><p className="preserve-lines">{source.source.draft.logline}</p>
     <p className="preserve-lines">{source.source.context.idea}</p>
     {source.source.context.constraints.map((text,i)=><p key={i} className="preserve-lines">Giới hạn: {text}</p>)}

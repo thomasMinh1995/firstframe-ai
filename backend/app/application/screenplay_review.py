@@ -6,12 +6,13 @@ from pydantic import ValidationError
 
 from app.api.schemas.projects import ScreenplayReview
 from app.api.schemas.screenplays import ReviewSource, SavedReviewNote, SceneReviewResult
+from app.api.schemas.provenance import TextProvenance
 from app.application.ai_provider import MalformedProviderResponseError, StructuredProvider, StructuredRequest
 from app.application.language import resolve_response_language
 from app.application.progress import progress_step
 from app.application.screenplay_context import check_context_budget
 
-PROMPT_VERSION = "screenplay-review-v4-author-control"
+PROMPT_VERSION = "screenplay-review-v5-provenance"
 PROMPT = Path(__file__).resolve().parents[3] / "domains/short-film/prompts/screenplay_review_prompt.md"
 
 
@@ -20,34 +21,47 @@ def review_sources(review: ScreenplayReview) -> list[ReviewSource]:
     index = next(i for i, s in enumerate(script.scenes) if s.id == review.target_scene_id)
     target = script.scenes[index]
     sources = []
-    def add(id, label, text, category, field="context", scene_id=None, block_id=None):
+    def add(id, label, text, category, field="context", scene_id=None, block_id=None, provenance=None):
         if text.strip():
+            provenance = provenance or TextProvenance()
+            if category == "author_choice" and not provenance.is_author_choice:
+                category = "context"
             sources.append(ReviewSource(id=id, label=label, text=text, category=category, field=field,
-                                        scene_id=scene_id, block_id=block_id))
+                                        scene_id=scene_id, block_id=block_id, provenance=provenance))
     for s in script.scenes[max(0, index - 1):index + 2]:
-        add(f"script:{s.id}:heading", s.heading or "Tiêu đề cảnh", s.heading, "screenplay", "heading", s.id)
+        key = f"script:{s.id}:heading"
+        add(key, s.heading or "Tiêu đề cảnh", s.heading, "screenplay", "heading", s.id,
+            provenance=script.provenance.get(key))
         for i, block in enumerate(s.blocks):
             label = f"{s.heading or 'Cảnh'} · khối {i + 1}"
-            add(f"block:{block.id}:text", label, block.text, "screenplay", "text", s.id, block.id)
-            add(f"block:{block.id}:speaker", label + " · người nói", block.speaker, "screenplay", "speaker", s.id, block.id)
+            for field in ("text", "speaker"):
+                key = f"block:{block.id}:{field}"
+                add(key, label if field == "text" else label + " · người nói", getattr(block, field),
+                    "screenplay", field, s.id, block.id, script.provenance.get(key))
     outline = script.source_outline
     scene = next(s for s in outline.scenes if s.id == target.source_scene_id)
-    add(f"m2:{scene.id}:action", "Diễn tiến M2 đã chọn", scene.action, "author_choice", "choice")
+    def choice(key, label, text):
+        id = f"m2:{scene.id}:{key}"
+        add(id, label, text, "author_choice", "choice", provenance=outline.provenance.get(id))
+    choice("action", "Diễn tiến dàn cảnh đã chọn", scene.action)
     for key, label in (("location", "Địa điểm"), ("time", "Thời điểm"), ("characters", "Nhân vật"), ("goal", "Mục tiêu"), ("purpose", "Đóng góp")):
-        add(f"m2:{scene.id}:{key}", label, getattr(scene, key), "author_choice", "choice")
-    add(f"m2:{scene.id}:keep_or_avoid", "Điều muốn giữ/tránh", scene.keep_or_avoid, "author_choice", "choice")
-    add(f"m2:{scene.id}:viewer_intent", "Cảm nhận người xem", scene.viewer_intent, "author_choice", "choice")
+        choice(key, label, getattr(scene, key))
+    choice("keep_or_avoid", "Điều muốn giữ/tránh", scene.keep_or_avoid)
+    choice("viewer_intent", "Cảm nhận người xem", scene.viewer_intent)
     for key, text in scene.staging_choices.items():
-        add(f"m2:{scene.id}:staging:{key}", "Lựa chọn dàn cảnh: " + key, text, "author_choice", "choice")
+        choice(f"staging:{key}", "Lựa chọn dàn cảnh: " + key, text)
     context, draft = outline.source.context, outline.source.draft
-    add("intent:idea", "Ý tưởng tác giả", context.idea, "author_choice", "choice")
+    author = TextProvenance(origin="author_input")
+    add("intent:idea", "Ý tưởng tác giả", context.idea, "author_choice", "choice", provenance=author)
     for i, text in enumerate(context.constraints):
-        add(f"intent:constraint:{i}", f"Giới hạn {i + 1}", text, "author_choice", "choice")
+        add(f"intent:constraint:{i}", f"Giới hạn {i + 1}", text, "author_choice", "choice", provenance=author)
     for i, answer in enumerate(context.clarifications):
-        add(f"intent:answer:{i}", answer.question, answer.answer, "author_choice", "choice")
-    add("plan:logline", "Logline nguồn", draft.logline, "context")
+        add(f"intent:answer:{i}", answer.question, answer.answer, "author_choice", "choice", provenance=author)
+    add("plan:logline", "Logline nguồn", draft.logline, "context",
+        provenance=outline.source.draft_provenance.get("logline"))
     for i, section in enumerate(draft.sections):
-        add(f"plan:section:{i}", section.title, section.content, "context")
+        add(f"plan:section:{i}", section.title, section.content, "context",
+            provenance=outline.source.draft_provenance.get(f"section:{i}:content"))
     return sources
 
 

@@ -24,7 +24,7 @@ const fs = require('node:fs/promises'), path = require('node:path'), {randomUUID
   const source = structuredClone(p.screenplay.source_outline), m2 = structuredClone(p.scene_outline), m1 = structuredClone(p.draft);
   const page = await context.newPage(), errors = []; page.on('pageerror', e => errors.push(e.message));
   await page.goto('http://127.0.0.1:3034');
-  const area = page.getByRole('region', {name: 'M3 Kịch bản', exact: true}), nav = area.getByRole('navigation', {name: 'Các cảnh kịch bản'});
+  const area = page.getByRole('region', {name: 'Kịch bản', exact: true}), nav = area.getByRole('navigation', {name: 'Các cảnh kịch bản'});
   const editor = area.getByLabel('Editor liền mạch', {exact: true}), comparison = area.getByRole('complementary', {name: 'Kịch bản đã lưu để đối chiếu'});
   const state = () => req('/__test/state'), writes = s => s.calls.filter(c => c.method !== 'GET').length;
   const scene = i => nav.getByRole('button').nth(i), savedScene = i => comparison.locator('[data-reading-scene]').nth(i);
@@ -100,7 +100,7 @@ const fs = require('node:fs/promises'), path = require('node:path'), {randomUUID
   await page.locator('#project-picker').selectOption(seed.id); await comparison.waitFor(); assert.equal(await editor.count(), 0);
   assert.match(await savedScene(0).innerText(), /SAVE_BEFORE_PROJECT_SWITCH/); await choose(0);
   await area.getByRole('checkbox').check(); await area.getByRole('button', {name: 'Bắt đầu bản kịch bản khác', exact: true}).click();
-  await page.getByText('Đã giữ nguồn và khung cảnh M3. Chưa tạo nội dung hoặc gọi AI.', {exact: true}).waitFor();
+  await page.getByText('Đã giữ nguồn và khung cảnh kịch bản. Chưa tạo nội dung hoặc gọi AI.', {exact: true}).waitFor();
   assert.equal(await editor.count(), 0); assert.equal(await comparison.locator('[data-selected=true]').count(), 0);
   assert.ok(!(await comparison.innerText()).includes('SAVE_BEFORE_PROJECT_SWITCH'));
   await choose(0); assert.equal(await text().inputValue(), '');
