@@ -1,0 +1,12 @@
+{
+  "calls": 8,
+  "http_200": 8,
+  "all_screenplays_unchanged": true,
+  "context_rejections": 0,
+  "false_positives": 0,
+  "missed_conflicts": 0,
+  "bad_evidence_pairs": 1,
+  "unexpected_cjk": 0,
+  "release_acceptance": "FAIL: spurious streetlight conflict; unhelpful craft prose and wrong constraint numbering; independent reader/device QA pending",
+  "usable_cases": 7
+}

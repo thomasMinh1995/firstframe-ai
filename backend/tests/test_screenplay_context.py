@@ -23,7 +23,8 @@ class CaptureReview:
 
     def request_structured(self, request):
         self.request = request
-        return StructuredResult(SceneReviewResult(notes=[]), "qwen2.5:7b")
+        output = request.response_model.model_validate({'checks':{s['id']:{'relation':'compatible','author_choice_id':'','observation':'Có thể cùng đúng.','impact':''} for s in json.loads(request.input_text)['sources'] if s['is_target'] and s['field']=='text'},'craft_notes':[]})
+        return StructuredResult(output, "qwen2.5:7b")
 
 
 def test_phase6_candidate_fits_without_dropping_or_changing_sources():
@@ -52,10 +53,11 @@ def test_phase6_candidate_fits_without_dropping_or_changing_sources():
     assert review.model_dump(mode="json") == before
     request = provider.request
     sent = json.loads(request.input_text)["sources"]
-    assert len(sent) == len(review.sources)
-    assert [s["text"] for s in sent] == [s.text for s in review.sources]
-    assert [s["category"] for s in sent] == [s.category for s in review.sources]
-    assert [s["label"] for s in sent] == [s.label for s in review.sources]
+    scoped = [s for s in review.sources if s.category != "context"]
+    assert len(sent) == len(scoped)
+    assert [s["text"] for s in sent] == [s.text for s in scoped]
+    assert [s["category"] for s in sent] == [s.category for s in scoped]
+    assert [s["label"] for s in sent] == [s.label for s in scoped]
     assert (
         len(request.input_text.encode()) + len(strict_json_instructions(request).encode()) <= 11776
     )

@@ -6,7 +6,7 @@ import pytest
 from test_projects import project_client  # noqa: F401
 
 from app.api.routes import screenplay_reviews as routes
-from app.api.schemas.screenplays import SceneReviewResult
+from test_screenplay_review import selected_output
 from app.application.ai_provider import ProviderMetadata, StructuredResult
 
 
@@ -34,9 +34,8 @@ def test_flashlight_priority_contract_with_scripted_provider(project_client,monk
         def request_structured(self,request):
             calls.append(request)
             prompt=request.instructions
-            assert prompt.index('1. Before optional craft feedback')<prompt.index('2. Only if the target action/result directly contradicts')<prompt.index('3. Only after this comparison')
-            assert 'Adding explanatory dialogue does not fix an incompatible action' in prompt
-            assert 'criticize dialogue that is absent' in prompt
+            assert 'BOTH be true' in prompt
+            assert 'Silence is not speech' in prompt
             data=json.loads(request.input_text)
             action=next(s for s in data['sources'] if s['is_target'] and s['field']=='text' and s['text']==expected_text)
             constraint=next(s for s in data['sources'] if s['category']=='author_choice' and s['text']=='Đèn pin bị hỏng, không thể sáng.')
@@ -61,13 +60,14 @@ def test_flashlight_priority_contract_with_scripted_provider(project_client,monk
                     output['notes'].append({'kind':'craft','observation':'Cần nhìn tờ giấy rõ hơn.',
                         'impact':'Có thể dễ nhìn hơn.','suggestion':'Thêm điện thoại bật đèn.',
                         'evidence':[evidence[0]]})
-            return StructuredResult(output=SceneReviewResult.model_validate(output),model=self.metadata.model,
+            self.first_output=selected_output(request,output)
+            return StructuredResult(output=self.first_output,model=self.metadata.model,
                 raw_output=json.dumps(output,ensure_ascii=False))
 
     monkeypatch.setattr(routes,'get_review_provider',lambda:ScriptedProvider())
     r=client.post(f'/api/projects/{p.id}/screenplay-reviews',json=case['request']);assert r.status_code==200,r.text
     saved=r.json();item=saved['screenplay_reviews'][-1]
-    assert item['status']=='ready' and item['prompt_version']=='screenplay-review-v6-compact'
+    assert item['status']=='ready' and item['prompt_version']=='screenplay-review-v7-evidence-selection'
     assert len(calls)==1 and saved['screenplay']==case['project']['screenplay']
     assert saved['scene_outline']==case['project']['scene_outline']
     if response=='empty':
@@ -83,7 +83,7 @@ def test_flashlight_priority_contract_with_scripted_provider(project_client,monk
             else:
                 assert 'bỏ hành động' in note['suggestion']
             if response=='contradictory_secondary_note':
-                assert len(item['notes'])==2 and item['notes'][1]['suggestion']=='Thêm điện thoại bật đèn.'
+                assert len(item['notes'])==1, 'Conflicts take priority over potentially inconsistent secondary craft notes'
         else:
             assert note['kind']=='craft','Source validity must not be presented as semantic certification'
     assert client.get(f'/api/projects/{p.id}').json()['screenplay_reviews']==saved['screenplay_reviews']

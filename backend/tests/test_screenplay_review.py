@@ -9,7 +9,31 @@ from test_screenplays import prepare,start,edit,block
 from test_screenplay_writing import generate as write
 from app.api.routes import screenplay_reviews as routes
 from app.api.schemas.screenplays import SceneReviewResult
+from pydantic import BaseModel, ConfigDict
 from app.application.ai_provider import ProviderMetadata,StructuredResult,ProviderTimeoutError,MissingProviderConfigurationError
+
+
+class UncheckedSelection(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
+
+def selected_output(request, output):
+    """Untrusted provider envelope; application must validate IDs and complete checks."""
+    targets = [s['id'] for s in json.loads(request.input_text)['sources'] if s['is_target'] and s['field']=='text']
+    checks = {t: {'relation':'compatible','author_choice_id':'','observation':'Hai nguồn vẫn có thể cùng đúng.','impact':''} for t in targets}
+    craft = []
+    for note in output['notes']:
+        refs = note['evidence']
+        comment = {k:note[k] for k in ('observation','impact','suggestion') if k in note}
+        comment['target_id'] = refs[0]['source_id']
+        if note['kind']=='intent_mismatch':
+            if len(refs)<2:
+                checks = {}  # Missing an author-bound decision is invalid, never guess one.
+            else:
+                checks[refs[0]['source_id']] = {'relation':'conflict', **{k:v for k,v in comment.items() if k!='target_id'}, 'author_choice_id':refs[1]['source_id']}
+        else:
+            craft.append({'kind':note['kind'], **comment})
+    return UncheckedSelection(checks=checks, craft_notes=craft, question=output.get('question',''))
 
 
 class ReviewProvider:
@@ -17,17 +41,14 @@ class ReviewProvider:
     def __init__(self):
         self.requests=[];self.error=None;self.mode='valid';self.hook=lambda:None
     def request_structured(self,request):
-        self.requests.append(request);self.hook()
+        self.requests.append(request)
+        self.hook()
         if self.error:raise self.error
         data=json.loads(request.input_text);sources=data['sources']
         anchor=next(s for s in sources if s['is_target'] and s['field']=='text')
         choice=next(s for s in sources if s['category']=='author_choice')
         note={'kind':'craft','observation':'Cử chỉ hiện tại để lại khoảng lặng.','impact':'Người xem có thể tự hiểu sự đón nhận.','suggestion':'Cân nhắc giữ khoảng dừng, không bắt thêm lời giải thích.',
               'evidence':[{'source_id':anchor['id'],'quote':anchor['text'][:500]}]}
-        if self.mode=='ui_all_fields':
-            for field in ('heading','speaker'):
-                source=next(s for s in sources if s['is_target'] and s['field']==field)
-                note['evidence'].append({'source_id':source['id'],'quote':source['text'][:500]})
         if self.mode=='bad_id':note['evidence'][0]['source_id']='made-up'
         if self.mode=='lowercase_id':note['evidence'][0]['source_id']=anchor['id'].lower()
         if self.mode=='padded_id':note['evidence'][0]['source_id']=' '+anchor['id']+' '
@@ -46,7 +67,10 @@ class ReviewProvider:
         if self.mode=='mismatch':note['kind']='intent_mismatch';note['evidence'].append({'source_id':choice['id'],'quote':choice['text'][:500]})
         if self.mode=='empty_observation':note['observation']=' '
         output={'notes':[] if self.mode=='empty' else [note],'question':'Bạn muốn giữ khoảng lặng nào?' if self.mode=='empty' else ''}
-        self.output=SceneReviewResult.model_validate(output)
+        if self.mode in {'bad_quote','foreign_quote','blank_quote'}:
+            self.output=SceneReviewResult.model_validate(output)  # Reject old quote-shaped output.
+        else:
+            self.output=selected_output(request,output)
         return StructuredResult(output=self.output,model='reviewer',raw_output=json.dumps(output,ensure_ascii=False))
 
 
@@ -159,7 +183,7 @@ def test_empty_target_bad_scope_quota_and_large_context(reviewing):
     assert review(client,empty)[0].status_code==422 and not provider.requests
     large=edit(empty);large['screenplay']['scenes'][0]['blocks']=[block(text='x'*10000)]
     large=client.put(url,json=large).json();r,_=review(client,large);assert r.status_code==422 and 'chưa gửi AI' in r.text and not provider.requests
-    ready=client.get(url).json();store=routes.projects.get_project_store();raw=store.get(p['id']);raw['screenplay_reviews']=[{**raw['screenplay_reviews'][0],'id':str(uuid4())} for _ in range(100)];store.save(raw,raw['revision'])
+    store=routes.projects.get_project_store();raw=store.get(p['id']);raw['screenplay_reviews']=[{**raw['screenplay_reviews'][0],'id':str(uuid4())} for _ in range(100)];store.save(raw,raw['revision'])
     full=client.get(url).json();assert review(client,full)[0].status_code==422 and not provider.requests
     assert client.put(url,json=payload(full)).status_code==200
 
@@ -184,9 +208,9 @@ def test_short_ids_are_transport_only_with_explicit_block_kind_and_target(review
     assert all(not s['is_target'] and s['block_kind'] is None for s in sources if s['category']!='screenplay')
     original=f"block:{p['screenplay']['scenes'][0]['blocks'][0]['id']}:text"
     assert item['notes'][0]['evidence'][0]['source_id']==original
-    assert provider.output.notes[0].evidence[0].source_id==action['id'],'raw provider result must not be rewritten'
+    assert provider.output.craft_notes[0]['target_id']==action['id'],'raw provider result must not be rewritten'
     assert any(s['id']==original for s in item['sources']) and all(s['id'] not in ids for s in item['sources'])
-    assert item['prompt_version']=='screenplay-review-v6-compact'
+    assert item['prompt_version']=='screenplay-review-v7-evidence-selection'
     assert saved['screenplay']==p['screenplay'] and client.get(url).json()['screenplay_reviews']==saved['screenplay_reviews']
 
 
@@ -214,13 +238,10 @@ def test_frozen_six_inputs_with_fake_provider_only(project_client,monkeypatch,in
     r=client.post(f'/api/projects/{p.id}/screenplay-reviews',json=case['request']);assert r.status_code==200,r.text
     saved=r.json();item=saved['screenplay_reviews'][-1];sources=json.loads(provider.requests[0].input_text)['sources']
     prompt=provider.requests[0].instructions
-    assert 'Missing expression, dialogue or an immediate decision is not a violation unless' in prompt
-    assert 'Distinguish using an already permitted element from introducing a new prohibited one' in prompt
-    assert 'A suggestion is optional' in prompt
-    assert 'every observation, impact, suggestion and question' in prompt
-    assert 'Do not keep secondary craft/uncertain notes or questions' in prompt
-    assert 'Suggest a small action the author may consider' not in prompt
-    assert item['prompt_version']=='screenplay-review-v6-compact'
+    assert 'BOTH be true' in prompt
+    assert 'A free choice can include waiting/staying' in prompt
+    assert 'valid references do not certify quality' in prompt
+    assert item['prompt_version']=='screenplay-review-v7-evidence-selection'
     assert saved['screenplay']==case['project']['screenplay'] and saved['scene_outline']==case['project']['scene_outline']
     assert item['source_screenplay']==case['project']['screenplay'] and len(provider.requests)==1
     target_texts=[s for s in sources if s['is_target'] and s['field']=='text']
@@ -251,7 +272,7 @@ def test_old_reviews_reopen_unchanged_without_provider(project_client,monkeypatc
     assert not provider.requests
 
 
-def test_ui_all_fields_evidence_keeps_script_and_sources(reviewing):
+def test_new_review_cites_target_text_and_keeps_heading_speaker_sources(reviewing):
     client,provider,p,_=reviewing
     body=edit(p)
     body['screenplay']['scenes'][0]['blocks'].append(block(kind='dialogue',text='Cha cứ để đó.'))
@@ -261,5 +282,5 @@ def test_ui_all_fields_evidence_keeps_script_and_sources(reviewing):
     assert result.status_code==200,result.text
     saved=result.json();reviewed=saved['screenplay_reviews'][-1]
     sources={s['id']:s for s in reviewed['sources']}
-    assert [sources[e['source_id']]['field'] for e in reviewed['notes'][0]['evidence']]==['text','heading','speaker']
+    assert [sources[e['source_id']]['field'] for e in reviewed['notes'][0]['evidence']]==['text']
     assert saved['screenplay']==p['screenplay'] and reviewed['source_screenplay']==p['screenplay']
