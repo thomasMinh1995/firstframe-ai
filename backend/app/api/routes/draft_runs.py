@@ -9,7 +9,9 @@ from app.api.routes import projects, screenplays, screenplay_reviews
 from app.api.schemas.projects import ProjectResponse, StoryDraft
 from app.api.schemas.screenplays import ScreenplayEdit
 from app.api.schemas.scenes import SceneId
+from app.api.schemas.draft_runs import DraftRunResponse
 from app.application import draft_workflow as workflow
+from app.application import draft_progress as progress
 from app.application.draft_run_store import DraftRunStore, active_run
 from app.application.language import resolve_response_language
 from app.application.provenance import attribute_edits, draft_fields, scene_fields
@@ -28,7 +30,25 @@ def providers():
 
 
 def brief(run):
-    return {k: v for k, v in run.items() if k not in ("candidate", "original", "source_content", "calls", "config", "owner")}
+    result = {k: v for k, v in run.items() if k not in (
+        "candidate", "original", "source_content", "calls", "config", "owner", "plan_review_result",
+    )}
+    result.update(progress.public_progress(run))
+    config = None
+    if run["status"] in ("needs_input", "partial", "failed", "interrupted"):
+        try:
+            config = workflow.configuration(providers())
+        except Exception:
+            pass  # Reading saved work must remain available when AI is unconfigured.
+    reason = progress.continuation_block(run, config)
+    result.update(can_continue=reason is None, continue_block_reason=reason,
+                  continue_block_message=progress.CONTINUE_MESSAGES.get(reason))
+    # Provider errors can contain prompts or raw model output. Keep them private.
+    if result["error"]:
+        result["error"] = "Lượt tạo gặp lỗi. Phần đã lưu vẫn được giữ; hãy kiểm tra trạng thái trước khi tiếp tục."
+    if result["review_error"]:
+        result["review_error"] = "Góp ý chưa hoàn tất. Bản nháp đã lưu vẫn đọc được."
+    return DraftRunResponse.model_validate(result).model_dump(mode="json")
 
 
 class Start(BaseModel):
@@ -63,14 +83,14 @@ async def lifespan(app):
     yield
 
 
-@router.get("")
+@router.get("", response_model=list[DraftRunResponse])
 def list_runs(project_id: str):
     with projects.project_errors():
         projects.load_project(project_id)
         return [brief(r) for r in store().rows(project_id)]
 
 
-@router.post("")
+@router.post("", response_model=DraftRunResponse)
 def start(project_id: str, request: Start):
     with projects.project_errors():
         s = store()
@@ -95,17 +115,22 @@ def start(project_id: str, request: Start):
         return brief(run)
 
 
-@router.get("/{run_id}")
+@router.get("/{run_id}", response_model=DraftRunResponse)
 def status(project_id: str, run_id: SceneId):
     with projects.project_errors():
         return brief(store().get_run(project_id, run_id))
 
 
+def candidate_response(run):
+    return {"revision": run["candidate_revision"], "save_id": run.get("last_candidate_save_id"),
+            "project": ProjectResponse.model_validate(run["candidate"]),
+            "plan_review": run.get("plan_review_result")}
+
+
 @router.get("/{run_id}/candidate")
 def candidate(project_id: str, run_id: SceneId):
     with projects.project_errors():
-        run = store().get_run(project_id, run_id)
-        return {"revision": run["candidate_revision"], "save_id": run.get("last_candidate_save_id"), "project": ProjectResponse.model_validate(run["candidate"])}
+        return candidate_response(store().get_run(project_id, run_id))
 
 
 @router.put("/{run_id}/candidate")
@@ -119,7 +144,8 @@ def edit_candidate(project_id: str, run_id: SceneId, request: CandidateEdit):
                 return
             if r["status"] not in ("needs_input", "ready", "partial", "failed", "interrupted", "cancelled") or r["candidate_revision"] != request.revision or r["adopted_revision"] is not None:
                 raise ProjectConflict
-            p = ProjectResponse.model_validate(r["candidate"])
+            previous = r["candidate"]
+            p = ProjectResponse.model_validate(previous)
             if p.draft is None and r["status"] != "needs_input":
                 raise ProjectConflict
             if request.answers is not None:
@@ -151,26 +177,22 @@ def edit_candidate(project_id: str, run_id: SceneId, request: CandidateEdit):
             r["candidate"] = p.model_dump(mode="json")
             r["candidate_revision"] += 1
             r.update(last_candidate_save_id=request.save_id, candidate_fingerprint=fingerprint)
+            progress.candidate_edited(r, previous)
         r = store().change(project_id, run_id, edit)
-        return {"revision": r["candidate_revision"], "save_id": r.get("last_candidate_save_id"), "project": ProjectResponse.model_validate(r["candidate"])}
+        return candidate_response(r)
 
 
-@router.post("/{run_id}/continue")
+@router.post("/{run_id}/continue", response_model=DraftRunResponse)
 def resume(project_id: str, run_id: SceneId, request: Continue):
     with projects.project_errors():
         selected = providers()
         def claim(r):
             if r["candidate_revision"] != request.candidate_revision or r["status"] not in ("needs_input", "partial", "failed", "interrupted") or r["adopted_revision"] is not None:
                 raise ProjectConflict
-            if workflow.configuration(selected) != r["config"]:
-                raise HTTPException(409, "Cấu hình model hoặc prompt đã đổi. Hãy tạo lượt mới; kết quả cũ vẫn được giữ.")
-            if any("output" not in c and c["stage"] in ("reasoning", "planning", "scene_generation", "screenplay_generation") for c in r["calls"]):
-                raise HTTPException(409, "Lần gọi AI chưa rõ kết quả; không gửi lại. Hãy giữ bản đã có hoặc hủy và tạo lượt mới.")
+            reason = progress.continuation_block(r, workflow.configuration(selected))
+            if reason:
+                raise HTTPException(409, progress.CONTINUE_MESSAGES[reason])
             p = ProjectResponse.model_validate(r["candidate"])
-            if r["original"] is not None:
-                original = ProjectResponse.model_validate(r["original"])
-                if (p.draft, p.screenplay) != (original.draft, original.screenplay):
-                    raise HTTPException(409, "Bạn đã sửa candidate. Giữ bản này để đọc/nhận; tạo lượt mới nếu muốn AI viết lại theo nguồn khác.")
             if request.answers is not None:
                 if r["status"] != "needs_input" or p.analysis is None or len(request.answers) != len(p.analysis.missing_information) or any(len(a) > 2000 for a in request.answers):
                     raise HTTPException(422, "Câu trả lời không khớp câu hỏi của lượt này.")
@@ -184,7 +206,7 @@ def resume(project_id: str, run_id: SceneId, request: Continue):
         return brief(run)
 
 
-@router.post("/{run_id}/cancel")
+@router.post("/{run_id}/cancel", response_model=DraftRunResponse)
 def cancel(project_id: str, run_id: SceneId):
     with projects.project_errors():
         def stop(r):
@@ -193,6 +215,7 @@ def cancel(project_id: str, run_id: SceneId):
             r["cancel_requested"] = True
             if r["status"] != "running":
                 r["status"] = "cancelled"
+                progress.end_items(r, "cancelled", "cancelled")
         return brief(store().change(project_id, run_id, stop))
 
 

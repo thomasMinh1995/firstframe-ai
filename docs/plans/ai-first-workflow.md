@@ -5,7 +5,7 @@
 - Trạng thái: các task hệ thống và UI của giai đoạn 1–6 đã triển khai, kiểm chứng kỹ thuật local. QA-01 có báo cáo tích hợp nhưng chưa chốt phát hành; xem [bằng chứng và các phần còn thiếu](../testing/phase6-workflow-acceptance-2026-10-29.md).
 - QA-01 tiếp nối: [context review trên Qwen mục tiêu](../evaluations/qa01-review-context-qwen7b-final-2026-10-29/README.md) đã bỏ chặn cho bộ ca cố định mà không cắt nguồn; độ tin cậy góp ý model và nghiệm thu người đọc/thiết bị vẫn chưa đạt.
 - QA-01 review cuối PR #77: [kiểm tra nguồn trực tiếp và giới hạn diễn giải Qwen](../evaluations/qa01-qwen-review-v8-2026-10-29/README.md) đạt 10/10 ca ở cả hai lượt; đã sửa ca đèn pin và diễn giải ngoài nguồn. Chỉ nghiệm thu kỹ thuật trên bộ ca đã lưu; kiểm tra ngữ nghĩa tổng quát, người đọc và thiết bị vẫn chưa hoàn tất.
-- Cập nhật UI đã chọn: [kế hoạch áp dụng prototype Bản nháp và Review](draft-review-workflow-ui.md), gồm DR-01–DR-10 qua năm giai đoạn. Đây là backlog tiếp nối, chưa triển khai; trạng thái hoàn tất của các task SYS/UI cũ được giữ.
+- Cập nhật UI đã chọn: [kế hoạch áp dụng prototype Bản nháp và Review](draft-review-workflow-ui.md), gồm DR-01–DR-10 qua năm giai đoạn. DR-01/DR-02 đã triển khai trên nhánh `fix/draft-workflow-progress`; DR-03–DR-10 chưa triển khai. Trạng thái hoàn tất của các task SYS/UI cũ được giữ.
 - Mục tiêu: người dùng kể khoảnh khắc, AI chuẩn bị bản nháp phim ngắn, người dùng review và yêu cầu thay đổi, rồi chọn bản để xuất.
 - Phạm vi ban đầu: ứng dụng local một người dùng, Next.js, FastAPI và SQLite hiện có. Đường tự viết tiếp tục dùng được.
 

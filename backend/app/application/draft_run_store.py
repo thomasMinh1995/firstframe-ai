@@ -3,6 +3,7 @@ import json
 from hashlib import sha256
 from datetime import UTC, datetime
 from app.application.project_store import ProjectStore, ProjectConflict, ProjectNotFound
+from app.application import draft_progress as progress
 
 ACTIVE = ("running", "needs_input", "partial", "failed", "interrupted")
 
@@ -80,6 +81,8 @@ class DraftRunStore(ProjectStore):
                 created_at=now(), updated_at=now(), candidate_revision=0,
                 completed_scenes=0, total_scenes=0, error=None, review_error=None,
                 adopted_revision=None, calls=[], candidate=candidate.model_dump(mode="json"), original=None)
+            run.update(progress_version=1, progress_revision=0,
+                       workflow_items=[progress.new_item(k) for k in progress.BASE])
             c.execute("INSERT INTO draft_runs VALUES (?,?,?)", (run_id, project_id, json.dumps(run, ensure_ascii=False)))
             return run, True
 
@@ -91,7 +94,13 @@ class DraftRunStore(ProjectStore):
             if row is None:
                 raise ProjectNotFound
             run = json.loads(row[0])
+            progress_keys = ("workflow_items", "status", "step", "cancel_requested", "adopted_revision")
+            before = json.dumps({k: run.get(k) for k in progress_keys}, sort_keys=True)
             fn(run)
+            if "workflow_items" in run:
+                progress.validate_progress(run)
+                if before != json.dumps({k: run.get(k) for k in progress_keys}, sort_keys=True):
+                    run["progress_revision"] = run.get("progress_revision", 0) + 1
             run["updated_at"] = now()
             c.execute("UPDATE draft_runs SET data=? WHERE id=?", (json.dumps(run, ensure_ascii=False), run_id))
             return run
@@ -99,12 +108,17 @@ class DraftRunStore(ProjectStore):
     def recover(self, owner):
         with self.connect() as c:
             self.setup(c)
-            for run_id, data in c.execute("SELECT id,data FROM draft_runs").fetchall():
-                r = json.loads(data)
+            rows = list(c.execute("SELECT id,project_id FROM draft_runs"))
+        for run_id, project_id in rows:
+            run = self.get_run(project_id, run_id)
+            if run["status"] != "running" or run["owner"] == owner:
+                continue
+            def interrupt(r):
                 if r["status"] == "running" and r["owner"] != owner:
                     r["status"] = "interrupted"
                     r["error"] = "Tiến trình đã dừng. Phần hoàn tất vẫn giữ; chỉ tiếp tục bước chưa gửi AI."
-                    c.execute("UPDATE draft_runs SET data=? WHERE id=?", (json.dumps(r, ensure_ascii=False), run_id))
+                    progress.end_items(r, "interrupted", "restart")
+            self.change(project_id, run_id, interrupt)
 
     def adopt(self, project_id, run_id, revision, candidate_revision):
         from app.api.schemas.projects import ProjectResponse
@@ -139,6 +153,8 @@ class DraftRunStore(ProjectStore):
             p.revision += 1
             p.updated_at = now()
             run["adopted_revision"] = p.revision
+            if "workflow_items" in run:
+                run["progress_revision"] += 1
             c.execute("UPDATE projects SET revision=?,data=? WHERE id=?", (p.revision, p.model_dump_json(exclude_computed_fields=True), project_id))
             c.execute("UPDATE draft_runs SET data=? WHERE id=?", (json.dumps(run, ensure_ascii=False), run_id))
             return p

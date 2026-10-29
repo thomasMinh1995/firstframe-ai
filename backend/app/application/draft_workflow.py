@@ -6,6 +6,10 @@ import json
 from pathlib import Path
 from uuid import uuid4
 
+from pydantic import TypeAdapter
+from app.core.artifacts import EvaluationArtifact
+from app.application import draft_progress as progress
+
 from app.api.schemas.projects import (ProjectResponse, StoryDraft, ScenePlanSource, SceneOutline,
     Screenplay, SceneProposal, ScreenplayProposal, ScreenplayReview)
 from app.api.schemas.story import AnalysisResponse
@@ -71,11 +75,25 @@ def execute(store, project_id, run_id, providers):
     run = store.get_run(project_id, run_id)
     p = ProjectResponse.model_validate(run["candidate"])
 
-    def checkpoint(step, **updates):
+    def checkpoint(step, *, completed=None, active=(), **updates):
         def keep(r):
+            progress.ensure_progress(r)
             r.update(candidate=p.model_dump(mode="json"), step=step, sending=False, **updates)
             r["candidate_revision"] += 1
+            progress.add_scenes(r, p.screenplay)
+            for key, artifact_id in (completed or {}).items():
+                progress.complete_item(r, key, artifact_id)
+            for key in active:
+                progress.update_item(r, key, "running")
         return store.change(project_id, run_id, keep)
+
+    def mark(key, status, error_code=None):
+        def keep(r):
+            progress.ensure_progress(r)
+            progress.update_item(r, key, status, error_code=error_code)
+            if key == "plan_review" and status in {"warning", "skipped"}:
+                r["review_error"] = "Góp ý story plan chưa hoàn tất sau gián đoạn."
+        store.change(project_id, run_id, keep)
 
     def cancelled():
         return store.get_run(project_id, run_id)["cancel_requested"]
@@ -83,35 +101,62 @@ def execute(store, project_id, run_id, providers):
     try:
         service = create_story_generation_service(wrapped[0])
         if p.analysis is None:
-            checkpoint("clarify")
+            checkpoint("clarify", active=("analysis",))
             reasoning = service.analyze(
                 p.idea, _constraints(p), answers=p.creator_answers(), response_language=p.response_language)
             p.analysis = AnalysisResponse(artifact_id=reasoning.metadata.artifact_id,
                 summary=next((n.content for n in reasoning.notes if n.label == "Analysis summary"), ""),
                 missing_information=list(reasoning.open_questions), ai_suggestions=list(getattr(reasoning, "ai_suggestions", ())))
             p.answers = [""] * len(p.analysis.missing_information)
-            checkpoint("plan")
+            checkpoint("plan", completed={"analysis": p.analysis.artifact_id})
             if p.analysis.missing_information and not cancelled():
-                store.change(project_id, run_id, lambda r: r.update(status="needs_input"))
+                def wait_for_author(r):
+                    r["status"] = "needs_input"
+                    progress.update_item(r, "intent", "needs_input")
+                store.change(project_id, run_id, wait_for_author)
                 return
         if cancelled():
             return
+        def confirmed_intent(r):
+            progress.ensure_progress(r)
+            progress.complete_item(r, "analysis", p.analysis.artifact_id)
+            progress.complete_item(r, "intent", p.analysis.artifact_id)
+        store.change(project_id, run_id, confirmed_intent)
         if p.draft is None:
-            checkpoint("plan")
+            checkpoint("plan", active=("plan",))
             def planned(plan):
                 p.draft = StoryDraft(title=plan.title or "Phim ngắn", logline=plan.logline or "",
                     sections=[dict(title=s.title, purpose=s.purpose, content=s.content) for s in plan.sections])
                 p.draft_provenance = ai_draft(p.draft)
-                checkpoint("plan_review")
+                checkpoint("plan_review", completed={"plan": None}, active=("plan_review",))
             try:
-                service.plan(p.idea, p.creator_answers(), _constraints(p), p.response_language,
+                planned_run = service.plan(p.idea, p.creator_answers(), _constraints(p), p.response_language,
                     on_planned=planned, structured_review=True,
                     pending_questions=tuple(q for q, a in zip(p.analysis.missing_information, p.answers) if not a.strip()))
+                def save_plan_review(r):
+                    r["plan_review_result"] = TypeAdapter(EvaluationArtifact).dump_python(
+                        planned_run.evaluation, mode="json")
+                    progress.complete_item(r, "plan_review", planned_run.evaluation.metadata.artifact_id)
+                store.change(project_id, run_id, save_plan_review)
             except Exception as error:
                 if p.draft is None:
                     raise
-                store.change(project_id, run_id, lambda r: r.update(review_error=str(error)))
-            checkpoint("outline")
+                def failed_plan_review(r):
+                    r["review_error"] = str(error)
+                    progress.update_item(r, "plan_review", "cancelled" if r["cancel_requested"] else "warning",
+                                         error_code="cancelled" if r["cancel_requested"] else "review_unavailable")
+                store.change(project_id, run_id, failed_plan_review)
+        else:
+            # A restart after the plan checkpoint must not invent a successful critic.
+            current = store.get_run(project_id, run_id)
+            progress.ensure_progress(current)
+            critic = next(i for i in current["workflow_items"] if i["id"] == "plan_review")
+            if critic["status"] not in {"completed", "warning", "skipped", "unknown"}:
+                calls = [c for c in current["calls"] if c["stage"] == "evaluation"]
+                if calls:
+                    mark("plan_review", "warning", "unknown_result" if any("output" not in c for c in calls) else "review_unavailable")
+                else:
+                    mark("plan_review", "skipped", "not_run")
         if cancelled():
             return
         if p.scene_outline is None:
@@ -121,6 +166,7 @@ def execute(store, project_id, run_id, providers):
                 response_language=p.response_language))
             checkpoint("outline")
         if not p.scene_outline.scenes:
+            checkpoint("outline", active=("outline",))
             proposal = suggest_scenes(SceneProposal(id=str(uuid4()), created_at=now(),
                 source_revision=p.revision, source_content=p.content_key(), source_outline=p.scene_outline,
                 mode="list", instructions="Create 2 to 6 concise scenes. Automatic drafting supports at most 6 scenes."), wrapped[1])
@@ -128,55 +174,80 @@ def execute(store, project_id, run_id, providers):
                 raise ValueError("Tạo tự động hỗ trợ tối đa 6 cảnh; không cắt bỏ cảnh. Hãy giữ story plan và tạo lượt mới ngắn hơn; bạn cũng có thể tiếp tục tự viết.")
             p.scene_outline.scenes = proposal.scenes
             p.scene_outline.provenance = {k: TextProvenance(origin="ai_proposal") for k in scene_fields(proposal.scenes)}
-            checkpoint("write", total_scenes=len(proposal.scenes))
         if p.screenplay is None:
             p.screenplay = Screenplay(id=str(uuid4()), version=1, source_revision=p.revision,
                 source_outline=p.scene_outline.model_copy(deep=True),
                 scenes=[ScriptScene(id=str(uuid4()), source_scene_id=s.id, heading=s.title) for s in p.scene_outline.scenes])
-            checkpoint("write")
+            checkpoint("write", completed={"outline": p.scene_outline.id},
+                       total_scenes=len(p.scene_outline.scenes))
         for index, scene in enumerate(p.screenplay.scenes):
             if scene.blocks:
                 continue
             if cancelled():
                 return
-            checkpoint("write")
+            checkpoint("write", active=(f"write:{scene.id}",))
             result = write_scene(ScreenplayProposal(id=str(uuid4()), created_at=now(),
                 source_revision=p.revision, source_content=p.content_key(), source_screenplay=p.screenplay.model_copy(deep=True),
                 source_outline=p.scene_outline, target_scene_id=scene.id, prompt_version="screenplay-scene-v1"), wrapped[2])
             p.screenplay.scenes[index] = result.scene
             p.screenplay.provenance.update({k: TextProvenance(origin="ai_proposal") for k in scene_fields([result.scene], True)})
-            checkpoint("write", completed_scenes=sum(bool(s.blocks) for s in p.screenplay.scenes))
+            checkpoint("write", completed={f"write:{scene.id}": scene.id},
+                       completed_scenes=sum(progress.valid_scene(s) for s in p.screenplay.scenes))
         # Text is durable and readable before optional reviews begin.
-        checkpoint("review")
+        checkpoint("review", completed={"draft": p.screenplay.id})
         if not cancelled():
+            mark("review", "running")
             for scene in p.screenplay.scenes:
                 if cancelled():
                     break
-                if any(r.target_scene_id == scene.id for r in p.screenplay_reviews):
+                saved_review = next((r for r in p.screenplay_reviews if r.target_scene_id == scene.id and r.status == "ready"), None)
+                if saved_review:
+                    checkpoint("review", completed={f"review_scene:{scene.id}": saved_review.id})
                     continue
+                mark(f"review_scene:{scene.id}", "running")
                 try:
                     review = ScreenplayReview(id=str(uuid4()), created_at=now(), source_revision=p.revision,
                         source_content=p.content_key(), source_screenplay=p.screenplay.model_copy(deep=True),
                         source_outline=p.scene_outline, target_scene_id=scene.id, prompt_version=REVIEW_PROMPT_VERSION)
                     review.sources = review_sources(review)
                     p.screenplay_reviews.append(review_scene(review, wrapped[3]))
-                    checkpoint("review")
+                    checkpoint("review", completed={f"review_scene:{scene.id}": review.id})
                 except Exception as error:
-                    store.change(project_id, run_id, lambda r: r.update(review_error=str(error)))
+                    def failed_review(r):
+                        r["review_error"] = str(error)
+                        stopped = r["cancel_requested"]
+                        status, code = ("cancelled", "cancelled") if stopped else ("warning", "review_unavailable")
+                        progress.update_item(r, f"review_scene:{scene.id}", status, error_code=code)
+                        progress.update_item(r, "review", status, error_code=code)
+                        summary = next(i for i in r["workflow_items"] if i["id"] == "review")
+                        for item in summary["children"]:
+                            if item["status"] == "pending":
+                                progress.update_item(r, item["id"], "skipped", error_code="not_run")
+                    store.change(project_id, run_id, failed_review)
                     break
         def finish(r):
             r.update(status="cancelled" if r["cancel_requested"] else "ready", step="done", sending=False)
             r["original"] = r["original"] or r["candidate"]
+            summary = next(i for i in r["workflow_items"] if i["id"] == "review")
+            if all(i["status"] == "completed" for i in summary["children"]):
+                progress.complete_item(r, "review", p.screenplay.id)
+            if r["cancel_requested"]:
+                progress.end_items(r, "cancelled", "cancelled")
         store.change(project_id, run_id, finish)
     except Exception as error:
         def failed(r):
             uncertain = any("output" not in c for c in r["calls"])
             r.update(status="cancelled" if r["cancel_requested"] else "interrupted" if uncertain else "partial" if p.draft else "failed",
                 error=str(error), sending=uncertain)
+            progress.end_items(r, "cancelled" if r["cancel_requested"] else "interrupted" if uncertain else "failed",
+                               "cancelled" if r["cancel_requested"] else "unknown_result" if uncertain else "provider_error")
         store.change(project_id, run_id, failed)
     finally:
         if cancelled():
-            store.change(project_id, run_id, lambda r: r.update(status="cancelled"))
+            def finish_cancel(r):
+                r["status"] = "cancelled"
+                progress.end_items(r, "cancelled", "cancelled")
+            store.change(project_id, run_id, finish_cancel)
 
 
 def _constraints(p):
