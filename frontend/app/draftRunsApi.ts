@@ -1,5 +1,5 @@
 import {request, isProject, type Project} from './projectsApi';
-export type DraftRun = {revision_instructions?:string;affected_scene_ids?:string[];id:string;project_id:string;source_revision:number;status:'running'|'needs_input'|'ready'|'partial'|'failed'|'interrupted'|'cancelled';step:string;sending:boolean;cancel_requested:boolean;candidate_revision:number;completed_scenes:number;total_scenes:number;error:string|null;review_error:string|null;adopted_revision:number|null};
+export type DraftRun = {created_at?:string;revision_instructions?:string;affected_scene_ids?:string[];id:string;project_id:string;source_revision:number;status:'running'|'needs_input'|'ready'|'partial'|'failed'|'interrupted'|'cancelled';step:string;sending:boolean;cancel_requested:boolean;candidate_revision:number;completed_scenes:number;total_scenes:number;error:string|null;review_error:string|null;adopted_revision:number|null};
 export type Candidate={revision:number;save_id?:string|null;project:Project};
 export const runPath=(projectId:string,id?:string)=>`/${projectId}/draft-runs${id?`/${id}`:''}`;
 export function isDraftRun(value:unknown):value is DraftRun {

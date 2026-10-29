@@ -1,0 +1,896 @@
+{
+  "run": {
+    "id": "6eeae23c-f27d-4e35-b4da-afaef3dc30af",
+    "project_id": "e676d54f-b7ba-4de3-840a-762ff35c7fdd",
+    "source_revision": 1,
+    "revision_instructions": "",
+    "affected_scene_ids": [],
+    "status": "ready",
+    "step": "done",
+    "sending": false,
+    "cancel_requested": false,
+    "created_at": "2026-10-29T06:44:34.638454+00:00",
+    "updated_at": "2026-10-29T06:48:03.462815+00:00",
+    "candidate_revision": 12,
+    "completed_scenes": 1,
+    "total_scenes": 1,
+    "error": null,
+    "review_error": "Ngữ cảnh vượt giới hạn yêu cầu AI hiện hỗ trợ; chưa gửi AI. Bản tác giả vẫn giữ, bạn có thể tiếp tục tự viết và lưu.",
+    "adopted_revision": null
+  },
+  "candidate": {
+    "revision": 12,
+    "save_id": null,
+    "project": {
+      "last_save_id": null,
+      "last_save_revision": null,
+      "last_save_fingerprint": null,
+      "edit_sessions": {},
+      "draft_provenance": {
+        "title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "logline": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:0:title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:0:purpose": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:0:content": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:1:title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:1:purpose": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:1:content": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:2:title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:2:purpose": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:2:content": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:3:title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:3:purpose": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:3:content": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:4:title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:4:purpose": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:4:content": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:5:title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:5:purpose": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:5:content": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:6:title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:6:purpose": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:6:content": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:7:title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:7:purpose": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:7:content": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:8:title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:8:purpose": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:8:content": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:9:title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:9:purpose": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:9:content": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        }
+      },
+      "response_language": "vi",
+      "id": "e676d54f-b7ba-4de3-840a-762ff35c7fdd",
+      "revision": 1,
+      "updated_at": "2026-10-29T06:44:34.633688+00:00",
+      "title": "Dự án chưa đặt tên",
+      "idea": "Chiều mưa trong căn bếp nhỏ, con gái đặt chìa khóa lên bàn trước khi đi học xa. Cha đặt cạnh đó một lá thư xin lỗi rồi lùi lại. Cô chưa mở thư, nhưng ngồi xuống uống cùng cha một ngụm trà.",
+      "constraints": [
+        "Phim 30 giây, tối đa 2 cảnh rất ngắn, 2 nhân vật, một căn bếp.",
+        "Giữ lá thư chưa mở và quyền quyết định của con gái; không giải quyết hết mâu thuẫn.",
+        "Bản phát triển gọn; ưu tiên hành động và khoảng lặng, ít thoại."
+      ],
+      "analysis": {
+        "artifact_id": "5ce0dc51-181f-4252-af19-1243b001322b",
+        "summary": "Trong căn bếp nhỏ, con gái đặt chìa khóa lên bàn trước khi đi học. Cha đặt lá thư xin lỗi cạnh chìa khóa, lùi lại. Cô chưa mở thư, ngồi uống trà cùng cha.",
+        "notes": [],
+        "missing_information": [
+          "Con gái sẽ mở thư hay không"
+        ],
+        "ai_suggestions": []
+      },
+      "answers": [
+        ""
+      ],
+      "clarifications": {},
+      "draft": {
+        "title": "Chiều mưa trong căn bếp nhỏ",
+        "logline": "Trong căn bếp nhỏ dưới mưa, con gái nhận chìa khóa và lá thư xin lỗi từ cha, quyết định giữ im lặng trước khi rời đi.",
+        "sections": [
+          {
+            "title": "Core idea",
+            "purpose": "State the short film's central promise.",
+            "content": "Trong căn bếp nhỏ dưới mưa, con gái nhận chìa khóa và lá thư xin lỗi từ cha, quyết định giữ im lặng trước khi rời đi."
+          },
+          {
+            "title": "Main character",
+            "purpose": "Define the protagonist and key character pressure.",
+            "content": "Con gái Cha"
+          },
+          {
+            "title": "Main conflict",
+            "purpose": "Describe the obstacle and stakes.",
+            "content": "Lá thư xin lỗi từ cha Con gái phải quyết định liệu có mở và đọc lá thư hay không Quyền quyết định của con gái về việc tiếp nhận hay không tiếp nhận sự xin lỗi từ cha"
+          },
+          {
+            "title": "Beginning",
+            "purpose": "Set up the story world and first dramatic turn.",
+            "content": "Chiều mưa, con gái đặt chìa khóa lên bàn trước khi rời đi học. Cha đặt lá thư xin lỗi cạnh chìa khóa."
+          },
+          {
+            "title": "Middle",
+            "purpose": "Escalate pressure and reveal the emotional turn.",
+            "content": "Con gái ngồi xuống uống trà cùng cha, vẫn chưa mở lá thư."
+          },
+          {
+            "title": "Ending",
+            "purpose": "Resolve the short film through a visible choice or image.",
+            "content": "Con gái quyết định không mở lá thư và rời đi, để lại lá thư và chìa khóa trên bàn. Con gái bước ra khỏi căn bếp, bóng lưng trong mưa, lá thư và chìa khóa vẫn còn trên bàn."
+          },
+          {
+            "title": "Theme",
+            "purpose": "Name the human idea underneath the plot.",
+            "content": "Sự tha thứ và quyền quyết định của con gái."
+          },
+          {
+            "title": "Visual Style",
+            "purpose": "Capture the visual approach and recurring motifs.",
+            "content": "Căn bếp nhỏ, ánh sáng mờ ảo của chiều mưa, chìa khóa và lá thư xin lỗi. Chiều mưa, Căn bếp nhỏ, Chìa khóa, Lá thư xin lỗi"
+          },
+          {
+            "title": "Tone",
+            "purpose": "Describe the intended emotional register.",
+            "content": "Tĩnh lặng, đầy cảm xúc."
+          },
+          {
+            "title": "Production Notes",
+            "purpose": "Keep the idea grounded for short-film production.",
+            "content": "Cảnh đầu và cuối nên ngắn gọn, tập trung vào hành động và khoảng lặng. Sử dụng chìa khóa và lá thư xin lỗi làm biểu tượng. Căn bếp nhỏ 2 nhân vật"
+          }
+        ]
+      },
+      "feedback": null,
+      "feedback_source": null,
+      "reviewed_content": null,
+      "versions": [],
+      "clarification_history": [],
+      "plan_generations": [],
+      "scene_outline": {
+        "id": "7b919efc-7dd1-4d40-9a00-1b4a3d7b93b3",
+        "version": 1,
+        "scenes": [
+          {
+            "id": "8f793a98-fcaf-41d4-8dea-320a820c61cd",
+            "title": "Chiều mưa, con gái đi học",
+            "action": "Con gái bước vào căn bếp nhỏ, trời mưa phù phù. Cô đặt chìa khóa lên bàn, nhìn ra cửa sổ. Cha đứng ở góc phòng, im lặng.",
+            "location": "Căn bếp nhỏ",
+            "time": "Chiều mưa",
+            "characters": "Con gái, Cha",
+            "goal": "Con gái đặt chìa khóa lên bàn trước khi đi học.",
+            "purpose": "Đặt bối cảnh và giới thiệu nhân vật.",
+            "viewer_intent": "",
+            "keep_or_avoid": "",
+            "staging_choices": {}
+          }
+        ],
+        "source": {
+          "id": "8593a0e2-60e7-4b94-8dfb-65fa6a2fa645",
+          "project_revision": 1,
+          "version_id": "current",
+          "draft": {
+            "title": "Chiều mưa trong căn bếp nhỏ",
+            "logline": "Trong căn bếp nhỏ dưới mưa, con gái nhận chìa khóa và lá thư xin lỗi từ cha, quyết định giữ im lặng trước khi rời đi.",
+            "sections": [
+              {
+                "title": "Core idea",
+                "purpose": "State the short film's central promise.",
+                "content": "Trong căn bếp nhỏ dưới mưa, con gái nhận chìa khóa và lá thư xin lỗi từ cha, quyết định giữ im lặng trước khi rời đi."
+              },
+              {
+                "title": "Main character",
+                "purpose": "Define the protagonist and key character pressure.",
+                "content": "Con gái Cha"
+              },
+              {
+                "title": "Main conflict",
+                "purpose": "Describe the obstacle and stakes.",
+                "content": "Lá thư xin lỗi từ cha Con gái phải quyết định liệu có mở và đọc lá thư hay không Quyền quyết định của con gái về việc tiếp nhận hay không tiếp nhận sự xin lỗi từ cha"
+              },
+              {
+                "title": "Beginning",
+                "purpose": "Set up the story world and first dramatic turn.",
+                "content": "Chiều mưa, con gái đặt chìa khóa lên bàn trước khi rời đi học. Cha đặt lá thư xin lỗi cạnh chìa khóa."
+              },
+              {
+                "title": "Middle",
+                "purpose": "Escalate pressure and reveal the emotional turn.",
+                "content": "Con gái ngồi xuống uống trà cùng cha, vẫn chưa mở lá thư."
+              },
+              {
+                "title": "Ending",
+                "purpose": "Resolve the short film through a visible choice or image.",
+                "content": "Con gái quyết định không mở lá thư và rời đi, để lại lá thư và chìa khóa trên bàn. Con gái bước ra khỏi căn bếp, bóng lưng trong mưa, lá thư và chìa khóa vẫn còn trên bàn."
+              },
+              {
+                "title": "Theme",
+                "purpose": "Name the human idea underneath the plot.",
+                "content": "Sự tha thứ và quyền quyết định của con gái."
+              },
+              {
+                "title": "Visual Style",
+                "purpose": "Capture the visual approach and recurring motifs.",
+                "content": "Căn bếp nhỏ, ánh sáng mờ ảo của chiều mưa, chìa khóa và lá thư xin lỗi. Chiều mưa, Căn bếp nhỏ, Chìa khóa, Lá thư xin lỗi"
+              },
+              {
+                "title": "Tone",
+                "purpose": "Describe the intended emotional register.",
+                "content": "Tĩnh lặng, đầy cảm xúc."
+              },
+              {
+                "title": "Production Notes",
+                "purpose": "Keep the idea grounded for short-film production.",
+                "content": "Cảnh đầu và cuối nên ngắn gọn, tập trung vào hành động và khoảng lặng. Sử dụng chìa khóa và lá thư xin lỗi làm biểu tượng. Căn bếp nhỏ 2 nhân vật"
+              }
+            ]
+          },
+          "context": {
+            "idea": "Chiều mưa trong căn bếp nhỏ, con gái đặt chìa khóa lên bàn trước khi đi học xa. Cha đặt cạnh đó một lá thư xin lỗi rồi lùi lại. Cô chưa mở thư, nhưng ngồi xuống uống cùng cha một ngụm trà.",
+            "constraints": [
+              "Phim 30 giây, tối đa 2 cảnh rất ngắn, 2 nhân vật, một căn bếp.",
+              "Giữ lá thư chưa mở và quyền quyết định của con gái; không giải quyết hết mâu thuẫn.",
+              "Bản phát triển gọn; ưu tiên hành động và khoảng lặng, ít thoại."
+            ],
+            "clarifications": [],
+            "pending_questions": [
+              {
+                "question": "Con gái sẽ mở thư hay không",
+                "input_index": 0
+              }
+            ]
+          },
+          "response_language": "vi",
+          "draft_provenance": {
+            "title": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "logline": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:0:title": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:0:purpose": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:0:content": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:1:title": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:1:purpose": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:1:content": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:2:title": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:2:purpose": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:2:content": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:3:title": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:3:purpose": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:3:content": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:4:title": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:4:purpose": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:4:content": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:5:title": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:5:purpose": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:5:content": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:6:title": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:6:purpose": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:6:content": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:7:title": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:7:purpose": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:7:content": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:8:title": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:8:purpose": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:8:content": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:9:title": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:9:purpose": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:9:content": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            }
+          }
+        },
+        "provenance": {
+          "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:action": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:location": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:time": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:characters": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:goal": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:viewer_intent": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:keep_or_avoid": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          }
+        }
+      },
+      "screenplay": {
+        "id": "39f267e6-0b72-4492-ab3d-c60543b6f205",
+        "version": 1,
+        "scenes": [
+          {
+            "id": "21cd8b17-699d-41d9-b099-6b37056df782",
+            "source_scene_id": "8f793a98-fcaf-41d4-8dea-320a820c61cd",
+            "heading": "Chiều mưa, con gái đi học",
+            "blocks": [
+              {
+                "kind": "action",
+                "text": "Con gái bước vào căn bếp nhỏ, trời mưa phù phù. Cô đặt chìa khóa lên bàn, nhìn ra cửa sổ. Cha đứng ở góc phòng, im lặng.",
+                "speaker": "",
+                "id": "a43e5388-c7b3-42e3-8cfa-4e766c31e464"
+              },
+              {
+                "kind": "action",
+                "text": "Cha đặt một lá thư xin lỗi lên bàn, cạnh chìa khóa.",
+                "speaker": "",
+                "id": "8f846729-93bf-4bfa-b822-12c8c3c5e075"
+              },
+              {
+                "kind": "action",
+                "text": "Con gái ngồi xuống, uống một ngụm trà, vẫn chưa mở lá thư.",
+                "speaker": "",
+                "id": "dcd01ce1-89b2-4331-b915-0c9cf070219e"
+              }
+            ]
+          }
+        ],
+        "source_revision": 1,
+        "source_outline": {
+          "id": "7b919efc-7dd1-4d40-9a00-1b4a3d7b93b3",
+          "version": 1,
+          "scenes": [
+            {
+              "id": "8f793a98-fcaf-41d4-8dea-320a820c61cd",
+              "title": "Chiều mưa, con gái đi học",
+              "action": "Con gái bước vào căn bếp nhỏ, trời mưa phù phù. Cô đặt chìa khóa lên bàn, nhìn ra cửa sổ. Cha đứng ở góc phòng, im lặng.",
+              "location": "Căn bếp nhỏ",
+              "time": "Chiều mưa",
+              "characters": "Con gái, Cha",
+              "goal": "Con gái đặt chìa khóa lên bàn trước khi đi học.",
+              "purpose": "Đặt bối cảnh và giới thiệu nhân vật.",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {}
+            }
+          ],
+          "source": {
+            "id": "8593a0e2-60e7-4b94-8dfb-65fa6a2fa645",
+            "project_revision": 1,
+            "version_id": "current",
+            "draft": {
+              "title": "Chiều mưa trong căn bếp nhỏ",
+              "logline": "Trong căn bếp nhỏ dưới mưa, con gái nhận chìa khóa và lá thư xin lỗi từ cha, quyết định giữ im lặng trước khi rời đi.",
+              "sections": [
+                {
+                  "title": "Core idea",
+                  "purpose": "State the short film's central promise.",
+                  "content": "Trong căn bếp nhỏ dưới mưa, con gái nhận chìa khóa và lá thư xin lỗi từ cha, quyết định giữ im lặng trước khi rời đi."
+                },
+                {
+                  "title": "Main character",
+                  "purpose": "Define the protagonist and key character pressure.",
+                  "content": "Con gái Cha"
+                },
+                {
+                  "title": "Main conflict",
+                  "purpose": "Describe the obstacle and stakes.",
+                  "content": "Lá thư xin lỗi từ cha Con gái phải quyết định liệu có mở và đọc lá thư hay không Quyền quyết định của con gái về việc tiếp nhận hay không tiếp nhận sự xin lỗi từ cha"
+                },
+                {
+                  "title": "Beginning",
+                  "purpose": "Set up the story world and first dramatic turn.",
+                  "content": "Chiều mưa, con gái đặt chìa khóa lên bàn trước khi rời đi học. Cha đặt lá thư xin lỗi cạnh chìa khóa."
+                },
+                {
+                  "title": "Middle",
+                  "purpose": "Escalate pressure and reveal the emotional turn.",
+                  "content": "Con gái ngồi xuống uống trà cùng cha, vẫn chưa mở lá thư."
+                },
+                {
+                  "title": "Ending",
+                  "purpose": "Resolve the short film through a visible choice or image.",
+                  "content": "Con gái quyết định không mở lá thư và rời đi, để lại lá thư và chìa khóa trên bàn. Con gái bước ra khỏi căn bếp, bóng lưng trong mưa, lá thư và chìa khóa vẫn còn trên bàn."
+                },
+                {
+                  "title": "Theme",
+                  "purpose": "Name the human idea underneath the plot.",
+                  "content": "Sự tha thứ và quyền quyết định của con gái."
+                },
+                {
+                  "title": "Visual Style",
+                  "purpose": "Capture the visual approach and recurring motifs.",
+                  "content": "Căn bếp nhỏ, ánh sáng mờ ảo của chiều mưa, chìa khóa và lá thư xin lỗi. Chiều mưa, Căn bếp nhỏ, Chìa khóa, Lá thư xin lỗi"
+                },
+                {
+                  "title": "Tone",
+                  "purpose": "Describe the intended emotional register.",
+                  "content": "Tĩnh lặng, đầy cảm xúc."
+                },
+                {
+                  "title": "Production Notes",
+                  "purpose": "Keep the idea grounded for short-film production.",
+                  "content": "Cảnh đầu và cuối nên ngắn gọn, tập trung vào hành động và khoảng lặng. Sử dụng chìa khóa và lá thư xin lỗi làm biểu tượng. Căn bếp nhỏ 2 nhân vật"
+                }
+              ]
+            },
+            "context": {
+              "idea": "Chiều mưa trong căn bếp nhỏ, con gái đặt chìa khóa lên bàn trước khi đi học xa. Cha đặt cạnh đó một lá thư xin lỗi rồi lùi lại. Cô chưa mở thư, nhưng ngồi xuống uống cùng cha một ngụm trà.",
+              "constraints": [
+                "Phim 30 giây, tối đa 2 cảnh rất ngắn, 2 nhân vật, một căn bếp.",
+                "Giữ lá thư chưa mở và quyền quyết định của con gái; không giải quyết hết mâu thuẫn.",
+                "Bản phát triển gọn; ưu tiên hành động và khoảng lặng, ít thoại."
+              ],
+              "clarifications": [],
+              "pending_questions": [
+                {
+                  "question": "Con gái sẽ mở thư hay không",
+                  "input_index": 0
+                }
+              ]
+            },
+            "response_language": "vi",
+            "draft_provenance": {
+              "title": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "logline": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:0:title": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:0:purpose": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:0:content": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:1:title": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:1:purpose": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:1:content": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:2:title": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:2:purpose": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:2:content": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:3:title": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:3:purpose": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:3:content": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:4:title": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:4:purpose": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:4:content": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:5:title": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:5:purpose": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:5:content": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:6:title": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:6:purpose": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:6:content": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:7:title": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:7:purpose": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:7:content": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:8:title": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:8:purpose": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:8:content": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:9:title": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:9:purpose": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:9:content": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              }
+            }
+          },
+          "provenance": {
+            "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:title": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:action": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:location": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:time": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:characters": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:goal": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:purpose": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:viewer_intent": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:keep_or_avoid": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            }
+          }
+        },
+        "provenance": {
+          "script:21cd8b17-699d-41d9-b099-6b37056df782:heading": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "block:a43e5388-c7b3-42e3-8cfa-4e766c31e464:text": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "block:a43e5388-c7b3-42e3-8cfa-4e766c31e464:speaker": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "block:8f846729-93bf-4bfa-b822-12c8c3c5e075:text": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "block:8f846729-93bf-4bfa-b822-12c8c3c5e075:speaker": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "block:dcd01ce1-89b2-4331-b915-0c9cf070219e:text": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "block:dcd01ce1-89b2-4331-b915-0c9cf070219e:speaker": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          }
+        }
+      },
+      "screenplay_versions": [],
+      "screenplay_selections": [],
+      "screenplay_proposals": [],
+      "screenplay_reviews": [],
+      "scene_versions": [],
+      "scene_proposals": [],
+      "staging_proposals": [],
+      "scene_sketches": [],
+      "selected_scene_sketches": {},
+      "screenplay_handoff": null,
+      "current_screenplay_review_ids": [],
+      "applicable_screenplay_proposal_ids": [],
+      "screenplay_source_is_current": true,
+      "applicable_sketch_ids": [],
+      "applicable_scene_proposal_ids": [],
+      "scene_source_is_current": true,
+      "scene_handoff": {
+        "outline_id": "7b919efc-7dd1-4d40-9a00-1b4a3d7b93b3",
+        "version": 1,
+        "project_revision": 1,
+        "source_id": "8593a0e2-60e7-4b94-8dfb-65fa6a2fa645",
+        "scenes": [
+          {
+            "id": "8f793a98-fcaf-41d4-8dea-320a820c61cd",
+            "title": "Chiều mưa, con gái đi học",
+            "action": "Con gái bước vào căn bếp nhỏ, trời mưa phù phù. Cô đặt chìa khóa lên bàn, nhìn ra cửa sổ. Cha đứng ở góc phòng, im lặng.",
+            "location": "Căn bếp nhỏ",
+            "time": "Chiều mưa",
+            "characters": "Con gái, Cha",
+            "goal": "Con gái đặt chìa khóa lên bàn trước khi đi học.",
+            "purpose": "Đặt bối cảnh và giới thiệu nhân vật.",
+            "viewer_intent": "",
+            "keep_or_avoid": "",
+            "staging_choices": {}
+          }
+        ]
+      },
+      "applicable_plan_ids": [],
+      "author_context": {
+        "idea": "Chiều mưa trong căn bếp nhỏ, con gái đặt chìa khóa lên bàn trước khi đi học xa. Cha đặt cạnh đó một lá thư xin lỗi rồi lùi lại. Cô chưa mở thư, nhưng ngồi xuống uống cùng cha một ngụm trà.",
+        "constraints": [
+          "Phim 30 giây, tối đa 2 cảnh rất ngắn, 2 nhân vật, một căn bếp.",
+          "Giữ lá thư chưa mở và quyền quyết định của con gái; không giải quyết hết mâu thuẫn.",
+          "Bản phát triển gọn; ưu tiên hành động và khoảng lặng, ít thoại."
+        ],
+        "clarifications": [],
+        "pending_questions": [
+          {
+            "question": "Con gái sẽ mở thư hay không",
+            "input_index": 0
+          }
+        ]
+      },
+      "feedback_is_current": false
+    }
+  },
+  "elapsed_seconds": 98.025,
+  "calls": 5,
+  "adopt_status": 200,
+  "select_status": 200,
+  "pdf_status": 200
+}

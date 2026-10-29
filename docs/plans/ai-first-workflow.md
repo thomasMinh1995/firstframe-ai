@@ -2,7 +2,7 @@
 
 - Ngày lập: 29/10/2026.
 - Cập nhật: kết hợp sáu giai đoạn hệ thống với 12 task UI thành backlog triển khai chung.
-- Trạng thái: giai đoạn 1 đã triển khai tại workspace và kiểm chứng kỹ thuật local; giai đoạn 2–6 chưa triển khai. Xem [báo cáo giai đoạn 1](../testing/phase1-autosave-2026-10-29.md).
+- Trạng thái: các task hệ thống và UI của giai đoạn 1–6 đã triển khai, kiểm chứng kỹ thuật local. QA-01 có báo cáo tích hợp nhưng chưa chốt phát hành; xem [bằng chứng và các phần còn thiếu](../testing/phase6-workflow-acceptance-2026-10-29.md).
 - Mục tiêu: người dùng kể khoảnh khắc, AI chuẩn bị bản nháp phim ngắn, người dùng review và yêu cầu thay đổi, rồi chọn bản để xuất.
 - Phạm vi ban đầu: ứng dụng local một người dùng, Next.js, FastAPI và SQLite hiện có. Đường tự viết tiếp tục dùng được.
 
@@ -60,7 +60,7 @@ Các chỉnh sửa UI cần để dùng từng tính năng được giao cùng t
 
 ## Backlog task tích hợp
 
-Backlog gồm **21 task: 8 hệ thống, 12 UI và 1 nghiệm thu toàn luồng**. **SYS-01–SYS-08 và UI-01–UI-10 đã triển khai, kiểm chứng kỹ thuật local**; 3 task còn lại chưa bắt đầu. QA-01 vẫn chờ toàn workflow. Mã task là định danh trong kế hoạch, chưa phải issue hoặc chat đã tạo. Mỗi task có phần kiểm tra đi cùng; QA-01 tổng hợp nghiệm thu và không thay test ở từng task.
+Backlog gồm **21 task: 8 hệ thống, 12 UI và 1 nghiệm thu toàn luồng**. **SYS-01–SYS-08 và UI-01–UI-12 đã triển khai, kiểm chứng kỹ thuật local**. QA-01 đã chạy hồi quy và luồng tích hợp; chưa chốt nghiệm thu phát hành do còn bằng chứng thiết bị/người đọc thật và giới hạn model. Mã task là định danh trong kế hoạch, chưa phải issue hoặc chat đã tạo. Mỗi task có phần kiểm tra đi cùng; QA-01 tổng hợp nghiệm thu và không thay test ở từng task.
 
 Các vai trò Backend, Frontend và QA dưới đây mô tả phần việc cần đảm nhiệm, chưa gán người thực hiện hoặc thời lượng. Các đường dẫn trong bảng tính từ thư mục gốc repo; danh sách file và kiểm chứng chi tiết tiếp tục nằm trong từng giai đoạn.
 
@@ -261,7 +261,7 @@ Kế hoạch `story-plan-pdf-export.md` dùng cho bản phát triển, không ph
 
 ## Giai đoạn 6 P2 Hoàn thiện không gian viết và nghiệm thu toàn luồng
 
-Task bàn giao: **UI-11, UI-12, QA-01**. Điều hướng, editor, card và mobile cốt lõi đã giao ở giai đoạn 3–4; giai đoạn này hoàn thiện sự nhất quán và nghiệm thu.
+Task bàn giao: **UI-11, UI-12, QA-01**. UI-11/UI-12 đã triển khai local. QA-01 có [báo cáo pass/fail và bằng chứng](../testing/phase6-workflow-acceptance-2026-10-29.md); quyết định phát hành còn **cần thêm bằng chứng**, không được suy ra từ số test.
 
 ### Công việc
 
@@ -284,7 +284,7 @@ Task bàn giao: **UI-11, UI-12, QA-01**. Điều hướng, editor, card và mobi
 
 ## Kiểm chứng và cách chia gói triển khai
 
-Mỗi giai đoạn giao thành PR nhỏ theo lát cắt dùng được, kèm test đúng phần rủi ro. Giai đoạn 3 tách ít nhất ba gói: hợp đồng run/lưu checkpoint; chuỗi plan–outline–screenplay; nối UI và xử lý gián đoạn. Giai đoạn 4 giao sửa cấp cảnh trước sửa cấp khối. Đây là thứ tự triển khai, chưa tạo commit/PR hay thay đổi runtime trong đợt lập kế hoạch.
+Mỗi giai đoạn giao thành PR nhỏ theo lát cắt dùng được, kèm test đúng phần rủi ro. Giai đoạn 3 tách ít nhất ba gói: hợp đồng run/lưu checkpoint; chuỗi plan–outline–screenplay; nối UI và xử lý gián đoạn. Giai đoạn 4 giao sửa cấp cảnh trước sửa cấp khối. Đây là thứ tự dự kiến khi lập kế hoạch; kết quả triển khai thực tế được liên kết theo từng giai đoạn ở trên.
 
 | Nhóm kiểm tra | Dùng lại và bổ sung |
 | --- | --- |

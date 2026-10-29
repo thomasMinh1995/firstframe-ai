@@ -1,5 +1,6 @@
 "use client";
 
+import {revealWorkspaceTarget} from "./WorkspaceStage";
 import {ReviewPanel} from "./ReviewPanel";
 import {useEffect,useId,useMemo,useRef,useState} from "react";
 import type {Project} from "./projectsApi";
@@ -87,7 +88,7 @@ export function ScreenplayEditor({project, savedProject, onSelectSource, onDownl
     const next={...script,scenes:script.scenes.map(s=>s.id===scene.id?{...s,blocks:s.blocks.filter(b=>b.id!==id)}:s)};
     setUndo({before:structuredClone(script),after:undoContent(next),label:"Hoàn tác xóa khối"});onChange(next);
   }
-  return <section className="panel screenplay" data-workspace-stage="workspace-script" aria-label="Kịch bản">
+  return <><section className="panel screenplay" data-workspace-stage="workspace-script" aria-label="Kịch bản">
     <header className="screenplay-heading"><div><p className="eyebrow">Kịch bản</p><h2 id="workspace-script" data-tour="script" tabIndex={-1}>Viết kịch bản</h2></div>
       <div className="screenplay-actions">
         <button ref={node=>{toolsOpener.current=node}} type="button" className="secondary" disabled={!scene} aria-controls={scene?`${editorId}-support`:undefined} onClick={e=>{
@@ -97,25 +98,24 @@ export function ScreenplayEditor({project, savedProject, onSelectSource, onDownl
           host?.scrollIntoView({block:'start'});host?.querySelector<HTMLElement>('summary')?.focus({preventScroll:true});
         }}>Dàn cảnh &amp; góp ý</button>
         <button type="button" className="secondary" disabled={savedProject.id!==project.id||!savedProject.screenplay} onClick={e=>{
-          const reader=e.currentTarget.closest('.screenplay')?.querySelector<HTMLElement>('.screenplay-reading');
-          const details=reader?.closest('details');if(details)details.open=true;
-          reader?.scrollIntoView({block:'start'});reader?.focus({preventScroll:true});
+          const target=document.getElementById('workspace-export');revealWorkspaceTarget(target);
+          target?.scrollIntoView({block:'start'});target?.focus({preventScroll:true});
         }}>Đọc &amp; xuất PDF</button>
       </div>
     </header>
-    <SceneHint title="Bắt đầu viết từ đâu?">Chọn cảnh → viết và sửa → lưu để cập nhật kịch bản bên cạnh.
+    <SceneHint title="Bắt đầu viết từ đâu?">Chọn cảnh → viết và sửa → đợi tự lưu; mở bản đã lưu để đối chiếu khi cần.
       Không bắt buộc có lời thoại hoặc hình phác. Mở nguồn, ảnh và góp ý khi cần; bạn có thể tự viết hoặc nhờ AI viết thử một cảnh. Quyết định vẫn thuộc về bạn.</SceneHint>
     <details className="screenplay-start"><summary>Bắt đầu từ dàn cảnh nào?</summary>
       <p>Lưu mọi sửa đang chờ trước khi bắt đầu. Nguồn dàn cảnh được giữ riêng; sửa dàn cảnh sau đó không tự thay kịch bản. Muốn đổi cấu trúc cảnh, sửa dàn cảnh rồi chủ động bắt đầu bản khác.</p>
       {project.scene_handoff ? <p>Dàn cảnh phiên bản {project.scene_handoff.version} · {project.scene_handoff.scenes.length} cảnh · {project.scene_outline?.source.draft.title}</p>
         : <p>Cần lưu tên và diễn tiến cho mọi cảnh trong dàn cảnh trước khi bắt đầu. Bạn vẫn lưu nháp dàn cảnh được.</p>}
       {project.scene_outline?.scenes.map((s,i)=><p key={s.id} className="preserve-lines">{i+1}. {s.title}: {s.action}</p>)}
-    </details>
     {script && <label><input type="checkbox" checked={replace} onChange={e=>setReplace(e.target.checked)} />Tôi muốn bắt đầu bản khác từ dàn cảnh đã lưu; bản kịch bản hiện tại sẽ giữ trong lịch sử.</label>}
     <button type="button" disabled={uncertain || (!!script&&!replace) || !project.scene_outline?.scenes.length || project.scene_outline.scenes.some(s=>!s.title.trim()||!s.action.trim())}
       onClick={()=>{const id=crypto.randomUUID();setSent(id);setReplace(false);void onStart(id);}}>{script?"Bắt đầu bản kịch bản khác":"Bắt đầu viết từ bản dàn cảnh này"}</button>
     <button type="button" className="secondary" onClick={async()=>{if(await onInspect())setSent(null);}}>Kiểm tra kịch bản đã lưu</button>
     {uncertain && <p role="status">Chưa rõ kết quả bắt đầu bản mới. Kiểm tra bản đã lưu trước; không tự gửi lại.</p>}
+    </details>
     {script && <>
       <p role="status">Bản kịch bản phiên bản {script.version} · {dirty?"Có sửa chưa lưu trong dự án":"Đang xem bản đã lưu"}.</p>
       {(!project.screenplay_source_is_current || sourceDirty) && <p role="status">Dàn cảnh hoặc ý đồ hiện tại khác nguồn kịch bản. Giữ bản nguồn trước; không tự đồng bộ.</p>}
@@ -170,7 +170,7 @@ export function ScreenplayEditor({project, savedProject, onSelectSource, onDownl
                 </details>
               </details>
             {undo && undoContent(script)===undo.after && <button type="button" onClick={()=>{onChange({...script,scenes:undo.before.scenes});setUndo(null);}}>{undo.label}</button>}
-            <details className="screenplay-writing-tools"><summary>Nhờ FirstFrame viết thử một cảnh</summary>
+            <details className="screenplay-writing-tools"><summary>Đề xuất sửa với AI</summary>
             <ScreenplayProposals key={`${script.id}:${scene.id}`} project={project} scene={scene} canUse={canUse}
               onChooseScene={id=>chooseScene(id)} onWrite={onWrite} onUndo={onUndoProposal} onStructural={onStructural} onInspect={onProposalInspect} onPreview={onPreview} onDiscard={onDiscard}
               onUse={(id,replacement)=>{
@@ -185,7 +185,7 @@ export function ScreenplayEditor({project, savedProject, onSelectSource, onDownl
               onNavigate={source=>{if(canNavigateReview&&source.scene_id){chooseScene(source.scene_id,false);setUseBlockEditor(true);setToolsOpen(false);setPendingReference(source);}}}/>
             </details>
             </div></ReviewPanel>
-          </> : <div className="screenplay-empty" role="status"><h3>Chọn một cảnh để viết</h3><p>Chọn cảnh phía trên để mở form. Kịch bản đã lưu ở bên cạnh không bao gồm các sửa chưa lưu.</p></div>}
+          </> : <div className="screenplay-empty" role="status"><h3>Chọn một cảnh để viết</h3><p>Chọn cảnh phía trên để mở form. Mở bản đã lưu để đối chiếu khi cần; bản đó không bao gồm chữ chưa lưu.</p></div>}
         </div>
         <details className="screenplay-saved" aria-label="Kịch bản đã lưu để đối chiếu"><summary>Đối chiếu bản đã lưu khi cần</summary>
           <h3>Kịch bản đã lưu</h3>
@@ -198,10 +198,11 @@ export function ScreenplayEditor({project, savedProject, onSelectSource, onDownl
       </div>
 
     </>}
-    <details className="screenplay-reader-toggle"><summary>Hoàn tất · đọc và xuất PDF kịch bản</summary><ScreenplayReading saved={savedProject} dirty={dirty} onSelect={onSelectSource} onDownload={onDownloadPdf} onInspect={onSourceInspect}
-      onEdit={id=>chooseScene(id)}/></details>
+  </section><section className="panel screenplay-export" data-workspace-stage="workspace-export" aria-labelledby="workspace-export">
+    <h2 id="workspace-export" data-tour="export" tabIndex={-1}>Hoàn tất · đọc và xuất PDF kịch bản</h2><ScreenplayReading saved={savedProject} dirty={dirty} onSelect={onSelectSource} onDownload={onDownloadPdf} onInspect={onSourceInspect}
+      onEdit={id=>{revealWorkspaceTarget(document.getElementById("workspace-script"));chooseScene(id)}}/>
 
-  </section>;
+  </section></>;
 }
 
 export function ScreenplayHistory({ project, onRestore }: {project: Project; onRestore: (id: string) => void}) {

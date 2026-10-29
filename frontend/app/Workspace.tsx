@@ -75,7 +75,7 @@ export default function Workspace({ library = false }: { library?: boolean }) {
     && saved?.feedback_source?.project_id === project.id
     && saved.feedback_source.artifact_id === project.feedback.artifact_id;
   const tourContext = { projectId: project?.id ?? null, hasAnalysis: !!project?.analysis,
-    hasDraft: !!project?.draft, briefChanged };
+    hasDraft: !!project?.draft, hasScreenplay: !!project?.screenplay, briefChanged };
   const tour = useOnboarding(tourContext, !!busy, error);
   useEffect(() => {
     if (saved) setProjects(items => [saved, ...items.filter(item => item.id !== saved.id)]);
@@ -382,7 +382,7 @@ export default function Workspace({ library = false }: { library?: boolean }) {
         empty={projectsListed && !projects.length} busy={!!busy} error={error}
         idea={project?.idea ?? ""} answers={project?.answers ?? []}
         questionCount={project?.analysis?.missing_information.length ?? 0} />}
-      {!library && projectToolbar}
+      {!library && (project ? <details className="project-switcher"><summary>{project.title} · Đổi hoặc tạo dự án</summary>{projectToolbar}</details> : projectToolbar)}
       {busy && !steps.length && <p className="operation-status" role="status">{busy}</p>}
       {!project && error && <p className="error" role="alert">{error}</p>}
       {notice && <p className="operation-status" role="status">{notice}</p>}
@@ -416,12 +416,13 @@ export default function Workspace({ library = false }: { library?: boolean }) {
           {(error || saveError) && <p className="error" role="alert">{error || saveError}</p>}
         </div>}
         {library && error && <p className="error" role="alert">{error}</p>}
-      {!!steps.length && operationTiming && <div data-progress-stage={`workspace-${operationTiming.kind === "analyze" ? "choices" : ["plan", "review"].includes(operationTiming.kind) ? "draft" : operationTiming.kind.startsWith("scene-") ? "outline" : "script"}`}>
+      {!!steps.length && operationTiming && <details className="operation-details" open={operationTiming.finishedAt===null||operationFailed} data-progress-stage={`workspace-${operationTiming.kind === "analyze" ? "choices" : ["plan", "review"].includes(operationTiming.kind) ? "draft" : operationTiming.kind.startsWith("scene-") ? "outline" : "script"}`}>
+        <summary>{operationTiming.finishedAt===null?'Đang xử lý…':operationFailed?'Xem lỗi và phần đã giữ':'Xem tiến trình lần vừa hoàn tất'}</summary>
         <OperationProgress steps={steps} failed={operationFailed}
           timing={operationTiming} dirty={dirty} language={progressLanguage(project?.response_language ?? "auto")} />
-      </div>}
+      </details>}
         {!library && <fieldset disabled={!!busy} className="project-fields">
-          <WorkspaceStage key={`${project.id}:idea`} id="workspace-idea" tourStep="idea" title="1. Khoảnh khắc bạn muốn kể"
+          <WorkspaceStage key={`${project.id}:idea`} id="workspace-idea" tourStep="idea" title="Khoảnh khắc bạn muốn kể"
             complete={!!project.analysis && !briefChanged} preview={project.idea || "Bắt đầu bằng một khoảnh khắc nhỏ."}>
             <label htmlFor="idea">Khoảnh khắc, kỷ niệm hoặc tình huống của bạn</label>
             <p className="storage-note" id="idea-help">Một cử chỉ, âm thanh hay chuyện vui/khó xử đều có thể bắt đầu câu chuyện.
@@ -488,7 +489,7 @@ export default function Workspace({ library = false }: { library?: boolean }) {
               revealWorkspaceTarget(document.getElementById("workspace-script"));
             })}}/>
           {project.draft && <section className="panel form-stack working-draft" data-workspace-stage="workspace-draft">
-            <h2 id="workspace-draft" data-tour="draft" tabIndex={-1}>3. Bản phát triển đang làm việc</h2>
+            <h2 id="workspace-draft" data-tour="draft" tabIndex={-1}>Story plan đang làm việc</h2>
             <h3 id="draft-editor-title" tabIndex={-1}>Đọc và sửa ngay tại card</h3>
             {operationTiming?.kind === "plan" && operationTiming.finishedAt !== null && <a className="storage-note" href="#workspace-operation">Xem lại tiến trình tạo bản này</a>}
             {selectedFeedback && !selectedCard && <aside className="revision-note" aria-labelledby="selected-feedback-title">
@@ -772,43 +773,18 @@ export default function Workspace({ library = false }: { library?: boolean }) {
 
 function WorkspaceNavigation({ project, briefChanged, creatingPlan, analyzing, tourStep }: { project: Project | null; briefChanged: boolean; creatingPlan: boolean; analyzing: boolean; tourStep?: TourStep }) {
   const [active, setActive] = useState("workspace-idea");
-  const [desktop, setDesktop] = useState(false);
   useEffect(() => {
-    let frame = 0;
-    const stages = [...document.querySelectorAll<HTMLElement>("[data-workspace-stage]")];
-    const workspace = document.querySelector<HTMLElement>("[data-desktop-stage]");
-    const selected = (event: Event) => {const stage=(event as CustomEvent<string>).detail;setActive(stage);sessionStorage.setItem(`firstframe-stage:${project?.id}`,stage)};
-    workspace?.addEventListener("workspace-stage-change", selected);
-    const measure = () => {
-      setDesktop(window.innerWidth > 760);
-      if (workspace?.dataset.desktopStage) {
-        setActive(workspace?.dataset.desktopStage ?? "workspace-idea");
-        return;
-      }
-      const line = window.innerWidth <= 760 ? 190 : 130;
-      const focused = document.activeElement as HTMLElement | null;
-      const bounds = focused?.getBoundingClientRect();
-      // A short final draft cannot always scroll to the rail's tracking line.
-      const focusedStage = bounds && bounds.bottom > line && bounds.top < window.innerHeight
-        ? focused?.closest<HTMLElement>("[data-workspace-stage]") : null;
-      const current = focusedStage ?? stages.filter(stage => stage.getBoundingClientRect().top <= line).at(-1) ?? stages[0];
-      if (current) setActive(current.dataset.workspaceStage!);
+    const workspace=document.querySelector<HTMLElement>('[data-desktop-stage]');
+    const selected=(event:Event)=>{
+      const stage=(event as CustomEvent<string>).detail;setActive(stage);
+      try{sessionStorage.setItem(`firstframe-stage:${project?.id}`,stage)}catch{/* Navigation works without browser storage. */}
     };
-    const scroll = () => { cancelAnimationFrame(frame); frame = requestAnimationFrame(measure); };
-    const focus = (event: FocusEvent) => {
-      const stage = (event.target as HTMLElement)?.closest<HTMLElement>("[data-workspace-stage]");
-      if (stage) setActive(stage.dataset.workspaceStage!);
-    };
-    const resize = new ResizeObserver(scroll); stages.forEach(stage => resize.observe(stage));
-    window.addEventListener("scroll", scroll, { passive: true }); window.addEventListener("resize", scroll);
-    document.addEventListener("focusin", focus); measure();
-    return () => { workspace?.removeEventListener("workspace-stage-change", selected); cancelAnimationFrame(frame); resize.disconnect(); window.removeEventListener("scroll", scroll);
-      window.removeEventListener("resize", scroll); document.removeEventListener("focusin", focus); };
-  }, [project?.id, !!project?.analysis, !!project?.draft, briefChanged]);
-  useEffect(() => {
-    const remembered=sessionStorage.getItem(`firstframe-stage:${project?.id}`);
-    revealWorkspaceTarget(document.getElementById(remembered||"workspace-idea")??document.getElementById("workspace-idea"));
-  }, [project?.id]);
+    workspace?.addEventListener('workspace-stage-change',selected);
+    let remembered:string|null=null;
+    try{remembered=sessionStorage.getItem(`firstframe-stage:${project?.id}`)}catch{/* Keep the default stage. */}
+    revealWorkspaceTarget(document.getElementById(remembered||'workspace-idea')??document.getElementById('workspace-idea'));
+    return()=>workspace?.removeEventListener('workspace-stage-change',selected);
+  },[project?.id]);
   useEffect(() => {
     if (window.innerWidth <= 760) return;
     if ((active === "workspace-choices" && !analyzing && (!project?.analysis || briefChanged))
@@ -817,12 +793,12 @@ function WorkspaceNavigation({ project, briefChanged, creatingPlan, analyzing, t
     }
   }, [active, !!project?.analysis, !!project?.draft, briefChanged, creatingPlan, analyzing]);
   const items = [
-    { id: project?.analysis && !briefChanged ? "workspace-choices" : "workspace-idea", label: "Ý tưởng & làm rõ", available: !!project },
-    { id: "draft-run", label: "Tạo bản nháp", available: !!project },
-    { id: project?.screenplay ? "workspace-script" : "workspace-draft", label: "Review & sửa", available: !!project?.draft || !!project?.screenplay },
+    { id: "workspace-idea", label: "Ý tưởng", available: !!project },
+    { id: project?.screenplay ? "workspace-script" : project?.draft ? "workspace-draft" : "draft-run", label: "Bản nháp & review", available: !!project },
+    { id: "workspace-export", label: "Hoàn tất", available: !!project?.screenplay },
   ];
-  const currentStage = !desktop && creatingPlan ? "workspace-draft"
-    : items.some(item => item.id === `workspace-${tourStep}`) ? `workspace-${tourStep}` : active;
+  const shown=tourStep==="draft-run"?"draft-run":tourStep&&["idea","script","export"].includes(tourStep)?`workspace-${tourStep}`:active;
+  const currentStage=shown==="workspace-export"?shown:["workspace-idea","workspace-choices"].includes(shown)?items[0].id:items[1].id;
   return <aside className="workspace-rail"><p className="eyebrow">Câu chuyện của bạn</p>
     <nav className="workspace-stage-nav" aria-label="Hành trình câu chuyện">
       {items.map((item, index) => <button key={item.id} type="button" disabled={!item.available}
@@ -837,7 +813,7 @@ function WorkspaceNavigation({ project, briefChanged, creatingPlan, analyzing, t
       </button>)}
     </nav>
     <details className="workflow-deep"><summary>Mở chi tiết</summary>{[
-      ["workspace-idea","Ý tưởng"],["workspace-choices","Làm rõ"],["workspace-draft","Story plan"],["workspace-outline","Dàn cảnh"],["workspace-script","Kịch bản"]
+      ["draft-run","Tạo hoặc mở lại bản nháp"],["workspace-idea","Ý tưởng"],["workspace-choices","Làm rõ"],["workspace-draft","Story plan"],["workspace-outline","Dàn cảnh"],["workspace-script","Kịch bản"]
     ].map(([id,label])=><button key={id} type="button" onClick={()=>{const el=document.getElementById(id);revealWorkspaceTarget(el);el?.scrollIntoView({block:"start"});el?.focus();setActive(id)}}>{label}</button>)}</details>
   </aside>;
 }

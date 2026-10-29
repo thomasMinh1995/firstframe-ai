@@ -42,7 +42,7 @@ export function useOnboarding(context: TourContext, busy: boolean, error: string
     else if (r?.status === "active" && (busy || !available(r.stepId, context))) {
       update({ type: "pause", hint: busy ? undefined : "Chưa thể mở bước này. Bạn có thể thử lại." });
     }
-  }, [context.projectId, context.hasAnalysis, context.hasDraft, context.briefChanged, busy, update]);
+  }, [context.projectId, context.hasAnalysis, context.hasDraft, context.hasScreenplay, context.briefChanged, busy, update]);
   // A pre-existing error must not close help the user explicitly opens to correct it.
   useEffect(() => { if (error) update({ type: "pause" }); }, [error, update]);
 
@@ -70,35 +70,14 @@ type Props = {
   idea: string; answers: string[]; questionCount: number;
 };
 const titles: Record<TourStep, string> = {
-  "new-project": "Dự án mới", idea: "Ý tưởng", choices: "Làm rõ", draft: "Story plan",
-  outline: "Dàn cảnh", script: "Kịch bản", save: "Lưu",
+  "new-project":"Dự án của bạn",idea:"Kể một khoảnh khắc","draft-run":"Tạo bản nháp",script:"Review và sửa",export:"Hoàn tất và tải PDF",save:"Lưu và quay lại",
 };
-const targetLabels: Record<TourStep, string> = {
-  "new-project": "Dự án mới", idea: "Vùng Ý tưởng", choices: "Vùng Làm rõ",
-  draft: "Vùng Story plan", outline: "Vùng Dàn cảnh", script: "Vùng Kịch bản", save: "Thanh lưu",
-};
-function copy(step: TourStep, p: Props) {
-  switch (step) {
-    case "new-project": return p.context.projectId ? "Tạo câu chuyện mới; thay đổi hiện tại sẽ được lưu trước." : "Tạo nơi viết cho câu chuyện của bạn.";
-    case "idea": return "Ghi lại khoảnh khắc, điều muốn giữ và giới hạn nếu có.";
-    case "choices": return p.questionCount ? "Chỉ trả lời điều bạn muốn quyết định; có thể để mở." : "Đã đủ thông tin, bạn có thể tạo story plan.";
-    case "draft": return "Đọc và sửa trực tiếp trên từng card.";
-    case "outline": return "Chia Story plan thành các cảnh. Tự viết trước; AI là tùy chọn.";
-    case "script": return "Chọn một cảnh để viết và lưu kịch bản.";
-    case "save": return "Thay đổi tự lưu khi dừng gõ. Kiểm tra trạng thái Đã lưu trước khi rời đi.";
-  }
+const targetLabels:Record<TourStep,string>={"new-project":"Dự án mới",idea:"Ý tưởng","draft-run":"Bản nháp riêng",script:"Kịch bản",export:"Bản đã đọc và chọn",save:"Trạng thái lưu"};
+function copy(step:TourStep,p:Props){
+  return {"new-project":p.context.projectId?"Bạn có thể giữ câu chuyện hiện tại hoặc tạo dự án khác. Thay đổi được lưu trước khi chuyển.":"Tạo nơi viết cho câu chuyện của bạn.",idea:"Kể điều bạn nhớ và điều muốn giữ. Không cần biết trước toàn bộ cốt truyện.","draft-run":"Một lần khởi động tạo story plan, dàn cảnh và nội dung các cảnh. Chỉ trả lời phần quan trọng còn thiếu; có thể để mở.",script:"AI gợi ý cạnh nội dung; bạn chọn giữ, chỉnh hoặc bỏ qua. Mỗi lần sửa có phạm vi và bản xem trước.",export:"Đọc đúng bản hiện tại hoặc lịch sử, chọn rồi tải PDF. Tải lại vẫn giữ đúng nội dung đã chọn.",save:"Chữ tự lưu khi dừng gõ. Nếu có lỗi, buffer vẫn giữ để thử lại hoặc tải bản sao."}[step];
 }
-
-function instructions(step: TourStep, hasDraft: boolean): string[] {
-  switch (step) {
-    case "new-project": return ["Chọn Dự án mới để bắt đầu."];
-    case "idea": return ["Viết ý tưởng, rồi chọn Tạo bản nháp. Theo dõi tiến độ và phần đọc được trong công đoạn Tạo bản nháp."];
-    case "choices": return ["Trả lời hoặc để quyết định sau."];
-    case "draft": return [hasDraft ? "Sửa từng card; thay đổi tự lưu khi bạn dừng gõ." : "Story plan sẽ xuất hiện sau bước Làm rõ."];
-    case "outline": return ["Chọn nguồn, thêm cảnh, rồi lưu dàn cảnh."];
-    case "script": return ["Chọn cảnh, viết, rồi lưu kịch bản."];
-    case "save": return ["Chờ trạng thái Đã lưu trước khi đóng trang. Tùy chọn bản lưu có Lưu thay đổi và Tải bản sao JSON."];
-  }
+function instructions(step:TourStep,_hasDraft:boolean):string[]{
+  return {"new-project":["Chọn Dự án mới khi muốn kể câu chuyện khác; có thể bỏ qua hướng dẫn."],idea:["Nhập khoảnh khắc và điều muốn giữ, rồi chọn Tạo bản nháp."],"draft-run":["Trả lời hoặc để mở câu hỏi nếu có. Tiếp tục một lần để tạo nội dung mọi cảnh.","Đọc, chỉnh bản nháp riêng rồi chọn Dùng bản nháp này. Reload không chạy lại AI."],script:["Chọn cảnh, mở Góp ý khi cần. Xem phạm vi và trước/sau trước khi Dùng, Chỉnh hoặc Bỏ qua.","Có thể tự viết, giữ cảnh im lặng hoặc kết mở. Không cần đạt điểm AI."],export:["Chọn bản để đọc; Chọn bản đã đọc & tải PDF. Không cần AI hoặc ảnh.","Các bản PDF đã giữ cho phép tải lại nguồn cũ mà không đổi bản đang viết."],save:["Chờ Đã lưu trước khi rời đi. Tùy chọn bản lưu có thử lưu lại và tải bản sao JSON."]}[step];
 }
 
 export function OnboardingTour(props: Props) {
@@ -137,22 +116,8 @@ export function OnboardingTour(props: Props) {
     const step = record.stepId;
     let selector = `[data-tour="${step}"]`;
     if (step === "idea") selector = "#idea";
-    if (step === "choices") {
-      const index = Array.from({ length: props.questionCount }, (_, i) => i).find(i => !props.answers[i]?.trim());
-      selector = index === undefined ? '[data-tour-action="plan"]' : `#answer-${index}`;
-    }
-    if (step === "draft") {
-      const editor = document.querySelector<HTMLButtonElement>('[data-draft-open="logline"]');
-      if (editor && !editor.disabled) {
-        tour.practice();
-        cancelAnimationFrame(focusFrame.current);
-        focusFrame.current = requestAnimationFrame(() => {
-          if (!document.activeElement?.matches("input, textarea, select")) { revealWorkspaceTarget(editor); editor.click(); }
-        });
-        return;
-      }
-      selector = "#draft-logline";
-    }
+    if(step === "draft-run")selector="#draft-run";
+    if(step === "export")selector="#workspace-export";
     tour.practice(); focusAfter(selector);
   };
   const welcome = state.initialized && state.offerAllowed && !record && ready && empty && !context.projectId && !busy && !error;
@@ -179,7 +144,7 @@ export function OnboardingTour(props: Props) {
       <button className="secondary" onClick={dismiss}>Bỏ qua</button>
     </section>}
     {resumable && <section className="tour-notice" aria-label="Tiến độ hướng dẫn">
-      <p role="status">{state.hint ?? (busy && record.stepId === "choices" ? "Theo dõi tiến trình ngay bên dưới: chuẩn bị lựa chọn → phát triển Story plan → đối chiếu và giữ kết quả. Mỗi nhóm có các bước con; khi hoàn tất, bạn có thể tiếp tục hướng dẫn."
+      <p role="status">{state.hint ?? (busy && record.stepId === "draft-run" ? "Theo dõi tiến trình ngay bên dưới: chuẩn bị lựa chọn → phát triển Story plan → đối chiếu và giữ kết quả. Mỗi nhóm có các bước con; khi hoàn tất, bạn có thể tiếp tục hướng dẫn."
         : record.status === "paused" ? "Hướng dẫn đang tạm dừng. Bạn có thể tiếp tục khi sẵn sàng."
         : "Bạn đang thực hành. Tiếp tục hướng dẫn khi sẵn sàng, hoặc bỏ qua để tự khám phá.")}</p>
       <button disabled={!ready || busy || !continuation(state, context)} onClick={event => open(event.currentTarget, true)}>Tiếp tục hướng dẫn</button>
@@ -191,19 +156,6 @@ export function OnboardingTour(props: Props) {
       <ol aria-label="Cách thực hiện" className="tour-instructions">
         {instructions(record.stepId, context.hasDraft).map(instruction => <li key={instruction}>{instruction}</li>)}
       </ol>
-      {record.stepId === "draft" && <button className="secondary" onClick={() => {
-        tour.practice();
-        focusAfter(document.querySelector(".card-feedback-trigger") ? ".card-feedback-trigger" : "[data-tour-review]");
-      }}>Thử xem góp ý</button>}
-      {record.stepId === "save" && <button className="secondary" onClick={() => {
-        tour.pause(); focusAfter(".workspace-library > summary");
-      }}>Khám phá đề xuất và lịch sử</button>}
-      {record.stepId === "save" && <button className="secondary" onClick={() => {
-        tour.pause();
-        const guide = document.querySelector<HTMLButtonElement>('.scene-outline .scene-info');
-        if (guide?.getAttribute("aria-expanded") === "false") guide.click();
-        focusAfter(guide ?? "#workspace-outline");
-      }}>Khám phá dàn cảnh</button>}
       <div className="tour-footer">
         <span>Bước {tourSteps.indexOf(record.stepId) + 1}/{tourSteps.length}</span>
         <button className="secondary" disabled={!previous} onClick={() => previous && tour.navigate(previous)}>Trước</button>
