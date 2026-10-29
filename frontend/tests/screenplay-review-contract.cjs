@@ -34,6 +34,9 @@ const review={id:uuid(),created_at:'now',source_revision:1,source_content:'snaps
  const forgedOrigin=structuredClone(ai);forgedOrigin.source_screenplay.source_outline.provenance[sourceId].origin=['ai_proposal'];
  await assert.rejects(()=>decode({...p,screenplay_reviews:[forgedOrigin]}),/không hợp lệ/,'origin must be an enum string');
  assert.equal(sameReviewScript(script,{...script,version:7,source_revision:99}),true);
+ const attributed={...script,provenance:{[anchor.id]:{origin:'author_input',author_confirmed:false},[`script:${s.id}:heading`]:{origin:'ai_proposal',author_confirmed:false}}};
+ const reordered={...attributed,provenance:Object.fromEntries(Object.entries(attributed.provenance).reverse())};
+ assert.equal(sameReviewScript(attributed,reordered),true,'restoring a snapshot may reorder provenance keys without changing evidence');
  const changed=structuredClone(script);changed.scenes[0].blocks[0].text='Nội dung mới';assert.equal(sameReviewScript(script,changed),false);
  for(const mutate of [r=>r.notes[0].evidence[0].quote='Quote bịa',r=>r.notes[0].evidence[0].source_id='unknown',r=>r.sources[0].text='Quote bịa',
    r=>{r.sources[0].text='Quote bịa';r.notes[0].evidence[0].quote='Quote bịa'},r=>r.sources[0].scene_id=uuid(),

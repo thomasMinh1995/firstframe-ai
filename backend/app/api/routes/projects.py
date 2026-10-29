@@ -345,6 +345,11 @@ def update_project(project_id: str, request: ProjectUpdate):
                 raise HTTPException(409, "Phương án đã đổi trạng thái; bản tự chỉnh vẫn giữ.")
             if (scene.id, scene.source_scene_id) != (proposal.scene.id, proposal.scene.source_scene_id):
                 raise HTTPException(422, "Giữ ID cảnh đích của phương án.")
+            from app.application.screenplay_writing import validate_preview
+            try:
+                validate_preview(proposal, scene)
+            except ValueError as error:
+                raise HTTPException(422, str(error)) from error
             proposal.preview_scene = scene
         if request.screenplay_proposal_id is not None:
             proposal = next((p for p in project.screenplay_proposals if p.id == request.screenplay_proposal_id), None)
@@ -352,6 +357,11 @@ def update_project(project_id: str, request: ProjectUpdate):
                 raise HTTPException(409, "Phương án đã dùng/bỏ hoặc ngữ cảnh đã đổi; không nhận bản cũ.")
             expected = project.screenplay.model_copy(deep=True)
             replacement = proposal.preview_scene or proposal.scene
+            from app.application.screenplay_writing import validate_preview
+            try:
+                validate_preview(proposal, replacement)
+            except ValueError as error:
+                raise HTTPException(422, str(error)) from error
             expected.scenes = [replacement if s.id == proposal.target_scene_id else s for s in expected.scenes]
             if (request.screenplay is None or request.screenplay.model_dump() != expected.model_dump(include={"id", "version", "scenes"})
                     or any(getattr(request, key) != getattr(project, key) for key in ("idea", "constraints", "answers", "draft", "response_language"))
@@ -359,6 +369,7 @@ def update_project(project_id: str, request: ProjectUpdate):
                     or request.scene_proposal_id is not None or request.staging_use is not None):
                 raise HTTPException(409, "Dùng phương án chỉ thay đúng cảnh đã nêu. Giữ thành bản tự chỉnh nếu sửa các phần khác.")
             proposal.status, proposal.applied_revision = "applied", project.revision + 1
+            proposal.applied_scene = replacement.model_copy(deep=True)
             ai_script_fields = scene_fields([proposal.scene], screenplay=True)
         if "screenplay" in request.model_fields_set:
             edit, current = request.screenplay, project.screenplay

@@ -59,6 +59,10 @@ class StartScreenplay(BaseModel):
 
 
 class SceneWritingRequest(StartScreenplay):
+    scope: Literal["scene", "blocks"] = "scene"
+    block_ids: list[SceneId] = Field(default_factory=list, max_length=20)
+    review_id: SceneId | None = None
+    note_id: SceneId | None = None
     target_scene_id: SceneId
     instructions: str = Field(default="", max_length=2000)
 
@@ -135,3 +139,15 @@ class ReviewAssessment(BaseModel):
     model_config = ConfigDict(extra="forbid")
     revision: int = Field(ge=0)
     assessment: Literal["helpful", "misleading", "uncertain", "dismissed"]
+
+
+class BlockReplacement(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    block_id: SceneId
+    expected: BlockText
+    replacement: BlockText
+
+
+class BlockRevisionResult(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    replacements: list[BlockReplacement] = Field(min_length=1, max_length=20)

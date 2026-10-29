@@ -29,6 +29,11 @@ const script={id:uuid(),version:1,source_revision:1,source_outline:outline,scene
  const withProposal={...p,screenplay_proposals:[proposal],applicable_screenplay_proposal_ids:[proposal.id]};
  assert.deepEqual(await decode(withProposal),withProposal);assert.equal(sameEditableContent(p,withProposal),true);
  assert.equal('screenplay_proposals' in editableProject(withProposal),false);
+ const scoped={...proposal,scope:'blocks',block_ids:[block.id]};
+ assert.deepEqual(await decode({...withProposal,screenplay_proposals:[scoped]}),{...withProposal,screenplay_proposals:[scoped]});
+ for(const mutate of [r=>r.block_ids=[uuid()],r=>r.scope='all',r=>r.scene={...r.scene,heading:'Outside scope'},r=>r.scene={...r.scene,blocks:[...r.scene.blocks,{...block,id:uuid()}]}]){
+  const bad=structuredClone(scoped);mutate(bad);await assert.rejects(()=>decode({...withProposal,screenplay_proposals:[bad]}),/không hợp lệ/);
+ }
  const preview={...withProposal,pending_screenplay_proposal_id:proposal.id,pending_screenplay_previews:{[proposal.id]:proposal.scene}};
  assert.equal(editableProject(preview).screenplay_proposal_id,proposal.id);
  assert.deepEqual(editableProject(preview).screenplay_proposal_previews,{[proposal.id]:proposal.scene});

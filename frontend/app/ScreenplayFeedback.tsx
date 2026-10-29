@@ -5,16 +5,16 @@ import type {Project} from './projectsApi';
 import type {SceneWritingInput,ScriptScene} from './screenplayTypes';
 import {reviewNoteSupported,reviewSourceMatches,sameReviewScript,type ReviewAssessment,type ReviewSource,type ScreenplayReview} from './screenplayReviewTypes';
 
-export function ScreenplayFeedback({project,scene,canNavigate,onReview,onInspect,onDiscard,onAssess,onNavigate}: {
-  project:Project;scene:ScriptScene;canNavigate:boolean;onReview:(input:SceneWritingInput)=>Promise<void>;onInspect:()=>Promise<boolean>;
+export function ScreenplayFeedback({project,scene,canNavigate,onReview,onInspect,onDiscard,onAssess,onNavigate,onRevise}: {
+  onRevise?:(input:SceneWritingInput)=>Promise<void>;project:Project;scene:ScriptScene;canNavigate:boolean;onReview:(input:SceneWritingInput)=>Promise<void>;onInspect:()=>Promise<boolean>;
   onDiscard:(id:string)=>void;onAssess:(reviewId:string,noteId:string,value:ReviewAssessment)=>void;onNavigate:(source:ReviewSource)=>void;
 }) {
   const id=useId(),[instructions,setInstructions]=useState(''),[sent,setSent]=useState<string|null>(null);
   const all=project.screenplay_reviews??[],uncertain=sent!==null&&!all.some(r=>r.id===sent);
   return <section className="screenplay-feedback" aria-label="Góp ý kịch bản có nguồn">
     <h3>Góp ý cho cảnh đang chọn</h3>
-    <p>AI có thể hiểu sai hoặc bỏ sót. Trích đúng nguồn không chứng minh nhận xét đúng; đây là gợi ý để bạn tự cân nhắc và sửa, không phải điểm chất lượng hay phán quyết về tác giả.</p>
-    <label htmlFor={`${id}-request`}>Bạn muốn góp ý chú ý điều gì? · tùy chọn</label><textarea id={`${id}-request`} maxLength={2000} value={instructions} onChange={e=>setInstructions(e.target.value)}/>
+    <p>AI có thể hiểu sai; trích dẫn khớp không chứng minh nhận xét đúng. Bạn tự chọn giữ, sửa hoặc bỏ qua.</p>
+    <details><summary>Nhắc AI điều cần chú ý · tùy chọn</summary><label htmlFor={`${id}-request`}>Bạn muốn góp ý chú ý điều gì? · tùy chọn</label><textarea id={`${id}-request`} maxLength={2000} value={instructions} onChange={e=>setInstructions(e.target.value)}/></details>
     <button type="button" disabled={uncertain||all.length>=100||[...all,...(project.screenplay_proposals??[])].some(r=>r.status==='pending')||!scene.blocks.some(b=>b.text.trim())}
       onClick={()=>{const request_id=crypto.randomUUID();setSent(request_id);void onReview({request_id,target_scene_id:scene.id,instructions});}}>Nhận góp ý cảnh này</button>
     <button type="button" className="secondary" onClick={async()=>{if(await onInspect())setSent(null);}}>Kiểm tra góp ý đã lưu</button>
@@ -22,6 +22,7 @@ export function ScreenplayFeedback({project,scene,canNavigate,onReview,onInspect
     {all.length>=100&&<p>Đã đủ 100 lượt góp ý; bạn vẫn tự sửa và lưu được.</p>}
     {[...all].reverse().filter(r=>r.source_screenplay.id===project.screenplay?.id&&r.target_scene_id===scene.id).map(r=><SavedFeedback key={r.id} review={r}
       current={canNavigate&&!!project.screenplay&&sameReviewScript(r.source_screenplay,project.screenplay)&&(project.current_screenplay_review_ids??[]).includes(r.id)} onNavigate={onNavigate}
+      onRevise={onRevise}
       onAssess={(noteId,value)=>onAssess(r.id,noteId,value)} onDiscard={()=>onDiscard(r.id)}/>)}
     <p className="storage-note">Tự sửa ở phần kịch bản rồi lưu; nếu cần, chủ động nhận góp ý mới. Chuyển cảnh hoặc lưu không gọi AI. Bạn có thể giữ nguyên bản của mình.</p>
   </section>;
@@ -29,8 +30,8 @@ export function ScreenplayFeedback({project,scene,canNavigate,onReview,onInspect
 // Older reviews keep their original evidence IDs and text; update only the system label.
 const sourceLabel = (source: ReviewSource) => source.label.replace("Diễn tiến M2 đã chọn", "Diễn tiến dàn cảnh đã chọn");
 
-function SavedFeedback({review:r,current,onNavigate,onAssess,onDiscard}: {
-  review:ScreenplayReview;current:boolean;onNavigate:(source:ReviewSource)=>void;onAssess:(noteId:string,value:ReviewAssessment)=>void;onDiscard:()=>void;
+function SavedFeedback({review:r,current,onNavigate,onAssess,onDiscard,onRevise}: {
+  onRevise?:(input:SceneWritingInput)=>Promise<void>;review:ScreenplayReview;current:boolean;onNavigate:(source:ReviewSource)=>void;onAssess:(noteId:string,value:ReviewAssessment)=>void;onDiscard:()=>void;
 }) {
   const [sourceId,setSourceId]=useState<string|null>(null);
   const source=r.sources.find(s=>s.id===sourceId);
@@ -54,6 +55,10 @@ function SavedFeedback({review:r,current,onNavigate,onAssess,onDiscard}: {
           {supported&&s&&<><button type="button" className="secondary" onClick={()=>setSourceId(s.id)}>Đọc nguồn đã giữ</button>
             {current&&s.category==='screenplay'&&<button type="button" className="secondary" onClick={()=>onNavigate(s)}>Đến phần đang viết</button>}</>}
         </div>})}
+        {current&&supported&&onRevise&&<button type="button" onClick={()=>{
+          const ids=[...new Set(note.evidence.flatMap(e=>{const source=r.sources.find(s=>s.id===e.source_id);return source?.scene_id===r.target_scene_id&&source.block_id?[source.block_id]:[]}))];
+          void onRevise({request_id:crypto.randomUUID(),target_scene_id:r.target_scene_id,instructions:'',review_id:r.id,note_id:note.id,scope:ids.length?'blocks':'scene',block_ids:ids});
+        }}>Đề xuất cách sửa phần được trích dẫn</button>}
         {r.status==='ready'&&<div role="group" aria-label="Ghi nhận của tác giả">{choices.map(([value,label])=><button key={value} type="button" className="secondary" aria-pressed={note.assessment===value} onClick={()=>onAssess(note.id,value)}>{label}</button>)}</div>}
         <p className="storage-note">Ghi nhận chỉ lưu đánh giá của bạn về góp ý, không nhận phương án hoặc sửa nội dung.</p>
       </article>;

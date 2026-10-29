@@ -32,6 +32,7 @@ def brief(run):
 
 
 class Start(BaseModel):
+    revision_instructions: str = Field(default="", max_length=2000)
     model_config = ConfigDict(extra="forbid")
     request_id: SceneId
     revision: int = Field(ge=0)
@@ -75,7 +76,7 @@ def start(project_id: str, request: Start):
         s = store()
         old = next((r for r in s.rows(project_id) if r["id"] == request.request_id), None)
         if old:
-            if old["source_revision"] != request.revision:
+            if old["source_revision"] != request.revision or old.get("revision_instructions", "") != request.revision_instructions:
                 raise ProjectConflict
             return brief(old)
         if any(active_run(r) for r in s.rows(project_id)):
@@ -83,10 +84,12 @@ def start(project_id: str, request: Start):
         p = projects.load_project(project_id, request.revision)
         if not p.idea.strip():
             raise HTTPException(422, "Hãy nhập ý tưởng trước khi tạo bản nháp.")
+        if request.revision_instructions and len(p.constraints) >= 20:
+            raise HTTPException(422, "Hãy gộp bớt giới hạn trước khi thêm yêu cầu cấu trúc mới.")
         resolve_response_language(p.idea, p.response_language)
         selected = providers()
         run, created = s.create_run(project_id, request.request_id, request.revision,
-            workflow.configuration(selected), workflow.OWNER)
+            workflow.configuration(selected), workflow.OWNER, request.revision_instructions)
         if created:
             workflow.launch(s, project_id, run["id"], selected)
         return brief(run)

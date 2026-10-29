@@ -9,12 +9,12 @@ The current MVP supports saved projects, clarification questions, editable story
 Current project workflow:
 
 ```text
-Idea (autosave) -> Draft run -> Clarify only if needed -> Story plan + outline + all scene text -> Read/edit candidate -> Adopt -> Review
+Idea (autosave) -> Draft run -> Clarify only if needed -> Story plan + outline + all scene text -> Read/edit candidate -> Adopt -> Review -> Preview scene/block revision -> Use / Edit / Discard -> Undo if unchanged
 ```
 
 Clarification has no fixed questionnaire. A clear brief can return no questions; unanswered questions remain open and do not become author decisions. AI suggestions are shown separately. The initial screen keeps project name and language under optional settings. The detailed tools still support creating a story plan separately. The “Tạo bản nháp” action starts a durable backend run. Reload reads progress without calling AI again; received model outputs and each completed scene are checkpointed. Candidate edits autosave separately, and adoption checks the original brief and target before atomically keeping the prior draft. Unknown model outcomes are never retried automatically.
 
-Review gives feedback on the saved draft; it does not rewrite it. Changing the idea or constraints uses the existing clarification flow again.
+Review gives feedback on the saved draft. Verified notes can request a separate scene/block revision without another prompt. The main editor stays beside the desktop review panel; narrow screens use a sheet. Saved comparisons and the full reader open on demand. Before/after previews show the proposed scope; accepting saves a checkpoint and undo restores the target only if it has not changed. Block revisions preserve all other blocks and IDs. Explicit scene numbers are resolved before generation; structural requests start an independent draft candidate with affected scenes listed. Changing the idea or constraints uses the existing clarification flow again.
 
 ## Why It Exists
 

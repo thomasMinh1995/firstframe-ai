@@ -616,7 +616,7 @@ export default function Workspace({ library = false }: { library?: boolean }) {
               setNotice(`Đã lưu bản dàn cảnh phiên bản ${next.scene_handoff.version}. Có thể bắt đầu soạn thủ công tại phần Kịch bản; chưa tự tạo nội dung kịch bản.`);
               const target=document.getElementById("workspace-script");revealWorkspaceTarget(target);target?.scrollIntoView({block:"start"});target?.focus({preventScroll:true});
             })} />}
-          {saved && <ScreenplayEditor key={`script:${project.id}`} project={project} savedProject={saved} dirty={dirty}
+          {saved && <ScreenplayEditor busy={!!busy} key={`script:${project.id}`} project={project} savedProject={saved} dirty={dirty}
             onSelectSource={input=>run("Đang giữ bản đã lưu làm nguồn xuất kịch bản…",async()=>{
               const source=await persist();if(!source)return;
               const next=await projectRequest(`/${source.id}/screenplay-selections`,"POST",{revision:source.revision,...input});
@@ -627,6 +627,21 @@ export default function Workspace({ library = false }: { library?: boolean }) {
               await inspectProject(true);checked=true;
             });return checked;}}
             sourceDirty={feedbackChanged || JSON.stringify(project.scene_outline)!==JSON.stringify(saved.scene_outline)}
+            onApply={(id,scene)=>void run("Đang kiểm tra phạm vi và nhận phương án…",async()=>{
+              const next=await persist();if(!next)return;
+              accept(await projectRequest(`/${next.id}/screenplay-proposals/${id}/apply`,"POST",{revision:next.revision,scene}));
+              setNotice("Đã nhận đúng phạm vi và giữ bản trước trong lịch sử.");
+            })}
+            onUndoProposal={id=>void run("Đang đối chiếu và hoàn tác phương án…",async()=>{
+              const next=await persist();if(!next)return;
+              accept(await projectRequest(`/${next.id}/screenplay-proposals/${id}/undo`,"POST",{revision:next.revision}));
+              setNotice("Đã hoàn tác lần nhận, giữ nguyên các phần ngoài cảnh đó.");
+            })}
+            onStructural={instructions=>void run("Đang tạo candidate cấu trúc riêng…",async()=>{
+              const next=await persist();if(!next)return;
+              setOpenedRun(await runRequest(runPath(next.id),"POST",{revision:next.revision,request_id:crypto.randomUUID(),revision_instructions:instructions}));
+              revealWorkspaceTarget(document.getElementById("draft-run"));document.getElementById("draft-run")?.focus();
+            })}
             onChange={(screenplay,proposalId)=>setProject(current=>current?{...current,screenplay,pending_screenplay_proposal_id:proposalId}:current)}
             canUse={!feedbackChanged&&!project.pending_screenplay_proposal_id&&!project.pending_scene_proposal_id&&!project.pending_staging_use
               &&JSON.stringify(project.screenplay)===JSON.stringify(saved.screenplay)&&JSON.stringify(project.scene_outline)===JSON.stringify(saved.scene_outline)}

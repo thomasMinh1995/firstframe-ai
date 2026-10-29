@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState, type CSSProperties, type KeyboardEvent, type ReactNode } from "react";
-import { createPortal } from "react-dom";
+import {ReviewPanel} from "./ReviewPanel";
 import type { StoryDraft } from "./projectsApi";
 import { sectionLabels } from "./storyLabels";
 
@@ -50,10 +50,6 @@ export function StoryPlanEditor({ draft, dirty, onChange, selectedCardId, onSele
   selectedCardId?: string; onSelectCard?: (card: { id: string; label: string } | null) => void; inspector?: ReactNode;
 }) {
   const [layout, setLayout] = useState(() => draft.sections.map(section => splitStorySection(section.content)));
-  const popup = useRef<HTMLDialogElement>(null);
-  useEffect(() => {
-    if (inspector && popup.current && !popup.current.open) popup.current.showModal();
-  }, [inspector]);
   const path = useRef<HTMLOListElement>(null);
   const sections = draft.sections.map((section, index) => ({ section, index }));
   const narrative = sections.filter(({ section }) => narrativeTitles.has(section.title));
@@ -104,8 +100,7 @@ export function StoryPlanEditor({ draft, dirty, onChange, selectedCardId, onSele
       })}
     </ol>
     </div></div>
-    {inspector && createPortal(<dialog ref={popup} className="feedback-popup" aria-label="Góp ý cho card"
-      onCancel={event => { event.preventDefault(); onSelectCard?.(null); }}>{inspector}</dialog>, document.body)}
+    {inspector && <ReviewPanel open onClose={()=>onSelectCard?.(null)} label="Góp ý cho card">{inspector}</ReviewPanel>}
     {!cards.length && <p className="storage-note">Chưa có nội dung phác thảo.</p>}
     {!!context.length && <details className="story-draft-context">
       <summary>Nhân vật, chủ đề và các chi tiết khác ({context.length})</summary>
