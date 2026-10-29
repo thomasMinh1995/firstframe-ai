@@ -20,15 +20,21 @@ def answer_all(client, project):
     return response.json()
 
 
-def test_extended_conversation_keeps_answers_and_appends_without_generating(project_client):
+def test_extended_conversation_keeps_answers_and_appends_without_generating(project_client, monkeypatch):
     client, provider = project_client
     project = start_project(client)
     project = clarify(client, project)
-    assert 5 <= len(project['analysis']['missing_information']) <= 6
+    assert len(project['analysis']['missing_information']) == 2
     assert not project['draft']
     assert all(not a for a in project['answers'])
     project = answer_all(client, project)
     before = deepcopy(project)
+    original = provider.request_structured
+    def followup(request):
+        result = original(request)
+        if request.stage == "reasoning": result.output.missing_information = ["What sound should remain?"]
+        return result
+    monkeypatch.setattr(provider, "request_structured", followup)
     project = clarify(client, project)
     count = len(before['answers'])
     assert project['analysis']['missing_information'][:count] == before['analysis']['missing_information']
@@ -38,7 +44,7 @@ def test_extended_conversation_keeps_answers_and_appends_without_generating(proj
     assert not project['draft'] and not project['plan_generations']
     assert all(r.stage == 'reasoning' for r in provider.requests)
     assert project['clarification_history'][-1]['answers'] == before['answers']
-    assert client.post(f"/api/projects/{project['id']}/plan", json={'revision': project['revision']}).status_code == 422
+    assert client.post(f"/api/projects/{project['id']}/plan", json={'revision': project['revision']}).status_code == 200
 
 
 def test_followup_failure_or_conflict_does_not_replace_answers(project_client, monkeypatch):
@@ -46,8 +52,8 @@ def test_followup_failure_or_conflict_does_not_replace_answers(project_client, m
     project = clarify(client, start_project(client))
     url = f"/api/projects/{project['id']}"
     requests = len(provider.requests)
-    assert client.post(url+'/clarify', json={'revision':project['revision']}).status_code == 422
-    assert len(provider.requests) == requests
+    project = clarify(client, project)
+    assert len(provider.requests) == requests + 1
     project = answer_all(client, project)
     before = deepcopy(project)
     from app.application.ai_provider import ProviderTimeoutError
@@ -68,7 +74,7 @@ def test_no_new_model_question_preserves_choices_and_streams_as_analysis(project
         if request.stage == 'reasoning': result.output.missing_information = []
         return result
     monkeypatch.setattr(provider, 'request_structured', no_questions)
-    # Ask until the fixed framework is covered; no implicit generation when it is covered.
+    # No fixed questions or implicit generation when the model has nothing to ask.
     project = clarify(client, project)
     project = answer_all(client, project)
     before = deepcopy(project)
@@ -99,3 +105,39 @@ def test_bounded_questions_and_legacy_analysis_remain_compatible(project_client)
     count=len(provider.requests)
     assert client.post(f"/api/projects/{legacy['id']}/clarify",json={'revision':saved['revision']}).status_code==422
     assert len(provider.requests)==count
+
+
+def test_clear_brief_and_open_questions_do_not_create_author_decisions(project_client, monkeypatch):
+    client, provider = project_client
+    original = provider.request_structured
+    def clear(request):
+        result = original(request)
+        if request.stage == 'reasoning':
+            result.output.missing_information = []
+            result.output.ai_suggestions = ['Có thể dùng tiếng quạt làm nhịp cảnh.']
+        return result
+    monkeypatch.setattr(provider, 'request_structured', clear)
+    p = clarify(client, start_project(client))
+    assert p['answers'] == [] and p['analysis']['missing_information'] == []
+    assert p['analysis']['ai_suggestions'] == ['Có thể dùng tiếng quạt làm nhịp cảnh.']
+    assert p['author_context']['clarifications'] == []
+    result = client.post(f"/api/projects/{p['id']}/plan", json={'revision':p['revision']})
+    assert result.status_code == 200, result.text
+    assert result.json()['draft']
+    assert 'Có thể dùng tiếng quạt' not in provider.requests[-2].input_text
+
+
+def test_unanswered_questions_reach_planner_without_fabricated_answers(project_client):
+    client, provider = project_client
+    p = clarify(client, start_project(client))
+    questions = p['analysis']['missing_information']
+    result = client.post(f"/api/projects/{p['id']}/plan", json={'revision':p['revision']})
+    assert result.status_code == 200, result.text
+    saved = result.json()
+    assert saved['answers'] == [''] * len(questions)
+    assert saved['author_context']['clarifications'] == []
+    assert [q['question'] for q in saved['author_context']['pending_questions']] == questions
+    planning = next(r for r in provider.requests if r.stage == 'planning')
+    assert all(q in planning.input_text for q in questions)
+    assert 'intentionally left open' in planning.instructions
+    assert saved['plan_generations'][-1]['context'] == saved['author_context']

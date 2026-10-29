@@ -57,6 +57,7 @@ class _ReasoningOutput(BaseModel):
     summary: str
     notes: list[_ReasoningNoteOutput] = Field(default_factory=list)
     missing_information: list[str] = Field(default_factory=list, max_length=3)
+    ai_suggestions: list[str] = Field(default_factory=list, max_length=3)
 
 
 class _PlanningOutput(BaseModel):
@@ -259,6 +260,8 @@ class HarnessRun:
 class _LLMReasoningArtifact(ReasoningArtifact):
     creator_context: str = ""
     review_initial: bool = False
+    ai_suggestions: tuple[str, ...] = ()
+    leave_questions_open: bool = False
 
 
 class LLMReasoningLayer(ReasoningLayer):
@@ -288,6 +291,7 @@ class LLMReasoningLayer(ReasoningLayer):
                 *(ReasoningNote(label=note.label, content=note.content) for note in output.notes),
             ),
             open_questions=tuple(output.missing_information[:3]),
+            ai_suggestions=tuple(output.ai_suggestions),
         )
 
 
@@ -323,7 +327,10 @@ class LLMPlanningLayer(PlanningLayer):
             input_text = _reasoning_input(reasoning, knowledge)
         result = self._provider.request_structured(
             StructuredRequest(
-                instructions=self._prompt_loader.load("story_planner", domain),
+                instructions=self._prompt_loader.load("story_planner", domain) + (
+                    "\nUnanswered questions are intentionally left open. Do not attribute proposed answers, "
+                    "endings or messages to the creator. Your additions are proposals, not author constraints. "
+                    "Quiet scenes, silence and open endings are valid." if getattr(reasoning, "leave_questions_open", False) else ""),
                 input_text=input_text,
                 response_model=_PlanningOutput,
                 stage="planning",
@@ -476,6 +483,7 @@ class StoryGenerationService:
         response_language: ResponseLanguage = "auto",
         on_planned: Callable[[StoryPlanArtifact], None] | None = None,
         structured_review: bool = False,
+        pending_questions: tuple[str, ...] = (),
     ) -> HarnessRun:
         return self._harness.plan(
             _LLMReasoningArtifact(
@@ -483,6 +491,8 @@ class StoryGenerationService:
                 source_idea_id=str(uuid4()),
                 creator_context=_creator_input(idea_text, constraints, answers),
                 review_initial=structured_review,
+                open_questions=pending_questions,
+                leave_questions_open=bool(pending_questions),
                 notes=(
                     ReasoningNote(label="Original idea", content=idea_text),
                     ReasoningNote(

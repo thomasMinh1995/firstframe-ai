@@ -237,7 +237,7 @@ function isProject(value: unknown): value is Project {
     && Number.isInteger(value.revision) && typeof value.idea === "string"
     && strings(value.constraints) && strings(value.answers)
     && (analysis === null || (isRecord(analysis) && typeof analysis.artifact_id === "string" && typeof analysis.summary === "string"
-      && strings(analysis.missing_information) && Array.isArray(analysis.notes)))
+      && strings(analysis.missing_information) && (analysis.ai_suggestions === undefined || strings(analysis.ai_suggestions)) && Array.isArray(analysis.notes)))
     && (value.draft === null || isDraft(value.draft))
     && (value.feedback === null || isFeedback(value.feedback))
     && (value.author_context === undefined || isAuthorContext(value.author_context))

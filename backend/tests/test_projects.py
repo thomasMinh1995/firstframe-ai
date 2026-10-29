@@ -222,7 +222,6 @@ def test_questions_gate_generation_and_review_uses_the_saved_edited_draft(projec
     project = client.post(f"{url}/analyze", json={"revision": project["revision"]}).json()
     assert [item.response_model.__name__ for item in provider.requests] == ["_ReasoningOutput"]
     assert project["draft"] is None
-    assert client.post(f"{url}/plan", json={"revision": project["revision"]}).status_code == 422
     data = payload(project)
     data["answers"] = ["She leaves tomorrow", "He wants to apologize, not stop her"]
     project = client.put(url, json=data).json()
@@ -484,8 +483,6 @@ def test_reanalysis_keeps_author_choices_for_planning_and_edited_review(
     assert all(item["input_index"] is None for item in card["clarifications"])
     assert [item["question"] for item in card["pending_questions"]] == new_questions
     assert client.get(url).json() == project
-    if new_questions:
-        assert client.post(f"{url}/plan", json={"revision": project["revision"]}).status_code == 422
     data = payload(project)
     data["answers"] = ["An unopened letter remains on the table."] * len(new_questions)
     data["draft"]["sections"][5]["content"] = "EDITED: An unopened letter remains on the table."
@@ -536,7 +533,7 @@ def test_changed_or_cleared_answer_overrides_retained_choice(project_client):
     data["answers"] = ["", "Chưa quyết định. Nếu đề xuất, ghi rõ đó là gợi ý của AI."]
     project = client.put(url, json=data).json()
     assert project["feedback_is_current"] is False
-    assert client.post(f"{url}/plan", json={"revision": project["revision"]}).status_code == 422
+    project = client.post(f"{url}/plan", json={"revision": project["revision"]}).json()
     card = project["author_context"]
     assert [item["answer"] for item in card["clarifications"]] == [data["answers"][1]]
     assert card["clarifications"][0]["input_index"] == 1

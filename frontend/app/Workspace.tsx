@@ -406,6 +406,19 @@ export default function Workspace({ library = false }: { library?: boolean }) {
         {!library && <fieldset disabled={!!busy} className="project-fields">
           <WorkspaceStage key={`${project.id}:idea`} id="workspace-idea" tourStep="idea" title="1. Khoảnh khắc bạn muốn kể"
             complete={!!project.analysis && !briefChanged} preview={project.idea || "Bắt đầu bằng một khoảnh khắc nhỏ."}>
+            <label htmlFor="idea">Khoảnh khắc, kỷ niệm hoặc tình huống của bạn</label>
+            <p className="storage-note" id="idea-help">Một cử chỉ, âm thanh hay chuyện vui/khó xử đều có thể bắt đầu câu chuyện.
+              Chưa cần có cốt truyện hoặc biết cách viết kịch bản.</p>
+            <textarea id="idea" maxLength={5000} value={project.idea} rows={5}
+              aria-describedby="idea-help"
+              placeholder="Ví dụ: Tôi về muộn. Mẹ để phần cơm trên bàn, chỉ hỏi có cần hâm lại không. Tôi nhớ tiếng chiếc quạt quay trong lúc hai mẹ con ngồi ăn."
+              onChange={(event) => setProject({ ...project, idea: event.target.value })} />
+            <label htmlFor="constraints">Điều bạn muốn giữ hoặc giới hạn thực hiện (tùy chọn)</label>
+            <textarea id="constraints" className="short-textarea" rows={3}
+              value={project.constraints.join("\n")}
+              placeholder="Mỗi dòng một ý, ví dụ: giữ sự lặng lẽ; chưa cần kết thúc rõ; chỉ hai nhân vật."
+              onChange={(event) => setProject({ ...project, constraints: event.target.value.split("\n") })} />
+            <details className="idea-settings"><summary>Tên dự án và ngôn ngữ (tùy chọn)</summary>
             <label htmlFor="project-title">Tên dự án</label>
             <input id="project-title" maxLength={200} value={project.title}
               onChange={(event) => setProject({ ...project, title: event.target.value })} />
@@ -422,22 +435,11 @@ export default function Workspace({ library = false }: { library?: boolean }) {
                 Lựa chọn áp dụng cho lần làm rõ, phát triển hoặc góp ý tiếp theo;
                 không tự dịch bản đang viết hay gọi AI.</p>
             </details>
-            <label htmlFor="idea">Khoảnh khắc, kỷ niệm hoặc tình huống của bạn</label>
-            <p className="storage-note" id="idea-help">Một cử chỉ, âm thanh hay chuyện vui/khó xử đều có thể bắt đầu câu chuyện.
-              Chưa cần có cốt truyện hoặc biết cách viết kịch bản.</p>
-            <textarea id="idea" maxLength={5000} value={project.idea} rows={5}
-              aria-describedby="idea-help"
-              placeholder="Ví dụ: Tôi về muộn. Mẹ để phần cơm trên bàn, chỉ hỏi có cần hâm lại không. Tôi nhớ tiếng chiếc quạt quay trong lúc hai mẹ con ngồi ăn."
-              onChange={(event) => setProject({ ...project, idea: event.target.value })} />
-            <label htmlFor="constraints">Điều bạn muốn giữ hoặc giới hạn thực hiện (tùy chọn)</label>
-            <textarea id="constraints" className="short-textarea" rows={3}
-              value={project.constraints.join("\n")}
-              placeholder="Mỗi dòng một ý, ví dụ: giữ sự lặng lẽ; chưa cần kết thúc rõ; chỉ hai nhân vật."
-              onChange={(event) => setProject({ ...project, constraints: event.target.value.split("\n") })} />
+            </details>
             {briefChanged && (project.analysis || project.draft) && <p className="form-message">Ý tưởng đã thay đổi. Làm rõ lại trước khi tạo
               bản phát triển mới; bản thảo và câu trả lời trước đó sẽ được giữ trong lịch sử.</p>}
             {(!project.analysis || briefChanged) && <button data-tour-action="analyze" disabled={!project.idea.trim()}
-              onClick={() => action("analyze")}>Cùng làm rõ ý tưởng</button>}
+              onClick={() => action("analyze")}>Chuẩn bị story plan</button>}
           </WorkspaceStage>
           {saved && <details className="workspace-author-context">
             <summary>Ý đồ và lựa chọn đã lưu <span>{dirty ? "Có thay đổi chưa lưu" : "Bản đã lưu"}</span></summary>
@@ -448,6 +450,8 @@ export default function Workspace({ library = false }: { library?: boolean }) {
             preview={`${project.analysis.missing_information.filter((_, i) => project.answers[i]?.trim()).length}/${project.analysis.missing_information.length} câu đã trả lời · Mở để xem hoặc sửa`}>
             <div>
             <ClarificationConversation key={`${project.id}:${project.analysis.artifact_id}`}
+              aiSuggestions={project.analysis.ai_suggestions ?? []}
+              onEditBrief={() => { const input=document.getElementById("idea"); revealWorkspaceTarget(input); input?.focus(); input?.scrollIntoView({block:"center"}); }}
               summary={project.analysis.summary} questions={project.analysis.missing_information} answers={project.answers}
               thinking={!!busy && operationTiming?.kind === "analyze"} confirmationKey={decisionKey} idea={project.idea} constraints={project.constraints} hasDraft={!!project.draft}
               retained={saved?.author_context?.clarifications.filter(item => item.input_index === null) ?? []}

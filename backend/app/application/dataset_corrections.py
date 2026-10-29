@@ -109,6 +109,7 @@ def apply_demo_corrections(
                     "summary": output.summary,
                     "notes": [note.model_dump() for note in output.notes],
                     "missing_information": output.missing_information,
+                    "ai_suggestions": output.ai_suggestions,
                 }
             )
             edited = True
