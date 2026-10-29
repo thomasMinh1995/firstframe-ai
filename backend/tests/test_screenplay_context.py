@@ -22,8 +22,9 @@ class CaptureReview:
     metadata = ProviderMetadata("ollama", "qwen2.5:7b", {"num_ctx": 16384})
 
     def request_structured(self, request):
+        self.requests = getattr(self,"requests",[])+[request]
         self.request = request
-        output = request.response_model.model_validate({'checks':{s['id']:{'relation':'compatible','author_choice_id':'','observation':'Có thể cùng đúng.','impact':''} for s in json.loads(request.input_text)['sources'] if s['is_target'] and s['field']=='text'},'craft_notes':[]})
+        output=request.response_model(craft_issue='none')
         return StructuredResult(output, "qwen2.5:7b")
 
 
@@ -52,12 +53,13 @@ def test_phase6_candidate_fits_without_dropping_or_changing_sources():
     assert result.status == "ready"
     assert review.model_dump(mode="json") == before
     request = provider.request
-    sent = json.loads(request.input_text)["sources"]
-    scoped = [s for s in review.sources if s.category != "context"]
-    assert len(sent) == len(scoped)
-    assert [s["text"] for s in sent] == [s.text for s in scoped]
-    assert [s["category"] for s in sent] == [s.category for s in scoped]
-    assert [s["label"] for s in sent] == [s.label for s in scoped]
+    sent=[s for r in provider.requests for s in json.loads(r.input_text)['sources'] if s['category']=='screenplay']
+    scoped=[s for s in review.sources if s.category=='screenplay' and s.scene_id==review.target_scene_id and s.field=='text']
+    assert [s['text'] for s in sent]==[s.text for s in scoped]
+    assert len(provider.requests)==len(scoped)
+    for r in provider.requests:
+        authors=[s['text'] for s in json.loads(r.input_text)['sources'] if s['category']=='author_choice']
+        assert authors==[]  # Full author choices are retained and checked by code, not a style classifier.
     assert (
         len(request.input_text.encode()) + len(strict_json_instructions(request).encode()) <= 11776
     )

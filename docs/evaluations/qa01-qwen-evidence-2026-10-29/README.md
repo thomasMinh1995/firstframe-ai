@@ -1,3 +1,5 @@
+> Cập nhật review cuối: xem [bản sửa v8 và hai lượt 10 ca](../qa01-qwen-review-v8-2026-10-29/README.md). Báo cáo v7 dưới đây giữ nguyên kết quả lịch sử.
+
 # QA-01 — grounded evidence and Qwen review accuracy
 
 29 October 2026. Branch `feat/qa01-qwen-review-evidence`, from `dev` at `d9698f1` (PR #76).

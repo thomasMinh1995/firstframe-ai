@@ -1,0 +1,78 @@
+{
+  "original": {
+    "expected_conflict": false,
+    "target_quote": null,
+    "author_quotes": [],
+    "expected_no_notes": false
+  },
+  "contradiction": {
+    "expected_conflict": true,
+    "target_quote": "Cô mở lá thư và đọc lời xin lỗi của cha.",
+    "author_quotes": [
+      "Giữ lá thư chưa mở và quyền quyết định của con gái; không giải quyết hết mâu thuẫn.",
+      "Chiều mưa trong căn bếp nhỏ, con gái đặt chìa khóa lên bàn trước khi đi học xa. Cha đặt cạnh đó một lá thư xin lỗi rồi lùi lại. Cô chưa mở thư, nhưng ngồi xuống uống cùng cha một ngụm trà."
+    ],
+    "expected_no_notes": false
+  },
+  "open-ending-compliant": {
+    "expected_conflict": false,
+    "target_quote": null,
+    "author_quotes": [],
+    "expected_no_notes": true
+  },
+  "open-ending-violating": {
+    "expected_conflict": true,
+    "target_quote": "Con tha thứ cho cha. Mọi chuyện đã được giải quyết.",
+    "author_quotes": [
+      "Kết mở; con gái không nói hoặc xác nhận đã tha thứ, không chốt hòa giải.",
+      "Cha xin lỗi; con gái ở lại nhưng chưa nói đã tha thứ."
+    ],
+    "expected_no_notes": false
+  },
+  "free-choice-compliant": {
+    "expected_conflict": false,
+    "target_quote": null,
+    "author_quotes": [],
+    "expected_no_notes": true
+  },
+  "free-choice-violating": {
+    "expected_conflict": true,
+    "target_quote": "Cha giấu hộ chiếu của con gái vào túi để cô không thể ra đi.",
+    "author_quotes": [
+      "Cha không giữ giấy tờ hoặc ép con gái ở lại.",
+      "Người cha xin lỗi và để con gái tự quyết định ở lại hay ra đi.",
+      "Con gái tự quyết định việc ra đi."
+    ],
+    "rationale": "Both explicit non-coercion and the daughter’s agency directly rule out hiding her passport to prevent departure.",
+    "expected_no_notes": false
+  },
+  "broken-flashlight-compliant": {
+    "expected_conflict": false,
+    "target_quote": null,
+    "author_quotes": [],
+    "expected_no_notes": true
+  },
+  "broken-flashlight-violating": {
+    "expected_conflict": true,
+    "target_quote": "Bình bật chiếc đèn pin hỏng; đèn sáng rực, rọi rõ tờ giấy.",
+    "author_quotes": [
+      "Đèn pin bị hỏng, không thể sáng."
+    ],
+    "expected_no_notes": false
+  },
+  "window-compliant": {
+    "expected_conflict": false,
+    "target_quote": null,
+    "author_quotes": [],
+    "expected_no_notes": true
+  },
+  "window-violating": {
+    "expected_conflict": true,
+    "target_quote": "Mai mở cửa sổ.",
+    "author_quotes": [
+      "Cửa sổ không được mở.",
+      "Mai ở trong phòng và chuẩn bị uống nước. Cửa sổ vẫn đóng."
+    ],
+    "expected_no_notes": false
+  }
+}

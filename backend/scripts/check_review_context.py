@@ -13,6 +13,7 @@ from app.api.routes import projects, screenplay_reviews
 from app.infrastructure.ollama_provider import OllamaProvider, OllamaProviderConfig
 from app.main import create_app
 from app.application.ai_provider import strict_json_instructions
+from app.application.screenplay_review import PRESENTATION
 import httpx
 
 
@@ -43,7 +44,16 @@ def evaluate_review(review, expectation):
         review["question"],
         *(n[k] for n in notes for k in ("observation", "impact", "suggestion")),
     ]
+    controlled = True
+    if review.get("prompt_version", "").startswith("screenplay-review-v8"):
+        controlled = not review["question"] and all(
+            (n["observation"], n["impact"]) in PRESENTATION["Vietnamese"].values()
+            and n["suggestion"] == ""
+            for n in notes
+        )
     return {
+        "matches_expected_presentation": controlled,
+        "no_spurious_notes": not expectation.get("expected_no_notes", False) or not notes,
         "matches_expected_conflict": bool(conflicts) == expectation["expected_conflict"],
         "matches_expected_evidence": all(correct_pair(n) for n in conflicts)
         if expectation["expected_conflict"] and conflicts
@@ -55,7 +65,7 @@ def evaluate_review(review, expectation):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Eight local Qwen reviews, one call each, 60s/review, no retries; isolated storage."
+        description="Ten local Qwen reviews, one call per target excerpt, shared 60s/review, no retries; isolated storage."
     )
     parser.add_argument("--output", type=Path, required=True)
     root = parser.parse_args().output
@@ -72,8 +82,8 @@ def main():
 
     class Measured(OllamaProvider):
         def request_structured(self, request):
-            if len(trace) >= 8:
-                raise RuntimeError("Frozen eight-call budget exhausted")
+            if sum(c["case"] == name for c in trace) >= case_call_limit:
+                raise RuntimeError("Saved target-excerpt call budget exhausted")
             current = {
                 "stage": request.stage,
                 "case": name,
@@ -104,7 +114,7 @@ def main():
     screenplay_reviews.get_review_provider = lambda: provider
     results = []
     expectations = json.loads(
-        Path("docs/evaluations/qa01-qwen-evidence-2026-10-29/expectations.json").read_text()
+        Path("docs/evaluations/qa01-qwen-review-v8-2026-10-29/expectations.json").read_text()
     )
     cases = [("original", original, None), ("contradiction", original, None)]
     frozen = json.loads(
@@ -112,6 +122,10 @@ def main():
     )
     assert len(frozen) == 6, "Expected the frozen six-case review set"
     cases += [(c["name"], c["project"], c["request"]["target_scene_id"]) for c in frozen]
+    additional = json.loads(
+        Path("docs/evaluations/qa01-qwen-review-v8-2026-10-29/additional-inputs.json").read_text()
+    )
+    cases += [(c["name"], c["project"], c["target_scene_id"]) for c in additional]
     with (
         TestClient(create_app()) as client,
         patch("app.infrastructure.ollama_provider.httpx.post", capture),
@@ -122,6 +136,12 @@ def main():
             p.screenplay_reviews = []
             if name == "contradiction":
                 p.screenplay.scenes[0].blocks[0].text = "Cô mở lá thư và đọc lời xin lỗi của cha."
+            selected_scene = next(
+                s for s in p.screenplay.scenes if s.id == (target_id or p.screenplay.scenes[0].id)
+            )
+            case_call_limit = sum(
+                (len(b.text) + 999) // 1000 for b in selected_scene.blocks if b.text.strip()
+            )
             store.create(p.model_dump(mode="json", exclude_computed_fields=True))
             response = client.post(
                 f"/api/projects/{p.id}/screenplay-reviews",
@@ -167,6 +187,8 @@ def main():
                 ),
                 "bad_evidence_pairs": sum(not r["matches_expected_evidence"] for r in results),
                 "unexpected_cjk": sum(r["unexpected_cjk"] for r in results),
+                "bad_presentations": sum(not r["matches_expected_presentation"] for r in results),
+                "spurious_notes": sum(not r["no_spurious_notes"] for r in results),
                 "release_acceptance": "pending independent reading and model reliability",
             },
             indent=2,
