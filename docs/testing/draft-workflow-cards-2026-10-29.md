@@ -22,3 +22,9 @@ Browser kiểm tra trên Next.js/FastAPI thực, DB demo riêng từ lần ghi w
 ![Mobile 320px](assets/draft-workflow-cards/mobile-320.jpg)
 
 DR-05/DR-06 tiếp tục skeleton, thinking, reveal và nghiệm thu phục hồi sâu hơn; DR-07/DR-08 tiếp tục hợp nhất quyết định và reader. Mốc này không nghiệm thu model thật, thiết bị/IME/screen reader hoặc toàn luồng phát hành QA-01. Browser lần này kiểm chứng bố cục và đọc run cũ, không thay nghiệm thu pipeline live mới.
+
+## Tinh chỉnh styling theo phản hồi
+
+Connector có đầu mũi tên theo chiều workflow. Điểm xuống hàng nối từ đáy card cuối hàng trên tới đỉnh card cùng cột bên dưới bằng mũi tên thẳng xuống, không vòng bên hông. Mọi trạng thái card dùng cùng nền, viền và bóng cơ bản; trạng thái vẫn thể hiện bằng chữ và dấu. Hover/focus nhấn viền và bóng mà không dịch chuyển vị trí card. Reduced motion tắt transition.
+
+TypeScript đạt sau chỉnh sửa. Browser xác nhận 10 card có cùng màu nền, 9 mũi tên, hai điểm xuống hàng giữ nguyên tọa độ x; tại 320px scrollWidth vẫn 320. Hover đã thay đổi bóng card. Các ảnh phía trên đã cập nhật theo styling mới. Không đổi logic dữ liệu hoặc gọi model trong lượt này.

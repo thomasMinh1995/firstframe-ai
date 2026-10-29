@@ -1,20 +1,21 @@
 'use client';
-import {useEffect,useRef,useState} from 'react';
+import {useEffect,useRef,useState,useId} from 'react';
 import type {DraftRun,Candidate} from './draftRunsApi';
 import {cardResult,workflowLabels,workflowStatusLabels,type WorkflowItem} from './draftWorkflowState';
 import './draftWorkflow.css';
 export function DraftWorkflow({run,candidate,onRead}:{run:DraftRun;candidate:Candidate|null;onRead:(target:string)=>void}){
  const list=useRef<HTMLOListElement>(null),[paths,setPaths]=useState<string[]>([]);
+ const arrowId='workflow-arrow-'+useId().replace(/:/g,'');
  const items=run.workflow_items??[];
  useEffect(()=>{
   const el=list.current;if(!el)return;let frame=0;
-  const draw=()=>{cancelAnimationFrame(frame);frame=requestAnimationFrame(()=>{const box=el.getBoundingClientRect();const cards=[...el.children].map(n=>n.getBoundingClientRect());setPaths(cards.slice(0,-1).map((a,i)=>{const b=cards[i+1];if(Math.abs(a.top-b.top)<5){const right=b.left>a.left,x=(right?a.right:a.left)-box.left,xx=(right?b.left:b.right)-box.left,y=a.top+a.height/2-box.top;return `M${x},${y} L${xx},${y}`;}if(Math.abs(a.left-b.left)<5&&box.width>620){const right=Math.floor(i/3)%2===0,x=(right?a.right:a.left)-box.left,y=a.top+a.height/2-box.top,yy=b.top+b.height/2-box.top,turn=x+(right?15:-15);return `M${x},${y} C${turn},${y} ${turn},${y+20} ${turn},${y+28} L${turn},${yy-28} C${turn},${yy-20} ${turn},${yy} ${x},${yy}`;}const x=a.left+a.width/2-box.left,xx=b.left+b.width/2-box.left,y=a.bottom-box.top,yy=b.top-box.top;return `M${x},${y} C${x},${(y+yy)/2} ${xx},${(y+yy)/2} ${xx},${yy}`;}));});};
+  const draw=()=>{cancelAnimationFrame(frame);frame=requestAnimationFrame(()=>{const box=el.getBoundingClientRect();const cards=[...el.children].map(n=>n.getBoundingClientRect());setPaths(cards.slice(0,-1).map((a,i)=>{const b=cards[i+1];if(Math.abs(a.top-b.top)<5){const right=b.left>a.left,x=(right?a.right:a.left)-box.left,xx=(right?b.left:b.right)-box.left,y=a.top+a.height/2-box.top;return `M${x},${y} L${xx},${y}`;}const x=a.left+a.width/2-box.left,xx=b.left+b.width/2-box.left,y=a.bottom-box.top,yy=b.top-box.top;return `M${x},${y} C${x},${(y+yy)/2} ${xx},${(y+yy)/2} ${xx},${yy}`;}));});};
   const observer=new ResizeObserver(draw);observer.observe(el);for(const child of el.children)observer.observe(child);draw();return()=>{observer.disconnect();cancelAnimationFrame(frame)};
  },[items]);
  if(!items.length)return <p className="storage-note">Lượt này chưa có tiến độ chi tiết. Xem trạng thái và bản đã lưu bên dưới.</p>;
  return <section className="draft-workflow" aria-label="Tiến độ tạo nháp theo từng bước">
   <p className="storage-note">{items.filter(i=>i.status==='completed').length}/{items.length} mục có kết quả · {items.filter(i=>['warning','failed','interrupted','needs_input'].includes(i.status)).length} mục cần xem</p>
-  <div className="draft-workflow-map"><svg aria-hidden="true" className="draft-workflow-route">{paths.map((d,i)=><path key={i} d={d}/>)}</svg>
+  <div className="draft-workflow-map"><svg aria-hidden="true" className="draft-workflow-route"><defs><marker id={arrowId} markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M1,1 L7,4 L1,7"/></marker></defs>{paths.map((d,i)=><path key={i} d={d} markerEnd={`url(#${arrowId})`}/>)}</svg>
    <ol ref={list} className="draft-workflow-cards">{items.map((item,index)=><WorkflowCard key={item.id} item={item} index={index} candidate={candidate} onRead={onRead}/>)}</ol>
   </div>
  </section>;
