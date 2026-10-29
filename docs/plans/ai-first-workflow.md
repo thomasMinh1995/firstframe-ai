@@ -60,7 +60,7 @@ Các chỉnh sửa UI cần để dùng từng tính năng được giao cùng t
 
 ## Backlog task tích hợp
 
-Backlog gồm **21 task: 8 hệ thống, 12 UI và 1 nghiệm thu toàn luồng**. **SYS-01–SYS-07 và UI-01–UI-09 đã triển khai, kiểm chứng kỹ thuật local**; 5 task còn lại chưa bắt đầu. QA-01 vẫn chờ toàn workflow. Mã task là định danh trong kế hoạch, chưa phải issue hoặc chat đã tạo. Mỗi task có phần kiểm tra đi cùng; QA-01 tổng hợp nghiệm thu và không thay test ở từng task.
+Backlog gồm **21 task: 8 hệ thống, 12 UI và 1 nghiệm thu toàn luồng**. **SYS-01–SYS-08 và UI-01–UI-10 đã triển khai, kiểm chứng kỹ thuật local**; 3 task còn lại chưa bắt đầu. QA-01 vẫn chờ toàn workflow. Mã task là định danh trong kế hoạch, chưa phải issue hoặc chat đã tạo. Mỗi task có phần kiểm tra đi cùng; QA-01 tổng hợp nghiệm thu và không thay test ở từng task.
 
 Các vai trò Backend, Frontend và QA dưới đây mô tả phần việc cần đảm nhiệm, chưa gán người thực hiện hoặc thời lượng. Các đường dẫn trong bảng tính từ thư mục gốc repo; danh sách file và kiểm chứng chi tiết tiếp tục nằm trong từng giai đoạn.
 
@@ -238,7 +238,7 @@ Task bàn giao: **SYS-06, SYS-07, UI-06, UI-07, UI-08**. Đã triển khai local
 
 ## Giai đoạn 5 P1 Xuất kịch bản đã chọn
 
-Task bàn giao: **SYS-08, UI-10**.
+Task bàn giao: **SYS-08, UI-10**. Đã triển khai local; xem [kiểm chứng giai đoạn 5](../testing/phase5-screenplay-pdf-2026-10-29.md).
 
 ### Công việc
 

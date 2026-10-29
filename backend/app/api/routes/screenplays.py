@@ -54,6 +54,29 @@ def select_screenplay(project_id: str, request: SelectScreenplay):
         return projects.save_project(project)
 
 
+@router.get("/{project_id}/screenplay-selections/{selection_id}/pdf")
+def export_screenplay_pdf(project_id: str, selection_id: SceneId):
+    from fastapi.responses import Response
+    from reportlab.pdfbase.ttfonts import TTFError
+    from app.application.screenplay_pdf import render_pdf, filename
+    with projects.project_errors():
+        project = projects.load_project(project_id)
+        selection = next((s for s in project.screenplay_selections if s.id == selection_id), None)
+        if selection is None:
+            raise HTTPException(404, "Không tìm thấy bản kịch bản đã chọn trong dự án.")
+        try:
+            data = render_pdf(selection)
+        except ValueError as error:
+            raise HTTPException(422, str(error)) from error
+        except (OSError, TTFError) as error:
+            raise HTTPException(503, "Chưa xuất được PDF. Bản đã chọn vẫn giữ; hãy kiểm tra font PDF và thử lại.") from error
+        return Response(data, media_type="application/pdf", headers={
+            "Content-Disposition": f'attachment; filename="{filename(selection)}"',
+            "Cache-Control": "no-store",
+            "Access-Control-Expose-Headers": "Content-Disposition",
+        })
+
+
 @router.post("/{project_id}/screenplay", response_model=ProjectResponse)
 def start_screenplay(project_id: str, request: StartScreenplay):
     with projects.project_errors():

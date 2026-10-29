@@ -4,17 +4,19 @@
 
 FirstFrame helps people in Vietnam write their first short film from their own experiences, understand their creative choices, and revise a screenplay to share with human collaborators. The author keeps control of the story.
 
-The current MVP supports saved projects, clarification questions, editable story plans, version history, and feedback on the revised draft through a **Creative Reasoning Harness**. Scene outlines and a scene-level screenplay editor are available as separate steps; checkpointed automatic drafting is available for short scripts of up to 6 scenes within the provider context budget. PDF export remains planned.
+The current MVP supports saved projects, clarification questions, editable story plans, version history, and feedback on the revised draft through a **Creative Reasoning Harness**. Scene outlines and a scene-level screenplay editor are available as separate steps; checkpointed automatic drafting is available for short scripts of up to 6 scenes within the provider context budget. Selected screenplay snapshots can be exported to PDF without AI.
 
 Current project workflow:
 
 ```text
-Idea (autosave) -> Draft run -> Clarify only if needed -> Story plan + outline + all scene text -> Read/edit candidate -> Adopt -> Review -> Preview scene/block revision -> Use / Edit / Discard -> Undo if unchanged
+Idea (autosave) -> Draft run -> Clarify only if needed -> Story plan + outline + all scene text -> Read/edit candidate -> Adopt -> Review -> Preview scene/block revision -> Use / Edit / Discard -> Undo if unchanged -> Read/select screenplay -> PDF
 ```
 
 Clarification has no fixed questionnaire. A clear brief can return no questions; unanswered questions remain open and do not become author decisions. AI suggestions are shown separately. The initial screen keeps project name and language under optional settings. The detailed tools still support creating a story plan separately. The “Tạo bản nháp” action starts a durable backend run. Reload reads progress without calling AI again; received model outputs and each completed scene are checkpointed. Candidate edits autosave separately, and adoption checks the original brief and target before atomically keeping the prior draft. Unknown model outcomes are never retried automatically.
 
 Review gives feedback on the saved draft. Verified notes can request a separate scene/block revision without another prompt. The main editor stays beside the desktop review panel; narrow screens use a sheet. Saved comparisons and the full reader open on demand. Before/after previews show the proposed scope; accepting saves a checkpoint and undo restores the target only if it has not changed. Block revisions preserve all other blocks and IDs. Explicit scene numbers are resolved before generation; structural requests start an independent draft candidate with affected scenes listed. Changing the idea or constraints uses the existing clarification flow again.
+
+**Đọc & xuất PDF** opens the saved screenplay reader. Choose the current or a historical version, then **Chọn bản đã đọc & tải PDF**. Pending saves are flushed and the read snapshot is checked before selection; if it changed, read it again. Previously selected versions can be downloaded again without changing the selection or current draft. The export API `GET /api/projects/{id}/screenplay-selections/{selection_id}/pdf` reads only that immutable selection, including its original story-plan title. It does not call AI or write history. PDF uses bundled Liberation Mono fonts for Vietnamese, A4 pages and page numbers; long dialogue repeats its speaker on continuation pages. Characters outside the font coverage report an error instead of silently becoming missing-glyph squares. A legacy snapshot without a title exports with a neutral filename.
 
 ## Why It Exists
 
@@ -46,7 +48,7 @@ Moment -> Story Plan -> Scene Outline -> Write and Revise Screenplay -> Export S
 
 A story plan clarifies the intended story before detailed scene writing. It is a useful milestone to keep or share, but a good plan does not guarantee a good screenplay. Its detail should fit the size and form of the story.
 
-The product goal is a complete short-film screenplay: all scenes are written, action and dialogue communicate the intended story, at least one feedback-and-revision round has taken place, and the selected draft can be exported for reading and further development. This is not a capability already delivered by the MVP.
+The product goal is a complete short-film screenplay: all scenes are written, action and dialogue communicate the intended story, at least one feedback-and-revision round has taken place, and the selected draft can be exported for reading and further development. The local implementation supports this journey; pilot and full release acceptance remain pending.
 
 FirstFrame's handoff ends at screenplay export. Casting, staging, shooting, editing, and post-production belong to a separate process with real people and actors. AI video, synthetic actors, generated footage, and production management are outside the product direction. Automatic scene illustrations are no longer an active roadmap milestone.
 

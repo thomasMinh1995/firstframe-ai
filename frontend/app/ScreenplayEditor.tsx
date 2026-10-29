@@ -18,9 +18,9 @@ import "./screenplay.css";
 
 const undoContent = (script: Screenplay) => JSON.stringify({id:script.id, scenes:script.scenes, source:script.source_outline.id});
 
-export function ScreenplayEditor({project, savedProject, onSelectSource, onSourceInspect, dirty, sourceDirty, onChange, onStart, onSave, onInspect, onWrite, onProposalInspect, onPreview, onDiscard, canUse, onReview, onReviewInspect, onReviewDiscard, onReviewAssess, canNavigateReview,onApply,onUndoProposal,onStructural,busy=false}: {
+export function ScreenplayEditor({project, savedProject, onSelectSource, onDownloadPdf, onSourceInspect, dirty, sourceDirty, onChange, onStart, onSave, onInspect, onWrite, onProposalInspect, onPreview, onDiscard, canUse, onReview, onReviewInspect, onReviewDiscard, onReviewAssess, canNavigateReview,onApply,onUndoProposal,onStructural,busy=false}: {
   busy?:boolean;onApply?:(id:string,scene:ScriptScene)=>void;onUndoProposal?:(id:string)=>void;onStructural?:(instructions:string)=>void;
-  savedProject:Project;onSelectSource:(input:ScreenplaySelectionInput)=>Promise<void>;onSourceInspect:()=>Promise<boolean>;
+  savedProject:Project;onSelectSource:(input:ScreenplaySelectionInput,read:Screenplay)=>Promise<void>;onDownloadPdf?:(selectionId:string)=>Promise<void>;onSourceInspect:()=>Promise<boolean>;
   onReview:(input:SceneWritingInput)=>Promise<void>;onReviewInspect:()=>Promise<boolean>;onReviewDiscard:(id:string)=>void;
   onReviewAssess:(reviewId:string,noteId:string,value:ReviewAssessment)=>void;canNavigateReview:boolean;
   project: Project; dirty: boolean; sourceDirty: boolean;
@@ -100,7 +100,7 @@ export function ScreenplayEditor({project, savedProject, onSelectSource, onSourc
           const reader=e.currentTarget.closest('.screenplay')?.querySelector<HTMLElement>('.screenplay-reading');
           const details=reader?.closest('details');if(details)details.open=true;
           reader?.scrollIntoView({block:'start'});reader?.focus({preventScroll:true});
-        }}>Đọc toàn bộ</button>
+        }}>Đọc &amp; xuất PDF</button>
       </div>
     </header>
     <SceneHint title="Bắt đầu viết từ đâu?">Chọn cảnh → viết và sửa → lưu để cập nhật kịch bản bên cạnh.
@@ -198,7 +198,7 @@ export function ScreenplayEditor({project, savedProject, onSelectSource, onSourc
       </div>
 
     </>}
-    <details className="screenplay-reader-toggle"><summary>Đọc hoặc chọn bản kịch bản đã lưu</summary><ScreenplayReading saved={savedProject} dirty={dirty} onSelect={onSelectSource} onInspect={onSourceInspect}
+    <details className="screenplay-reader-toggle"><summary>Hoàn tất · đọc và xuất PDF kịch bản</summary><ScreenplayReading saved={savedProject} dirty={dirty} onSelect={onSelectSource} onDownload={onDownloadPdf} onInspect={onSourceInspect}
       onEdit={id=>chooseScene(id)}/></details>
 
   </section>;

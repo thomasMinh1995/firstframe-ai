@@ -1,4 +1,5 @@
 "use client";
+import {selectReadScreenplay,downloadScreenplayPdf} from "./screenplayExport";
 
 import { useEffect, useRef, useState } from "react";
 import {DraftRunPanel} from "./DraftRunPanel";
@@ -617,11 +618,13 @@ export default function Workspace({ library = false }: { library?: boolean }) {
               const target=document.getElementById("workspace-script");revealWorkspaceTarget(target);target?.scrollIntoView({block:"start"});target?.focus({preventScroll:true});
             })} />}
           {saved && <ScreenplayEditor busy={!!busy} key={`script:${project.id}`} project={project} savedProject={saved} dirty={dirty}
-            onSelectSource={input=>run("Đang giữ bản đã lưu làm nguồn xuất kịch bản…",async()=>{
+            onDownloadPdf={id=>run("Đang tải PDF bản đã chọn…",async()=>{await downloadScreenplayPdf(project.id,id);setNotice("Đã tải PDF đúng bản kịch bản đã chọn.");})}
+            onSelectSource={(input,read)=>run("Đang chọn đúng bản đã đọc và tải PDF…",async()=>{
               const source=await persist();if(!source)return;
-              const next=await projectRequest(`/${source.id}/screenplay-selections`,"POST",{revision:source.revision,...input});
+              const next=await selectReadScreenplay(source,input,read);
               setSaved(next);setProject(current=>current?{...current,revision:next.revision,screenplay_selections:next.screenplay_selections,screenplay_handoff:next.screenplay_handoff}:current);
-              setNotice("Đã lưu thay đổi và giữ bản nguồn để xuất kịch bản; chưa xuất bản.");
+              await downloadScreenplayPdf(source.id,input.request_id);
+              setNotice("Đã giữ bản đã đọc và tải PDF. Sửa tiếp không đổi PDF của bản chọn này.");
             })}
             onSourceInspect={async()=>{let checked=false;await run("Đang kiểm tra nguồn xuất kịch bản đã lưu…",async()=>{
               await inspectProject(true);checked=true;
