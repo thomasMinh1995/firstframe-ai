@@ -4,13 +4,15 @@
 
 FirstFrame helps people in Vietnam write their first short film from their own experiences, understand their creative choices, and revise a screenplay to share with human collaborators. The author keeps control of the story.
 
-The current MVP supports saved projects, clarification questions, editable story plans, version history, and feedback on the revised draft through a **Creative Reasoning Harness**. It does not yet provide a scene outline, scene-level screenplay editor, or screenplay export.
+The current MVP supports saved projects, clarification questions, editable story plans, version history, and feedback on the revised draft through a **Creative Reasoning Harness**. Scene outlines and a scene-level screenplay editor are available as separate steps; automatic end-to-end drafting and PDF export remain planned.
 
 Current project workflow:
 
 ```text
-Save Idea -> Analyze -> Answer/Defer Questions -> Generate Story Plan -> Edit -> Review -> Save/Reopen
+Idea (autosave) -> Read understanding -> Answer only if needed / leave open -> Story Plan -> Edit -> Review
 ```
+
+Clarification has no fixed questionnaire. A clear brief can return no questions; unanswered questions remain open and do not become author decisions. AI suggestions are shown separately. The initial screen keeps project name and language under optional settings. “Chuẩn bị story plan” prepares clarification; “Tạo story plan” creates the plan. Full screenplay generation remains phase 3.
 
 Review gives feedback on the saved draft; it does not rewrite it. Changing the idea or constraints uses the existing clarification flow again.
 

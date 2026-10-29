@@ -1,0 +1,13 @@
+const assert=require('node:assert/strict');
+const React=require('react'),{renderToStaticMarkup}=require('react-dom/server');
+const {ClarificationConversation}=require(process.argv[2]+'/ClarificationConversation.js');
+const render=extra=>renderToStaticMarkup(React.createElement(ClarificationConversation,{summary:'Đợi trong bếp.',questions:[],answers:[],onChange(){},onConfirm(){},...extra}));
+assert.match(render({}),/Đã đủ thông tin/);
+assert.match(render({}),/data-tour-action="plan"/);
+assert.doesNotMatch(render({}),/Xem lại các lựa chọn|Đồng ý/);
+const open=render({questions:['Kết ở đâu?'],answers:[''],aiSuggestions:['AI thử cảnh im lặng.']});
+assert.match(open,/Tạo story plan với phần còn để mở/);
+assert.match(open,/Gợi ý AI chưa xác nhận/);
+assert.doesNotMatch(open,/disabled=""/);
+assert.match(open,/<textarea[^>]+id="answer-0"/);
+console.log('PASS clarification: clear brief, optional questions, one CTA, separate AI proposals');

@@ -81,7 +81,7 @@ function copy(step: TourStep, p: Props) {
   switch (step) {
     case "new-project": return p.context.projectId ? "Tạo câu chuyện mới; thay đổi hiện tại sẽ được lưu trước." : "Tạo nơi viết cho câu chuyện của bạn.";
     case "idea": return "Ghi lại khoảnh khắc, điều muốn giữ và giới hạn nếu có.";
-    case "choices": return p.questionCount ? "Trả lời từng câu hỏi để chọn hướng phát triển." : "Xem lại lựa chọn trước khi tạo Story plan.";
+    case "choices": return p.questionCount ? "Chỉ trả lời điều bạn muốn quyết định; có thể để mở." : "Đã đủ thông tin, bạn có thể tạo story plan.";
     case "draft": return "Đọc và sửa trực tiếp trên từng card.";
     case "outline": return "Chia Story plan thành các cảnh. Tự viết trước; AI là tùy chọn.";
     case "script": return "Chọn một cảnh để viết và lưu kịch bản.";
@@ -92,7 +92,7 @@ function copy(step: TourStep, p: Props) {
 function instructions(step: TourStep, hasDraft: boolean): string[] {
   switch (step) {
     case "new-project": return ["Chọn Dự án mới để bắt đầu."];
-    case "idea": return ["Viết ý tưởng, rồi chọn Cùng làm rõ ý tưởng."];
+    case "idea": return ["Viết ý tưởng, rồi chọn Chuẩn bị story plan."];
     case "choices": return ["Trả lời hoặc để quyết định sau."];
     case "draft": return [hasDraft ? "Sửa từng card; thay đổi tự lưu khi bạn dừng gõ." : "Story plan sẽ xuất hiện sau bước Làm rõ."];
     case "outline": return ["Chọn nguồn, thêm cảnh, rồi lưu dàn cảnh."];
@@ -139,7 +139,7 @@ export function OnboardingTour(props: Props) {
     if (step === "idea") selector = "#idea";
     if (step === "choices") {
       const index = Array.from({ length: props.questionCount }, (_, i) => i).find(i => !props.answers[i]?.trim());
-      selector = index === undefined ? '[data-choice-review]' : `#answer-${index}`;
+      selector = index === undefined ? '[data-tour-action="plan"]' : `#answer-${index}`;
     }
     if (step === "draft") {
       const editor = document.querySelector<HTMLButtonElement>('[data-draft-open="logline"]');

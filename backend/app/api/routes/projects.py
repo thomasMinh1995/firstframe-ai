@@ -586,8 +586,6 @@ def _analyze_project(project_id: str, request: RevisionRequest, conversation: bo
         if not project.idea.strip():
             raise HTTPException(422, "Hãy nhập ý tưởng trước khi bắt đầu.")
         existing = list(project.analysis.missing_information) if conversation and project.analysis else []
-        if existing and (len(project.answers) != len(existing) or any(not answer.strip() for answer in project.answers)):
-            raise HTTPException(422, "Hãy trả lời hoặc để quyết định sau các câu hiện tại trước khi hỏi tiếp.")
         if len(existing) >= MAX_CHOICES:
             raise HTTPException(422, "Đã có đủ 20 lượt làm rõ. Bạn có thể sửa các lựa chọn trước khi xác nhận.")
         with capture_workflow("analyze", dataset_snapshot(project)) as dataset:
@@ -601,6 +599,7 @@ def _analyze_project(project_id: str, request: RevisionRequest, conversation: bo
             project.clarifications = previous_answers
             project.analysis = AnalysisResponse(
                 artifact_id=reasoning.metadata.artifact_id,
+                ai_suggestions=list(getattr(reasoning, "ai_suggestions", ())),
                 summary=next(
                     (note.content for note in reasoning.notes if note.label == "Analysis summary"), ""
                 ),
@@ -627,10 +626,8 @@ def plan_project(project_id: str, request: RevisionRequest):
             if project.analysis is None:
                 raise HTTPException(422, "Hãy làm rõ ý tưởng trước khi tạo bản phát triển.")
             questions = project.analysis.missing_information
-            if len(questions) != len(project.answers) or any(
-                not answer.strip() for answer in project.answers
-            ):
-                raise HTTPException(422, "Hãy trả lời hoặc chọn để quyết định sau cho từng câu hỏi.")
+            if len(questions) != len(project.answers):
+                raise HTTPException(422, "Câu trả lời phải khớp với bộ câu hỏi hiện tại.")
         generation_id = None
 
         def keep_plan(plan: StoryPlanArtifact) -> None:
@@ -660,6 +657,7 @@ def plan_project(project_id: str, request: RevisionRequest):
                     project.idea, project.creator_answers(), constraints_for(project),
                     response_language=project.response_language, on_planned=keep_plan,
                     structured_review=True,
+                    pending_questions=tuple(q for q, a in zip(questions, project.answers) if not a.strip()),
                 )
                 generation = project.plan_generations[-1]
                 generation.feedback = _to_response(run).evaluation

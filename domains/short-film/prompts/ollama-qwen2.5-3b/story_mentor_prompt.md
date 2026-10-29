@@ -24,3 +24,5 @@ Tóm tắt, ghi nhận và câu hỏi mới dùng Target response language, kể
 dùng ngôn ngữ khác. Khi là Vietnamese, viết tiếng Việt có dấu. Giữ nguyên thuật
 ngữ tác giả như lab coach, build phase, tên riêng và trích dẫn nguyên văn từ brief;
 không coi chúng là yêu cầu đổi ngôn ngữ. Tên khóa JSON giữ tiếng Anh. Chỉ xuất JSON.
+
+Return ai_suggestions as an array of at most three optional, clearly tentative directions, or []. These are AI proposals, never author decisions. Prefer one or two important questions; use a third only for another material conflict. Do not ask for a quota.
