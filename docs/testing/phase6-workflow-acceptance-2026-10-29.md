@@ -77,3 +77,15 @@ Browser regression với fixture SQLite riêng, 390px: trước sửa yêu cầu
 [Báo cáo context và tám ca Qwen](../evaluations/qa01-review-context-qwen7b-final-2026-10-29/README.md): request của candidate đã giảm từ 12.430 xuống 11.450 byte, không bỏ nguồn và không nới guard; đã đặt trần đầu ra Ollama đúng phần ngân sách dành sẵn. Tám ca đều gửi được, không cắt đầu ra và không đổi kịch bản. Backend 559 passed, 1 skipped.
 
 **Chưa nghiệm thu model:** sáu ca bị từ chối do bằng chứng không hợp lệ; hai ca qua validator nhưng một ca cáo buộc sai với hành động được phép. Vì vậy phần chặn context đã giải quyết cho bộ ca này, còn độ tin cậy góp ý và xác nhận người đọc/thiết bị thật vẫn chặn QA-01 phát hành. Không suy ra chất lượng từ số test hay JSON/quote hợp lệ.
+
+## QA-01 tiếp nối — bằng chứng và độ chính xác Qwen
+
+[Báo cáo và dữ liệu Qwen v7](../evaluations/qa01-qwen-evidence-2026-10-29/README.md): backend lấy trích dẫn trực tiếp từ snapshot theo ID do model chọn; schema buộc kiểm tra từng khối text, không nhận ID ngoài phạm vi. Dữ liệu nguồn đầy đủ vẫn được lưu; model chỉ nhận screenplay và lựa chọn tác giả đã xác nhận. Review Ollama dùng nhiệt độ 0, một call và ngân sách 60 giây, không tự retry.
+
+Kiểm thử kỹ thuật **598 passed, 1 skipped**. Hai lượt tám ca đều trả 8/8 review hợp lệ về nguồn; tiêu chí đúng cặp bằng chứng đạt **7/8 mỗi lượt**, so với 1/8 ca dùng được ở v6. **Chưa nghiệm thu:** ca đèn pin vẫn cáo buộc thêm đoạn dùng ánh đèn đường được phép; còn craft praise và diễn giải sai thứ tự/nội dung giới hạn. Bộ chấm mới phát hiện các lỗi mà chỉ số “có phát hiện xung đột” từng che mất. PR ở trạng thái draft; QA-01 chưa hoàn tất.
+
+## Review cuối PR #77 — nguồn trực tiếp và diễn giải
+
+[Báo cáo v8 và dữ liệu hai lượt](../evaluations/qa01-qwen-review-v8-2026-10-29/README.md): cả hai lượt đạt 10/10 ca, đúng cặp bằng chứng và mẫu nội dung hiển thị, không cáo buộc thêm ánh đèn đường, không đổi kịch bản. Backend kiểm tra các đối lập trực tiếp thận trọng; Qwen chỉ phân loại độ rõ từng đoạn và không viết diễn giải. Hai đối chứng cửa sổ/cửa tủ đã được dùng trong phát triển; không tuyên bố đây là bộ đánh giá độc lập.
+
+Đã bỏ chặn lỗi tái hiện của PR #77 để merge kỹ thuật vào dev. Không suy ra review ngữ nghĩa tổng quát đã chính xác; các trường hợp ngoài phạm vi trực tiếp có thể không phát hiện. QA-01 phát hành tiếp tục chờ người đọc độc lập, pilot và kiểm tra thiết bị/IME/screen reader/Safari.

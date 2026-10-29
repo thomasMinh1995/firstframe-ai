@@ -138,3 +138,10 @@ def test_provider_rejects_json_that_does_not_match_schema() -> None:
                 response_model=DemoResponse,
             )
         )
+
+
+def test_request_timeout_is_bounded_by_provider_configuration():
+    responses=FakeResponses(result=SimpleNamespace(id='response-1',output_text='{"title":"A quiet goodbye"}'))
+    provider=OpenAIProvider(OpenAIProviderConfig('test-key','gpt-test',0.3,timeout_seconds=1),client=FakeOpenAIClient(responses))
+    provider.request_structured(StructuredRequest('Return JSON.','Seed idea.',DemoResponse,timeout_seconds=2.5))
+    assert responses.calls[0]['timeout']==1

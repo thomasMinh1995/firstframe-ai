@@ -88,6 +88,7 @@ class OpenAIProvider:
                 instructions=strict_json_instructions(request),
                 input=request.input_text,
                 temperature=self._config.temperature,
+                **({"timeout": min(self._config.timeout_seconds, request.timeout_seconds)} if request.timeout_seconds is not None else {}),
             )
         except APITimeoutError as error:
             _log_provider_exception(provider_method, self._config.model, error)

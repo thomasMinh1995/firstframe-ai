@@ -42,6 +42,7 @@ class StructuredRequest:
     input_text: str
     response_model: type[BaseModel]
     stage: str = ""
+    timeout_seconds: float | None = None
 
 
 @dataclass(frozen=True)
