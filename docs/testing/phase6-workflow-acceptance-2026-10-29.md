@@ -71,3 +71,9 @@ Browser regression với fixture SQLite riêng, 390px: trước sửa yêu cầu
 Đã chạy lại **553 backend passed, 1 skipped; 15/15 bộ frontend, TypeScript và production build qua**. GitHub không có Actions/check/status test thực thi; trạng thái legacy pending với total_count=0 không phải CI đang chạy. Các điều kiện QA-01 về thiết bị/người đọc thật và giới hạn context của model vẫn chưa được chốt, không thay đổi vì merge kỹ thuật vào dev.
 
 ![Yêu cầu sửa còn nguyên sau đóng/mở sheet](assets/phase6-writing-space/review-retained-request.png)
+
+## QA-01 tiếp nối — context review
+
+[Báo cáo context và tám ca Qwen](../evaluations/qa01-review-context-qwen7b-final-2026-10-29/README.md): request của candidate đã giảm từ 12.430 xuống 11.450 byte, không bỏ nguồn và không nới guard; đã đặt trần đầu ra Ollama đúng phần ngân sách dành sẵn. Tám ca đều gửi được, không cắt đầu ra và không đổi kịch bản. Backend 559 passed, 1 skipped.
+
+**Chưa nghiệm thu model:** sáu ca bị từ chối do bằng chứng không hợp lệ; hai ca qua validator nhưng một ca cáo buộc sai với hành động được phép. Vì vậy phần chặn context đã giải quyết cho bộ ca này, còn độ tin cậy góp ý và xác nhận người đọc/thiết bị thật vẫn chặn QA-01 phát hành. Không suy ra chất lượng từ số test hay JSON/quote hợp lệ.

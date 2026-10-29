@@ -15,7 +15,7 @@ from app.application.ai_provider import StructuredResult
 from app.application.provenance import ai_draft, scene_fields
 from app.application.scene_suggestions import suggest_scenes
 from app.application.screenplay_writing import write_scene
-from app.application.screenplay_review import review_scene, review_sources
+from app.application.screenplay_review import PROMPT_VERSION as REVIEW_PROMPT_VERSION, review_scene, review_sources
 from app.application.workflow import create_story_generation_service
 from app.application.draft_run_store import now
 
@@ -157,7 +157,7 @@ def execute(store, project_id, run_id, providers):
                 try:
                     review = ScreenplayReview(id=str(uuid4()), created_at=now(), source_revision=p.revision,
                         source_content=p.content_key(), source_screenplay=p.screenplay.model_copy(deep=True),
-                        source_outline=p.scene_outline, target_scene_id=scene.id, prompt_version="screenplay-review-v5-provenance")
+                        source_outline=p.scene_outline, target_scene_id=scene.id, prompt_version=REVIEW_PROMPT_VERSION)
                     review.sources = review_sources(review)
                     p.screenplay_reviews.append(review_scene(review, wrapped[3]))
                     checkpoint("review")

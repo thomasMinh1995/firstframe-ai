@@ -3,6 +3,7 @@
 - Ngày lập: 29/10/2026.
 - Cập nhật: kết hợp sáu giai đoạn hệ thống với 12 task UI thành backlog triển khai chung.
 - Trạng thái: các task hệ thống và UI của giai đoạn 1–6 đã triển khai, kiểm chứng kỹ thuật local. QA-01 có báo cáo tích hợp nhưng chưa chốt phát hành; xem [bằng chứng và các phần còn thiếu](../testing/phase6-workflow-acceptance-2026-10-29.md).
+- QA-01 tiếp nối: [context review trên Qwen mục tiêu](../evaluations/qa01-review-context-qwen7b-final-2026-10-29/README.md) đã bỏ chặn cho bộ ca cố định mà không cắt nguồn; độ tin cậy góp ý model và nghiệm thu người đọc/thiết bị vẫn chưa đạt.
 - Mục tiêu: người dùng kể khoảnh khắc, AI chuẩn bị bản nháp phim ngắn, người dùng review và yêu cầu thay đổi, rồi chọn bản để xuất.
 - Phạm vi ban đầu: ứng dụng local một người dùng, Next.js, FastAPI và SQLite hiện có. Đường tự viết tiếp tục dùng được.
 
