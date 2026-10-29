@@ -186,7 +186,7 @@ def test_short_ids_are_transport_only_with_explicit_block_kind_and_target(review
     assert item['notes'][0]['evidence'][0]['source_id']==original
     assert provider.output.notes[0].evidence[0].source_id==action['id'],'raw provider result must not be rewritten'
     assert any(s['id']==original for s in item['sources']) and all(s['id'] not in ids for s in item['sources'])
-    assert item['prompt_version']=='screenplay-review-v5-provenance'
+    assert item['prompt_version']=='screenplay-review-v6-compact'
     assert saved['screenplay']==p['screenplay'] and client.get(url).json()['screenplay_reviews']==saved['screenplay_reviews']
 
 
@@ -220,7 +220,7 @@ def test_frozen_six_inputs_with_fake_provider_only(project_client,monkeypatch,in
     assert 'every observation, impact, suggestion and question' in prompt
     assert 'Do not keep secondary craft/uncertain notes or questions' in prompt
     assert 'Suggest a small action the author may consider' not in prompt
-    assert item['prompt_version']=='screenplay-review-v5-provenance'
+    assert item['prompt_version']=='screenplay-review-v6-compact'
     assert saved['screenplay']==case['project']['screenplay'] and saved['scene_outline']==case['project']['scene_outline']
     assert item['source_screenplay']==case['project']['screenplay'] and len(provider.requests)==1
     target_texts=[s for s in sources if s['is_target'] and s['field']=='text']

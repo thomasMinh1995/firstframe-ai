@@ -12,7 +12,7 @@ from app.application.language import resolve_response_language
 from app.application.progress import progress_step
 from app.application.screenplay_context import check_context_budget
 
-PROMPT_VERSION = "screenplay-review-v5-provenance"
+PROMPT_VERSION = "screenplay-review-v6-compact"
 PROMPT = Path(__file__).resolve().parents[3] / "domains/short-film/prompts/screenplay_review_prompt.md"
 
 
@@ -84,7 +84,7 @@ def review_scene(review: ScreenplayReview, provider: StructuredProvider) -> Scre
             "block_kind": block.kind if block else None})
     request = StructuredRequest(stage="screenplay_review", instructions=PROMPT.read_text(encoding="utf-8"),
         input_text=json.dumps({"response_language": resolve_response_language(context.context.idea, context.response_language),
-            "author_request": review.instructions, "sources": model_sources}, ensure_ascii=False),
+            "author_request": review.instructions, "sources": model_sources}, ensure_ascii=False, separators=(",", ":")),
         response_model=SceneReviewResult)
     check_context_budget(request, provider)
     with progress_step("screenplay_review"):

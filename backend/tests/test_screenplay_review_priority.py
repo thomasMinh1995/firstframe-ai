@@ -67,7 +67,7 @@ def test_flashlight_priority_contract_with_scripted_provider(project_client,monk
     monkeypatch.setattr(routes,'get_review_provider',lambda:ScriptedProvider())
     r=client.post(f'/api/projects/{p.id}/screenplay-reviews',json=case['request']);assert r.status_code==200,r.text
     saved=r.json();item=saved['screenplay_reviews'][-1]
-    assert item['status']=='ready' and item['prompt_version']=='screenplay-review-v5-provenance'
+    assert item['status']=='ready' and item['prompt_version']=='screenplay-review-v6-compact'
     assert len(calls)==1 and saved['screenplay']==case['project']['screenplay']
     assert saved['scene_outline']==case['project']['scene_outline']
     if response=='empty':
