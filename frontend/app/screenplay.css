@@ -134,3 +134,5 @@
   .story-workspace .screenplay-scene-list button > strong { grid-column: 2; grid-row: 2; }
   .story-workspace .screenplay-scene-list button > span:last-child { grid-column: 2; grid-row: 3; }
 }
+
+.story-workspace .screenplay-sketch-placeholder { aspect-ratio:auto; min-height:0; padding:5px 8px; display:block; border:0; text-align:left; }

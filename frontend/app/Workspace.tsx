@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import {DraftRunPanel} from "./DraftRunPanel";
+import {runRequest,runPath,type DraftRun} from "./draftRunsApi";
 import {useProjectAutosave} from "./useProjectAutosave";
 import { useRouter } from "next/navigation";
 import { WorkspaceStage, revealWorkspaceTarget } from "./WorkspaceStage";
@@ -34,6 +36,9 @@ export default function Workspace({ library = false }: { library?: boolean }) {
   const {project, saved, saving, error: saveError, autosave} = useProjectAutosave(!busy && !library);
   const {setProject, setSaved} = autosave;
   const operation = useRef(false);
+  const candidateFlush = useRef<()=>Promise<void>>(async()=>{});
+  const draftStart = useRef<{projectId:string;revision:number;request_id:string}|null>(null);
+  const [openedRun,setOpenedRun] = useState<DraftRun|null>(null);
   const [draftEditorRevision, setDraftEditorRevision] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
@@ -165,8 +170,19 @@ export default function Workspace({ library = false }: { library?: boolean }) {
     autosave.setEnabled(false);
     if (!showProgress) { setSteps([]); setOperationFailed(false); setOperationTiming(null); }
     setBusy(label); setError(null); setNotice(null);
-    try { await autosave.idle(); await action(); } catch (caught) { setError(message(caught)); }
+    try { await autosave.idle(); await candidateFlush.current(); await action(); } catch (caught) { setError(message(caught)); }
     finally { operation.current = false; setBusy(null); autosave.setEnabled(!library); }
+  }
+  async function startDraftRun() {
+    tour.pause("Theo dõi bản nháp trong công đoạn Tạo bản nháp; bản đang viết vẫn được giữ.");
+    await run("Đang giữ nguồn và khởi động tạo bản nháp…",async()=>{
+      const next=await persist();if(!next)return;
+      if(draftStart.current?.projectId!==next.id||draftStart.current.revision!==next.revision)draftStart.current={projectId:next.id,revision:next.revision,request_id:crypto.randomUUID()};
+      setOpenedRun(await runRequest(runPath(next.id),"POST",{revision:next.revision,request_id:draftStart.current.request_id}));
+      draftStart.current=null;
+      revealWorkspaceTarget(document.getElementById("draft-run"));
+      document.getElementById("draft-run")?.focus();
+    });
   }
   const persist = (retry = false) => autosave.flush("autosave", retry);
   const currentRevision = () => autosave.getSnapshot().project!.revision;
@@ -439,7 +455,7 @@ export default function Workspace({ library = false }: { library?: boolean }) {
             {briefChanged && (project.analysis || project.draft) && <p className="form-message">Ý tưởng đã thay đổi. Làm rõ lại trước khi tạo
               bản phát triển mới; bản thảo và câu trả lời trước đó sẽ được giữ trong lịch sử.</p>}
             {(!project.analysis || briefChanged) && <button data-tour-action="analyze" disabled={!project.idea.trim()}
-              onClick={() => action("analyze")}>Chuẩn bị story plan</button>}
+              onClick={() => void startDraftRun()}>Tạo bản nháp</button>}
           </WorkspaceStage>
           {saved && <details className="workspace-author-context">
             <summary>Ý đồ và lựa chọn đã lưu <span>{dirty ? "Có thay đổi chưa lưu" : "Bản đã lưu"}</span></summary>
@@ -464,6 +480,12 @@ export default function Workspace({ library = false }: { library?: boolean }) {
               })} />
             </div>
           </WorkspaceStage>}
+          <DraftRunPanel key={`draft-run:${project.id}`} project={project} opened={openedRun?.project_id===project.id?openedRun:null} onStart={startDraftRun}
+            registerFlush={fn=>{candidateFlush.current=fn;return()=>{if(candidateFlush.current===fn)candidateFlush.current=async()=>{}}}}
+            onAdopt={async(selected,revision)=>{await run("Đang giữ bản hiện tại và nhận bản nháp…",async()=>{
+              const next=await persist();if(!next)return;accept(await projectRequest(`${runPath(next.id,selected.id)}/adopt`,"POST",{revision:next.revision,candidate_revision:revision}));
+              revealWorkspaceTarget(document.getElementById("workspace-script"));
+            })}}/>
           {project.draft && <section className="panel form-stack working-draft" data-workspace-stage="workspace-draft">
             <h2 id="workspace-draft" data-tour="draft" tabIndex={-1}>3. Bản phát triển đang làm việc</h2>
             <h3 id="draft-editor-title" tabIndex={-1}>Đọc và sửa ngay tại card</h3>
@@ -737,11 +759,11 @@ function WorkspaceNavigation({ project, briefChanged, creatingPlan, analyzing, t
     let frame = 0;
     const stages = [...document.querySelectorAll<HTMLElement>("[data-workspace-stage]")];
     const workspace = document.querySelector<HTMLElement>("[data-desktop-stage]");
-    const selected = (event: Event) => setActive((event as CustomEvent<string>).detail);
+    const selected = (event: Event) => {const stage=(event as CustomEvent<string>).detail;setActive(stage);sessionStorage.setItem(`firstframe-stage:${project?.id}`,stage)};
     workspace?.addEventListener("workspace-stage-change", selected);
     const measure = () => {
       setDesktop(window.innerWidth > 760);
-      if (window.innerWidth > 760) {
+      if (workspace?.dataset.desktopStage) {
         setActive(workspace?.dataset.desktopStage ?? "workspace-idea");
         return;
       }
@@ -766,7 +788,8 @@ function WorkspaceNavigation({ project, briefChanged, creatingPlan, analyzing, t
       window.removeEventListener("resize", scroll); document.removeEventListener("focusin", focus); };
   }, [project?.id, !!project?.analysis, !!project?.draft, briefChanged]);
   useEffect(() => {
-    if (window.innerWidth > 760) revealWorkspaceTarget(document.getElementById("workspace-idea"));
+    const remembered=sessionStorage.getItem(`firstframe-stage:${project?.id}`);
+    revealWorkspaceTarget(document.getElementById(remembered||"workspace-idea")??document.getElementById("workspace-idea"));
   }, [project?.id]);
   useEffect(() => {
     if (window.innerWidth <= 760) return;
@@ -776,11 +799,9 @@ function WorkspaceNavigation({ project, briefChanged, creatingPlan, analyzing, t
     }
   }, [active, !!project?.analysis, !!project?.draft, briefChanged, creatingPlan, analyzing]);
   const items = [
-    { id: "workspace-idea", label: "Ý tưởng", available: !!project },
-    { id: "workspace-choices", label: "Làm rõ", available: analyzing || (!!project?.analysis && !briefChanged) },
-    { id: "workspace-draft", label: "Story plan", available: !!project?.draft || creatingPlan },
-    { id: "workspace-outline", label: "Dàn cảnh", available: !!project },
-    { id: "workspace-script", label: "Kịch bản", available: !!project },
+    { id: project?.analysis && !briefChanged ? "workspace-choices" : "workspace-idea", label: "Ý tưởng & làm rõ", available: !!project },
+    { id: "draft-run", label: "Tạo bản nháp", available: !!project },
+    { id: project?.screenplay ? "workspace-script" : "workspace-draft", label: "Review & sửa", available: !!project?.draft || !!project?.screenplay },
   ];
   const currentStage = !desktop && creatingPlan ? "workspace-draft"
     : items.some(item => item.id === `workspace-${tourStep}`) ? `workspace-${tourStep}` : active;
@@ -797,7 +818,9 @@ function WorkspaceNavigation({ project, briefChanged, creatingPlan, analyzing, t
         <span>{item.label}<small>{!item.available && index > 2 ? "Chưa hỗ trợ" : item.available ? (item.id === currentStage ? (creatingPlan && item.id === "workspace-draft" ? "Đang tạo" : "Đang làm việc") : "Xem lại") : "Chưa có nội dung"}</small></span>
       </button>)}
     </nav>
-    <p className="workspace-rail-note">Câu chuyện và lựa chọn của bạn làm chủ đạo.<br />Các bước sau mở khi sản phẩm hỗ trợ.</p>
+    <details className="workflow-deep"><summary>Mở chi tiết</summary>{[
+      ["workspace-idea","Ý tưởng"],["workspace-choices","Làm rõ"],["workspace-draft","Story plan"],["workspace-outline","Dàn cảnh"],["workspace-script","Kịch bản"]
+    ].map(([id,label])=><button key={id} type="button" onClick={()=>{const el=document.getElementById(id);revealWorkspaceTarget(el);el?.scrollIntoView({block:"start"});el?.focus();setActive(id)}}>{label}</button>)}</details>
   </aside>;
 }
 

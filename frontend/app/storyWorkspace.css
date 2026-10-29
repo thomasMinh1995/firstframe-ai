@@ -276,3 +276,27 @@ html:has(.feedback-popup[open]) { overflow: hidden; }
   [data-desktop-stage="workspace-outline"] .workspace-content > [data-progress-stage]:not([data-progress-stage="workspace-outline"]) { display: none; }
   [data-desktop-stage="workspace-script"] .workspace-content > [data-progress-stage]:not([data-progress-stage="workspace-script"]) { display: none; }
 }
+
+/* The same focused stage is visible on desktop and mobile. */
+[data-desktop-stage] .project-fields > [data-workspace-stage] { display:none; }
+[data-desktop-stage="workspace-idea"] .project-fields > [data-workspace-stage="workspace-idea"],
+[data-desktop-stage="workspace-choices"] .project-fields > [data-workspace-stage="workspace-choices"],
+[data-desktop-stage="workspace-draft"] .project-fields > [data-workspace-stage="workspace-draft"],
+[data-desktop-stage="workspace-outline"] .project-fields > [data-workspace-stage="workspace-outline"],
+[data-desktop-stage="workspace-script"] .project-fields > [data-workspace-stage="workspace-script"],
+[data-desktop-stage="draft-run"] .project-fields > [data-workspace-stage="draft-run"] { display:block; }
+[data-desktop-stage="draft-run"] .workspace-author-context { display:none; }
+.draft-run-panel { min-width:0; scroll-margin-top:90px; }
+.draft-run-panel select,.draft-run-panel textarea { width:100%; box-sizing:border-box; }
+.draft-run-actions { display:flex; flex-wrap:wrap; gap:8px; margin:16px 0; }
+.candidate-scene { padding:16px 0; border-top:1px solid var(--line); }
+.candidate-scene textarea { min-height:90px; }
+.workflow-deep button { display:block; width:100%; margin:5px 0; }
+@media (max-width:760px) {
+ .workspace-stage-nav { grid-template-columns:repeat(3,minmax(0,1fr)); }
+ .workspace-stage-nav button { min-width:0; padding:8px 4px; white-space:normal; }
+ .draft-run-panel { padding:16px; }
+}
+.draft-run-panel > label { display:grid; gap:8px; margin:16px 0; }
+.draft-run-panel progress { width:100%; accent-color:var(--accent); }
+.draft-run-panel details { margin:12px 0; }

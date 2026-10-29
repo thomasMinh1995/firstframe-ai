@@ -25,6 +25,7 @@ from test_projects import develop_project, start_project
 from app.api.routes import projects as routes
 from app.api.routes import screenplay_reviews
 from test_screenplay_review import ReviewProvider
+from app.api.routes import draft_runs
 from app.api.routes import screenplays
 from test_screenplay_writing import WritingProvider
 from app.api.routes import scene_sketches
@@ -80,6 +81,7 @@ review_provider = ReviewProvider()
 screenplay_reviews.get_review_provider = lambda: review_provider
 writing_provider = WritingProvider()
 screenplays.get_screenplay_provider = lambda: writing_provider
+draft_runs.providers = lambda: [provider, provider, writing_provider, review_provider]
 image_provider = FakeImageProvider()
 scene_sketches.get_image_provider = lambda: image_provider
 routes.get_project_store = lambda: ProjectStore(directory / "projects.sqlite3")

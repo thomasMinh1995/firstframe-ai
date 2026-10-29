@@ -92,7 +92,7 @@ function copy(step: TourStep, p: Props) {
 function instructions(step: TourStep, hasDraft: boolean): string[] {
   switch (step) {
     case "new-project": return ["Chọn Dự án mới để bắt đầu."];
-    case "idea": return ["Viết ý tưởng, rồi chọn Chuẩn bị story plan."];
+    case "idea": return ["Viết ý tưởng, rồi chọn Tạo bản nháp. Theo dõi tiến độ và phần đọc được trong công đoạn Tạo bản nháp."];
     case "choices": return ["Trả lời hoặc để quyết định sau."];
     case "draft": return [hasDraft ? "Sửa từng card; thay đổi tự lưu khi bạn dừng gõ." : "Story plan sẽ xuất hiện sau bước Làm rõ."];
     case "outline": return ["Chọn nguồn, thêm cảnh, rồi lưu dàn cảnh."];
