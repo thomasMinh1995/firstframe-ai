@@ -60,3 +60,14 @@ PDF model được render bằng Poppler và kiểm tra trực quan một trang:
 ## Điều kiện còn lại trước phát hành
 
 UI-11/UI-12 đủ để review/merge kỹ thuật. QA-01 chưa được đánh dấu hoàn tất phát hành: cần kiểm chứng thiết bị/IME/screen reader/Safari, người đọc và pilot theo tiêu chí đã chốt; cần kết luận rõ về context guard ở vòng screenplay review trên cấu hình model mục tiêu. Giữ các giới hạn và lỗi trong báo cáo. Mở dự án không tự tạo nháp hoặc tự sửa tác phẩm; người dùng chủ động chọn từng lần dùng/sửa/xuất.
+
+
+## Review cuối PR #75 — 29/10/2026
+
+Đã tái hiện một lỗi giữ input trên mobile: nhập yêu cầu sửa chưa gửi, đóng rồi mở lại review sheet làm field trở về rỗng vì children bị unmount. Bản sửa giữ dialog/children mounted khi đóng; native dialog đóng vẫn không hiện, không tương tác hoặc nhận focus.
+
+Browser regression với fixture SQLite riêng, 390px: trước sửa yêu cầu bị xóa; sau sửa chuỗi “Giảm thoại cảnh này, giữ lá thư chưa mở.” còn nguyên sau đóng/mở. Khi đóng, dialog có open=false, không có client rect và focus về Dàn cảnh & góp ý. Chuyển Hoàn tất và resize 320px xác nhận chỉ workspace-export hiện, không có dialog mở, scrollWidth=320. Không gửi yêu cầu AI khi kiểm tra này.
+
+Đã chạy lại **553 backend passed, 1 skipped; 15/15 bộ frontend, TypeScript và production build qua**. GitHub không có Actions/check/status test thực thi; trạng thái legacy pending với total_count=0 không phải CI đang chạy. Các điều kiện QA-01 về thiết bị/người đọc thật và giới hạn context của model vẫn chưa được chốt, không thay đổi vì merge kỹ thuật vào dev.
+
+![Yêu cầu sửa còn nguyên sau đóng/mở sheet](assets/phase6-writing-space/review-retained-request.png)

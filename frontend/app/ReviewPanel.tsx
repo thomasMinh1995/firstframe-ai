@@ -12,6 +12,6 @@ export function ReviewPanel({open,onClose,label,children,disabled=false}:{disabl
  useEffect(()=>{const media=matchMedia('(max-width:1000px)');const update=()=>setMobile(media.matches);update();media.addEventListener('change',update);return()=>media.removeEventListener('change',update)},[]);
  useEffect(()=>{if(!mobile||!open||!stageVisible||!dialog.current)return;opener.current=document.activeElement;dialog.current.showModal();return()=>{dialog.current?.close();if(opener.current instanceof HTMLElement&&opener.current.isConnected&&opener.current.getClientRects().length)opener.current.focus({preventScroll:true})}},[mobile,open,stageVisible]);
  const content=<><button type="button" className="secondary review-panel-close" onClick={onClose}>Đóng panel góp ý</button><fieldset disabled={disabled} className="review-panel-fields">{children}</fieldset></>;
- if(mobile)return <><span hidden ref={marker}/>{open&&stageVisible?createPortal(<dialog ref={dialog} className="review-sheet" aria-label={label} onCancel={e=>{e.preventDefault();onClose()}}>{content}</dialog>,document.body):null}</>;
+ if(mobile)return <><span hidden ref={marker}/>{createPortal(<dialog ref={dialog} className="review-sheet" aria-label={label} onCancel={e=>{e.preventDefault();onClose()}}>{content}</dialog>,document.body)}</>;
  return <><span hidden ref={marker}/><aside className="review-side-panel" aria-label={label} hidden={!open||!stageVisible}>{content}</aside></>;
 }
