@@ -28,3 +28,11 @@ DR-05/DR-06 tiếp tục skeleton, thinking, reveal và nghiệm thu phục hồ
 Connector có đầu mũi tên theo chiều workflow. Điểm xuống hàng nối từ đáy card cuối hàng trên tới đỉnh card cùng cột bên dưới bằng mũi tên thẳng xuống, không vòng bên hông. Mọi trạng thái card dùng cùng nền, viền và bóng cơ bản; trạng thái vẫn thể hiện bằng chữ và dấu. Hover/focus nhấn viền và bóng mà không dịch chuyển vị trí card. Reduced motion tắt transition.
 
 TypeScript đạt sau chỉnh sửa. Browser xác nhận 10 card có cùng màu nền, 9 mũi tên, hai điểm xuống hàng giữ nguyên tọa độ x; tại 320px scrollWidth vẫn 320. Hover đã thay đổi bóng card. Các ảnh phía trên đã cập nhật theo styling mới. Không đổi logic dữ liệu hoặc gọi model trong lượt này.
+
+## Kiểm tra mobile và phân tầng — 29/10/2026
+
+Giữ lớp kính trên thanh lưu/điều hướng, lớp nội dung đặc và bóng nhẹ cho card; không thêm blur cho từng card đọc dài. Workspace hiện có fallback không blur, reduced transparency, reduced motion và forced colors. Đây là bố cục web thích ứng theo không gian hiển thị, chưa phải UI tự thay đổi theo hành vi người dùng.
+
+Đã sửa phần mobile: bỏ lề lồng 12px, giảm độ lệch card từ 14px xuống 8px; tăng nội dung và nút card từ 12px lên 14px; nút đọc chiếm chiều rộng card, cao tối thiểu 44px. Vùng nhãn checkbox cao 44px và ô chọn 18px. Select dùng chữ 16px; ngày giờ của lượt đang chọn được ghi đầy đủ bên dưới để không phụ thuộc nhãn native bị cắt. Anchor đọc candidate có scroll margin để thanh lưu không che phần đầu nội dung.
+
+Browser thực với dữ liệu QA riêng: tại 320px, scrollWidth=320, card rộng 246px, nút đọc rộng 212px/cao 46.4px, vùng checkbox cao 44px; tại 390px card rộng 316px, không tràn ngang. 768px chuyển một cột theo chiều rộng vùng nội dung; 1280px giữ ba cột. Bấm đọc ý tưởng mở đúng nội dung và focus đúng anchor; tại 320px anchor ở y=64px, dưới thanh lưu kết thúc tại y=40px. Viewport được reset sau kiểm tra. TypeScript và 16 suite frontend không dùng browser đạt. Không gọi model hoặc đổi DB chính. Chưa kiểm chứng Safari/iPhone thật, bàn phím ảo, screen reader hoặc tuân thủ WCAG toàn ứng dụng.

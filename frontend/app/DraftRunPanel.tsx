@@ -17,11 +17,13 @@ export function DraftRunPanel(props:Props){
  useEffect(()=>{let cancelled=false;listRuns(props.project.id).then(rows=>{if(!cancelled){setRuns(current=>[...current,...rows.filter(r=>!current.some(c=>c.id===r.id))]);setActive(current=>current??rows[0]?.id??null)}}).catch(e=>{if(!cancelled)setError(String(e))});return()=>{cancelled=true}},[props.project.id]);
  useEffect(()=>{if(props.opened){setRuns(rows=>[props.opened!,...rows.filter(r=>r.id!==props.opened!.id)]);setActive(props.opened.id)}},[props.opened]);
  const register=(fn:()=>Promise<void>)=>{flush.current=fn;const remove=props.registerFlush(fn);return()=>{flush.current=async()=>{};remove()}};
+ const activeRun=runs.find(r=>r.id===active);
  return <section id="draft-run" data-tour="draft-run" className="panel draft-run-panel" data-workspace-stage="draft-run" tabIndex={-1}>
    <h2>Tạo bản nháp</h2>
    <p>Một lượt tạo story plan, dàn cảnh và nội dung từng cảnh. Bản nháp AI được giữ riêng để bạn đọc, sửa và chọn dùng. Phạm vi hiện tại tối đa 6 cảnh.</p>
    <button type="button" disabled={!props.project.idea.trim()} onClick={()=>void props.onStart()}>Tạo bản nháp mới</button>
    {!!runs.length&&<label>Lượt tạo đã lưu<select value={active??''} onChange={e=>{const id=e.target.value;void flush.current().then(()=>setActive(id)).catch(e=>setError(String(e)))}}>{runs.map(r=><option key={r.id} value={r.id}>{statusLabels[r.status]} · {r.created_at?new Date(r.created_at).toLocaleString('vi-VN'):'Lượt đã lưu'}</option>)}</select></label>}
+   {activeRun?.created_at&&<p className="draft-run-created-at">Lượt đang xem được tạo lúc {new Date(activeRun.created_at).toLocaleString('vi-VN')}.</p>}
    {error&&<p role="alert" className="error">{error}</p>}
    {active&&<RunCandidate key={active} {...props} id={active} onStatus={r=>setRuns(rows=>rows.map(row=>row.id===r.id?r:row))} registerFlush={register}/>}
  </section>;
@@ -49,7 +51,7 @@ function RunCandidate({id,onStatus,...props}:Props&{id:string;onStatus:(run:Draf
  return <div onCompositionStartCapture={()=>queue.composition(true)} onCompositionEndCapture={()=>queue.composition(false)}>
    {run&&<>
      <p role="status"><strong>{statusLabels[run.status]}</strong> · {stepLabels[run.step]??run.step} · Đã lưu {run.completed_scenes}/{run.total_scenes||'…'} cảnh</p>
-     <label><input type="checkbox" checked={cards} onChange={e=>setCards(e.target.checked)}/>Xem thử tiến độ dạng card</label>
+     <label className="draft-workflow-toggle"><input type="checkbox" checked={cards} onChange={e=>setCards(e.target.checked)}/>Xem thử tiến độ dạng card</label>
      {cards&&<DraftWorkflow run={run} candidate={state.saved} onRead={target=>void action(async()=>{await inspect();readCard(target)})}/>}
      {run.total_scenes>0&&<progress aria-label="Số cảnh đã lưu" max={run.total_scenes} value={run.completed_scenes}/>}
      {run.revision_instructions&&<p className="preserve-lines">Yêu cầu thay đổi cấu trúc: {run.revision_instructions} · {run.affected_scene_ids?.length??0} cảnh nguồn có thể bị ảnh hưởng. Bản đang viết được giữ nguyên cho đến khi bạn nhận bản nháp mới.</p>}

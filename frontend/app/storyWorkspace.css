@@ -374,3 +374,13 @@ html:has(.feedback-popup[open]) { overflow: hidden; }
  .story-workspace button { min-height:44px; }
 }
 .story-workspace .story-draft-overview .story-field h3,.story-workspace .story-draft-caption,.story-workspace .story-draft-context > summary,.story-workspace .workspace-author-context > summary span,.story-workspace .clarification-question > span,.story-workspace .clarification-answer > span,.story-workspace .clarification-you,.story-workspace .scene-outline > .scene-heading .eyebrow { color:var(--muted); }
+
+.draft-run-created-at { display:none; }
+@media(max-width:760px) {
+ .draft-run-panel .draft-run-created-at { display:block; font-size:14px; line-height:1.7; overflow-wrap:anywhere; }
+ .draft-run-panel select { font-size:16px; font-weight:400; min-height:44px; }
+}
+.draft-run-panel [id^="run-"] { scroll-margin-top:96px; }
+@media(max-width:760px) {
+ .draft-run-panel [id^="run-"] { scroll-margin-top:64px; }
+}
