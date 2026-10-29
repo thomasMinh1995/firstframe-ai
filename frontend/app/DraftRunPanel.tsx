@@ -1,6 +1,8 @@
 "use client";
 import {useEffect,useRef,useState,useSyncExternalStore} from 'react';
 import type {Project} from './projectsApi';
+import {DraftWorkflow} from './DraftWorkflow';
+import {newerRun} from './draftWorkflowState';
 import {CandidateAutosave} from './candidateAutosave';
 import {candidateRequest,listRuns,runPath,runRequest,statusLabels,stepLabels,type DraftRun} from './draftRunsApi';
 import {revealWorkspaceTarget} from './WorkspaceStage';
@@ -29,11 +31,15 @@ function RunCandidate({id,onStatus,...props}:Props&{id:string;onStatus:(run:Draf
  const [queue]=useState(()=>new CandidateAutosave(body=>candidateRequest(path+'/candidate','PUT',body),()=>candidateRequest(path+'/candidate')));
  const state=useSyncExternalStore(queue.subscribe,queue.getSnapshot,queue.getSnapshot);
  const [run,setRun]=useState<DraftRun|null>(null),[error,setError]=useState(''),[working,setWorking]=useState(false);
+ const [cards,setCards]=useState(false);
+ const latest=useRef<DraftRun|null>(null);
+ function receive(next:DraftRun){const accepted=newerRun(latest.current,next);latest.current=accepted;setRun(accepted);onStatus(accepted)}
+ function readCard(target:string){const el=document.getElementById(`run-${id}-${target}`);if(!el)return;if(el instanceof HTMLDetailsElement)el.open=true;el.focus();el.scrollIntoView({block:'start',behavior:'auto'})}
  const edited=state.local?.project,dirty=queue.dirty;
- async function inspect(){const r=await runRequest(path);setRun(r);onStatus(r);const c=await candidateRequest(path+'/candidate');queue.accept(c);return r;}
+ async function inspect(){const r=await runRequest(path);receive(r);const c=await candidateRequest(path+'/candidate');queue.accept(c);return r;}
  useEffect(()=>{
    let stopped=false,timer:ReturnType<typeof setTimeout>,delay=1500,lastRevision=-1;
-   const poll=async()=>{try{const r=await runRequest(path);if(stopped)return;setRun(r);onStatus(r);if(r.candidate_revision!==lastRevision){const c=await candidateRequest(path+'/candidate');if(stopped)return;queue.accept(c);lastRevision=r.candidate_revision;delay=1500}else delay=Math.min(8000,delay*1.5);if(r.status==='running')timer=setTimeout(poll,delay)}catch(e){if(!stopped)setError(String(e))}};
+   const poll=async()=>{try{const r=await runRequest(path);if(stopped)return;receive(r);if(r.candidate_revision!==lastRevision){const c=await candidateRequest(path+'/candidate');if(stopped)return;queue.accept(c);lastRevision=c.revision;delay=1500}else delay=Math.min(8000,delay*1.5);if(latest.current?.status==='running')timer=setTimeout(poll,delay)}catch(e){if(!stopped)setError(String(e))}};
    void poll();return()=>{stopped=true;clearTimeout(timer);queue.stop()};
  },[path,queue,run?.status]);
  useEffect(()=>props.registerFlush(()=>queue.flush()),[queue]);
@@ -43,6 +49,8 @@ function RunCandidate({id,onStatus,...props}:Props&{id:string;onStatus:(run:Draf
  return <div onCompositionStartCapture={()=>queue.composition(true)} onCompositionEndCapture={()=>queue.composition(false)}>
    {run&&<>
      <p role="status"><strong>{statusLabels[run.status]}</strong> · {stepLabels[run.step]??run.step} · Đã lưu {run.completed_scenes}/{run.total_scenes||'…'} cảnh</p>
+     <label><input type="checkbox" checked={cards} onChange={e=>setCards(e.target.checked)}/>Xem thử tiến độ dạng card</label>
+     {cards&&<DraftWorkflow run={run} candidate={state.saved} onRead={target=>void action(async()=>{await inspect();readCard(target)})}/>}
      {run.total_scenes>0&&<progress aria-label="Số cảnh đã lưu" max={run.total_scenes} value={run.completed_scenes}/>}
      {run.revision_instructions&&<p className="preserve-lines">Yêu cầu thay đổi cấu trúc: {run.revision_instructions} · {run.affected_scene_ids?.length??0} cảnh nguồn có thể bị ảnh hưởng. Bản đang viết được giữ nguyên cho đến khi bạn nhận bản nháp mới.</p>}
      <p>Tiến độ được giữ trên máy chủ. Mở lại trang không gọi AI lần nữa.</p>
@@ -51,9 +59,9 @@ function RunCandidate({id,onStatus,...props}:Props&{id:string;onStatus:(run:Draf
      {run.adopted_revision===null&&run.source_revision!==props.project.revision&&<p className="storage-note">Bản nguồn đã thay đổi từ khi khởi động. Khi nhận, hệ thống sẽ đối chiếu lại nội dung; phần bản nháp riêng vẫn giữ.</p>}
      <div className="draft-run-actions">
        <button type="button" disabled={working} className="secondary" onClick={()=>void action(async()=>{await inspect()})}>Kiểm tra tiến độ</button>
-       {(run.status==='running'||run.status==='needs_input')&&<button type="button" className="secondary" disabled={working||run.cancel_requested} onClick={()=>void action(async()=>{setRun(await runRequest(path+'/cancel','POST'))})}>{run.cancel_requested?'Đang dừng sau bước hiện tại…':'Hủy các bước tiếp theo'}</button>}
-       {['partial','failed','interrupted'].includes(run.status)&&<button type="button" disabled={working} onClick={()=>void action(async()=>{const c=queue.getSnapshot().saved!;setRun(await runRequest(path+'/continue','POST',{candidate_revision:c.revision}));await inspect()})}>Tiếp tục bước chưa gửi</button>}
-       {['partial','failed','interrupted'].includes(run.status)&&<button type="button" className="secondary" disabled={working} onClick={()=>void action(async()=>{setRun(await runRequest(path+'/cancel','POST'))})}>Kết thúc lượt này</button>}
+       {(run.status==='running'||run.status==='needs_input')&&<button type="button" className="secondary" disabled={working||run.cancel_requested} onClick={()=>void action(async()=>{receive(await runRequest(path+'/cancel','POST'))})}>{run.cancel_requested?'Đang dừng sau bước hiện tại…':'Hủy các bước tiếp theo'}</button>}
+       {['partial','failed','interrupted'].includes(run.status)&&<button type="button" disabled={working} onClick={()=>void action(async()=>{const c=queue.getSnapshot().saved!;receive(await runRequest(path+'/continue','POST',{candidate_revision:c.revision}));await inspect()})}>Tiếp tục bước chưa gửi</button>}
+       {['partial','failed','interrupted'].includes(run.status)&&<button type="button" className="secondary" disabled={working} onClick={()=>void action(async()=>{receive(await runRequest(path+'/cancel','POST'))})}>Kết thúc lượt này</button>}
        {(run.status==='ready'||run.status==='partial')&&edited?.screenplay?.scenes.some(s=>s.blocks.length)&&run.adopted_revision===null&&<button type="button" disabled={working||state.saving||!!state.error} onClick={()=>void action(async()=>{await props.onAdopt(run,queue.getSnapshot().saved!.revision);await inspect()})}>Dùng bản nháp này</button>}
        {run.adopted_revision!==null&&<p>Đã nhận vào không gian viết. Các sửa tiếp theo lưu tại bản đang viết.</p>}
      </div>
@@ -62,19 +70,21 @@ function RunCandidate({id,onStatus,...props}:Props&{id:string;onStatus:(run:Draf
    {state.local&&<p role="status">{state.saving?'Đang lưu bản nháp riêng…':state.error?'Chưa xác nhận lưu bản nháp riêng':dirty?'Chờ tự lưu bản nháp riêng':'Bản nháp riêng đã lưu'}</p>}
    {state.error&&<div role="alert"><p>{state.error}</p><button type="button" onClick={()=>void queue.flush(true).catch(e=>setError(String(e)))}>Thử lưu lại bản nháp</button><button type="button" disabled={state.saving} onClick={()=>{if(window.confirm('Mở lại sẽ bỏ phần candidate chưa xác nhận lưu. Hãy tải bản sao trước nếu cần giữ.'))void queue.reopen().then(()=>setError('')).catch(e=>setError(String(e)))}}>Mở lại bản nháp đã lưu</button><button type="button" onClick={()=>{const blob=new Blob([JSON.stringify(state.local,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`draft-${id}.json`;a.click();URL.revokeObjectURL(url)}}>Tải bản sao bản nháp</button></div>}
    {run?.status==='needs_input'&&edited?.analysis&&<ClarificationConversation idPrefix={`run-${id}-`} creatingScreenplay summary={edited.analysis.summary} questions={edited.analysis.missing_information} answers={edited.answers}
-      onEditBrief={()=>void action(async()=>{setRun(await runRequest(path+'/cancel','POST'));const input=document.getElementById('idea');revealWorkspaceTarget(input);input?.focus();input?.scrollIntoView({block:'center'})})}
+      onEditBrief={()=>void action(async()=>{receive(await runRequest(path+'/cancel','POST'));const input=document.getElementById('idea');revealWorkspaceTarget(input);input?.focus();input?.scrollIntoView({block:'center'})})}
       aiSuggestions={edited.analysis.ai_suggestions} idea={edited.idea} constraints={edited.constraints}
       onChange={(i,v)=>{const p={...edited,answers:edited.answers.map((a,j)=>j===i?v:a)};queue.edit(p)}}
-      onConfirm={()=>void action(async()=>{const c=queue.getSnapshot().local!;setRun(await runRequest(path+'/continue','POST',{candidate_revision:c.revision,answers:c.project.answers}));await inspect()})}/>}
-   {edited?.draft&&<details><summary>Story plan · {edited.draft.title}</summary><p className="preserve-lines">{edited.draft.logline}</p>{edited.draft.sections.map((s,i)=><p key={i} className="preserve-lines"><strong>{s.title}</strong><br/>{s.content}</p>)}</details>}
-   {edited?.scene_outline&&<details><summary>Dàn cảnh · {edited.scene_outline.scenes.length} cảnh</summary><ol>{edited.scene_outline.scenes.map(s=><li key={s.id}><strong>{s.title}</strong><p className="preserve-lines">{s.action}</p></li>)}</ol></details>}
-   {edited?.screenplay&&<div className="candidate-scenes"><h3>Kịch bản đang hình thành</h3>{edited.screenplay.scenes.map((scene,index)=><section key={scene.id} className="candidate-scene">
+      onConfirm={()=>void action(async()=>{const c=queue.getSnapshot().local!;receive(await runRequest(path+'/continue','POST',{candidate_revision:c.revision,answers:c.project.answers}));await inspect()})}/>}
+   {edited?.analysis&&<details id={`run-${id}-understanding`} tabIndex={-1}><summary>Điều đã hiểu và ý đồ đã lưu</summary><p>{edited.analysis.summary}</p><p>{edited.constraints.join(' · ')}</p></details>}
+   {!!state.saved?.plan_review&&<details id={`run-${id}-plan-review`} tabIndex={-1}><summary>Góp ý story plan đã lưu</summary><p>Góp ý thuộc nguồn lúc tạo story plan; chỉ dùng tham khảo nếu bạn đã sửa bản.</p>{typeof state.saved.plan_review==='object'&&state.saved.plan_review!==null&&'findings' in state.saved.plan_review&&Array.isArray(state.saved.plan_review.findings)&&state.saved.plan_review.findings.map((f:unknown,i:number)=>f&&typeof f==='object'&&'message' in f&&typeof f.message==='string'?<p key={i}>{f.message}</p>:null)}</details>}
+   {edited?.draft&&<details id={`run-${id}-plan`} tabIndex={-1}><summary>Story plan · {edited.draft.title}</summary><p className="preserve-lines">{edited.draft.logline}</p>{edited.draft.sections.map((s,i)=><p key={i} className="preserve-lines"><strong>{s.title}</strong><br/>{s.content}</p>)}</details>}
+   {edited?.scene_outline&&<details id={`run-${id}-outline`} tabIndex={-1}><summary>Dàn cảnh · {edited.scene_outline.scenes.length} cảnh</summary><ol>{edited.scene_outline.scenes.map(s=><li key={s.id}><strong>{s.title}</strong><p className="preserve-lines">{s.action}</p></li>)}</ol></details>}
+   {edited?.screenplay&&<div className="candidate-scenes" id={`run-${id}-script`} tabIndex={-1}><h3>Kịch bản đang hình thành</h3>{edited.screenplay.scenes.map((scene,index)=><section key={scene.id} id={`run-${id}-scene:${scene.id}`} tabIndex={-1} className="candidate-scene">
      <h4>{index+1}. {scene.heading}</h4>{!scene.blocks.length&&<p>Chưa có nội dung cảnh này.</p>}
      {scene.blocks.map((block,blockIndex)=><div key={block.id}>
        {block.speaker&&<strong>{block.speaker}</strong>}
        {editable?<label>Cảnh {index+1} · {block.kind==='dialogue'?'Lời thoại':'Hành động'} · đoạn {blockIndex+1}<small className="candidate-origin">{provenanceLabel(edited.screenplay?.provenance?.[`block:${block.id}:text`])}</small><textarea rows={3} maxLength={10000} value={block.text} onChange={e=>queue.edit({...edited,screenplay:{...edited.screenplay!,scenes:edited.screenplay!.scenes.map(s=>s.id===scene.id?{...s,blocks:s.blocks.map(b=>b.id===block.id?{...b,text:e.target.value}:b)}:s)}})}/></label>:<p className="preserve-lines">{block.text}</p>}
      </div>)}
    </section>)}</div>}
-   {!!edited?.screenplay_reviews?.length&&<details><summary>Góp ý AI · để bạn cân nhắc</summary>{edited.screenplay_reviews.map(r=><div key={r.id}><p className="storage-note">{edited.screenplay&&sameReviewScript(edited.screenplay,r.source_screenplay)&&JSON.stringify(edited.draft)===JSON.stringify(r.source_screenplay.source_outline.source.draft)?'Góp ý đọc bản này. Bạn tự cân nhắc.':'Góp ý thuộc bản trước khi sửa; chỉ dùng tham khảo.'}</p>{r.notes.map(n=><p key={n.id}>{n.observation} {n.suggestion}</p>)}</div>)}</details>}
+   {!!edited?.screenplay_reviews?.length&&<details id={`run-${id}-reviews`} tabIndex={-1}><summary>Góp ý AI · để bạn cân nhắc</summary>{edited.screenplay_reviews.map(r=><div key={r.id}><p className="storage-note">{edited.screenplay&&sameReviewScript(edited.screenplay,r.source_screenplay)&&JSON.stringify(edited.draft)===JSON.stringify(r.source_screenplay.source_outline.source.draft)?'Góp ý đọc bản này. Bạn tự cân nhắc.':'Góp ý thuộc bản trước khi sửa; chỉ dùng tham khảo.'}</p>{r.notes.map(n=><p key={n.id}>{n.observation} {n.suggestion}</p>)}</div>)}</details>}
  </div>;
 }

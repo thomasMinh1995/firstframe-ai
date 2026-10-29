@@ -1,0 +1,11 @@
+const assert=require('node:assert/strict');
+const {validProgress,newerRun,cardResult}=require(process.argv[2]+'/draftWorkflowState.js');
+const {CandidateAutosave}=require(process.argv[2]+'/candidateAutosave.js');
+const item={id:'analysis',kind:'analysis',scene_id:null,status:'completed',started_at:null,finished_at:null,error_code:null,children:[],result:{kind:'analysis',id:'a',candidate_revision:3}};
+const run={id:'r',candidate_revision:3,progress_version:1,progress_revision:4,workflow_items:[item],can_continue:false,continue_block_reason:null,continue_block_message:null};
+assert.equal(validProgress(run),true);assert.equal(validProgress({}),true);
+for(const bad of [{...run,progress_version:2},{...run,progress_revision:-1},{...run,workflow_items:[item,item]},{...run,workflow_items:[{...item,status:'fake'}]},{...run,workflow_items:[{...item,result:null}]},{...run,workflow_items:[{...item,result:{...item.result,candidate_revision:'3'}}]},{...run,workflow_items:[{...item,children:[item]}]}])assert.equal(validProgress(bad),false);
+assert.equal(newerRun(run,{...run,progress_revision:3}),run);assert.equal(newerRun(run,{...run,candidate_revision:2}),run);assert.equal(newerRun(run,{...run,progress_revision:5}).progress_revision,5);
+assert.equal(cardResult(item,{revision:2,project:{}}).target,'');assert.equal(cardResult(item,{revision:3,project:{analysis:{summary:'Ý đồ đã lưu'}}}).text,'Ý đồ đã lưu');assert.equal(cardResult({...item,kind:'write',scene_id:'missing'},{revision:3,project:{screenplay:{scenes:[]}}}),null);assert.equal(cardResult({...item,kind:'review',result:null},{revision:3,project:{screenplay_reviews:[{}]}}).target,'reviews');
+const project={draft:null,answers:[],screenplay:null};const q=new CandidateAutosave(async()=>{},async()=>{});q.accept({revision:4,project});q.accept({revision:3,project:{...project,answers:['stale']}});assert.equal(q.getSnapshot().saved.revision,4);q.stop();
+console.log('PASS workflow contract and ordering');

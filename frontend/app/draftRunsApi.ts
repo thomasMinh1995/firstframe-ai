@@ -1,12 +1,13 @@
+import {validProgress,type WorkflowItem} from './draftWorkflowState';
 import {request, isProject, type Project} from './projectsApi';
-export type DraftRun = {created_at?:string;revision_instructions?:string;affected_scene_ids?:string[];id:string;project_id:string;source_revision:number;status:'running'|'needs_input'|'ready'|'partial'|'failed'|'interrupted'|'cancelled';step:string;sending:boolean;cancel_requested:boolean;candidate_revision:number;completed_scenes:number;total_scenes:number;error:string|null;review_error:string|null;adopted_revision:number|null};
-export type Candidate={revision:number;save_id?:string|null;project:Project};
+export type DraftRun = {progress_version?:0|1;progress_revision?:number;workflow_items?:WorkflowItem[];can_continue?:boolean;continue_block_reason?:string|null;continue_block_message?:string|null;created_at?:string|null;revision_instructions?:string;affected_scene_ids?:string[];id:string;project_id:string;source_revision:number;status:'running'|'needs_input'|'ready'|'partial'|'failed'|'interrupted'|'cancelled';step:string;sending:boolean;cancel_requested:boolean;candidate_revision:number;completed_scenes:number;total_scenes:number;error:string|null;review_error:string|null;adopted_revision:number|null};
+export type Candidate={revision:number;save_id?:string|null;project:Project;plan_review?:unknown};
 export const runPath=(projectId:string,id?:string)=>`/${projectId}/draft-runs${id?`/${id}`:''}`;
 export function isDraftRun(value:unknown):value is DraftRun {
   if(!value||typeof value!=='object')return false;
   const r=value as Record<string,unknown>;
   return typeof r.id==='string'&&typeof r.project_id==='string'&&['running','needs_input','ready','partial','failed','interrupted','cancelled'].includes(String(r.status))
-    &&typeof r.step==='string'&&['candidate_revision','completed_scenes','total_scenes','source_revision'].every(k=>Number.isInteger(r[k])&&Number(r[k])>=0)
+    &&validProgress(r)&&typeof r.step==='string'&&['candidate_revision','completed_scenes','total_scenes','source_revision'].every(k=>Number.isInteger(r[k])&&Number(r[k])>=0)
     &&typeof r.cancel_requested==='boolean'&&typeof r.sending==='boolean'
     &&['error','review_error'].every(k=>r[k]===null||typeof r[k]==='string')
     &&(r.adopted_revision===null||(Number.isInteger(r.adopted_revision)&&Number(r.adopted_revision)>=0));
