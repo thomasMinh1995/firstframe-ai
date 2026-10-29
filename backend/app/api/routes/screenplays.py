@@ -57,6 +57,7 @@ def select_screenplay(project_id: str, request: SelectScreenplay):
 @router.get("/{project_id}/screenplay-selections/{selection_id}/pdf")
 def export_screenplay_pdf(project_id: str, selection_id: SceneId):
     from fastapi.responses import Response
+    from reportlab.pdfbase.ttfonts import TTFError
     from app.application.screenplay_pdf import render_pdf, filename
     with projects.project_errors():
         project = projects.load_project(project_id)
@@ -67,7 +68,7 @@ def export_screenplay_pdf(project_id: str, selection_id: SceneId):
             data = render_pdf(selection)
         except ValueError as error:
             raise HTTPException(422, str(error)) from error
-        except OSError as error:
+        except (OSError, TTFError) as error:
             raise HTTPException(503, "Chưa xuất được PDF. Bản đã chọn vẫn giữ; hãy kiểm tra font PDF và thử lại.") from error
         return Response(data, media_type="application/pdf", headers={
             "Content-Disposition": f'attachment; filename="{filename(selection)}"',

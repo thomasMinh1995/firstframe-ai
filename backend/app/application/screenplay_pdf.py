@@ -47,7 +47,7 @@ class ScriptText(Flowable):
             break_long_words=True, break_on_hyphens=False)
         if self.lines is None:
             self.lines = [line for paragraph in self.text.split("\n") for line in (wrapper.wrap(paragraph) or [""])]
-        self.labels = wrapper.wrap(self.speaker) if self.speaker else []
+        self.labels = [line for paragraph in self.speaker.split("\n") for line in (wrapper.wrap(paragraph) or [""])] if self.speaker else []
         self.height = (len(self.labels) + len(self.lines)) * self.leading
         return width, self.height
 

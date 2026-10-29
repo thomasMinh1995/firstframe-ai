@@ -115,3 +115,22 @@ def test_bundled_fonts_cover_complete_vietnamese_alphabet():
     for name in ('Screenplay','ScreenplayBold'):
         glyphs=pdfmetrics.getFont(name).face.charToGlyph
         assert all(n in glyphs for n in [ord('đ'),ord('Đ'),*range(0x1ea0,0x1efa)])
+
+
+def test_actual_missing_font_returns_recoverable_error(written,monkeypatch,tmp_path):
+    client,_,p=written;p=select(client,p)[0].json()
+    monkeypatch.setattr(screenplay_pdf,'__file__',str(tmp_path/'app/application/screenplay_pdf.py'))
+    screenplay_pdf.fonts.cache_clear()
+    try:
+        response=exported(client,p)
+        assert response.status_code==503,response.text
+        assert client.get(f"/api/projects/{p['id']}").json()==p
+    finally:
+        screenplay_pdf.fonts.cache_clear()
+
+
+def test_multiline_speaker_is_drawn_as_separate_lines():
+    screenplay_pdf.fonts()
+    block=screenplay_pdf.ScriptText('Con vẫn ở đây.',speaker='Con gái\n(nhỏ giọng)')
+    block.wrap(450,700)
+    assert block.labels==['Con gái','(nhỏ giọng)']

@@ -37,3 +37,13 @@ Dùng fixture `ui_workspace_fixture.py`, SQLite/dataset riêng, API 8034 và fro
 ## Giới hạn
 
 Xuất văn bản A4 với font cố định; không cung cấp font/khổ giấy tùy ý, Final Draft/FDX, ảnh hoặc phụ lục góp ý. Emoji và chữ ngoài font có thể cần đổi trước khi chọn một snapshot mới; không âm thầm sửa snapshot đã chọn. PDF chưa gắn tag accessibility. Chưa thử Safari/mobile thiết bị thật hoặc máy in thật. Không đánh giá model/chất lượng sáng tác; QA-01 và hoàn thiện vật liệu/tour vẫn ở giai đoạn 6.
+
+
+## Review cuối PR #74 — 29/10/2026
+
+- Tái hiện font thiếu thực tế: ReportLab ném `TTFError`, không phải `OSError`, làm endpoint trả 500 thay vì 503. Đã xử lý đúng ngoại lệ font và giữ nguyên project/selection. Test mới dùng đường dẫn font không tồn tại, không chỉ mock lỗi renderer.
+- Tên người nói có newline là dữ liệu hợp lệ nhưng renderer đưa cả newline vào một lệnh vẽ. Đã tách thành các dòng riêng và giữ chính văn; kiểm tra lại PDF tiếng Việt bằng Poppler, không có glyph lỗi.
+- Hai test hồi quy thất bại trước sửa và qua sau sửa. Kết quả cuối: **553 backend passed, 1 skipped; 15/15 bộ frontend, TypeScript và production build qua**. Cảnh báo TestClient/httpx có sẵn giữ nguyên.
+- GitHub không có workflow/check run hoặc review chặn merge. Đây là kiểm chứng local, không phải CI đã chạy thành công. Các giới hạn thiết bị thật và chất lượng model ở trên giữ nguyên.
+
+![PDF tên người nói nhiều dòng sau sửa](assets/phase5-screenplay-pdf/review-multiline.png)
