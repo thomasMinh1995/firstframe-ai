@@ -46,7 +46,7 @@ export class CandidateAutosave {
        if(!(error instanceof Error&&"status" in error&&error.status===422&&this.state.local&&text(this.state.local.project)!==text(sent.project)))throw error;
      }}
      this.update({error:null});
-     while(this.dirty){
+     while(this.dirty&&!this.composing){
        const sent=this.state.local!,id=crypto.randomUUID();
        const body={revision:sent.revision,save_id:id,...editable(sent.project)};
        this.uncertain={sent,body,id};await send(sent,body,id);

@@ -251,3 +251,15 @@ def test_restart_between_received_scene_and_checkpoint_reuses_result(drafting,mo
     assert response.status_code==200,response.text
     assert client.get(url).json()['status']=='ready'
     assert len(providers[2].requests)==2, 'received second scene must be replayed from SQLite'
+
+
+def test_adopted_partial_run_does_not_block_next_run(drafting):
+    client,providers,p,base,url,body=begin(drafting)
+    r,c=complete(client,url)
+    script={k:deepcopy(c['project']['screenplay'][k]) for k in ('id','version','scenes')}
+    script['scenes'][1]['blocks']=[]
+    c=client.put(url+'/candidate',json={'revision':c['revision'],'draft':c['project']['draft'],'screenplay':script}).json()
+    adopted=client.post(url+'/adopt',json={'revision':p['revision'],'candidate_revision':c['revision']})
+    assert adopted.status_code==200,adopted.text
+    next_run=client.post(base,json={'revision':adopted.json()['revision'],'request_id':str(uuid4())})
+    assert next_run.status_code==200,next_run.text

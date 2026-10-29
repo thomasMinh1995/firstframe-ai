@@ -12,5 +12,11 @@ const gate=()=>{let resolve;const promise=new Promise(r=>resolve=r);return{promi
  let lost=c(),writes=0;const retry=new CandidateAutosave(async b=>{writes++;lost={revision:b.revision+1,save_id:b.save_id,project:{...lost.project,draft:b.draft,answers:b.answers}};throw Error('Lost ack')},async()=>lost);
  retry.accept(lost);retry.edit({...lost.project,answers:['Tôi nhập']});await retry.flush();assert.equal(writes,1);assert.equal(retry.dirty,false);
  const conflict=new CandidateAutosave(async()=>{throw Error('409')},async()=>({...c(),revision:9}));conflict.accept(c());conflict.edit({...project(),answers:['Buffer']});await assert.rejects(conflict.flush());assert.equal(conflict.getSnapshot().local.project.answers[0],'Buffer');assert.ok(conflict.getSnapshot().error);await conflict.reopen();assert.equal(conflict.getSnapshot().error,null);assert.equal(conflict.dirty,false);
+ const imeGate=gate();let imeRemote=c(),imeCalls=0;
+ const ime=new CandidateAutosave(async b=>{imeCalls++;if(imeCalls===1)await imeGate.promise;return imeRemote={revision:b.revision+1,save_id:b.save_id,project:{...imeRemote.project,draft:b.draft,answers:b.answers}}},async()=>imeRemote,10000);
+ ime.accept(imeRemote);ime.edit({...imeRemote.project,answers:['Trước IME']});const inFlight=ime.flush();
+ ime.composition(true);ime.edit({...imeRemote.project,answers:['Chữ đang ghép']});imeGate.resolve();await inFlight;
+ assert.equal(imeCalls,1,'do not send a new write during composition');assert.equal(ime.dirty,true);
+ ime.composition(false);await ime.flush();assert.equal(imeCalls,2);assert.equal(ime.dirty,false);ime.stop();
  q.stop();retry.stop();conflict.stop();console.log('PASS candidate autosave: serial writes, newer input, exact lost-ack recovery, isolated answers and conflicts');
 })().catch(e=>{console.error(e);process.exit(1)});

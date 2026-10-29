@@ -6,6 +6,10 @@ from app.application.project_store import ProjectStore, ProjectConflict, Project
 
 ACTIVE = ("running", "needs_input", "partial", "failed", "interrupted")
 
+def active_run(run):
+    return run["status"] in ACTIVE and run["adopted_revision"] is None
+
+
 def now():
     return datetime.now(UTC).isoformat()
 
@@ -56,7 +60,7 @@ class DraftRunStore(ProjectStore):
             if project.revision != revision:
                 raise ProjectConflict
             runs = [json.loads(r[0]) for r in c.execute("SELECT data FROM draft_runs WHERE project_id=?", (project_id,))]
-            if any(r["status"] in ACTIVE for r in runs) or len(runs) >= 100:
+            if any(active_run(r) for r in runs) or len(runs) >= 100:
                 raise ProjectConflict
             # Start from the author's brief, never recycle an old generated artifact.
             candidate = project.model_copy(deep=True)

@@ -38,3 +38,12 @@ Dùng `ui_workspace_fixture.py`, SQLite/dataset tạm và provider giả, API 80
 ## Giới hạn
 
 Đã đo bằng fixture ngắn 2 và 6 cảnh; chưa đánh giá chất lượng/độ dài thực tế của model. Ngân sách byte của provider vẫn có thể chặn cảnh sau với brief hoặc nội dung dài; hệ thống báo phần đã giữ thay vì coi là xong. Một process local, chưa bảo đảm nhiều worker/host. Không tự retry request AI chưa rõ kết quả; muốn tạo lượt khác cần kết thúc lượt cũ. Chưa thử bộ gõ thiết bị thật, Safari/screen reader hoặc pilot. Browser script cũ giả định workflow năm bước cần cập nhật trước nghiệm thu toàn luồng. PDF và sửa theo đề xuất có kiểm soát vẫn thuộc các giai đoạn sau.
+
+## Review cuối PR #72 — 29/10/2026
+
+Đã tái hiện và sửa hai lỗi trước merge:
+
+- Run `partial` đã nhận vẫn nằm trong khóa lượt đang hoạt động, chặn tạo bản tiếp theo. Cả preflight API và giao dịch SQLite hiện dùng chung kiểm tra trạng thái kèm `adopted_revision`.
+- Nếu IME bắt đầu khi request autosave đang chờ, hàng đợi có thể gửi chữ đang ghép ngay sau acknowledgement. Vòng ghi hiện dừng khi composition còn hoạt động và tiếp tục sau compositionend.
+
+Test hồi quy mới thất bại trước sửa và qua sau sửa. Kiểm tra toàn bộ sau sửa: **534 backend passed, 1 skipped; 14/14 bộ frontend, TypeScript và production build qua**. GitHub Actions/status checks chưa được cấu hình; kết quả này là local. Chưa thử bộ gõ thiết bị thật; các giới hạn bên trên giữ nguyên.

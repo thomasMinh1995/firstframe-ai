@@ -10,7 +10,7 @@ from app.api.schemas.projects import ProjectResponse, StoryDraft
 from app.api.schemas.screenplays import ScreenplayEdit
 from app.api.schemas.scenes import SceneId
 from app.application import draft_workflow as workflow
-from app.application.draft_run_store import DraftRunStore, ACTIVE
+from app.application.draft_run_store import DraftRunStore, active_run
 from app.application.language import resolve_response_language
 from app.application.provenance import attribute_edits, draft_fields, scene_fields
 from app.application.project_store import ProjectConflict
@@ -78,7 +78,7 @@ def start(project_id: str, request: Start):
             if old["source_revision"] != request.revision:
                 raise ProjectConflict
             return brief(old)
-        if any(r["status"] in ACTIVE for r in s.rows(project_id)):
+        if any(active_run(r) for r in s.rows(project_id)):
             raise HTTPException(409, "Đang có một lượt tạo chưa kết thúc. Hãy mở lại tiến độ hoặc kết thúc lượt đó trước khi tạo mới.")
         p = projects.load_project(project_id, request.revision)
         if not p.idea.strip():
