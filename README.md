@@ -4,15 +4,15 @@
 
 FirstFrame helps people in Vietnam write their first short film from their own experiences, understand their creative choices, and revise a screenplay to share with human collaborators. The author keeps control of the story.
 
-The current MVP supports saved projects, clarification questions, editable story plans, version history, and feedback on the revised draft through a **Creative Reasoning Harness**. Scene outlines and a scene-level screenplay editor are available as separate steps; automatic end-to-end drafting and PDF export remain planned.
+The current MVP supports saved projects, clarification questions, editable story plans, version history, and feedback on the revised draft through a **Creative Reasoning Harness**. Scene outlines and a scene-level screenplay editor are available as separate steps; checkpointed automatic drafting is available for short scripts of up to 6 scenes within the provider context budget. PDF export remains planned.
 
 Current project workflow:
 
 ```text
-Idea (autosave) -> Read understanding -> Answer only if needed / leave open -> Story Plan -> Edit -> Review
+Idea (autosave) -> Draft run -> Clarify only if needed -> Story plan + outline + all scene text -> Read/edit candidate -> Adopt -> Review
 ```
 
-Clarification has no fixed questionnaire. A clear brief can return no questions; unanswered questions remain open and do not become author decisions. AI suggestions are shown separately. The initial screen keeps project name and language under optional settings. “Chuẩn bị story plan” prepares clarification; “Tạo story plan” creates the plan. Full screenplay generation remains phase 3.
+Clarification has no fixed questionnaire. A clear brief can return no questions; unanswered questions remain open and do not become author decisions. AI suggestions are shown separately. The initial screen keeps project name and language under optional settings. The detailed tools still support creating a story plan separately. The “Tạo bản nháp” action starts a durable backend run. Reload reads progress without calling AI again; received model outputs and each completed scene are checkpointed. Candidate edits autosave separately, and adoption checks the original brief and target before atomically keeping the prior draft. Unknown model outcomes are never retried automatically.
 
 Review gives feedback on the saved draft; it does not rewrite it. Changing the idea or constraints uses the existing clarification flow again.
 
@@ -395,3 +395,9 @@ this updated app on the receiving machine; version 1 packages remain supported.
 The subsequent [multi-scenario Qwen critic evaluation](docs/evaluations/qwen-critic-2026-10-21.md)
 records 24 primary outputs and rejected pilots. The candidate is benchmark-only;
 it was not enabled because author-intent and issue/suggestion errors remained.
+
+### Automatic draft runs (local)
+
+`POST /api/projects/{id}/draft-runs` starts or recovers an idempotent `request_id` and project `revision`. GET list/status/candidate reads never invoke AI. Candidate PUT uses its own revision and optional save ID. Continue, cancel and adopt are explicit POST actions; adoption requires both project and candidate revisions.
+
+Runs use the project SQLite database and a local two-thread executor. Restart marks previous-process running jobs interrupted. A received model result can be replayed from storage; a sent request without a stored result blocks continuation. Cancel stops future calls and keeps late results. There is no multi-worker/host recovery guarantee. See `docs/testing/phase3-draft-runs-2026-10-29.md` for verification and limits.

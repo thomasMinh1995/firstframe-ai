@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from app.api.routes.draft_runs import router as draft_runs_router, lifespan
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.routes.dataset_branches import router as dataset_branches_router
@@ -15,6 +16,7 @@ from app.api.routes.scene_sketches import router as scene_sketches_router
 
 def create_app() -> FastAPI:
     app = FastAPI(
+        lifespan=lifespan,
         title="FirstFrame AI API",
         description="Backend foundation for the FirstFrame AI Creative Reasoning Harness.",
         version="0.1.0",
@@ -31,6 +33,7 @@ def create_app() -> FastAPI:
         allow_methods=["*"],
         allow_headers=["*"],
     )
+    app.include_router(draft_runs_router)
     app.include_router(health_router)
     app.include_router(demo_router)
     app.include_router(datasets_router)

@@ -122,7 +122,7 @@ export class ProjectRequestError extends Error {
   constructor(message: string, public status: number) {super(message);}
 }
 
-async function request(path: string, method = "GET", body?: unknown): Promise<unknown> {
+export async function request(path: string, method = "GET", body?: unknown): Promise<unknown> {
   let response: Response;
   try {
     response = await fetch(`${baseUrl}/api/projects${path}`, {
@@ -230,7 +230,7 @@ export function isFeedback(value: unknown): value is Feedback {
       && typeof finding.criterion_id === "string" && typeof finding.message === "string"
       && typeof finding.severity === "string");
 }
-function isProject(value: unknown): value is Project {
+export function isProject(value: unknown): value is Project {
   if (!isSummary(value) || !isRecord(value)) return false;
   const analysis = value.analysis;
   return ["auto", "vi", "en"].includes(String(value.response_language))
