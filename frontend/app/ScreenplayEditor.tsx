@@ -1,5 +1,6 @@
 "use client";
 
+import {ReviewPanel} from "./ReviewPanel";
 import {useEffect,useId,useMemo,useRef,useState} from "react";
 import type {Project} from "./projectsApi";
 import type {Screenplay, ScriptScene, SceneWritingInput, ScreenplaySelectionInput} from "./screenplayTypes";
@@ -17,7 +18,8 @@ import "./screenplay.css";
 
 const undoContent = (script: Screenplay) => JSON.stringify({id:script.id, scenes:script.scenes, source:script.source_outline.id});
 
-export function ScreenplayEditor({project, savedProject, onSelectSource, onSourceInspect, dirty, sourceDirty, onChange, onStart, onSave, onInspect, onWrite, onProposalInspect, onPreview, onDiscard, canUse, onReview, onReviewInspect, onReviewDiscard, onReviewAssess, canNavigateReview}: {
+export function ScreenplayEditor({project, savedProject, onSelectSource, onSourceInspect, dirty, sourceDirty, onChange, onStart, onSave, onInspect, onWrite, onProposalInspect, onPreview, onDiscard, canUse, onReview, onReviewInspect, onReviewDiscard, onReviewAssess, canNavigateReview,onApply,onUndoProposal,onStructural,busy=false}: {
+  busy?:boolean;onApply?:(id:string,scene:ScriptScene)=>void;onUndoProposal?:(id:string)=>void;onStructural?:(instructions:string)=>void;
   savedProject:Project;onSelectSource:(input:ScreenplaySelectionInput)=>Promise<void>;onSourceInspect:()=>Promise<boolean>;
   onReview:(input:SceneWritingInput)=>Promise<void>;onReviewInspect:()=>Promise<boolean>;onReviewDiscard:(id:string)=>void;
   onReviewAssess:(reviewId:string,noteId:string,value:ReviewAssessment)=>void;canNavigateReview:boolean;
@@ -28,6 +30,11 @@ export function ScreenplayEditor({project, savedProject, onSelectSource, onSourc
   onSave: () => void; onInspect: () => Promise<boolean>;
 }) {
   const editorId=useId();
+  const [toolsOpen,setToolsOpen]=useState(false);
+  const toolsOpener=useRef<HTMLElement|null>(null);
+  useEffect(()=>{if(window.innerWidth>1000)setToolsOpen(true)},[]);
+  function closeTools(){setToolsOpen(false);requestAnimationFrame(()=>toolsOpener.current?.focus({preventScroll:true}))}
+
   const editOrigin=useRef<Element|null>(null);
   const [pendingReference,setPendingReference]=useState<ReviewSource|null>(null);
   const [pendingEdit,setPendingEdit]=useState<string|null>(null);
@@ -59,6 +66,7 @@ export function ScreenplayEditor({project, savedProject, onSelectSource, onSourc
     });
     return()=>cancelAnimationFrame(frame);
   },[pendingEdit,scene?.id,editorId]);
+  useEffect(()=>{document.querySelectorAll(".review-highlight").forEach(node=>node.classList.remove("review-highlight"));},[script,canNavigateReview]);
   useEffect(()=>{
     if(!pendingReference||!canNavigateReview)return;
     const frame=requestAnimationFrame(()=>{
@@ -68,6 +76,7 @@ export function ScreenplayEditor({project, savedProject, onSelectSource, onSourc
       if(text===ref.text){
         const node=ref.block_id?document.querySelector<HTMLElement>(`.screenplay-author-fields [data-script-block="${ref.block_id}"] ${ref.field==='speaker'?'input':'textarea'}`)
           :document.querySelector<HTMLElement>('.screenplay-author-fields input');
+        node?.closest('[data-script-block]')?.classList.add('review-highlight');
         node?.scrollIntoView({block:'center'});node?.focus({preventScroll:true});
       }
       setPendingReference(null);
@@ -81,13 +90,15 @@ export function ScreenplayEditor({project, savedProject, onSelectSource, onSourc
   return <section className="panel screenplay" data-workspace-stage="workspace-script" aria-label="Kịch bản">
     <header className="screenplay-heading"><div><p className="eyebrow">Kịch bản</p><h2 id="workspace-script" data-tour="script" tabIndex={-1}>Viết kịch bản</h2></div>
       <div className="screenplay-actions">
-        <button type="button" className="secondary" disabled={!scene} aria-controls={scene?`${editorId}-support`:undefined} onClick={e=>{
+        <button ref={node=>{toolsOpener.current=node}} type="button" className="secondary" disabled={!scene} aria-controls={scene?`${editorId}-support`:undefined} onClick={e=>{
+          toolsOpener.current=e.currentTarget;setToolsOpen(true);
           const host=e.currentTarget.closest('.screenplay')?.querySelector<HTMLElement>('.screenplay-tools');
           host?.querySelectorAll<HTMLDetailsElement>('.screenplay-source, .screenplay-feedback-tools').forEach(node=>{node.open=true;});
           host?.scrollIntoView({block:'start'});host?.querySelector<HTMLElement>('summary')?.focus({preventScroll:true});
         }}>Dàn cảnh &amp; góp ý</button>
         <button type="button" className="secondary" disabled={savedProject.id!==project.id||!savedProject.screenplay} onClick={e=>{
           const reader=e.currentTarget.closest('.screenplay')?.querySelector<HTMLElement>('.screenplay-reading');
+          const details=reader?.closest('details');if(details)details.open=true;
           reader?.scrollIntoView({block:'start'});reader?.focus({preventScroll:true});
         }}>Đọc toàn bộ</button>
       </div>
@@ -118,7 +129,7 @@ export function ScreenplayEditor({project, savedProject, onSelectSource, onSourc
           <span>{s.blocks.some(b=>b.text.trim())?'Đang viết':'Chưa viết'}</span>
         </button>
       </li>)}</ol></nav>
-      <div className="screenplay-columns">
+      <div className="screenplay-columns screenplay-layout">
         <div className="screenplay-scene" id={editorId}>
           {scene ? <>
             <div className="screenplay-writing-heading"><h3>Viết và sửa cảnh</h3><span>Cảnh {script.scenes.indexOf(scene)+1} / {script.scenes.length}</span></div>
@@ -133,7 +144,7 @@ export function ScreenplayEditor({project, savedProject, onSelectSource, onSourc
             </div>
             <button type="button" onClick={onSave}>Lưu kịch bản</button>
             <p>Chuyển cảnh giữ phần đang viết. Thay đổi tự lưu khi dừng gõ; bản nháp không cần đủ mọi cảnh.</p>
-            <div className="screenplay-tools" id={`${editorId}-support`} aria-label="Hỗ trợ cảnh đang viết">
+            <ReviewPanel disabled={busy} open={toolsOpen} onClose={closeTools} label="Góp ý và phương án sửa"><div className="screenplay-tools" id={`${editorId}-support`} aria-label="Hỗ trợ cảnh đang viết">
               <details className="screenplay-source"><summary>Nguồn dàn cảnh của cảnh đang viết</summary>
                 <p>Đây là nguồn được giữ lúc bắt đầu, không phải bản soạn.</p>
                 {source && <><h3>{source.title}</h3><p className="preserve-lines">{source.action}</p>
@@ -161,33 +172,34 @@ export function ScreenplayEditor({project, savedProject, onSelectSource, onSourc
             {undo && undoContent(script)===undo.after && <button type="button" onClick={()=>{onChange({...script,scenes:undo.before.scenes});setUndo(null);}}>{undo.label}</button>}
             <details className="screenplay-writing-tools"><summary>Nhờ FirstFrame viết thử một cảnh</summary>
             <ScreenplayProposals key={`${script.id}:${scene.id}`} project={project} scene={scene} canUse={canUse}
-              onWrite={onWrite} onInspect={onProposalInspect} onPreview={onPreview} onDiscard={onDiscard}
+              onChooseScene={id=>chooseScene(id)} onWrite={onWrite} onUndo={onUndoProposal} onStructural={onStructural} onInspect={onProposalInspect} onPreview={onPreview} onDiscard={onDiscard}
               onUse={(id,replacement)=>{
+                if(onApply){onApply(id,replacement);return;}
                 const next={...script,scenes:script.scenes.map(s=>s.id===replacement.id?replacement:s)};
                 setUndo({before:structuredClone(script),after:undoContent(next),label:"Hoàn tác dùng phương án"});onChange(next,id);
               }}/>
             </details>
             <details className="screenplay-feedback-tools"><summary>Góp ý có bằng chứng để tự sửa</summary>
             <ScreenplayFeedback key={`review:${script.id}:${scene.id}`} project={project} scene={scene} canNavigate={canNavigateReview}
-              onReview={onReview} onInspect={onReviewInspect} onDiscard={onReviewDiscard} onAssess={onReviewAssess}
-              onNavigate={source=>{if(canNavigateReview&&source.scene_id){chooseScene(source.scene_id,false);setPendingReference(source);}}}/>
+              onRevise={async input=>{await onWrite(input);setToolsOpen(true);requestAnimationFrame(()=>document.querySelectorAll<HTMLDetailsElement>(".screenplay-writing-tools").forEach(d=>d.open=true))}} onReview={onReview} onInspect={onReviewInspect} onDiscard={onReviewDiscard} onAssess={onReviewAssess}
+              onNavigate={source=>{if(canNavigateReview&&source.scene_id){chooseScene(source.scene_id,false);setUseBlockEditor(true);setToolsOpen(false);setPendingReference(source);}}}/>
             </details>
-            </div>
+            </div></ReviewPanel>
           </> : <div className="screenplay-empty" role="status"><h3>Chọn một cảnh để viết</h3><p>Chọn cảnh phía trên để mở form. Kịch bản đã lưu ở bên cạnh không bao gồm các sửa chưa lưu.</p></div>}
         </div>
-        <aside className="screenplay-saved" aria-label="Kịch bản đã lưu để đối chiếu">
+        <details className="screenplay-saved" aria-label="Kịch bản đã lưu để đối chiếu"><summary>Đối chiếu bản đã lưu khi cần</summary>
           <h3>Kịch bản đã lưu</h3>
           {savedProject.id===project.id&&savedProject.screenplay?.id===script.id ? <>
             <p>Phiên bản {savedProject.screenplay.version} · {savedProject.screenplay.scenes.length} cảnh.</p>
             {dirty&&<p role="status">Có sửa chưa lưu trong dự án. Cột này vẫn giữ bản server đã xác nhận.</p>}
             <SavedScript script={savedProject.screenplay} activeSceneId={scene?.id}/>
           </> : <p>Chưa có bản đã lưu tương ứng để đối chiếu. Phần đang viết vẫn được giữ.</p>}
-        </aside>
+        </details>
       </div>
 
     </>}
-    <ScreenplayReading saved={savedProject} dirty={dirty} onSelect={onSelectSource} onInspect={onSourceInspect}
-      onEdit={id=>chooseScene(id)}/>
+    <details className="screenplay-reader-toggle"><summary>Đọc hoặc chọn bản kịch bản đã lưu</summary><ScreenplayReading saved={savedProject} dirty={dirty} onSelect={onSelectSource} onInspect={onSourceInspect}
+      onEdit={id=>chooseScene(id)}/></details>
 
   </section>;
 }

@@ -34,5 +34,7 @@ export function reviewNoteSupported(review:ScreenplayReview,note:ReviewNote,allo
 
 export function sameReviewScript(a:Screenplay,b:Screenplay):boolean {
   const content=(s:Screenplay)=>({id:s.id,scenes:s.scenes,provenance:s.provenance??{},source:{id:s.source_outline.id,scenes:s.source_outline.scenes,provenance:s.source_outline.provenance??{},source:s.source_outline.source}});
-  return JSON.stringify(content(a))===JSON.stringify(content(b));
+  const stable=(value:unknown):unknown=>Array.isArray(value)?value.map(stable)
+    :value!==null&&typeof value==='object'?Object.fromEntries(Object.entries(value).sort(([a],[b])=>a.localeCompare(b)).map(([k,v])=>[k,stable(v)])):value;
+  return JSON.stringify(stable(content(a)))===JSON.stringify(stable(content(b)));
 }

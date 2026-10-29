@@ -1,15 +1,15 @@
 "use client";
 
-export function ClarificationConversation({ summary, questions, answers, onChange, onAskMore, onConfirm, onEditBrief, idea, constraints = [], retained = [], aiSuggestions = [], hasDraft = false, thinking = false, creatingScreenplay = false }: {
-  creatingScreenplay?: boolean; thinking?: boolean; summary: string; questions: string[]; answers: string[]; onChange: (index: number, value: string) => void;
+export function ClarificationConversation({ summary, questions, answers, onChange, onAskMore, onConfirm, onEditBrief, idea, constraints = [], retained = [], aiSuggestions = [], hasDraft = false, thinking = false, creatingScreenplay = false, idPrefix = "" }: {
+  idPrefix?:string;creatingScreenplay?: boolean; thinking?: boolean; summary: string; questions: string[]; answers: string[]; onChange: (index: number, value: string) => void;
   onAskMore?: () => void; onConfirm?: () => void; onEditBrief?: () => void; confirmationKey?: string;
   idea?: string; constraints?: string[]; retained?: { question: string; answer: string }[]; aiSuggestions?: string[]; hasDraft?: boolean;
 }) {
   const pending = questions.filter((_, i) => !answers[i]?.trim()).length;
   return <div className="clarification-conversation" aria-busy={thinking}>
     <fieldset className="conversation-content" disabled={thinking}>
-      <section className="clarification-summary" aria-labelledby="understanding-title">
-        <h3 id="understanding-title">Điều FirstFrame đã hiểu</h3>
+      <section className="clarification-summary" aria-labelledby={`${idPrefix}understanding-title`}>
+        <h3 id={`${idPrefix}understanding-title`}>Điều FirstFrame đã hiểu</h3>
         <p className="preserve-lines">{summary}</p>
         <p className="storage-note">Đây là cách AI hiểu ý tưởng, bạn có thể sửa nguồn bên dưới nếu chưa đúng.</p>
         {onEditBrief && <button type="button" className="secondary" onClick={onEditBrief}>Chỉnh ý tưởng và điều muốn giữ</button>}
@@ -29,14 +29,14 @@ export function ClarificationConversation({ summary, questions, answers, onChang
         <p>Trả lời phần bạn muốn quyết định. Bỏ trống để AI đưa phương án cho bạn review.</p>
         <ol className="clarification-thread" aria-label="Các câu hỏi làm rõ">
           {questions.map((question,i)=><li key={i} className="clarification-current">
-            <label htmlFor={`answer-${i}`}>{question}</label>
-            <textarea className="short-textarea" id={`answer-${i}`} rows={3} maxLength={2000} value={answers[i] ?? ""}
+            <label htmlFor={`${idPrefix}answer-${i}`}>{question}</label>
+            <textarea className="short-textarea" id={`${idPrefix}answer-${i}`} rows={3} maxLength={2000} value={answers[i] ?? ""}
               onChange={e=>onChange(i,e.target.value)} placeholder="Có thể để mở…" />
           </li>)}
         </ol>
       </>}
       {thinking && <p role="status">FirstFrame đang đọc ý tưởng…</p>}
-      <div id="clarification-complete" tabIndex={-1} className="clarification-complete">
+      <div id={`${idPrefix}clarification-complete`} tabIndex={-1} className="clarification-complete">
         <p>{creatingScreenplay ? "Tiếp tục tạo dàn cảnh và nội dung kịch bản. Các phần chưa quyết định vẫn là phương án AI để bạn review." : hasDraft ? "Bản đề xuất mới được giữ riêng để bạn đọc và chọn nhận." : "Bước này tạo story plan để bạn đọc và sửa."}</p>
         <div className="clarification-actions">
           {onConfirm && <button type="button" data-tour-action="plan" onClick={onConfirm}>

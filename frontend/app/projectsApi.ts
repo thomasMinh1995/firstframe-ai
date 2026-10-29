@@ -373,6 +373,17 @@ function isScreenplayProposal(v:unknown):v is ScreenplayProposal {
     ||(v.model!==null&&typeof v.model!=='string')||(v.error!==null&&typeof v.error!=='string')
     ||(v.applied_revision!==null&&(!Number.isInteger(v.applied_revision)||Number(v.applied_revision)<0)))return false;
   const target=v.source_screenplay.scenes.find(s=>s.id===v.target_scene_id);
+  const scope=v.scope??'scene', ids=v.block_ids??[];
+  if(!['scene','blocks'].includes(String(scope))||!Array.isArray(ids)||!ids.every(uuid)||new Set(ids).size!==ids.length
+    ||(scope==='blocks'&&(!ids.length||!target||!ids.every(id=>target.blocks.some(b=>b.id===id))))||(scope==='scene'&&ids.length))return false;
+  if(v.undone_revision!==undefined&&v.undone_revision!==null&&!positive(v.undone_revision))return false;
+  if(v.applied_scene!==undefined&&v.applied_scene!==null&&(!isScriptScene(v.applied_scene)||v.applied_scene.id!==target?.id||v.applied_scene.source_scene_id!==target?.source_scene_id))return false;
+  if((v.review_id!=null&&!uuid(v.review_id))||(v.note_id!=null&&!uuid(v.note_id))||!!v.review_id!==!!v.note_id)return false;
+  if(scope==='blocks'&&target&&![v.scene,v.preview_scene].every(value=>{
+    if(value===null)return true;if(!isScriptScene(value))return false;
+    return value.heading===target.heading&&JSON.stringify(value.blocks.map(b=>b.id))===JSON.stringify(target.blocks.map(b=>b.id))
+      &&value.blocks.every((b,i)=>ids.includes(b.id)||JSON.stringify([b.id,b.kind,b.text,b.speaker])===JSON.stringify([target.blocks[i].id,target.blocks[i].kind,target.blocks[i].text,target.blocks[i].speaker]));
+  }))return false;
   return !!target&&[v.scene,v.preview_scene].every(s=>s===null||(isScriptScene(s)&&s.id===target.id&&s.source_scene_id===target.source_scene_id))
     &&(!['ready','applied'].includes(String(v.status))||v.scene!==null);
 }

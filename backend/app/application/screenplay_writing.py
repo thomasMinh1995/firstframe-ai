@@ -5,7 +5,7 @@ from uuid import uuid4
 from pydantic import ValidationError
 
 from app.api.schemas.projects import ScreenplayProposal
-from app.api.schemas.screenplays import SceneWritingResult, ScriptScene
+from app.api.schemas.screenplays import SceneWritingResult, ScriptScene, BlockRevisionResult
 from app.application.ai_provider import MalformedProviderResponseError, StructuredProvider, StructuredRequest
 from app.application.language import resolve_response_language
 from app.application.screenplay_context import ScreenplayContextTooLarge, check_context_budget
@@ -20,8 +20,11 @@ def write_scene(proposal: ScreenplayProposal, provider: StructuredProvider) -> S
     target = next(s for s in script.scenes if s.id == proposal.target_scene_id)
     source = next(s for s in script.source_outline.scenes if s.id == target.source_scene_id)
     context = script.source_outline.source
+    scoped = proposal.scope == "blocks"
     request = StructuredRequest(
-        stage="screenplay_generation", instructions=PROMPT.read_text(encoding="utf-8"),
+        stage="screenplay_generation", instructions=PROMPT.read_text(encoding="utf-8") + (
+            "\nRevise ONLY the selected block IDs. Return replacements with exact expected original kind/text/speaker and a replacement. "
+            "Return every selected ID once; never add, remove, reorder blocks or change the heading. Preserve silence and open endings." if scoped else ""),
         input_text=json.dumps({
             "response_language": resolve_response_language(context.context.idea, context.response_language),
             "author_intent": context.context.ai_context(), "story_plan": context.draft.model_dump(mode="json"),
@@ -29,14 +32,44 @@ def write_scene(proposal: ScreenplayProposal, provider: StructuredProvider) -> S
             "source_scene": source.model_dump(mode="json"), "target_scene_id": target.id,
             "screenplay_context": [s.model_dump(mode="json") for s in script.scenes],
             "author_request": proposal.instructions,
-        }, ensure_ascii=False), response_model=SceneWritingResult)
+            **({"revision_scope": "blocks", "block_ids": proposal.block_ids,
+                "selected_blocks": [b.model_dump(mode="json") for b in target.blocks if b.id in proposal.block_ids]} if scoped else {}),
+        }, ensure_ascii=False), response_model=BlockRevisionResult if scoped else SceneWritingResult)
     check_context_budget(request, provider)
     result = provider.request_structured(request)
     with progress_step("screenplay_validation"):
         try:
+            if scoped:
+                output = BlockRevisionResult.model_validate(result.output.model_dump())
+                by_id = {r.block_id: r for r in output.replacements}
+                if len(by_id) != len(output.replacements) or set(by_id) != set(proposal.block_ids):
+                    raise ValueError("Replacement IDs differ from selected scope")
+                for b in target.blocks:
+                    if b.id in by_id and b.model_dump(exclude={"id"}) != by_id[b.id].expected.model_dump():
+                        raise ValueError("Expected block text does not match source")
+                scene = target.model_copy(deep=True)
+                scene.blocks = [b.model_copy(update=by_id[b.id].replacement.model_dump()) if b.id in by_id else b for b in scene.blocks]
+                for replacement in output.replacements:
+                    b = replacement.replacement
+                    if not b.text.strip() or (b.kind == "dialogue" and not b.speaker.strip()) or (b.kind == "action" and b.speaker):
+                        raise ValueError("Invalid replacement text/speaker")
+                ScriptScene.model_validate(scene.model_dump())
+                return proposal.model_copy(update={"scene": scene, "status": "ready", "model": result.model})
             output = SceneWritingResult.model_validate(result.output.model_dump()).scene
-        except ValidationError as error:
+        except (ValidationError, ValueError) as error:
             raise MalformedProviderResponseError("Invalid single-scene screenplay", raw_output=result.raw_output) from error
         scene = ScriptScene(id=target.id, source_scene_id=target.source_scene_id, heading=output.heading,
                             blocks=[{**b.model_dump(), "id": str(uuid4())} for b in output.blocks])
         return proposal.model_copy(update={"scene": scene, "status": "ready", "model": result.model})
+
+
+def validate_preview(proposal, scene):
+    """Enforce the same scope for AI output, author preview and legacy PUT adoption."""
+    target = next(s for s in proposal.source_screenplay.scenes if s.id == proposal.target_scene_id)
+    if (scene.id, scene.source_scene_id) != (target.id, target.source_scene_id):
+        raise ValueError("Giữ đúng ID cảnh nguồn.")
+    if proposal.scope == "blocks":
+        if scene.heading != target.heading or [b.id for b in scene.blocks] != [b.id for b in target.blocks]:
+            raise ValueError("Sửa khối không thay tiêu đề, thêm/bớt hoặc đổi thứ tự khối.")
+        if any(b != target.blocks[i] for i,b in enumerate(scene.blocks) if b.id not in proposal.block_ids):
+            raise ValueError("Phần ngoài các khối đã chọn phải giữ nguyên.")

@@ -1,6 +1,8 @@
 from datetime import UTC, datetime
 from uuid import uuid4
 
+from pydantic import ValidationError
+
 from fastapi import APIRouter, HTTPException
 
 from app.api.routes import projects
@@ -12,6 +14,7 @@ from app.api.schemas.provenance import TextProvenance
 from app.application.dataset import capture_workflow, recording_provider
 from app.application.progress import progress_step
 from app.application.screenplay_writing import PROMPT_VERSION, ScreenplayContextTooLarge, write_scene
+from app.application.screenplay_revisions import validate_request
 from app.infrastructure.provider_factory import create_provider
 
 
@@ -103,7 +106,7 @@ def propose_scene(project_id: str, request: SceneWritingRequest):
             project = projects.load_project(project_id)
             existing = next((p for p in project.screenplay_proposals if p.id == request.request_id), None)
             if existing:
-                if (existing.target_scene_id, existing.instructions) != (request.target_scene_id, request.instructions):
+                if (existing.target_scene_id, existing.instructions, existing.scope, existing.block_ids, existing.review_id, existing.note_id) != (request.target_scene_id, request.instructions, request.scope, request.block_ids, request.review_id, request.note_id):
                     raise HTTPException(409, "ID tác vụ đã dùng cho cảnh hoặc yêu cầu khác.")
                 return project
             if project.revision != request.revision:
@@ -115,11 +118,13 @@ def propose_scene(project_id: str, request: SceneWritingRequest):
                 raise HTTPException(409, "Có lượt viết chưa rõ kết quả. Kiểm tra hoặc bỏ lượt đó trước; không tự chạy lại.")
             if len(project.screenplay_proposals) >= 100:
                 raise HTTPException(422, "Đã đủ 100 lượt viết thử; vẫn tự viết và lưu kịch bản được.")
+            instructions = validate_request(project, request)
             proposal = ScreenplayProposal(id=request.request_id, created_at=datetime.now(UTC).isoformat(),
                 source_revision=project.revision, source_content=project.content_key(),
                 source_screenplay=script.model_copy(deep=True),
                 source_outline=project.scene_outline.model_copy(deep=True) if project.scene_outline else None,
-                target_scene_id=request.target_scene_id, instructions=request.instructions, prompt_version=PROMPT_VERSION)
+                target_scene_id=request.target_scene_id, instructions=request.instructions, prompt_version=PROMPT_VERSION,
+                scope=request.scope, block_ids=request.block_ids, review_id=request.review_id, note_id=request.note_id)
             project.screenplay_proposals.append(proposal)
             projects.save_project(project, "screenplay_checkpoint")
 
@@ -137,7 +142,8 @@ def propose_scene(project_id: str, request: SceneWritingRequest):
                 proposal.provider, proposal.model, proposal.parameters = metadata.provider, metadata.model, metadata.parameters
                 projects.get_project_store().update(project_id, keep_result)
                 with progress_step("screenplay_generation"):
-                    proposal = write_scene(proposal, provider)
+                    generated = write_scene(proposal.model_copy(update={"instructions": instructions}), provider)
+                    proposal = generated.model_copy(update={"instructions": request.instructions})
                 with progress_step("screenplay_proposal_save"):
                     project = ProjectResponse.model_validate(projects.get_project_store().update(project_id, keep_result))
                 stored = next(p for p in project.screenplay_proposals if p.id == proposal.id)
@@ -161,3 +167,74 @@ def discard_scene_writing(project_id: str, proposal_id: SceneId, request: Revisi
         if proposal.status != "applied":
             proposal.status = "discarded"
         return projects.save_project(project)
+
+
+class ApplyProposal(RevisionRequest):
+    scene: ScriptScene | None = None
+
+
+@router.post("/{project_id}/screenplay-revision-target")
+def revision_target(project_id: str, request: SceneWritingRequest):
+    from app.application.screenplay_revisions import resolve_target
+    with projects.project_errors():
+        p = projects.load_project(project_id, request.revision)
+        return resolve_target(p, request.instructions, request.target_scene_id)
+
+
+@router.post("/{project_id}/screenplay-proposals/{proposal_id}/apply", response_model=ProjectResponse)
+def apply_proposal(project_id: str, proposal_id: SceneId, request: ApplyProposal):
+    from app.api.schemas.projects import ProjectUpdate
+    with projects.project_errors():
+        p = projects.load_project(project_id)
+        proposal = next((r for r in p.screenplay_proposals if r.id == proposal_id), None)
+        if proposal is None:
+            raise HTTPException(404, "Không tìm thấy phương án.")
+        if proposal.status == "applied":
+            if request.scene is not None and request.scene != proposal.applied_scene:
+                raise projects.ProjectConflict
+            return p
+        if p.revision != request.revision:
+            raise projects.ProjectConflict
+        replacement = request.scene or proposal.preview_scene or proposal.scene
+        if p.screenplay is None or replacement is None:
+            raise projects.ProjectConflict
+        script = p.screenplay.model_copy(deep=True)
+        script.scenes = [replacement if s.id == proposal.target_scene_id else s for s in script.scenes]
+        body = {key:getattr(p,key) for key in ("title","idea","constraints","answers","draft","response_language")}
+        try:
+            update = ProjectUpdate(**body, revision=p.revision,
+                screenplay=script.model_dump(include={"id","version","scenes"}), screenplay_proposal_id=proposal_id,
+                screenplay_proposal_previews={proposal_id:replacement})
+        except ValidationError as error:
+            raise HTTPException(422, "Phương án không khớp giới hạn hoặc ID của toàn bộ kịch bản; bản đang viết vẫn giữ nguyên.") from error
+        return projects.update_project(project_id, update)
+
+
+@router.post("/{project_id}/screenplay-proposals/{proposal_id}/undo", response_model=ProjectResponse)
+def undo_proposal(project_id: str, proposal_id: SceneId, request: RevisionRequest):
+    from app.application.provenance import scene_fields
+    with projects.project_errors():
+        p = projects.load_project(project_id)
+        proposal = next((r for r in p.screenplay_proposals if r.id == proposal_id), None)
+        if proposal is None or proposal.status != "applied" or proposal.applied_scene is None:
+            raise HTTPException(409, "Không có lần nhận phương án để hoàn tác.")
+        if proposal.undone_revision is not None:
+            return p
+        if p.revision != request.revision or p.screenplay is None or p.screenplay.id != proposal.source_screenplay.id or p.content_key() != proposal.source_content:
+            raise projects.ProjectConflict
+        current = next((s for s in p.screenplay.scenes if s.id == proposal.target_scene_id), None)
+        if current != proposal.applied_scene or p.screenplay.source_outline != proposal.source_screenplay.source_outline:
+            raise HTTPException(409, "Cảnh hoặc nguồn đã sửa sau khi nhận; không ghi đè để hoàn tác.")
+        before = next(s for s in proposal.source_screenplay.scenes if s.id == proposal.target_scene_id)
+        projects.archive_screenplay(p)
+        affected = set(scene_fields([current,before], True))
+        p.screenplay.provenance = {**{k:v for k,v in p.screenplay.provenance.items() if k not in affected},
+            **{k:v for k,v in proposal.source_screenplay.provenance.items() if k in affected}}
+        p.screenplay.scenes = [before.model_copy(deep=True) if s.id == before.id else s for s in p.screenplay.scenes]
+        p.screenplay.version += 1
+        try:
+            p.screenplay = Screenplay.model_validate(p.screenplay.model_dump())
+        except ValidationError as error:
+            raise HTTPException(409, "Các ID khối đã được dùng ở nơi khác; không thể hoàn tác an toàn.") from error
+        proposal.undone_revision = p.revision + 1
+        return projects.save_project(p)

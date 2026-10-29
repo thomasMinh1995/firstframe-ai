@@ -42,14 +42,14 @@ class DraftRunStore(ProjectStore):
             raise ProjectNotFound
         return json.loads(row[0])
 
-    def create_run(self, project_id, run_id, revision, config, owner):
+    def create_run(self, project_id, run_id, revision, config, owner, revision_instructions=""):
         with self.connect() as c:
             self.setup(c)
             c.execute("BEGIN IMMEDIATE")
             old = c.execute("SELECT data FROM draft_runs WHERE id=?", (run_id,)).fetchone()
             if old:
                 run = json.loads(old[0])
-                if run["project_id"] != project_id or run["source_revision"] != revision:
+                if run["project_id"] != project_id or run["source_revision"] != revision or run.get("revision_instructions", "") != revision_instructions:
                     raise ProjectConflict
                 return run, False
             row = c.execute("SELECT data FROM projects WHERE id=?", (project_id,)).fetchone()
@@ -68,8 +68,14 @@ class DraftRunStore(ProjectStore):
             candidate.draft_provenance = {}
             candidate.feedback = candidate.feedback_source = candidate.reviewed_content = None
             candidate.screenplay_reviews = []
+            if revision_instructions.strip():
+                candidate.constraints = [*candidate.constraints, revision_instructions]
+                candidate.clarifications = dict(project.creator_answers())
+                candidate.analysis = None
+                candidate.answers = []
             run = dict(id=run_id, project_id=project_id, source_revision=revision,
                 source_content=source_key(project), config=config, owner=owner,
+                revision_instructions=revision_instructions, affected_scene_ids=[s.id for s in project.screenplay.scenes] if revision_instructions and project.screenplay else [],
                 status="running", step="prepare", sending=False, cancel_requested=False,
                 created_at=now(), updated_at=now(), candidate_revision=0,
                 completed_scenes=0, total_scenes=0, error=None, review_error=None,
@@ -125,7 +131,7 @@ class DraftRunStore(ProjectStore):
                 archive_clarifications(p)
             archive_scene_outline(p)
             archive_screenplay(p)
-            for key in ("analysis", "answers", "clarifications", "draft", "draft_provenance", "scene_outline", "screenplay"):
+            for key in ("constraints", "analysis", "answers", "clarifications", "draft", "draft_provenance", "scene_outline", "screenplay"):
                 setattr(p, key, getattr(draft, key))
             p.screenplay_reviews.extend(draft.screenplay_reviews)
             p.feedback = p.feedback_source = p.reviewed_content = None

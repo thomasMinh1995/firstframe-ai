@@ -300,3 +300,7 @@ html:has(.feedback-popup[open]) { overflow: hidden; }
 .draft-run-panel > label { display:grid; gap:8px; margin:16px 0; }
 .draft-run-panel progress { width:100%; accent-color:var(--accent); }
 .draft-run-panel details { margin:12px 0; }
+.story-draft-editor:has(> .review-side-panel) { display:grid; grid-template-columns:minmax(0,1fr) minmax(280px,360px); gap:20px; }
+.story-draft-editor:has(> .review-side-panel) > :not(.review-side-panel) { grid-column:1; }
+.story-draft-editor > .review-side-panel { grid-column:2; grid-row:1 / span 8; align-self:start; position:sticky; top:90px; max-height:calc(100dvh - 110px); overflow:auto; }
+@media(max-width:1000px) { .story-draft-editor:has(> .review-side-panel) { display:block; } }

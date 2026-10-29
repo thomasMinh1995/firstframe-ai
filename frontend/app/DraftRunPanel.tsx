@@ -44,6 +44,7 @@ function RunCandidate({id,onStatus,...props}:Props&{id:string;onStatus:(run:Draf
    {run&&<>
      <p role="status"><strong>{statusLabels[run.status]}</strong> · {stepLabels[run.step]??run.step} · Đã lưu {run.completed_scenes}/{run.total_scenes||'…'} cảnh</p>
      {run.total_scenes>0&&<progress aria-label="Số cảnh đã lưu" max={run.total_scenes} value={run.completed_scenes}/>}
+     {run.revision_instructions&&<p className="preserve-lines">Yêu cầu thay đổi cấu trúc: {run.revision_instructions} · {run.affected_scene_ids?.length??0} cảnh nguồn có thể bị ảnh hưởng. Bản đang viết được giữ nguyên cho đến khi bạn nhận candidate.</p>}
      <p>Tiến độ được giữ trên máy chủ. Mở lại trang không gọi AI lần nữa.</p>
      {run.error&&<p role="alert" className="error">{run.error}</p>}
      {run.review_error&&<p className="form-message">Bản nháp vẫn đọc được. Góp ý chưa hoàn tất: {run.review_error}</p>}
@@ -60,7 +61,7 @@ function RunCandidate({id,onStatus,...props}:Props&{id:string;onStatus:(run:Draf
    {error&&<p role="alert" className="error">{error}</p>}
    {state.local&&<p role="status">{state.saving?'Đang lưu bản nháp riêng…':state.error?'Chưa xác nhận lưu bản nháp riêng':dirty?'Chờ tự lưu bản nháp riêng':'Bản nháp riêng đã lưu'}</p>}
    {state.error&&<div role="alert"><p>{state.error}</p><button type="button" onClick={()=>void queue.flush(true).catch(e=>setError(String(e)))}>Thử lưu lại bản nháp</button><button type="button" disabled={state.saving} onClick={()=>{if(window.confirm('Mở lại sẽ bỏ phần candidate chưa xác nhận lưu. Hãy tải bản sao trước nếu cần giữ.'))void queue.reopen().then(()=>setError('')).catch(e=>setError(String(e)))}}>Mở lại bản nháp đã lưu</button><button type="button" onClick={()=>{const blob=new Blob([JSON.stringify(state.local,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`draft-${id}.json`;a.click();URL.revokeObjectURL(url)}}>Tải bản sao bản nháp</button></div>}
-   {run?.status==='needs_input'&&edited?.analysis&&<ClarificationConversation creatingScreenplay summary={edited.analysis.summary} questions={edited.analysis.missing_information} answers={edited.answers}
+   {run?.status==='needs_input'&&edited?.analysis&&<ClarificationConversation idPrefix={`run-${id}-`} creatingScreenplay summary={edited.analysis.summary} questions={edited.analysis.missing_information} answers={edited.answers}
       onEditBrief={()=>void action(async()=>{setRun(await runRequest(path+'/cancel','POST'));const input=document.getElementById('idea');revealWorkspaceTarget(input);input?.focus();input?.scrollIntoView({block:'center'})})}
       aiSuggestions={edited.analysis.ai_suggestions} idea={edited.idea} constraints={edited.constraints}
       onChange={(i,v)=>{const p={...edited,answers:edited.answers.map((a,j)=>j===i?v:a)};queue.edit(p)}}

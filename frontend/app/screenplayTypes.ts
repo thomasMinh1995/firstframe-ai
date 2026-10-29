@@ -8,8 +8,9 @@ export type ScreenplaySelectionInput = {request_id:string;source_version_id:stri
 export function unfinishedScriptScenes(script:Screenplay):ScriptScene[] {
   return script.scenes.filter(s=>!s.heading.trim()||!s.blocks.length||s.blocks.some(b=>!b.text.trim()||(b.kind==='dialogue'&&!b.speaker.trim())));
 }
-export type SceneWritingInput = {request_id:string;target_scene_id:string;instructions:string};
+export type SceneWritingInput = {request_id:string;target_scene_id:string;instructions:string;scope?:"scene"|"blocks";block_ids?:string[];review_id?:string;note_id?:string};
 export type ScreenplayProposal = {
+  scope?:"scene"|"blocks";block_ids?:string[];review_id?:string|null;note_id?:string|null;applied_scene?:ScriptScene|null;undone_revision?:number|null;
   id:string;created_at:string;source_revision:number;source_content:string;source_screenplay:Screenplay;source_outline:SceneOutline|null;
   target_scene_id:string;instructions:string;status:'pending'|'ready'|'failed'|'applied'|'discarded';
   scene:ScriptScene|null;preview_scene:ScriptScene|null;provider:string|null;model:string|null;parameters:Record<string,unknown>;

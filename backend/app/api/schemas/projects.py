@@ -266,6 +266,12 @@ def screenplay_content(script: Screenplay) -> dict:
 
 
 class ScreenplayProposal(BaseModel):
+    scope: Literal["scene", "blocks"] = "scene"
+    block_ids: list[SceneId] = Field(default_factory=list)
+    review_id: SceneId | None = None
+    note_id: SceneId | None = None
+    applied_scene: ScriptScene | None = None
+    undone_revision: int | None = None
     id: SceneId
     created_at: str
     source_revision: int
