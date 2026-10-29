@@ -24,8 +24,10 @@ function WorkflowCard({item,index,candidate,onRead}:{item:WorkflowItem;index:num
  const sceneIndex=candidate?.project.screenplay?.scenes.findIndex(s=>s.id===item.scene_id)??-1;
  const result=cardResult(item,candidate),row=Math.floor(index/3),col=row%2?3-index%3:1+index%3;
  return <li className={`draft-workflow-card is-${item.status}`} style={{gridRow:row+1,gridColumn:col}}>
-  <h3>{workflowLabels[item.kind]}{item.kind==='write'&&sceneIndex>=0&&` ${sceneIndex+1}`}{item.status==='completed'&&<span className="draft-workflow-check" aria-hidden="true">✓</span>}</h3>
-  <span className="draft-workflow-number" aria-hidden="true">{index+1}</span>
+  <div className="draft-workflow-heading">
+   <span className="draft-workflow-badge" aria-hidden="true"><span className="draft-workflow-number">{index+1}</span>{item.status==='completed'&&<span className="draft-workflow-check">✓</span>}</span>
+   <h3>{workflowLabels[item.kind]}{item.kind==='write'&&sceneIndex>=0&&` ${sceneIndex+1}`}</h3>
+  </div>
   <p className="draft-workflow-status">{workflowStatusLabels[item.status]}</p>
   {result&&<p className="draft-workflow-preview">{result.text.slice(0,180)}{result.text.length>180?'…':''}</p>}
   {item.children.length>0&&<ul>{item.children.map((child,i)=><li key={child.id}>Cảnh {i+1} · {workflowStatusLabels[child.status]}</li>)}</ul>}
