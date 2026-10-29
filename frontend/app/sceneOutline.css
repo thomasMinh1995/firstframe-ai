@@ -81,12 +81,12 @@
 .story-workspace .scene-outline h2 { font: 400 25px/1.4 Georgia, serif; color: #35442c; }
 .story-workspace .scene-outline button, .story-workspace .scene-popover button { font-size: 12px; padding: 10px 14px; }
 .story-workspace .scene-outline .storage-note, .story-workspace .scene-popover .storage-note { font-size: 12px; line-height: 1.8; }
-.story-workspace .scene-help h4 { font-size: 12px; font-weight: 500; color: #667758; margin: 8px 0; }
+.story-workspace .scene-help h4 { font-size: 12px; font-weight: 500; color: var(--muted); margin: 8px 0; }
 .story-workspace .scene-outline .scene-info { background: transparent; padding: 4px; font-size: 17px; color: var(--accent); }
 .story-workspace .scene-source, .story-workspace .scene-history, .story-workspace .scene-handoff {
   border: 1px solid var(--line); border-radius: 8px; padding: 15px 18px; background: #f4f5ed;
 }
-.story-workspace .scene-source > summary, .story-workspace .scene-history > summary, .story-workspace .scene-handoff > summary { font-size: 12px; color: #667758; margin: 0; }
+.story-workspace .scene-source > summary, .story-workspace .scene-history > summary, .story-workspace .scene-handoff > summary { font-size: 12px; color: var(--muted); margin: 0; }
 .story-workspace .scene-source[open] > summary, .story-workspace .scene-history[open] > summary, .story-workspace .scene-handoff[open] > summary { margin-bottom: 16px; }
 .story-workspace .scene-source p, .story-workspace .scene-handoff p { font-size: 14px; line-height: 1.8; }
 .story-workspace .scene-start, .story-workspace .scene-suggestions { border: 1px solid var(--line); border-radius: 10px; padding: 20px; background: var(--soft); }
@@ -95,7 +95,7 @@
 .story-workspace .scene-suggestions textarea { min-height: 80px; }
 .story-workspace .scene-start select, .story-workspace .scene-suggestions input, .story-workspace .scene-suggestions select, .story-workspace .scene-suggestions textarea,
 .story-workspace .scene-field input, .story-workspace .scene-field textarea, .story-workspace .scene-choice textarea { font-size: 14px; font-weight: 400; line-height: 1.8; }
-.story-workspace .scene-outline .story-draft-caption { color: #667758; }
+.story-workspace .scene-outline .story-draft-caption { color: var(--muted); }
 .story-workspace .scene-path { gap: 48px 28px; }
 .story-workspace .scene-path > li { position: relative; padding: 25px 17px 16px; border-radius: 14px; background: #fffffd; display: flex; flex-direction: column; }
 .story-workspace .scene-outline .scene-select { padding: 0; color: var(--foreground); background: transparent; font-size: 14px; font-weight: 400; line-height: 1.7; border-radius: 6px; }

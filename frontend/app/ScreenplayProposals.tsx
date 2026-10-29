@@ -15,9 +15,9 @@ export function ScreenplayProposals({project,scene,canUse,onWrite,onInspect,onPr
   const all=project.screenplay_proposals??[];
   const uncertain=sent!==null&&!all.some(p=>p.id===sent);
   return <section className="screenplay-proposals" aria-label="FirstFrame viết thử một cảnh">
-    <h3>FirstFrame viết thử cảnh đang chọn</h3>
-    <p>AI chỉ đề xuất tiêu đề và nội dung cho một cảnh. Lưu mọi sửa đang chờ trước khi gửi; bạn đọc, chỉnh rồi tự quyết định dùng hay bỏ.</p>
-    <label htmlFor={`${id}-request`}>Bạn muốn viết thử theo hướng nào? · tùy chọn</label><textarea id={`${id}-request`} maxLength={2000} value={instructions} onChange={e=>{setInstructions(e.target.value);setResolved(null)}}/>
+    <h3>Phương án sửa cảnh</h3>
+    <p>Chọn cả cảnh hoặc các khối cần sửa. AI giữ phương án riêng để bạn đọc, chỉnh và quyết định dùng hay bỏ.</p>
+    <label htmlFor={`${id}-request`}>Bạn muốn sửa điều gì? · tùy chọn</label><textarea id={`${id}-request`} maxLength={2000} value={instructions} onChange={e=>{setInstructions(e.target.value);setResolved(null)}}/>
     <label>Phạm vi sửa<select value={scope} onChange={e=>{setScope(e.target.value as 'scene'|'blocks');setResolved(null)}}><option value="scene">Cảnh đang chọn</option><option value="blocks">Chỉ các khối được chọn</option></select></label>
     {scope==='blocks'&&<fieldset><legend>Chọn khối được phép thay đổi</legend>{scene.blocks.map((b,i)=><label key={b.id}><input type="checkbox" checked={blocks.includes(b.id)} onChange={e=>{setBlocks(ids=>e.target.checked?[...ids,b.id]:ids.filter(id=>id!==b.id));setResolved(null)}}/>Khối {i+1} · {b.text.slice(0,70)}</label>)}</fieldset>}
     <button type="button" className="secondary" onClick={()=>{setError('');void request(`/${project.id}/screenplay-revision-target`,'POST',{revision:project.revision,request_id:crypto.randomUUID(),target_scene_id:scene.id,instructions}).then(r=>setResolved(r as typeof resolved)).catch(e=>setError(String(e)))}}>Xem phạm vi sửa</button>

@@ -54,11 +54,11 @@ FirstFrame's handoff ends at screenplay export. Casting, staging, shooting, edit
 
 Feature-film and television **screenwriting** may be explored after the short-film journey is validated and users demonstrate a need. This is a conditional long-term direction, not an MVP commitment; the handoff would still end at screenplay export.
 
-See the [Vietnam first-screenplay and MVP demo plan](docs/plans/vietnam-first-screenplay-mvp.md) for priorities, acceptance criteria, and pilot design. This update is documentation only; proposed demo improvements are not implemented by it.
+See the [Vietnam first-screenplay and MVP demo plan](docs/plans/vietnam-first-screenplay-mvp.md) for priorities, acceptance criteria, and pilot design. That plan retains the pilot and acceptance requirements; technical implementation does not establish a passing pilot.
 
 ## Current MVP
 
-- Optional six-step onboarding tour with practice breaks, replay, and browser-local progress; tour navigation preserves unsaved text and makes no AI or project-write requests
+- Six-step AI-first onboarding (project, idea, automatic draft, review, PDF, saving), with practice breaks, skip/replay, preserved legacy progress and no AI/project writes from tour navigation
 - Local SQLite project storage, debounced autosave with IME support, project selection, and optional manual save controls
 - Up to three clarification questions before story-plan generation, with an explicit option to defer a decision
 - Editable story plans and feedback tied to the exact reviewed content
@@ -90,7 +90,9 @@ Source attribution is stored by the server for story-plan fields, scene fields a
 
 The writing workspace at `/` uses the card UI for every project. Story prose is split into short cards at existing sentence/paragraph boundaries, with a soft 200-character limit at word boundaries. A curved S path runs across three columns on desktop, two at medium widths, and one on mobile. Card edits replace only the corresponding text in the original section, preserving other cards and separators; saving/review still uses the original draft format. There is no view switch; old `workspace=story` or `workspace=classic` links open the same UI.
 
-Clarification is a guided conversation: one answer editor at a time, 5–6 initial questions, and follow-up batches of up to three new questions, up to 20 in the current question set. Prior answers remain visible and editable; **Tiếp tục** and **Để quyết định sau** update choices, which autosave without calling AI. **Hỏi thêm từ câu trả lời của tôi** saves and requests follow-up questions. **Xem lại các lựa chọn** opens a recap; only **Đồng ý, tạo bản phát triển** starts planning. Editing a choice requires reviewing and confirming again. Planning displays three groups with eight required substeps, using actual backend progress events and preserving optional/repeated audit steps. The new `/clarify` and `/clarify/stream` endpoints support this conversation; legacy `/analyze` retains its existing behavior. Project fields and revision requests retain their existing shape, with answer validation extended from 3 to 20.
+The main workspace has three stages: **Ý tưởng → Bản nháp & review → Hoàn tất**. Manual story-plan, scene-outline and run tools remain under **Mở chi tiết**. Editors stay mounted across navigation, so changing stages keeps pending text. Saved comparisons open on demand; the PDF reader has its own final stage. Completed operation details collapse while failures stay open. Writing surfaces remain opaque; navigation uses restrained glass with solid/reduced-transparency fallbacks and reduced-motion rules.
+
+Clarification only asks for missing information; unanswered choices stay open. Automatic runs create a separate candidate, autosave its answers/text, and wait for explicit adoption. The six-step tour follows this flow and the selected-PDF export. Legacy tour v2 records migrate by artifact availability; dismissed/completed tours stay dismissed/completed. Help can be resumed or replayed without generating AI work.
 
 **Xong** closes a card editor; **Hủy** or Escape restores only that card's text when opened. Autosave keeps the card editor and focus open. Cancel restores that card to the text present when it was opened; that restoration also autosaves. Save or download a JSON backup before accepting a reload: unsaved text lives in memory. The user approved the Idea → Clarification → Story plan UI on 24 October 2026. The initial approval covered the first three stages; current scene-outline and screenplay editors have their own saved sources and histories. See the [approved scope](docs/plans/approved-story-workspace.md) and [UI checks](docs/testing/approved-story-workspace.md).
 
@@ -403,3 +405,5 @@ it was not enabled because author-intent and issue/suggestion errors remained.
 `POST /api/projects/{id}/draft-runs` starts or recovers an idempotent `request_id` and project `revision`. GET list/status/candidate reads never invoke AI. Candidate PUT uses its own revision and optional save ID. Continue, cancel and adopt are explicit POST actions; adoption requires both project and candidate revisions.
 
 Runs use the project SQLite database and a local two-thread executor. Restart marks previous-process running jobs interrupted. A received model result can be replayed from storage; a sent request without a stored result blocks continuation. Cancel stops future calls and keeps late results. There is no multi-worker/host recovery guarantee. See `docs/testing/phase3-draft-runs-2026-10-29.md` for verification and limits.
+
+Phase 6 local checks and the remaining release gates are recorded in [workflow acceptance](docs/testing/phase6-workflow-acceptance-2026-10-29.md). A single local-model smoke produced an exportable screenplay but hit the existing context guard before screenplay review; this is retained as a limitation, not counted as a successful full AI-review round. Real-device/reader acceptance remains pending.

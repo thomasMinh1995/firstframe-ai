@@ -1,6 +1,6 @@
 # Roadmap
 
-**Implementation update — 29 October 2026:** [AI-first workflow phases 1–5](plans/ai-first-workflow.md) now have local technical verification, including automatic short-script drafting, controlled scene/block revision and selected-screenplay PDF export ([phase 5 evidence](testing/phase5-screenplay-pdf-2026-10-29.md)). The older delivery sequence below records the prior roadmap; its pilot/PO acceptance requirements are still pending. Story-plan PDF issue #5 is a separate export contract and is not closed by screenplay export. Final UI/tour work and QA-01 remain in phase 6.
+**Implementation update — 29 October 2026:** [AI-first workflow phases 1–6](plans/ai-first-workflow.md) now have local technical verification, including automatic short-script drafting, controlled scene/block revision and selected-screenplay PDF export ([phase 5 evidence](testing/phase5-screenplay-pdf-2026-10-29.md)). The older delivery sequence below records the prior roadmap; its pilot/PO acceptance requirements are still pending. Story-plan PDF issue #5 is a separate export contract and is not closed by screenplay export. Phase 6 UI/tour work is implemented locally; [QA-01 evidence](testing/phase6-workflow-acceptance-2026-10-29.md) records technical passes and remaining release gates. It does not replace the pilot/PO decision.
 
 ## Product Direction
 
