@@ -50,8 +50,8 @@ const {chromium}=require('playwright'),assert=require('node:assert/strict'),fs=r
  // Keeping a new image from the new M2 does not silently reuse the old unselected image.
  const other=uuid();p=await req(url+'/scene-sketches','POST',{revision:p.revision,request_id:other,scene_id:first,instructions:''});p=await req(url+'/scene-sketches/'+other+'/keep','POST',{revision:p.revision});
  await page.reload();await nav.getByRole('button').first().click();await sourcePanel.locator(':scope > summary').click();
- assert.equal(await nav.locator('img').count(),0);await nav.getByText('Ảnh M2 khác nguồn',{exact:true}).waitFor();
- await sourcePanel.locator('.screenplay-sketch-other > summary').click();await sourcePanel.getByText(/Ảnh này không khớp nguồn M3/).waitFor();
+ assert.equal(await nav.locator('img').count(),0);await nav.getByText('Ảnh dàn cảnh khác nguồn',{exact:true}).waitFor();
+ await sourcePanel.locator('.screenplay-sketch-other > summary').click();await sourcePanel.getByText(/Ảnh này không khớp nguồn kịch bản/).waitFor();
  assert.ok((await sourcePanel.locator('img').getAttribute('src')).includes(other));
  // A missing asset is a neutral fallback; writing and saving remain available.
  await page.route('**/scene-sketches/*/image',r=>r.fulfill({status:404,body:'missing'}));await page.reload();await nav.getByRole('button').first().click();await sourcePanel.locator(':scope > summary').click();await sourcePanel.locator('.screenplay-sketch-other > summary').click();

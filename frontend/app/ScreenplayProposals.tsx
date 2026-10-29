@@ -42,7 +42,7 @@ function Proposal({proposal:p,value,current,eligible,selected,onPreview,onUse,on
       <p>Model: {p.model??'chưa xác định'} · prompt {p.prompt_version}. Đây là nguồn tại lúc yêu cầu.</p>
       <p className="preserve-lines">{p.source_screenplay.source_outline.source.context.idea}</p>
       {p.source_screenplay.source_outline.source.context.constraints.map((c,i)=><p key={i} className="preserve-lines">{c}</p>)}
-      {p.source_screenplay.source_outline.scenes.map(s=><p key={s.id} className="preserve-lines">M2 · {s.title}: {s.action}</p>)}
+      {p.source_screenplay.source_outline.scenes.map(s=><p key={s.id} className="preserve-lines">Dàn cảnh · {s.title}: {s.action}</p>)}
       {p.source_screenplay.scenes.map(s=><div key={s.id}><h4>{s.heading}</h4>{s.blocks.map(b=><p key={b.id} className="preserve-lines">{b.speaker&&<strong>{b.speaker}: </strong>}{b.text}</p>)}</div>)}
       <p className="preserve-lines">Yêu cầu thêm: {p.instructions||'Không có'}</p>
     </details>

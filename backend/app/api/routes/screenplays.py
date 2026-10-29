@@ -7,6 +7,7 @@ from app.api.routes import projects
 from app.api.schemas.projects import ProjectResponse, RevisionRequest, Screenplay, ScreenplayProposal, ScreenplaySelection
 from app.api.schemas.screenplays import ScriptScene, StartScreenplay, SceneWritingRequest, SelectScreenplay
 from app.api.schemas.scenes import SceneId
+from app.api.schemas.provenance import TextProvenance
 
 from app.application.dataset import capture_workflow, recording_provider
 from app.application.progress import progress_step
@@ -63,13 +64,17 @@ def start_screenplay(project_id: str, request: StartScreenplay):
         if project.revision != request.revision:
             raise projects.ProjectConflict
         if not project.scene_handoff:
-            raise HTTPException(422, "Cần lưu tên và diễn tiến của mọi cảnh M2 trước khi bắt đầu M3.")
+            raise HTTPException(422, "Cần lưu tên và diễn tiến của mọi cảnh trong dàn cảnh trước khi bắt đầu viết kịch bản.")
         projects.archive_screenplay(project)
         project.screenplay = Screenplay(
             id=request.request_id, version=1, source_revision=project.revision,
             source_outline=project.scene_outline.model_copy(deep=True),
             scenes=[ScriptScene(id=str(uuid4()), source_scene_id=s.id, heading=s.title)
                     for s in project.scene_outline.scenes])
+        project.screenplay.provenance = {
+            f"script:{scene.id}:heading": project.scene_outline.provenance.get(
+                f"m2:{scene.source_scene_id}:title", TextProvenance())
+            for scene in project.screenplay.scenes}
         return projects.save_project(project)
 
 

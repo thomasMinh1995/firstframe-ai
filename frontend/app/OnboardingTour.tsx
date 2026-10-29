@@ -85,7 +85,7 @@ function copy(step: TourStep, p: Props) {
     case "draft": return "Đọc và sửa trực tiếp trên từng card.";
     case "outline": return "Chia Story plan thành các cảnh. Tự viết trước; AI là tùy chọn.";
     case "script": return "Chọn một cảnh để viết và lưu kịch bản.";
-    case "save": return "Lưu thay đổi trước khi rời đi hoặc mở lại dự án.";
+    case "save": return "Thay đổi tự lưu khi dừng gõ. Kiểm tra trạng thái Đã lưu trước khi rời đi.";
   }
 }
 
@@ -94,10 +94,10 @@ function instructions(step: TourStep, hasDraft: boolean): string[] {
     case "new-project": return ["Chọn Dự án mới để bắt đầu."];
     case "idea": return ["Viết ý tưởng, rồi chọn Cùng làm rõ ý tưởng."];
     case "choices": return ["Trả lời hoặc để quyết định sau."];
-    case "draft": return [hasDraft ? "Sửa từng card; Xong để giữ, Lưu thay đổi để lưu." : "Story plan sẽ xuất hiện sau bước Làm rõ."];
+    case "draft": return [hasDraft ? "Sửa từng card; thay đổi tự lưu khi bạn dừng gõ." : "Story plan sẽ xuất hiện sau bước Làm rõ."];
     case "outline": return ["Chọn nguồn, thêm cảnh, rồi lưu dàn cảnh."];
     case "script": return ["Chọn cảnh, viết, rồi lưu kịch bản."];
-    case "save": return ["Lưu bản đang sửa trước khi đóng hoặc chuyển dự án."];
+    case "save": return ["Chờ trạng thái Đã lưu trước khi đóng trang. Tùy chọn bản lưu có Lưu thay đổi và Tải bản sao JSON."];
   }
 }
 
@@ -210,7 +210,7 @@ export function OnboardingTour(props: Props) {
         {record.stepId !== "save" && <button className={next ? "secondary" : ""} onClick={practice}>Thực hành</button>}
         {next && <button onClick={() => tour.navigate(next)}>Tiếp</button>}
         {record.stepId === "save" && <button onClick={() => {
-          tour.complete(); focusAfter(document.querySelector('[data-tour-action="save"]:enabled') ? '[data-tour-action="save"]' : "#save-status");
+          tour.complete(); focusAfter("#save-status");
         }}>Hoàn tất hướng dẫn</button>}
       </div>
       <button className="tour-skip" onClick={dismiss}>Bỏ qua hướng dẫn</button>

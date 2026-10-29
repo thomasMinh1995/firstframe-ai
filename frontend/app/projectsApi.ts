@@ -1,5 +1,6 @@
 import type { GenerateResponse, StoryPlanSection } from "./apiClient";
 import { progressCopy } from "./progressState";
+import {isProvenanceMap} from './provenance';
 import type { UiLanguage } from "./language";
 import type { ResponseLanguage } from "./language";
 import { stagingLabels, type Scene, type SceneOutline, type SceneVersion, type SceneHandoff, type SceneProposal, type SceneSuggestionInput, type StagingIdea, type StagingUse, type SceneSketch } from "./sceneTypes";
@@ -33,6 +34,8 @@ export type PlanGeneration = {
   applied_revision: number | null; feedback: Feedback | null; feedback_source: FeedbackSource | null;
 };
 export type Project = {
+  last_save_id?: string | null;
+  last_save_revision?: number | null;
   response_language: ResponseLanguage;
   id: string; revision: number; updated_at: string; title: string; idea: string;
   constraints: string[]; analysis: (GenerateResponse["analysis"] & { artifact_id: string }) | null; answers: string[];
@@ -115,6 +118,10 @@ export async function streamProjectOperation(
   }
 }
 
+export class ProjectRequestError extends Error {
+  constructor(message: string, public status: number) {super(message);}
+}
+
 async function request(path: string, method = "GET", body?: unknown): Promise<unknown> {
   let response: Response;
   try {
@@ -127,9 +134,9 @@ async function request(path: string, method = "GET", body?: unknown): Promise<un
   }
   const data: unknown = await response.json().catch(() => null);
   if (!response.ok) {
-    throw new Error(isRecord(data) && typeof data.detail === "string" ? data.detail
+    throw new ProjectRequestError(isRecord(data) && typeof data.detail === "string" ? data.detail
       : response.status === 422 ? "Kiểm tra nội dung: tên và các phần không được trống hoặc vượt giới hạn."
-        : "Không hoàn tất được thao tác. Bản đang sửa vẫn được giữ; hãy thử lại.");
+        : "Không hoàn tất được thao tác. Bản đang sửa vẫn được giữ; hãy thử lại.", response.status);
   }
   return data;
 }
@@ -178,8 +185,9 @@ export function sameEditableContent(a: Project, b: Project): boolean {
     .map(x=>[x.id,x.status==='applied'||x.status==='discarded'?x.status:null,x.preview_scene]);
   const reviewDecisions=(p:Project)=>(p.screenplay_reviews??[]).filter(r=>r.status==='discarded'||r.notes.some(n=>n.assessment!==null)).map(r=>[r.id,r.status==='discarded',r.notes.map(n=>[n.id,n.assessment])]);
   const selections=(p:Project)=>(p.screenplay_selections??[]).map(s=>s.id);
-  return JSON.stringify([selections(a),reviewDecisions(a),scriptDecisions(a),left, previews(a), ideaEdits(a), ideaDecisions(a), imageDecisions(a)])
-    === JSON.stringify([selections(b),reviewDecisions(b),scriptDecisions(b),right, previews(b), ideaEdits(b), ideaDecisions(b), imageDecisions(b)]);
+  const questions=(p:Project)=>p.analysis?.missing_information??[];
+  return JSON.stringify([questions(a),selections(a),reviewDecisions(a),scriptDecisions(a),left, previews(a), ideaEdits(a), ideaDecisions(a), imageDecisions(a)])
+    === JSON.stringify([questions(b),selections(b),reviewDecisions(b),scriptDecisions(b),right, previews(b), ideaEdits(b), ideaDecisions(b), imageDecisions(b)]);
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -282,6 +290,7 @@ function isScenes(v: unknown): v is Scene[] {
 }
 function isSceneOutline(v: unknown): v is SceneOutline {
   return isRecord(v) && uuid(v.id) && positive(v.version) && isScenes(v.scenes) && isRecord(v.source)
+    && isProvenanceMap(v.provenance) && isProvenanceMap(v.source.draft_provenance)
     && uuid(v.source.id) && Number.isInteger(v.source.project_revision) && Number(v.source.project_revision) >= 0
     && typeof v.source.version_id === "string" && isDraft(v.source.draft) && isAuthorContext(v.source.context)
     && ["auto", "vi", "en"].includes(String(v.source.response_language));
@@ -348,7 +357,7 @@ function isScriptScene(v:unknown):v is ScriptScene {
     &&Array.from(v.heading).length+v.blocks.reduce((n,b)=>n+Array.from(b.text).length+Array.from(b.speaker).length,0)<=200000;
 }
 function isScreenplay(v: unknown): v is Screenplay {
-  if(!isRecord(v)||!uuid(v.id)||!positive(v.version)||!Number.isInteger(v.source_revision)||Number(v.source_revision)<0
+  if(!isRecord(v)||!isProvenanceMap(v.provenance)||!uuid(v.id)||!positive(v.version)||!Number.isInteger(v.source_revision)||Number(v.source_revision)<0
     ||!isSceneOutline(v.source_outline)||!Array.isArray(v.scenes)||!v.scenes.length||v.scenes.length>60||!v.scenes.every(isScriptScene))return false;
   const scenes=v.scenes,outline=v.source_outline;
   const ids=scenes.flatMap(s=>[s.id,...s.blocks.map(b=>b.id)]);
@@ -381,9 +390,11 @@ function isScreenplayReview(v:unknown):v is ScreenplayReview {
     ||!isRecord(v.parameters)||(v.provider!==null&&typeof v.provider!=='string')||(v.model!==null&&typeof v.model!=='string')
     ||(v.error!==null&&typeof v.error!=='string')||!Array.isArray(v.sources)||v.sources.length>1500||!Array.isArray(v.notes)||v.notes.length>6)return false;
   const script=v.source_screenplay;
+  const legacy = v.prompt_version !== 'screenplay-review-v5-provenance'
+    && v.sources.every(s=>isRecord(s)&&s.provenance==null);
   if(!v.sources.every(s=>isRecord(s)&&typeof s.id==='string'&&typeof s.label==='string'&&typeof s.text==='string'
     &&['screenplay','author_choice','context'].includes(String(s.category))&&['text','speaker','heading','choice','context'].includes(String(s.field))
-    &&(s.scene_id===null||uuid(s.scene_id))&&(s.block_id===null||uuid(s.block_id))&&reviewSourceMatches(script,s as ReviewSource))
+    &&(s.scene_id===null||uuid(s.scene_id))&&(s.block_id===null||uuid(s.block_id))&&reviewSourceMatches(script,s as ReviewSource,legacy))
     ||new Set(v.sources.map(s=>s.id)).size!==v.sources.length)return false;
   return v.notes.every(n=>isRecord(n)&&uuid(n.id)&&['intent_mismatch','craft','uncertain'].includes(String(n.kind))
     &&typeof n.observation==='string'&&!!n.observation.trim()&&Array.from(n.observation).length<=2000
@@ -392,5 +403,5 @@ function isScreenplayReview(v:unknown):v is ScreenplayReview {
     &&(n.assessment===null||['helpful','misleading','uncertain','dismissed'].includes(String(n.assessment)))
     &&Array.isArray(n.evidence)&&n.evidence.length>=1&&n.evidence.length<=4&&n.evidence.every(e=>isRecord(e)&&typeof e.source_id==='string'
       &&typeof e.quote==='string'&&!!e.quote.trim()&&Array.from(e.quote).length<=1000)
-    &&reviewNoteSupported(v as ScreenplayReview,n as ReviewNote))&&new Set(v.notes.map(n=>n.id)).size===v.notes.length;
+    &&reviewNoteSupported(v as ScreenplayReview,n as ReviewNote,legacy))&&new Set(v.notes.map(n=>n.id)).size===v.notes.length;
 }

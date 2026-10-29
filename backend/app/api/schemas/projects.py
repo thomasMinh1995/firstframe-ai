@@ -10,12 +10,14 @@ from pydantic import (
     computed_field,
     field_validator,
     model_validator,
+    model_serializer,
 )
 
 from app.api.schemas.story import AnalysisResponse, EvaluationResponse
 from app.api.schemas.scenes import Scene, SceneId, SceneOutlineEdit, SceneText, StagingIdea, StagingSource, StagingUse
 from app.application.language import ResponseLanguage
 from app.application.clarification import MAX_CHOICES
+from app.api.schemas.provenance import TextProvenance
 
 from app.api.schemas.screenplays import ScreenplayEdit, ScriptScene, ReviewSource, SavedReviewNote
 
@@ -23,7 +25,7 @@ ShortText = Annotated[str, Field(max_length=2000)]
 
 
 class DraftSection(BaseModel):
-    model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
+    model_config = ConfigDict(extra="forbid")
 
     title: str = Field(min_length=1, max_length=200)
     purpose: str = Field(max_length=2000)
@@ -31,7 +33,7 @@ class DraftSection(BaseModel):
 
 
 class StoryDraft(BaseModel):
-    model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
+    model_config = ConfigDict(extra="forbid")
 
     title: str = Field(max_length=200)
     logline: str = Field(max_length=2000)
@@ -45,6 +47,10 @@ class RevisionRequest(BaseModel):
 
 
 class ProjectUpdate(RevisionRequest):
+    save_mode: Literal["checkpoint", "autosave"] = "checkpoint"
+    edit_session_id: SceneId | None = None
+    save_id: SceneId | None = None
+    restore_draft_id: str | None = Field(default=None, max_length=100)
     response_language: ResponseLanguage = "auto"
     title: str = Field(min_length=1, max_length=200)
     idea: str = Field(max_length=5000)
@@ -171,6 +177,7 @@ class ClarificationVersion(BaseModel):
 
 class DraftVersion(ClarificationVersion):
     draft: StoryDraft
+    draft_provenance: dict[str, TextProvenance] = Field(default_factory=dict)
     feedback: EvaluationResponse | None = None
     feedback_source: FeedbackSource | None = None
 
@@ -217,15 +224,39 @@ class ScenePlanSource(BaseModel):
     draft: StoryDraft
     context: AuthorContext
     response_language: ResponseLanguage
+    draft_provenance: dict[str, TextProvenance] = Field(default_factory=dict)
+
+    @model_serializer(mode="wrap")
+    def serialize(self, handler):
+        data = handler(self)
+        if not self.draft_provenance:
+            data.pop("draft_provenance", None)
+        return data
 
 
 class SceneOutline(SceneOutlineEdit):
     source: ScenePlanSource
+    provenance: dict[str, TextProvenance] = Field(default_factory=dict)
+
+    @model_serializer(mode="wrap")
+    def serialize(self, handler):
+        data = handler(self)
+        if not self.provenance:
+            data.pop("provenance", None)
+        return data
 
 
 class Screenplay(ScreenplayEdit):
     source_revision: int
     source_outline: SceneOutline
+    provenance: dict[str, TextProvenance] = Field(default_factory=dict)
+
+    @model_serializer(mode="wrap")
+    def serialize(self, handler):
+        data = handler(self)
+        if not self.provenance:
+            data.pop("provenance", None)
+        return data
 
 
 def screenplay_content(script: Screenplay) -> dict:
@@ -339,6 +370,11 @@ class SceneSketch(BaseModel):
 
 
 class ProjectResponse(BaseModel):
+    last_save_id: SceneId | None = None
+    last_save_revision: int | None = None
+    last_save_fingerprint: str | None = None
+    edit_sessions: dict[str, str] = Field(default_factory=dict)
+    draft_provenance: dict[str, TextProvenance] = Field(default_factory=dict)
     response_language: ResponseLanguage = "auto"
     id: str
     revision: int = 0
@@ -402,7 +438,7 @@ class ProjectResponse(BaseModel):
             return False
         source, current = self.screenplay.source_outline, self.scene_outline
         # Version/revision metadata can change without changing source content.
-        return (source.id == current.id and source.scenes == current.scenes
+        return (source.id == current.id and source.scenes == current.scenes and source.provenance == current.provenance
                 and source.source == current.source and self.scene_source_is_current)
 
     @computed_field

@@ -15,10 +15,10 @@ type Tab = "content" | "staging" | "sketch";
 const tabs: [Tab, string][] = [["content", "Nội dung"], ["staging", "Dàn cảnh"], ["sketch", "Phác hình"]];
 const groups = stagingGroups;
 
-export function SceneOutlineEditor({ project, saved, dirty, sourceCurrent, error, onChange, onStart, onRestore, onPrepare, onSave, onSuggest, onInspect, onDiscard, onPreviewChange, canUseProposal, onStagingEdit, onDiscardIdea, onSketch, onSketchDecision }: {
+export function SceneOutlineEditor({ project, saved, dirty, sourceCurrent, error, onChange, onStart, onPrepare, onSave, onSuggest, onInspect, onDiscard, onPreviewChange, canUseProposal, onStagingEdit, onDiscardIdea, onSketch, onSketchDecision }: {
   project: Project; saved: Project; dirty: boolean; sourceCurrent: boolean;
   onChange: (outline: SceneOutline, proposalId?: string | null, stagingUse?: StagingUse | null) => void; onStart: (versionId: string) => void;
-  onRestore: (versionId: string) => void; onPrepare: () => void;
+  onPrepare: () => void;
   onSave: () => void;
   onStagingEdit: (id: string, text: string) => void; onDiscardIdea: (proposalId: string, ideaId: string) => void;
   onSketch: (input: SketchInput) => Promise<void>; onSketchDecision: (id: string, action: "keep" | "discard") => void;
@@ -116,7 +116,7 @@ export function SceneOutlineEditor({ project, saved, dirty, sourceCurrent, error
       <button type="button" disabled={source === "current" && !saved.draft} onClick={() => onStart(source)}>
         {dirty ? "Lưu thay đổi và bắt đầu dàn cảnh" : "Bắt đầu dàn cảnh từ bản đã chọn"}</button>
     </div> : <>
-      <details className="scene-source"><summary>Story plan và ý đồ nguồn · M2 phiên bản {outline.version}</summary>
+      <details className="scene-source"><summary>Story plan và ý đồ nguồn · Dàn cảnh phiên bản {outline.version}</summary>
         <p>Nguồn {outline.source.version_id === "current" ? "bản hiện tại khi bắt đầu" : "bản lịch sử đã chọn"}, revision dự án {outline.source.project_revision}.</p>
         <p className="preserve-lines">{outline.source.draft.title}{"\n"}{outline.source.draft.logline}</p>
         <IntentDetails context={outline.source.context} />
@@ -205,10 +205,10 @@ export function SceneOutlineEditor({ project, saved, dirty, sourceCurrent, error
       </div>}
       <div className="scene-next"><button type="button" disabled={!outline.scenes.length || outline.scenes.some(s => !s.title.trim() || !s.action.trim())}
         onClick={onPrepare}>Lưu bản dàn cảnh để viết tiếp</button>
-        <SceneHint title="Viết tiếp từ bản đã lưu">Thao tác này lưu bản nguồn để đối chiếu; bắt đầu viết từng cảnh tại M3, lưu rồi đọc toàn bản và chọn nguồn M4. Bạn có thể đi hết đường viết tay, không cần AI hay ảnh. Chọn nguồn chưa phải xuất bản.</SceneHint>
+        <SceneHint title="Viết tiếp từ bản đã lưu">Thao tác này lưu bản nguồn để đối chiếu; bắt đầu viết từng cảnh tại phần Kịch bản, lưu rồi đọc toàn bản và chọn bản để xuất kịch bản. Bạn có thể đi hết đường viết tay, không cần AI hay ảnh. Chọn nguồn chưa phải xuất bản.</SceneHint>
         {saved.scene_handoff && <details className="scene-handoff">
           <summary>Đối chiếu bản dàn cảnh đã lưu để viết tiếp</summary>
-          <p className="storage-note">Bản nguồn đã lưu: M2 phiên bản {saved.scene_handoff.version}, revision dự án {saved.scene_handoff.project_revision} · {saved.scene_handoff.scenes.length} cảnh.</p>
+          <p className="storage-note">Bản nguồn đã lưu: Dàn cảnh phiên bản {saved.scene_handoff.version}, revision dự án {saved.scene_handoff.project_revision} · {saved.scene_handoff.scenes.length} cảnh.</p>
           {dirty && <p role="status">Có sửa chưa lưu. Bản dưới đây chỉ gồm nội dung đã lưu, chưa nhận các sửa trên màn hình.</p>}
           <p className="preserve-lines">Story plan nguồn: {saved.scene_outline?.source.draft.title || "Chưa đặt tên"}</p>
           {!saved.scene_source_is_current && <p role="status">Story plan hoặc ý đồ hiện tại khác nguồn này; bản bàn giao vẫn giữ nguồn đã chọn, không tự đồng bộ.</p>}
@@ -218,14 +218,29 @@ export function SceneOutlineEditor({ project, saved, dirty, sourceCurrent, error
               <strong>{["Địa điểm", "Thời điểm", "Nhân vật", "Nhân vật muốn gì", "Đóng góp của cảnh", "Cảm nhận người xem", "Điều muốn giữ/tránh"][i]}: </strong>{s[key]}</p>)}
             {Object.entries(s.staging_choices).map(([key, text]) => text && <p key={key} className="preserve-lines"><strong>{stagingLabels[key as StagingKey]}: </strong>{text}</p>)}
           </li>)}</ol>
-          <SceneHint title="Cách dùng bản nguồn">Chỉ những lựa chọn đã đưa vào cảnh và lưu mới có trong bản này; đề xuất riêng không được tự nhận. Sang M3 để tự viết hoặc chủ động chọn phương án AI, rồi lưu và đọc toàn bản trước khi chọn nguồn M4.</SceneHint>
+          <SceneHint title="Cách dùng bản nguồn">Chỉ những lựa chọn đã đưa vào cảnh và lưu mới có trong bản này; đề xuất riêng không được tự nhận. Sang phần Kịch bản để tự viết hoặc chủ động chọn phương án AI, rồi lưu và đọc toàn bản trước khi chọn bản để xuất kịch bản.</SceneHint>
         </details>}
       </div>
-      {!!project.scene_versions?.length && <details className="scene-history"><summary>Lịch sử dàn cảnh ({project.scene_versions.length})</summary>
-        <p className="storage-note">Khôi phục sẽ lưu mọi sửa đang chờ trước; chỉ thay dàn cảnh, giữ story plan hiện tại.</p>
-        {[...project.scene_versions].reverse().map(v => <div key={v.id}><p>Phiên bản {v.outline.version} · {new Date(v.created_at).toLocaleString("vi-VN")} · {v.outline.scenes.length} cảnh</p>
-          <button type="button" className="secondary" onClick={() => onRestore(v.id)}>Khôi phục dàn cảnh phiên bản {v.outline.version}</button></div>)}
-      </details>}
+
     </>}
   </section>;
+}
+
+export function SceneHistory({ project, onRestore }: {project: Project; onRestore: (id: string) => void}) {
+  return <>
+    {project.scene_versions?.length ? <details open className="scene-history"><summary>Lịch sử dàn cảnh ({project.scene_versions.length})</summary>
+        <p className="storage-note">Khôi phục sẽ lưu mọi sửa đang chờ trước; chỉ thay dàn cảnh, giữ story plan hiện tại.</p>
+        {[...project.scene_versions].reverse().map(v => <div key={v.id}><p>Phiên bản {v.outline.version} · {new Date(v.created_at).toLocaleString("vi-VN")} · {v.outline.scenes.length} cảnh</p>
+          <details><summary>Đọc phiên bản này</summary><SavedOutline outline={v.outline} /></details>
+          <button type="button" className="secondary" onClick={() => onRestore(v.id)}>Khôi phục dàn cảnh phiên bản {v.outline.version}</button></div>)}
+      </details> : <p>Chưa có bản lịch sử dàn cảnh.</p>}
+  </>;
+}
+
+export function SavedOutline({outline}: {outline: SceneOutline}) {
+  return <ol>{outline.scenes.map(scene => <li key={scene.id}><h4>{scene.title || "Cảnh chưa đặt tên"}</h4>
+    <p className="preserve-lines">{scene.action}</p>
+    {(["location", "time", "characters", "goal", "purpose", "viewer_intent", "keep_or_avoid"] as const).map(key => scene[key] && <p className="preserve-lines" key={key}>{scene[key]}</p>)}
+    {Object.entries(scene.staging_choices).map(([key, value]) => <p key={key}>{stagingLabels[key as StagingKey]}: {value}</p>)}
+  </li>)}</ol>;
 }

@@ -51,7 +51,7 @@ export function SceneSuggestions({ project, dirty, onSuggest, onInspect, onDisca
       <button type="button" className="secondary" onClick={onKeepManual}>Giữ cảnh đang sửa như bản tự chỉnh</button></div>}
     {[...proposals].reverse().map(p => <details key={p.id} className="scene-proposal" open={p.status === "ready"}>
       <summary>Đề xuất {p.mode === "list" ? "danh sách" : p.mode === "append" ? "thêm cảnh" : "phát triển cảnh"} · {statusLabels[p.status]} · {new Date(p.created_at).toLocaleString("vi-VN")}</summary>
-      <p className="storage-note">Nguồn M2 phiên bản {p.source_outline.version} · {p.model ?? "chưa gọi được model"} · {p.prompt_version}.</p>
+      <p className="storage-note">Nguồn dàn cảnh phiên bản {p.source_outline.version} · {p.model ?? "chưa gọi được model"} · {p.prompt_version}.</p>
       {p.status === "failed" && <p role="status">Lượt này lỗi ({p.error}). Cảnh đang viết vẫn được giữ. Không tự retry.</p>}
       {p.status === "pending" && <p role="status">Chưa có kết quả được lưu. Không coi đây là thất bại hay tự gọi lại model.</p>}
       <details><summary>Đối chiếu story plan và ý đồ đã dùng</summary>

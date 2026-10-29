@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState, type CSSProperties, type KeyboardEvent, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 import type { StoryDraft } from "./projectsApi";
 import { sectionLabels } from "./storyLabels";
 
@@ -49,13 +50,10 @@ export function StoryPlanEditor({ draft, dirty, onChange, selectedCardId, onSele
   selectedCardId?: string; onSelectCard?: (card: { id: string; label: string } | null) => void; inspector?: ReactNode;
 }) {
   const [layout, setLayout] = useState(() => draft.sections.map(section => splitStorySection(section.content)));
-  const [wideInspector, setWideInspector] = useState(false);
+  const popup = useRef<HTMLDialogElement>(null);
   useEffect(() => {
-    const media = window.matchMedia("(min-width: 1200px)");
-    const update = () => setWideInspector(media.matches);
-    update(); media.addEventListener("change", update);
-    return () => media.removeEventListener("change", update);
-  }, []);
+    if (inspector && popup.current && !popup.current.open) popup.current.showModal();
+  }, [inspector]);
   const path = useRef<HTMLOListElement>(null);
   const sections = draft.sections.map((section, index) => ({ section, index }));
   const narrative = sections.filter(({ section }) => narrativeTitles.has(section.title));
@@ -73,7 +71,7 @@ export function StoryPlanEditor({ draft, dirty, onChange, selectedCardId, onSele
   return <div className="story-draft-editor" aria-label="Phác thảo đang viết">
     <div className="story-draft-intro">
       <p className="storage-note" role="status">{dirty ? "Bản đang viết · Có thay đổi chưa lưu" : "Bản đang viết · Đã lưu"}</p>
-      <p className="storage-note">Sửa ngay tại từng card. Đóng ô sửa giữ chữ trong bản đang viết. Dùng Lưu thay đổi để ghi lên máy.
+      <p className="storage-note">Sửa ngay tại từng card. Thay đổi tự lưu khi bạn dừng gõ; xem trạng thái ở thanh lưu.
         Đây là story plan, chưa phải kịch bản theo cảnh.</p>
     </div>
     <div className="story-draft-overview">
@@ -83,7 +81,7 @@ export function StoryPlanEditor({ draft, dirty, onChange, selectedCardId, onSele
         onChange={value => onChange("logline", value)} />
     </div>
     <div className="story-draft-caption"><span>ĐƯỜNG KỂ CỦA BẠN</span><span>{cards.length} card · Đọc theo số thứ tự</span></div>
-    <div className={`story-workbench${inspector && wideInspector ? " has-inspector" : ""}`}><div className="story-path-canvas">
+    <div className="story-workbench"><div className="story-path-canvas">
     <StoryPath list={path} count={cards.length} />
     <ol ref={path} className="story-draft-path" aria-label="Các phần câu chuyện theo số thứ tự">
       {cards.map(({ section, index, part, span }, position) => {
@@ -102,11 +100,12 @@ export function StoryPlanEditor({ draft, dirty, onChange, selectedCardId, onSele
           {onSelectCard && <button type="button" className="secondary card-feedback-trigger"
             aria-pressed={selectedCardId === id} aria-label={`Xem góp ý cho card ${position + 1}`}
             onClick={() => onSelectCard({ id, label: `Card ${position + 1} · ${label}` })}>Xem góp ý</button>}
-          {!wideInspector && selectedCardId === id && inspector}
         </li>;
       })}
     </ol>
-    </div>{wideInspector && inspector}</div>
+    </div></div>
+    {inspector && createPortal(<dialog ref={popup} className="feedback-popup" aria-label="Góp ý cho card"
+      onCancel={event => { event.preventDefault(); onSelectCard?.(null); }}>{inspector}</dialog>, document.body)}
     {!cards.length && <p className="storage-note">Chưa có nội dung phác thảo.</p>}
     {!!context.length && <details className="story-draft-context">
       <summary>Nhân vật, chủ đề và các chi tiết khác ({context.length})</summary>
@@ -140,11 +139,7 @@ export function StoryPath({ list, count, orderKey = "" }: {
         if (Math.abs(a.y - b.y) < 1) return a.x < b.x
           ? `M ${a.x + a.w} ${a.y + a.h / 2} L ${b.x} ${b.y + b.h / 2}`
           : `M ${a.x} ${a.y + a.h / 2} L ${b.x + b.w} ${b.y + b.h / 2}`;
-        const right = a.x + a.w / 2 > area.width / 2;
-        const x = right ? a.x + a.w : a.x;
-        const end = right ? b.x + b.w : b.x;
-        const bend = right ? 36 : -36;
-        return `M ${x} ${a.y + a.h / 2} C ${x + bend} ${a.y + a.h / 2} ${end + bend} ${b.y + b.h / 2} ${end} ${b.y + b.h / 2}`;
+        return `M ${a.x + a.w / 2} ${a.y + a.h} L ${b.x + b.w / 2} ${b.y}`;
       });
       setDrawing(current => current.width === area.width && current.height === area.height
         && current.paths.join() === paths.join() ? current : { width: area.width, height: area.height, paths });
@@ -198,7 +193,7 @@ function Field({ id, label, value, maxLength, onChange }: {
         : <textarea id={id} autoFocus aria-labelledby={`${id}-label`} rows={id === "draft-logline" ? 3 : 6}
           value={value} maxLength={maxLength} onChange={event => change(event.target.value)} onKeyDown={keyDown} />}
       {error && <p className="error" role="alert">{error}</p>}
-      <div className="story-field-actions"><button type="button" onClick={() => close()} title="Đóng ô sửa, chưa lưu lên máy">Xong</button>
+      <div className="story-field-actions"><button type="button" onClick={() => close()} title="Đóng ô sửa; xem trạng thái tự lưu ở thanh lưu">Xong</button>
         <button type="button" className="secondary" onClick={() => close(true)}>Hủy</button></div>
     </> : <p className="story-field-value preserve-lines">{value || "Chưa có nội dung."}</p>}
   </div>;

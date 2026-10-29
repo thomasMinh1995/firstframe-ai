@@ -1,12 +1,19 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-export function ClarificationConversation({ summary, questions, answers, onChange, onAskMore, onConfirm, confirmationKey, idea, constraints = [], retained = [], hasDraft = false }: {
-  summary: string; questions: string[]; answers: string[]; onChange: (index: number, value: string) => void;
+export function ClarificationConversation({ summary, questions, answers, onChange, onAskMore, onConfirm, confirmationKey, idea, constraints = [], retained = [], hasDraft = false, thinking = false }: {
+  thinking?: boolean; summary: string; questions: string[]; answers: string[]; onChange: (index: number, value: string) => void;
   onAskMore?: () => void; onConfirm?: () => void; confirmationKey?: string;
   idea?: string; constraints?: string[]; retained?: { question: string; answer: string }[]; hasDraft?: boolean;
 }) {
+  const [advancing, setAdvancing] = useState(false);
+  const nextTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => () => { if (nextTimer.current) clearTimeout(nextTimer.current); }, []);
+  const thinkingBubble = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (thinking || advancing) thinkingBubble.current?.scrollIntoView({block: "nearest"});
+  }, [thinking, advancing]);
   const firstEmpty = questions.findIndex((_, i) => !answers[i]?.trim());
   const [active, setActive] = useState(firstEmpty < 0 ? questions.length : firstEmpty);
   const answered = questions.filter((_, i) => answers[i]?.trim()).length;
@@ -21,9 +28,14 @@ export function ClarificationConversation({ summary, questions, answers, onChang
   function next() {
     const following = questions.findIndex((_, i) => i > active && !answers[i]?.trim());
     const missing = questions.findIndex((_, i) => i !== active && !answers[i]?.trim());
-    choose(following >= 0 ? following : missing >= 0 ? missing : questions.length);
+    setAdvancing(true);
+    nextTimer.current = setTimeout(() => {
+      choose(following >= 0 ? following : missing >= 0 ? missing : questions.length);
+      setAdvancing(false);
+    }, 450);
   }
-  return <div className="clarification-conversation">
+  return <div className="clarification-conversation" aria-busy={thinking || advancing}>
+    <fieldset className="conversation-content" disabled={thinking || advancing}>
     <details className="clarification-summary"><summary>Điều FirstFrame đã hiểu</summary>
       <p className="preserve-lines">{summary}</p>
     </details>
@@ -64,7 +76,13 @@ export function ClarificationConversation({ summary, questions, answers, onChang
           </div>
         </li> : null)}
       </ol>
+
+
     </>}
+    {(thinking || advancing) && <div ref={thinkingBubble} className="firstframe-thinking" role="status">
+      <span className="thinking-dots" aria-hidden="true"><i /><i /><i /></span>
+      <span>{thinking ? "FirstFrame đang suy nghĩ…" : "FirstFrame đang chuẩn bị câu tiếp theo…"}</span>
+    </div>}
     {active === questions.length && answered === questions.length && <div id="clarification-complete" tabIndex={-1} className="clarification-complete">
       <div className="clarification-question"><span>FirstFrame · Tiếp tục cùng bạn</span>
         <p>Đã có {answered + retained.length} lựa chọn. Bạn muốn làm rõ thêm hay xem lại trước khi tạo bản phát triển?</p></div>
@@ -94,5 +112,6 @@ export function ClarificationConversation({ summary, questions, answers, onChang
         </div>
       </section>}
     </div>}
+    </fieldset>
   </div>;
 }

@@ -17,6 +17,22 @@ const review={id:uuid(),created_at:'now',source_revision:1,source_content:'snaps
  assert.deepEqual(await decode(p),p);assert.deepEqual(await decode(base),base);
  assert.equal('screenplay_reviews' in editableProject(p),false);assert.equal('current_screenplay_review_ids' in editableProject(p),false);
  assert.equal(reviewSourceMatches(script,anchor),true);assert.equal(reviewNoteSupported(review,note),true);
+ const old=structuredClone(review);old.sources[1]={id:`m2:${scene.id}:action`,label:'Diễn tiến cũ',text:scene.action,category:'author_choice',scene_id:null,block_id:null,field:'choice'};
+ old.notes[0].evidence[1]={source_id:old.sources[1].id,quote:scene.action};
+ assert.deepEqual(await decode({...p,screenplay_reviews:[old]}),{...p,screenplay_reviews:[old]},'legacy source roles remain readable');
+ assert.equal(reviewNoteSupported(old,old.notes[0]),false,'unknown legacy origin does not become a confirmed author choice');
+ const ai=structuredClone(old),sourceId=ai.sources[1].id;
+ const aiOrigin={origin:'ai_proposal',author_confirmed:false};
+ ai.source_screenplay.source_outline.provenance={[sourceId]:aiOrigin};
+ ai.sources[1].category='context';ai.sources[1].provenance={...aiOrigin};ai.notes[0].kind='craft';
+ assert.deepEqual(await decode({...p,screenplay_reviews:[ai]}),{...p,screenplay_reviews:[ai]});
+ const forgedLabel=structuredClone(ai);forgedLabel.sources[1].provenance.origin='author_input';
+ await assert.rejects(()=>decode({...p,screenplay_reviews:[forgedLabel]}),/không hợp lệ/,'displayed origin must match the immutable source');
+ const forgedFlag=structuredClone(ai);forgedFlag.source_screenplay.source_outline.provenance[sourceId].author_confirmed='false';
+ forgedFlag.sources[1].category='author_choice';forgedFlag.notes[0].kind='intent_mismatch';
+ await assert.rejects(()=>decode({...p,screenplay_reviews:[forgedFlag]}),/không hợp lệ/,'confirmation is a boolean, not a truthy string');
+ const forgedOrigin=structuredClone(ai);forgedOrigin.source_screenplay.source_outline.provenance[sourceId].origin=['ai_proposal'];
+ await assert.rejects(()=>decode({...p,screenplay_reviews:[forgedOrigin]}),/không hợp lệ/,'origin must be an enum string');
  assert.equal(sameReviewScript(script,{...script,version:7,source_revision:99}),true);
  const changed=structuredClone(script);changed.scenes[0].blocks[0].text='Nội dung mới';assert.equal(sameReviewScript(script,changed),false);
  for(const mutate of [r=>r.notes[0].evidence[0].quote='Quote bịa',r=>r.notes[0].evidence[0].source_id='unknown',r=>r.sources[0].text='Quote bịa',

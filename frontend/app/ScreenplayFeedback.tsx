@@ -1,5 +1,6 @@
 "use client";
 import {useId,useState} from 'react';
+import {provenanceLabel} from './provenance';
 import type {Project} from './projectsApi';
 import type {SceneWritingInput,ScriptScene} from './screenplayTypes';
 import {reviewNoteSupported,reviewSourceMatches,sameReviewScript,type ReviewAssessment,type ReviewSource,type ScreenplayReview} from './screenplayReviewTypes';
@@ -25,6 +26,9 @@ export function ScreenplayFeedback({project,scene,canNavigate,onReview,onInspect
     <p className="storage-note">Tự sửa ở phần kịch bản rồi lưu; nếu cần, chủ động nhận góp ý mới. Chuyển cảnh hoặc lưu không gọi AI. Bạn có thể giữ nguyên bản của mình.</p>
   </section>;
 }
+// Older reviews keep their original evidence IDs and text; update only the system label.
+const sourceLabel = (source: ReviewSource) => source.label.replace("Diễn tiến M2 đã chọn", "Diễn tiến dàn cảnh đã chọn");
+
 function SavedFeedback({review:r,current,onNavigate,onAssess,onDiscard}: {
   review:ScreenplayReview;current:boolean;onNavigate:(source:ReviewSource)=>void;onAssess:(noteId:string,value:ReviewAssessment)=>void;onDiscard:()=>void;
 }) {
@@ -32,7 +36,7 @@ function SavedFeedback({review:r,current,onNavigate,onAssess,onDiscard}: {
   const source=r.sources.find(s=>s.id===sourceId);
   const labels={pending:'đang chờ',ready:'đã lưu góp ý',failed:'lỗi',discarded:'đã bỏ'};
   const choices:[ReviewAssessment,string][]=[['helpful','Hữu ích'],['misleading','Dẫn sai'],['uncertain','Chưa đủ căn cứ'],['dismissed','Bỏ qua']];
-  return <details className="script-review" open={r.status==='ready'}><summary>Góp ý · {labels[r.status]} · nguồn M3 bản {r.source_screenplay.version}</summary>
+  return <details className="script-review" open={r.status==='ready'}><summary>Góp ý · {labels[r.status]} · nguồn kịch bản bản {r.source_screenplay.version}</summary>
     {r.status==='ready'&&!current&&<p role="status">Góp ý thuộc nguồn trước hoặc có sửa chưa lưu; không dùng liên kết vào bản hiện tại. Nguồn cũ vẫn giữ để đối chiếu.</p>}
     {r.status==='pending'&&<p>Lượt này chưa rõ kết quả. Bỏ lượt không nhất thiết dừng model; không tự gọi lại.</p>}
     {r.error&&<p role="status">Lượt góp ý lỗi ({r.error}); bản tác giả vẫn giữ. Có thể tự sửa và lưu mà không cần nhận góp ý.</p>}
@@ -44,9 +48,9 @@ function SavedFeedback({review:r,current,onNavigate,onAssess,onDiscard}: {
         <h4>{note.kind==='intent_mismatch'?'AI nghi có lệch ý đồ':note.kind==='craft'?'Một lựa chọn để cân nhắc':'Chưa chắc về cách hiểu'}</h4>
         <p className="preserve-lines">{note.observation}</p><p className="preserve-lines">Tác động có thể có: {note.impact}</p>
         {note.suggestion&&<p className="preserve-lines">Bạn có thể cân nhắc: {note.suggestion}</p>}
-        {!supported&&<p role="alert">Tham chiếu chưa hợp lệ; không coi là bằng chứng đã kiểm tra hoặc mở liên kết sửa.</p>}
+        {!supported&&<p role="alert">Nguồn hoặc vai trò lựa chọn tác giả chưa đủ căn cứ; chỉ đọc tham khảo, không mở liên kết sửa.</p>}
         {note.evidence.map((e,i)=>{const s=r.sources.find(s=>s.id===e.source_id);return <div key={i}>
-          <blockquote className="preserve-lines">{e.quote}</blockquote><p>{s?.label??'Nguồn không xác định'}</p>
+          <blockquote className="preserve-lines">{e.quote}</blockquote><p>{s?sourceLabel(s):'Nguồn không xác định'}{s&&<> · {provenanceLabel(s.provenance)}</>}</p>
           {supported&&s&&<><button type="button" className="secondary" onClick={()=>setSourceId(s.id)}>Đọc nguồn đã giữ</button>
             {current&&s.category==='screenplay'&&<button type="button" className="secondary" onClick={()=>onNavigate(s)}>Đến phần đang viết</button>}</>}
         </div>})}
@@ -55,12 +59,12 @@ function SavedFeedback({review:r,current,onNavigate,onAssess,onDiscard}: {
       </article>;
     })}
     {source&&reviewSourceMatches(r.source_screenplay,source)&&<div className="script-review-source" role="region" aria-label="Nguồn góp ý đã giữ">
-      <h4>{source.label}</h4><p>Nguồn tại lúc nhận góp ý, không phải buffer hiện tại.</p><p className="preserve-lines">{source.text}</p>
+      <h4>{sourceLabel(source)}</h4><p>Nguồn tại lúc nhận góp ý, không phải buffer hiện tại.</p><p className="preserve-lines">{source.text}</p>
       <button type="button" className="secondary" onClick={()=>setSourceId(null)}>Đóng nguồn góp ý</button>
     </div>}
     <details><summary>Thông tin lượt và ngữ cảnh nguồn</summary><p>{r.created_at} · {r.model??'Chưa xác định model'} · {r.prompt_version}</p>
       <p className="preserve-lines">Yêu cầu: {r.instructions||'Không có yêu cầu thêm'}</p>
-      {r.sources.map(s=><p key={s.id} className="preserve-lines"><strong>{s.label}: </strong>{s.text}</p>)}
+      {r.sources.map(s=><p key={s.id} className="preserve-lines"><strong>{sourceLabel(s)}: </strong>{s.text}</p>)}
     </details>
     {r.status==='pending'&&<button type="button" className="secondary" onClick={onDiscard}>Lưu sửa và bỏ lượt góp ý đang chờ</button>}
   </details>;
