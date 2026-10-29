@@ -51,8 +51,9 @@ def update_item(run, item_id, status, *, result=None, error_code=None, recorded=
     item = next(i for i in all_items(run) if i["id"] == item_id)
     if (item["status"], item["result"], item["error_code"]) == (status, result, error_code):
         return
+    previous_status = item["status"]
     item.update(status=status, result=result, error_code=error_code)
-    if recorded:
+    if recorded and previous_status != status:
         if status == "running" and item["started_at"] is None:
             item["started_at"] = timestamp()
         item["finished_at"] = timestamp() if status in TERMINAL else None
@@ -137,15 +138,19 @@ def end_items(run, status, code):
             update_item(run, item["id"], "skipped", error_code="not_run")
 
 
-def candidate_edited(run):
-    """Current text may be incomplete even when generation originally succeeded."""
+def candidate_edited(run, previous):
+    """Refresh changed content without replaying unrelated completion milestones."""
     ensure_progress(run)
     p = ProjectResponse.model_validate(run["candidate"])
+    before = ProjectResponse.model_validate(previous)
     add_scenes(run, p.screenplay)
-    if p.draft:
+    if p.draft and p.draft != before.draft:
         update_item(run, "plan", "completed", result=result_ref(run, "plan"))
-    if p.screenplay:
+    if p.screenplay and (before.screenplay is None or p.screenplay.scenes != before.screenplay.scenes):
+        old_scenes = {s.id: s for s in before.screenplay.scenes} if before.screenplay else {}
         for scene in p.screenplay.scenes:
+            if scene == old_scenes.get(scene.id):
+                continue
             complete = valid_scene(scene)
             update_item(run, f"write:{scene.id}", "completed" if complete else "needs_input",
                         result=result_ref(run, "write", scene.id) if complete else None,

@@ -121,12 +121,16 @@ def status(project_id: str, run_id: SceneId):
         return brief(store().get_run(project_id, run_id))
 
 
+def candidate_response(run):
+    return {"revision": run["candidate_revision"], "save_id": run.get("last_candidate_save_id"),
+            "project": ProjectResponse.model_validate(run["candidate"]),
+            "plan_review": run.get("plan_review_result")}
+
+
 @router.get("/{run_id}/candidate")
 def candidate(project_id: str, run_id: SceneId):
     with projects.project_errors():
-        run = store().get_run(project_id, run_id)
-        return {"revision": run["candidate_revision"], "save_id": run.get("last_candidate_save_id"), "project": ProjectResponse.model_validate(run["candidate"]),
-                "plan_review": run.get("plan_review_result")}
+        return candidate_response(store().get_run(project_id, run_id))
 
 
 @router.put("/{run_id}/candidate")
@@ -140,7 +144,8 @@ def edit_candidate(project_id: str, run_id: SceneId, request: CandidateEdit):
                 return
             if r["status"] not in ("needs_input", "ready", "partial", "failed", "interrupted", "cancelled") or r["candidate_revision"] != request.revision or r["adopted_revision"] is not None:
                 raise ProjectConflict
-            p = ProjectResponse.model_validate(r["candidate"])
+            previous = r["candidate"]
+            p = ProjectResponse.model_validate(previous)
             if p.draft is None and r["status"] != "needs_input":
                 raise ProjectConflict
             if request.answers is not None:
@@ -172,9 +177,9 @@ def edit_candidate(project_id: str, run_id: SceneId, request: CandidateEdit):
             r["candidate"] = p.model_dump(mode="json")
             r["candidate_revision"] += 1
             r.update(last_candidate_save_id=request.save_id, candidate_fingerprint=fingerprint)
-            progress.candidate_edited(r)
+            progress.candidate_edited(r, previous)
         r = store().change(project_id, run_id, edit)
-        return {"revision": r["candidate_revision"], "save_id": r.get("last_candidate_save_id"), "project": ProjectResponse.model_validate(r["candidate"])}
+        return candidate_response(r)
 
 
 @router.post("/{run_id}/continue", response_model=DraftRunResponse)

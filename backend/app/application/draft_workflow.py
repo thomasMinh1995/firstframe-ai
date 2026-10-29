@@ -91,6 +91,8 @@ def execute(store, project_id, run_id, providers):
         def keep(r):
             progress.ensure_progress(r)
             progress.update_item(r, key, status, error_code=error_code)
+            if key == "plan_review" and status in {"warning", "skipped"}:
+                r["review_error"] = "Góp ý story plan chưa hoàn tất sau gián đoạn."
         store.change(project_id, run_id, keep)
 
     def cancelled():

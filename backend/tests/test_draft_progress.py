@@ -356,3 +356,49 @@ def test_cancel_before_critic_does_not_report_it_as_failed_or_completed(drafting
     assert item(r,'outline')['status']=='skipped'
     assert not [q for q in providers[0].requests if q.stage=='evaluation']
     assert not providers[1].requests
+
+
+def test_editing_one_scene_preserves_other_card_results_and_completion_times(drafting):
+    client,providers,p,base,url,body=begin(drafting)
+    before,c=complete(client,url)
+    edit={k:deepcopy(c['project']['screenplay'][k]) for k in ('id','version','scenes')}
+    edit['scenes'][0]['blocks'][0]['text']='Chữ mới của tác giả, chỉ sửa cảnh đầu.'
+    saved=client.put(url+'/candidate',json={'revision':c['revision'],'draft':c['project']['draft'],'screenplay':edit})
+    assert saved.status_code==200,saved.text
+    after=client.get(url).json()
+    first=f"write:{edit['scenes'][0]['id']}"
+    second=f"write:{edit['scenes'][1]['id']}"
+    assert item(after,second)==item(before,second), 'Unchanged scenes must not look newly completed'
+    assert item(after,'plan')==item(before,'plan')
+    assert item(after,first)['result']['candidate_revision']==saved.json()['revision']
+    assert item(after,first)['finished_at']==item(before,first)['finished_at']
+    assert saved.json()['plan_review']==c['plan_review'], 'Autosave must not discard the retained critic artifact'
+
+
+def test_noop_candidate_save_keeps_progress_and_returns_same_readable_artifacts(drafting):
+    client,providers,p,base,url,body=begin(drafting)
+    before,c=complete(client,url)
+    script={k:deepcopy(c['project']['screenplay'][k]) for k in ('id','version','scenes')}
+    saved=client.put(url+'/candidate',json={'revision':c['revision'],'draft':c['project']['draft'],'screenplay':script})
+    assert saved.status_code==200,saved.text
+    after=client.get(url).json()
+    assert after['workflow_items']==before['workflow_items']
+    assert after['progress_revision']==before['progress_revision']
+    assert saved.json()['plan_review']==client.get(url+'/candidate').json()['plan_review']
+
+
+def test_recovered_critic_warning_remains_visible_to_existing_clients(drafting,monkeypatch):
+    client,providers,p,base,url,body=begin(drafting)
+    class Crash(BaseException):pass
+    original=providers[0].request_structured
+    def crash(request):
+        if request.stage=='evaluation':raise Crash()
+        return original(request)
+    monkeypatch.setattr(providers[0],'request_structured',crash)
+    r=client.get(url).json()
+    with pytest.raises(Crash):
+        client.post(url+'/continue',json={'candidate_revision':r['candidate_revision']})
+    api.store().recover('new-process')
+    r,c=complete_after_continue(client,url,client.get(url).json())
+    assert item(r,'plan_review')['status']=='warning'
+    assert r['review_error'], 'Existing UI reads review_error, not workflow_items yet'

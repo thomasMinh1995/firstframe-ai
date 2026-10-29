@@ -15,7 +15,7 @@ Mỗi item có kind, scene ID khi liên quan, status, thời điểm bắt đầ
 
 Card completed đòi hỏi tham chiếu kết quả đã lưu. Không thêm lần gọi AI cho mục ý đồ. Candidate và các thay đổi item của checkpoint được ghi cùng giao dịch SQLite; progress mới nằm trong JSON của bảng draft_runs hiện có, không thêm bảng hoặc queue.
 
-Critic story plan được lưu riêng trong `plan_review_result`; GET candidate trả `plan_review` để đọc kết quả tương ứng. Response tiến độ dùng schema whitelist trong OpenAPI, không trả raw calls, prompt, cấu hình nội bộ, original hoặc candidate đầy đủ. `error`/`review_error` công khai được chuyển thành thông báo an toàn; chi tiết gốc tiếp tục nằm trong DB riêng của run.
+Critic story plan được lưu riêng trong `plan_review_result`; GET và PUT candidate cùng trả `plan_review` để đọc kết quả tương ứng. Response tiến độ dùng schema whitelist trong OpenAPI, không trả raw calls, prompt, cấu hình nội bộ, original hoặc candidate đầy đủ. `error`/`review_error` công khai được chuyển thành thông báo an toàn; chi tiết gốc tiếp tục nằm trong DB riêng của run.
 
 ## Hành vi lỗi và dữ liệu cũ
 
@@ -33,9 +33,9 @@ Critic story plan được lưu riêng trong `plan_review_result`; GET candidate
 
 Provider giả và SQLite tạm được dùng để kiểm tra API/runner thực; không gọi model live và không sử dụng DB dự án đang viết.
 
-39 ca tập trung gồm 15 ca draft-run hiện có và 24 ca tiến độ mới: 1/2/6 cảnh; cần làm rõ/đủ rõ; đọc plan trước critic; critic lỗi riêng; lỗi review; timeout sau một cảnh; hủy trước critic và trong lúc viết; crash sau nhận raw output nhưng trước checkpoint; restart critic; đọc run cũ không ghi; resume run cũ; điều kiện tiếp tục khi đổi cấu hình/chỉnh candidate/hủy/đã nhận/thiếu provider; rollback artifact và tiến độ; whitelist API và OpenAPI.
+42 ca tập trung gồm 15 ca draft-run hiện có và 27 ca tiến độ mới: 1/2/6 cảnh; cần làm rõ/đủ rõ; đọc plan trước critic; critic lỗi riêng; lỗi review; timeout sau một cảnh; hủy trước critic và trong lúc viết; crash sau nhận raw output nhưng trước checkpoint; restart critic; đọc run cũ không ghi; resume run cũ; điều kiện tiếp tục khi đổi cấu hình/chỉnh candidate/hủy/đã nhận/thiếu provider; rollback artifact và tiến độ; whitelist API và OpenAPI.
 
-**Kết quả bản cuối: 39 ca tập trung đạt; toàn bộ backend 653 passed, 1 skipped.** Có một cảnh báo deprecation Starlette/httpx đã có từ trước. `git diff --check` đạt. Frontend không thay đổi trong mốc này.
+**Kết quả sau review PR #79: 42 ca tập trung đạt; toàn bộ backend 656 passed, 1 skipped.** Có một cảnh báo deprecation Starlette/httpx đã có từ trước. `git diff --check` đạt. Frontend không thay đổi trong mốc này.
 
 Lệnh kiểm chứng từ repository root:
 
@@ -48,3 +48,13 @@ cd backend
 Lệnh dùng môi trường Python backend đã cài; worktree có thể dùng đường dẫn tuyệt đối tới môi trường dùng chung.
 
 Giai đoạn này chưa nghiệm thu giao diện S, skeleton/reveal, browser/mobile hoặc chất lượng nội dung model. Các phần đó giữ trong mốc triển khai tiếp theo và QA-01.
+
+## Review PR 79
+
+Đã tái hiện và sửa ba vấn đề trên API với SQLite tạm:
+
+1. Mỗi lần lưu candidate từng cập nhật lại cả plan và mọi cảnh, kể cả nội dung không đổi. Bản sửa chỉ cập nhật mục có nội dung thay đổi; card khác giữ nguyên tham chiếu và timestamp. Sửa nội dung khi card vẫn completed không thay thời điểm hoàn tất công đoạn. Lưu không đổi nội dung không tăng progress revision.
+2. GET candidate có `plan_review` nhưng PUT thiếu trường này, khiến phản hồi autosave làm mất artifact góp ý trong trạng thái client. Hai đường dùng chung response để giữ hợp đồng nhất quán.
+3. Sau restart trong critic, trạng thái card có warning nhưng `review_error` trống nên UI hiện tại không báo góp ý chưa hoàn tất. Luồng phục hồi ghi thông báo an toàn cùng trạng thái warning/skipped trong một giao dịch. Không retry critic chưa rõ kết quả.
+
+Ba ca mới thất bại trên bản trước sửa và đã đạt sau sửa. Phạm vi review theo ứng dụng local một người dùng, runner hiện có; không mở rộng cam kết sang nhiều worker hoặc nhiều host.
