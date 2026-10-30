@@ -1,0 +1,24 @@
+{
+  "scene": {
+    "id": "c4a6954a-4405-4ca9-8698-84e83474e0bf",
+    "source_scene_id": "6b9d8dd8-c29b-43ef-af8d-d8fb94f45409",
+    "heading": "SCENE 2",
+    "blocks": [
+      {
+        "kind": "action",
+        "text": "Father places the sealed letter on the table and steps back.",
+        "speaker": "",
+        "id": "dd40a000-aa4b-436c-a207-b49c43eb145c"
+      },
+      {
+        "kind": "action",
+        "text": "Daughter places her hand beside the sealed letter, not picking it up or opening it; she stops there.",
+        "speaker": "",
+        "id": "01428fb2-d530-4bb4-9659-67483fa2b2d7"
+      }
+    ]
+  },
+  "prompt_version": "screenplay-scene-v19-source-composition",
+  "model": "qwen2.5:7b",
+  "status": "ready"
+}

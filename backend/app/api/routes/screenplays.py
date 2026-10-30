@@ -14,6 +14,7 @@ from app.api.schemas.provenance import TextProvenance
 from app.application.dataset import capture_workflow, recording_provider
 from app.application.progress import progress_step
 from app.application.screenplay_writing import PROMPT_VERSION, ScreenplayContextTooLarge, write_scene
+from app.application.screenplay_composition import SceneSourceConflict
 from app.application.screenplay_revisions import validate_request
 from app.infrastructure.provider_factory import create_provider
 
@@ -174,7 +175,7 @@ def propose_scene(project_id: str, request: SceneWritingRequest):
         except Exception as error:
             proposal.status, proposal.error = "failed", type(error).__name__
             projects.get_project_store().update(project_id, keep_result)
-            if isinstance(error, ScreenplayContextTooLarge):
+            if isinstance(error, (ScreenplayContextTooLarge, SceneSourceConflict)):
                 raise HTTPException(422, str(error)) from error
             raise
         return project

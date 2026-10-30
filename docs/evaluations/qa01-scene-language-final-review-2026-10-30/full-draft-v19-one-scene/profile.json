@@ -1,0 +1,53 @@
+{
+  "model": "qwen2.5:7b",
+  "context_length": 16384,
+  "temperature": 0.3,
+  "started_at": "2026-10-30T08:07:32.147946+00:00",
+  "database": "/var/folders/5q/2y5tf10x3pg8jm8d6_mkf80h0000gn/T/firstframe-live-draft-fwkvyhwf/projects.sqlite3",
+  "providers": [
+    {
+      "provider": "ollama",
+      "model": "qwen2.5:7b",
+      "parameters": {
+        "temperature": 0.3,
+        "timeout_seconds": 180.0,
+        "num_ctx": 16384,
+        "screenplay_review_temperature": 0.0
+      }
+    },
+    {
+      "provider": "ollama",
+      "model": "qwen2.5:7b",
+      "parameters": {
+        "temperature": 0.3,
+        "timeout_seconds": 180.0,
+        "num_ctx": 16384,
+        "screenplay_review_temperature": 0.0
+      }
+    },
+    {
+      "provider": "ollama",
+      "model": "qwen2.5:7b",
+      "parameters": {
+        "temperature": 0.3,
+        "timeout_seconds": 180.0,
+        "num_ctx": 16384,
+        "screenplay_review_temperature": 0.0
+      }
+    },
+    {
+      "provider": "ollama",
+      "model": "qwen2.5:7b",
+      "parameters": {
+        "temperature": 0.3,
+        "timeout_seconds": 180.0,
+        "num_ctx": 16384,
+        "screenplay_review_temperature": 0.0
+      }
+    }
+  ],
+  "max_calls": 14,
+  "budget_seconds": 600,
+  "application_revision": "532c11812a89a6fbfb920fbcf6395c51a28cf547",
+  "brief_source": "docs/evaluations/qa01-scene-structure-qwen7b-2026-10-30/one-scene-brief.json"
+}

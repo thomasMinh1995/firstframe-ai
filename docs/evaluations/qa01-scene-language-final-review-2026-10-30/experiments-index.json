@@ -1,0 +1,880 @@
+[
+  {
+    "run": "acceptance-final-1",
+    "files": 42,
+    "report": {
+      "cases": [
+        {
+          "case": "quiet-open-ending",
+          "source": "docs/evaluations/m3-scene-writing-qwen7b-2026-10-27/quiet-open-ending/project-after.json",
+          "technical_pass": true,
+          "blocks": 2,
+          "target_preserved": true,
+          "content_checks": {
+            "no_unrequested_dialogue": true,
+            "source_actions_in_exact_order_once": true
+          },
+          "content_pass": true,
+          "seconds": 5.773,
+          "model_calls": 1
+        },
+        {
+          "case": "gentle-comedy",
+          "source": "docs/evaluations/m3-scene-writing-qwen7b-2026-10-27/gentle-comedy/project-after.json",
+          "technical_pass": true,
+          "blocks": 2,
+          "target_preserved": true,
+          "content_checks": {
+            "no_unrequested_dialogue": true,
+            "source_actions_in_exact_order_once": true
+          },
+          "content_pass": true,
+          "seconds": 1.804,
+          "model_calls": 1
+        },
+        {
+          "case": "limited-resources",
+          "source": "docs/evaluations/m3-scene-writing-qwen7b-2026-10-27/limited-resources/project-after.json",
+          "technical_pass": true,
+          "blocks": 2,
+          "target_preserved": true,
+          "content_checks": {
+            "no_unrequested_dialogue": true,
+            "source_actions_in_exact_order_once": true
+          },
+          "content_pass": true,
+          "seconds": 1.876,
+          "model_calls": 1
+        },
+        {
+          "case": "draft-workflow-qwen7b-2026-10-30",
+          "source": "docs/evaluations/draft-workflow-qwen7b-2026-10-30/candidate.json.gz",
+          "technical_pass": true,
+          "blocks": 2,
+          "target_preserved": true,
+          "content_checks": {
+            "no_unrequested_dialogue": true,
+            "source_actions_in_exact_order_once": true
+          },
+          "content_pass": true,
+          "seconds": 2.063,
+          "model_calls": 1
+        },
+        {
+          "case": "draft-workflow-qwen7b-saved-brief-2026-10-30",
+          "source": "docs/evaluations/draft-workflow-qwen7b-saved-brief-2026-10-30/candidate.json.gz",
+          "technical_pass": true,
+          "blocks": 1,
+          "target_preserved": true,
+          "content_checks": {
+            "no_unrequested_dialogue": true,
+            "source_actions_in_exact_order_once": true
+          },
+          "content_pass": true,
+          "seconds": 1.954,
+          "model_calls": 1
+        },
+        {
+          "case": "parent-dialogue",
+          "source": "docs/evaluations/m3-scene-writing-qwen7b-2026-10-27/quiet-open-ending/project-after.json",
+          "technical_pass": true,
+          "blocks": 4,
+          "target_preserved": true,
+          "content_checks": {
+            "no_unrequested_dialogue": true,
+            "source_actions_in_exact_order_once": true,
+            "one_line_per_requested_speaker": true,
+            "father_child_address": true,
+            "no_wrong_pronouns_or_narrated_actions": true
+          },
+          "content_pass": true,
+          "seconds": 5.897,
+          "model_calls": 1
+        },
+        {
+          "case": "english",
+          "source": "docs/evaluations/m3-scene-writing-qwen7b-2026-10-27/quiet-open-ending/project-after.json",
+          "technical_pass": true,
+          "blocks": 2,
+          "target_preserved": true,
+          "content_checks": {
+            "no_unrequested_dialogue": true,
+            "english_heading": true,
+            "two_translated_beats": true,
+            "english_text": true,
+            "sealed_letter_and_table": true,
+            "daughter_has_not_opened_or_received": true
+          },
+          "content_pass": true,
+          "seconds": 3.884,
+          "model_calls": 1
+        },
+        {
+          "case": "later-scene",
+          "source": "docs/evaluations/draft-workflow-qwen7b-2026-10-30/candidate.json.gz",
+          "technical_pass": true,
+          "blocks": 1,
+          "target_preserved": true,
+          "content_checks": {
+            "no_unrequested_dialogue": true,
+            "source_actions_in_exact_order_once": true
+          },
+          "content_pass": true,
+          "seconds": 2.034,
+          "model_calls": 1
+        }
+      ],
+      "expected_cases": 8,
+      "completed_cases": 8,
+      "technical_pass": true,
+      "content_pass": true,
+      "release_approved": false
+    }
+  },
+  {
+    "run": "acceptance-pass-1",
+    "files": 42,
+    "report": {
+      "cases": [
+        {
+          "case": "quiet-open-ending",
+          "source": "docs/evaluations/m3-scene-writing-qwen7b-2026-10-27/quiet-open-ending/project-after.json",
+          "technical_pass": true,
+          "blocks": 2,
+          "target_preserved": true,
+          "content_checks": {
+            "no_unrequested_dialogue": true,
+            "source_actions_in_exact_order_once": true
+          },
+          "content_pass": true,
+          "seconds": 6.415,
+          "model_calls": 1
+        },
+        {
+          "case": "gentle-comedy",
+          "source": "docs/evaluations/m3-scene-writing-qwen7b-2026-10-27/gentle-comedy/project-after.json",
+          "technical_pass": true,
+          "blocks": 2,
+          "target_preserved": true,
+          "content_checks": {
+            "no_unrequested_dialogue": true,
+            "source_actions_in_exact_order_once": true
+          },
+          "content_pass": true,
+          "seconds": 1.928,
+          "model_calls": 1
+        },
+        {
+          "case": "limited-resources",
+          "source": "docs/evaluations/m3-scene-writing-qwen7b-2026-10-27/limited-resources/project-after.json",
+          "technical_pass": true,
+          "blocks": 2,
+          "target_preserved": true,
+          "content_checks": {
+            "no_unrequested_dialogue": true,
+            "source_actions_in_exact_order_once": true
+          },
+          "content_pass": true,
+          "seconds": 1.827,
+          "model_calls": 1
+        },
+        {
+          "case": "draft-workflow-qwen7b-2026-10-30",
+          "source": "docs/evaluations/draft-workflow-qwen7b-2026-10-30/candidate.json.gz",
+          "technical_pass": true,
+          "blocks": 2,
+          "target_preserved": true,
+          "content_checks": {
+            "no_unrequested_dialogue": true,
+            "source_actions_in_exact_order_once": true
+          },
+          "content_pass": true,
+          "seconds": 1.921,
+          "model_calls": 1
+        },
+        {
+          "case": "draft-workflow-qwen7b-saved-brief-2026-10-30",
+          "source": "docs/evaluations/draft-workflow-qwen7b-saved-brief-2026-10-30/candidate.json.gz",
+          "technical_pass": true,
+          "blocks": 1,
+          "target_preserved": true,
+          "content_checks": {
+            "no_unrequested_dialogue": true,
+            "source_actions_in_exact_order_once": true
+          },
+          "content_pass": true,
+          "seconds": 1.782,
+          "model_calls": 1
+        },
+        {
+          "case": "parent-dialogue",
+          "source": "docs/evaluations/m3-scene-writing-qwen7b-2026-10-27/quiet-open-ending/project-after.json",
+          "technical_pass": true,
+          "blocks": 4,
+          "target_preserved": true,
+          "content_checks": {
+            "no_unrequested_dialogue": true,
+            "source_actions_in_exact_order_once": true,
+            "one_line_per_requested_speaker": true,
+            "father_child_address": true,
+            "no_wrong_pronouns_or_narrated_actions": true
+          },
+          "content_pass": true,
+          "seconds": 5.864,
+          "model_calls": 1
+        },
+        {
+          "case": "english",
+          "source": "docs/evaluations/m3-scene-writing-qwen7b-2026-10-27/quiet-open-ending/project-after.json",
+          "technical_pass": true,
+          "blocks": 2,
+          "target_preserved": true,
+          "content_checks": {
+            "no_unrequested_dialogue": true,
+            "english_heading": true,
+            "two_translated_beats": true,
+            "english_text": true,
+            "sealed_letter_and_table": true,
+            "daughter_has_not_opened_or_received": true
+          },
+          "content_pass": true,
+          "seconds": 3.998,
+          "model_calls": 1
+        },
+        {
+          "case": "later-scene",
+          "source": "docs/evaluations/draft-workflow-qwen7b-2026-10-30/candidate.json.gz",
+          "technical_pass": true,
+          "blocks": 1,
+          "target_preserved": true,
+          "content_checks": {
+            "no_unrequested_dialogue": true,
+            "source_actions_in_exact_order_once": true
+          },
+          "content_pass": true,
+          "seconds": 2.065,
+          "model_calls": 1
+        }
+      ],
+      "expected_cases": 8,
+      "completed_cases": 8,
+      "technical_pass": true,
+      "content_pass": true,
+      "release_approved": false
+    }
+  },
+  {
+    "run": "acceptance-pass-2",
+    "files": 42,
+    "report": {
+      "cases": [
+        {
+          "case": "quiet-open-ending",
+          "source": "docs/evaluations/m3-scene-writing-qwen7b-2026-10-27/quiet-open-ending/project-after.json",
+          "technical_pass": true,
+          "blocks": 2,
+          "target_preserved": true,
+          "content_checks": {
+            "no_unrequested_dialogue": true,
+            "source_actions_in_exact_order_once": true
+          },
+          "content_pass": true,
+          "seconds": 2.273,
+          "model_calls": 1
+        },
+        {
+          "case": "gentle-comedy",
+          "source": "docs/evaluations/m3-scene-writing-qwen7b-2026-10-27/gentle-comedy/project-after.json",
+          "technical_pass": true,
+          "blocks": 2,
+          "target_preserved": true,
+          "content_checks": {
+            "no_unrequested_dialogue": true,
+            "source_actions_in_exact_order_once": true
+          },
+          "content_pass": true,
+          "seconds": 1.74,
+          "model_calls": 1
+        },
+        {
+          "case": "limited-resources",
+          "source": "docs/evaluations/m3-scene-writing-qwen7b-2026-10-27/limited-resources/project-after.json",
+          "technical_pass": true,
+          "blocks": 2,
+          "target_preserved": true,
+          "content_checks": {
+            "no_unrequested_dialogue": true,
+            "source_actions_in_exact_order_once": true
+          },
+          "content_pass": true,
+          "seconds": 1.745,
+          "model_calls": 1
+        },
+        {
+          "case": "draft-workflow-qwen7b-2026-10-30",
+          "source": "docs/evaluations/draft-workflow-qwen7b-2026-10-30/candidate.json.gz",
+          "technical_pass": true,
+          "blocks": 2,
+          "target_preserved": true,
+          "content_checks": {
+            "no_unrequested_dialogue": true,
+            "source_actions_in_exact_order_once": true
+          },
+          "content_pass": true,
+          "seconds": 1.879,
+          "model_calls": 1
+        },
+        {
+          "case": "draft-workflow-qwen7b-saved-brief-2026-10-30",
+          "source": "docs/evaluations/draft-workflow-qwen7b-saved-brief-2026-10-30/candidate.json.gz",
+          "technical_pass": true,
+          "blocks": 1,
+          "target_preserved": true,
+          "content_checks": {
+            "no_unrequested_dialogue": true,
+            "source_actions_in_exact_order_once": true
+          },
+          "content_pass": true,
+          "seconds": 1.868,
+          "model_calls": 1
+        },
+        {
+          "case": "parent-dialogue",
+          "source": "docs/evaluations/m3-scene-writing-qwen7b-2026-10-27/quiet-open-ending/project-after.json",
+          "technical_pass": true,
+          "blocks": 4,
+          "target_preserved": true,
+          "content_checks": {
+            "no_unrequested_dialogue": true,
+            "source_actions_in_exact_order_once": true,
+            "one_line_per_requested_speaker": true,
+            "father_child_address": true,
+            "no_wrong_pronouns_or_narrated_actions": true
+          },
+          "content_pass": true,
+          "seconds": 4.29,
+          "model_calls": 1
+        },
+        {
+          "case": "english",
+          "source": "docs/evaluations/m3-scene-writing-qwen7b-2026-10-27/quiet-open-ending/project-after.json",
+          "technical_pass": true,
+          "blocks": 2,
+          "target_preserved": true,
+          "content_checks": {
+            "no_unrequested_dialogue": true,
+            "english_heading": true,
+            "two_translated_beats": true,
+            "english_text": true,
+            "sealed_letter_and_table": true,
+            "daughter_has_not_opened_or_received": true
+          },
+          "content_pass": true,
+          "seconds": 2.668,
+          "model_calls": 1
+        },
+        {
+          "case": "later-scene",
+          "source": "docs/evaluations/draft-workflow-qwen7b-2026-10-30/candidate.json.gz",
+          "technical_pass": true,
+          "blocks": 1,
+          "target_preserved": true,
+          "content_checks": {
+            "no_unrequested_dialogue": true,
+            "source_actions_in_exact_order_once": true
+          },
+          "content_pass": true,
+          "seconds": 2.194,
+          "model_calls": 1
+        }
+      ],
+      "expected_cases": 8,
+      "completed_cases": 8,
+      "technical_pass": true,
+      "content_pass": true,
+      "release_approved": false
+    }
+  },
+  {
+    "run": "composition-v13",
+    "files": 27,
+    "report": {
+      "cases": [
+        {
+          "case": "quiet-open-ending",
+          "source": "docs/evaluations/m3-scene-writing-qwen7b-2026-10-27/quiet-open-ending/project-after.json",
+          "technical_pass": true,
+          "blocks": 2,
+          "target_preserved": true,
+          "seconds": 11.499,
+          "model_calls": 1
+        },
+        {
+          "case": "gentle-comedy",
+          "source": "docs/evaluations/m3-scene-writing-qwen7b-2026-10-27/gentle-comedy/project-after.json",
+          "technical_pass": true,
+          "blocks": 3,
+          "target_preserved": true,
+          "seconds": 9.601,
+          "model_calls": 1
+        },
+        {
+          "case": "limited-resources",
+          "source": "docs/evaluations/m3-scene-writing-qwen7b-2026-10-27/limited-resources/project-after.json",
+          "technical_pass": true,
+          "blocks": 1,
+          "target_preserved": true,
+          "seconds": 6.894,
+          "model_calls": 1
+        },
+        {
+          "case": "draft-workflow-qwen7b-2026-10-30",
+          "source": "docs/evaluations/draft-workflow-qwen7b-2026-10-30/candidate.json.gz",
+          "technical_pass": true,
+          "blocks": 2,
+          "target_preserved": true,
+          "seconds": 3.047,
+          "model_calls": 1
+        },
+        {
+          "case": "draft-workflow-qwen7b-saved-brief-2026-10-30",
+          "source": "docs/evaluations/draft-workflow-qwen7b-saved-brief-2026-10-30/candidate.json.gz",
+          "technical_pass": true,
+          "blocks": 3,
+          "target_preserved": true,
+          "seconds": 1.781,
+          "model_calls": 1
+        }
+      ],
+      "technical_pass": true,
+      "release_approved": false
+    }
+  },
+  {
+    "run": "composition-v14",
+    "files": 17,
+    "report": {
+      "cases": [
+        {
+          "case": "parent-dialogue",
+          "source": "docs/evaluations/m3-scene-writing-qwen7b-2026-10-27/quiet-open-ending/project-after.json",
+          "technical_pass": true,
+          "blocks": 3,
+          "target_preserved": true,
+          "seconds": 5.244,
+          "model_calls": 1
+        },
+        {
+          "case": "english",
+          "source": "docs/evaluations/m3-scene-writing-qwen7b-2026-10-27/quiet-open-ending/project-after.json",
+          "technical_pass": true,
+          "blocks": 2,
+          "target_preserved": true,
+          "seconds": 6.982,
+          "model_calls": 1
+        },
+        {
+          "case": "later-scene",
+          "source": "docs/evaluations/draft-workflow-qwen7b-2026-10-30/candidate.json.gz",
+          "technical_pass": true,
+          "blocks": 1,
+          "target_preserved": true,
+          "seconds": 2.112,
+          "model_calls": 1
+        }
+      ],
+      "technical_pass": true,
+      "release_approved": false
+    }
+  },
+  {
+    "run": "composition-v15-saved",
+    "files": 27,
+    "report": {
+      "cases": [
+        {
+          "case": "quiet-open-ending",
+          "source": "docs/evaluations/m3-scene-writing-qwen7b-2026-10-27/quiet-open-ending/project-after.json",
+          "technical_pass": true,
+          "blocks": 2,
+          "target_preserved": true,
+          "seconds": 3.626,
+          "model_calls": 1
+        },
+        {
+          "case": "gentle-comedy",
+          "source": "docs/evaluations/m3-scene-writing-qwen7b-2026-10-27/gentle-comedy/project-after.json",
+          "technical_pass": true,
+          "blocks": 2,
+          "target_preserved": true,
+          "seconds": 1.773,
+          "model_calls": 1
+        },
+        {
+          "case": "limited-resources",
+          "source": "docs/evaluations/m3-scene-writing-qwen7b-2026-10-27/limited-resources/project-after.json",
+          "technical_pass": true,
+          "blocks": 2,
+          "target_preserved": true,
+          "seconds": 1.742,
+          "model_calls": 1
+        },
+        {
+          "case": "draft-workflow-qwen7b-2026-10-30",
+          "source": "docs/evaluations/draft-workflow-qwen7b-2026-10-30/candidate.json.gz",
+          "technical_pass": true,
+          "blocks": 2,
+          "target_preserved": true,
+          "seconds": 1.728,
+          "model_calls": 1
+        },
+        {
+          "case": "draft-workflow-qwen7b-saved-brief-2026-10-30",
+          "source": "docs/evaluations/draft-workflow-qwen7b-saved-brief-2026-10-30/candidate.json.gz",
+          "technical_pass": true,
+          "blocks": 1,
+          "target_preserved": true,
+          "seconds": 1.741,
+          "model_calls": 1
+        }
+      ],
+      "technical_pass": true,
+      "release_approved": false
+    }
+  },
+  {
+    "run": "composition-v15-variants",
+    "files": 15,
+    "report": {
+      "cases": [
+        {
+          "case": "parent-dialogue",
+          "source": "docs/evaluations/m3-scene-writing-qwen7b-2026-10-27/quiet-open-ending/project-after.json",
+          "technical_pass": false,
+          "error": "Ollama returned an invalid structured response.",
+          "raw_output": "{\n  \"heading\": \"Cha và Con gái\",\n  \"translations\": [],\n  \"dialogue\": {\n    \"line_1\": {\n      \"after_action\": 0,\n      \"speaker\": \"Cha\",\n      \"text\": \"Con à, em có muốn mở thư này không?\"\n    },\n    \"line_2\": {\n      \"after_action\": 1,\n      \"speaker\": \"Con gái\",\n      \"text\": \"Cha, em không biết...\"\n    }\n  }\n}",
+          "validation_error": "2 validation errors for QwenSceneComposition\ndialogue.line_1.text\n  String should match pattern '^Cha ' [type=string_pattern_mismatch, input_value='Con à, em có muốn mở thư này không?', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/string_pattern_mismatch\ndialogue.line_2.text\n  String should match pattern '^Con ' [type=string_pattern_mismatch, input_value='Cha, em không biết...', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/string_pattern_mismatch",
+          "seconds": 5.372,
+          "model_calls": 1
+        },
+        {
+          "case": "english",
+          "source": "docs/evaluations/m3-scene-writing-qwen7b-2026-10-27/quiet-open-ending/project-after.json",
+          "technical_pass": true,
+          "blocks": 2,
+          "target_preserved": true,
+          "seconds": 3.921,
+          "model_calls": 1
+        },
+        {
+          "case": "later-scene",
+          "source": "docs/evaluations/draft-workflow-qwen7b-2026-10-30/candidate.json.gz",
+          "technical_pass": true,
+          "blocks": 1,
+          "target_preserved": true,
+          "seconds": 1.601,
+          "model_calls": 1
+        }
+      ],
+      "technical_pass": false,
+      "release_approved": false
+    }
+  },
+  {
+    "run": "composition-v16-variants",
+    "files": 17,
+    "report": {
+      "cases": [
+        {
+          "case": "parent-dialogue",
+          "source": "docs/evaluations/m3-scene-writing-qwen7b-2026-10-27/quiet-open-ending/project-after.json",
+          "technical_pass": true,
+          "blocks": 4,
+          "target_preserved": true,
+          "seconds": 8.069,
+          "model_calls": 1
+        },
+        {
+          "case": "english",
+          "source": "docs/evaluations/m3-scene-writing-qwen7b-2026-10-27/quiet-open-ending/project-after.json",
+          "technical_pass": true,
+          "blocks": 2,
+          "target_preserved": true,
+          "seconds": 4.209,
+          "model_calls": 1
+        },
+        {
+          "case": "later-scene",
+          "source": "docs/evaluations/draft-workflow-qwen7b-2026-10-30/candidate.json.gz",
+          "technical_pass": true,
+          "blocks": 1,
+          "target_preserved": true,
+          "seconds": 2.565,
+          "model_calls": 1
+        }
+      ],
+      "technical_pass": true,
+      "release_approved": false
+    }
+  },
+  {
+    "run": "final-v17-saved",
+    "files": 27,
+    "report": {
+      "cases": [
+        {
+          "case": "quiet-open-ending",
+          "source": "docs/evaluations/m3-scene-writing-qwen7b-2026-10-27/quiet-open-ending/project-after.json",
+          "technical_pass": true,
+          "blocks": 2,
+          "target_preserved": true,
+          "seconds": 5.462,
+          "model_calls": 1
+        },
+        {
+          "case": "gentle-comedy",
+          "source": "docs/evaluations/m3-scene-writing-qwen7b-2026-10-27/gentle-comedy/project-after.json",
+          "technical_pass": true,
+          "blocks": 2,
+          "target_preserved": true,
+          "seconds": 1.734,
+          "model_calls": 1
+        },
+        {
+          "case": "limited-resources",
+          "source": "docs/evaluations/m3-scene-writing-qwen7b-2026-10-27/limited-resources/project-after.json",
+          "technical_pass": true,
+          "blocks": 2,
+          "target_preserved": true,
+          "seconds": 1.719,
+          "model_calls": 1
+        },
+        {
+          "case": "draft-workflow-qwen7b-2026-10-30",
+          "source": "docs/evaluations/draft-workflow-qwen7b-2026-10-30/candidate.json.gz",
+          "technical_pass": true,
+          "blocks": 2,
+          "target_preserved": true,
+          "seconds": 1.802,
+          "model_calls": 1
+        },
+        {
+          "case": "draft-workflow-qwen7b-saved-brief-2026-10-30",
+          "source": "docs/evaluations/draft-workflow-qwen7b-saved-brief-2026-10-30/candidate.json.gz",
+          "technical_pass": true,
+          "blocks": 1,
+          "target_preserved": true,
+          "seconds": 1.672,
+          "model_calls": 1
+        }
+      ],
+      "technical_pass": true,
+      "release_approved": false
+    }
+  },
+  {
+    "run": "final-v17-variants",
+    "files": 16,
+    "report": {
+      "cases": [
+        {
+          "case": "parent-dialogue",
+          "source": "docs/evaluations/m3-scene-writing-qwen7b-2026-10-27/quiet-open-ending/project-after.json",
+          "technical_pass": false,
+          "error": "Invalid single-scene screenplay",
+          "raw_output": "{\n  \"heading\": \"Khoảnh khắc\",\n  \"translations\": [],\n  \"dialogue\": {\n    \"line_1\": {\n      \"after_action\": 1,\n      \"speaker\": \"Cha\",\n      \"self_reference\": \"Cha\",\n      \"intent\": \"uncertain\"\n    },\n    \"line_2\": {\n      \"after_action\": 0,\n      \"speaker\": \"Con gái\",\n      \"self_reference\": \"Con\",\n      \"intent\": \"uncertain\"\n    }\n  }\n}",
+          "validation_error": "Requested dialogue order must follow the action order.",
+          "seconds": 8.664,
+          "model_calls": 1
+        },
+        {
+          "case": "english",
+          "source": "docs/evaluations/m3-scene-writing-qwen7b-2026-10-27/quiet-open-ending/project-after.json",
+          "technical_pass": true,
+          "blocks": 2,
+          "target_preserved": true,
+          "seconds": 8.125,
+          "model_calls": 1
+        },
+        {
+          "case": "later-scene",
+          "source": "docs/evaluations/draft-workflow-qwen7b-2026-10-30/candidate.json.gz",
+          "technical_pass": true,
+          "blocks": 1,
+          "target_preserved": true,
+          "seconds": 6.953,
+          "model_calls": 1
+        }
+      ],
+      "technical_pass": false,
+      "release_approved": false
+    }
+  },
+  {
+    "run": "final-v18-variants",
+    "files": 17,
+    "report": {
+      "cases": [
+        {
+          "case": "parent-dialogue",
+          "source": "docs/evaluations/m3-scene-writing-qwen7b-2026-10-27/quiet-open-ending/project-after.json",
+          "technical_pass": true,
+          "blocks": 4,
+          "target_preserved": true,
+          "seconds": 9.102,
+          "model_calls": 1
+        },
+        {
+          "case": "english",
+          "source": "docs/evaluations/m3-scene-writing-qwen7b-2026-10-27/quiet-open-ending/project-after.json",
+          "technical_pass": true,
+          "blocks": 2,
+          "target_preserved": true,
+          "seconds": 3.889,
+          "model_calls": 1
+        },
+        {
+          "case": "later-scene",
+          "source": "docs/evaluations/draft-workflow-qwen7b-2026-10-30/candidate.json.gz",
+          "technical_pass": true,
+          "blocks": 1,
+          "target_preserved": true,
+          "seconds": 2.256,
+          "model_calls": 1
+        }
+      ],
+      "technical_pass": true,
+      "release_approved": false
+    }
+  },
+  {
+    "run": "focus-v11",
+    "files": 23,
+    "report": [
+      {
+        "case": "draft-workflow-qwen7b-saved-brief-2026-10-30",
+        "ok": true,
+        "seconds": 15.78
+      },
+      {
+        "case": "parent-dialogue",
+        "ok": true,
+        "seconds": 7.08
+      },
+      {
+        "case": "english",
+        "ok": true,
+        "seconds": 9.695
+      },
+      {
+        "case": "draft-workflow-qwen7b-2026-10-30",
+        "ok": true,
+        "seconds": 10.789
+      },
+      {
+        "case": "limited-resources",
+        "ok": true,
+        "seconds": 6.866
+      },
+      {
+        "case": "quiet-open-ending",
+        "ok": true,
+        "seconds": 4.589
+      },
+      {
+        "case": "gentle-comedy",
+        "ok": false,
+        "error": "Ollama timed out.",
+        "cause": "timed out",
+        "raw_output": null
+      },
+      {
+        "case": "later-scene",
+        "ok": true,
+        "seconds": 53.007
+      }
+    ]
+  },
+  {
+    "run": "frames-v12",
+    "files": 25,
+    "report": [
+      {
+        "case": "draft-workflow-qwen7b-saved-brief-2026-10-30",
+        "ok": true,
+        "seconds": 57.923
+      },
+      {
+        "case": "parent-dialogue",
+        "ok": true,
+        "seconds": 53.815
+      },
+      {
+        "case": "english",
+        "ok": true,
+        "seconds": 15.481
+      },
+      {
+        "case": "draft-workflow-qwen7b-2026-10-30",
+        "ok": true,
+        "seconds": 12.397
+      },
+      {
+        "case": "limited-resources",
+        "ok": true,
+        "seconds": 17.792
+      },
+      {
+        "case": "quiet-open-ending",
+        "ok": true,
+        "seconds": 9.492
+      },
+      {
+        "case": "gentle-comedy",
+        "ok": true,
+        "seconds": 13.441
+      },
+      {
+        "case": "later-scene",
+        "ok": true,
+        "seconds": 13.976
+      }
+    ]
+  },
+  {
+    "run": "full-draft-one-scene",
+    "files": 17,
+    "report": {
+      "checks": {
+        "ready": true,
+        "review_completed": true,
+        "author_scene_limit": true,
+        "all_scenes_written": true,
+        "exact_selected_script": true,
+        "pdf_without_ai": true
+      },
+      "http": {
+        "start": 200,
+        "continue": 200,
+        "adopt": 200,
+        "select": 200,
+        "pdf": 200
+      },
+      "project_id": "cbf7d87d-37e5-4f3a-ad68-6206096ea4f8",
+      "run_id": "33a4968d-f6ba-4923-9711-3f3fd76d94a9",
+      "run_status": "ready",
+      "review_error": null,
+      "scene_count": 1,
+      "reviewed_scenes": 1,
+      "scene_count_bounds": [
+        1,
+        1
+      ],
+      "total_seconds": 79.225,
+      "model_seconds": 78.792,
+      "call_count": 8,
+      "technical_pass": true,
+      "release_approved": false
+    }
+  }
+]

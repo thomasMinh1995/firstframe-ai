@@ -220,6 +220,26 @@ def test_author_scene_cap_rejects_extra_scenes_without_truncating_or_writing(dra
     assert len(providers[1].requests) == 1 and not providers[2].requests
 
 
+def test_foreign_script_result_keeps_checkpoint_and_never_resends_known_call(drafting):
+    from app.api.schemas.screenplays import SceneWritingResult
+    client, providers = drafting
+    providers[1].count = 1
+    providers[2].output = SceneWritingResult(scene={'heading':'Bếp','blocks':[
+        {'kind':'action','text':'Cha đặt thư 漉漉的','speaker':''}]})
+    client, providers, p, base, url, body = begin(drafting)
+    c = client.get(url+'/candidate').json()
+    if client.get(url).json()['status'] == 'needs_input':
+        assert client.post(url+'/continue', json={'candidate_revision':c['revision'],
+            'answers':['']*len(c['project']['answers'])}).status_code == 200
+    r = client.get(url).json(); c = client.get(url+'/candidate').json()
+    assert r['status'] == 'partial' and c['project']['draft']
+    assert not c['project']['screenplay']['scenes'][0]['blocks']
+    assert len(providers[2].requests) == 1
+    assert client.get(f"/api/projects/{p['id']}").json()['screenplay'] is None
+    assert client.post(url+'/continue', json={'candidate_revision':c['revision']}).status_code == 200
+    assert len(providers[2].requests) == 1
+
+
 def test_character_answer_does_not_force_two_scenes_in_automatic_run(drafting, monkeypatch):
     client, providers = drafting
     original = providers[0].request_structured

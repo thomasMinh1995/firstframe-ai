@@ -1,0 +1,17 @@
+{
+  "case": "parent-dialogue",
+  "source": "docs/evaluations/m3-scene-writing-qwen7b-2026-10-27/quiet-open-ending/project-after.json",
+  "technical_pass": true,
+  "blocks": 4,
+  "target_preserved": true,
+  "content_checks": {
+    "no_unrequested_dialogue": true,
+    "source_actions_in_exact_order_once": true,
+    "one_line_per_requested_speaker": true,
+    "father_child_address": true,
+    "no_wrong_pronouns_or_narrated_actions": true
+  },
+  "content_pass": true,
+  "seconds": 4.044,
+  "model_calls": 1
+}

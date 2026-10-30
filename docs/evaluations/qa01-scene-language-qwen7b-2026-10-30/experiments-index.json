@@ -1,0 +1,51 @@
+{
+  "trial-v3": {
+    "cases": 5,
+    "technical_pass": true,
+    "model_calls": 5,
+    "seconds": 51.191,
+    "files": 27
+  },
+  "trial-v4": {
+    "cases": 5,
+    "technical_pass": true,
+    "model_calls": 5,
+    "seconds": 89.39,
+    "files": 27
+  },
+  "trial-v5": {
+    "cases": 5,
+    "technical_pass": true,
+    "model_calls": 5,
+    "seconds": 98.83,
+    "files": 27
+  },
+  "trial-v6": {
+    "cases": 5,
+    "technical_pass": false,
+    "model_calls": 4,
+    "seconds": 56.887,
+    "files": 21
+  },
+  "trial-v7": {
+    "cases": 5,
+    "technical_pass": true,
+    "model_calls": 5,
+    "seconds": 40.532,
+    "files": 27
+  },
+  "trial-v8": {
+    "cases": 5,
+    "technical_pass": true,
+    "model_calls": 10,
+    "seconds": 120.352,
+    "files": 37
+  },
+  "final-v9": {
+    "cases": 5,
+    "technical_pass": true,
+    "model_calls": 5,
+    "seconds": 79.739,
+    "files": 27
+  }
+}

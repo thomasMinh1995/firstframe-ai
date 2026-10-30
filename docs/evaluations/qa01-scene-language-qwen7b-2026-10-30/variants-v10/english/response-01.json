@@ -1,0 +1,20 @@
+{
+  "raw_output": "{\n  \"scene\": {\n    \"heading\": \"Khoảnh khắc\",\n    \"blocks\": [\n      {\n        \"kind\": \"action\",\n        \"text\": \"Father stands by the table, hands slightly trembling as he places the sealed letter down. He takes a step back, his eyes lingering on the envelope.\",\n        \"speaker\": \"\"\n      },\n      {\n        \"kind\": \"action\",\n        \"text\": \"Daughter stands by the table, her hand hovering above the letter. She hesitates, her gaze shifting between the envelope and her father's face, then back to the letter.\",\n        \"speaker\": \"\"\n      }\n    ]\n  }\n}",
+  "output": {
+    "scene": {
+      "heading": "Khoảnh khắc",
+      "blocks": [
+        {
+          "kind": "action",
+          "text": "Father stands by the table, hands slightly trembling as he places the sealed letter down. He takes a step back, his eyes lingering on the envelope.",
+          "speaker": ""
+        },
+        {
+          "kind": "action",
+          "text": "Daughter stands by the table, her hand hovering above the letter. She hesitates, her gaze shifting between the envelope and her father's face, then back to the letter.",
+          "speaker": ""
+        }
+      ]
+    }
+  }
+}

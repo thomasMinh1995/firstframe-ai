@@ -1,0 +1,15 @@
+{
+  "raw_output": "{\"scene\": {\"heading\": \"Khoảnh khắc\", \"blocks\": [{\"kind\": \"action\", \"text\": \"Cha bước nhẹ về phía con gái, đặt phong thư kín lên bàn rồi lùi lại. Con gái nhìn phong thư, tay đặt cạnh nó, không động đậy.\", \"speaker\": \"\"}]} }",
+  "output": {
+    "scene": {
+      "heading": "Khoảnh khắc",
+      "blocks": [
+        {
+          "kind": "action",
+          "text": "Cha bước nhẹ về phía con gái, đặt phong thư kín lên bàn rồi lùi lại. Con gái nhìn phong thư, tay đặt cạnh nó, không động đậy.",
+          "speaker": ""
+        }
+      ]
+    }
+  }
+}
