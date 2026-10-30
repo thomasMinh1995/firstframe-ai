@@ -1,9 +1,10 @@
 'use client';
-import {useEffect,useRef,useState,useId} from 'react';
+import {useEffect,useRef,useState,useId,type ReactNode} from 'react';
 import type {DraftRun,Candidate} from './draftRunsApi';
 import {cardResult,workflowLabels,workflowStatusLabels,type WorkflowItem} from './draftWorkflowState';
 import './draftWorkflow.css';
-export function DraftWorkflow({run,candidate,onRead,reveals=[]}:{run:DraftRun;candidate:Candidate|null;onRead:(target:string)=>void;reveals?:string[]}){
+type Read=(target:string,trigger:HTMLButtonElement)=>void;
+export function DraftWorkflow({run,candidate,onRead,reveals=[],actions}:{run:DraftRun;candidate:Candidate|null;onRead:Read;reveals?:string[];actions?:(item:WorkflowItem)=>ReactNode}){
  const list=useRef<HTMLOListElement>(null),[paths,setPaths]=useState<string[]>([]);
  const arrowId='workflow-arrow-'+useId().replace(/:/g,'');
  const items=run.workflow_items??[];
@@ -16,11 +17,11 @@ export function DraftWorkflow({run,candidate,onRead,reveals=[]}:{run:DraftRun;ca
  return <section className="draft-workflow" aria-label="Tiến độ tạo nháp theo từng bước">
   <p className="storage-note" role="status">{items.filter(i=>i.status==='completed').length}/{items.length} mục có kết quả · {items.filter(i=>['warning','failed','interrupted','needs_input'].includes(i.status)).length} mục cần xem{items.some(i=>i.status==='running')&&` · Đang xử lý: ${items.filter(i=>i.status==='running').map(i=>workflowLabels[i.kind]).join(', ')}`}</p>
   <div className="draft-workflow-map"><svg aria-hidden="true" className="draft-workflow-route"><defs><marker id={arrowId} markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M1,1 L7,4 L1,7"/></marker></defs>{paths.map((d,i)=><path key={i} className={items[i+1]?.status==='running'?'is-current':undefined} d={d} markerEnd={`url(#${arrowId})`}/>)}</svg>
-   <ol ref={list} role="list" className="draft-workflow-cards">{items.map((item,index)=><WorkflowCard key={item.id} item={item} index={index} candidate={candidate} onRead={onRead} reveal={reveals.indexOf(item.id)}/>)}</ol>
+   <ol ref={list} role="list" className="draft-workflow-cards">{items.map((item,index)=><WorkflowCard key={item.id} item={item} index={index} candidate={candidate} onRead={onRead} reveal={reveals.indexOf(item.id)} actions={actions?.(item)}/>)}</ol>
   </div>
  </section>;
 }
-function WorkflowCard({item,index,candidate,onRead,reveal}:{item:WorkflowItem;index:number;candidate:Candidate|null;onRead:(target:string)=>void;reveal:number}){
+function WorkflowCard({item,index,candidate,onRead,reveal,actions}:{item:WorkflowItem;index:number;candidate:Candidate|null;onRead:Read;reveal:number;actions?:ReactNode}){
  const sceneIndex=candidate?.project.screenplay?.scenes.findIndex(s=>s.id===item.scene_id)??-1;
  const result=cardResult(item,candidate),row=Math.floor(index/3),col=row%2?3-index%3:1+index%3;
  return <li className={`draft-workflow-card is-${item.status}`} style={{gridRow:row+1,gridColumn:col}}>
@@ -32,7 +33,8 @@ function WorkflowCard({item,index,candidate,onRead,reveal}:{item:WorkflowItem;in
   {(item.status==='running'&&!result?.target||result&&!result.target)&&<WorkflowSkeleton processing={item.status==='running'}/>}
   {result&&<p className={`draft-workflow-preview${reveal>=0?' is-revealing':''}`} style={reveal>=0?{animationDelay:`${reveal*100}ms`}:undefined}>{result.text.slice(0,180)}{result.text.length>180?'…':''}</p>}
   {item.children.length>0&&<ul>{item.children.map((child,i)=><li key={child.id}>Cảnh {i+1} · {workflowStatusLabels[child.status]}</li>)}</ul>}
-  {result?.target&&<button type="button" className="secondary" onClick={()=>onRead(result.target)}>Đọc nội dung</button>}
+  {result?.target&&<button type="button" data-read-target={result.target} className="secondary" onClick={e=>onRead(result.target,e.currentTarget)}>Đọc nội dung</button>}
+  {actions}
  </li>;
 }
 export function WorkflowSkeleton({processing=false}:{processing?:boolean}){

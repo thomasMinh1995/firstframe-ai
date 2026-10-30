@@ -22,3 +22,19 @@
 @media(forced-colors:active){.draft-workflow-skeleton span{background:CanvasText!important;animation:none!important}.draft-workflow-check{background:Highlight;color:HighlightText;outline:1px solid CanvasText}}
 
 .draft-workflow-route > path.is-current{stroke:var(--accent);stroke-width:2.5}
+
+.draft-run-panel [hidden]{display:none!important}
+.draft-workflow-decisions{margin-top:16px;padding-top:12px;border-top:1px solid var(--line)}
+.draft-workflow-decisions .clarification-thread{gap:16px}
+.draft-workflow-decisions .clarification-thread label,.draft-workflow-decisions .clarification-summary p{font-size:14px}
+.draft-workflow-decisions fieldset{min-width:0;border:0;margin:0;padding:0}
+.draft-workflow-decisions textarea{width:100%;font-size:16px}
+.draft-workflow-card .draft-run-actions{flex-direction:column;align-items:stretch}
+.draft-workflow-card .draft-run-actions button,.draft-workflow-decisions button{width:100%;min-height:44px;white-space:normal}
+.draft-candidate-reader{scroll-margin-top:96px;margin-top:24px;padding:20px;border:1px solid var(--line);border-radius:14px;background:var(--panel);box-shadow:0 6px 20px rgb(30 55 38 / 6%);overflow-wrap:anywhere}
+.draft-candidate-reader-header{border-bottom:1px solid var(--line);margin-bottom:16px}
+.draft-candidate-reader-header h3{margin:0 0 8px}
+.draft-plan-fields{display:grid;gap:16px;margin-top:16px}
+.draft-plan-fields label{display:grid;gap:8px}
+.draft-candidate-reader blockquote{border-left:3px solid var(--line);margin:12px 0;padding:8px 12px;font-size:14px;white-space:pre-wrap}
+@media(max-width:760px){.draft-candidate-reader{scroll-margin-top:64px;padding:14px}.draft-candidate-reader .draft-run-actions button{flex:1 1 160px}.draft-candidate-reader input,.draft-candidate-reader textarea{font-size:16px}}

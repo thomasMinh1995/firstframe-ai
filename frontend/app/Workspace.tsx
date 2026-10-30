@@ -3,6 +3,7 @@ import {selectReadScreenplay,downloadScreenplayPdf} from "./screenplayExport";
 
 import { useEffect, useRef, useState } from "react";
 import {DraftRunPanel} from "./DraftRunPanel";
+import {confirmedAdoption} from "./draftWorkflowActions";
 import {runRequest,runPath,type DraftRun} from "./draftRunsApi";
 import {useProjectAutosave} from "./useProjectAutosave";
 import { useRouter } from "next/navigation";
@@ -485,7 +486,9 @@ export default function Workspace({ library = false }: { library?: boolean }) {
           <DraftRunPanel key={`draft-run:${project.id}`} project={project} opened={openedRun?.project_id===project.id?openedRun:null} onStart={startDraftRun}
             registerFlush={fn=>{candidateFlush.current=fn;return()=>{if(candidateFlush.current===fn)candidateFlush.current=async()=>{}}}}
             onAdopt={async(selected,revision)=>{await run("Đang giữ bản hiện tại và nhận bản nháp…",async()=>{
-              const next=await persist();if(!next)return;accept(await projectRequest(`${runPath(next.id,selected.id)}/adopt`,"POST",{revision:next.revision,candidate_revision:revision}));
+              const next=await persist();if(!next)return;accept(await confirmedAdoption(
+                ()=>projectRequest(`${runPath(next.id,selected.id)}/adopt`,"POST",{revision:next.revision,candidate_revision:revision}),
+                ()=>runRequest(runPath(next.id,selected.id)),()=>projectRequest(`/${next.id}`),revision));
               revealWorkspaceTarget(document.getElementById("workspace-script"));
             })}}/>
           {project.draft && <section className="panel form-stack working-draft" data-workspace-stage="workspace-draft">

@@ -1,6 +1,6 @@
 # Kế hoạch cập nhật Bản nháp và Review theo prototype đã chọn
 
-Ngày 29/10/2026. Trạng thái: DR-01/DR-02 đã merge PR #79; DR-03/DR-04 đã merge PR #80. DR-05/DR-06 đã triển khai dạng xem thử trên nhánh `fix/draft-workflow-transitions`; DR-07–DR-10 chưa triển khai. Xem [kiểm chứng chuyển trạng thái và phục hồi](../testing/draft-workflow-transitions-2026-10-30.md). Xem [kiểm chứng card và bố cục](../testing/draft-workflow-cards-2026-10-29.md). Xem [hợp đồng và kiểm chứng giai đoạn 1](../testing/draft-workflow-progress-2026-10-29.md). Phạm vi là tiến độ tạo nháp và cách đọc, nhận bản nháp trong Bản nháp & Review; tiếp nối các task hệ thống và UI đã giao của workflow AI chủ động.
+Ngày 29/10/2026. Trạng thái: DR-01/DR-02 đã merge PR #79; DR-03/DR-04 đã merge PR #80. DR-05/DR-06 đã merge PR #81. DR-07/DR-08 đã triển khai dạng xem thử trên nhánh `fix/draft-workflow-decisions`; DR-09/DR-10 chưa triển khai. Xem [kiểm chứng quyết định và reader](../testing/draft-workflow-decisions-2026-10-30.md). Xem [kiểm chứng chuyển trạng thái và phục hồi](../testing/draft-workflow-transitions-2026-10-30.md). Xem [kiểm chứng card và bố cục](../testing/draft-workflow-cards-2026-10-29.md). Xem [hợp đồng và kiểm chứng giai đoạn 1](../testing/draft-workflow-progress-2026-10-29.md). Phạm vi là tiến độ tạo nháp và cách đọc, nhận bản nháp trong Bản nháp & Review; tiếp nối các task hệ thống và UI đã giao của workflow AI chủ động.
 
 Áp dụng bố cục card nối theo đường chữ S, trạng thái thinking cho công việc đang chạy và skeleton được thay bằng kết quả từng bước. Người dùng phải biết hệ thống đang làm gì, phần nào đã có thể đọc và khi nào cần quyết định. Tiến độ phản ánh checkpoint backend; hiệu ứng chỉ trình bày kết quả đã có.
 
@@ -64,7 +64,7 @@ Tiếp tục dùng poll hiện có, không thêm SSE/WebSocket trong đợt này
 
 ## Các giai đoạn triển khai
 
-Các task dưới đây là backlog tiếp nối của đợt áp dụng prototype, chưa phải issue đã tạo. DR-01–DR-06 đã có triển khai và kiểm chứng kỹ thuật; card hiện bật chủ động để xem thử. Các task còn lại chưa triển khai. Các task SYS và UI cũ giữ trạng thái đã triển khai.
+Các task dưới đây là backlog tiếp nối của đợt áp dụng prototype, chưa phải issue đã tạo. DR-01–DR-08 đã có triển khai và kiểm chứng kỹ thuật; card hiện bật chủ động để xem thử. Các task còn lại chưa triển khai. Các task SYS và UI cũ giữ trạng thái đã triển khai.
 
 | Giai đoạn | Task | Ưu tiên | Kết quả bàn giao | Phụ thuộc |
 | --- | --- | --- | --- | --- |

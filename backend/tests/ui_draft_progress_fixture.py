@@ -1,7 +1,7 @@
 """Disposable API with real draft checkpoints and gated fake providers for DR-05/06.
 
 Run with backend's Python environment. All data lives in a new temporary folder.
-POST /__test/control accepts release, auto, fail_run, fail_candidate.
+POST /__test/control accepts release, auto, fail_run, fail_candidate, ask, fail_stage, lose_adopt.
 """
 import json
 import os
@@ -21,7 +21,7 @@ from starlette.middleware.cors import CORSMiddleware
 from app.api.routes import projects, draft_runs
 from app.application.project_store import ProjectStore
 from app.application import draft_workflow
-from app.application.ai_provider import StructuredResult
+from app.application.ai_provider import StructuredResult, ProviderTimeoutError
 from app.main import create_app
 from test_projects import start_project
 from test_generate_workflow import FakeProvider
@@ -29,7 +29,7 @@ from test_scene_suggestions import SceneProvider
 from test_screenplay_writing import WritingProvider
 from test_screenplay_review import ReviewProvider
 
-state = {"stage": None, "calls": [], "auto": False, "fail_run": False, "fail_candidate": False}
+state = {"stage": None, "calls": [], "auto": False, "fail_run": False, "fail_candidate": False, "ask": False, "fail_stage": None, "lose_adopt": False}
 release = threading.Event()
 class Gated:
     def __init__(self, provider):
@@ -41,8 +41,10 @@ class Gated:
             if not release.wait(180):
                 raise TimeoutError("Fixture gate timeout")
             release.clear()
+        if request.stage == state["fail_stage"]:
+            raise ProviderTimeoutError("Fixture: unknown provider result")
         result = self.provider.request_structured(request)
-        if result.output.__class__.__name__ == "_ReasoningOutput":
+        if result.output.__class__.__name__ == "_ReasoningOutput" and not state["ask"]:
             result = StructuredResult(output=result.output.model_copy(update={"missing_information": []}), model=result.model)
         return result
 
@@ -56,16 +58,21 @@ async def connection(request: Request, call_next):
         candidate = request.url.path.endswith("/candidate")
         if state["fail_candidate" if candidate else "fail_run"]:
             return JSONResponse({"detail": "Fixture: mất kết nối tạm thời"}, status_code=503)
-    return await call_next(request)
+    response = await call_next(request)
+    if request.method == "POST" and request.url.path.endswith("/adopt") and state["lose_adopt"]:
+        state["lose_adopt"] = False
+        return JSONResponse({"detail": "Fixture: phản hồi nhận bản bị mất"}, status_code=503)
+    return response
 @app.get("/__test/state")
 def inspect():
     return state
 @app.post("/__test/control")
 def control(values: dict):
-    assert set(values) <= {"release", "auto", "fail_run", "fail_candidate"}
-    for key in ("auto", "fail_run", "fail_candidate"):
+    assert set(values) <= {"release", "auto", "fail_run", "fail_candidate", "ask", "fail_stage", "lose_adopt"}
+    for key in ("auto", "fail_run", "fail_candidate", "ask", "lose_adopt"):
         if key in values: state[key] = bool(values[key])
     if values.get("release") or state["auto"]: release.set()
+    if "fail_stage" in values: state["fail_stage"] = values["fail_stage"]
     return state
 app.add_middleware(CORSMiddleware, allow_origins=["http://127.0.0.1:3034"], allow_methods=["*"], allow_headers=["*"])
 with TestClient(app) as client:
