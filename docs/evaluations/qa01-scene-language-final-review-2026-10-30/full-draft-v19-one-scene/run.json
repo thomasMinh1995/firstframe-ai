@@ -1,0 +1,162 @@
+{
+  "id": "67c5a39f-0b3e-40a7-b4d4-581dd471f121",
+  "project_id": "0689edf1-e9bc-4924-bb6a-26df65f31628",
+  "source_revision": 2,
+  "created_at": "2026-10-30T08:07:32.205999+00:00",
+  "updated_at": "2026-10-30T08:09:42.964503+00:00",
+  "revision_instructions": "",
+  "affected_scene_ids": [],
+  "status": "ready",
+  "step": "done",
+  "sending": false,
+  "cancel_requested": false,
+  "candidate_revision": 12,
+  "completed_scenes": 1,
+  "total_scenes": 1,
+  "error": null,
+  "review_error": null,
+  "adopted_revision": null,
+  "progress_version": 1,
+  "progress_revision": 18,
+  "workflow_items": [
+    {
+      "id": "analysis",
+      "kind": "analysis",
+      "scene_id": null,
+      "status": "completed",
+      "started_at": "2026-10-30T08:07:32.207276+00:00",
+      "finished_at": "2026-10-30T08:07:44.211862+00:00",
+      "result": {
+        "kind": "analysis",
+        "id": "e3ee8b34-f586-47e3-9173-269cd394249f",
+        "candidate_revision": 2
+      },
+      "error_code": null,
+      "children": []
+    },
+    {
+      "id": "intent",
+      "kind": "intent",
+      "scene_id": null,
+      "status": "completed",
+      "started_at": null,
+      "finished_at": "2026-10-30T08:07:44.232190+00:00",
+      "result": {
+        "kind": "intent",
+        "id": "e3ee8b34-f586-47e3-9173-269cd394249f",
+        "candidate_revision": 3
+      },
+      "error_code": null,
+      "children": []
+    },
+    {
+      "id": "plan",
+      "kind": "plan",
+      "scene_id": null,
+      "status": "completed",
+      "started_at": "2026-10-30T08:07:44.233673+00:00",
+      "finished_at": "2026-10-30T08:08:42.607760+00:00",
+      "result": {
+        "kind": "plan",
+        "id": null,
+        "candidate_revision": 5
+      },
+      "error_code": null,
+      "children": []
+    },
+    {
+      "id": "plan_review",
+      "kind": "plan_review",
+      "scene_id": null,
+      "status": "completed",
+      "started_at": "2026-10-30T08:08:42.607780+00:00",
+      "finished_at": "2026-10-30T08:09:07.121485+00:00",
+      "result": {
+        "kind": "plan_review",
+        "id": "867c4703-9bb0-45e7-bc7c-9c5c4735325e",
+        "candidate_revision": 5
+      },
+      "error_code": null,
+      "children": []
+    },
+    {
+      "id": "outline",
+      "kind": "outline",
+      "scene_id": null,
+      "status": "completed",
+      "started_at": "2026-10-30T08:09:07.129723+00:00",
+      "finished_at": "2026-10-30T08:09:32.904815+00:00",
+      "result": {
+        "kind": "outline",
+        "id": "4d3e0b5e-7c82-4f90-bfd5-c64a61bb6417",
+        "candidate_revision": 8
+      },
+      "error_code": null,
+      "children": []
+    },
+    {
+      "id": "write:d96caebc-3b7d-447f-8138-e4aade6b12a0",
+      "kind": "write",
+      "scene_id": "d96caebc-3b7d-447f-8138-e4aade6b12a0",
+      "status": "completed",
+      "started_at": "2026-10-30T08:09:32.909817+00:00",
+      "finished_at": "2026-10-30T08:09:37.730325+00:00",
+      "result": {
+        "kind": "write",
+        "id": "d96caebc-3b7d-447f-8138-e4aade6b12a0",
+        "candidate_revision": 10
+      },
+      "error_code": null,
+      "children": []
+    },
+    {
+      "id": "review",
+      "kind": "review",
+      "scene_id": null,
+      "status": "completed",
+      "started_at": "2026-10-30T08:09:37.739058+00:00",
+      "finished_at": "2026-10-30T08:09:42.963957+00:00",
+      "result": {
+        "kind": "review",
+        "id": "1b7213b3-03c9-41dc-aad3-455f13a5afad",
+        "candidate_revision": 12
+      },
+      "error_code": null,
+      "children": [
+        {
+          "id": "review_scene:d96caebc-3b7d-447f-8138-e4aade6b12a0",
+          "kind": "review_scene",
+          "scene_id": "d96caebc-3b7d-447f-8138-e4aade6b12a0",
+          "status": "completed",
+          "started_at": "2026-10-30T08:09:37.743033+00:00",
+          "finished_at": "2026-10-30T08:09:42.944647+00:00",
+          "result": {
+            "kind": "review_scene",
+            "id": "888e820b-5460-4c41-8fe8-7ba33028b581",
+            "candidate_revision": 12
+          },
+          "error_code": null,
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "draft",
+      "kind": "draft",
+      "scene_id": null,
+      "status": "completed",
+      "started_at": null,
+      "finished_at": "2026-10-30T08:09:37.734786+00:00",
+      "result": {
+        "kind": "draft",
+        "id": "1b7213b3-03c9-41dc-aad3-455f13a5afad",
+        "candidate_revision": 11
+      },
+      "error_code": null,
+      "children": []
+    }
+  ],
+  "can_continue": false,
+  "continue_block_reason": "not_resumable",
+  "continue_block_message": "Lượt này không ở trạng thái có thể tiếp tục."
+}

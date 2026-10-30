@@ -18,7 +18,11 @@ parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--output', type=Path, required=True)
 parser.add_argument('--model', default='qwen2.5:7b')
 parser.add_argument('--variants-only', action='store_true', help='Check parent dialogue, English output and a later scene with saved continuity')
+parser.add_argument('--all-cases', action='store_true', help='Run all five saved cases and three variants')
+parser.add_argument('--content-gate', action='store_true', help='Require the frozen case acceptance criteria, not only schema validity')
 args = parser.parse_args()
+if args.variants_only and args.all_cases:
+    parser.error('Choose either --variants-only or --all-cases')
 out = args.output.resolve()
 out.mkdir(parents=True, exist_ok=False)
 root = Path(__file__).resolve().parents[2]
@@ -41,7 +45,8 @@ for name in ('draft-workflow-qwen7b-2026-10-30', 'draft-workflow-qwen7b-saved-br
         source_outline=p.scene_outline, target_scene_id=script.scenes[0].id, prompt_version=PROMPT_VERSION)))
 
 variants = {}
-if args.variants_only:
+if args.variants_only or args.all_cases:
+    original_cases = cases
     quiet = cases[0]
     dialogue = quiet[2].model_copy(deep=True)
     dialogue.instructions = 'Viết hai câu thoại ngắn, cha nói một câu và con gái đáp một câu; giữ xưng hô cha-con, thư kín và kết mở.'
@@ -59,6 +64,8 @@ if args.variants_only:
         'later-scene':'Target second scene with a synthetic saved first scene: the letter has already changed hands.'}
     cases = [('parent-dialogue', quiet[1], dialogue), ('english', quiet[1], english),
              ('later-scene', cases[3][1], later)]
+    if args.all_cases:
+        cases = original_cases + cases
 
 def save(path, value):
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2), encoding='utf-8')
@@ -75,6 +82,7 @@ class Capture(OllamaProvider):
 provider = Capture(OllamaProviderConfig(args.model))
 save(out/'profile.json', dict(provider=asdict(provider.metadata), prompt_version=PROMPT_VERSION,
     variants=variants,
+    content_gate=args.content_gate, expected_cases=len(cases),
     application_revision=subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=root, text=True).strip(),
     worktree_changes=subprocess.check_output(['git', 'diff', '--stat'], cwd=root, text=True)))
 reports = []
@@ -95,12 +103,19 @@ for name, path, proposal in cases:
             target_preserved=result.scene.id == proposal.target_scene_id)
         target = next(s for s in proposal.source_screenplay.scenes if s.id == proposal.target_scene_id)
         assert report['target_preserved'] and result.scene.source_scene_id == target.source_scene_id
+        if args.content_gate:
+            from scripts.scene_writing_acceptance import assess
+            report['content_checks'] = assess(name, result.scene.model_dump(mode='json'))
+            report['content_pass'] = all(report['content_checks'].values())
     except Exception as error:
         report.update(technical_pass=False, error=str(error), raw_output=getattr(error, 'raw_output', None),
             validation_error=str(error.__cause__) if error.__cause__ else None)
     report.update(seconds=round(time.monotonic()-began, 3), model_calls=provider.calls)
     reports.append(report)
     save(case_dir/'report.json', report)
-    save(out/'report.json', dict(cases=reports, technical_pass=all(r['technical_pass'] for r in reports), release_approved=False))
+    complete = len(reports)==len(cases)
+    save(out/'report.json', dict(cases=reports, expected_cases=len(cases), completed_cases=len(reports),
+        technical_pass=complete and all(r['technical_pass'] for r in reports),
+        content_pass=complete and all(r.get('content_pass',False) for r in reports) if args.content_gate else None, release_approved=False))
     print(json.dumps(report, ensure_ascii=False), flush=True)
-sys.exit(0 if all(r['technical_pass'] for r in reports) else 1)
+sys.exit(0 if all(r['technical_pass'] and (not args.content_gate or r.get('content_pass',False)) for r in reports) else 1)

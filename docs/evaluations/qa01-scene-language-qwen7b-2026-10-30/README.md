@@ -58,3 +58,7 @@ backend/.venv/bin/python backend/scripts/check_scene_writing.py --output /tmp/ff
 ```
 
 Output phải là thư mục mới. Runner ghi từng request/response có số thứ tự và số call thật. Thiết bị thật, IME, screen reader và người đọc độc lập chưa được kiểm chứng trong đợt này.
+
+## Tiếp nối review cuối
+
+Các lỗi và trạng thái draft bên trên là kết quả v10 được giữ nguyên. Xem [báo cáo review cuối PR #85](../qa01-scene-language-final-review-2026-10-30/README.md) cho bản v19, hai lượt đủ tám ca và giới hạn của profile giữ nguồn.
