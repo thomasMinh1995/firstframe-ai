@@ -20,7 +20,7 @@ Công cụ điều khiển máy trả về `Computer Use was not approved to use
 
 Đã yêu cầu người dùng bật VoiceOver, chọn bộ gõ tiếng Việt có sẵn và cho biết tên bộ gõ. Chưa nhận được xác nhận cấu hình. Không thay quyền hệ thống hoặc cài bộ gõ để vượt qua giới hạn này.
 
-**Chưa có bằng chứng IME thật hoặc VoiceOver thật.** Unicode paste, sự kiện composition giả, unit test và cây accessibility không được tính là nghiệm thu thay thế. Chưa sửa mã ứng dụng và chưa chạy lại bộ test runtime trong đợt này.
+**Chưa có bằng chứng IME thật hoặc VoiceOver thật.** Unicode paste, sự kiện composition giả, unit test và cây accessibility không được tính là nghiệm thu thay thế. Chưa sửa mã ứng dụng và không chạy lại runtime tests local cho thay đổi chỉ gồm tài liệu; kết quả CI được kiểm tra riêng trước khi merge.
 
 ## Checklist khi tiếp tục
 
@@ -32,11 +32,11 @@ Mọi mục bên dưới đều **chưa chạy**, không phải kết quả pass
 | IME nhập liệu | Gõ có dấu bằng bộ gõ thật ở ý tưởng, hành động, người nói và lời thoại; sửa dấu, xóa và chọn vị trí giữa câu | Chuỗi phím, nội dung cuối và dữ liệu API sau autosave/reload; không dùng paste làm bằng chứng bộ gõ |
 | IME và phím editor | Enter xác nhận chữ/candidate không tách khối hoặc chuyển sang thoại sớm; Enter thường và Shift+Enter vẫn đúng sau khi kết thúc composition | Số khối, nội dung, người nói và vị trí focus trước/sau |
 | IME và review | Escape khi đang composition không đóng nhầm panel hoặc hủy phần sửa; thử đóng/mở và đổi breakpoint sau khi nhập | Buffer còn nguyên; phân biệt Escape của bộ gõ với Escape đóng dialog |
-| IME và lưu | Dừng khi đang ghép chữ, kết thúc nhập rồi chờ lưu; chuyển cảnh và mở lại | Không lưu trạng thái nhập dở; nội dung cuối được giữ, không gọi AI ngoài yêu cầu |
+| IME và lưu | Với bộ gõ phát composition, dừng giữa composition rồi kết thúc nhập; với bộ gõ sửa trực tiếp, kiểm tra chuỗi input thực tế. Sau đó chờ lưu, chuyển cảnh và mở lại | Hoãn autosave trong composition khi bộ gõ cung cấp sự kiện; nội dung cuối được giữ, không gọi AI ngoài yêu cầu |
 | VoiceOver và editor | Đọc heading, nhãn trường, cảnh đang chọn, trạng thái lưu; tương tác trường nhập bằng lệnh VoiceOver | Lệnh đã dùng và nội dung được đọc thực tế; chưa suy ra từ AX snapshot |
 | VoiceOver và review | Mở/đóng dialog, thứ tự đọc và focus; modal mobile giới hạn trong panel, desktop vẫn điều hướng được editor | Kết quả đọc/focus ở desktop và Safari RDM; không coi RDM là thiết bị iOS thật |
 | VoiceOver và tiến trình | Gọi review qua provider giả, đóng sheet lúc busy, theo dõi tiến trình và hoàn tất/lỗi | Close dùng được, nội dung vẫn khóa, focus hợp lý, thông báo không bị đọc lặp bởi timer |
 
 Nếu phát hiện lỗi: lưu ca tái hiện trước sửa, sửa tại nơi dùng chung, thêm hồi quy phù hợp và lặp lại ca bằng đúng bộ gõ/VoiceOver. Sau đó chạy typecheck, frontend tests, production build và kiểm tra CI trên commit cuối.
 
-PR của tài liệu này giữ dạng draft cho đến khi có bằng chứng kiểm thử thật và xử lý xong các lỗi tìm được. QA-01 và các gate thiết bị/screen reader tiếp tục mở; không đổi cờ rollout UI.
+PR #88 chỉ bàn giao tài liệu theo dõi và checklist; có thể chuyển khỏi draft và merge sau khi review tài liệu, kiểm tra liên kết và CI đạt. Merge tài liệu không xác nhận kiểm thử IME/VoiceOver thật đã đạt. QA-01 và các gate thiết bị/screen reader tiếp tục mở đến khi có bằng chứng thực tế và xử lý xong lỗi tìm được; không đổi cờ rollout UI.
