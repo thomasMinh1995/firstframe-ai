@@ -106,6 +106,34 @@ def test_append_cannot_exceed_author_cap_but_develop_can_still_edit(setup):
     assert response.status_code == 200 and len(provider.requests) == 1
 
 
+@pytest.mark.parametrize('returned,status', [(1, 200), (2, 502)])
+def test_author_request_scene_cap_is_enforced_without_rewriting_source(setup, returned, status):
+    client, provider, project = setup
+    provider.count = returned
+    body = {'revision':project['revision'], 'request_id':str(uuid4()), 'mode':'list',
+            'instructions':'Tối đa một cảnh. Giữ kết mở.'}
+    response = client.post(f"/api/projects/{project['id']}/scene-suggestions", json=body)
+    assert response.status_code == status
+    request = provider.requests[-1]
+    schema = request.response_model.model_json_schema()['properties']['scenes']
+    assert schema['maxItems'] == 1
+    saved = client.get(f"/api/projects/{project['id']}").json()
+    assert saved['scene_outline'] == project['scene_outline']
+    assert len(provider.requests) == 1
+
+
+def test_request_cannot_relax_source_scene_cap(setup):
+    client, provider, project = setup
+    store = routes.get_project_store()
+    raw = store.get(project['id'])
+    raw['scene_outline']['source']['context']['constraints'] = ['Tối đa một cảnh.']
+    store.save(raw, raw['revision'])
+    project = client.get(f"/api/projects/{project['id']}").json()
+    response = client.post(f"/api/projects/{project['id']}/scene-suggestions", json={
+        'revision':project['revision'], 'request_id':str(uuid4()), 'mode':'list', 'instructions':'Đúng hai cảnh.'})
+    assert response.status_code == 422 and not provider.requests
+
+
 def test_late_result_preserves_concurrent_author_edits(setup):
     client, provider, project = setup
     url = f"/api/projects/{project['id']}"

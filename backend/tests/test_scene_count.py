@@ -1,7 +1,7 @@
 import pytest
 
 from app.api.schemas.projects import AuthorContext
-from app.application.scene_count import scene_count_bounds
+from app.application.scene_count import SceneCountConflict, scene_count_bounds
 
 
 def context(text, **updates):
@@ -35,7 +35,30 @@ def test_idea_and_answer_are_author_sources_but_question_is_not():
     assert scene_count_bounds(context('', clarifications=[{'question':'Bao nhiêu nhân vật?', 'answer':'2'}]), 6) == (1, 6)
 
 
+@pytest.mark.parametrize('question', [
+    'Bao nhiêu nhân vật trong cảnh?', 'Số nhân vật tối đa trong cảnh là bao nhiêu?',
+    'How many characters are in the scene?', 'Maximum number of characters per scene?',
+])
+def test_character_question_cannot_turn_numeric_answer_into_scene_count(question):
+    assert scene_count_bounds(context('', clarifications=[{'question':question, 'answer':'2'}]), 6) == (1, 6)
+
+
+@pytest.mark.parametrize('question,expected', [
+    ('Tối đa bao nhiêu cảnh?', (1, 2)), ('Số lượng cảnh tối đa?', (1, 2)),
+    ('How many scenes?', (2, 2)), ('Maximum number of scenes?', (1, 2)),
+    ('Minimum number of scenes?', (2, 6)),
+    ('Số cảnh ít nhất?', (2, 6)),
+])
+def test_numeric_scene_answers_keep_the_question_count_type(question, expected):
+    assert scene_count_bounds(context('', clarifications=[{'question':question, 'answer':'2'}]), 6) == expected
+
+
 @pytest.mark.parametrize('text', ['Đúng 7 cảnh.', 'Tối đa 0 cảnh.', 'Từ 3 đến 2 cảnh.', 'Ít nhất 3 cảnh; tối đa hai cảnh.'])
 def test_impossible_bounds_fail_before_generation(text):
     with pytest.raises(ValueError, match='Giới hạn số cảnh'):
         scene_count_bounds(context(text), 6)
+
+
+def test_oversized_numeric_idea_is_a_validation_error_not_an_api_crash():
+    with pytest.raises(SceneCountConflict, match='Số cảnh'):
+        scene_count_bounds(context('', idea='Đúng ' + '9'*4400 + ' cảnh.'), 6)

@@ -8,6 +8,7 @@ a closed ending or a minimum number of scenes. If a detail is undecided, leave i
 In list mode, scene_count gives the enforced minimum and maximum from the author's explicit count
 and the supported workflow limit. Return a scenes array within these bounds; one scene is enough
 when requested. Never add scenes to satisfy an assumed story-act structure.
+An explicit count in author_request may narrow the source bounds, never relax them.
 In list mode, suggest the initial ordered list; in append mode suggest exactly one scene after the
 specified target (or at the end); in develop mode suggest exactly one replacement for the selected
 scene's content. Do not change other scenes. Keep existing staging choices and author notes outside

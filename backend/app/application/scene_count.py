@@ -13,6 +13,9 @@ COUNT = re.compile(
 MAXIMUM = re.compile(r"\b(?:tối đa|không quá|nhiều nhất|không vượt quá|giới hạn(?: ở)?|at most|no more than|up to|limit(?:ed)? to|max(?:imum)?(?: of)?)[\s.:]*(?:là\s+)?$")
 MINIMUM = re.compile(r"\b(?:ít nhất|tối thiểu|at least|min(?:imum)?(?: of)?)[\s.:]*(?:là\s+)?$")
 EXACT = re.compile(r"\b(?:chỉ(?: có)?|đúng|gồm|tổng cộng|exactly|only|consists of)\s*$")
+SCENE_QUESTION = re.compile(
+    r"\b(?:(?:bao nhiêu|mấy|số(?:\s+lượng)?)\s+(?:phân\s+)?cảnh|"
+    r"(?:how many|number of|maximum(?:\s+number of)?|minimum(?:\s+number of)?)\s+scenes)\b")
 
 
 class SceneCountConflict(ValueError):
@@ -25,16 +28,17 @@ def scene_count_bounds(context: AuthorContext, ceiling: int = 60) -> tuple[int, 
     for choice in context.clarifications:
         answer = choice.answer.strip().casefold()
         # A numeric answer is usable only when the author actually answered a scene-count question.
-        if re.fullmatch(NUMBER, answer) and re.search(
-            r"(?:bao nhiêu|số|tối đa|tối thiểu).*cảnh|(?:how many|number of|maximum|minimum).*scenes?",
-            choice.question.casefold()):
-            prefix = "tối đa " if re.search(r"tối đa|maximum", choice.question.casefold()) else (
-                "ít nhất " if re.search(r"tối thiểu|minimum", choice.question.casefold()) else "")
+        if re.fullmatch(NUMBER, answer) and SCENE_QUESTION.search(choice.question.casefold()):
+            prefix = "tối đa " if re.search(r"tối đa|nhiều nhất|không quá|maximum|at most", choice.question.casefold()) else (
+                "ít nhất " if re.search(r"tối thiểu|ít nhất|minimum|at least", choice.question.casefold()) else "")
             answer = f"{prefix}{answer} cảnh"
         texts.append(answer)
 
     def number(value):
-        return WORDS[value] if value in WORDS else int(value)
+        try:
+            return WORDS[value] if value in WORDS else int(value)
+        except ValueError as error:
+            raise SceneCountConflict("Số cảnh quá lớn hoặc không hợp lệ; hãy dùng số trong giới hạn hỗ trợ.") from error
 
     for text in texts:
         text = text.casefold()

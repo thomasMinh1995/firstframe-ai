@@ -1,0 +1,10 @@
+{
+  "base_revision": "9529b2b19f999581fd42ef541bdc044f7794ef8e",
+  "working_tree_changes": true,
+  "sha256": {
+    "backend/app/application/scene_count.py": "a0a42a05101df7c1c2af9b2502806d3e964650e22403e51945f0469ed1a7520f",
+    "backend/app/application/scene_suggestions.py": "7b2758f8e8518f30aff07fb7c11d9701dba036e43876e59238cbcc65b7114090",
+    "domains/short-film/prompts/scene_suggestions_prompt.md": "fb3b6276e6530edaea7cb379776d407a405832a9fb3ecab6e779e9e0d585a93d"
+  },
+  "note": "Numeric overflow validation guard added after live model call; request prompt/schema unchanged. Historical evidence remains unchanged."
+}

@@ -1,0 +1,14 @@
+{
+  "provider": {
+    "provider": "ollama",
+    "model": "qwen2.5:7b",
+    "parameters": {
+      "temperature": 0.3,
+      "timeout_seconds": 180.0,
+      "num_ctx": 16384,
+      "screenplay_review_temperature": 0.0
+    }
+  },
+  "source": "docs/evaluations/draft-workflow-qwen7b-2026-10-30/candidate.json.gz",
+  "variant": "Reset outline to before list generation; add numeric character clarification and explicit one-scene author_request. No original run resumed."
+}

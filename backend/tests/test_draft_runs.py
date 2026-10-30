@@ -220,6 +220,27 @@ def test_author_scene_cap_rejects_extra_scenes_without_truncating_or_writing(dra
     assert len(providers[1].requests) == 1 and not providers[2].requests
 
 
+def test_character_answer_does_not_force_two_scenes_in_automatic_run(drafting, monkeypatch):
+    client, providers = drafting
+    original = providers[0].request_structured
+    def ask_characters(request):
+        result = original(request)
+        if request.stage == 'reasoning':
+            result = result.__class__(output=result.output.model_copy(update={
+                'missing_information':['Bao nhiêu nhân vật trong cảnh?']}), model=result.model)
+        return result
+    monkeypatch.setattr(providers[0], 'request_structured', ask_characters)
+    providers[1].count = 1
+    client, providers, p, base, url, body = begin(drafting)
+    assert client.get(url).json()['status'] == 'needs_input'
+    c = client.get(url+'/candidate').json()
+    assert client.post(url+'/continue', json={'candidate_revision':c['revision'], 'answers':['2']}).status_code == 200
+    r = client.get(url).json()
+    assert r['status'] == 'ready' and r['completed_scenes'] == 1
+    schema = providers[1].requests[0].response_model.model_json_schema()['properties']['scenes']
+    assert schema['minItems'] == 1 and schema['maxItems'] == 6
+
+
 def test_candidate_cleared_scene_is_partial_not_complete(drafting):
     client,providers,p,base,url,body=begin(drafting)
     r,c=complete(client,url)

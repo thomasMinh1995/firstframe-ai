@@ -15,6 +15,7 @@ Ngày 2026-10-30, nhánh `fix/qwen-scene-structure-limits`, từ dev `d5d12fe`.
 
 Ollama `qwen2.5:7b`, context 16384, temperature 0.3, review 0, output viết/review tối đa 4096 token. Digest và hash nguồn ở [source-profile.json](source-profile.json).
 Các profile ghi HEAD nền do chạy trước commit; request thực tế là nguồn xác nhận prompt/schema. Lượt brief tối đa hai cảnh chạy trước khi thêm đoạn giải thích `scene_count` vào prompt dàn cảnh; bounds/schema viết cảnh giữ nguyên. Lượt một cảnh dùng đoạn giải thích mới.
+`source-profile.json` giữ hash của đợt đầu trên commit `9529b2b`, trước các sửa phát hiện khi review cuối bên dưới; không sửa lại bằng chứng lịch sử thành kết quả của code mới.
 
 ```sh
 # Từ root repo, với backend venv và Ollama đã sẵn sàng:
@@ -44,6 +45,16 @@ Năm replay gọi mỗi snapshot đúng một lần, không sửa nguồn. Ba ca
 [harness-error-before-model](harness-error-before-model/) giữ dấu vết một lỗi của bộ ghi evidence trước khi gửi model: thử parse input reasoning dạng text như JSON. Đã sửa runner để lưu nguyên `input_text`; lượt đó không tính là model failure và không có model call thực.
 
 Hồi quy local: toàn backend **692 passed, 1 skipped** trước hai bổ sung cuối cho append và cách nói “hai cảnh cuối”; **42 passed** trên count/scene suggestions sau các bổ sung đó. Ma trận API có brief yêu cầu đúng 1/2/6 cảnh, cả cần/không cần làm rõ; kiểm tra schema min/max, checkpoint, review, chọn bản và PDF. Ca AI trả dư kiểm tra giữ plan, không viết tiếp và không gọi lặp. Kiểm tra block revision, scope, ID và lưu dữ liệu cũ nằm trong suite backend. CI chạy lại toàn bộ backend/frontend trên PR.
+
+## Review cuối PR #84
+
+Đã sửa các lỗi có ca hồi quy đỏ trước khi sửa:
+
+- Regex câu hỏi trước đây hiểu câu trả lời số cho “Bao nhiêu nhân vật trong cảnh?” là số cảnh. Nay chỉ đọc câu trả lời số khi câu hỏi hỏi trực tiếp số lượng cảnh, giữ đúng loại tối đa/tối thiểu. Có hồi quy Việt/Anh và ca API tự động với câu trả lời `2` nhân vật vẫn viết được một cảnh.
+- Giới hạn trong `author_request` trước đây chỉ gửi model như text. Nay được giao với bounds của nguồn để dựng schema và kiểm tra backend; yêu cầu mới được thu hẹp, không được nới giới hạn nguồn. Không thay source context lưu trong dự án. Prompt cập nhật khiến lượt chạy cũ khác cấu hình không được tiếp tục bằng prompt mới.
+- Chuỗi số quá dài trong ý tưởng (4400 chữ số, vẫn trong giới hạn 5000 ký tự) trước đây làm `int()` ném lỗi ngoài xử lý validation. Nay trả `SceneCountConflict` để API trả 422 thay vì 500.
+
+[Lượt Qwen kiểm tra cuối](final-review/report.json): một call 16.346s, biến thể từ brief hai cảnh đã lưu, thêm trả lời `2` nhân vật và yêu cầu trực tiếp tối đa một cảnh. Kết quả đúng một cảnh, schema maxItems=1, nguồn giữ nguyên. Request/raw response/profile lưu cạnh report; không retry, không resume run cũ. Đây là kiểm chứng count, không bổ sung nghiệm thu ngữ nghĩa.
 
 ## Gate còn mở
 

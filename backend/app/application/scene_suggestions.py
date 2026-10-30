@@ -19,7 +19,9 @@ def suggest_scenes(proposal: SceneProposal, provider: StructuredProvider, *, max
     source = proposal.source_outline
     language = resolve_response_language(source.source.context.idea, source.source.response_language)
     response_model = SceneSuggestionResult if proposal.mode == "list" else SingleSceneSuggestionResult
-    bounds = scene_count_bounds(source.source.context, max_scenes) if proposal.mode in {"list", "append"} else None
+    count_context = source.source.context.model_copy(update={
+        "constraints": [*source.source.context.constraints, proposal.instructions]})
+    bounds = scene_count_bounds(count_context, max_scenes) if proposal.mode in {"list", "append"} else None
     if proposal.mode == "append" and len(source.scenes) >= bounds[1]:
         raise SceneCountConflict("Dàn cảnh đã đạt giới hạn số cảnh; hãy sửa giới hạn tác giả trước khi yêu cầu AI thêm cảnh.")
     if proposal.mode == "list" and bounds != (1, 60):
