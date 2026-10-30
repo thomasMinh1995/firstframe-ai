@@ -4,6 +4,8 @@ Nhánh `fix/draft-workflow-release-qa` từ `dev` sau PR #82 (`d1f4a64`). Review
 
 **Kết luận:** đã bàn giao hồi quy, CI, hai ca Qwen thật, kiểm tra PDF/UI và hướng dẫn mới. **Chưa phê duyệt bật giao diện thay thế mặc định hoặc đóng QA-01.** Một ca model dừng ở JSON scene không hợp lệ; ca xuất được PDF vẫn có lỗi nội dung. Thiết bị/assistive technology/người đọc độc lập chưa được nghiệm thu.
 
+Tiếp nối QA-01: [đợt kiểm chứng cấu trúc viết cảnh và giới hạn số cảnh](../evaluations/qa01-scene-structure-qwen7b-2026-10-30/README.md) bổ sung schema/prompt chặt hơn, bounds từ tác giả và evidence 5 snapshot + hai lượt toàn luồng. Các báo cáo lịch sử dưới đây giữ nguyên; gate nội dung/người đọc/thiết bị vẫn chưa đạt.
+
 ## Kiểm chứng tự động
 
 - Backend: **662 passed, 1 skipped**, gồm sáu ca mới clear/needs-input × 1/2/6 cảnh. Mỗi ca đi từ start → để mở/trả lời → checkpoint → sửa → từ chối revision cũ → nhận/idempotency → selection/PDF khi AI bị tắt. Kiểm tra ID động, review nguồn cũ và số call không tăng khi GET/replay request.

@@ -1,0 +1,20 @@
+{
+  "raw_output": "{\"scene\": {\"heading\": \"Trong căn bếp chiều mưa\", \"blocks\": [{\"kind\": \"action\", \"text\": \"Bố nhẹ nhàng đưa cho Linh một lá thư, mặt mũi ướt漉漉的，眼神中带着一丝不舍。\", \"speaker\": \"\"}, {\"kind\": \"dialogue\", \"text\": \"Linh, đây là... một lá thư. Tôi không biết nên nói gì, chỉ mong nó có thể giúp ích cho bạn.\", \"speaker\": \"Bố\"}]}}",
+  "output": {
+    "scene": {
+      "heading": "Trong căn bếp chiều mưa",
+      "blocks": [
+        {
+          "kind": "action",
+          "text": "Bố nhẹ nhàng đưa cho Linh một lá thư, mặt mũi ướt漉漉的，眼神中带着一丝不舍。",
+          "speaker": ""
+        },
+        {
+          "kind": "dialogue",
+          "text": "Linh, đây là... một lá thư. Tôi không biết nên nói gì, chỉ mong nó có thể giúp ích cho bạn.",
+          "speaker": "Bố"
+        }
+      ]
+    }
+  }
+}

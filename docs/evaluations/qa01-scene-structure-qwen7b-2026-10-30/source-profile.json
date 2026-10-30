@@ -1,0 +1,38 @@
+{
+  "model": {
+    "name": "qwen2.5:7b",
+    "model": "qwen2.5:7b",
+    "modified_at": "2026-10-21T20:26:25.328883896+07:00",
+    "size": 4683087332,
+    "digest": "845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
+    "details": {
+      "parent_model": "",
+      "format": "gguf",
+      "family": "qwen2",
+      "families": [
+        "qwen2"
+      ],
+      "parameter_size": "7.6B",
+      "quantization_level": "Q4_K_M",
+      "context_length": 32768,
+      "embedding_length": 3584,
+      "runner": "ggml"
+    },
+    "capabilities": [
+      "completion",
+      "tools"
+    ]
+  },
+  "tested_worktree_base": "d5d12fe18ae56638b1ebf03e5f0751685b62fa2a",
+  "working_tree_changes": true,
+  "final_source_sha256": {
+    "backend/app/application/scene_count.py": "399b304408efe3e64167fdacea98d04140eeb173633e3a4b96965aa16dbdf2eb",
+    "backend/app/application/scene_suggestions.py": "fecfb482d2a997c37531640e847f65558b6ba9d47e237d3a38251895d4e7a112",
+    "backend/app/application/screenplay_writing.py": "de4dec55e38235a3bd2b2e878ab55208d3ee9094c9352b95aec7724daf711c2a",
+    "backend/app/application/draft_workflow.py": "9087516c60587da2973f5113682bbc909a790b7842457bda34fd155fa34392db",
+    "backend/app/api/schemas/screenplays.py": "fdf49c0d833851fe5a375a0efb889d5bceea8800d6cd95725892c399f78028a4",
+    "domains/short-film/prompts/scene_suggestions_prompt.md": "ae78ad0563e2b959e7de941bb0ab0dff9902b82802ef42834ea060450bb60b47",
+    "domains/short-film/prompts/screenplay_scene_prompt.md": "61436623bb70d52009183f414b41140ebc9c183991d6db38a48922e6b0d61a87"
+  },
+  "note": "Evidence generated before commit. Request files capture exact prompt/schema. The two-scene-budget run predates the final explanatory scene_count prompt paragraph; bounds and writing schema are identical."
+}

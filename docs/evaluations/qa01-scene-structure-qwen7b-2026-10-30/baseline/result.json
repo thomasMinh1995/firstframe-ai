@@ -1,0 +1,35 @@
+{
+  "ok": true,
+  "scene": {
+    "id": "4a14368b-25cd-4a03-bbb6-bb21bbfcd4c5",
+    "source_scene_id": "d474b831-9e36-4dcc-9c3a-757abd04e3e4",
+    "heading": "Trong căn bếp chiều mưa",
+    "blocks": [
+      {
+        "kind": "action",
+        "text": "Bố cất tiếng, giọng nhẹ nhàng: 'Linh, đây là một lá thư. Tôi muốn trao cho bạn trước khi bạn rời quê.'",
+        "speaker": "",
+        "id": "6a6df87d-855e-4077-b280-d00bcc840a9e"
+      },
+      {
+        "kind": "action",
+        "text": "Linh nhìn bố, đôi mắt ẩn chứa sự phức tạp, rồi nhẹ nhàng nhận lá thư. Bố đưa cho cô một nụ cười nhẹ, ý thức được rằng đây là khoảnh khắc quan trọng.",
+        "speaker": "",
+        "id": "10cc05e1-08cb-4b45-ad3e-f6cf32a20081"
+      },
+      {
+        "kind": "action",
+        "text": "Linh nắm lấy lá thư, nhưng vẫn chưa mở. Cô nhìn quanh căn bếp, ánh sáng từ cửa sổ tạo nên một không gian ấm áp nhưng cũng mang theo chút buồn bã.",
+        "speaker": "",
+        "id": "21398ee3-9bf0-47cf-9be5-dbc5d074ac48"
+      },
+      {
+        "kind": "action",
+        "text": "Bố đứng bên cạnh, không nói thêm gì, chỉ nhìn Linh với sự ủng hộ và hy vọng.",
+        "speaker": "",
+        "id": "2ba027ab-5692-43b1-ae27-31e6958a4c10"
+      }
+    ]
+  },
+  "seconds": 17.44146995799383
+}

@@ -1,0 +1,15 @@
+{
+  "provider": {
+    "provider": "ollama",
+    "model": "qwen2.5:7b",
+    "parameters": {
+      "temperature": 0.3,
+      "timeout_seconds": 180.0,
+      "num_ctx": 16384,
+      "screenplay_review_temperature": 0.0
+    }
+  },
+  "prompt_version": "screenplay-scene-v2",
+  "application_revision": "d5d12fe18ae56638b1ebf03e5f0751685b62fa2a",
+  "worktree_changes": " backend/app/api/routes/projects.py                 |  3 +++\n backend/app/api/schemas/screenplays.py             | 14 +++++++++++++-\n backend/app/application/draft_workflow.py          |  7 ++++---\n backend/app/application/scene_suggestions.py       | 14 ++++++++++----\n backend/app/application/screenplay_writing.py      |  8 ++++++--\n backend/scripts/check_draft_release.py             | 19 ++++++++++++++++---\n backend/tests/test_draft_release_matrix.py         |  6 ++++++\n backend/tests/test_draft_runs.py                   | 21 +++++++++++++++++++++\n backend/tests/test_scene_suggestions.py            |  6 +++---\n backend/tests/test_screenplay_writing.py           | 22 +++++++++++++++++++---\n .../short-film/prompts/scene_suggestions_prompt.md |  3 +++\n .../short-film/prompts/screenplay_scene_prompt.md  |  4 ++--\n 12 files changed, 106 insertions(+), 21 deletions(-)\n"
+}

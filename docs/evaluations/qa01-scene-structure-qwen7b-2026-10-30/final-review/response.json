@@ -1,0 +1,17 @@
+{
+  "raw_output": "{\n  \"scenes\": [\n    {\n      \"title\": \"Trước Cánh Cửa\",\n      \"action\": \"Linh đứng trước cánh cửa, tay nắm lấy lá thư chưa mở. Bố đứng bên ngoài, nhìn vào trong, ánh mắt đầy tình cảm và lo lắng. Linh quay lại nhìn bố, rồi nhẹ nhàng đẩy cửa ra.\",\n      \"location\": \"Căn bếp\",\n      \"time\": \"Chiều mưa\",\n      \"characters\": \"Linh, Bố\",\n      \"goal\": \"Linh quyết định giữ quyền quyết định có đọc thư hay không.\",\n      \"purpose\": \"Giải quyết chủ đề về quyền quyết định và giữ được sự bí ẩn của lá thư.\",\n      \"transition\": \"Linh bước ra khỏi căn bếp, cánh cửa đóng lại, để lại sự im lặng và không gian cho những suy nghĩ riêng tư.\"\n    }\n  ]\n}",
+  "output": {
+    "scenes": [
+      {
+        "title": "Trước Cánh Cửa",
+        "action": "Linh đứng trước cánh cửa, tay nắm lấy lá thư chưa mở. Bố đứng bên ngoài, nhìn vào trong, ánh mắt đầy tình cảm và lo lắng. Linh quay lại nhìn bố, rồi nhẹ nhàng đẩy cửa ra.",
+        "location": "Căn bếp",
+        "time": "Chiều mưa",
+        "characters": "Linh, Bố",
+        "goal": "Linh quyết định giữ quyền quyết định có đọc thư hay không.",
+        "purpose": "Giải quyết chủ đề về quyền quyết định và giữ được sự bí ẩn của lá thư.",
+        "transition": "Linh bước ra khỏi căn bếp, cánh cửa đóng lại, để lại sự im lặng và không gian cho những suy nghĩ riêng tư."
+      }
+    ]
+  }
+}

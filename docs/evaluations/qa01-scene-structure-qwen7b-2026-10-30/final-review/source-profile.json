@@ -1,0 +1,10 @@
+{
+  "base_revision": "9529b2b19f999581fd42ef541bdc044f7794ef8e",
+  "working_tree_changes": true,
+  "sha256": {
+    "backend/app/application/scene_count.py": "084df2f23315a4638b9e16848c63e35c8979498184e541a08d269dfa759c75fd",
+    "backend/app/application/scene_suggestions.py": "7b2758f8e8518f30aff07fb7c11d9701dba036e43876e59238cbcc65b7114090",
+    "domains/short-film/prompts/scene_suggestions_prompt.md": "fb3b6276e6530edaea7cb379776d407a405832a9fb3ecab6e779e9e0d585a93d"
+  },
+  "note": "Integer overflow validation and explicit temporal-qualifier guards added after live model call; request prompt/schema for the saved brief unchanged. Historical evidence remains unchanged."
+}

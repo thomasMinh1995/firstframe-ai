@@ -1,0 +1,1 @@
+Lỗi bộ ghi QA trước khi gửi model: `json.loads(request.input_text)` không dùng được với reasoning input dạng text. Exception xảy ra trước provider call, sau đó tổng hợp timing thiếu `seconds` gây `KeyError`. Giữ evidence này để không giấu lượt chạy hỏng; runner đã đổi sang lưu nguyên `input_text`. Không tiếp tục hay gửi lại request của lượt này.

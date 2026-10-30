@@ -71,10 +71,22 @@ class SelectScreenplay(StartScreenplay):
     source_version_id: Literal["current"] | SceneId
 
 
+class WrittenAction(BlockText):
+    kind: Literal["action"]
+    text: str = Field(min_length=1, max_length=10000)
+    speaker: Literal[""] = ""
+
+
+class WrittenDialogue(BlockText):
+    kind: Literal["dialogue"]
+    text: str = Field(min_length=1, max_length=10000)
+    speaker: str = Field(min_length=1, max_length=200)
+
+
 class WrittenScene(BaseModel):
     model_config = ConfigDict(extra="forbid")
     heading: str = Field(min_length=1, max_length=500)
-    blocks: list[BlockText] = Field(min_length=1, max_length=200)
+    blocks: list[WrittenAction | WrittenDialogue] = Field(min_length=1, max_length=200)
 
     @model_validator(mode="after")
     def require_content(self):
