@@ -6,3 +6,19 @@
 @media(prefers-reduced-motion:reduce){.draft-workflow-card{transition:none}}
 
 .draft-workflow-toggle{display:flex;align-items:center;gap:8px;min-height:44px;cursor:pointer}.draft-workflow-toggle input[type=checkbox]{flex:none;margin:0;width:18px;height:18px}
+
+.draft-workflow-thinking{display:flex;align-items:center;gap:8px}
+.draft-workflow-thinking .process-spinner{flex:none}
+.draft-workflow-skeleton{display:grid;gap:12px;min-height:128px;align-content:start;padding:8px 0}
+.draft-workflow-skeleton span{height:12px;border-radius:6px;background:var(--soft)}
+.draft-workflow-skeleton span:nth-child(2){width:90%}.draft-workflow-skeleton span:nth-child(4){width:65%}
+.draft-workflow-skeleton.is-processing span{background:linear-gradient(100deg,var(--soft) 20%,var(--line) 50%,var(--soft) 80%);background-size:220% 100%;animation:draft-skeleton 1.8s ease-in-out infinite}
+.draft-workflow-preview.is-revealing{animation:draft-result 450ms ease-out both}
+.draft-workflow-network{padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--soft);overflow-wrap:anywhere}
+@keyframes draft-skeleton{from{background-position:100% 0}to{background-position:-100% 0}}
+@keyframes draft-result{from{opacity:0;transform:translateY(4px);filter:blur(1px)}to{opacity:1;transform:none;filter:none}}
+@media(prefers-reduced-motion:reduce){.draft-workflow-skeleton.is-processing span,.draft-workflow-preview.is-revealing{animation:none}}
+@media(prefers-reduced-transparency:reduce){.draft-workflow-preview.is-revealing{animation:none}}
+@media(forced-colors:active){.draft-workflow-skeleton span{background:CanvasText!important;animation:none!important}.draft-workflow-check{background:Highlight;color:HighlightText;outline:1px solid CanvasText}}
+
+.draft-workflow-route > path.is-current{stroke:var(--accent);stroke-width:2.5}

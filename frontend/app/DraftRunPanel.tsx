@@ -1,8 +1,10 @@
 "use client";
 import {useEffect,useRef,useState,useSyncExternalStore} from 'react';
 import type {Project} from './projectsApi';
-import {DraftWorkflow} from './DraftWorkflow';
+import {DraftWorkflow,WorkflowSkeleton} from './DraftWorkflow';
 import {newerRun} from './draftWorkflowState';
+import {DraftRunPoller} from './draftRunPolling';
+import {WorkflowReveals} from './draftWorkflowReveal';
 import {CandidateAutosave} from './candidateAutosave';
 import {candidateRequest,listRuns,runPath,runRequest,statusLabels,stepLabels,type DraftRun} from './draftRunsApi';
 import {revealWorkspaceTarget} from './WorkspaceStage';
@@ -14,7 +16,8 @@ type Props={project:Project;opened:DraftRun|null;onStart:()=>Promise<void>;onAdo
 export function DraftRunPanel(props:Props){
  const [runs,setRuns]=useState<DraftRun[]>([]),[active,setActive]=useState<string|null>(null),[error,setError]=useState('');
  const flush=useRef<()=>Promise<void>>(async()=>{});
- useEffect(()=>{let cancelled=false;listRuns(props.project.id).then(rows=>{if(!cancelled){setRuns(current=>[...current,...rows.filter(r=>!current.some(c=>c.id===r.id))]);setActive(current=>current??rows[0]?.id??null)}}).catch(e=>{if(!cancelled)setError(String(e))});return()=>{cancelled=true}},[props.project.id]);
+ useEffect(()=>{let cancelled=false;listRuns(props.project.id).then(rows=>{if(!cancelled){let remembered:string|null=null;try{remembered=sessionStorage.getItem(`firstframe-draft-run:${props.project.id}`)}catch{}setRuns(current=>[...current,...rows.filter(r=>!current.some(c=>c.id===r.id))]);setActive(current=>current??rows.find(r=>r.id===remembered)?.id??rows[0]?.id??null)}}).catch(e=>{if(!cancelled)setError(String(e))});return()=>{cancelled=true}},[props.project.id]);
+ useEffect(()=>{if(active)try{sessionStorage.setItem(`firstframe-draft-run:${props.project.id}`,active)}catch{}},[active,props.project.id]);
  useEffect(()=>{if(props.opened){setRuns(rows=>[props.opened!,...rows.filter(r=>r.id!==props.opened!.id)]);setActive(props.opened.id)}},[props.opened]);
  const register=(fn:()=>Promise<void>)=>{flush.current=fn;const remove=props.registerFlush(fn);return()=>{flush.current=async()=>{};remove()}};
  const activeRun=runs.find(r=>r.id===active);
@@ -34,25 +37,34 @@ function RunCandidate({id,onStatus,...props}:Props&{id:string;onStatus:(run:Draf
  const state=useSyncExternalStore(queue.subscribe,queue.getSnapshot,queue.getSnapshot);
  const [run,setRun]=useState<DraftRun|null>(null),[error,setError]=useState(''),[working,setWorking]=useState(false);
  const [cards,setCards]=useState(false);
+ const [reveals,setReveals]=useState<string[]>([]),[revealHistory]=useState(()=>new WorkflowReveals());
+ const [syncError,setSyncError]=useState<string|null>(null);
  const latest=useRef<DraftRun|null>(null);
+ const lastRead=useRef<string|null>(null);
+ useEffect(()=>{try{setCards(sessionStorage.getItem(`firstframe-draft-cards:${id}`)==='1');lastRead.current=sessionStorage.getItem(`firstframe-draft-read:${id}`)}catch{}},[id]);
  function receive(next:DraftRun){const accepted=newerRun(latest.current,next);latest.current=accepted;setRun(accepted);onStatus(accepted)}
- function readCard(target:string){const el=document.getElementById(`run-${id}-${target}`);if(!el)return;if(el instanceof HTMLDetailsElement)el.open=true;el.focus();el.scrollIntoView({block:'start',behavior:'auto'})}
+ function readCard(target:string){const el=document.getElementById(`run-${id}-${target}`);if(!el)return;if(el instanceof HTMLDetailsElement)el.open=true;try{sessionStorage.setItem(`firstframe-draft-read:${id}`,target)}catch{}el.focus();el.scrollIntoView({block:'start',behavior:'auto'})}
  const edited=state.local?.project,dirty=queue.dirty;
  async function inspect(){const r=await runRequest(path);receive(r);const c=await candidateRequest(path+'/candidate');queue.accept(c);return r;}
  useEffect(()=>{
-   let stopped=false,timer:ReturnType<typeof setTimeout>,delay=1500,lastRevision=-1;
-   const poll=async()=>{try{const r=await runRequest(path);if(stopped)return;receive(r);if(r.candidate_revision!==lastRevision){const c=await candidateRequest(path+'/candidate');if(stopped)return;queue.accept(c);lastRevision=c.revision;delay=1500}else delay=Math.min(8000,delay*1.5);if(latest.current?.status==='running')timer=setTimeout(poll,delay)}catch(e){if(!stopped)setError(String(e))}};
-   void poll();return()=>{stopped=true;clearTimeout(timer);queue.stop()};
+   const poller=new DraftRunPoller({readRun:()=>runRequest(path),readCandidate:()=>candidateRequest(path+'/candidate'),
+     current:()=>latest.current,receive,candidateRevision:()=>queue.getSnapshot().saved?.revision??-1,accept:queue.accept,onError:setSyncError});
+   void poller.start();return poller.stop;
  },[path,queue,run?.status]);
+ useEffect(()=>()=>queue.stop(),[queue]);
+ useEffect(()=>{if(run){const changed=revealHistory.update(run,state.saved);setReveals(cards?changed.slice(0,3):[])}},[run,state.saved,revealHistory]);
+ useEffect(()=>{if(state.saved&&lastRead.current){const el=document.getElementById(`run-${id}-${lastRead.current}`);if(el instanceof HTMLDetailsElement)el.open=true;if(el?.getClientRects().length)el.scrollIntoView({block:'start',behavior:'auto'});lastRead.current=null}},[state.saved,id]);
  useEffect(()=>props.registerFlush(()=>queue.flush()),[queue]);
  useEffect(()=>{const warn=(e:BeforeUnloadEvent)=>{if(dirty||state.saving||state.error){e.preventDefault();e.returnValue=''}};window.addEventListener('beforeunload',warn);return()=>window.removeEventListener('beforeunload',warn)},[dirty,state.saving,state.error]);
  async function action(fn:()=>Promise<void>){if(working)return;setWorking(true);setError('');try{await queue.flush();await fn()}catch(e){setError(String(e))}finally{setWorking(false)}}
  const editable=run&&run.status!=='running'&&run.status!=='needs_input'&&run.adopted_revision===null;
- return <div onCompositionStartCapture={()=>queue.composition(true)} onCompositionEndCapture={()=>queue.composition(false)}>
+ return <div onPointerDownCapture={()=>{lastRead.current=null}} onKeyDownCapture={()=>{lastRead.current=null}} onCompositionStartCapture={()=>queue.composition(true)} onCompositionEndCapture={()=>queue.composition(false)}>
+   {syncError&&<p role="status" className="draft-workflow-network">Chưa cập nhật được tiến độ. Bản đã tải vẫn được giữ; FirstFrame sẽ tự thử kết nối lại. {syncError}</p>}
+   {!run&&!syncError&&<div role="status"><p>Đang tải lượt tạo đã lưu…</p><WorkflowSkeleton/></div>}
    {run&&<>
      <p role="status"><strong>{statusLabels[run.status]}</strong> · {stepLabels[run.step]??run.step} · Đã lưu {run.completed_scenes}/{run.total_scenes||'…'} cảnh</p>
-     <label className="draft-workflow-toggle"><input type="checkbox" checked={cards} onChange={e=>setCards(e.target.checked)}/>Xem thử tiến độ dạng card</label>
-     {cards&&<DraftWorkflow run={run} candidate={state.saved} onRead={target=>void action(async()=>{await inspect();readCard(target)})}/>}
+     <label className="draft-workflow-toggle"><input type="checkbox" checked={cards} onChange={e=>{setReveals([]);setCards(e.target.checked);try{sessionStorage.setItem(`firstframe-draft-cards:${id}`,e.target.checked?'1':'0')}catch{}}}/>Xem thử tiến độ dạng card</label>
+     {cards&&<DraftWorkflow run={run} candidate={state.saved} reveals={reveals} onRead={target=>void action(async()=>{readCard(target)})}/>}
      {run.total_scenes>0&&<progress aria-label="Số cảnh đã lưu" max={run.total_scenes} value={run.completed_scenes}/>}
      {run.revision_instructions&&<p className="preserve-lines">Yêu cầu thay đổi cấu trúc: {run.revision_instructions} · {run.affected_scene_ids?.length??0} cảnh nguồn có thể bị ảnh hưởng. Bản đang viết được giữ nguyên cho đến khi bạn nhận bản nháp mới.</p>}
      <p>Tiến độ được giữ trên máy chủ. Mở lại trang không gọi AI lần nữa.</p>
