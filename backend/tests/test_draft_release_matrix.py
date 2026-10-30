@@ -26,6 +26,9 @@ def test_release_matrix_checkpoint_edit_source_adopt_pdf(project_client, monkeyp
     monkeypatch.setattr(draft_runs, 'providers', lambda: providers)
     monkeypatch.setattr(draft_workflow, 'launch', lambda *values: draft_workflow.execute(*values))
     p = start_project(client)
+    from test_projects import payload
+    p = client.put(f"/api/projects/{p['id']}", json={**payload(p),
+        'constraints': [*p['constraints'], f'Đúng {count} cảnh.']}).json()
     base = f"/api/projects/{p['id']}"; request = {'revision':p['revision'], 'request_id':str(uuid4())}
     url = base+'/draft-runs/'+request['request_id']
     assert client.post(base+'/draft-runs', json=request).status_code == 200
@@ -38,6 +41,9 @@ def test_release_matrix_checkpoint_edit_source_adopt_pdf(project_client, monkeyp
     r = client.get(url).json(); c = client.get(url+'/candidate').json()
     assert r['status'] == 'ready', r
     assert r['completed_scenes'] == r['total_scenes'] == count
+    schema = scenes.requests[0].response_model.model_json_schema()['properties']['scenes']
+    assert schema['minItems'] == schema['maxItems'] == count
+    assert '2 to 6' not in scenes.requests[0].input_text
     ids = [i['id'] for i in r['workflow_items']]
     assert len(ids) == len(set(ids)) == 7+count
     assert len(next(i for i in r['workflow_items'] if i['kind']=='review')['children']) == count

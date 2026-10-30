@@ -11,7 +11,7 @@ from app.application.language import resolve_response_language
 from app.application.screenplay_context import ScreenplayContextTooLarge, check_context_budget
 from app.application.progress import progress_step
 
-PROMPT_VERSION = "screenplay-scene-v1"
+PROMPT_VERSION = "screenplay-scene-v2"
 PROMPT = Path(__file__).resolve().parents[3] / "domains/short-film/prompts/screenplay_scene_prompt.md"
 
 
@@ -24,7 +24,11 @@ def write_scene(proposal: ScreenplayProposal, provider: StructuredProvider) -> S
     request = StructuredRequest(
         stage="screenplay_generation", instructions=PROMPT.read_text(encoding="utf-8") + (
             "\nRevise ONLY the selected block IDs. Return replacements with exact expected original kind/text/speaker and a replacement. "
-            "Return every selected ID once; never add, remove, reorder blocks or change the heading. Preserve silence and open endings." if scoped else ""),
+            "Return every selected ID once; never add, remove, reorder blocks or change the heading. Preserve silence and open endings. "
+            "Response contract: return only the JSON object with replacements required by the schema; no scene wrapper." if scoped else
+            '\nResponse contract: return exactly {"scene":{"heading":"...","blocks":[{"kind":"action","text":"...","speaker":""}]}}. '
+            'The scene wrapper is required. A dialogue block is {"kind":"dialogue","text":"spoken words","speaker":"character name"}. '
+            'Do not return IDs, a bare scene, a scenes array, markdown or commentary.'),
         input_text=json.dumps({
             "response_language": resolve_response_language(context.context.idea, context.response_language),
             "author_intent": context.context.ai_context(), "story_plan": context.draft.model_dump(mode="json"),

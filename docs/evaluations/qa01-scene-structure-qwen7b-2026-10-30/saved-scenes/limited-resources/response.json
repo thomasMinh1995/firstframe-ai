@@ -1,0 +1,15 @@
+{
+  "raw_output": "{\"scene\":{\"heading\":\"Khoảnh khắc\",\"blocks\":[{\"kind\":\"action\",\"text\":\"Bình đặt đèn pin xuống. Lan kéo rèm để ánh đèn đường rọi vào bàn; cả hai nghiêng tờ giấy để đọc.\",\"speaker\":\"\"}]} }",
+  "output": {
+    "scene": {
+      "heading": "Khoảnh khắc",
+      "blocks": [
+        {
+          "kind": "action",
+          "text": "Bình đặt đèn pin xuống. Lan kéo rèm để ánh đèn đường rọi vào bàn; cả hai nghiêng tờ giấy để đọc.",
+          "speaker": ""
+        }
+      ]
+    }
+  }
+}

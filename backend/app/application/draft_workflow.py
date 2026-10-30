@@ -18,7 +18,7 @@ from app.api.schemas.provenance import TextProvenance
 from app.application.ai_provider import StructuredResult
 from app.application.provenance import ai_draft, scene_fields
 from app.application.scene_suggestions import suggest_scenes
-from app.application.screenplay_writing import write_scene
+from app.application.screenplay_writing import PROMPT_VERSION as WRITING_PROMPT_VERSION, write_scene
 from app.application.screenplay_review import PROMPT_VERSION as REVIEW_PROMPT_VERSION, review_scene, review_sources
 from app.application.workflow import create_story_generation_service
 from app.application.draft_run_store import now
@@ -169,7 +169,8 @@ def execute(store, project_id, run_id, providers):
             checkpoint("outline", active=("outline",))
             proposal = suggest_scenes(SceneProposal(id=str(uuid4()), created_at=now(),
                 source_revision=p.revision, source_content=p.content_key(), source_outline=p.scene_outline,
-                mode="list", instructions="Create 2 to 6 concise scenes. Automatic drafting supports at most 6 scenes."), wrapped[1])
+                mode="list", instructions="Create concise scenes within the author's scene count; do not impose a minimum of two."),
+                wrapped[1], max_scenes=MAX_AUTO_SCENES)
             if len(proposal.scenes) > MAX_AUTO_SCENES:
                 raise ValueError("Tạo tự động hỗ trợ tối đa 6 cảnh; không cắt bỏ cảnh. Hãy giữ story plan và tạo lượt mới ngắn hơn; bạn cũng có thể tiếp tục tự viết.")
             p.scene_outline.scenes = proposal.scenes
@@ -188,7 +189,7 @@ def execute(store, project_id, run_id, providers):
             checkpoint("write", active=(f"write:{scene.id}",))
             result = write_scene(ScreenplayProposal(id=str(uuid4()), created_at=now(),
                 source_revision=p.revision, source_content=p.content_key(), source_screenplay=p.screenplay.model_copy(deep=True),
-                source_outline=p.scene_outline, target_scene_id=scene.id, prompt_version="screenplay-scene-v1"), wrapped[2])
+                source_outline=p.scene_outline, target_scene_id=scene.id, prompt_version=WRITING_PROMPT_VERSION), wrapped[2])
             p.screenplay.scenes[index] = result.scene
             p.screenplay.provenance.update({k: TextProvenance(origin="ai_proposal") for k in scene_fields([result.scene], True)})
             checkpoint("write", completed={f"write:{scene.id}": scene.id},

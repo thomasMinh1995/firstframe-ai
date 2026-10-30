@@ -1,0 +1,174 @@
+[
+  {
+    "seconds": 0.055,
+    "status": "running",
+    "step": "clarify",
+    "candidate_revision": 1,
+    "progress_revision": 1,
+    "workflow_items": [
+      {
+        "id": "analysis",
+        "kind": "analysis",
+        "scene_id": null,
+        "status": "running",
+        "started_at": "2026-10-30T04:36:47.270883+00:00",
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "intent",
+        "kind": "intent",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "plan",
+        "kind": "plan",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "plan_review",
+        "kind": "plan_review",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "outline",
+        "kind": "outline",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "review",
+        "kind": "review",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "draft",
+        "kind": "draft",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      }
+    ]
+  },
+  {
+    "seconds": 0.057,
+    "status": "interrupted",
+    "step": "clarify",
+    "candidate_revision": 1,
+    "progress_revision": 2,
+    "workflow_items": [
+      {
+        "id": "analysis",
+        "kind": "analysis",
+        "scene_id": null,
+        "status": "interrupted",
+        "started_at": "2026-10-30T04:36:47.270883+00:00",
+        "finished_at": "2026-10-30T04:36:47.272732+00:00",
+        "result": null,
+        "error_code": "unknown_result",
+        "children": []
+      },
+      {
+        "id": "intent",
+        "kind": "intent",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "plan",
+        "kind": "plan",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "plan_review",
+        "kind": "plan_review",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "outline",
+        "kind": "outline",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "review",
+        "kind": "review",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "draft",
+        "kind": "draft",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      }
+    ]
+  }
+]

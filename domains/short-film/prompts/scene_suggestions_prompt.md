@@ -5,6 +5,9 @@ Preserve the author's explicit constraints, relationships, deliberate silence, a
 Show through visible actions and natural speech. Do not add a confession, forgiveness, reconciliation,
 new relationship, character or location that contradicts the author's intent. Do not force a climax,
 a closed ending or a minimum number of scenes. If a detail is undecided, leave it open.
+In list mode, scene_count gives the enforced minimum and maximum from the author's explicit count
+and the supported workflow limit. Return a scenes array within these bounds; one scene is enough
+when requested. Never add scenes to satisfy an assumed story-act structure.
 In list mode, suggest the initial ordered list; in append mode suggest exactly one scene after the
 specified target (or at the end); in develop mode suggest exactly one replacement for the selected
 scene's content. Do not change other scenes. Keep existing staging choices and author notes outside

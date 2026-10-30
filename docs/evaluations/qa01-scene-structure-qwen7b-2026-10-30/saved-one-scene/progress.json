@@ -1,0 +1,2038 @@
+[
+  {
+    "seconds": 0.062,
+    "status": "running",
+    "step": "clarify",
+    "candidate_revision": 1,
+    "progress_revision": 1,
+    "workflow_items": [
+      {
+        "id": "analysis",
+        "kind": "analysis",
+        "scene_id": null,
+        "status": "running",
+        "started_at": "2026-10-30T04:40:33.820901+00:00",
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "intent",
+        "kind": "intent",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "plan",
+        "kind": "plan",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "plan_review",
+        "kind": "plan_review",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "outline",
+        "kind": "outline",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "review",
+        "kind": "review",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "draft",
+        "kind": "draft",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      }
+    ]
+  },
+  {
+    "seconds": 11.805,
+    "status": "running",
+    "step": "plan",
+    "candidate_revision": 2,
+    "progress_revision": 2,
+    "workflow_items": [
+      {
+        "id": "analysis",
+        "kind": "analysis",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:40:33.820901+00:00",
+        "finished_at": "2026-10-30T04:40:45.563779+00:00",
+        "result": {
+          "kind": "analysis",
+          "id": "b6914aa6-2133-4b03-bbc0-6b7487c66d31",
+          "candidate_revision": 2
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "intent",
+        "kind": "intent",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "plan",
+        "kind": "plan",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "plan_review",
+        "kind": "plan_review",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "outline",
+        "kind": "outline",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "review",
+        "kind": "review",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "draft",
+        "kind": "draft",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      }
+    ]
+  },
+  {
+    "seconds": 11.807,
+    "status": "needs_input",
+    "step": "plan",
+    "candidate_revision": 2,
+    "progress_revision": 3,
+    "workflow_items": [
+      {
+        "id": "analysis",
+        "kind": "analysis",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:40:33.820901+00:00",
+        "finished_at": "2026-10-30T04:40:45.563779+00:00",
+        "result": {
+          "kind": "analysis",
+          "id": "b6914aa6-2133-4b03-bbc0-6b7487c66d31",
+          "candidate_revision": 2
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "intent",
+        "kind": "intent",
+        "scene_id": null,
+        "status": "needs_input",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "plan",
+        "kind": "plan",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "plan_review",
+        "kind": "plan_review",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "outline",
+        "kind": "outline",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "review",
+        "kind": "review",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "draft",
+        "kind": "draft",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      }
+    ]
+  },
+  {
+    "seconds": 11.851,
+    "status": "running",
+    "step": "plan",
+    "candidate_revision": 3,
+    "progress_revision": 4,
+    "workflow_items": [
+      {
+        "id": "analysis",
+        "kind": "analysis",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:40:33.820901+00:00",
+        "finished_at": "2026-10-30T04:40:45.563779+00:00",
+        "result": {
+          "kind": "analysis",
+          "id": "b6914aa6-2133-4b03-bbc0-6b7487c66d31",
+          "candidate_revision": 2
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "intent",
+        "kind": "intent",
+        "scene_id": null,
+        "status": "needs_input",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "plan",
+        "kind": "plan",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "plan_review",
+        "kind": "plan_review",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "outline",
+        "kind": "outline",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "review",
+        "kind": "review",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "draft",
+        "kind": "draft",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      }
+    ]
+  },
+  {
+    "seconds": 11.86,
+    "status": "running",
+    "step": "plan",
+    "candidate_revision": 3,
+    "progress_revision": 5,
+    "workflow_items": [
+      {
+        "id": "analysis",
+        "kind": "analysis",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:40:33.820901+00:00",
+        "finished_at": "2026-10-30T04:40:45.563779+00:00",
+        "result": {
+          "kind": "analysis",
+          "id": "b6914aa6-2133-4b03-bbc0-6b7487c66d31",
+          "candidate_revision": 2
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "intent",
+        "kind": "intent",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": null,
+        "finished_at": "2026-10-30T04:40:45.617605+00:00",
+        "result": {
+          "kind": "intent",
+          "id": "b6914aa6-2133-4b03-bbc0-6b7487c66d31",
+          "candidate_revision": 3
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "plan",
+        "kind": "plan",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "plan_review",
+        "kind": "plan_review",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "outline",
+        "kind": "outline",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "review",
+        "kind": "review",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "draft",
+        "kind": "draft",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      }
+    ]
+  },
+  {
+    "seconds": 11.862,
+    "status": "running",
+    "step": "plan",
+    "candidate_revision": 4,
+    "progress_revision": 6,
+    "workflow_items": [
+      {
+        "id": "analysis",
+        "kind": "analysis",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:40:33.820901+00:00",
+        "finished_at": "2026-10-30T04:40:45.563779+00:00",
+        "result": {
+          "kind": "analysis",
+          "id": "b6914aa6-2133-4b03-bbc0-6b7487c66d31",
+          "candidate_revision": 2
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "intent",
+        "kind": "intent",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": null,
+        "finished_at": "2026-10-30T04:40:45.617605+00:00",
+        "result": {
+          "kind": "intent",
+          "id": "b6914aa6-2133-4b03-bbc0-6b7487c66d31",
+          "candidate_revision": 3
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "plan",
+        "kind": "plan",
+        "scene_id": null,
+        "status": "running",
+        "started_at": "2026-10-30T04:40:45.620541+00:00",
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "plan_review",
+        "kind": "plan_review",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "outline",
+        "kind": "outline",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "review",
+        "kind": "review",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "draft",
+        "kind": "draft",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      }
+    ]
+  },
+  {
+    "seconds": 70.961,
+    "status": "running",
+    "step": "plan_review",
+    "candidate_revision": 5,
+    "progress_revision": 7,
+    "workflow_items": [
+      {
+        "id": "analysis",
+        "kind": "analysis",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:40:33.820901+00:00",
+        "finished_at": "2026-10-30T04:40:45.563779+00:00",
+        "result": {
+          "kind": "analysis",
+          "id": "b6914aa6-2133-4b03-bbc0-6b7487c66d31",
+          "candidate_revision": 2
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "intent",
+        "kind": "intent",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": null,
+        "finished_at": "2026-10-30T04:40:45.617605+00:00",
+        "result": {
+          "kind": "intent",
+          "id": "b6914aa6-2133-4b03-bbc0-6b7487c66d31",
+          "candidate_revision": 3
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "plan",
+        "kind": "plan",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:40:45.620541+00:00",
+        "finished_at": "2026-10-30T04:41:44.716908+00:00",
+        "result": {
+          "kind": "plan",
+          "id": null,
+          "candidate_revision": 5
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "plan_review",
+        "kind": "plan_review",
+        "scene_id": null,
+        "status": "running",
+        "started_at": "2026-10-30T04:41:44.716934+00:00",
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "outline",
+        "kind": "outline",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "review",
+        "kind": "review",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "draft",
+        "kind": "draft",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      }
+    ]
+  },
+  {
+    "seconds": 91.608,
+    "status": "running",
+    "step": "plan_review",
+    "candidate_revision": 5,
+    "progress_revision": 8,
+    "workflow_items": [
+      {
+        "id": "analysis",
+        "kind": "analysis",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:40:33.820901+00:00",
+        "finished_at": "2026-10-30T04:40:45.563779+00:00",
+        "result": {
+          "kind": "analysis",
+          "id": "b6914aa6-2133-4b03-bbc0-6b7487c66d31",
+          "candidate_revision": 2
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "intent",
+        "kind": "intent",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": null,
+        "finished_at": "2026-10-30T04:40:45.617605+00:00",
+        "result": {
+          "kind": "intent",
+          "id": "b6914aa6-2133-4b03-bbc0-6b7487c66d31",
+          "candidate_revision": 3
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "plan",
+        "kind": "plan",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:40:45.620541+00:00",
+        "finished_at": "2026-10-30T04:41:44.716908+00:00",
+        "result": {
+          "kind": "plan",
+          "id": null,
+          "candidate_revision": 5
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "plan_review",
+        "kind": "plan_review",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:41:44.716934+00:00",
+        "finished_at": "2026-10-30T04:42:05.365102+00:00",
+        "result": {
+          "kind": "plan_review",
+          "id": "1c5b97c4-bdac-4aef-9f20-215f9722f9bd",
+          "candidate_revision": 5
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "outline",
+        "kind": "outline",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "review",
+        "kind": "review",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "draft",
+        "kind": "draft",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      }
+    ]
+  },
+  {
+    "seconds": 91.62,
+    "status": "running",
+    "step": "outline",
+    "candidate_revision": 6,
+    "progress_revision": 9,
+    "workflow_items": [
+      {
+        "id": "analysis",
+        "kind": "analysis",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:40:33.820901+00:00",
+        "finished_at": "2026-10-30T04:40:45.563779+00:00",
+        "result": {
+          "kind": "analysis",
+          "id": "b6914aa6-2133-4b03-bbc0-6b7487c66d31",
+          "candidate_revision": 2
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "intent",
+        "kind": "intent",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": null,
+        "finished_at": "2026-10-30T04:40:45.617605+00:00",
+        "result": {
+          "kind": "intent",
+          "id": "b6914aa6-2133-4b03-bbc0-6b7487c66d31",
+          "candidate_revision": 3
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "plan",
+        "kind": "plan",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:40:45.620541+00:00",
+        "finished_at": "2026-10-30T04:41:44.716908+00:00",
+        "result": {
+          "kind": "plan",
+          "id": null,
+          "candidate_revision": 5
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "plan_review",
+        "kind": "plan_review",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:41:44.716934+00:00",
+        "finished_at": "2026-10-30T04:42:05.365102+00:00",
+        "result": {
+          "kind": "plan_review",
+          "id": "1c5b97c4-bdac-4aef-9f20-215f9722f9bd",
+          "candidate_revision": 5
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "outline",
+        "kind": "outline",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "review",
+        "kind": "review",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "draft",
+        "kind": "draft",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      }
+    ]
+  },
+  {
+    "seconds": 91.625,
+    "status": "running",
+    "step": "outline",
+    "candidate_revision": 7,
+    "progress_revision": 10,
+    "workflow_items": [
+      {
+        "id": "analysis",
+        "kind": "analysis",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:40:33.820901+00:00",
+        "finished_at": "2026-10-30T04:40:45.563779+00:00",
+        "result": {
+          "kind": "analysis",
+          "id": "b6914aa6-2133-4b03-bbc0-6b7487c66d31",
+          "candidate_revision": 2
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "intent",
+        "kind": "intent",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": null,
+        "finished_at": "2026-10-30T04:40:45.617605+00:00",
+        "result": {
+          "kind": "intent",
+          "id": "b6914aa6-2133-4b03-bbc0-6b7487c66d31",
+          "candidate_revision": 3
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "plan",
+        "kind": "plan",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:40:45.620541+00:00",
+        "finished_at": "2026-10-30T04:41:44.716908+00:00",
+        "result": {
+          "kind": "plan",
+          "id": null,
+          "candidate_revision": 5
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "plan_review",
+        "kind": "plan_review",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:41:44.716934+00:00",
+        "finished_at": "2026-10-30T04:42:05.365102+00:00",
+        "result": {
+          "kind": "plan_review",
+          "id": "1c5b97c4-bdac-4aef-9f20-215f9722f9bd",
+          "candidate_revision": 5
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "outline",
+        "kind": "outline",
+        "scene_id": null,
+        "status": "running",
+        "started_at": "2026-10-30T04:42:05.382450+00:00",
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "review",
+        "kind": "review",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "draft",
+        "kind": "draft",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      }
+    ]
+  },
+  {
+    "seconds": 113.086,
+    "status": "running",
+    "step": "write",
+    "candidate_revision": 8,
+    "progress_revision": 11,
+    "workflow_items": [
+      {
+        "id": "analysis",
+        "kind": "analysis",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:40:33.820901+00:00",
+        "finished_at": "2026-10-30T04:40:45.563779+00:00",
+        "result": {
+          "kind": "analysis",
+          "id": "b6914aa6-2133-4b03-bbc0-6b7487c66d31",
+          "candidate_revision": 2
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "intent",
+        "kind": "intent",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": null,
+        "finished_at": "2026-10-30T04:40:45.617605+00:00",
+        "result": {
+          "kind": "intent",
+          "id": "b6914aa6-2133-4b03-bbc0-6b7487c66d31",
+          "candidate_revision": 3
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "plan",
+        "kind": "plan",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:40:45.620541+00:00",
+        "finished_at": "2026-10-30T04:41:44.716908+00:00",
+        "result": {
+          "kind": "plan",
+          "id": null,
+          "candidate_revision": 5
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "plan_review",
+        "kind": "plan_review",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:41:44.716934+00:00",
+        "finished_at": "2026-10-30T04:42:05.365102+00:00",
+        "result": {
+          "kind": "plan_review",
+          "id": "1c5b97c4-bdac-4aef-9f20-215f9722f9bd",
+          "candidate_revision": 5
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "outline",
+        "kind": "outline",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:42:05.382450+00:00",
+        "finished_at": "2026-10-30T04:42:26.843507+00:00",
+        "result": {
+          "kind": "outline",
+          "id": "4720aa84-82b7-46c6-8ba5-85171c5614cc",
+          "candidate_revision": 8
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "write:3aaa2e6b-68f6-4690-b8e4-3bc8afd6e7fa",
+        "kind": "write",
+        "scene_id": "3aaa2e6b-68f6-4690-b8e4-3bc8afd6e7fa",
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "review",
+        "kind": "review",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": [
+          {
+            "id": "review_scene:3aaa2e6b-68f6-4690-b8e4-3bc8afd6e7fa",
+            "kind": "review_scene",
+            "scene_id": "3aaa2e6b-68f6-4690-b8e4-3bc8afd6e7fa",
+            "status": "pending",
+            "started_at": null,
+            "finished_at": null,
+            "result": null,
+            "error_code": null,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "draft",
+        "kind": "draft",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      }
+    ]
+  },
+  {
+    "seconds": 113.092,
+    "status": "running",
+    "step": "write",
+    "candidate_revision": 9,
+    "progress_revision": 12,
+    "workflow_items": [
+      {
+        "id": "analysis",
+        "kind": "analysis",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:40:33.820901+00:00",
+        "finished_at": "2026-10-30T04:40:45.563779+00:00",
+        "result": {
+          "kind": "analysis",
+          "id": "b6914aa6-2133-4b03-bbc0-6b7487c66d31",
+          "candidate_revision": 2
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "intent",
+        "kind": "intent",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": null,
+        "finished_at": "2026-10-30T04:40:45.617605+00:00",
+        "result": {
+          "kind": "intent",
+          "id": "b6914aa6-2133-4b03-bbc0-6b7487c66d31",
+          "candidate_revision": 3
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "plan",
+        "kind": "plan",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:40:45.620541+00:00",
+        "finished_at": "2026-10-30T04:41:44.716908+00:00",
+        "result": {
+          "kind": "plan",
+          "id": null,
+          "candidate_revision": 5
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "plan_review",
+        "kind": "plan_review",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:41:44.716934+00:00",
+        "finished_at": "2026-10-30T04:42:05.365102+00:00",
+        "result": {
+          "kind": "plan_review",
+          "id": "1c5b97c4-bdac-4aef-9f20-215f9722f9bd",
+          "candidate_revision": 5
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "outline",
+        "kind": "outline",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:42:05.382450+00:00",
+        "finished_at": "2026-10-30T04:42:26.843507+00:00",
+        "result": {
+          "kind": "outline",
+          "id": "4720aa84-82b7-46c6-8ba5-85171c5614cc",
+          "candidate_revision": 8
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "write:3aaa2e6b-68f6-4690-b8e4-3bc8afd6e7fa",
+        "kind": "write",
+        "scene_id": "3aaa2e6b-68f6-4690-b8e4-3bc8afd6e7fa",
+        "status": "running",
+        "started_at": "2026-10-30T04:42:26.849481+00:00",
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "review",
+        "kind": "review",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": [
+          {
+            "id": "review_scene:3aaa2e6b-68f6-4690-b8e4-3bc8afd6e7fa",
+            "kind": "review_scene",
+            "scene_id": "3aaa2e6b-68f6-4690-b8e4-3bc8afd6e7fa",
+            "status": "pending",
+            "started_at": null,
+            "finished_at": null,
+            "result": null,
+            "error_code": null,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "draft",
+        "kind": "draft",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      }
+    ]
+  },
+  {
+    "seconds": 135.032,
+    "status": "running",
+    "step": "write",
+    "candidate_revision": 10,
+    "progress_revision": 13,
+    "workflow_items": [
+      {
+        "id": "analysis",
+        "kind": "analysis",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:40:33.820901+00:00",
+        "finished_at": "2026-10-30T04:40:45.563779+00:00",
+        "result": {
+          "kind": "analysis",
+          "id": "b6914aa6-2133-4b03-bbc0-6b7487c66d31",
+          "candidate_revision": 2
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "intent",
+        "kind": "intent",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": null,
+        "finished_at": "2026-10-30T04:40:45.617605+00:00",
+        "result": {
+          "kind": "intent",
+          "id": "b6914aa6-2133-4b03-bbc0-6b7487c66d31",
+          "candidate_revision": 3
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "plan",
+        "kind": "plan",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:40:45.620541+00:00",
+        "finished_at": "2026-10-30T04:41:44.716908+00:00",
+        "result": {
+          "kind": "plan",
+          "id": null,
+          "candidate_revision": 5
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "plan_review",
+        "kind": "plan_review",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:41:44.716934+00:00",
+        "finished_at": "2026-10-30T04:42:05.365102+00:00",
+        "result": {
+          "kind": "plan_review",
+          "id": "1c5b97c4-bdac-4aef-9f20-215f9722f9bd",
+          "candidate_revision": 5
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "outline",
+        "kind": "outline",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:42:05.382450+00:00",
+        "finished_at": "2026-10-30T04:42:26.843507+00:00",
+        "result": {
+          "kind": "outline",
+          "id": "4720aa84-82b7-46c6-8ba5-85171c5614cc",
+          "candidate_revision": 8
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "write:3aaa2e6b-68f6-4690-b8e4-3bc8afd6e7fa",
+        "kind": "write",
+        "scene_id": "3aaa2e6b-68f6-4690-b8e4-3bc8afd6e7fa",
+        "status": "completed",
+        "started_at": "2026-10-30T04:42:26.849481+00:00",
+        "finished_at": "2026-10-30T04:42:48.789228+00:00",
+        "result": {
+          "kind": "write",
+          "id": "3aaa2e6b-68f6-4690-b8e4-3bc8afd6e7fa",
+          "candidate_revision": 10
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "review",
+        "kind": "review",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": [
+          {
+            "id": "review_scene:3aaa2e6b-68f6-4690-b8e4-3bc8afd6e7fa",
+            "kind": "review_scene",
+            "scene_id": "3aaa2e6b-68f6-4690-b8e4-3bc8afd6e7fa",
+            "status": "pending",
+            "started_at": null,
+            "finished_at": null,
+            "result": null,
+            "error_code": null,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "draft",
+        "kind": "draft",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": []
+      }
+    ]
+  },
+  {
+    "seconds": 135.038,
+    "status": "running",
+    "step": "review",
+    "candidate_revision": 11,
+    "progress_revision": 14,
+    "workflow_items": [
+      {
+        "id": "analysis",
+        "kind": "analysis",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:40:33.820901+00:00",
+        "finished_at": "2026-10-30T04:40:45.563779+00:00",
+        "result": {
+          "kind": "analysis",
+          "id": "b6914aa6-2133-4b03-bbc0-6b7487c66d31",
+          "candidate_revision": 2
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "intent",
+        "kind": "intent",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": null,
+        "finished_at": "2026-10-30T04:40:45.617605+00:00",
+        "result": {
+          "kind": "intent",
+          "id": "b6914aa6-2133-4b03-bbc0-6b7487c66d31",
+          "candidate_revision": 3
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "plan",
+        "kind": "plan",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:40:45.620541+00:00",
+        "finished_at": "2026-10-30T04:41:44.716908+00:00",
+        "result": {
+          "kind": "plan",
+          "id": null,
+          "candidate_revision": 5
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "plan_review",
+        "kind": "plan_review",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:41:44.716934+00:00",
+        "finished_at": "2026-10-30T04:42:05.365102+00:00",
+        "result": {
+          "kind": "plan_review",
+          "id": "1c5b97c4-bdac-4aef-9f20-215f9722f9bd",
+          "candidate_revision": 5
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "outline",
+        "kind": "outline",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:42:05.382450+00:00",
+        "finished_at": "2026-10-30T04:42:26.843507+00:00",
+        "result": {
+          "kind": "outline",
+          "id": "4720aa84-82b7-46c6-8ba5-85171c5614cc",
+          "candidate_revision": 8
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "write:3aaa2e6b-68f6-4690-b8e4-3bc8afd6e7fa",
+        "kind": "write",
+        "scene_id": "3aaa2e6b-68f6-4690-b8e4-3bc8afd6e7fa",
+        "status": "completed",
+        "started_at": "2026-10-30T04:42:26.849481+00:00",
+        "finished_at": "2026-10-30T04:42:48.789228+00:00",
+        "result": {
+          "kind": "write",
+          "id": "3aaa2e6b-68f6-4690-b8e4-3bc8afd6e7fa",
+          "candidate_revision": 10
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "review",
+        "kind": "review",
+        "scene_id": null,
+        "status": "pending",
+        "started_at": null,
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": [
+          {
+            "id": "review_scene:3aaa2e6b-68f6-4690-b8e4-3bc8afd6e7fa",
+            "kind": "review_scene",
+            "scene_id": "3aaa2e6b-68f6-4690-b8e4-3bc8afd6e7fa",
+            "status": "pending",
+            "started_at": null,
+            "finished_at": null,
+            "result": null,
+            "error_code": null,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "draft",
+        "kind": "draft",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": null,
+        "finished_at": "2026-10-30T04:42:48.795561+00:00",
+        "result": {
+          "kind": "draft",
+          "id": "9b299786-aa82-4e21-9326-f3e0aad8057e",
+          "candidate_revision": 11
+        },
+        "error_code": null,
+        "children": []
+      }
+    ]
+  },
+  {
+    "seconds": 135.045,
+    "status": "running",
+    "step": "review",
+    "candidate_revision": 11,
+    "progress_revision": 15,
+    "workflow_items": [
+      {
+        "id": "analysis",
+        "kind": "analysis",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:40:33.820901+00:00",
+        "finished_at": "2026-10-30T04:40:45.563779+00:00",
+        "result": {
+          "kind": "analysis",
+          "id": "b6914aa6-2133-4b03-bbc0-6b7487c66d31",
+          "candidate_revision": 2
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "intent",
+        "kind": "intent",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": null,
+        "finished_at": "2026-10-30T04:40:45.617605+00:00",
+        "result": {
+          "kind": "intent",
+          "id": "b6914aa6-2133-4b03-bbc0-6b7487c66d31",
+          "candidate_revision": 3
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "plan",
+        "kind": "plan",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:40:45.620541+00:00",
+        "finished_at": "2026-10-30T04:41:44.716908+00:00",
+        "result": {
+          "kind": "plan",
+          "id": null,
+          "candidate_revision": 5
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "plan_review",
+        "kind": "plan_review",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:41:44.716934+00:00",
+        "finished_at": "2026-10-30T04:42:05.365102+00:00",
+        "result": {
+          "kind": "plan_review",
+          "id": "1c5b97c4-bdac-4aef-9f20-215f9722f9bd",
+          "candidate_revision": 5
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "outline",
+        "kind": "outline",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:42:05.382450+00:00",
+        "finished_at": "2026-10-30T04:42:26.843507+00:00",
+        "result": {
+          "kind": "outline",
+          "id": "4720aa84-82b7-46c6-8ba5-85171c5614cc",
+          "candidate_revision": 8
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "write:3aaa2e6b-68f6-4690-b8e4-3bc8afd6e7fa",
+        "kind": "write",
+        "scene_id": "3aaa2e6b-68f6-4690-b8e4-3bc8afd6e7fa",
+        "status": "completed",
+        "started_at": "2026-10-30T04:42:26.849481+00:00",
+        "finished_at": "2026-10-30T04:42:48.789228+00:00",
+        "result": {
+          "kind": "write",
+          "id": "3aaa2e6b-68f6-4690-b8e4-3bc8afd6e7fa",
+          "candidate_revision": 10
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "review",
+        "kind": "review",
+        "scene_id": null,
+        "status": "running",
+        "started_at": "2026-10-30T04:42:48.802468+00:00",
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": [
+          {
+            "id": "review_scene:3aaa2e6b-68f6-4690-b8e4-3bc8afd6e7fa",
+            "kind": "review_scene",
+            "scene_id": "3aaa2e6b-68f6-4690-b8e4-3bc8afd6e7fa",
+            "status": "pending",
+            "started_at": null,
+            "finished_at": null,
+            "result": null,
+            "error_code": null,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "draft",
+        "kind": "draft",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": null,
+        "finished_at": "2026-10-30T04:42:48.795561+00:00",
+        "result": {
+          "kind": "draft",
+          "id": "9b299786-aa82-4e21-9326-f3e0aad8057e",
+          "candidate_revision": 11
+        },
+        "error_code": null,
+        "children": []
+      }
+    ]
+  },
+  {
+    "seconds": 135.051,
+    "status": "running",
+    "step": "review",
+    "candidate_revision": 11,
+    "progress_revision": 16,
+    "workflow_items": [
+      {
+        "id": "analysis",
+        "kind": "analysis",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:40:33.820901+00:00",
+        "finished_at": "2026-10-30T04:40:45.563779+00:00",
+        "result": {
+          "kind": "analysis",
+          "id": "b6914aa6-2133-4b03-bbc0-6b7487c66d31",
+          "candidate_revision": 2
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "intent",
+        "kind": "intent",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": null,
+        "finished_at": "2026-10-30T04:40:45.617605+00:00",
+        "result": {
+          "kind": "intent",
+          "id": "b6914aa6-2133-4b03-bbc0-6b7487c66d31",
+          "candidate_revision": 3
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "plan",
+        "kind": "plan",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:40:45.620541+00:00",
+        "finished_at": "2026-10-30T04:41:44.716908+00:00",
+        "result": {
+          "kind": "plan",
+          "id": null,
+          "candidate_revision": 5
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "plan_review",
+        "kind": "plan_review",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:41:44.716934+00:00",
+        "finished_at": "2026-10-30T04:42:05.365102+00:00",
+        "result": {
+          "kind": "plan_review",
+          "id": "1c5b97c4-bdac-4aef-9f20-215f9722f9bd",
+          "candidate_revision": 5
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "outline",
+        "kind": "outline",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:42:05.382450+00:00",
+        "finished_at": "2026-10-30T04:42:26.843507+00:00",
+        "result": {
+          "kind": "outline",
+          "id": "4720aa84-82b7-46c6-8ba5-85171c5614cc",
+          "candidate_revision": 8
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "write:3aaa2e6b-68f6-4690-b8e4-3bc8afd6e7fa",
+        "kind": "write",
+        "scene_id": "3aaa2e6b-68f6-4690-b8e4-3bc8afd6e7fa",
+        "status": "completed",
+        "started_at": "2026-10-30T04:42:26.849481+00:00",
+        "finished_at": "2026-10-30T04:42:48.789228+00:00",
+        "result": {
+          "kind": "write",
+          "id": "3aaa2e6b-68f6-4690-b8e4-3bc8afd6e7fa",
+          "candidate_revision": 10
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "review",
+        "kind": "review",
+        "scene_id": null,
+        "status": "running",
+        "started_at": "2026-10-30T04:42:48.802468+00:00",
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": [
+          {
+            "id": "review_scene:3aaa2e6b-68f6-4690-b8e4-3bc8afd6e7fa",
+            "kind": "review_scene",
+            "scene_id": "3aaa2e6b-68f6-4690-b8e4-3bc8afd6e7fa",
+            "status": "running",
+            "started_at": "2026-10-30T04:42:48.808607+00:00",
+            "finished_at": null,
+            "result": null,
+            "error_code": null,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "draft",
+        "kind": "draft",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": null,
+        "finished_at": "2026-10-30T04:42:48.795561+00:00",
+        "result": {
+          "kind": "draft",
+          "id": "9b299786-aa82-4e21-9326-f3e0aad8057e",
+          "candidate_revision": 11
+        },
+        "error_code": null,
+        "children": []
+      }
+    ]
+  },
+  {
+    "seconds": 139.033,
+    "status": "running",
+    "step": "review",
+    "candidate_revision": 12,
+    "progress_revision": 17,
+    "workflow_items": [
+      {
+        "id": "analysis",
+        "kind": "analysis",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:40:33.820901+00:00",
+        "finished_at": "2026-10-30T04:40:45.563779+00:00",
+        "result": {
+          "kind": "analysis",
+          "id": "b6914aa6-2133-4b03-bbc0-6b7487c66d31",
+          "candidate_revision": 2
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "intent",
+        "kind": "intent",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": null,
+        "finished_at": "2026-10-30T04:40:45.617605+00:00",
+        "result": {
+          "kind": "intent",
+          "id": "b6914aa6-2133-4b03-bbc0-6b7487c66d31",
+          "candidate_revision": 3
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "plan",
+        "kind": "plan",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:40:45.620541+00:00",
+        "finished_at": "2026-10-30T04:41:44.716908+00:00",
+        "result": {
+          "kind": "plan",
+          "id": null,
+          "candidate_revision": 5
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "plan_review",
+        "kind": "plan_review",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:41:44.716934+00:00",
+        "finished_at": "2026-10-30T04:42:05.365102+00:00",
+        "result": {
+          "kind": "plan_review",
+          "id": "1c5b97c4-bdac-4aef-9f20-215f9722f9bd",
+          "candidate_revision": 5
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "outline",
+        "kind": "outline",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:42:05.382450+00:00",
+        "finished_at": "2026-10-30T04:42:26.843507+00:00",
+        "result": {
+          "kind": "outline",
+          "id": "4720aa84-82b7-46c6-8ba5-85171c5614cc",
+          "candidate_revision": 8
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "write:3aaa2e6b-68f6-4690-b8e4-3bc8afd6e7fa",
+        "kind": "write",
+        "scene_id": "3aaa2e6b-68f6-4690-b8e4-3bc8afd6e7fa",
+        "status": "completed",
+        "started_at": "2026-10-30T04:42:26.849481+00:00",
+        "finished_at": "2026-10-30T04:42:48.789228+00:00",
+        "result": {
+          "kind": "write",
+          "id": "3aaa2e6b-68f6-4690-b8e4-3bc8afd6e7fa",
+          "candidate_revision": 10
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "review",
+        "kind": "review",
+        "scene_id": null,
+        "status": "running",
+        "started_at": "2026-10-30T04:42:48.802468+00:00",
+        "finished_at": null,
+        "result": null,
+        "error_code": null,
+        "children": [
+          {
+            "id": "review_scene:3aaa2e6b-68f6-4690-b8e4-3bc8afd6e7fa",
+            "kind": "review_scene",
+            "scene_id": "3aaa2e6b-68f6-4690-b8e4-3bc8afd6e7fa",
+            "status": "completed",
+            "started_at": "2026-10-30T04:42:48.808607+00:00",
+            "finished_at": "2026-10-30T04:42:52.791327+00:00",
+            "result": {
+              "kind": "review_scene",
+              "id": "8cad7bfe-bca2-457f-83bb-d3c51c29cb42",
+              "candidate_revision": 12
+            },
+            "error_code": null,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "draft",
+        "kind": "draft",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": null,
+        "finished_at": "2026-10-30T04:42:48.795561+00:00",
+        "result": {
+          "kind": "draft",
+          "id": "9b299786-aa82-4e21-9326-f3e0aad8057e",
+          "candidate_revision": 11
+        },
+        "error_code": null,
+        "children": []
+      }
+    ]
+  },
+  {
+    "seconds": 139.037,
+    "status": "ready",
+    "step": "done",
+    "candidate_revision": 12,
+    "progress_revision": 18,
+    "workflow_items": [
+      {
+        "id": "analysis",
+        "kind": "analysis",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:40:33.820901+00:00",
+        "finished_at": "2026-10-30T04:40:45.563779+00:00",
+        "result": {
+          "kind": "analysis",
+          "id": "b6914aa6-2133-4b03-bbc0-6b7487c66d31",
+          "candidate_revision": 2
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "intent",
+        "kind": "intent",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": null,
+        "finished_at": "2026-10-30T04:40:45.617605+00:00",
+        "result": {
+          "kind": "intent",
+          "id": "b6914aa6-2133-4b03-bbc0-6b7487c66d31",
+          "candidate_revision": 3
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "plan",
+        "kind": "plan",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:40:45.620541+00:00",
+        "finished_at": "2026-10-30T04:41:44.716908+00:00",
+        "result": {
+          "kind": "plan",
+          "id": null,
+          "candidate_revision": 5
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "plan_review",
+        "kind": "plan_review",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:41:44.716934+00:00",
+        "finished_at": "2026-10-30T04:42:05.365102+00:00",
+        "result": {
+          "kind": "plan_review",
+          "id": "1c5b97c4-bdac-4aef-9f20-215f9722f9bd",
+          "candidate_revision": 5
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "outline",
+        "kind": "outline",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:42:05.382450+00:00",
+        "finished_at": "2026-10-30T04:42:26.843507+00:00",
+        "result": {
+          "kind": "outline",
+          "id": "4720aa84-82b7-46c6-8ba5-85171c5614cc",
+          "candidate_revision": 8
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "write:3aaa2e6b-68f6-4690-b8e4-3bc8afd6e7fa",
+        "kind": "write",
+        "scene_id": "3aaa2e6b-68f6-4690-b8e4-3bc8afd6e7fa",
+        "status": "completed",
+        "started_at": "2026-10-30T04:42:26.849481+00:00",
+        "finished_at": "2026-10-30T04:42:48.789228+00:00",
+        "result": {
+          "kind": "write",
+          "id": "3aaa2e6b-68f6-4690-b8e4-3bc8afd6e7fa",
+          "candidate_revision": 10
+        },
+        "error_code": null,
+        "children": []
+      },
+      {
+        "id": "review",
+        "kind": "review",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": "2026-10-30T04:42:48.802468+00:00",
+        "finished_at": "2026-10-30T04:42:52.794631+00:00",
+        "result": {
+          "kind": "review",
+          "id": "9b299786-aa82-4e21-9326-f3e0aad8057e",
+          "candidate_revision": 12
+        },
+        "error_code": null,
+        "children": [
+          {
+            "id": "review_scene:3aaa2e6b-68f6-4690-b8e4-3bc8afd6e7fa",
+            "kind": "review_scene",
+            "scene_id": "3aaa2e6b-68f6-4690-b8e4-3bc8afd6e7fa",
+            "status": "completed",
+            "started_at": "2026-10-30T04:42:48.808607+00:00",
+            "finished_at": "2026-10-30T04:42:52.791327+00:00",
+            "result": {
+              "kind": "review_scene",
+              "id": "8cad7bfe-bca2-457f-83bb-d3c51c29cb42",
+              "candidate_revision": 12
+            },
+            "error_code": null,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "draft",
+        "kind": "draft",
+        "scene_id": null,
+        "status": "completed",
+        "started_at": null,
+        "finished_at": "2026-10-30T04:42:48.795561+00:00",
+        "result": {
+          "kind": "draft",
+          "id": "9b299786-aa82-4e21-9326-f3e0aad8057e",
+          "candidate_revision": 11
+        },
+        "error_code": null,
+        "children": []
+      }
+    ]
+  }
+]

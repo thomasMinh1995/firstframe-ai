@@ -114,11 +114,14 @@ def get_project_store() -> ProjectStore:
 
 @contextmanager
 def project_errors():
+    from app.application.scene_count import SceneCountConflict
     try:
         yield
     except ProjectNotFound as error:
         raise HTTPException(404, "Project not found.") from error
     except LanguageSelectionRequired as error:
+        raise HTTPException(422, str(error)) from error
+    except SceneCountConflict as error:
         raise HTTPException(422, str(error)) from error
     except ProjectConflict as error:
         raise HTTPException(

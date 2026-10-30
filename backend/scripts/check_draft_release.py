@@ -18,7 +18,7 @@ from uuid import uuid4
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--output', type=Path, required=True)
 parser.add_argument('--model', default='qwen2.5:7b')
-parser.add_argument('--brief-source', type=Path, help='Saved phase-6 result; reuse only its synthetic brief and constraints')
+parser.add_argument('--brief-source', type=Path, help='Saved result/candidate (.json or .json.gz) or brief; reuse only its synthetic idea and constraints')
 args = parser.parse_args()
 out = args.output.resolve()
 out.mkdir(parents=True, exist_ok=False)
@@ -34,6 +34,8 @@ from app.application import draft_workflow
 from app.application.project_store import ProjectStore
 from app.application.draft_run_store import DraftRunStore
 from app.application.ai_provider import ProviderTimeoutError
+from app.api.schemas.projects import ProjectResponse
+from app.application.scene_count import scene_count_bounds
 
 start = time.monotonic()
 calls, progress = [], []
@@ -48,14 +50,19 @@ class Timed:
         entry = dict(stage=request.stage, input_bytes=len(request.input_text.encode()),
                      instructions_bytes=len(request.instructions.encode()), timeout_seconds=request.timeout_seconds)
         calls.append(entry)
+        save(f'request-{len(calls):02d}.json', dict(stage=request.stage, instructions=request.instructions,
+            input_text=request.input_text, schema=request.response_model.model_json_schema()))
         began = time.monotonic()
         print(json.dumps({'stage': request.stage, 'event': 'start'}), flush=True)
         try:
             result = self.provider.request_structured(request)
             entry.update(model=result.model, output=result.output.model_dump(mode='json'))
+            entry['raw_output'] = result.raw_output
             return result
         except Exception as error:
             entry['error'] = str(error)
+            entry['raw_output'] = getattr(error, 'raw_output', None)
+            entry['validation_error'] = str(error.__cause__) if error.__cause__ else None
             raise
         finally:
             entry['seconds'] = round(time.monotonic()-began, 3)
@@ -84,7 +91,11 @@ save('profile.json', profile)
 report = {'checks': {}, 'http': {}}
 brief = None
 if args.brief_source:
-    brief = json.loads(args.brief_source.read_text(encoding='utf-8'))['candidate']['project']
+    if args.brief_source.suffix == '.gz':
+        with gzip.open(args.brief_source, 'rt', encoding='utf-8') as f: brief = json.load(f)
+    else:
+        brief = json.loads(args.brief_source.read_text(encoding='utf-8'))
+    brief = brief.get('candidate', brief).get('project', brief.get('candidate', brief))
     profile['brief_source'] = str(args.brief_source)
     save('profile.json', profile)
 with TestClient(create_app()) as client:
@@ -112,8 +123,10 @@ with TestClient(create_app()) as client:
     report.update(project_id=p['id'], run_id=run_id, run_status=r['status'], review_error=r['review_error'],
                   scene_count=len(script['scenes']) if script else 0,
                   reviewed_scenes=len(c['project'].get('screenplay_reviews', [])))
+    bounds = scene_count_bounds(ProjectResponse.model_validate(c['project']).author_context, draft_workflow.MAX_AUTO_SCENES)
+    report['scene_count_bounds'] = list(bounds)
     report['checks'].update(ready=r['status']=='ready', review_completed=not r['review_error'] and any(i['kind']=='review' and i['status']=='completed' for i in r.get('workflow_items', [])),
-        author_scene_limit=bool(script) and len(script['scenes'])<=2,
+        author_scene_limit=bool(script) and bounds[0]<=len(script['scenes'])<=bounds[1],
         all_scenes_written=bool(script) and all(s['blocks'] for s in script['scenes']))
     if script and any(s['blocks'] for s in script['scenes']) and r['status'] in ('ready', 'partial'):
         adopted = client.post(url+'/adopt', json={'revision':p['revision'], 'candidate_revision':c['revision']})

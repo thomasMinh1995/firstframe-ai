@@ -199,6 +199,27 @@ def test_supported_short_fixture_completes_every_scene(drafting,count):
     assert len(providers[2].requests)==count
 
 
+def test_author_scene_cap_rejects_extra_scenes_without_truncating_or_writing(drafting):
+    client, providers = drafting
+    p = start_project(client)
+    base = f"/api/projects/{p['id']}"
+    p = client.put(base, json={**payload(p), 'constraints':['Tối đa một cảnh.', 'Chỉ hai nhân vật.']}).json()
+    rid = str(uuid4()); url = base+'/draft-runs/'+rid
+    assert client.post(base+'/draft-runs', json={'revision':p['revision'], 'request_id':rid}).status_code == 200
+    c = client.get(url+'/candidate').json()
+    if client.get(url).json()['status'] == 'needs_input':
+        assert client.post(url+'/continue', json={'candidate_revision':c['revision'], 'answers':['']*len(c['project']['answers'])}).status_code == 200
+    r = client.get(url).json(); c = client.get(url+'/candidate').json()
+    assert r['status'] == 'partial' and c['project']['draft']
+    assert not c['project']['scene_outline']['scenes'] and c['project']['screenplay'] is None
+    assert len(providers[1].requests) == 1 and not providers[2].requests
+    assert client.get(base).json()['draft'] is None
+    # Replaying a durable received but invalid result must not send another model call.
+    if r['can_continue']:
+        client.post(url+'/continue', json={'candidate_revision':c['revision'], 'answers':c['project']['answers']})
+    assert len(providers[1].requests) == 1 and not providers[2].requests
+
+
 def test_candidate_cleared_scene_is_partial_not_complete(drafting):
     client,providers,p,base,url,body=begin(drafting)
     r,c=complete(client,url)

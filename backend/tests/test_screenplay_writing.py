@@ -121,7 +121,7 @@ def test_large_context_rejected_before_call_without_losing_work(writing):
     assert saved['screenplay_proposals'][-1]['error']=='ScreenplayContextTooLarge'
 
 
-def test_runtime_prompt_matches_frozen_real_trial_requests():
+def test_v2_preserves_frozen_trial_sources_with_stricter_response_contract():
     from pathlib import Path
     from app.api.schemas.projects import ScreenplayProposal
     from app.application.screenplay_writing import write_scene
@@ -131,9 +131,25 @@ def test_runtime_prompt_matches_frozen_real_trial_requests():
         proposal=ScreenplayProposal.model_validate(after['screenplay_proposals'][-1]);provider=WritingProvider()
         write_scene(proposal,provider)
         frozen=json.loads((root/name/'request.json').read_text());actual=provider.requests[0]
-        assert actual.instructions==frozen['instructions']
+        assert actual.instructions != frozen['instructions']
+        assert 'The scene wrapper is required' in actual.instructions
         assert json.loads(actual.input_text)==frozen['input']
-        assert actual.response_model.model_json_schema()==frozen['schema']
+        schema = actual.response_model.model_json_schema()
+        assert schema['$defs']['WrittenAction']['properties']['speaker']['const'] == ''
+        assert 'speaker' in schema['$defs']['WrittenDialogue']['required']
+
+
+@pytest.mark.parametrize('block', [
+    {'kind':'action', 'text':'Đặt thư.', 'speaker':'Cha'},
+    {'kind':'dialogue', 'text':'Con à.'},
+    {'kind':'dialogue', 'text':'Con à.', 'speaker':'   '},
+    {'kind':'action', 'text':'   ', 'speaker':''},
+    {'kind':'narration', 'text':'Đặt thư.', 'speaker':''},
+])
+def test_writing_contract_does_not_repair_invalid_blocks(block):
+    from pydantic import ValidationError
+    with pytest.raises(ValidationError):
+        SceneWritingResult.model_validate({'scene':{'heading':'NỘI. BẾP', 'blocks':[block]}})
 
 
 def test_wrong_target_project_extra_fields_and_quota_never_call(writing):
