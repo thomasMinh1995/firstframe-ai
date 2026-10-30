@@ -1,0 +1,22 @@
+{
+  "scene": {
+    "id": "03967f2b-18d4-4476-abd9-e13fd51d9ed9",
+    "source_scene_id": "89375d9c-4cef-4678-8c2c-a832d423cb81",
+    "heading": "CẢNH 1",
+    "blocks": [
+      {
+        "kind": "action",
+        "text": "An đặt chậu cây khô lên bàn.",
+        "speaker": "",
+        "id": "d153b45f-2426-4840-a3d2-92c3b5ea2402"
+      }
+    ]
+  },
+  "status": "ready",
+  "model": "qwen2.5:7b",
+  "parameters": {
+    "composition": "source-preserving-v1",
+    "outline_reconciled": true
+  },
+  "prompt_version": "screenplay-scene-v25-bounded-reactions"
+}

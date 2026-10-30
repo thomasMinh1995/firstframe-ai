@@ -72,6 +72,7 @@ def main():
         revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip(),
         fixtures_sha256=hashlib.sha256(args.cases.read_bytes()).hexdigest(),
         expected_cases=len(cases),expected_scenes=sum(len(c['scenes']) for c in cases),
+        result_format='Proposal snapshot plus scene/status/model/parameters/prompt_version delta',
         scope='Controlled outlines; sequential writing uses all previously returned scenes. No automatic content approval.'))
     reports=[]
     for case in cases:
@@ -86,7 +87,7 @@ def main():
             try:
                 result=write_scene(proposal,provider);assert result.scene.id==target.id and result.scene.source_scene_id==target.source_scene_id
                 assert script.source_outline.model_dump(mode='json')==before
-                save(scene_dir/'result.json',result.model_dump(mode='json'))
+                save(scene_dir/'result.json',result.model_dump(mode='json',include={'scene','status','model','parameters','prompt_version'}))
                 script.scenes[index]=result.scene
                 script.provenance.update({k:TextProvenance(origin='ai_proposal') for k in scene_fields([result.scene],True)})
                 entry=dict(scene=index+1,technical_pass=True,contract_checks=contracts(case,result.scene))

@@ -7,10 +7,14 @@ import pytest
 
 from app.api.schemas.projects import ScreenplayProposal, PendingQuestion
 from app.api.schemas.screenplays import ScriptBlock
-from app.application.screenplay_composition import can_compose, composition_request, fixed_beats, per_scene_dialogue, speaker_voices, speaker_addresses
+from app.application.screenplay_composition import (
+    can_compose, composition_request, fixed_beats, per_scene_dialogue, speaker_voices, speaker_addresses,
+    reaction_options, render_composition, SceneComposition, SceneSourceConflict,
+)
 from app.application.ai_provider import ProviderMetadata, StructuredResult, MalformedProviderResponseError
 from app.application.screenplay_writing import write_scene
 from scripts.check_multiscene_writing import prepare, contracts
+from test_screenplay_composition import CompositionProvider, Unchecked
 
 CASES = json.loads((Path(__file__).resolve().parents[2]/'docs/evaluations/qa01-new-briefs-qwen7b-2026-10-30/cases.json').read_text())
 
@@ -35,7 +39,7 @@ def test_author_per_scene_dialogue_uses_source_constraints_not_empty_request(cas
         for name,speaker in zip(fields,case['required_speakers']):
             model=field.model_fields[name].annotation
             schema=model.model_json_schema()['properties']
-            assert schema['speaker']['const']==speaker and 'text' in schema and 'intent' not in schema
+            assert schema['speaker']['const']==speaker and 'intent' in schema and 'text' not in schema
     assert p.model_dump(mode='json')==before
 
 
@@ -87,7 +91,7 @@ def test_completed_dialogue_does_not_block_next_reconciled_author_beat():
     request,_=composition_request(p,'Vietnamese');data=json.loads(request.input_text)
     assert data['previous_scenes'][0]['blocks'][1]['text']=='Con cần thêm thời gian.'
     assert data['fixed_action_beats']==beats
-    assert data['target_scene']['characters']=='Mẹ, Con gái'
+    assert data['target_scene']['characters']==['Mẹ','Con gái']
     first.blocks[0].text='Mẹ cất vé vào ngăn kéo.'
     assert not fixed_beats(p)[1]
 
@@ -95,6 +99,13 @@ def test_completed_dialogue_does_not_block_next_reconciled_author_beat():
 def test_scene_refinement_uses_full_writer_instead_of_ignoring_new_request():
     p=proposal(CASES[0]);p.instructions='Chỉ viết một câu của mẹ ở cảnh này.'
     assert not can_compose(p)
+
+
+def test_explicit_silence_conflicting_with_two_turns_stops_before_model():
+    p=proposal(CASES[0]);p.source_screenplay.source_outline.source.context.constraints.append('Hoàn toàn không thoại.')
+    provider=CompositionProvider()
+    with pytest.raises(SceneSourceConflict):write_scene(p,provider)
+    assert not provider.requests
 
 
 def test_only_positive_unambiguous_author_voice_is_used():
@@ -105,6 +116,13 @@ def test_only_positive_unambiguous_author_voice_is_used():
     assert speaker_voices(p,['Mẹ','Con gái'])=={'Con gái':'con'}
 
 
+@pytest.mark.parametrize('voice',['chúng tôi','em trai','Minh'])
+def test_unsupported_voice_is_not_shortened_or_treated_as_a_pronoun(voice):
+    p=proposal(CASES[0]);ctx=p.source_screenplay.source_outline.source.context
+    ctx.constraints[1]=f'Mỗi cảnh có hai câu thoại: mẹ nói một câu, con gái đáp một câu. Mẹ xưng {voice}, con gái xưng con.'
+    assert not can_compose(p)
+
+
 class SpeechProvider:
     metadata=ProviderMetadata('ollama','qwen2.5:7b',{'num_ctx':16384})
     def __init__(self,text):self.text=text;self.calls=0
@@ -113,24 +131,35 @@ class SpeechProvider:
         output={'heading':request.response_model.model_json_schema()['properties']['heading']['const'],'translations':[],
                 'dialogue':{'line_1':dict(speaker='Mẹ',after_action=len(data['fixed_action_beats']),text=self.text),
                             'line_2':dict(speaker='Con gái',after_action=len(data['fixed_action_beats']),text='Con cần thêm thời gian, mẹ.')}}
-        return StructuredResult(output=request.response_model.model_validate(output),model='qwen2.5:7b',raw_output=json.dumps(output,ensure_ascii=False))
+        return StructuredResult(output=Unchecked(data=output),model='qwen2.5:7b',raw_output=json.dumps(output,ensure_ascii=False))
 
 
 @pytest.mark.parametrize('text',['Tôi chưa sẵn sàng.','Con, tôi có thể chờ.','Con chưa biết, mẹ ạ.','Mẹ ơi, con chưa biết.',
     'Mẹ đặt vé tàu lên bàn bếp.','Con gái nhận vé rồi cất vào túi áo.',
     'Mẹ đặt vé tàu lên bàn bếp. Con thấy thế nào?'])
-def test_invalid_speech_keeps_raw_frame_and_source_and_does_not_retry(text):
+def test_free_text_frame_is_rejected_without_repair_or_retry(text):
     p=proposal(CASES[0]);before=p.model_dump(mode='json');provider=SpeechProvider(text)
     with pytest.raises(MalformedProviderResponseError) as failure:write_scene(p,provider)
     assert text in failure.value.raw_output and provider.calls==1
     assert p.model_dump(mode='json')==before
 
 
+@pytest.mark.parametrize('text',['Tôi chưa sẵn sàng.','Mẹ ơi, con chưa biết.',
+    'Mẹ đặt vé tàu lên bàn bếp. Con thấy thế nào?'])
+def test_legacy_free_speech_guards_remain_active(text):
+    request,beats=composition_request(proposal(CASES[0]),'Vietnamese')
+    data=json.loads(request.input_text);data['dialogue_options']={}
+    output=SceneComposition(heading='Bếp',translations=[],dialogue=[dict(after_action=1,speaker='Mẹ',text=text)])
+    before=output.model_dump()
+    with pytest.raises(ValueError):render_composition(output,beats,'Vietnamese',data)
+    assert output.model_dump()==before
+
+
 def test_author_custom_self_reference_is_not_replaced_by_family_default():
     p=proposal(CASES[0]);ctx=p.source_screenplay.source_outline.source.context
     ctx.constraints[1]='Mỗi cảnh có hai câu thoại: mẹ nói một câu, con gái đáp một câu. Mẹ xưng tôi, con gái xưng con.'
-    result=write_scene(p,SpeechProvider('Tôi chưa sẵn sàng.'))
-    assert result.scene.blocks[1].text=='Tôi chưa sẵn sàng.'
+    result=write_scene(p,CompositionProvider())
+    assert result.scene.blocks[1].text=='Con, tôi nghe đây.'
 
 
 def test_explicit_address_overrides_family_defaults():
@@ -156,8 +185,8 @@ def test_already_english_actions_are_not_translated_again(index):
     assert request.response_model.model_json_schema()['properties']['translations']['maxItems']==0
     from app.application.screenplay_composition import render_composition
     output=request.response_model.model_validate({'heading':f'SCENE {index+1}','translations':[],
-        'dialogue':{'line_1':{'speaker':'Mara','after_action':1,'text':'We can wait.'},
-                    'line_2':{'speaker':'Owen','after_action':1,'text':'No need to rush.'}}})
+        'dialogue':{'line_1':{'speaker':'Mara','after_action':1,'self_reference':'I','intent':'give_space'},
+                    'line_2':{'speaker':'Owen','after_action':1,'self_reference':'I','intent':'needs_time'}}})
     scene=render_composition(output,beats,'English',data)
     assert scene.blocks[0].text==CASES[2]['scenes'][index]['action']
 
@@ -175,3 +204,60 @@ def test_runner_marks_missing_or_reordered_dialogue_as_failed_contract():
                   ScriptBlock(id=str(uuid4()),kind='dialogue',text='Mẹ đợi.',speaker='Mẹ')]
     checks=contracts(CASES[0],scene)
     assert checks['requested_dialogue_count'] and not checks['requested_speaker_order']
+
+
+@pytest.mark.parametrize('case',CASES,ids=lambda c:c['id'])
+def test_complete_sequences_keep_beats_roles_sources_and_distinct_reactions(case):
+    p=proposal(case);script=p.source_screenplay;before=script.source_outline.model_dump(mode='json')
+    provider=CompositionProvider();seen={}
+    for index,scene in enumerate(script.scenes):
+        p.source_screenplay=script.model_copy(deep=True);p.target_scene_id=scene.id
+        result=write_scene(p,provider)
+        assert [b.text for b in result.scene.blocks if b.kind=='action']==[case['scenes'][index]['action']]
+        assert all(contracts(case,result.scene).values())
+        for b in result.scene.blocks:
+            if b.kind=='dialogue':
+                assert b.text not in seen.setdefault(b.speaker,set());seen[b.speaker].add(b.text)
+        script.scenes[index]=result.scene
+    assert len(provider.requests)==len(case['scenes'])
+    assert script.source_outline.model_dump(mode='json')==before
+
+
+def test_ai_outline_quotes_and_missing_cast_do_not_drop_author_beats():
+    case=deepcopy(CASES[0]);case['origin']='ai_proposal';p=proposal(case);script=p.source_screenplay
+    source=script.source_outline
+    source.scenes[0].action+=' '+case['scenes'][1]['action']
+    source.scenes[1].action="Mẹ: 'Con có muốn đi không?', Con gái: 'Con chưa biết.'"
+    source.scenes[2].characters='con gái';source.scenes[2].action='Con gái nhìn ra ngoài, không lên tàu.'
+    before=source.model_dump(mode='json');provider=CompositionProvider()
+    for index,target in enumerate(script.scenes):
+        p.source_screenplay=script.model_copy(deep=True);p.target_scene_id=target.id
+        assert can_compose(p)
+        result=write_scene(p,provider)
+        assert result.parameters['outline_reconciled']
+        assert result.parameters['dialogue_mode']=='bounded-reactions-v1'
+        assert result.scene.heading==f'CẢNH {index+1}'
+        assert all(contracts(case,result.scene).values())
+        script.scenes[index]=result.scene
+    assert [b.text for s in script.scenes for b in s.blocks if b.kind=='action']==[s['action'] for s in case['scenes']]
+    assert script.source_outline.model_dump(mode='json')==before
+    p=proposal(case);p.source_screenplay.source_outline.scenes[0].action="Mẹ nói: 'Tôi hiểu'."
+    p.source_screenplay.source_outline.provenance[next(iter(p.source_screenplay.source_outline.provenance))].author_confirmed=True
+    assert not can_compose(p)
+
+
+def test_reaction_exhaustion_stops_before_sending_another_model_call():
+    p=proposal(CASES[0],1);pair=CASES[0]['required_speakers']
+    options=reaction_options(p,pair,'Vietnamese')
+    p.source_screenplay.scenes[0].blocks=[ScriptBlock(id=str(uuid4()),kind='dialogue',speaker=s,text=t)
+        for s,choices in options.items() for t in choices.values()]
+    provider=CompositionProvider()
+    with pytest.raises(SceneSourceConflict):write_scene(p,provider)
+    assert not provider.requests
+
+
+def test_speaker_label_case_does_not_replay_a_previous_reaction():
+    p=proposal(CASES[0],1);pair=CASES[0]['required_speakers']
+    options=reaction_options(p,pair,'Vietnamese')
+    p.source_screenplay.scenes[0].blocks=[ScriptBlock(id=str(uuid4()),kind='dialogue',speaker='mẹ',text=options['Mẹ']['invite'])]
+    assert 'invite' not in reaction_options(p,pair,'Vietnamese')['Mẹ']

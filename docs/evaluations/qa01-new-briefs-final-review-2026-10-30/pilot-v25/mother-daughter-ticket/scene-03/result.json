@@ -1,0 +1,35 @@
+{
+  "scene": {
+    "id": "6a7f7081-efeb-44f4-82eb-d1b9924b8fdf",
+    "source_scene_id": "46e6fcad-9b67-4ffb-8877-a6066bdf12fa",
+    "heading": "Cửa nhà",
+    "blocks": [
+      {
+        "kind": "action",
+        "text": "Mẹ và con gái đứng ở cửa, con gái vẫn chưa quyết định có lên tàu hay không.",
+        "speaker": "",
+        "id": "523346f0-c65c-43cc-8638-53b5313d5df4"
+      },
+      {
+        "kind": "dialogue",
+        "text": "Mẹ không muốn giục con.",
+        "speaker": "Mẹ",
+        "id": "2fc203be-76e6-4828-a7fa-38cb6ae7bf74"
+      },
+      {
+        "kind": "dialogue",
+        "text": "Con muốn nghĩ kỹ hơn, mẹ.",
+        "speaker": "Con gái",
+        "id": "5163459e-6611-4c78-a884-577b7423923f"
+      }
+    ]
+  },
+  "status": "ready",
+  "model": "qwen2.5:7b",
+  "parameters": {
+    "composition": "source-preserving-v1",
+    "outline_reconciled": false,
+    "dialogue_mode": "bounded-reactions-v1"
+  },
+  "prompt_version": "screenplay-scene-v25-bounded-reactions"
+}

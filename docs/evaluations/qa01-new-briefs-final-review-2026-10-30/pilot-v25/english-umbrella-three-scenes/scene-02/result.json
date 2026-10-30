@@ -1,0 +1,35 @@
+{
+  "scene": {
+    "id": "c0b6c85c-baf2-4b8a-93ac-b6fa26e9e436",
+    "source_scene_id": "ed8ae047-6216-462a-8fe7-b1fa598fca4f",
+    "heading": "SCENE 2",
+    "blocks": [
+      {
+        "kind": "action",
+        "text": "Owen takes the umbrella from the chair and holds it.",
+        "speaker": "",
+        "id": "8e40b084-072d-48ff-aced-7be54bd0480d"
+      },
+      {
+        "kind": "dialogue",
+        "text": "I'm not sure where to start.",
+        "speaker": "Mara",
+        "id": "3349fbd4-b15d-4a5d-b80a-ee6fd478520a"
+      },
+      {
+        "kind": "dialogue",
+        "text": "I need a little more time.",
+        "speaker": "Owen",
+        "id": "11687db6-06f5-40a6-aa7b-6eacd8174461"
+      }
+    ]
+  },
+  "status": "ready",
+  "model": "qwen2.5:7b",
+  "parameters": {
+    "composition": "source-preserving-v1",
+    "outline_reconciled": true,
+    "dialogue_mode": "bounded-reactions-v1"
+  },
+  "prompt_version": "screenplay-scene-v25-bounded-reactions"
+}

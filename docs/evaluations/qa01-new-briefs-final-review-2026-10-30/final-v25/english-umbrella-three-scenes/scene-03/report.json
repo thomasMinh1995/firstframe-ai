@@ -1,0 +1,11 @@
+{
+  "scene": 3,
+  "technical_pass": true,
+  "contract_checks": {
+    "requested_dialogue_count": true,
+    "requested_speaker_order": true,
+    "english_heading": true
+  },
+  "model_calls": 1,
+  "seconds": 9.919
+}

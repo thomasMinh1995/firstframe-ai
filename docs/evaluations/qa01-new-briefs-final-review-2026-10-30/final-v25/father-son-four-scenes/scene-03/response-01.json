@@ -1,0 +1,21 @@
+{
+  "output": {
+    "heading": "Đẩy hộp",
+    "translations": [],
+    "dialogue": {
+      "line_1": {
+        "after_action": 1,
+        "speaker": "Bố",
+        "self_reference": "bố",
+        "intent": "give_space"
+      },
+      "line_2": {
+        "after_action": 1,
+        "speaker": "Minh",
+        "self_reference": "con",
+        "intent": "think_it_through"
+      }
+    }
+  },
+  "raw_output": "{\n  \"heading\": \"Đẩy hộp\",\n  \"translations\": [],\n  \"dialogue\": {\n    \"line_1\": {\n      \"after_action\": 1,\n      \"speaker\": \"Bố\",\n      \"self_reference\": \"bố\",\n      \"intent\": \"give_space\"\n    },\n    \"line_2\": {\n      \"after_action\": 1,\n      \"speaker\": \"Minh\",\n      \"self_reference\": \"con\",\n      \"intent\": \"think_it_through\"\n    }\n  }\n}"
+}

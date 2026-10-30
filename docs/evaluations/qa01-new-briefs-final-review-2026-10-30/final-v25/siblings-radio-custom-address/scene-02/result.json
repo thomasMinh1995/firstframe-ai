@@ -1,0 +1,35 @@
+{
+  "status": "ready",
+  "scene": {
+    "id": "a49cb01a-9bdf-4202-9c60-55e896488b87",
+    "source_scene_id": "a5cd93e1-ac8b-4c29-87c6-eb8f7fa842c2",
+    "heading": "Tua vít",
+    "blocks": [
+      {
+        "kind": "action",
+        "text": "Em trai Nam lấy tua vít rồi ngồi xuống cạnh bàn.",
+        "speaker": "",
+        "id": "b344720f-8107-4f3e-af28-d71af145b2fa"
+      },
+      {
+        "kind": "dialogue",
+        "text": "Chị không muốn giục em.",
+        "speaker": "Hạnh",
+        "id": "f6e40246-f1fd-4be5-b0f0-d89a6197e76e"
+      },
+      {
+        "kind": "dialogue",
+        "text": "Em vẫn đang nghĩ, chị.",
+        "speaker": "Nam",
+        "id": "821e1726-4dc7-4014-a7e6-b1805bc75f29"
+      }
+    ]
+  },
+  "model": "qwen2.5:7b",
+  "parameters": {
+    "composition": "source-preserving-v1",
+    "outline_reconciled": false,
+    "dialogue_mode": "bounded-reactions-v1"
+  },
+  "prompt_version": "screenplay-scene-v25-bounded-reactions"
+}

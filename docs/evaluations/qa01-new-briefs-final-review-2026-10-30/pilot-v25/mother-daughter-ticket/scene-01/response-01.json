@@ -1,0 +1,21 @@
+{
+  "output": {
+    "heading": "Bếp",
+    "translations": [],
+    "dialogue": {
+      "line_1": {
+        "after_action": 1,
+        "speaker": "Mẹ",
+        "self_reference": "mẹ",
+        "intent": "give_space"
+      },
+      "line_2": {
+        "after_action": 1,
+        "speaker": "Con gái",
+        "self_reference": "con",
+        "intent": "thinking"
+      }
+    }
+  },
+  "raw_output": "{\n  \"heading\": \"Bếp\",\n  \"translations\": [],\n  \"dialogue\": {\n    \"line_1\": {\n      \"after_action\": 1,\n      \"speaker\": \"Mẹ\",\n      \"self_reference\": \"mẹ\",\n      \"intent\": \"give_space\"\n    },\n    \"line_2\": {\n      \"after_action\": 1,\n      \"speaker\": \"Con gái\",\n      \"self_reference\": \"con\",\n      \"intent\": \"thinking\"\n    }\n  }\n}"
+}

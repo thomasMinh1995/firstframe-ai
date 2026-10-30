@@ -1,0 +1,22 @@
+{
+  "status": "ready",
+  "scene": {
+    "id": "66aaf23c-55b9-4d42-8a7e-f102a876dfaf",
+    "source_scene_id": "1caccd25-9b70-4359-9ac9-8733f463a705",
+    "heading": "CẢNH 5",
+    "blocks": [
+      {
+        "kind": "action",
+        "text": "An đặt bình rỗng xuống bàn.",
+        "speaker": "",
+        "id": "f5fe046a-d736-4eed-8a7a-0aa7ab428cf5"
+      }
+    ]
+  },
+  "model": "qwen2.5:7b",
+  "parameters": {
+    "composition": "source-preserving-v1",
+    "outline_reconciled": true
+  },
+  "prompt_version": "screenplay-scene-v25-bounded-reactions"
+}

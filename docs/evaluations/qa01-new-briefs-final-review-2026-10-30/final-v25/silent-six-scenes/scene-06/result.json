@@ -1,0 +1,22 @@
+{
+  "status": "ready",
+  "scene": {
+    "id": "77b8af09-4837-4cc2-a8ef-899eb43050ce",
+    "source_scene_id": "4093afd9-5c0f-434c-97d8-0e0d7943e374",
+    "heading": "CẢNH 6",
+    "blocks": [
+      {
+        "kind": "action",
+        "text": "An và Bình đứng nhìn chậu cây vẫn chưa có lá mới.",
+        "speaker": "",
+        "id": "0953c4f6-4305-40fc-bbd4-51899cf5f8a8"
+      }
+    ]
+  },
+  "model": "qwen2.5:7b",
+  "parameters": {
+    "composition": "source-preserving-v1",
+    "outline_reconciled": true
+  },
+  "prompt_version": "screenplay-scene-v25-bounded-reactions"
+}

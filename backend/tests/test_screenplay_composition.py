@@ -56,7 +56,9 @@ class CompositionProvider:
             for key, field in line_type.model_fields.items():
                 model = field.annotation
                 row = {k:get_args(model.model_fields[k].annotation)[0] for k in ('speaker','self_reference','after_action')}
-                row['intent'] = 'will_wait' if row['self_reference']=='Cha' else 'needs_time'
+                choices = get_args(model.model_fields['intent'].annotation)
+                preferred = 'will_wait' if row['self_reference']=='Cha' else 'needs_time'
+                row['intent'] = preferred if preferred in choices else choices[0]
                 result['dialogue'][key] = row
         if self.bad == 'heading': result['heading'] = 'Wrong heading'
         if self.bad == 'position': result['dialogue']['line_1']['after_action'] = 99

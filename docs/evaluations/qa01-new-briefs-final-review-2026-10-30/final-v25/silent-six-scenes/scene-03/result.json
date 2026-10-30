@@ -1,0 +1,22 @@
+{
+  "status": "ready",
+  "scene": {
+    "id": "0cf1a657-54cc-415b-bde6-a915957cacbd",
+    "source_scene_id": "f2941a49-d27e-4745-877c-328d284c5e51",
+    "heading": "CẢNH 3",
+    "blocks": [
+      {
+        "kind": "action",
+        "text": "An cầm bình nước.",
+        "speaker": "",
+        "id": "373a7e90-fcd8-427e-86dc-891f55cb72b6"
+      }
+    ]
+  },
+  "model": "qwen2.5:7b",
+  "parameters": {
+    "composition": "source-preserving-v1",
+    "outline_reconciled": true
+  },
+  "prompt_version": "screenplay-scene-v25-bounded-reactions"
+}

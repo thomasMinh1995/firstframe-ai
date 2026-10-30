@@ -1,0 +1,21 @@
+{
+  "output": {
+    "heading": "Cửa nhà",
+    "translations": [],
+    "dialogue": {
+      "line_1": {
+        "after_action": 1,
+        "speaker": "Mẹ",
+        "self_reference": "mẹ",
+        "intent": "unhurried"
+      },
+      "line_2": {
+        "after_action": 1,
+        "speaker": "Con gái",
+        "self_reference": "con",
+        "intent": "think_it_through"
+      }
+    }
+  },
+  "raw_output": "{\n  \"heading\": \"Cửa nhà\",\n  \"translations\": [],\n  \"dialogue\": {\n    \"line_1\": {\n      \"after_action\": 1,\n      \"speaker\": \"Mẹ\",\n      \"self_reference\": \"mẹ\",\n      \"intent\": \"unhurried\"\n    },\n    \"line_2\": {\n      \"after_action\": 1,\n      \"speaker\": \"Con gái\",\n      \"self_reference\": \"con\",\n      \"intent\": \"think_it_through\"\n    }\n  }\n}"
+}

@@ -1,5 +1,7 @@
 # QA-01 — Brief mới, thoại tự do và diễn tiến nhiều cảnh
 
+> Báo cáo lịch sử v24. Kết quả hiện tại nằm ở [review cuối PR #86](../qa01-new-briefs-final-review-2026-10-30/README.md); các lỗi/kết luận cũ dưới đây được giữ nguyên.
+
 Ngày 30/10/2026. Nhánh `fix/qwen-new-brief-dialogue-continuity` từ `dev` tại `4bc8a38` (sau PR #85). **Chưa đạt nghiệm thu nội dung; PR giữ draft.** Không thay trạng thái QA-01 hay bật workflow card mặc định.
 
 ## Phạm vi và kết quả
@@ -62,3 +64,7 @@ backend/.venv/bin/python backend/scripts/check_draft_release.py \
   --brief-source docs/evaluations/qa01-new-briefs-qwen7b-2026-10-30/full-workflow-brief.json \
   --output /tmp/firstframe-three-scenes
 ```
+
+## Tiếp nối review cuối PR #86
+
+Trạng thái draft và lỗi 2/5 bên trên là bản v24 được giữ làm lịch sử. [Báo cáo cuối v25](../qa01-new-briefs-final-review-2026-10-30/README.md) ghi hai lượt 5/5, hồi quy và planner tới PDF; nêu rõ đánh đổi thoại phản hồi có cấu trúc thay cho việc coi lời tự do của Qwen là đã được kiểm chứng.

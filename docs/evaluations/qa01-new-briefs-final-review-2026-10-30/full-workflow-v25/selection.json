@@ -1,0 +1,535 @@
+{
+  "id": "1e298c07-4438-4ab4-9c20-c3fe98e9ce14",
+  "created_at": "2026-10-30T09:16:36.870445+00:00",
+  "source_revision": 3,
+  "source_version_id": "current",
+  "screenplay": {
+    "id": "79be9d67-f44b-456b-897f-e05599a30648",
+    "version": 1,
+    "scenes": [
+      {
+        "id": "360c54bd-5d96-497e-8c9a-47e6438633f0",
+        "source_scene_id": "0b5d7c56-15b4-4745-b98e-95c72b734655",
+        "heading": "CẢNH 1",
+        "blocks": [
+          {
+            "kind": "action",
+            "text": "Mẹ đặt vé tàu lên bàn bếp.",
+            "speaker": "",
+            "id": "6afb1d11-b70e-4c70-bad9-6cd895c33518"
+          },
+          {
+            "kind": "dialogue",
+            "text": "Mẹ không muốn giục con.",
+            "speaker": "Mẹ",
+            "id": "040b0de7-c738-40a7-bce7-5e67afab22ac"
+          },
+          {
+            "kind": "dialogue",
+            "text": "Con vẫn đang nghĩ, mẹ.",
+            "speaker": "Con gái",
+            "id": "98e3a555-cf2a-49cc-8e3e-5a16026ccc8d"
+          }
+        ]
+      },
+      {
+        "id": "bb9fac4c-a994-428a-b7db-6990cf6c2ce3",
+        "source_scene_id": "60a397b7-466c-499b-a131-e4ec69579fdd",
+        "heading": "CẢNH 2",
+        "blocks": [
+          {
+            "kind": "action",
+            "text": "Con gái nhận vé rồi cất vào túi áo.",
+            "speaker": "",
+            "id": "2b66f6f1-bcd7-4a7f-a4e3-8429e9e9a47a"
+          },
+          {
+            "kind": "dialogue",
+            "text": "Con cứ nghĩ thêm một chút.",
+            "speaker": "Mẹ",
+            "id": "06f10567-01c9-434f-bc60-1ba094b795fa"
+          },
+          {
+            "kind": "dialogue",
+            "text": "Con cần thêm một chút thời gian, mẹ.",
+            "speaker": "Con gái",
+            "id": "06baf300-8570-47f0-87d8-f65b2c8bcdf1"
+          }
+        ]
+      },
+      {
+        "id": "d54066f9-ef69-4951-9798-40a46b7e5f15",
+        "source_scene_id": "9a2f16bd-4de5-4fa9-9df2-1abb2dc1e298",
+        "heading": "CẢNH 3",
+        "blocks": [
+          {
+            "kind": "action",
+            "text": "Mẹ và con gái đứng ở cửa, con gái vẫn chưa quyết định có lên tàu hay không.",
+            "speaker": "",
+            "id": "90830c0f-365e-41f4-90ad-cae25602d269"
+          },
+          {
+            "kind": "dialogue",
+            "text": "Mẹ muốn nghe con nói.",
+            "speaker": "Mẹ",
+            "id": "b1de60aa-e945-4616-bc12-977b3976e277"
+          },
+          {
+            "kind": "dialogue",
+            "text": "Con muốn nghĩ kỹ hơn, mẹ.",
+            "speaker": "Con gái",
+            "id": "2525f431-532b-47fe-9277-594120479b64"
+          }
+        ]
+      }
+    ],
+    "source_revision": 2,
+    "source_outline": {
+      "id": "9b1caa3f-e825-4c15-820e-ef7de329a52d",
+      "version": 1,
+      "scenes": [
+        {
+          "id": "0b5d7c56-15b4-4745-b98e-95c72b734655",
+          "title": "Mẹ đặt vé lên bàn bếp",
+          "action": "Mẹ nhẹ nhàng đặt vé tàu lên bàn bếp. Con gái nhìn vé, sau đó cất vào túi áo.",
+          "location": "Bếp",
+          "time": "Sáng sớm",
+          "characters": "Mẹ, Con gái",
+          "goal": "Mẹ muốn con gái đi tàu, con gái cân nhắc quyết định.",
+          "purpose": "Đặt bối cảnh và tạo ra sự cân nhắc đầu tiên.",
+          "viewer_intent": "",
+          "keep_or_avoid": "",
+          "staging_choices": {}
+        },
+        {
+          "id": "60a397b7-466c-499b-a131-e4ec69579fdd",
+          "title": "Con gái đứng ở cửa",
+          "action": "Con gái đứng ở cửa, nhìn ra ngoài, sau đó quay lại nhìn mẹ. Mẹ nhìn con gái, con gái cất vé vào túi áo.",
+          "location": "Cửa nhà",
+          "time": "Sáng sớm",
+          "characters": "Mẹ, Con gái",
+          "goal": "Con gái cân nhắc quyết định cuối cùng.",
+          "purpose": "Tăng áp lực và thể hiện sự cân nhắc của con gái.",
+          "viewer_intent": "",
+          "keep_or_avoid": "",
+          "staging_choices": {}
+        },
+        {
+          "id": "9a2f16bd-4de5-4fa9-9df2-1abb2dc1e298",
+          "title": "Con gái quyết định không đi tàu",
+          "action": "Con gái quay lại nhìn mẹ, mẹ nhìn con gái với ánh mắt đầy ý nghĩa. Con gái quay lại nhìn mẹ, quyết định không đi tàu.",
+          "location": "Cửa nhà",
+          "time": "Sáng sớm",
+          "characters": "Mẹ, Con gái",
+          "goal": "Con gái quyết định không đi tàu.",
+          "purpose": "Kết thúc câu chuyện với một lựa chọn rõ ràng.",
+          "viewer_intent": "",
+          "keep_or_avoid": "",
+          "staging_choices": {}
+        }
+      ],
+      "source": {
+        "id": "58da9096-1e59-4af2-b583-e03d783ebaad",
+        "project_revision": 2,
+        "version_id": "current",
+        "draft": {
+          "title": "Đặt vé tàu",
+          "logline": "Mẹ đặt vé tàu lên bàn bếp, con gái nhận và cân nhắc việc lên tàu, cuối cùng quyết định không đi.",
+          "sections": [
+            {
+              "title": "Core idea",
+              "purpose": "State the short film's central promise.",
+              "content": "Mẹ đặt vé tàu lên bàn bếp, con gái nhận và cân nhắc việc lên tàu, cuối cùng quyết định không đi."
+            },
+            {
+              "title": "Main character",
+              "purpose": "Define the protagonist and key character pressure.",
+              "content": "Con gái Mẹ"
+            },
+            {
+              "title": "Main conflict",
+              "purpose": "Describe the obstacle and stakes.",
+              "content": "Vé tàu và quyết định của con gái Cân nhắc giữa việc đi hay không đi Cảm giác tự lập và quyết định của bản thân"
+            },
+            {
+              "title": "Beginning",
+              "purpose": "Set up the story world and first dramatic turn.",
+              "content": "Mẹ đặt vé tàu lên bàn bếp, con gái nhận và cất vào túi áo."
+            },
+            {
+              "title": "Middle",
+              "purpose": "Escalate pressure and reveal the emotional turn.",
+              "content": "Con gái đứng ở cửa, cân nhắc việc lên tàu, cuối cùng quyết định không đi."
+            },
+            {
+              "title": "Ending",
+              "purpose": "Resolve the short film through a visible choice or image.",
+              "content": "Con gái quyết định không đi tàu, mẹ và con gái đứng ở cửa, con gái quay lại nhìn mẹ. Con gái quay lại nhìn mẹ, mẹ nhìn con gái với ánh mắt đầy ý nghĩa."
+            },
+            {
+              "title": "Theme",
+              "purpose": "Name the human idea underneath the plot.",
+              "content": "Cảm giác tự lập và quyết định của bản thân."
+            },
+            {
+              "title": "Visual Style",
+              "purpose": "Capture the visual approach and recurring motifs.",
+              "content": "Tone nhẹ nhàng, sử dụng màu sắc ấm áp và hình ảnh tự nhiên. Bàn bếp, Vé tàu"
+            },
+            {
+              "title": "Tone",
+              "purpose": "Describe the intended emotional register.",
+              "content": "Nhiệt tình và nhẹ nhàng, tập trung vào cảm xúc của nhân vật."
+            },
+            {
+              "title": "Production Notes",
+              "purpose": "Keep the idea grounded for short-film production.",
+              "content": "Cảnh quay đơn giản, chỉ có mẹ và con gái. Sử dụng ánh sáng tự nhiên để tạo cảm giác ấm áp. Sử dụng âm thanh nhẹ nhàng để tăng cường cảm xúc. Bếp 2 người"
+            }
+          ]
+        },
+        "context": {
+          "idea": "Mẹ đặt vé tàu lên bàn bếp. Con gái nhận vé rồi cất vào túi áo. Mẹ và con gái đứng ở cửa, con gái vẫn chưa quyết định có lên tàu hay không.",
+          "constraints": [
+            "Đúng ba cảnh, chỉ mẹ và con gái; giữ kết mở.",
+            "Mỗi cảnh có đúng hai câu thoại ngắn: mẹ nói một câu, con gái đáp một câu. Mẹ xưng mẹ, con gái xưng con; không dùng tôi/bạn. Không lặp việc trao vé hoặc tự xác nhận con lên tàu."
+          ],
+          "clarifications": [],
+          "pending_questions": [
+            {
+              "question": "Con gái có quyết định lên tàu không?",
+              "input_index": 0
+            }
+          ]
+        },
+        "response_language": "vi",
+        "draft_provenance": {
+          "title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "logline": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:0:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:0:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:0:content": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:1:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:1:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:1:content": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:2:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:2:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:2:content": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:3:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:3:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:3:content": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:4:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:4:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:4:content": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:5:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:5:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:5:content": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:6:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:6:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:6:content": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:7:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:7:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:7:content": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:8:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:8:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:8:content": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:9:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:9:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:9:content": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          }
+        }
+      },
+      "provenance": {
+        "m2:0b5d7c56-15b4-4745-b98e-95c72b734655:title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:0b5d7c56-15b4-4745-b98e-95c72b734655:action": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:0b5d7c56-15b4-4745-b98e-95c72b734655:location": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:0b5d7c56-15b4-4745-b98e-95c72b734655:time": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:0b5d7c56-15b4-4745-b98e-95c72b734655:characters": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:0b5d7c56-15b4-4745-b98e-95c72b734655:goal": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:0b5d7c56-15b4-4745-b98e-95c72b734655:purpose": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:0b5d7c56-15b4-4745-b98e-95c72b734655:viewer_intent": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:0b5d7c56-15b4-4745-b98e-95c72b734655:keep_or_avoid": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:60a397b7-466c-499b-a131-e4ec69579fdd:title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:60a397b7-466c-499b-a131-e4ec69579fdd:action": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:60a397b7-466c-499b-a131-e4ec69579fdd:location": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:60a397b7-466c-499b-a131-e4ec69579fdd:time": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:60a397b7-466c-499b-a131-e4ec69579fdd:characters": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:60a397b7-466c-499b-a131-e4ec69579fdd:goal": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:60a397b7-466c-499b-a131-e4ec69579fdd:purpose": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:60a397b7-466c-499b-a131-e4ec69579fdd:viewer_intent": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:60a397b7-466c-499b-a131-e4ec69579fdd:keep_or_avoid": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:9a2f16bd-4de5-4fa9-9df2-1abb2dc1e298:title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:9a2f16bd-4de5-4fa9-9df2-1abb2dc1e298:action": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:9a2f16bd-4de5-4fa9-9df2-1abb2dc1e298:location": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:9a2f16bd-4de5-4fa9-9df2-1abb2dc1e298:time": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:9a2f16bd-4de5-4fa9-9df2-1abb2dc1e298:characters": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:9a2f16bd-4de5-4fa9-9df2-1abb2dc1e298:goal": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:9a2f16bd-4de5-4fa9-9df2-1abb2dc1e298:purpose": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:9a2f16bd-4de5-4fa9-9df2-1abb2dc1e298:viewer_intent": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:9a2f16bd-4de5-4fa9-9df2-1abb2dc1e298:keep_or_avoid": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        }
+      }
+    },
+    "provenance": {
+      "script:360c54bd-5d96-497e-8c9a-47e6438633f0:heading": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:6afb1d11-b70e-4c70-bad9-6cd895c33518:text": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:6afb1d11-b70e-4c70-bad9-6cd895c33518:speaker": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:040b0de7-c738-40a7-bce7-5e67afab22ac:text": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:040b0de7-c738-40a7-bce7-5e67afab22ac:speaker": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:98e3a555-cf2a-49cc-8e3e-5a16026ccc8d:text": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:98e3a555-cf2a-49cc-8e3e-5a16026ccc8d:speaker": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "script:bb9fac4c-a994-428a-b7db-6990cf6c2ce3:heading": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:2b66f6f1-bcd7-4a7f-a4e3-8429e9e9a47a:text": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:2b66f6f1-bcd7-4a7f-a4e3-8429e9e9a47a:speaker": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:06f10567-01c9-434f-bc60-1ba094b795fa:text": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:06f10567-01c9-434f-bc60-1ba094b795fa:speaker": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:06baf300-8570-47f0-87d8-f65b2c8bcdf1:text": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:06baf300-8570-47f0-87d8-f65b2c8bcdf1:speaker": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "script:d54066f9-ef69-4951-9798-40a46b7e5f15:heading": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:90830c0f-365e-41f4-90ad-cae25602d269:text": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:90830c0f-365e-41f4-90ad-cae25602d269:speaker": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:b1de60aa-e945-4616-bc12-977b3976e277:text": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:b1de60aa-e945-4616-bc12-977b3976e277:speaker": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:2525f431-532b-47fe-9277-594120479b64:text": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:2525f431-532b-47fe-9277-594120479b64:speaker": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      }
+    }
+  }
+}

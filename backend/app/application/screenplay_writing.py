@@ -15,7 +15,7 @@ from app.application.progress import progress_step
 from app.application.provenance import scene_fields
 from app.application.screenplay_composition import can_compose, composition_request, render_composition
 
-PROMPT_VERSION = "screenplay-scene-v24-dialogue-voices"
+PROMPT_VERSION = "screenplay-scene-v25-bounded-reactions"
 PROMPT = Path(__file__).resolve().parents[3] / "domains/short-film/prompts/screenplay_scene_prompt.md"
 
 
@@ -52,7 +52,7 @@ def write_scene(proposal: ScreenplayProposal, provider: StructuredProvider) -> S
                 "selected_blocks": [b.model_dump(mode="json") for b in target.blocks if b.id in proposal.block_ids]} if scoped else {}),
             "author_intent": context.context.ai_context(),
         }, ensure_ascii=False), response_model=BlockRevisionResult if scoped else SceneWritingResult)
-    composed = provider.metadata.model == 'qwen2.5:7b' and can_compose(proposal)
+    composed = provider.metadata.model == 'qwen2.5:7b' and can_compose(proposal, language)
     if composed:
         request, beats = composition_request(proposal, language)
     check_context_budget(request, provider)
@@ -87,6 +87,8 @@ def write_scene(proposal: ScreenplayProposal, provider: StructuredProvider) -> S
         if composed:
             parameters = {**parameters, 'composition': 'source-preserving-v1',
                           'outline_reconciled': json.loads(request.input_text)['reconciled_ai_outline']}
+            if json.loads(request.input_text)['dialogue_options']:
+                parameters['dialogue_mode'] = 'bounded-reactions-v1'
         return proposal.model_copy(update={"scene": scene, "status": "ready", "model": result.model, "parameters": parameters})
 
 
