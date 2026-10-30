@@ -14,7 +14,7 @@ export class CandidateAutosave {
  subscribe=(fn:()=>void)=>{this.listeners.add(fn);return()=>{this.listeners.delete(fn)}};
  private update(patch:Partial<typeof this.state>){this.state={...this.state,...patch};this.listeners.forEach(f=>f());}
  get dirty(){return !!this.state.local&&!!this.state.saved&&text(this.state.local.project)!==text(this.state.saved.project);}
- accept=(c:Candidate)=>{if(this.dirty||this.state.error||this.flight)return;this.update({local:c,saved:c});};
+ accept=(c:Candidate)=>{if(this.dirty||this.state.error||this.flight||c.revision<(this.state.saved?.revision??-1))return;this.update({local:c,saved:c});};
  edit=(project:Project)=>{if(!this.state.local)return;this.update({local:{...this.state.local,project}});this.schedule();};
  composition=(active:boolean)=>{this.composing=active;this.schedule();};
  stop=()=>{clearTimeout(this.timer);};
