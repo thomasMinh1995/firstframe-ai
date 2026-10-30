@@ -1,0 +1,168 @@
+{
+  "id": "2fadb419-62c6-481c-8eae-b82b62f811b2",
+  "project_id": "2704bbee-2e89-4f5b-b87b-0895d25713cb",
+  "source_revision": 1,
+  "created_at": "2026-10-30T03:47:27.970573+00:00",
+  "updated_at": "2026-10-30T03:49:17.778881+00:00",
+  "revision_instructions": "",
+  "affected_scene_ids": [],
+  "status": "interrupted",
+  "step": "write",
+  "sending": true,
+  "cancel_requested": false,
+  "candidate_revision": 9,
+  "completed_scenes": 0,
+  "total_scenes": 2,
+  "error": "Lượt tạo gặp lỗi. Phần đã lưu vẫn được giữ; hãy kiểm tra trạng thái trước khi tiếp tục.",
+  "review_error": null,
+  "adopted_revision": null,
+  "progress_version": 1,
+  "progress_revision": 13,
+  "workflow_items": [
+    {
+      "id": "analysis",
+      "kind": "analysis",
+      "scene_id": null,
+      "status": "completed",
+      "started_at": "2026-10-30T03:47:27.971360+00:00",
+      "finished_at": "2026-10-30T03:47:41.127941+00:00",
+      "result": {
+        "kind": "analysis",
+        "id": "40e072ec-beb2-4d27-a286-8c9b60002681",
+        "candidate_revision": 2
+      },
+      "error_code": null,
+      "children": []
+    },
+    {
+      "id": "intent",
+      "kind": "intent",
+      "scene_id": null,
+      "status": "completed",
+      "started_at": null,
+      "finished_at": "2026-10-30T03:47:41.143157+00:00",
+      "result": {
+        "kind": "intent",
+        "id": "40e072ec-beb2-4d27-a286-8c9b60002681",
+        "candidate_revision": 3
+      },
+      "error_code": null,
+      "children": []
+    },
+    {
+      "id": "plan",
+      "kind": "plan",
+      "scene_id": null,
+      "status": "completed",
+      "started_at": "2026-10-30T03:47:41.144011+00:00",
+      "finished_at": "2026-10-30T03:48:17.438083+00:00",
+      "result": {
+        "kind": "plan",
+        "id": null,
+        "candidate_revision": 5
+      },
+      "error_code": null,
+      "children": []
+    },
+    {
+      "id": "plan_review",
+      "kind": "plan_review",
+      "scene_id": null,
+      "status": "completed",
+      "started_at": "2026-10-30T03:48:17.438390+00:00",
+      "finished_at": "2026-10-30T03:48:29.624978+00:00",
+      "result": {
+        "kind": "plan_review",
+        "id": "ea5f04d4-8f8e-45e1-9445-22ab24a769d8",
+        "candidate_revision": 5
+      },
+      "error_code": null,
+      "children": []
+    },
+    {
+      "id": "outline",
+      "kind": "outline",
+      "scene_id": null,
+      "status": "completed",
+      "started_at": "2026-10-30T03:48:29.630646+00:00",
+      "finished_at": "2026-10-30T03:48:47.548641+00:00",
+      "result": {
+        "kind": "outline",
+        "id": "e87d7c65-73ad-4dc5-b533-a36229cb636b",
+        "candidate_revision": 8
+      },
+      "error_code": null,
+      "children": []
+    },
+    {
+      "id": "write:4a14368b-25cd-4a03-bbb6-bb21bbfcd4c5",
+      "kind": "write",
+      "scene_id": "4a14368b-25cd-4a03-bbb6-bb21bbfcd4c5",
+      "status": "interrupted",
+      "started_at": "2026-10-30T03:48:47.552820+00:00",
+      "finished_at": "2026-10-30T03:49:17.778511+00:00",
+      "result": null,
+      "error_code": "unknown_result",
+      "children": []
+    },
+    {
+      "id": "write:c2792bfe-33e6-4fcd-9b4c-f240e5e8d4a9",
+      "kind": "write",
+      "scene_id": "c2792bfe-33e6-4fcd-9b4c-f240e5e8d4a9",
+      "status": "pending",
+      "started_at": null,
+      "finished_at": null,
+      "result": null,
+      "error_code": null,
+      "children": []
+    },
+    {
+      "id": "review",
+      "kind": "review",
+      "scene_id": null,
+      "status": "pending",
+      "started_at": null,
+      "finished_at": null,
+      "result": null,
+      "error_code": null,
+      "children": [
+        {
+          "id": "review_scene:4a14368b-25cd-4a03-bbb6-bb21bbfcd4c5",
+          "kind": "review_scene",
+          "scene_id": "4a14368b-25cd-4a03-bbb6-bb21bbfcd4c5",
+          "status": "pending",
+          "started_at": null,
+          "finished_at": null,
+          "result": null,
+          "error_code": null,
+          "children": []
+        },
+        {
+          "id": "review_scene:c2792bfe-33e6-4fcd-9b4c-f240e5e8d4a9",
+          "kind": "review_scene",
+          "scene_id": "c2792bfe-33e6-4fcd-9b4c-f240e5e8d4a9",
+          "status": "pending",
+          "started_at": null,
+          "finished_at": null,
+          "result": null,
+          "error_code": null,
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "draft",
+      "kind": "draft",
+      "scene_id": null,
+      "status": "pending",
+      "started_at": null,
+      "finished_at": null,
+      "result": null,
+      "error_code": null,
+      "children": []
+    }
+  ],
+  "can_continue": false,
+  "continue_block_reason": "unknown_result",
+  "continue_block_message": "Lần gọi AI chưa rõ kết quả; không gửi lại. Hãy giữ bản đã có hoặc hủy và tạo lượt mới."
+}

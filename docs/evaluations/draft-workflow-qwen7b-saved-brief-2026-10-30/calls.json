@@ -1,0 +1,265 @@
+[
+  {
+    "stage": "reasoning",
+    "input_bytes": 909,
+    "instructions_bytes": 3492,
+    "timeout_seconds": null,
+    "model": "qwen2.5:7b",
+    "output": {
+      "summary": "Trong một căn bếp nhỏ, buổi chiều mưa, con gái đặt chìa khóa lên bàn trước khi đi học xa. Cha đặt một lá thư xin lỗi cạnh đó, lùi lại. Cô chưa mở thư, ngồi xuống uống cùng cha một ngụm trà.",
+      "notes": [
+        {
+          "label": "Cảnh ngắn",
+          "content": "Cảnh đầu tiên có thể chỉ tập trung vào hành động của con gái đặt chìa khóa và cha đặt thư, tạo ra sự đối lập giữa hành động và không nói."
+        }
+      ],
+      "missing_information": [
+        "Cách cha xin lỗi qua lá thư"
+      ],
+      "ai_suggestions": []
+    },
+    "seconds": 6.524
+  },
+  {
+    "stage": "planning",
+    "input_bytes": 12181,
+    "instructions_bytes": 6908,
+    "timeout_seconds": null,
+    "model": "qwen2.5:7b",
+    "output": {
+      "story_plan": {
+        "working_title": {
+          "title": "Chiều mưa trong căn bếp nhỏ"
+        },
+        "logline": {
+          "text": "Trong căn bếp nhỏ, con gái và cha cùng uống trà, con gái chưa mở lá thư xin lỗi của cha, để lại một tình cảm phức tạp chưa giải quyết."
+        },
+        "characters": {
+          "protagonist": "Con gái",
+          "supporting_characters": [
+            "Cha"
+          ],
+          "antagonist_or_obstacle": null
+        },
+        "conflict": {
+          "external": "Lá thư xin lỗi của cha",
+          "internal": "Con gái chưa thể mở lòng tha thứ",
+          "stakes": "Quyền quyết định của con gái về tình cảm với cha"
+        },
+        "beginning": {
+          "setup": "Chiều mưa, con gái chuẩn bị đi học xa, cha đặt lá thư xin lỗi cạnh chìa khóa của con.",
+          "key_event": null
+        },
+        "middle": {
+          "escalation": "Con gái ngồi xuống uống trà cùng cha, chưa mở lá thư.",
+          "turning_point": null
+        },
+        "ending": {
+          "resolution": "Con gái không mở lá thư, ngồi uống trà cùng cha, để lại một tình cảm phức tạp chưa giải quyết.",
+          "final_image": "Con gái và cha ngồi im lặng trong căn bếp, con gái chưa mở lá thư, chỉ uống trà, ánh sáng từ cửa sổ chiếu vào làm ấm căn bếp."
+        },
+        "theme": {
+          "statement": "Tình cảm giữa cha và con gái cần thời gian để được hiểu và chấp nhận."
+        },
+        "visual_style": {
+          "description": "Căn bếp nhỏ, ánh sáng từ cửa sổ, chén trà, lá thư xin lỗi.",
+          "visual_motifs": [
+            "Ánh sáng từ cửa sổ",
+            "Chén trà"
+          ]
+        },
+        "tone": {
+          "description": "Tình cảm, im lặng, phức tạp."
+        },
+        "production_notes": {
+          "notes": "Cảnh ngắn, chỉ hai nhân vật, một căn bếp. Sử dụng ánh sáng từ cửa sổ để tạo cảm giác ấm áp và tâm trạng.",
+          "locations": [
+            "Căn bếp"
+          ],
+          "cast_size": "2 nhân vật"
+        }
+      }
+    },
+    "seconds": 27.875
+  },
+  {
+    "stage": "evaluation",
+    "input_bytes": 3974,
+    "instructions_bytes": 2938,
+    "timeout_seconds": null,
+    "model": "qwen2.5:7b",
+    "output": {
+      "reviews": [
+        {
+          "card_id": "section-5",
+          "decision_id": "constraint-1",
+          "related_card_id": "section-4",
+          "observation": "Card 5 mô tả con gái không mở lá thư và để lại một tình cảm phức tạp, trong khi Card 4 chỉ nói về việc con gái ngồi uống trà cùng cha. Điều này tạo ra sự mâu thuẫn giữa hai card.",
+          "comparison": "mismatch",
+          "suggestion": "Trong Card 4, thêm chi tiết về lá thư xin lỗi chưa mở để giữ cho cả hai card đồng nhất và tuân theo giới hạn 2."
+        }
+      ],
+      "passed": false,
+      "rubric_scores": null
+    },
+    "seconds": 11.785
+  },
+  {
+    "stage": "scene_generation",
+    "input_bytes": 3348,
+    "instructions_bytes": 2406,
+    "timeout_seconds": null,
+    "model": "qwen2.5:7b",
+    "output": {
+      "scenes": [
+        {
+          "title": "Chiều mưa",
+          "action": "Mưa rơi nhẹ ngoài cửa sổ, ánh sáng mờ nhạt từ bên ngoài chiếu vào căn bếp nhỏ, làm ấm không gian. Con gái ngồi ở bàn học, chuẩn bị đi học xa. Cha đứng bên cạnh, đặt chìa khóa lên bàn, sau đó lùi về phía sau, nhìn con gái.",
+          "location": "Căn bếp nhỏ",
+          "time": "Chiều mưa",
+          "characters": "Con gái, Cha",
+          "goal": "Cha muốn thể hiện sự quan tâm và xin lỗi con gái trước khi cô đi học xa.",
+          "purpose": "Tạo ra bối cảnh và giới thiệu nhân vật, đồng thời đặt ra vấn đề cần giải quyết.",
+          "transition": "Cha đặt chìa khóa lên bàn, sau đó lùi về phía sau, nhìn con gái."
+        },
+        {
+          "title": "Uống trà",
+          "action": "Con gái ngồi xuống, uống một ngụm trà. Cha đứng im lặng, nhìn con gái. Con gái chưa mở lá thư xin lỗi, nhưng ngồi uống trà cùng cha, để lại một tình cảm phức tạp chưa giải quyết.",
+          "location": "Căn bếp nhỏ",
+          "time": "Chiều mưa",
+          "characters": "Con gái, Cha",
+          "goal": "Con gái chưa mở lá thư xin lỗi, nhưng ngồi uống trà cùng cha, để lại một tình cảm phức tạp chưa giải quyết.",
+          "purpose": "Tăng thêm áp lực và tiết lộ xoay quanh tình cảm phức tạp giữa cha và con gái.",
+          "transition": "Con gái không mở lá thư, ngồi uống trà cùng cha, để lại một tình cảm phức tạp chưa giải quyết."
+        }
+      ]
+    },
+    "seconds": 23.347
+  },
+  {
+    "stage": "screenplay_generation",
+    "input_bytes": 5791,
+    "instructions_bytes": 1672,
+    "timeout_seconds": null,
+    "model": "qwen2.5:7b",
+    "output": {
+      "scene": {
+        "heading": "Chiều mưa",
+        "blocks": [
+          {
+            "kind": "action",
+            "text": "Mưa rơi nhẹ ngoài cửa sổ, ánh sáng mờ nhạt từ bên ngoài chiếu vào căn bếp nhỏ, làm ấm không gian. Con gái ngồi ở bàn học, chuẩn bị đi học xa. Cha đứng bên cạnh, đặt chìa khóa lên bàn, sau đó lùi về phía sau, nhìn con gái.",
+            "speaker": ""
+          },
+          {
+            "kind": "action",
+            "text": "Cha đặt một lá thư xin lỗi cạnh chìa khóa, rồi lùi về phía sau, nhìn con gái một cách đầy tình cảm.",
+            "speaker": ""
+          },
+          {
+            "kind": "action",
+            "text": "Con gái nhìn chìa khóa và lá thư, nhưng chưa mở thư. Cô ngồi xuống, uống một ngụm trà.",
+            "speaker": ""
+          },
+          {
+            "kind": "action",
+            "text": "Cha đứng im lặng, nhìn con gái uống trà. Cả hai ngồi im lặng trong căn bếp, ánh sáng từ cửa sổ làm ấm căn phòng.",
+            "speaker": ""
+          }
+        ]
+      }
+    },
+    "seconds": 29.533
+  },
+  {
+    "stage": "screenplay_generation",
+    "input_bytes": 6809,
+    "instructions_bytes": 1672,
+    "timeout_seconds": null,
+    "model": "qwen2.5:7b",
+    "output": {
+      "scene": {
+        "heading": "Chiều mưa trong căn bếp nhỏ",
+        "blocks": [
+          {
+            "kind": "action",
+            "text": "Con gái ngồi xuống, uống một ngụm trà. Cha đứng im lặng, nhìn con gái.",
+            "speaker": ""
+          },
+          {
+            "kind": "action",
+            "text": "Ánh sáng từ cửa sổ làm ấm căn bếp, tạo nên không khí yên lặng giữa hai người.",
+            "speaker": ""
+          }
+        ]
+      }
+    },
+    "seconds": 16.372
+  },
+  {
+    "stage": "screenplay_review",
+    "input_bytes": 502,
+    "instructions_bytes": 1200,
+    "timeout_seconds": 59.982202249986585,
+    "model": "qwen2.5:7b",
+    "output": {
+      "craft_issue": "none"
+    },
+    "seconds": 3.476
+  },
+  {
+    "stage": "screenplay_review",
+    "input_bytes": 343,
+    "instructions_bytes": 1200,
+    "timeout_seconds": 56.45980895799585,
+    "model": "qwen2.5:7b",
+    "output": {
+      "craft_issue": "none"
+    },
+    "seconds": 1.242
+  },
+  {
+    "stage": "screenplay_review",
+    "input_bytes": 324,
+    "instructions_bytes": 1200,
+    "timeout_seconds": 55.15446820796933,
+    "model": "qwen2.5:7b",
+    "output": {
+      "craft_issue": "none"
+    },
+    "seconds": 1.398
+  },
+  {
+    "stage": "screenplay_review",
+    "input_bytes": 358,
+    "instructions_bytes": 1200,
+    "timeout_seconds": 53.72021662502084,
+    "model": "qwen2.5:7b",
+    "output": {
+      "craft_issue": "none"
+    },
+    "seconds": 1.817
+  },
+  {
+    "stage": "screenplay_review",
+    "input_bytes": 326,
+    "instructions_bytes": 1200,
+    "timeout_seconds": 59.8813043749542,
+    "model": "qwen2.5:7b",
+    "output": {
+      "craft_issue": "none"
+    },
+    "seconds": 0.897
+  },
+  {
+    "stage": "screenplay_review",
+    "input_bytes": 341,
+    "instructions_bytes": 1200,
+    "timeout_seconds": 58.00034358398989,
+    "model": "qwen2.5:7b",
+    "output": {
+      "craft_issue": "none"
+    },
+    "seconds": 1.75
+  }
+]

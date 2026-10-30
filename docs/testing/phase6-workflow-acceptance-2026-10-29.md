@@ -89,3 +89,7 @@ Kiểm thử kỹ thuật **598 passed, 1 skipped**. Hai lượt tám ca đều 
 [Báo cáo v8 và dữ liệu hai lượt](../evaluations/qa01-qwen-review-v8-2026-10-29/README.md): cả hai lượt đạt 10/10 ca, đúng cặp bằng chứng và mẫu nội dung hiển thị, không cáo buộc thêm ánh đèn đường, không đổi kịch bản. Backend kiểm tra các đối lập trực tiếp thận trọng; Qwen chỉ phân loại độ rõ từng đoạn và không viết diễn giải. Hai đối chứng cửa sổ/cửa tủ đã được dùng trong phát triển; không tuyên bố đây là bộ đánh giá độc lập.
 
 Đã bỏ chặn lỗi tái hiện của PR #77 để merge kỹ thuật vào dev. Không suy ra review ngữ nghĩa tổng quát đã chính xác; các trường hợp ngoài phạm vi trực tiếp có thể không phát hiện. QA-01 phát hành tiếp tục chờ người đọc độc lập, pilot và kiểm tra thiết bị/IME/screen reader/Safari.
+
+## DR-09 / DR-10 — 30/10/2026
+
+[Báo cáo mới](draft-workflow-release-2026-10-30.md): backend 662 passed/1 skipped, 18 suite frontend và build đạt; đã thêm CI, ma trận 1/2/6 cảnh, kiểm tra hai tab/backup, mobile và onboarding. Hai ca Qwen thật được lưu riêng: một ca lỗi structured scene sau 5 call; một ca 12 call tới PDF với hai review nhưng vẫn có đổi chủ thể/lặp nội dung. Không thay kết luận QA-01 thành pass; model robustness, thiết bị/assistive technology và người đọc/pilot còn là cổng phát hành.

@@ -1,0 +1,53 @@
+{
+  "model": "qwen2.5:7b",
+  "context_length": 16384,
+  "temperature": 0.3,
+  "started_at": "2026-10-30T03:51:31.837080+00:00",
+  "database": "/var/folders/5q/2y5tf10x3pg8jm8d6_mkf80h0000gn/T/firstframe-live-draft-jh2e42yv/projects.sqlite3",
+  "providers": [
+    {
+      "provider": "ollama",
+      "model": "qwen2.5:7b",
+      "parameters": {
+        "temperature": 0.3,
+        "timeout_seconds": 180.0,
+        "num_ctx": 16384,
+        "screenplay_review_temperature": 0.0
+      }
+    },
+    {
+      "provider": "ollama",
+      "model": "qwen2.5:7b",
+      "parameters": {
+        "temperature": 0.3,
+        "timeout_seconds": 180.0,
+        "num_ctx": 16384,
+        "screenplay_review_temperature": 0.0
+      }
+    },
+    {
+      "provider": "ollama",
+      "model": "qwen2.5:7b",
+      "parameters": {
+        "temperature": 0.3,
+        "timeout_seconds": 180.0,
+        "num_ctx": 16384,
+        "screenplay_review_temperature": 0.0
+      }
+    },
+    {
+      "provider": "ollama",
+      "model": "qwen2.5:7b",
+      "parameters": {
+        "temperature": 0.3,
+        "timeout_seconds": 180.0,
+        "num_ctx": 16384,
+        "screenplay_review_temperature": 0.0
+      }
+    }
+  ],
+  "max_calls": 14,
+  "budget_seconds": 600,
+  "brief_source": "docs/evaluations/phase6-qwen7b-2026-10-29/result.json",
+  "application_revision": "d1f4a6412d166fbee67301fffde8e99d49c207b1"
+}
