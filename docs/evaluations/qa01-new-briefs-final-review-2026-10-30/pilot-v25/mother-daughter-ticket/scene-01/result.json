@@ -1,0 +1,35 @@
+{
+  "scene": {
+    "id": "843acf97-1837-4914-8a8c-b0389cff004b",
+    "source_scene_id": "729fa9a5-9de2-4fbd-a27d-34f18cbfcf31",
+    "heading": "Bếp",
+    "blocks": [
+      {
+        "kind": "action",
+        "text": "Mẹ đặt vé tàu lên bàn bếp.",
+        "speaker": "",
+        "id": "43a38af9-7e80-4bf8-9a9e-441a3c295774"
+      },
+      {
+        "kind": "dialogue",
+        "text": "Con cứ nghĩ thêm một chút.",
+        "speaker": "Mẹ",
+        "id": "876ee690-6742-4ada-8a2f-50bd386defb6"
+      },
+      {
+        "kind": "dialogue",
+        "text": "Con vẫn đang nghĩ, mẹ.",
+        "speaker": "Con gái",
+        "id": "f9e98a4a-fd30-4034-a721-f42b1dc64501"
+      }
+    ]
+  },
+  "status": "ready",
+  "model": "qwen2.5:7b",
+  "parameters": {
+    "composition": "source-preserving-v1",
+    "outline_reconciled": false,
+    "dialogue_mode": "bounded-reactions-v1"
+  },
+  "prompt_version": "screenplay-scene-v25-bounded-reactions"
+}

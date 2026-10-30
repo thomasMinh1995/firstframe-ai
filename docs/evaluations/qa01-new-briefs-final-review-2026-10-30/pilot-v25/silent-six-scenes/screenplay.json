@@ -1,0 +1,509 @@
+{
+  "id": "21dc1a99-4d42-4ca9-b828-4f2c3d502a08",
+  "version": 1,
+  "scenes": [
+    {
+      "id": "03967f2b-18d4-4476-abd9-e13fd51d9ed9",
+      "source_scene_id": "89375d9c-4cef-4678-8c2c-a832d423cb81",
+      "heading": "CẢNH 1",
+      "blocks": [
+        {
+          "kind": "action",
+          "text": "An đặt chậu cây khô lên bàn.",
+          "speaker": "",
+          "id": "d153b45f-2426-4840-a3d2-92c3b5ea2402"
+        }
+      ]
+    },
+    {
+      "id": "ed1af303-bdcc-4c2f-913b-47f5a3766c73",
+      "source_scene_id": "abaeb60d-666a-47f9-ac34-f096dadd9ea7",
+      "heading": "CẢNH 2",
+      "blocks": [
+        {
+          "kind": "action",
+          "text": "Bình đặt bình nước cạnh chậu cây.",
+          "speaker": "",
+          "id": "138c4ae1-3be0-4c6f-808f-1cf7a86f676a"
+        }
+      ]
+    },
+    {
+      "id": "0cb6857a-0e78-45cb-bdcb-c5165f9c73e5",
+      "source_scene_id": "18a0638c-ffc3-44c4-8aa9-92c4136ea8d1",
+      "heading": "CẢNH 3",
+      "blocks": [
+        {
+          "kind": "action",
+          "text": "An cầm bình nước.",
+          "speaker": "",
+          "id": "ff3f108a-0d27-48dc-8ebb-276b3226769f"
+        }
+      ]
+    },
+    {
+      "id": "0136d20d-f614-40b1-a0c4-1e4d7a5cb592",
+      "source_scene_id": "3bbb7dac-6008-47ae-80ab-7c27230d1733",
+      "heading": "CẢNH 4",
+      "blocks": [
+        {
+          "kind": "action",
+          "text": "An nghiêng bình, một ít nước rơi vào đất.",
+          "speaker": "",
+          "id": "f4bae4ec-7bda-4093-b54c-ed0182c6f835"
+        }
+      ]
+    },
+    {
+      "id": "8c42b140-13ff-4a69-9bef-b82e7d67fd31",
+      "source_scene_id": "2471147e-135f-4e0d-8b7e-508da21bf3f8",
+      "heading": "CẢNH 5",
+      "blocks": [
+        {
+          "kind": "action",
+          "text": "An đặt bình rỗng xuống bàn.",
+          "speaker": "",
+          "id": "f36b85e2-d870-41ed-b933-5dfb738ec8e6"
+        }
+      ]
+    },
+    {
+      "id": "ca887890-1d34-4c34-8cdb-6afcb364a91f",
+      "source_scene_id": "518afb0f-1b96-4378-90b0-0c86b6b53247",
+      "heading": "CẢNH 6",
+      "blocks": [
+        {
+          "kind": "action",
+          "text": "An và Bình đứng nhìn chậu cây vẫn chưa có lá mới.",
+          "speaker": "",
+          "id": "750e178e-d102-4aaa-bbcb-eb8b67e1912c"
+        }
+      ]
+    }
+  ],
+  "source_revision": 1,
+  "source_outline": {
+    "id": "52aec28f-d235-4fd4-b9ac-2c53b4a6a64d",
+    "version": 1,
+    "scenes": [
+      {
+        "id": "89375d9c-4cef-4678-8c2c-a832d423cb81",
+        "title": "Chậu cây",
+        "action": "An đặt chậu cây khô lên bàn.",
+        "location": "Căn phòng",
+        "time": "",
+        "characters": "An, Bình",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      },
+      {
+        "id": "abaeb60d-666a-47f9-ac34-f096dadd9ea7",
+        "title": "Bình nước",
+        "action": "Bình đặt bình nước cạnh chậu cây.",
+        "location": "Căn phòng",
+        "time": "",
+        "characters": "An, Bình",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      },
+      {
+        "id": "18a0638c-ffc3-44c4-8aa9-92c4136ea8d1",
+        "title": "Cầm bình",
+        "action": "An cầm bình nước.",
+        "location": "Căn phòng",
+        "time": "",
+        "characters": "An, Bình",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      },
+      {
+        "id": "3bbb7dac-6008-47ae-80ab-7c27230d1733",
+        "title": "Tưới",
+        "action": "An nghiêng bình, một ít nước rơi vào đất.",
+        "location": "Căn phòng",
+        "time": "",
+        "characters": "An, Bình",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      },
+      {
+        "id": "2471147e-135f-4e0d-8b7e-508da21bf3f8",
+        "title": "Bình rỗng",
+        "action": "An đặt bình rỗng xuống bàn.",
+        "location": "Căn phòng",
+        "time": "",
+        "characters": "An, Bình",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      },
+      {
+        "id": "518afb0f-1b96-4378-90b0-0c86b6b53247",
+        "title": "Chờ",
+        "action": "An và Bình đứng nhìn chậu cây vẫn chưa có lá mới.",
+        "location": "Căn phòng",
+        "time": "",
+        "characters": "An, Bình",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      }
+    ],
+    "source": {
+      "id": "2f89f78f-5cdf-4937-85d9-d730d5cd1f67",
+      "project_revision": 1,
+      "version_id": "current",
+      "draft": {
+        "title": "Chậu cây ở bậu cửa",
+        "logline": "An đặt chậu cây khô lên bàn. Bình đặt bình nước cạnh chậu cây. An cầm bình nước. An nghiêng bình, một ít nước rơi vào đất. An đặt bình rỗng xuống bàn. An và Bình đứng nhìn chậu cây vẫn chưa có lá mới.",
+        "sections": [
+          {
+            "title": "Story",
+            "purpose": "Author brief",
+            "content": "An đặt chậu cây khô lên bàn. Bình đặt bình nước cạnh chậu cây. An cầm bình nước. An nghiêng bình, một ít nước rơi vào đất. An đặt bình rỗng xuống bàn. An và Bình đứng nhìn chậu cây vẫn chưa có lá mới."
+          }
+        ]
+      },
+      "context": {
+        "idea": "An đặt chậu cây khô lên bàn. Bình đặt bình nước cạnh chậu cây. An cầm bình nước. An nghiêng bình, một ít nước rơi vào đất. An đặt bình rỗng xuống bàn. An và Bình đứng nhìn chậu cây vẫn chưa có lá mới.",
+        "constraints": [
+          "Đúng sáu cảnh; chỉ An và Bình trong một căn phòng. Hoàn toàn không thoại, không thuyết minh.",
+          "Không lặp việc tưới hoặc biến cây khô thành cây xanh ngay. Bình không tự tưới thay An."
+        ],
+        "clarifications": [],
+        "pending_questions": []
+      },
+      "response_language": "vi",
+      "draft_provenance": {
+        "title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "logline": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:0:title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:0:purpose": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:0:content": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        }
+      }
+    },
+    "provenance": {
+      "m2:89375d9c-4cef-4678-8c2c-a832d423cb81:title": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:89375d9c-4cef-4678-8c2c-a832d423cb81:action": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:89375d9c-4cef-4678-8c2c-a832d423cb81:location": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:89375d9c-4cef-4678-8c2c-a832d423cb81:time": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:89375d9c-4cef-4678-8c2c-a832d423cb81:characters": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:89375d9c-4cef-4678-8c2c-a832d423cb81:goal": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:89375d9c-4cef-4678-8c2c-a832d423cb81:purpose": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:89375d9c-4cef-4678-8c2c-a832d423cb81:viewer_intent": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:89375d9c-4cef-4678-8c2c-a832d423cb81:keep_or_avoid": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:abaeb60d-666a-47f9-ac34-f096dadd9ea7:title": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:abaeb60d-666a-47f9-ac34-f096dadd9ea7:action": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:abaeb60d-666a-47f9-ac34-f096dadd9ea7:location": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:abaeb60d-666a-47f9-ac34-f096dadd9ea7:time": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:abaeb60d-666a-47f9-ac34-f096dadd9ea7:characters": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:abaeb60d-666a-47f9-ac34-f096dadd9ea7:goal": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:abaeb60d-666a-47f9-ac34-f096dadd9ea7:purpose": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:abaeb60d-666a-47f9-ac34-f096dadd9ea7:viewer_intent": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:abaeb60d-666a-47f9-ac34-f096dadd9ea7:keep_or_avoid": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:18a0638c-ffc3-44c4-8aa9-92c4136ea8d1:title": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:18a0638c-ffc3-44c4-8aa9-92c4136ea8d1:action": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:18a0638c-ffc3-44c4-8aa9-92c4136ea8d1:location": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:18a0638c-ffc3-44c4-8aa9-92c4136ea8d1:time": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:18a0638c-ffc3-44c4-8aa9-92c4136ea8d1:characters": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:18a0638c-ffc3-44c4-8aa9-92c4136ea8d1:goal": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:18a0638c-ffc3-44c4-8aa9-92c4136ea8d1:purpose": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:18a0638c-ffc3-44c4-8aa9-92c4136ea8d1:viewer_intent": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:18a0638c-ffc3-44c4-8aa9-92c4136ea8d1:keep_or_avoid": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:3bbb7dac-6008-47ae-80ab-7c27230d1733:title": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:3bbb7dac-6008-47ae-80ab-7c27230d1733:action": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:3bbb7dac-6008-47ae-80ab-7c27230d1733:location": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:3bbb7dac-6008-47ae-80ab-7c27230d1733:time": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:3bbb7dac-6008-47ae-80ab-7c27230d1733:characters": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:3bbb7dac-6008-47ae-80ab-7c27230d1733:goal": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:3bbb7dac-6008-47ae-80ab-7c27230d1733:purpose": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:3bbb7dac-6008-47ae-80ab-7c27230d1733:viewer_intent": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:3bbb7dac-6008-47ae-80ab-7c27230d1733:keep_or_avoid": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:2471147e-135f-4e0d-8b7e-508da21bf3f8:title": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:2471147e-135f-4e0d-8b7e-508da21bf3f8:action": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:2471147e-135f-4e0d-8b7e-508da21bf3f8:location": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:2471147e-135f-4e0d-8b7e-508da21bf3f8:time": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:2471147e-135f-4e0d-8b7e-508da21bf3f8:characters": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:2471147e-135f-4e0d-8b7e-508da21bf3f8:goal": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:2471147e-135f-4e0d-8b7e-508da21bf3f8:purpose": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:2471147e-135f-4e0d-8b7e-508da21bf3f8:viewer_intent": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:2471147e-135f-4e0d-8b7e-508da21bf3f8:keep_or_avoid": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:518afb0f-1b96-4378-90b0-0c86b6b53247:title": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:518afb0f-1b96-4378-90b0-0c86b6b53247:action": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:518afb0f-1b96-4378-90b0-0c86b6b53247:location": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:518afb0f-1b96-4378-90b0-0c86b6b53247:time": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:518afb0f-1b96-4378-90b0-0c86b6b53247:characters": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:518afb0f-1b96-4378-90b0-0c86b6b53247:goal": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:518afb0f-1b96-4378-90b0-0c86b6b53247:purpose": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:518afb0f-1b96-4378-90b0-0c86b6b53247:viewer_intent": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:518afb0f-1b96-4378-90b0-0c86b6b53247:keep_or_avoid": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      }
+    }
+  },
+  "provenance": {
+    "script:03967f2b-18d4-4476-abd9-e13fd51d9ed9:heading": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:d153b45f-2426-4840-a3d2-92c3b5ea2402:text": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:d153b45f-2426-4840-a3d2-92c3b5ea2402:speaker": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "script:ed1af303-bdcc-4c2f-913b-47f5a3766c73:heading": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:138c4ae1-3be0-4c6f-808f-1cf7a86f676a:text": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:138c4ae1-3be0-4c6f-808f-1cf7a86f676a:speaker": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "script:0cb6857a-0e78-45cb-bdcb-c5165f9c73e5:heading": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:ff3f108a-0d27-48dc-8ebb-276b3226769f:text": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:ff3f108a-0d27-48dc-8ebb-276b3226769f:speaker": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "script:0136d20d-f614-40b1-a0c4-1e4d7a5cb592:heading": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:f4bae4ec-7bda-4093-b54c-ed0182c6f835:text": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:f4bae4ec-7bda-4093-b54c-ed0182c6f835:speaker": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "script:8c42b140-13ff-4a69-9bef-b82e7d67fd31:heading": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:f36b85e2-d870-41ed-b933-5dfb738ec8e6:text": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:f36b85e2-d870-41ed-b933-5dfb738ec8e6:speaker": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "script:ca887890-1d34-4c34-8cdb-6afcb364a91f:heading": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:750e178e-d102-4aaa-bbcb-eb8b67e1912c:text": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:750e178e-d102-4aaa-bbcb-eb8b67e1912c:speaker": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "status": "ready",
+  "scene": {
+    "id": "0584242f-e0e2-4b48-80be-25aa2a4e437c",
+    "source_scene_id": "9f3ea4b7-58d7-453a-ad21-ac426a5d9797",
+    "heading": "Đẩy hộp",
+    "blocks": [
+      {
+        "kind": "action",
+        "text": "Bố đẩy chiếc hộp về phía Minh.",
+        "speaker": "",
+        "id": "2fb94aec-8ae4-4bb2-be81-b7ae2024b9c2"
+      },
+      {
+        "kind": "dialogue",
+        "text": "Con cứ nghĩ thêm một chút.",
+        "speaker": "Bố",
+        "id": "20c0ea73-d408-4397-856f-86b7a38958dd"
+      },
+      {
+        "kind": "dialogue",
+        "text": "Con muốn nghĩ kỹ hơn, bố.",
+        "speaker": "Minh",
+        "id": "00182f63-079e-4815-9c0f-793c0b84d430"
+      }
+    ]
+  },
+  "model": "qwen2.5:7b",
+  "parameters": {
+    "composition": "source-preserving-v1",
+    "outline_reconciled": false,
+    "dialogue_mode": "bounded-reactions-v1"
+  },
+  "prompt_version": "screenplay-scene-v25-bounded-reactions"
+}

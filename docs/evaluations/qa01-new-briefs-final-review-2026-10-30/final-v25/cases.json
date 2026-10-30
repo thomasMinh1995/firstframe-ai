@@ -1,0 +1,228 @@
+[
+  {
+    "id": "mother-daughter-ticket",
+    "title": "Tấm vé trên bàn",
+    "idea": "Mẹ đặt vé tàu lên bàn bếp. Con gái nhận vé rồi cất vào túi áo. Mẹ và con gái đứng ở cửa, con gái vẫn chưa quyết định có lên tàu hay không.",
+    "constraints": [
+      "Đúng ba cảnh, chỉ mẹ và con gái; giữ kết mở.",
+      "Mỗi cảnh có đúng hai câu thoại ngắn: mẹ nói một câu, con gái đáp một câu. Mẹ xưng mẹ, con gái xưng con; không dùng tôi/bạn. Không lặp việc trao vé hoặc tự xác nhận con lên tàu."
+    ],
+    "language": "vi",
+    "origin": "author_input",
+    "scenes": [
+      {
+        "title": "Bếp",
+        "action": "Mẹ đặt vé tàu lên bàn bếp.",
+        "characters": "Mẹ, Con gái",
+        "location": "Bếp"
+      },
+      {
+        "title": "Túi áo",
+        "action": "Con gái nhận vé rồi cất vào túi áo.",
+        "characters": "Mẹ, Con gái",
+        "location": "Bếp"
+      },
+      {
+        "title": "Cửa nhà",
+        "action": "Mẹ và con gái đứng ở cửa, con gái vẫn chưa quyết định có lên tàu hay không.",
+        "characters": "Mẹ, Con gái",
+        "location": "Cửa nhà"
+      }
+    ],
+    "required_speakers": [
+      "Mẹ",
+      "Con gái"
+    ],
+    "dialogue_count": 2,
+    "review_criteria": [
+      "Đúng ngôi mẹ/con, thoại không kể lại động tác",
+      "Vé trên bàn trước khi con nhận và cất",
+      "Cảnh cuối vé còn trong túi, không trao lại hoặc quyết định lên tàu"
+    ]
+  },
+  {
+    "id": "siblings-radio-custom-address",
+    "title": "Máy radio chưa sửa",
+    "idea": "Chị Hạnh đặt máy radio hỏng lên bàn. Em trai Nam lấy tua vít rồi ngồi xuống cạnh bàn. Hạnh và Nam nhìn chiếc radio vẫn im tiếng.",
+    "constraints": [
+      "Đúng ba cảnh, chỉ Hạnh và Nam; máy radio chưa hoạt động ở cuối.",
+      "Mỗi cảnh có đúng hai câu thoại, Hạnh trước rồi Nam. Hạnh xưng chị và gọi Nam là em; Nam xưng em và gọi Hạnh là chị. Không tự sửa xong radio, không lặp ngồi xuống."
+    ],
+    "language": "vi",
+    "origin": "author_input",
+    "scenes": [
+      {
+        "title": "Radio hỏng",
+        "action": "Chị Hạnh đặt máy radio hỏng lên bàn.",
+        "characters": "Hạnh, Nam",
+        "location": "Phòng khách"
+      },
+      {
+        "title": "Tua vít",
+        "action": "Em trai Nam lấy tua vít rồi ngồi xuống cạnh bàn.",
+        "characters": "Hạnh, Nam",
+        "location": "Phòng khách"
+      },
+      {
+        "title": "Chờ tiếng nhạc",
+        "action": "Hạnh và Nam nhìn chiếc radio vẫn im tiếng.",
+        "characters": "Hạnh, Nam",
+        "location": "Phòng khách"
+      }
+    ],
+    "required_speakers": [
+      "Hạnh",
+      "Nam"
+    ],
+    "dialogue_count": 2,
+    "review_criteria": [
+      "Hạnh/Nam không đổi vai, không xưng tôi/bạn",
+      "Nam chỉ ngồi một lần và giữ tua vít",
+      "Radio không được sửa xong hoặc phát nhạc"
+    ]
+  },
+  {
+    "id": "english-umbrella-three-scenes",
+    "title": "The folded umbrella",
+    "idea": "Mara puts the folded umbrella on a chair. Owen takes the umbrella from the chair and holds it. Mara and Owen stand by the closed door, still unsure whether to leave.",
+    "constraints": [
+      "Exactly three scenes, two adult friends Mara and Owen. Write all headings, action and dialogue in English.",
+      "Each scene has exactly two short dialogue lines, Mara first and Owen second. Owen keeps the umbrella after taking it; do not take it twice, open the door or resolve whether they leave."
+    ],
+    "language": "en",
+    "origin": "ai_proposal",
+    "scenes": [
+      {
+        "title": "The chair",
+        "action": "Mara puts the folded umbrella on a chair.",
+        "characters": "Mara, Owen",
+        "location": "Hallway"
+      },
+      {
+        "title": "The umbrella",
+        "action": "Owen takes the umbrella from the chair and holds it.",
+        "characters": "Mara, Owen",
+        "location": "Hallway"
+      },
+      {
+        "title": "The closed door",
+        "action": "Mara and Owen stand by the closed door, still unsure whether to leave.",
+        "characters": "Mara, Owen",
+        "location": "Hallway"
+      }
+    ],
+    "required_speakers": [
+      "Mara",
+      "Owen"
+    ],
+    "dialogue_count": 2,
+    "review_criteria": [
+      "English throughout",
+      "Mara puts umbrella down before Owen takes it",
+      "No repeated transfer, door stays closed, ending undecided"
+    ]
+  },
+  {
+    "id": "father-son-four-scenes",
+    "title": "Chiếc hộp chưa mở",
+    "idea": "Bố đặt chiếc hộp đóng kín lên bàn. Con trai Minh kéo ghế rồi ngồi xuống. Bố đẩy chiếc hộp về phía Minh. Minh đặt tay lên nắp hộp nhưng chưa mở, bố vẫn đứng cạnh bàn.",
+    "constraints": [
+      "Đúng bốn cảnh, chỉ bố và con trai Minh. Kết mở, hộp chưa mở.",
+      "Mỗi cảnh có hai câu thoại ngắn: bố nói trước, Minh đáp sau. Bố xưng bố gọi con; Minh xưng con gọi bố. Không tự nhận tha thứ, không ngồi lại hoặc trao hộp lại."
+    ],
+    "language": "vi",
+    "origin": "author_input",
+    "scenes": [
+      {
+        "title": "Đặt hộp",
+        "action": "Bố đặt chiếc hộp đóng kín lên bàn.",
+        "characters": "Bố, Minh",
+        "location": "Phòng ăn"
+      },
+      {
+        "title": "Kéo ghế",
+        "action": "Con trai Minh kéo ghế rồi ngồi xuống.",
+        "characters": "Bố, Minh",
+        "location": "Phòng ăn"
+      },
+      {
+        "title": "Đẩy hộp",
+        "action": "Bố đẩy chiếc hộp về phía Minh.",
+        "characters": "Bố, Minh",
+        "location": "Phòng ăn"
+      },
+      {
+        "title": "Tay trên nắp",
+        "action": "Minh đặt tay lên nắp hộp nhưng chưa mở, bố vẫn đứng cạnh bàn.",
+        "characters": "Bố, Minh",
+        "location": "Phòng ăn"
+      }
+    ],
+    "required_speakers": [
+      "Bố",
+      "Minh"
+    ],
+    "dialogue_count": 2,
+    "review_criteria": [
+      "Đúng bố/con và vai Bố/Minh",
+      "Minh ngồi đúng một lần, bố không tự ngồi",
+      "Hộp chỉ di chuyển sau nhịp kéo ghế, chưa mở ở cuối"
+    ]
+  },
+  {
+    "id": "silent-six-scenes",
+    "title": "Chậu cây ở bậu cửa",
+    "idea": "An đặt chậu cây khô lên bàn. Bình đặt bình nước cạnh chậu cây. An cầm bình nước. An nghiêng bình, một ít nước rơi vào đất. An đặt bình rỗng xuống bàn. An và Bình đứng nhìn chậu cây vẫn chưa có lá mới.",
+    "constraints": [
+      "Đúng sáu cảnh; chỉ An và Bình trong một căn phòng. Hoàn toàn không thoại, không thuyết minh.",
+      "Không lặp việc tưới hoặc biến cây khô thành cây xanh ngay. Bình không tự tưới thay An."
+    ],
+    "language": "vi",
+    "origin": "ai_proposal",
+    "scenes": [
+      {
+        "title": "Chậu cây",
+        "action": "An đặt chậu cây khô lên bàn.",
+        "characters": "An, Bình",
+        "location": "Căn phòng"
+      },
+      {
+        "title": "Bình nước",
+        "action": "Bình đặt bình nước cạnh chậu cây.",
+        "characters": "An, Bình",
+        "location": "Căn phòng"
+      },
+      {
+        "title": "Cầm bình",
+        "action": "An cầm bình nước.",
+        "characters": "An, Bình",
+        "location": "Căn phòng"
+      },
+      {
+        "title": "Tưới",
+        "action": "An nghiêng bình, một ít nước rơi vào đất.",
+        "characters": "An, Bình",
+        "location": "Căn phòng"
+      },
+      {
+        "title": "Bình rỗng",
+        "action": "An đặt bình rỗng xuống bàn.",
+        "characters": "An, Bình",
+        "location": "Căn phòng"
+      },
+      {
+        "title": "Chờ",
+        "action": "An và Bình đứng nhìn chậu cây vẫn chưa có lá mới.",
+        "characters": "An, Bình",
+        "location": "Căn phòng"
+      }
+    ],
+    "required_speakers": [],
+    "dialogue_count": 0,
+    "review_criteria": [
+      "Không có thoại",
+      "An tưới đúng một lần, không đổi sang Bình",
+      "Cây chưa có lá mới, không tưới lại khi bình rỗng"
+    ]
+  }
+]

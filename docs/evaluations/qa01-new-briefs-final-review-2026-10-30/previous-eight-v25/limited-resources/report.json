@@ -1,0 +1,14 @@
+{
+  "case": "limited-resources",
+  "source": "docs/evaluations/m3-scene-writing-qwen7b-2026-10-27/limited-resources/project-after.json",
+  "technical_pass": true,
+  "blocks": 2,
+  "target_preserved": true,
+  "content_checks": {
+    "no_unrequested_dialogue": true,
+    "source_actions_in_exact_order_once": true
+  },
+  "content_pass": true,
+  "seconds": 4.53,
+  "model_calls": 1
+}

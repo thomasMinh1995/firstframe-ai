@@ -1,0 +1,19 @@
+{
+  "output": {
+    "heading": "Bếp",
+    "translations": [],
+    "dialogue": {
+      "line_1": {
+        "after_action": 1,
+        "speaker": "Mẹ",
+        "text": "Con đã nhận vé chưa?"
+      },
+      "line_2": {
+        "after_action": 1,
+        "speaker": "Con gái",
+        "text": "Con đã cất vào túi áo rồi, mẹ."
+      }
+    }
+  },
+  "raw_output": "{\n  \"heading\": \"Bếp\",\n  \"translations\": [],\n  \"dialogue\": {\n    \"line_1\": {\n      \"after_action\": 1,\n      \"speaker\": \"Mẹ\",\n      \"text\": \"Con đã nhận vé chưa?\"\n    },\n    \"line_2\": {\n      \"after_action\": 1,\n      \"speaker\": \"Con gái\",\n      \"text\": \"Con đã cất vào túi áo rồi, mẹ.\"\n    }\n  }\n}"
+}

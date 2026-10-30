@@ -1,0 +1,53 @@
+{
+  "model": "qwen2.5:7b",
+  "context_length": 16384,
+  "temperature": 0.3,
+  "started_at": "2026-10-30T08:51:54.302401+00:00",
+  "database": "/var/folders/5q/2y5tf10x3pg8jm8d6_mkf80h0000gn/T/firstframe-live-draft-puix4gqj/projects.sqlite3",
+  "providers": [
+    {
+      "provider": "ollama",
+      "model": "qwen2.5:7b",
+      "parameters": {
+        "temperature": 0.3,
+        "timeout_seconds": 180.0,
+        "num_ctx": 16384,
+        "screenplay_review_temperature": 0.0
+      }
+    },
+    {
+      "provider": "ollama",
+      "model": "qwen2.5:7b",
+      "parameters": {
+        "temperature": 0.3,
+        "timeout_seconds": 180.0,
+        "num_ctx": 16384,
+        "screenplay_review_temperature": 0.0
+      }
+    },
+    {
+      "provider": "ollama",
+      "model": "qwen2.5:7b",
+      "parameters": {
+        "temperature": 0.3,
+        "timeout_seconds": 180.0,
+        "num_ctx": 16384,
+        "screenplay_review_temperature": 0.0
+      }
+    },
+    {
+      "provider": "ollama",
+      "model": "qwen2.5:7b",
+      "parameters": {
+        "temperature": 0.3,
+        "timeout_seconds": 180.0,
+        "num_ctx": 16384,
+        "screenplay_review_temperature": 0.0
+      }
+    }
+  ],
+  "max_calls": 24,
+  "budget_seconds": 600,
+  "application_revision": "4bc8a38d3e6a65d09e11151daa7e9fd437b498d5",
+  "brief_source": "docs/evaluations/qa01-new-briefs-qwen7b-2026-10-30/full-workflow-brief.json"
+}

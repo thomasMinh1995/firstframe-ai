@@ -1,0 +1,35 @@
+{
+  "status": "ready",
+  "scene": {
+    "id": "63e14ac2-de09-479c-8663-ea9ce1838b96",
+    "source_scene_id": "27d12a89-ca95-4a76-a513-dc74d30dcf6e",
+    "heading": "Radio hỏng",
+    "blocks": [
+      {
+        "kind": "action",
+        "text": "Chị Hạnh đặt máy radio hỏng lên bàn.",
+        "speaker": "",
+        "id": "e4bc7b4e-5444-47c9-a93d-5cd4e4eecc64"
+      },
+      {
+        "kind": "dialogue",
+        "text": "Em, chị nghe đây.",
+        "speaker": "Hạnh",
+        "id": "703dfc23-af9e-4d46-8e25-ecd153297c18"
+      },
+      {
+        "kind": "dialogue",
+        "text": "Em cần thêm một chút thời gian, chị.",
+        "speaker": "Nam",
+        "id": "acba7e09-9703-4ea8-a91e-9d64201f1bc8"
+      }
+    ]
+  },
+  "model": "qwen2.5:7b",
+  "parameters": {
+    "composition": "source-preserving-v1",
+    "outline_reconciled": false,
+    "dialogue_mode": "bounded-reactions-v1"
+  },
+  "prompt_version": "screenplay-scene-v25-bounded-reactions"
+}

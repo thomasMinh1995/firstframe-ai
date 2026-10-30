@@ -1,0 +1,19 @@
+{
+  "output": {
+    "heading": "Radio hỏng",
+    "translations": [],
+    "dialogue": {
+      "line_1": {
+        "after_action": 1,
+        "speaker": "Hạnh",
+        "text": "Radio này hỏng rồi, em."
+      },
+      "line_2": {
+        "after_action": 1,
+        "speaker": "Nam",
+        "text": "Chị, em sẽ xem có thể sửa được không."
+      }
+    }
+  },
+  "raw_output": "{\n  \"heading\": \"Radio hỏng\",\n  \"translations\": [],\n  \"dialogue\": {\n    \"line_1\": {\n      \"after_action\": 1,\n      \"speaker\": \"Hạnh\",\n      \"text\": \"Radio này hỏng rồi, em.\"\n    },\n    \"line_2\": {\n      \"after_action\": 1,\n      \"speaker\": \"Nam\",\n      \"text\": \"Chị, em sẽ xem có thể sửa được không.\"\n    }\n  }\n}"
+}

@@ -19,7 +19,10 @@ parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--output', type=Path, required=True)
 parser.add_argument('--model', default='qwen2.5:7b')
 parser.add_argument('--brief-source', type=Path, help='Saved result/candidate (.json or .json.gz) or brief; reuse only its synthetic idea and constraints')
+parser.add_argument('--max-calls', type=int, default=14, help='Explicit QA call budget for longer scene sequences (1–60)')
 args = parser.parse_args()
+if not 1 <= args.max_calls <= 60:
+    parser.error('--max-calls must be between 1 and 60')
 out = args.output.resolve()
 out.mkdir(parents=True, exist_ok=False)
 data = Path(tempfile.mkdtemp(prefix='firstframe-live-draft-'))
@@ -45,7 +48,7 @@ class Timed:
     def __init__(self, provider):
         self.provider, self.metadata = provider, provider.metadata
     def request_structured(self, request):
-        if len(calls) >= 14 or time.monotonic()-start > 600:
+        if len(calls) >= args.max_calls or time.monotonic()-start > 600:
             raise ProviderTimeoutError('QA budget reached; no more model calls')
         entry = dict(stage=request.stage, input_bytes=len(request.input_text.encode()),
                      instructions_bytes=len(request.instructions.encode()), timeout_seconds=request.timeout_seconds)
@@ -85,7 +88,7 @@ draft_runs.providers = lambda: providers
 draft_workflow.launch = lambda *values: draft_workflow.execute(*values)
 profile = dict(model=args.model, context_length=16384, temperature=0.3,
                started_at=datetime.now(UTC).isoformat(), database=str(data/'projects.sqlite3'),
-               providers=[asdict(p.metadata) for p in providers], max_calls=14, budget_seconds=600)
+               providers=[asdict(p.metadata) for p in providers], max_calls=args.max_calls, budget_seconds=600)
 profile['application_revision'] = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=Path(__file__).resolve().parents[2], text=True).strip()
 save('profile.json', profile)
 report = {'checks': {}, 'http': {}}

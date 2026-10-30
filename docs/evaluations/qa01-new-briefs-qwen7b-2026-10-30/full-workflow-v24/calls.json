@@ -1,0 +1,315 @@
+[
+  {
+    "stage": "reasoning",
+    "input_bytes": 855,
+    "instructions_bytes": 3492,
+    "timeout_seconds": null,
+    "model": "qwen2.5:7b",
+    "output": {
+      "summary": "Mẹ đặt vé tàu lên bàn bếp. Con gái nhận vé rồi cất vào túi áo. Mẹ và con gái đứng ở cửa, con gái vẫn chưa quyết định có lên tàu hay không.",
+      "notes": [
+        {
+          "label": "Cảnh mở",
+          "content": "Cảnh đầu tiên có thể diễn ra như thế nào? Mẹ và con gái có thể nói gì với nhau?"
+        }
+      ],
+      "missing_information": [
+        "Con gái sẽ nói gì khi nhận vé?"
+      ],
+      "ai_suggestions": []
+    },
+    "raw_output": "{\n  \"summary\": \"Mẹ đặt vé tàu lên bàn bếp. Con gái nhận vé rồi cất vào túi áo. Mẹ và con gái đứng ở cửa, con gái vẫn chưa quyết định có lên tàu hay không.\",\n  \"notes\": [\n    {\n      \"label\": \"Cảnh mở\",\n      \"content\": \"Cảnh đầu tiên có thể diễn ra như thế nào? Mẹ và con gái có thể nói gì với nhau?\"\n    }\n  ],\n  \"missing_information\": [\"Con gái sẽ nói gì khi nhận vé?\"],\n  \"ai_suggestions\": []\n}",
+    "seconds": 11.101
+  },
+  {
+    "stage": "planning",
+    "input_bytes": 12079,
+    "instructions_bytes": 6908,
+    "timeout_seconds": null,
+    "model": "qwen2.5:7b",
+    "output": {
+      "story_plan": {
+        "working_title": {
+          "title": "Vé tàu"
+        },
+        "logline": {
+          "text": "Mẹ đặt vé tàu lên bàn bếp, con gái nhận và cất vào túi áo, nhưng vẫn chưa quyết định có lên tàu hay không."
+        },
+        "characters": {
+          "protagonist": "Con gái",
+          "supporting_characters": [
+            "Mẹ"
+          ],
+          "antagonist_or_obstacle": null
+        },
+        "conflict": {
+          "external": "Vé tàu và quyết định của con gái",
+          "internal": null,
+          "stakes": null
+        },
+        "beginning": {
+          "setup": "Mẹ đặt vé tàu lên bàn bếp. Con gái nhận vé rồi cất vào túi áo.",
+          "key_event": null
+        },
+        "middle": {
+          "escalation": "Mẹ và con gái đứng ở cửa, con gái vẫn chưa quyết định có lên tàu hay không.",
+          "turning_point": null
+        },
+        "ending": {
+          "resolution": "Con gái cuối cùng vẫn chưa quyết định lên tàu hay không.",
+          "final_image": "Con gái đứng ở cửa, nhìn ra ngoài, con gái không lên tàu."
+        },
+        "theme": {
+          "statement": "Cảm giác lưỡng lự giữa việc theo đuổi ước mơ và giữ gìn hiện tại."
+        },
+        "visual_style": {
+          "description": null,
+          "visual_motifs": [
+            "Vé tàu",
+            "Cửa"
+          ]
+        },
+        "tone": {
+          "description": "Nghiêm túc, nhẹ nhàng"
+        },
+        "production_notes": {
+          "notes": "Cảnh 1: Mẹ đặt vé tàu lên bàn bếp. Con gái nhận vé rồi cất vào túi áo. Cảnh 2: Mẹ và con gái đứng ở cửa, con gái vẫn chưa quyết định có lên tàu hay không. Cảnh 3: Con gái đứng ở cửa, nhìn ra ngoài, con gái không lên tàu.",
+          "locations": [
+            "Bếp",
+            "Cửa"
+          ],
+          "cast_size": "2 người"
+        }
+      }
+    },
+    "raw_output": "{\n  \"story_plan\": {\n    \"working_title\": {\n      \"title\": \"Vé tàu\"\n    },\n    \"logline\": {\n      \"text\": \"Mẹ đặt vé tàu lên bàn bếp, con gái nhận và cất vào túi áo, nhưng vẫn chưa quyết định có lên tàu hay không.\"\n    },\n    \"characters\": {\n      \"protagonist\": \"Con gái\",\n      \"supporting_characters\": [\"Mẹ\"],\n      \"antagonist_or_obstacle\": null\n    },\n    \"conflict\": {\n      \"external\": \"Vé tàu và quyết định của con gái\",\n      \"internal\": null,\n      \"stakes\": null\n    },\n    \"beginning\": {\n      \"setup\": \"Mẹ đặt vé tàu lên bàn bếp. Con gái nhận vé rồi cất vào túi áo.\",\n      \"key_event\": null\n    },\n    \"middle\": {\n      \"escalation\": \"Mẹ và con gái đứng ở cửa, con gái vẫn chưa quyết định có lên tàu hay không.\",\n      \"turning_point\": null\n    },\n    \"ending\": {\n      \"resolution\": \"Con gái cuối cùng vẫn chưa quyết định lên tàu hay không.\",\n      \"final_image\": \"Con gái đứng ở cửa, nhìn ra ngoài, con gái không lên tàu.\"\n    },\n    \"theme\": {\n      \"statement\": \"Cảm giác lưỡng lự giữa việc theo đuổi ước mơ và giữ gìn hiện tại.\"\n    },\n    \"visual_style\": {\n      \"description\": null,\n      \"visual_motifs\": [\"Vé tàu\", \"Cửa\"]\n    },\n    \"tone\": {\n      \"description\": \"Nghiêm túc, nhẹ nhàng\"\n    },\n    \"production_notes\": {\n      \"notes\": \"Cảnh 1: Mẹ đặt vé tàu lên bàn bếp. Con gái nhận vé rồi cất vào túi áo. Cảnh 2: Mẹ và con gái đứng ở cửa, con gái vẫn chưa quyết định có lên tàu hay không. Cảnh 3: Con gái đứng ở cửa, nhìn ra ngoài, con gái không lên tàu.\",\n      \"locations\": [\"Bếp\", \"Cửa\"],\n      \"cast_size\": \"2 người\"\n    }\n  }\n}",
+    "seconds": 49.684
+  },
+  {
+    "stage": "evaluation",
+    "input_bytes": 3685,
+    "instructions_bytes": 2938,
+    "timeout_seconds": null,
+    "model": "qwen2.5:7b",
+    "output": {
+      "reviews": [
+        {
+          "card_id": "section-3",
+          "decision_id": "constraint-0",
+          "related_card_id": null,
+          "observation": "Card 3 chỉ có một câu thoại của mẹ, nhưng không có câu thoại của con gái. Đây có thể là một sự bất hợp lý so với các card khác.",
+          "comparison": "mismatch",
+          "suggestion": "Thêm một câu thoại của con gái, ví dụ: 'Con gái:"
+        }
+      ],
+      "passed": false,
+      "rubric_scores": null
+    },
+    "raw_output": "{\n  \"reviews\": [\n    {\n      \"card_id\": \"section-3\",\n      \"decision_id\": \"constraint-0\",\n      \"related_card_id\": null,\n      \"observation\": \"Card 3 chỉ có một câu thoại của mẹ, nhưng không có câu thoại của con gái. Đây có thể là một sự bất hợp lý so với các card khác.\",\n      \"comparison\": \"mismatch\",\n      \"suggestion\": \"Thêm một câu thoại của con gái, ví dụ: 'Con gái: \" }], \"passed\": false, \"rubric_scores\": null\n}",
+    "seconds": 14.208
+  },
+  {
+    "stage": "scene_generation",
+    "input_bytes": 3055,
+    "instructions_bytes": 2761,
+    "timeout_seconds": null,
+    "model": "qwen2.5:7b",
+    "output": {
+      "scenes": [
+        {
+          "title": "Mẹ đặt vé lên bàn",
+          "action": "Mẹ đặt vé tàu lên bàn bếp. Con gái nhận vé, nhìn chằm chằm vào nó, sau đó cất vào túi áo.",
+          "location": "Bếp",
+          "time": "",
+          "characters": "Mẹ, Con gái",
+          "goal": "Mẹ đặt vé lên bàn, con gái nhận và cất vào túi áo.",
+          "purpose": "Introduce the setting and the initial decision.",
+          "transition": "Mẹ và con gái đứng ở cửa, con gái vẫn chưa quyết định có lên tàu hay không."
+        },
+        {
+          "title": "Mẹ và con gái đứng ở cửa",
+          "action": "Mẹ: 'Con có muốn đi không?', Con gái: 'Con chưa biết.'",
+          "location": "Cửa",
+          "time": "",
+          "characters": "Mẹ, Con gái",
+          "goal": "Mẹ hỏi con gái về quyết định, con gái vẫn chưa quyết định.",
+          "purpose": "Reveal the internal conflict and decision-making process.",
+          "transition": "Con gái đứng ở cửa, nhìn ra ngoài, con gái không lên tàu."
+        },
+        {
+          "title": "Con gái nhìn ra ngoài",
+          "action": "Con gái đứng ở cửa, nhìn ra ngoài, không lên tàu.",
+          "location": "Cửa",
+          "time": "",
+          "characters": "Con gái",
+          "goal": "Con gái quyết định không lên tàu.",
+          "purpose": "Show the final decision and end the film.",
+          "transition": ""
+        }
+      ]
+    },
+    "raw_output": "{\n    \"scenes\": [\n        {\n            \"title\": \"Mẹ đặt vé lên bàn\",\n            \"action\": \"Mẹ đặt vé tàu lên bàn bếp. Con gái nhận vé, nhìn chằm chằm vào nó, sau đó cất vào túi áo.\",\n            \"location\": \"Bếp\",\n            \"time\": \"\",\n            \"characters\": \"Mẹ, Con gái\",\n            \"goal\": \"Mẹ đặt vé lên bàn, con gái nhận và cất vào túi áo.\",\n            \"purpose\": \"Introduce the setting and the initial decision.\",\n            \"transition\": \"Mẹ và con gái đứng ở cửa, con gái vẫn chưa quyết định có lên tàu hay không.\"\n        },\n        {\n            \"title\": \"Mẹ và con gái đứng ở cửa\",\n            \"action\": \"Mẹ: 'Con có muốn đi không?', Con gái: 'Con chưa biết.'\",\n            \"location\": \"Cửa\",\n            \"time\": \"\",\n            \"characters\": \"Mẹ, Con gái\",\n            \"goal\": \"Mẹ hỏi con gái về quyết định, con gái vẫn chưa quyết định.\",\n            \"purpose\": \"Reveal the internal conflict and decision-making process.\",\n            \"transition\": \"Con gái đứng ở cửa, nhìn ra ngoài, con gái không lên tàu.\"\n        },\n        {\n            \"title\": \"Con gái nhìn ra ngoài\",\n            \"action\": \"Con gái đứng ở cửa, nhìn ra ngoài, không lên tàu.\",\n            \"location\": \"Cửa\",\n            \"time\": \"\",\n            \"characters\": \"Con gái\",\n            \"goal\": \"Con gái quyết định không lên tàu.\",\n            \"purpose\": \"Show the final decision and end the film.\",\n            \"transition\": \"\"\n        }\n    ]\n}",
+    "seconds": 27.26
+  },
+  {
+    "stage": "screenplay_generation",
+    "input_bytes": 1473,
+    "instructions_bytes": 2366,
+    "timeout_seconds": null,
+    "model": "qwen2.5:7b",
+    "output": {
+      "heading": "Mẹ đặt vé lên bàn",
+      "translations": [],
+      "dialogue": {
+        "line_1": {
+          "after_action": 1,
+          "speaker": "Mẹ",
+          "text": "Mẹ đã đặt vé lên bàn rồi, con xem nhé."
+        },
+        "line_2": {
+          "after_action": 1,
+          "speaker": "Con gái",
+          "text": "Con xem, mẹ đã đặt vé lên bàn rồi."
+        }
+      }
+    },
+    "raw_output": "{\n  \"heading\": \"Mẹ đặt vé lên bàn\",\n  \"translations\": [],\n  \"dialogue\": {\n    \"line_1\": {\n      \"after_action\": 1,\n      \"speaker\": \"Mẹ\",\n      \"text\": \"Mẹ đã đặt vé lên bàn rồi, con xem nhé.\"\n    },\n    \"line_2\": {\n      \"after_action\": 1,\n      \"speaker\": \"Con gái\",\n      \"text\": \"Con xem, mẹ đã đặt vé lên bàn rồi.\"\n    }\n  }\n}",
+    "seconds": 9.107
+  },
+  {
+    "stage": "screenplay_generation",
+    "input_bytes": 5860,
+    "instructions_bytes": 1768,
+    "timeout_seconds": null,
+    "model": "qwen2.5:7b",
+    "output": {
+      "scene": {
+        "heading": "Mẹ và con gái đứng ở cửa",
+        "blocks": [
+          {
+            "kind": "action",
+            "text": "Mẹ: 'Con có muốn đi không?'",
+            "speaker": ""
+          },
+          {
+            "kind": "dialogue",
+            "text": "Con chưa biết.",
+            "speaker": "Con gái"
+          }
+        ]
+      }
+    },
+    "raw_output": "{\"scene\": {\"heading\": \"Mẹ và con gái đứng ở cửa\", \"blocks\": [{\"kind\": \"action\", \"text\": \"Mẹ: 'Con có muốn đi không?'\", \"speaker\": \"\"},\n{\"kind\": \"dialogue\", \"text\": \"Con chưa biết.\", \"speaker\": \"Con gái\"}]}}",
+    "seconds": 10.761
+  },
+  {
+    "stage": "screenplay_generation",
+    "input_bytes": 6032,
+    "instructions_bytes": 1768,
+    "timeout_seconds": null,
+    "model": "qwen2.5:7b",
+    "output": {
+      "scene": {
+        "heading": "Con gái nhìn ra ngoài",
+        "blocks": [
+          {
+            "kind": "action",
+            "text": "Con gái đứng ở cửa, nhìn ra ngoài, không lên tàu.",
+            "speaker": ""
+          },
+          {
+            "kind": "dialogue",
+            "text": "Con chưa biết.",
+            "speaker": "Con gái"
+          }
+        ]
+      }
+    },
+    "raw_output": "{\"scene\": {\"heading\": \"Con gái nhìn ra ngoài\", \"blocks\": [{\"kind\": \"action\", \"text\": \"Con gái đứng ở cửa, nhìn ra ngoài, không lên tàu.\", \"speaker\": \"\"}, {\"kind\": \"dialogue\", \"text\": \"Con chưa biết.\", \"speaker\": \"Con gái\"}]}}",
+    "seconds": 7.454
+  },
+  {
+    "stage": "screenplay_review",
+    "input_bytes": 264,
+    "instructions_bytes": 1200,
+    "timeout_seconds": 59.999392209000234,
+    "model": "qwen2.5:7b",
+    "output": {
+      "craft_issue": "none"
+    },
+    "raw_output": "{\"craft_issue\": \"none\"}",
+    "seconds": 1.816
+  },
+  {
+    "stage": "screenplay_review",
+    "input_bytes": 284,
+    "instructions_bytes": 1200,
+    "timeout_seconds": 58.082216917000096,
+    "model": "qwen2.5:7b",
+    "output": {
+      "craft_issue": "none"
+    },
+    "raw_output": "{\"craft_issue\": \"none\"}",
+    "seconds": 0.708
+  },
+  {
+    "stage": "screenplay_review",
+    "input_bytes": 283,
+    "instructions_bytes": 1200,
+    "timeout_seconds": 57.36564258399994,
+    "model": "qwen2.5:7b",
+    "output": {
+      "craft_issue": "none"
+    },
+    "raw_output": "{\"craft_issue\": \"none\"}",
+    "seconds": 0.768
+  },
+  {
+    "stage": "screenplay_review",
+    "input_bytes": 271,
+    "instructions_bytes": 1200,
+    "timeout_seconds": 59.99919883299981,
+    "model": "qwen2.5:7b",
+    "output": {
+      "craft_issue": "none"
+    },
+    "raw_output": "{\"craft_issue\": \"none\"}",
+    "seconds": 0.698
+  },
+  {
+    "stage": "screenplay_review",
+    "input_bytes": 264,
+    "instructions_bytes": 1200,
+    "timeout_seconds": 59.28924112499999,
+    "model": "qwen2.5:7b",
+    "output": {
+      "craft_issue": "none"
+    },
+    "raw_output": "{\"craft_issue\": \"none\"}",
+    "seconds": 0.691
+  },
+  {
+    "stage": "screenplay_review",
+    "input_bytes": 288,
+    "instructions_bytes": 1200,
+    "timeout_seconds": 59.99936541699981,
+    "model": "qwen2.5:7b",
+    "output": {
+      "craft_issue": "none"
+    },
+    "raw_output": "{\"craft_issue\": \"none\"}",
+    "seconds": 0.687
+  },
+  {
+    "stage": "screenplay_review",
+    "input_bytes": 253,
+    "instructions_bytes": 1200,
+    "timeout_seconds": 59.299208459000056,
+    "model": "qwen2.5:7b",
+    "output": {
+      "craft_issue": "none"
+    },
+    "raw_output": "{\"craft_issue\": \"none\"}",
+    "seconds": 0.705
+  }
+]

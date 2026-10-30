@@ -1,0 +1,481 @@
+{
+  "scope": "scene",
+  "block_ids": [],
+  "review_id": null,
+  "note_id": null,
+  "applied_scene": null,
+  "undone_revision": null,
+  "id": "e7fab413-bfac-4cbb-8e8f-7e6ce3276e5c",
+  "created_at": "2026-10-30",
+  "source_revision": 1,
+  "source_content": "synthetic QA",
+  "source_screenplay": {
+    "id": "a2e3b1bb-e35e-4b2c-a3b2-48bbcd4805b9",
+    "version": 1,
+    "scenes": [
+      {
+        "id": "eb13af28-a44b-4522-8d4d-fc6aa5032d0c",
+        "source_scene_id": "603141c4-1203-4ac3-a84b-58a569c4baf4",
+        "heading": "The chair",
+        "blocks": []
+      },
+      {
+        "id": "8483f0ce-e118-41ac-9f71-8983804c3360",
+        "source_scene_id": "2d2d36d2-6828-4ba2-a261-cb341aa9c9d3",
+        "heading": "The umbrella",
+        "blocks": []
+      },
+      {
+        "id": "7a79814a-106f-4ce9-a88b-9b5cc3e5518b",
+        "source_scene_id": "f3a3bf20-9ba8-4ff3-a00f-4711349f4d64",
+        "heading": "The closed door",
+        "blocks": []
+      }
+    ],
+    "source_revision": 1,
+    "source_outline": {
+      "id": "823a2d6c-ab63-4a44-b3e7-5ad9aa7db287",
+      "version": 1,
+      "scenes": [
+        {
+          "id": "603141c4-1203-4ac3-a84b-58a569c4baf4",
+          "title": "The chair",
+          "action": "Mara puts the folded umbrella on a chair.",
+          "location": "Hallway",
+          "time": "",
+          "characters": "Mara, Owen",
+          "goal": "",
+          "purpose": "",
+          "viewer_intent": "",
+          "keep_or_avoid": "",
+          "staging_choices": {}
+        },
+        {
+          "id": "2d2d36d2-6828-4ba2-a261-cb341aa9c9d3",
+          "title": "The umbrella",
+          "action": "Owen takes the umbrella from the chair and holds it.",
+          "location": "Hallway",
+          "time": "",
+          "characters": "Mara, Owen",
+          "goal": "",
+          "purpose": "",
+          "viewer_intent": "",
+          "keep_or_avoid": "",
+          "staging_choices": {}
+        },
+        {
+          "id": "f3a3bf20-9ba8-4ff3-a00f-4711349f4d64",
+          "title": "The closed door",
+          "action": "Mara and Owen stand by the closed door, still unsure whether to leave.",
+          "location": "Hallway",
+          "time": "",
+          "characters": "Mara, Owen",
+          "goal": "",
+          "purpose": "",
+          "viewer_intent": "",
+          "keep_or_avoid": "",
+          "staging_choices": {}
+        }
+      ],
+      "source": {
+        "id": "fa79e6c0-8e31-4c73-80a0-0b887998a807",
+        "project_revision": 1,
+        "version_id": "current",
+        "draft": {
+          "title": "The folded umbrella",
+          "logline": "Mara puts the folded umbrella on a chair. Owen takes the umbrella from the chair and holds it. Mara and Owen stand by the closed door, still unsure whether to leave.",
+          "sections": [
+            {
+              "title": "Story",
+              "purpose": "Author brief",
+              "content": "Mara puts the folded umbrella on a chair. Owen takes the umbrella from the chair and holds it. Mara and Owen stand by the closed door, still unsure whether to leave."
+            }
+          ]
+        },
+        "context": {
+          "idea": "Mara puts the folded umbrella on a chair. Owen takes the umbrella from the chair and holds it. Mara and Owen stand by the closed door, still unsure whether to leave.",
+          "constraints": [
+            "Exactly three scenes, two adult friends Mara and Owen. Write all headings, action and dialogue in English.",
+            "Each scene has exactly two short dialogue lines, Mara first and Owen second. Owen keeps the umbrella after taking it; do not take it twice, open the door or resolve whether they leave."
+          ],
+          "clarifications": [],
+          "pending_questions": []
+        },
+        "response_language": "en",
+        "draft_provenance": {
+          "title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "logline": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:0:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:0:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:0:content": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          }
+        }
+      },
+      "provenance": {
+        "m2:603141c4-1203-4ac3-a84b-58a569c4baf4:title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:603141c4-1203-4ac3-a84b-58a569c4baf4:action": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:603141c4-1203-4ac3-a84b-58a569c4baf4:location": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:603141c4-1203-4ac3-a84b-58a569c4baf4:time": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:603141c4-1203-4ac3-a84b-58a569c4baf4:characters": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:603141c4-1203-4ac3-a84b-58a569c4baf4:goal": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:603141c4-1203-4ac3-a84b-58a569c4baf4:purpose": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:603141c4-1203-4ac3-a84b-58a569c4baf4:viewer_intent": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:603141c4-1203-4ac3-a84b-58a569c4baf4:keep_or_avoid": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:2d2d36d2-6828-4ba2-a261-cb341aa9c9d3:title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:2d2d36d2-6828-4ba2-a261-cb341aa9c9d3:action": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:2d2d36d2-6828-4ba2-a261-cb341aa9c9d3:location": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:2d2d36d2-6828-4ba2-a261-cb341aa9c9d3:time": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:2d2d36d2-6828-4ba2-a261-cb341aa9c9d3:characters": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:2d2d36d2-6828-4ba2-a261-cb341aa9c9d3:goal": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:2d2d36d2-6828-4ba2-a261-cb341aa9c9d3:purpose": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:2d2d36d2-6828-4ba2-a261-cb341aa9c9d3:viewer_intent": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:2d2d36d2-6828-4ba2-a261-cb341aa9c9d3:keep_or_avoid": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:f3a3bf20-9ba8-4ff3-a00f-4711349f4d64:title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:f3a3bf20-9ba8-4ff3-a00f-4711349f4d64:action": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:f3a3bf20-9ba8-4ff3-a00f-4711349f4d64:location": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:f3a3bf20-9ba8-4ff3-a00f-4711349f4d64:time": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:f3a3bf20-9ba8-4ff3-a00f-4711349f4d64:characters": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:f3a3bf20-9ba8-4ff3-a00f-4711349f4d64:goal": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:f3a3bf20-9ba8-4ff3-a00f-4711349f4d64:purpose": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:f3a3bf20-9ba8-4ff3-a00f-4711349f4d64:viewer_intent": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:f3a3bf20-9ba8-4ff3-a00f-4711349f4d64:keep_or_avoid": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        }
+      }
+    }
+  },
+  "source_outline": {
+    "id": "823a2d6c-ab63-4a44-b3e7-5ad9aa7db287",
+    "version": 1,
+    "scenes": [
+      {
+        "id": "603141c4-1203-4ac3-a84b-58a569c4baf4",
+        "title": "The chair",
+        "action": "Mara puts the folded umbrella on a chair.",
+        "location": "Hallway",
+        "time": "",
+        "characters": "Mara, Owen",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      },
+      {
+        "id": "2d2d36d2-6828-4ba2-a261-cb341aa9c9d3",
+        "title": "The umbrella",
+        "action": "Owen takes the umbrella from the chair and holds it.",
+        "location": "Hallway",
+        "time": "",
+        "characters": "Mara, Owen",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      },
+      {
+        "id": "f3a3bf20-9ba8-4ff3-a00f-4711349f4d64",
+        "title": "The closed door",
+        "action": "Mara and Owen stand by the closed door, still unsure whether to leave.",
+        "location": "Hallway",
+        "time": "",
+        "characters": "Mara, Owen",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      }
+    ],
+    "source": {
+      "id": "fa79e6c0-8e31-4c73-80a0-0b887998a807",
+      "project_revision": 1,
+      "version_id": "current",
+      "draft": {
+        "title": "The folded umbrella",
+        "logline": "Mara puts the folded umbrella on a chair. Owen takes the umbrella from the chair and holds it. Mara and Owen stand by the closed door, still unsure whether to leave.",
+        "sections": [
+          {
+            "title": "Story",
+            "purpose": "Author brief",
+            "content": "Mara puts the folded umbrella on a chair. Owen takes the umbrella from the chair and holds it. Mara and Owen stand by the closed door, still unsure whether to leave."
+          }
+        ]
+      },
+      "context": {
+        "idea": "Mara puts the folded umbrella on a chair. Owen takes the umbrella from the chair and holds it. Mara and Owen stand by the closed door, still unsure whether to leave.",
+        "constraints": [
+          "Exactly three scenes, two adult friends Mara and Owen. Write all headings, action and dialogue in English.",
+          "Each scene has exactly two short dialogue lines, Mara first and Owen second. Owen keeps the umbrella after taking it; do not take it twice, open the door or resolve whether they leave."
+        ],
+        "clarifications": [],
+        "pending_questions": []
+      },
+      "response_language": "en",
+      "draft_provenance": {
+        "title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "logline": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:0:title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:0:purpose": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:0:content": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        }
+      }
+    },
+    "provenance": {
+      "m2:603141c4-1203-4ac3-a84b-58a569c4baf4:title": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:603141c4-1203-4ac3-a84b-58a569c4baf4:action": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:603141c4-1203-4ac3-a84b-58a569c4baf4:location": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:603141c4-1203-4ac3-a84b-58a569c4baf4:time": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:603141c4-1203-4ac3-a84b-58a569c4baf4:characters": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:603141c4-1203-4ac3-a84b-58a569c4baf4:goal": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:603141c4-1203-4ac3-a84b-58a569c4baf4:purpose": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:603141c4-1203-4ac3-a84b-58a569c4baf4:viewer_intent": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:603141c4-1203-4ac3-a84b-58a569c4baf4:keep_or_avoid": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:2d2d36d2-6828-4ba2-a261-cb341aa9c9d3:title": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:2d2d36d2-6828-4ba2-a261-cb341aa9c9d3:action": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:2d2d36d2-6828-4ba2-a261-cb341aa9c9d3:location": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:2d2d36d2-6828-4ba2-a261-cb341aa9c9d3:time": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:2d2d36d2-6828-4ba2-a261-cb341aa9c9d3:characters": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:2d2d36d2-6828-4ba2-a261-cb341aa9c9d3:goal": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:2d2d36d2-6828-4ba2-a261-cb341aa9c9d3:purpose": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:2d2d36d2-6828-4ba2-a261-cb341aa9c9d3:viewer_intent": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:2d2d36d2-6828-4ba2-a261-cb341aa9c9d3:keep_or_avoid": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:f3a3bf20-9ba8-4ff3-a00f-4711349f4d64:title": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:f3a3bf20-9ba8-4ff3-a00f-4711349f4d64:action": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:f3a3bf20-9ba8-4ff3-a00f-4711349f4d64:location": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:f3a3bf20-9ba8-4ff3-a00f-4711349f4d64:time": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:f3a3bf20-9ba8-4ff3-a00f-4711349f4d64:characters": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:f3a3bf20-9ba8-4ff3-a00f-4711349f4d64:goal": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:f3a3bf20-9ba8-4ff3-a00f-4711349f4d64:purpose": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:f3a3bf20-9ba8-4ff3-a00f-4711349f4d64:viewer_intent": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:f3a3bf20-9ba8-4ff3-a00f-4711349f4d64:keep_or_avoid": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      }
+    }
+  },
+  "target_scene_id": "eb13af28-a44b-4522-8d4d-fc6aa5032d0c",
+  "instructions": "",
+  "status": "ready",
+  "scene": {
+    "id": "eb13af28-a44b-4522-8d4d-fc6aa5032d0c",
+    "source_scene_id": "603141c4-1203-4ac3-a84b-58a569c4baf4",
+    "heading": "SCENE 1",
+    "blocks": [
+      {
+        "kind": "action",
+        "text": "Mara puts the folded umbrella on a chair.",
+        "speaker": "",
+        "id": "5981a201-f4ad-44d5-9894-ccaf1e891dc1"
+      },
+      {
+        "kind": "dialogue",
+        "text": "I placed it there for a reason.",
+        "speaker": "Mara",
+        "id": "e0fb6e64-e2c6-4059-a627-311fba28bb22"
+      },
+      {
+        "kind": "dialogue",
+        "text": "Let's just hold onto it for now, okay?",
+        "speaker": "Owen",
+        "id": "cc32518c-698d-4ee5-adf2-33076d1bb262"
+      }
+    ]
+  },
+  "preview_scene": null,
+  "provider": null,
+  "model": "qwen2.5:7b",
+  "parameters": {
+    "composition": "source-preserving-v1",
+    "outline_reconciled": true
+  },
+  "prompt_version": "screenplay-scene-v24-dialogue-voices",
+  "error": null,
+  "applied_revision": null
+}

@@ -1,0 +1,36 @@
+{
+  "scene": {
+    "id": "c4a6954a-4405-4ca9-8698-84e83474e0bf",
+    "source_scene_id": "6b9d8dd8-c29b-43ef-af8d-d8fb94f45409",
+    "heading": "Khoảnh khắc",
+    "blocks": [
+      {
+        "kind": "action",
+        "text": "Cha đặt phong thư kín lên bàn rồi lùi lại.",
+        "speaker": "",
+        "id": "f12e1f07-8132-4e7d-8460-a6ff77f259a2"
+      },
+      {
+        "kind": "dialogue",
+        "text": "Cha chưa biết phải nói thế nào.",
+        "speaker": "Cha",
+        "id": "7b01bb7e-98d3-4e65-b352-dba4e885c059"
+      },
+      {
+        "kind": "action",
+        "text": "Con gái đặt tay cạnh phong thư, chưa nhận hoặc mở; dừng ở đó.",
+        "speaker": "",
+        "id": "502e4a4a-102a-42e8-88f3-08e9c9656a4c"
+      },
+      {
+        "kind": "dialogue",
+        "text": "Con chưa biết phải nói thế nào.",
+        "speaker": "Con gái",
+        "id": "fb511209-ac39-41d3-b4b2-ec4e4961d0f7"
+      }
+    ]
+  },
+  "prompt_version": "screenplay-scene-v24-dialogue-voices",
+  "model": "qwen2.5:7b",
+  "status": "ready"
+}

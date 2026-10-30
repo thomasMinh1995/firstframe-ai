@@ -1,0 +1,35 @@
+{
+  "status": "ready",
+  "scene": {
+    "id": "f0e77f28-10eb-4ac9-b0fe-8afbe210b730",
+    "source_scene_id": "cf9e104c-dfd3-499b-a276-8451130a3fe3",
+    "heading": "SCENE 2",
+    "blocks": [
+      {
+        "kind": "action",
+        "text": "Owen takes the umbrella from the chair and holds it.",
+        "speaker": "",
+        "id": "01b83492-0eaf-4c44-bd2e-a7d876cfbc5f"
+      },
+      {
+        "kind": "dialogue",
+        "text": "I want to hear what you think.",
+        "speaker": "Mara",
+        "id": "c6429de8-25bb-4571-9dc8-fb0e97f940d5"
+      },
+      {
+        "kind": "dialogue",
+        "text": "I don't know what to say yet.",
+        "speaker": "Owen",
+        "id": "e83f233b-91c8-4e9a-b8d5-82c4a55bb541"
+      }
+    ]
+  },
+  "model": "qwen2.5:7b",
+  "parameters": {
+    "composition": "source-preserving-v1",
+    "outline_reconciled": true,
+    "dialogue_mode": "bounded-reactions-v1"
+  },
+  "prompt_version": "screenplay-scene-v25-bounded-reactions"
+}

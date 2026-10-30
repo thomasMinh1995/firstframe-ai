@@ -1,0 +1,35 @@
+{
+  "status": "ready",
+  "scene": {
+    "id": "bee7b354-b853-4326-9c94-a0dbc62aaf39",
+    "source_scene_id": "ae6dfc8a-f03b-4c5f-92ee-24f999a4c19e",
+    "heading": "SCENE 1",
+    "blocks": [
+      {
+        "kind": "action",
+        "text": "Mara puts the folded umbrella on a chair.",
+        "speaker": "",
+        "id": "ba90e320-7875-41d2-a67c-0c4e4d40d57c"
+      },
+      {
+        "kind": "dialogue",
+        "text": "You can take your time.",
+        "speaker": "Mara",
+        "id": "b4813345-a951-4349-8aa3-43c0a7144a0c"
+      },
+      {
+        "kind": "dialogue",
+        "text": "I'm still thinking about it.",
+        "speaker": "Owen",
+        "id": "c768e88b-3308-4eb3-a0e7-a8318e58a6f0"
+      }
+    ]
+  },
+  "model": "qwen2.5:7b",
+  "parameters": {
+    "composition": "source-preserving-v1",
+    "outline_reconciled": true,
+    "dialogue_mode": "bounded-reactions-v1"
+  },
+  "prompt_version": "screenplay-scene-v25-bounded-reactions"
+}

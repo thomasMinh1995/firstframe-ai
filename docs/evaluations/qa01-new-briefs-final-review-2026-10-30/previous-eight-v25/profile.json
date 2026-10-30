@@ -1,0 +1,22 @@
+{
+  "provider": {
+    "provider": "ollama",
+    "model": "qwen2.5:7b",
+    "parameters": {
+      "temperature": 0.3,
+      "timeout_seconds": 180.0,
+      "num_ctx": 16384,
+      "screenplay_review_temperature": 0.0
+    }
+  },
+  "prompt_version": "screenplay-scene-v25-bounded-reactions",
+  "variants": {
+    "parent-dialogue": "Explicit request for two parent/child dialogue lines; source constraints unchanged.",
+    "english": "Explicit English response language; Vietnamese source retained.",
+    "later-scene": "Target second scene with a synthetic saved first scene: the letter has already changed hands."
+  },
+  "content_gate": true,
+  "expected_cases": 8,
+  "application_revision": "aa64f209fe5dd5db7524150d26b293a06e136307",
+  "worktree_changes": " backend/app/application/screenplay_composition.py  | 130 ++++++++++++++++-----\n backend/app/application/screenplay_writing.py      |   6 +-\n backend/scripts/check_multiscene_writing.py        |   3 +-\n backend/tests/test_multiscene_writing.py           |  90 ++++++++++++--\n backend/tests/test_screenplay_composition.py       |   4 +-\n .../prompts/screenplay_composition_prompt.md       |   3 +-\n 6 files changed, 191 insertions(+), 45 deletions(-)\n"
+}

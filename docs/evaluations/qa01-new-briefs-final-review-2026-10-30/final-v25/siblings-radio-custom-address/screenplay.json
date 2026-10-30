@@ -1,0 +1,371 @@
+{
+  "id": "1670618a-7bf7-4b5d-9d07-ef8fd0261891",
+  "version": 1,
+  "scenes": [
+    {
+      "id": "63e14ac2-de09-479c-8663-ea9ce1838b96",
+      "source_scene_id": "27d12a89-ca95-4a76-a513-dc74d30dcf6e",
+      "heading": "Radio hỏng",
+      "blocks": [
+        {
+          "kind": "action",
+          "text": "Chị Hạnh đặt máy radio hỏng lên bàn.",
+          "speaker": "",
+          "id": "e4bc7b4e-5444-47c9-a93d-5cd4e4eecc64"
+        },
+        {
+          "kind": "dialogue",
+          "text": "Em, chị nghe đây.",
+          "speaker": "Hạnh",
+          "id": "703dfc23-af9e-4d46-8e25-ecd153297c18"
+        },
+        {
+          "kind": "dialogue",
+          "text": "Em cần thêm một chút thời gian, chị.",
+          "speaker": "Nam",
+          "id": "acba7e09-9703-4ea8-a91e-9d64201f1bc8"
+        }
+      ]
+    },
+    {
+      "id": "a49cb01a-9bdf-4202-9c60-55e896488b87",
+      "source_scene_id": "a5cd93e1-ac8b-4c29-87c6-eb8f7fa842c2",
+      "heading": "Tua vít",
+      "blocks": [
+        {
+          "kind": "action",
+          "text": "Em trai Nam lấy tua vít rồi ngồi xuống cạnh bàn.",
+          "speaker": "",
+          "id": "b344720f-8107-4f3e-af28-d71af145b2fa"
+        },
+        {
+          "kind": "dialogue",
+          "text": "Chị không muốn giục em.",
+          "speaker": "Hạnh",
+          "id": "f6e40246-f1fd-4be5-b0f0-d89a6197e76e"
+        },
+        {
+          "kind": "dialogue",
+          "text": "Em vẫn đang nghĩ, chị.",
+          "speaker": "Nam",
+          "id": "821e1726-4dc7-4014-a7e6-b1805bc75f29"
+        }
+      ]
+    },
+    {
+      "id": "8f570b0a-56fb-49c3-9557-00da0938c558",
+      "source_scene_id": "5f150099-c9d0-4135-ab2c-e9da1ff54398",
+      "heading": "Chờ tiếng nhạc",
+      "blocks": [
+        {
+          "kind": "action",
+          "text": "Hạnh và Nam nhìn chiếc radio vẫn im tiếng.",
+          "speaker": "",
+          "id": "55389550-dc67-4bf7-80b8-29c3734f63ad"
+        },
+        {
+          "kind": "dialogue",
+          "text": "Chị chưa biết bắt đầu thế nào.",
+          "speaker": "Hạnh",
+          "id": "5a2a3cfb-fb90-4299-954b-ae52d16d772a"
+        },
+        {
+          "kind": "dialogue",
+          "text": "Em muốn nghĩ kỹ hơn, chị.",
+          "speaker": "Nam",
+          "id": "1da6fe5a-cf2a-4cf6-a11b-6092101843dc"
+        }
+      ]
+    }
+  ],
+  "source_revision": 1,
+  "source_outline": {
+    "id": "f21dee0f-0568-4dd0-9dc4-20039bb867e9",
+    "version": 1,
+    "scenes": [
+      {
+        "id": "27d12a89-ca95-4a76-a513-dc74d30dcf6e",
+        "title": "Radio hỏng",
+        "action": "Chị Hạnh đặt máy radio hỏng lên bàn.",
+        "location": "Phòng khách",
+        "time": "",
+        "characters": "Hạnh, Nam",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      },
+      {
+        "id": "a5cd93e1-ac8b-4c29-87c6-eb8f7fa842c2",
+        "title": "Tua vít",
+        "action": "Em trai Nam lấy tua vít rồi ngồi xuống cạnh bàn.",
+        "location": "Phòng khách",
+        "time": "",
+        "characters": "Hạnh, Nam",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      },
+      {
+        "id": "5f150099-c9d0-4135-ab2c-e9da1ff54398",
+        "title": "Chờ tiếng nhạc",
+        "action": "Hạnh và Nam nhìn chiếc radio vẫn im tiếng.",
+        "location": "Phòng khách",
+        "time": "",
+        "characters": "Hạnh, Nam",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      }
+    ],
+    "source": {
+      "id": "dc70a7cd-ddac-4c12-95f9-271bf9db3fa8",
+      "project_revision": 1,
+      "version_id": "current",
+      "draft": {
+        "title": "Máy radio chưa sửa",
+        "logline": "Chị Hạnh đặt máy radio hỏng lên bàn. Em trai Nam lấy tua vít rồi ngồi xuống cạnh bàn. Hạnh và Nam nhìn chiếc radio vẫn im tiếng.",
+        "sections": [
+          {
+            "title": "Story",
+            "purpose": "Author brief",
+            "content": "Chị Hạnh đặt máy radio hỏng lên bàn. Em trai Nam lấy tua vít rồi ngồi xuống cạnh bàn. Hạnh và Nam nhìn chiếc radio vẫn im tiếng."
+          }
+        ]
+      },
+      "context": {
+        "idea": "Chị Hạnh đặt máy radio hỏng lên bàn. Em trai Nam lấy tua vít rồi ngồi xuống cạnh bàn. Hạnh và Nam nhìn chiếc radio vẫn im tiếng.",
+        "constraints": [
+          "Đúng ba cảnh, chỉ Hạnh và Nam; máy radio chưa hoạt động ở cuối.",
+          "Mỗi cảnh có đúng hai câu thoại, Hạnh trước rồi Nam. Hạnh xưng chị và gọi Nam là em; Nam xưng em và gọi Hạnh là chị. Không tự sửa xong radio, không lặp ngồi xuống."
+        ],
+        "clarifications": [],
+        "pending_questions": []
+      },
+      "response_language": "vi",
+      "draft_provenance": {
+        "title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "logline": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:0:title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:0:purpose": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:0:content": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        }
+      }
+    },
+    "provenance": {
+      "m2:27d12a89-ca95-4a76-a513-dc74d30dcf6e:title": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:27d12a89-ca95-4a76-a513-dc74d30dcf6e:action": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:27d12a89-ca95-4a76-a513-dc74d30dcf6e:location": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:27d12a89-ca95-4a76-a513-dc74d30dcf6e:time": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:27d12a89-ca95-4a76-a513-dc74d30dcf6e:characters": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:27d12a89-ca95-4a76-a513-dc74d30dcf6e:goal": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:27d12a89-ca95-4a76-a513-dc74d30dcf6e:purpose": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:27d12a89-ca95-4a76-a513-dc74d30dcf6e:viewer_intent": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:27d12a89-ca95-4a76-a513-dc74d30dcf6e:keep_or_avoid": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:a5cd93e1-ac8b-4c29-87c6-eb8f7fa842c2:title": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:a5cd93e1-ac8b-4c29-87c6-eb8f7fa842c2:action": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:a5cd93e1-ac8b-4c29-87c6-eb8f7fa842c2:location": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:a5cd93e1-ac8b-4c29-87c6-eb8f7fa842c2:time": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:a5cd93e1-ac8b-4c29-87c6-eb8f7fa842c2:characters": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:a5cd93e1-ac8b-4c29-87c6-eb8f7fa842c2:goal": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:a5cd93e1-ac8b-4c29-87c6-eb8f7fa842c2:purpose": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:a5cd93e1-ac8b-4c29-87c6-eb8f7fa842c2:viewer_intent": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:a5cd93e1-ac8b-4c29-87c6-eb8f7fa842c2:keep_or_avoid": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:5f150099-c9d0-4135-ab2c-e9da1ff54398:title": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:5f150099-c9d0-4135-ab2c-e9da1ff54398:action": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:5f150099-c9d0-4135-ab2c-e9da1ff54398:location": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:5f150099-c9d0-4135-ab2c-e9da1ff54398:time": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:5f150099-c9d0-4135-ab2c-e9da1ff54398:characters": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:5f150099-c9d0-4135-ab2c-e9da1ff54398:goal": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:5f150099-c9d0-4135-ab2c-e9da1ff54398:purpose": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:5f150099-c9d0-4135-ab2c-e9da1ff54398:viewer_intent": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:5f150099-c9d0-4135-ab2c-e9da1ff54398:keep_or_avoid": {
+        "origin": "author_input",
+        "author_confirmed": false
+      }
+    }
+  },
+  "provenance": {
+    "script:63e14ac2-de09-479c-8663-ea9ce1838b96:heading": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:e4bc7b4e-5444-47c9-a93d-5cd4e4eecc64:text": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:e4bc7b4e-5444-47c9-a93d-5cd4e4eecc64:speaker": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:703dfc23-af9e-4d46-8e25-ecd153297c18:text": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:703dfc23-af9e-4d46-8e25-ecd153297c18:speaker": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:acba7e09-9703-4ea8-a91e-9d64201f1bc8:text": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:acba7e09-9703-4ea8-a91e-9d64201f1bc8:speaker": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "script:a49cb01a-9bdf-4202-9c60-55e896488b87:heading": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:b344720f-8107-4f3e-af28-d71af145b2fa:text": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:b344720f-8107-4f3e-af28-d71af145b2fa:speaker": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:f6e40246-f1fd-4be5-b0f0-d89a6197e76e:text": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:f6e40246-f1fd-4be5-b0f0-d89a6197e76e:speaker": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:821e1726-4dc7-4014-a7e6-b1805bc75f29:text": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:821e1726-4dc7-4014-a7e6-b1805bc75f29:speaker": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "script:8f570b0a-56fb-49c3-9557-00da0938c558:heading": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:55389550-dc67-4bf7-80b8-29c3734f63ad:text": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:55389550-dc67-4bf7-80b8-29c3734f63ad:speaker": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:5a2a3cfb-fb90-4299-954b-ae52d16d772a:text": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:5a2a3cfb-fb90-4299-954b-ae52d16d772a:speaker": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:1da6fe5a-cf2a-4cf6-a11b-6092101843dc:text": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:1da6fe5a-cf2a-4cf6-a11b-6092101843dc:speaker": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    }
+  }
+}

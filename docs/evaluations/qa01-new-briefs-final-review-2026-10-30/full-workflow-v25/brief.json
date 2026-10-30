@@ -1,0 +1,8 @@
+{
+  "idea": "Mẹ đặt vé tàu lên bàn bếp. Con gái nhận vé rồi cất vào túi áo. Mẹ và con gái đứng ở cửa, con gái vẫn chưa quyết định có lên tàu hay không.",
+  "constraints": [
+    "Đúng ba cảnh, chỉ mẹ và con gái; giữ kết mở.",
+    "Mỗi cảnh có đúng hai câu thoại ngắn: mẹ nói một câu, con gái đáp một câu. Mẹ xưng mẹ, con gái xưng con; không dùng tôi/bạn. Không lặp việc trao vé hoặc tự xác nhận con lên tàu."
+  ],
+  "response_language": "vi"
+}

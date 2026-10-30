@@ -1,0 +1,21 @@
+{
+  "output": {
+    "heading": "Đặt hộp",
+    "translations": [],
+    "dialogue": {
+      "line_1": {
+        "after_action": 1,
+        "speaker": "Bố",
+        "self_reference": "bố",
+        "intent": "invite"
+      },
+      "line_2": {
+        "after_action": 1,
+        "speaker": "Minh",
+        "self_reference": "con",
+        "intent": "needs_time"
+      }
+    }
+  },
+  "raw_output": "{\n  \"heading\": \"Đặt hộp\",\n  \"translations\": [],\n  \"dialogue\": {\n    \"line_1\": {\n      \"after_action\": 1,\n      \"speaker\": \"Bố\",\n      \"self_reference\": \"bố\",\n      \"intent\": \"invite\"\n    },\n    \"line_2\": {\n      \"after_action\": 1,\n      \"speaker\": \"Minh\",\n      \"self_reference\": \"con\",\n      \"intent\": \"needs_time\"\n    }\n  }\n}"
+}

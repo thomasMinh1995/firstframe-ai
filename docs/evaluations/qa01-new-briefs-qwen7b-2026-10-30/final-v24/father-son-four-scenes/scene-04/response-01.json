@@ -1,0 +1,19 @@
+{
+  "output": {
+    "heading": "Tay trên nắp",
+    "translations": [],
+    "dialogue": {
+      "line_1": {
+        "after_action": 1,
+        "speaker": "Bố",
+        "text": "Bố ơi, con chưa biết mở như thế nào."
+      },
+      "line_2": {
+        "after_action": 1,
+        "speaker": "Minh",
+        "text": "Bố ơi, con chưa biết mở như thế nào."
+      }
+    }
+  },
+  "raw_output": "{\n  \"heading\": \"Tay trên nắp\",\n  \"translations\": [],\n  \"dialogue\": {\n    \"line_1\": {\n      \"after_action\": 1,\n      \"speaker\": \"Bố\",\n      \"text\": \"Bố ơi, con chưa biết mở như thế nào.\"\n    },\n    \"line_2\": {\n      \"after_action\": 1,\n      \"speaker\": \"Minh\",\n      \"text\": \"Bố ơi, con chưa biết mở như thế nào.\"\n    }\n  }\n}"
+}

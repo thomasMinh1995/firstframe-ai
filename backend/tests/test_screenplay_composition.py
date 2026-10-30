@@ -49,14 +49,16 @@ class CompositionProvider:
                 {'kind':'action','text':'Cha đặt thư.','speaker':''}]}), model='qwen2.5:7b')
         result = {'heading':request.response_model.model_json_schema()['properties']['heading']['const'],
                   'translations':['Father places the sealed letter on the table.']*len(data['fixed_action_beats'])
-                      if data['response_language']=='English' else [], 'dialogue':[]}
+                      if data['translate_actions'] else [], 'dialogue':[]}
         line_type = request.response_model.model_fields['dialogue'].annotation
         if isinstance(line_type, type) and issubclass(line_type, BaseModel):
             result['dialogue'] = {}
             for key, field in line_type.model_fields.items():
                 model = field.annotation
                 row = {k:get_args(model.model_fields[k].annotation)[0] for k in ('speaker','self_reference','after_action')}
-                row['intent'] = 'will_wait' if row['self_reference']=='Cha' else 'needs_time'
+                choices = get_args(model.model_fields['intent'].annotation)
+                preferred = 'will_wait' if row['self_reference']=='Cha' else 'needs_time'
+                row['intent'] = preferred if preferred in choices else choices[0]
                 result['dialogue'][key] = row
         if self.bad == 'heading': result['heading'] = 'Wrong heading'
         if self.bad == 'position': result['dialogue']['line_1']['after_action'] = 99

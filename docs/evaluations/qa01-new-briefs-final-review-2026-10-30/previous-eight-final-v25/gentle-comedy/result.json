@@ -1,0 +1,24 @@
+{
+  "scene": {
+    "id": "e40317cd-07a3-4a95-b7f6-0ba50f908d6f",
+    "source_scene_id": "474fcdcf-6fb1-485f-9293-03411fe34e66",
+    "heading": "Khoảnh khắc",
+    "blocks": [
+      {
+        "kind": "action",
+        "text": "Nam lấy chiếc túi đang cầm che chỗ khóa kẹt.",
+        "speaker": "",
+        "id": "1924b612-3a7e-4524-9755-699fe5a734c2"
+      },
+      {
+        "kind": "action",
+        "text": "Hà nhìn thấy, đưa tay chờ Nam chịu nhờ giúp; Nam miễn cưỡng đưa vạt áo ra.",
+        "speaker": "",
+        "id": "9c116e88-fe71-4adc-9c28-ab583cd03b5c"
+      }
+    ]
+  },
+  "prompt_version": "screenplay-scene-v25-bounded-reactions",
+  "model": "qwen2.5:7b",
+  "status": "ready"
+}

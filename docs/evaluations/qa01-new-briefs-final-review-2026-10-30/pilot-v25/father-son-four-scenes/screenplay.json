@@ -1,0 +1,473 @@
+{
+  "id": "8a2e84df-955d-47c2-b95f-7fcbf7b51c97",
+  "version": 1,
+  "scenes": [
+    {
+      "id": "e9ec0e0d-17b8-4ea4-8a9c-4dc85130299f",
+      "source_scene_id": "08ae6ffb-1ad8-4112-aed4-66eafce87777",
+      "heading": "Đặt hộp",
+      "blocks": [
+        {
+          "kind": "action",
+          "text": "Bố đặt chiếc hộp đóng kín lên bàn.",
+          "speaker": "",
+          "id": "4989cd67-08fe-46be-a4dc-12e58ce3ed2e"
+        },
+        {
+          "kind": "dialogue",
+          "text": "Bố không muốn giục con.",
+          "speaker": "Bố",
+          "id": "af9b2aa2-8ecc-4005-96ef-5bd8ddb94d22"
+        },
+        {
+          "kind": "dialogue",
+          "text": "Con cần thêm một chút thời gian, bố.",
+          "speaker": "Minh",
+          "id": "491a5a6b-303f-4994-a29a-8fa03f4fbe44"
+        }
+      ]
+    },
+    {
+      "id": "b29de604-b8d4-4185-a28e-e4ea434da5c4",
+      "source_scene_id": "367a6cb0-aceb-4ce6-a284-56a0523e6e89",
+      "heading": "Kéo ghế",
+      "blocks": [
+        {
+          "kind": "action",
+          "text": "Con trai Minh kéo ghế rồi ngồi xuống.",
+          "speaker": "",
+          "id": "26555aa0-90af-4214-8f71-d1920c8e8f33"
+        },
+        {
+          "kind": "dialogue",
+          "text": "Con, bố nghe đây.",
+          "speaker": "Bố",
+          "id": "c6b733c7-3833-41ba-a9ae-39e58a648bdb"
+        },
+        {
+          "kind": "dialogue",
+          "text": "Con vẫn đang nghĩ, bố.",
+          "speaker": "Minh",
+          "id": "284bf8c1-2a54-4a45-b844-ce366d107040"
+        }
+      ]
+    },
+    {
+      "id": "62c822d7-b2e4-4589-9c0e-b45c1d52e850",
+      "source_scene_id": "a268a39c-510f-4e7d-a51d-950a0234c2a0",
+      "heading": "Đẩy hộp",
+      "blocks": [
+        {
+          "kind": "action",
+          "text": "Bố đẩy chiếc hộp về phía Minh.",
+          "speaker": "",
+          "id": "32ba4368-a960-4dd4-8405-fd1d894609c4"
+        },
+        {
+          "kind": "dialogue",
+          "text": "Con cứ nghĩ thêm một chút.",
+          "speaker": "Bố",
+          "id": "6218209a-13f7-4246-819e-5154d7728e14"
+        },
+        {
+          "kind": "dialogue",
+          "text": "Con muốn nghĩ kỹ hơn, bố.",
+          "speaker": "Minh",
+          "id": "156fd360-ef94-4ddb-afbb-2c0947191034"
+        }
+      ]
+    },
+    {
+      "id": "0fd2d304-5c52-4baa-82f0-6cbb59701eac",
+      "source_scene_id": "ce134dda-a06b-4c21-a62f-c0fb2d1f51fd",
+      "heading": "Tay trên nắp",
+      "blocks": [
+        {
+          "kind": "action",
+          "text": "Minh đặt tay lên nắp hộp nhưng chưa mở, bố vẫn đứng cạnh bàn.",
+          "speaker": "",
+          "id": "c07741ab-8a80-4d66-ba0c-3040b54e7b28"
+        },
+        {
+          "kind": "dialogue",
+          "text": "Bố chưa biết bắt đầu thế nào.",
+          "speaker": "Bố",
+          "id": "12531e3b-0b34-4fa8-984e-80bb5fd6492a"
+        },
+        {
+          "kind": "dialogue",
+          "text": "Con chưa có câu trả lời, bố.",
+          "speaker": "Minh",
+          "id": "8a363f56-d5a5-40d6-a05c-3384f7b5698e"
+        }
+      ]
+    }
+  ],
+  "source_revision": 1,
+  "source_outline": {
+    "id": "028c8f22-af9a-4168-9986-d039f5a839f2",
+    "version": 1,
+    "scenes": [
+      {
+        "id": "08ae6ffb-1ad8-4112-aed4-66eafce87777",
+        "title": "Đặt hộp",
+        "action": "Bố đặt chiếc hộp đóng kín lên bàn.",
+        "location": "Phòng ăn",
+        "time": "",
+        "characters": "Bố, Minh",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      },
+      {
+        "id": "367a6cb0-aceb-4ce6-a284-56a0523e6e89",
+        "title": "Kéo ghế",
+        "action": "Con trai Minh kéo ghế rồi ngồi xuống.",
+        "location": "Phòng ăn",
+        "time": "",
+        "characters": "Bố, Minh",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      },
+      {
+        "id": "a268a39c-510f-4e7d-a51d-950a0234c2a0",
+        "title": "Đẩy hộp",
+        "action": "Bố đẩy chiếc hộp về phía Minh.",
+        "location": "Phòng ăn",
+        "time": "",
+        "characters": "Bố, Minh",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      },
+      {
+        "id": "ce134dda-a06b-4c21-a62f-c0fb2d1f51fd",
+        "title": "Tay trên nắp",
+        "action": "Minh đặt tay lên nắp hộp nhưng chưa mở, bố vẫn đứng cạnh bàn.",
+        "location": "Phòng ăn",
+        "time": "",
+        "characters": "Bố, Minh",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      }
+    ],
+    "source": {
+      "id": "7df6fc0d-a6fd-4808-b1ac-af0606b8b844",
+      "project_revision": 1,
+      "version_id": "current",
+      "draft": {
+        "title": "Chiếc hộp chưa mở",
+        "logline": "Bố đặt chiếc hộp đóng kín lên bàn. Con trai Minh kéo ghế rồi ngồi xuống. Bố đẩy chiếc hộp về phía Minh. Minh đặt tay lên nắp hộp nhưng chưa mở, bố vẫn đứng cạnh bàn.",
+        "sections": [
+          {
+            "title": "Story",
+            "purpose": "Author brief",
+            "content": "Bố đặt chiếc hộp đóng kín lên bàn. Con trai Minh kéo ghế rồi ngồi xuống. Bố đẩy chiếc hộp về phía Minh. Minh đặt tay lên nắp hộp nhưng chưa mở, bố vẫn đứng cạnh bàn."
+          }
+        ]
+      },
+      "context": {
+        "idea": "Bố đặt chiếc hộp đóng kín lên bàn. Con trai Minh kéo ghế rồi ngồi xuống. Bố đẩy chiếc hộp về phía Minh. Minh đặt tay lên nắp hộp nhưng chưa mở, bố vẫn đứng cạnh bàn.",
+        "constraints": [
+          "Đúng bốn cảnh, chỉ bố và con trai Minh. Kết mở, hộp chưa mở.",
+          "Mỗi cảnh có hai câu thoại ngắn: bố nói trước, Minh đáp sau. Bố xưng bố gọi con; Minh xưng con gọi bố. Không tự nhận tha thứ, không ngồi lại hoặc trao hộp lại."
+        ],
+        "clarifications": [],
+        "pending_questions": []
+      },
+      "response_language": "vi",
+      "draft_provenance": {
+        "title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "logline": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:0:title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:0:purpose": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:0:content": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        }
+      }
+    },
+    "provenance": {
+      "m2:08ae6ffb-1ad8-4112-aed4-66eafce87777:title": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:08ae6ffb-1ad8-4112-aed4-66eafce87777:action": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:08ae6ffb-1ad8-4112-aed4-66eafce87777:location": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:08ae6ffb-1ad8-4112-aed4-66eafce87777:time": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:08ae6ffb-1ad8-4112-aed4-66eafce87777:characters": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:08ae6ffb-1ad8-4112-aed4-66eafce87777:goal": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:08ae6ffb-1ad8-4112-aed4-66eafce87777:purpose": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:08ae6ffb-1ad8-4112-aed4-66eafce87777:viewer_intent": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:08ae6ffb-1ad8-4112-aed4-66eafce87777:keep_or_avoid": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:367a6cb0-aceb-4ce6-a284-56a0523e6e89:title": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:367a6cb0-aceb-4ce6-a284-56a0523e6e89:action": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:367a6cb0-aceb-4ce6-a284-56a0523e6e89:location": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:367a6cb0-aceb-4ce6-a284-56a0523e6e89:time": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:367a6cb0-aceb-4ce6-a284-56a0523e6e89:characters": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:367a6cb0-aceb-4ce6-a284-56a0523e6e89:goal": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:367a6cb0-aceb-4ce6-a284-56a0523e6e89:purpose": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:367a6cb0-aceb-4ce6-a284-56a0523e6e89:viewer_intent": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:367a6cb0-aceb-4ce6-a284-56a0523e6e89:keep_or_avoid": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:a268a39c-510f-4e7d-a51d-950a0234c2a0:title": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:a268a39c-510f-4e7d-a51d-950a0234c2a0:action": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:a268a39c-510f-4e7d-a51d-950a0234c2a0:location": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:a268a39c-510f-4e7d-a51d-950a0234c2a0:time": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:a268a39c-510f-4e7d-a51d-950a0234c2a0:characters": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:a268a39c-510f-4e7d-a51d-950a0234c2a0:goal": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:a268a39c-510f-4e7d-a51d-950a0234c2a0:purpose": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:a268a39c-510f-4e7d-a51d-950a0234c2a0:viewer_intent": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:a268a39c-510f-4e7d-a51d-950a0234c2a0:keep_or_avoid": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:ce134dda-a06b-4c21-a62f-c0fb2d1f51fd:title": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:ce134dda-a06b-4c21-a62f-c0fb2d1f51fd:action": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:ce134dda-a06b-4c21-a62f-c0fb2d1f51fd:location": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:ce134dda-a06b-4c21-a62f-c0fb2d1f51fd:time": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:ce134dda-a06b-4c21-a62f-c0fb2d1f51fd:characters": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:ce134dda-a06b-4c21-a62f-c0fb2d1f51fd:goal": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:ce134dda-a06b-4c21-a62f-c0fb2d1f51fd:purpose": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:ce134dda-a06b-4c21-a62f-c0fb2d1f51fd:viewer_intent": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:ce134dda-a06b-4c21-a62f-c0fb2d1f51fd:keep_or_avoid": {
+        "origin": "author_input",
+        "author_confirmed": false
+      }
+    }
+  },
+  "provenance": {
+    "script:e9ec0e0d-17b8-4ea4-8a9c-4dc85130299f:heading": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:4989cd67-08fe-46be-a4dc-12e58ce3ed2e:text": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:4989cd67-08fe-46be-a4dc-12e58ce3ed2e:speaker": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:af9b2aa2-8ecc-4005-96ef-5bd8ddb94d22:text": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:af9b2aa2-8ecc-4005-96ef-5bd8ddb94d22:speaker": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:491a5a6b-303f-4994-a29a-8fa03f4fbe44:text": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:491a5a6b-303f-4994-a29a-8fa03f4fbe44:speaker": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "script:b29de604-b8d4-4185-a28e-e4ea434da5c4:heading": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:26555aa0-90af-4214-8f71-d1920c8e8f33:text": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:26555aa0-90af-4214-8f71-d1920c8e8f33:speaker": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:c6b733c7-3833-41ba-a9ae-39e58a648bdb:text": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:c6b733c7-3833-41ba-a9ae-39e58a648bdb:speaker": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:284bf8c1-2a54-4a45-b844-ce366d107040:text": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:284bf8c1-2a54-4a45-b844-ce366d107040:speaker": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "script:62c822d7-b2e4-4589-9c0e-b45c1d52e850:heading": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:32ba4368-a960-4dd4-8405-fd1d894609c4:text": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:32ba4368-a960-4dd4-8405-fd1d894609c4:speaker": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:6218209a-13f7-4246-819e-5154d7728e14:text": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:6218209a-13f7-4246-819e-5154d7728e14:speaker": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:156fd360-ef94-4ddb-afbb-2c0947191034:text": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:156fd360-ef94-4ddb-afbb-2c0947191034:speaker": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "script:0fd2d304-5c52-4baa-82f0-6cbb59701eac:heading": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:c07741ab-8a80-4d66-ba0c-3040b54e7b28:text": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:c07741ab-8a80-4d66-ba0c-3040b54e7b28:speaker": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:12531e3b-0b34-4fa8-984e-80bb5fd6492a:text": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:12531e3b-0b34-4fa8-984e-80bb5fd6492a:speaker": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:8a363f56-d5a5-40d6-a05c-3384f7b5698e:text": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:8a363f56-d5a5-40d6-a05c-3384f7b5698e:speaker": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    }
+  }
+}
