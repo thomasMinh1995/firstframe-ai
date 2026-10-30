@@ -1,4 +1,5 @@
 "use client";
+import {isComposingKey} from './inputEvents';
 
 import { useEffect, useId, useRef, useState, type CSSProperties } from "react";
 import type { Project } from "./projectsApi";
@@ -163,6 +164,7 @@ export function SceneOutlineEditor({ project, saved, dirty, sourceCurrent, error
           <button type="button" disabled={outline.scenes.at(-1)?.id === selected} onClick={() => move(1)}>Xuống sau</button></div></div>
         {fields("title", "Tên cảnh", 200)}
         <div className="scene-tabs" role="tablist" aria-label="Các phần nội dung cảnh" onKeyDown={e => {
+          if (isComposingKey(e)) return;
           if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(e.key)) return;
           e.preventDefault(); const index = tabs.findIndex(([key]) => key === tab);
           const next = e.key === "Home" ? 0 : e.key === "End" ? 2 : (index + (e.key === "ArrowRight" ? 1 : 2)) % 3;

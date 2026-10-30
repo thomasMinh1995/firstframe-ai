@@ -1,4 +1,5 @@
 "use client";
+import {isComposingKey} from './inputEvents';
 
 import { useEffect, useId, useRef, useState, type CSSProperties, type KeyboardEvent, type ReactNode } from "react";
 import {ReviewPanel} from "./ReviewPanel";
@@ -169,7 +170,7 @@ function Field({ id, label, value, maxLength, onChange }: {
     requestAnimationFrame(() => editButton.current?.focus());
   }
   function keyDown(event: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) {
-    if (event.key === "Escape" && !event.nativeEvent.isComposing) {
+    if (event.key === "Escape" && !isComposingKey(event)) {
       event.preventDefault(); event.stopPropagation(); close(true);
     }
   }

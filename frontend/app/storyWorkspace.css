@@ -300,10 +300,10 @@ html:has(.feedback-popup[open]) { overflow: hidden; }
 .draft-run-panel > label { display:grid; gap:8px; margin:16px 0; }
 .draft-run-panel progress { width:100%; accent-color:var(--accent); }
 .draft-run-panel details { margin:12px 0; }
-.story-draft-editor:has(> .review-side-panel) { display:grid; grid-template-columns:minmax(0,1fr) minmax(280px,360px); gap:20px; }
-.story-draft-editor:has(> .review-side-panel) > :not(.review-side-panel) { grid-column:1; }
+.story-draft-editor:has(> .review-side-panel[open]) { display:grid; grid-template-columns:minmax(0,1fr) minmax(280px,360px); gap:20px; }
+.story-draft-editor:has(> .review-side-panel[open]) > :not(.review-side-panel) { grid-column:1; }
 .story-draft-editor > .review-side-panel { grid-column:2; grid-row:1 / span 8; align-self:start; position:sticky; top:90px; max-height:calc(100dvh - 110px); overflow:auto; }
-@media(max-width:1000px) { .story-draft-editor:has(> .review-side-panel) { display:block; } }
+@media(max-width:1000px) { .story-draft-editor:has(> .review-side-panel[open]) { display:block; } }
 
 /* Paper carries the story; navigation and review sit one layer above it. */
 .story-workspace { --foreground:#21352d; --muted:#4d5c50; --accent:#305e4b; --line:#cbd6cd; --panel:#fffefa; --soft:#f3f5f0; background:radial-gradient(ellipse at 5% 0%,#e6ede4 0,transparent 48%),#f6f7f2; min-height:100vh; }
@@ -330,7 +330,9 @@ html:has(.feedback-popup[open]) { overflow: hidden; }
 .review-sheet,.tour-layer { --foreground:#21352d; --muted:#4d5c50; --accent:#305e4b; --panel:#fffefa; --line:#cbd6cd; --soft:#f3f5f0; }
 .review-side-panel { box-shadow:-6px 10px 28px rgb(31 57 42 / 10%); background:#f4f6ef; }
 .review-sheet { box-shadow:0 16px 60px rgb(17 35 26 / 24%); padding:18px; overscroll-behavior:contain; }
-.review-sheet .review-panel-close { position:sticky; top:0; z-index:2; margin-bottom:12px; }
+.review-sheet[open] { display:flex; flex-direction:column; gap:12px; overflow:hidden; }
+.review-sheet > .review-panel-body { min-height:0; overflow:auto; overscroll-behavior:contain; }
+.review-sheet .review-panel-close { align-self:flex-start; flex-shrink:0; }
 .review-sheet label { display:block; margin:10px 0; }
 .review-sheet input[type=checkbox],.story-workspace input[type=checkbox] { width:auto; margin-right:8px; }
 .review-sheet p,.review-sheet label,.review-sheet li { font-size:14px; line-height:1.7; }
