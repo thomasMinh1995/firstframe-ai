@@ -19,6 +19,9 @@ const legacy=new WorkflowReveals(),partial=run([{...item('review','unknown'),kin
 assert.deepEqual(legacy.update(partial,null),[]);
 assert.deepEqual(legacy.update(partial,{revision:1,project:{screenplay_reviews:[{id:'old'}]}}),[],'legacy partial reviews do not replay after hydration');
 assert.deepEqual(legacy.update(partial,{revision:2,project:{screenplay_reviews:[{id:'old'},{id:'new'}]}}),['review']);
+const freshReview=new WorkflowReveals(),waitingReview=run([{...item('review'),kind:'review'}]);
+freshReview.update(waitingReview,null);freshReview.update(waitingReview,candidate(0));
+assert.deepEqual(freshReview.update({...waitingReview,workflow_items:[{...waitingReview.workflow_items[0],status:'running'}]},{revision:2,project:{screenplay_reviews:[{id:'first-new'}]}}),['review'],'initial empty hydration must not suppress the first new partial review');
 
 (async()=>{
  let current=null,saved=null,error=null,reads=0,candidateReads=0,failRun=true,failCandidate=false,task,delay;

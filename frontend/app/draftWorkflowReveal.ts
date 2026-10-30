@@ -16,10 +16,11 @@ export class WorkflowReveals {
   const changed:string[]=[];
   for(const item of run.workflow_items??[]){
    if(!this.initialized&&!candidate&&item.kind==='review')this.awaitingHistory.add(item.id);
+   const historyLoaded=!!candidate&&this.awaitingHistory.delete(item.id);
    const value=token(item,candidate);
    if(value===null)continue;
    if(!this.initialized){this.seen.set(item.id,value);continue;}
-   if(candidate&&this.awaitingHistory.delete(item.id)&&!item.result){this.seen.set(item.id,value);continue;}
+   if(historyLoaded&&!item.result){this.seen.set(item.id,value);continue;}
    if(!cardResult(item,candidate)?.target)continue;
    if(this.seen.get(item.id)!==value){this.seen.set(item.id,value);changed.push(item.id);}
   }

@@ -46,3 +46,7 @@ Run đầu có 10 call fake của pipeline (gồm các lượt review theo logic
 ## Phần chưa nghiệm thu
 
 DR-07/08 tiếp tục đưa quyết định tác giả và recovery vào card. DR-09/10 tiếp tục ma trận tích hợp đầy đủ, thiết bị/IME/screen reader/Safari thật, reduced motion/transparency ở môi trường thật và model thật tới PDF. Browser lần này kiểm chứng trạng thái theo checkpoint của provider giả, không xác nhận toàn luồng QA-01 hoặc chất lượng Qwen. Trạng thái gián đoạn/restart backend vẫn dùng hợp đồng đã giao ở DR-01/02; chưa chạy lại ma trận restart toàn hệ thống trong mốc UI này.
+
+## Review trước merge
+
+Đã sửa lịch hydrate của partial review: khi candidate ban đầu chưa có góp ý, không giữ cờ lịch sử tới tận lần góp ý mới đầu tiên. Thêm hồi quy cho pending → hydrate rỗng → partial review mới. TypeScript, 17 suite frontend và production build đạt sau sửa. GitHub không có CI check/Actions được báo cáo cho PR #81.
