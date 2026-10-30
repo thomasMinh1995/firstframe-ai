@@ -1,0 +1,19 @@
+{
+  "output": {
+    "heading": "Tua vít",
+    "translations": [],
+    "dialogue": {
+      "line_1": {
+        "after_action": 1,
+        "speaker": "Hạnh",
+        "text": "Em trai Nam lấy tua vít rồi ngồi xuống cạnh bàn."
+      },
+      "line_2": {
+        "after_action": 1,
+        "speaker": "Nam",
+        "text": "Chị, em sẽ xem có thể sửa được không."
+      }
+    }
+  },
+  "raw_output": "{\n  \"heading\": \"Tua vít\",\n  \"translations\": [],\n  \"dialogue\": {\n    \"line_1\": {\n      \"after_action\": 1,\n      \"speaker\": \"Hạnh\",\n      \"text\": \"Em trai Nam lấy tua vít rồi ngồi xuống cạnh bàn.\"\n    },\n    \"line_2\": {\n      \"after_action\": 1,\n      \"speaker\": \"Nam\",\n      \"text\": \"Chị, em sẽ xem có thể sửa được không.\"\n    }\n  }\n}"
+}

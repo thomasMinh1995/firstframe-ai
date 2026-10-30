@@ -1,0 +1,19 @@
+{
+  "output": {
+    "heading": "SCENE 2",
+    "translations": [],
+    "dialogue": {
+      "line_1": {
+        "after_action": 1,
+        "speaker": "Mara",
+        "text": "I hope it stays dry."
+      },
+      "line_2": {
+        "after_action": 1,
+        "speaker": "Owen",
+        "text": "Let's keep it for a bit more, just in case."
+      }
+    }
+  },
+  "raw_output": "{\n  \"heading\": \"SCENE 2\",\n  \"translations\": [],\n  \"dialogue\": {\n    \"line_1\": {\n      \"after_action\": 1,\n      \"speaker\": \"Mara\",\n      \"text\": \"I hope it stays dry.\"\n    },\n    \"line_2\": {\n      \"after_action\": 1,\n      \"speaker\": \"Owen\",\n      \"text\": \"Let's keep it for a bit more, just in case.\"\n    }\n  }\n}"
+}

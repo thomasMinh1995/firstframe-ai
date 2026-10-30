@@ -49,7 +49,7 @@ class CompositionProvider:
                 {'kind':'action','text':'Cha đặt thư.','speaker':''}]}), model='qwen2.5:7b')
         result = {'heading':request.response_model.model_json_schema()['properties']['heading']['const'],
                   'translations':['Father places the sealed letter on the table.']*len(data['fixed_action_beats'])
-                      if data['response_language']=='English' else [], 'dialogue':[]}
+                      if data['translate_actions'] else [], 'dialogue':[]}
         line_type = request.response_model.model_fields['dialogue'].annotation
         if isinstance(line_type, type) and issubclass(line_type, BaseModel):
             result['dialogue'] = {}

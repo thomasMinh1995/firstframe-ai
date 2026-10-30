@@ -1,0 +1,18 @@
+{
+  "scene": {
+    "id": "42e34759-54de-4207-af54-283ac45e1a6d",
+    "source_scene_id": "db594006-295a-4fec-a75d-192f2b53760b",
+    "heading": "Chiều mưa",
+    "blocks": [
+      {
+        "kind": "action",
+        "text": "Chiều mưa trong căn bếp nhỏ, con gái đặt chìa khóa lên bàn trước khi đi học xa.",
+        "speaker": "",
+        "id": "03034b86-10a2-4c73-8dde-473114c34333"
+      }
+    ]
+  },
+  "prompt_version": "screenplay-scene-v24-dialogue-voices",
+  "model": "qwen2.5:7b",
+  "status": "ready"
+}

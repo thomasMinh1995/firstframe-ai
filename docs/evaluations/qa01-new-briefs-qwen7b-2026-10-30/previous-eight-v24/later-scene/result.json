@@ -1,0 +1,18 @@
+{
+  "scene": {
+    "id": "c2792bfe-33e6-4fcd-9b4c-f240e5e8d4a9",
+    "source_scene_id": "de176dc1-8f42-4889-8bc9-4d4188815d75",
+    "heading": "Trước cánh cửa",
+    "blocks": [
+      {
+        "kind": "action",
+        "text": "Linh đứng trước cánh cửa, tay nắm lấy lá thư chưa mở.",
+        "speaker": "",
+        "id": "1b35bd7b-b7c3-4e67-8dfe-1a32f7366447"
+      }
+    ]
+  },
+  "prompt_version": "screenplay-scene-v24-dialogue-voices",
+  "model": "qwen2.5:7b",
+  "status": "ready"
+}

@@ -1,0 +1,481 @@
+{
+  "scope": "scene",
+  "block_ids": [],
+  "review_id": null,
+  "note_id": null,
+  "applied_scene": null,
+  "undone_revision": null,
+  "id": "13904427-9b14-443b-a9ed-d1e33a5626fb",
+  "created_at": "2026-10-30",
+  "source_revision": 1,
+  "source_content": "synthetic QA",
+  "source_screenplay": {
+    "id": "7e9e439f-1348-46a7-adda-ac4879523daf",
+    "version": 1,
+    "scenes": [
+      {
+        "id": "38e0195a-9c2b-4a3f-88da-292c9f172629",
+        "source_scene_id": "af46cccb-253c-42a9-80ce-b7baf070b41c",
+        "heading": "Radio hỏng",
+        "blocks": []
+      },
+      {
+        "id": "9f64388c-71ba-4ad7-9152-9ca7882d49ba",
+        "source_scene_id": "c33151cf-1dde-4e78-aa0d-b4b42d70c18b",
+        "heading": "Tua vít",
+        "blocks": []
+      },
+      {
+        "id": "c88eb494-db61-41ef-b111-7842473d19ee",
+        "source_scene_id": "d0195394-faec-4b54-8917-e59b7bf09811",
+        "heading": "Chờ tiếng nhạc",
+        "blocks": []
+      }
+    ],
+    "source_revision": 1,
+    "source_outline": {
+      "id": "fc6601dd-9c76-40fe-b05a-54196ca3d2cf",
+      "version": 1,
+      "scenes": [
+        {
+          "id": "af46cccb-253c-42a9-80ce-b7baf070b41c",
+          "title": "Radio hỏng",
+          "action": "Chị Hạnh đặt máy radio hỏng lên bàn.",
+          "location": "Phòng khách",
+          "time": "",
+          "characters": "Hạnh, Nam",
+          "goal": "",
+          "purpose": "",
+          "viewer_intent": "",
+          "keep_or_avoid": "",
+          "staging_choices": {}
+        },
+        {
+          "id": "c33151cf-1dde-4e78-aa0d-b4b42d70c18b",
+          "title": "Tua vít",
+          "action": "Em trai Nam lấy tua vít rồi ngồi xuống cạnh bàn.",
+          "location": "Phòng khách",
+          "time": "",
+          "characters": "Hạnh, Nam",
+          "goal": "",
+          "purpose": "",
+          "viewer_intent": "",
+          "keep_or_avoid": "",
+          "staging_choices": {}
+        },
+        {
+          "id": "d0195394-faec-4b54-8917-e59b7bf09811",
+          "title": "Chờ tiếng nhạc",
+          "action": "Hạnh và Nam nhìn chiếc radio vẫn im tiếng.",
+          "location": "Phòng khách",
+          "time": "",
+          "characters": "Hạnh, Nam",
+          "goal": "",
+          "purpose": "",
+          "viewer_intent": "",
+          "keep_or_avoid": "",
+          "staging_choices": {}
+        }
+      ],
+      "source": {
+        "id": "6a2a88f9-3e4a-4aeb-94d4-dd4e24a91ffa",
+        "project_revision": 1,
+        "version_id": "current",
+        "draft": {
+          "title": "Máy radio chưa sửa",
+          "logline": "Chị Hạnh đặt máy radio hỏng lên bàn. Em trai Nam lấy tua vít rồi ngồi xuống cạnh bàn. Hạnh và Nam nhìn chiếc radio vẫn im tiếng.",
+          "sections": [
+            {
+              "title": "Story",
+              "purpose": "Author brief",
+              "content": "Chị Hạnh đặt máy radio hỏng lên bàn. Em trai Nam lấy tua vít rồi ngồi xuống cạnh bàn. Hạnh và Nam nhìn chiếc radio vẫn im tiếng."
+            }
+          ]
+        },
+        "context": {
+          "idea": "Chị Hạnh đặt máy radio hỏng lên bàn. Em trai Nam lấy tua vít rồi ngồi xuống cạnh bàn. Hạnh và Nam nhìn chiếc radio vẫn im tiếng.",
+          "constraints": [
+            "Đúng ba cảnh, chỉ Hạnh và Nam; máy radio chưa hoạt động ở cuối.",
+            "Mỗi cảnh có đúng hai câu thoại, Hạnh trước rồi Nam. Hạnh xưng chị và gọi Nam là em; Nam xưng em và gọi Hạnh là chị. Không tự sửa xong radio, không lặp ngồi xuống."
+          ],
+          "clarifications": [],
+          "pending_questions": []
+        },
+        "response_language": "vi",
+        "draft_provenance": {
+          "title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "logline": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:0:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:0:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:0:content": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          }
+        }
+      },
+      "provenance": {
+        "m2:af46cccb-253c-42a9-80ce-b7baf070b41c:title": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:af46cccb-253c-42a9-80ce-b7baf070b41c:action": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:af46cccb-253c-42a9-80ce-b7baf070b41c:location": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:af46cccb-253c-42a9-80ce-b7baf070b41c:time": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:af46cccb-253c-42a9-80ce-b7baf070b41c:characters": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:af46cccb-253c-42a9-80ce-b7baf070b41c:goal": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:af46cccb-253c-42a9-80ce-b7baf070b41c:purpose": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:af46cccb-253c-42a9-80ce-b7baf070b41c:viewer_intent": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:af46cccb-253c-42a9-80ce-b7baf070b41c:keep_or_avoid": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:c33151cf-1dde-4e78-aa0d-b4b42d70c18b:title": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:c33151cf-1dde-4e78-aa0d-b4b42d70c18b:action": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:c33151cf-1dde-4e78-aa0d-b4b42d70c18b:location": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:c33151cf-1dde-4e78-aa0d-b4b42d70c18b:time": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:c33151cf-1dde-4e78-aa0d-b4b42d70c18b:characters": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:c33151cf-1dde-4e78-aa0d-b4b42d70c18b:goal": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:c33151cf-1dde-4e78-aa0d-b4b42d70c18b:purpose": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:c33151cf-1dde-4e78-aa0d-b4b42d70c18b:viewer_intent": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:c33151cf-1dde-4e78-aa0d-b4b42d70c18b:keep_or_avoid": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:d0195394-faec-4b54-8917-e59b7bf09811:title": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:d0195394-faec-4b54-8917-e59b7bf09811:action": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:d0195394-faec-4b54-8917-e59b7bf09811:location": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:d0195394-faec-4b54-8917-e59b7bf09811:time": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:d0195394-faec-4b54-8917-e59b7bf09811:characters": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:d0195394-faec-4b54-8917-e59b7bf09811:goal": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:d0195394-faec-4b54-8917-e59b7bf09811:purpose": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:d0195394-faec-4b54-8917-e59b7bf09811:viewer_intent": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:d0195394-faec-4b54-8917-e59b7bf09811:keep_or_avoid": {
+          "origin": "author_input",
+          "author_confirmed": false
+        }
+      }
+    }
+  },
+  "source_outline": {
+    "id": "fc6601dd-9c76-40fe-b05a-54196ca3d2cf",
+    "version": 1,
+    "scenes": [
+      {
+        "id": "af46cccb-253c-42a9-80ce-b7baf070b41c",
+        "title": "Radio hỏng",
+        "action": "Chị Hạnh đặt máy radio hỏng lên bàn.",
+        "location": "Phòng khách",
+        "time": "",
+        "characters": "Hạnh, Nam",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      },
+      {
+        "id": "c33151cf-1dde-4e78-aa0d-b4b42d70c18b",
+        "title": "Tua vít",
+        "action": "Em trai Nam lấy tua vít rồi ngồi xuống cạnh bàn.",
+        "location": "Phòng khách",
+        "time": "",
+        "characters": "Hạnh, Nam",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      },
+      {
+        "id": "d0195394-faec-4b54-8917-e59b7bf09811",
+        "title": "Chờ tiếng nhạc",
+        "action": "Hạnh và Nam nhìn chiếc radio vẫn im tiếng.",
+        "location": "Phòng khách",
+        "time": "",
+        "characters": "Hạnh, Nam",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      }
+    ],
+    "source": {
+      "id": "6a2a88f9-3e4a-4aeb-94d4-dd4e24a91ffa",
+      "project_revision": 1,
+      "version_id": "current",
+      "draft": {
+        "title": "Máy radio chưa sửa",
+        "logline": "Chị Hạnh đặt máy radio hỏng lên bàn. Em trai Nam lấy tua vít rồi ngồi xuống cạnh bàn. Hạnh và Nam nhìn chiếc radio vẫn im tiếng.",
+        "sections": [
+          {
+            "title": "Story",
+            "purpose": "Author brief",
+            "content": "Chị Hạnh đặt máy radio hỏng lên bàn. Em trai Nam lấy tua vít rồi ngồi xuống cạnh bàn. Hạnh và Nam nhìn chiếc radio vẫn im tiếng."
+          }
+        ]
+      },
+      "context": {
+        "idea": "Chị Hạnh đặt máy radio hỏng lên bàn. Em trai Nam lấy tua vít rồi ngồi xuống cạnh bàn. Hạnh và Nam nhìn chiếc radio vẫn im tiếng.",
+        "constraints": [
+          "Đúng ba cảnh, chỉ Hạnh và Nam; máy radio chưa hoạt động ở cuối.",
+          "Mỗi cảnh có đúng hai câu thoại, Hạnh trước rồi Nam. Hạnh xưng chị và gọi Nam là em; Nam xưng em và gọi Hạnh là chị. Không tự sửa xong radio, không lặp ngồi xuống."
+        ],
+        "clarifications": [],
+        "pending_questions": []
+      },
+      "response_language": "vi",
+      "draft_provenance": {
+        "title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "logline": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:0:title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:0:purpose": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:0:content": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        }
+      }
+    },
+    "provenance": {
+      "m2:af46cccb-253c-42a9-80ce-b7baf070b41c:title": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:af46cccb-253c-42a9-80ce-b7baf070b41c:action": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:af46cccb-253c-42a9-80ce-b7baf070b41c:location": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:af46cccb-253c-42a9-80ce-b7baf070b41c:time": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:af46cccb-253c-42a9-80ce-b7baf070b41c:characters": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:af46cccb-253c-42a9-80ce-b7baf070b41c:goal": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:af46cccb-253c-42a9-80ce-b7baf070b41c:purpose": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:af46cccb-253c-42a9-80ce-b7baf070b41c:viewer_intent": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:af46cccb-253c-42a9-80ce-b7baf070b41c:keep_or_avoid": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:c33151cf-1dde-4e78-aa0d-b4b42d70c18b:title": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:c33151cf-1dde-4e78-aa0d-b4b42d70c18b:action": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:c33151cf-1dde-4e78-aa0d-b4b42d70c18b:location": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:c33151cf-1dde-4e78-aa0d-b4b42d70c18b:time": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:c33151cf-1dde-4e78-aa0d-b4b42d70c18b:characters": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:c33151cf-1dde-4e78-aa0d-b4b42d70c18b:goal": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:c33151cf-1dde-4e78-aa0d-b4b42d70c18b:purpose": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:c33151cf-1dde-4e78-aa0d-b4b42d70c18b:viewer_intent": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:c33151cf-1dde-4e78-aa0d-b4b42d70c18b:keep_or_avoid": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:d0195394-faec-4b54-8917-e59b7bf09811:title": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:d0195394-faec-4b54-8917-e59b7bf09811:action": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:d0195394-faec-4b54-8917-e59b7bf09811:location": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:d0195394-faec-4b54-8917-e59b7bf09811:time": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:d0195394-faec-4b54-8917-e59b7bf09811:characters": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:d0195394-faec-4b54-8917-e59b7bf09811:goal": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:d0195394-faec-4b54-8917-e59b7bf09811:purpose": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:d0195394-faec-4b54-8917-e59b7bf09811:viewer_intent": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:d0195394-faec-4b54-8917-e59b7bf09811:keep_or_avoid": {
+        "origin": "author_input",
+        "author_confirmed": false
+      }
+    }
+  },
+  "target_scene_id": "38e0195a-9c2b-4a3f-88da-292c9f172629",
+  "instructions": "",
+  "status": "ready",
+  "scene": {
+    "id": "38e0195a-9c2b-4a3f-88da-292c9f172629",
+    "source_scene_id": "af46cccb-253c-42a9-80ce-b7baf070b41c",
+    "heading": "Radio hỏng",
+    "blocks": [
+      {
+        "kind": "action",
+        "text": "Chị Hạnh đặt máy radio hỏng lên bàn.",
+        "speaker": "",
+        "id": "b3732860-5a5c-4dcb-bf5c-4e80dc4b13ed"
+      },
+      {
+        "kind": "dialogue",
+        "text": "Radio này hỏng rồi, em.",
+        "speaker": "Hạnh",
+        "id": "d0ba5f56-a47e-478f-b211-58c3f5f638a2"
+      },
+      {
+        "kind": "dialogue",
+        "text": "Chị, em sẽ xem có thể sửa được không.",
+        "speaker": "Nam",
+        "id": "1936a288-867c-48f7-ad91-4db1c32e4051"
+      }
+    ]
+  },
+  "preview_scene": null,
+  "provider": null,
+  "model": "qwen2.5:7b",
+  "parameters": {
+    "composition": "source-preserving-v1",
+    "outline_reconciled": false
+  },
+  "prompt_version": "screenplay-scene-v24-dialogue-voices",
+  "error": null,
+  "applied_revision": null
+}

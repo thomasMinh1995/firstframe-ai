@@ -1,0 +1,19 @@
+{
+  "output": {
+    "heading": "SCENE 1",
+    "translations": [],
+    "dialogue": {
+      "line_1": {
+        "after_action": 1,
+        "speaker": "Mara",
+        "text": "I placed it there for a reason."
+      },
+      "line_2": {
+        "after_action": 1,
+        "speaker": "Owen",
+        "text": "Let's just hold onto it for now, okay?"
+      }
+    }
+  },
+  "raw_output": "{\n  \"heading\": \"SCENE 1\",\n  \"translations\": [],\n  \"dialogue\": {\n    \"line_1\": {\n      \"after_action\": 1,\n      \"speaker\": \"Mara\",\n      \"text\": \"I placed it there for a reason.\"\n    },\n    \"line_2\": {\n      \"after_action\": 1,\n      \"speaker\": \"Owen\",\n      \"text\": \"Let's just hold onto it for now, okay?\"\n    }\n  }\n}"
+}
