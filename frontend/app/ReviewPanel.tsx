@@ -21,7 +21,10 @@ export function ReviewPanel({open,onClose,label,children,disabled=false}:{disabl
    const switching=mode.current!==mobile;
    if(switching&&latest.current.open&&node.contains(document.activeElement))resizeFocus.current=document.activeElement as HTMLElement;
    node.close();
-   if(mobile&&!switching&&opener instanceof HTMLElement&&opener.isConnected&&opener.getClientRects().length)opener.focus({preventScroll:true});
+   if(mobile&&!switching){
+    const target=!node.closest('[inert]')&&opener instanceof HTMLElement&&opener!==document.body&&opener.isConnected&&opener.getClientRects().length&&!opener.closest('[inert]')?opener:document.getElementById('workspace-operation');
+    requestAnimationFrame(()=>{if(!document.querySelector('dialog:modal')&&target?.isConnected&&target.getClientRects().length)target.focus({preventScroll:true})});
+   }
   };
  },[mobile,open,stageVisible]);
  // Keep one host across breakpoints: reparenting a portal remounts uncontrolled draft state.

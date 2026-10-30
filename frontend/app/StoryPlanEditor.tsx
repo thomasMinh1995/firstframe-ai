@@ -44,7 +44,8 @@ export function replaceStoryBeat(content: string, spans: Span[], part: number, v
     ? { start, end: start + value.length } : { start: span.start + delta, end: span.end + delta }) };
 }
 
-export function StoryPlanEditor({ draft, dirty, onChange, selectedCardId, onSelectCard, inspector }: {
+export function StoryPlanEditor({ draft, dirty, onChange, selectedCardId, onSelectCard, inspector, disabled=false }: {
+  disabled?: boolean;
   draft: StoryDraft;
   dirty: boolean;
   onChange: (field: DraftField, value: string) => void;
@@ -101,7 +102,7 @@ export function StoryPlanEditor({ draft, dirty, onChange, selectedCardId, onSele
       })}
     </ol>
     </div></div>
-    {inspector && <ReviewPanel open onClose={()=>onSelectCard?.(null)} label="Góp ý cho card">{inspector}</ReviewPanel>}
+    {inspector && <ReviewPanel disabled={disabled} open onClose={()=>onSelectCard?.(null)} label="Góp ý cho card">{inspector}</ReviewPanel>}
     {!cards.length && <p className="storage-note">Chưa có nội dung phác thảo.</p>}
     {!!context.length && <details className="story-draft-context">
       <summary>Nhân vật, chủ đề và các chi tiết khác ({context.length})</summary>

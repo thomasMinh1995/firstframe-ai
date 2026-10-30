@@ -47,7 +47,20 @@ Review còn chặn Escape khi đang composition, desktop Escape đóng panel và
 - `cd backend && python -m pytest -q`: 831 passed, 1 skipped; một cảnh báo deprecation Starlette/httpx có sẵn.
 - Smoke bản production (`next start`): tab in-app browser 320→1200px giữ nguyên `PRODUCTION BUFFER — giữ thoại`; desktop dialog non-modal vẫn mở, Escape đóng và trả focus về trigger (`aria-expanded=false`).
 
-## Gate còn mở
+## Review cuối PR #87
+
+Phát hiện và sửa thêm một lỗi chặn trên mobile: dialog inline mới kế thừa `disabled` từ `.project-fields` khi `busy`, nên nút đóng bên ngoài fieldset riêng của dialog vẫn bị disable. Tái hiện trên bản production bằng giữ request `/screenplay-reviews/stream`: dialog là modal nhưng nút Close khớp `:disabled`, ancestor là `.project-fields`.
+
+Đổi khóa workspace sang `inert` + `aria-busy`. Modal native thoát inert của ancestor; fieldset riêng của review tiếp tục khóa nội dung, nút đóng dùng được. Truyền trạng thái busy cho cả inspector story plan để modal đó cũng không bật lại thao tác sửa. Cơ chế này theo [HTML Standard về modal và inert](https://html.spec.whatwg.org/multipage/interaction.html#modal-dialogs-and-inert-subtrees). Trong lúc busy, nội dung workspace tạm không nằm trong luồng tương tác/đọc; vùng tiến trình bên ngoài vẫn truy cập được. Sau khi đóng mobile sheet, nếu workspace còn inert thì chuyển focus sang tiến trình ở frame tiếp theo, sau native dialog focus restoration.
+
+Đã kiểm tra bản sửa qua CUA:
+
+- In-app browser 390px: `aria-busy=true`, workspace có `inert`, fieldset dialog disabled, Close không disabled; bấm Close đóng modal trong khi request vẫn giữ. Bấm editor không chuyển focus vào vùng inert, nội dung `Lá thư` giữ nguyên.
+- Safari native/RDM 390px: các nút nhận/kiểm tra góp ý và đánh giá đều disabled, Close vẫn hoạt động. Bấm Close khi AI đang chờ đưa focus về `Tiến trình xử lý`; Option+Tab tiếp tục tại nút `Chuẩn bị cảnh và dẫn chứng`.
+- Release request: các lượt review hoàn tất có trạng thái `ready`, văn bản `Cha đặt thư kín lên bàn.` giữ nguyên. Đóng sheet không thêm POST và không hủy request. Một lượt cố ý giữ quá 45 giây làm transport timeout; UI giữ nguồn, không retry; đối chiếu/mở lại vẫn lấy kết quả server đã lưu.
+- Thêm hồi quy SSR cho inspector story plan busy/idle: fieldset khóa đúng trạng thái, Close nằm ngoài phần disabled; cập nhật các browser scenario cũ dùng trạng thái `inert` thay `.disabled`. Các file `.browser.cjs` không được chạy bằng runner ngoài CUA trong đợt này; ca UI tương ứng được thao tác qua CUA như mô tả trên.
+
+## Gate còn mở (giữ nguyên)
 
 Chưa nghiệm thu iPhone/iPad/Android thật, bàn phím ảo và visual viewport khi mở bàn phím, xoay thiết bị thật, bộ gõ Telex/VNI hoặc CJK có candidate thật, VoiceOver/NVDA đọc toàn luồng và các chế độ OS giảm chuyển động/transparency/forced-colors. Develop không có thiết bị inspectable và đề nghị cài Xcode cho Simulator. Thử shortcut nguồn nhập/VoiceOver không cung cấp bằng chứng composition hoặc màn đọc xác thực; không tính là pass. Không cài thêm hoặc cấp quyền input monitoring/accessibility cho bộ gõ.
 
