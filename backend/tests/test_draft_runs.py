@@ -60,6 +60,7 @@ def test_pipeline_checkpoints_provenance_and_atomic_adoption(drafting):
     assert adopted.status_code == 200, adopted.text
     assert adopted.json()['screenplay'] == candidate['screenplay']
     assert client.post(url+'/adopt',json={'revision':p['revision'],'candidate_revision':c['revision']}).json() == adopted.json()
+    assert client.post(url+'/adopt',json={'revision':p['revision'],'candidate_revision':c['revision']-1}).status_code == 409
     assert client.get(url).json()['adopted_revision'] == adopted.json()['revision']
 
 

@@ -132,6 +132,8 @@ class DraftRunStore(ProjectStore):
                 raise ProjectNotFound
             run, p = json.loads(row[0]), ProjectResponse.model_validate_json(raw[0])
             if run["adopted_revision"] is not None:
+                if run["candidate_revision"] != candidate_revision:
+                    raise ProjectConflict
                 return p
             if (p.revision != revision or source_key(p) != run["source_content"]
                 or run["candidate_revision"] != candidate_revision or run["status"] not in ("ready", "partial")
