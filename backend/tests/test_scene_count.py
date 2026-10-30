@@ -11,6 +11,8 @@ def context(text, **updates):
 
 @pytest.mark.parametrize('text,expected', [
     ('Tối đa một cảnh, hai nhân vật.', (1, 1)),
+    ('Chỉ một cảnh sau cơn mưa.', (1, 1)),
+    ('Tối đa một cảnh trước khi trời tối.', (1, 1)),
     ('Phim 30 giây, tối đa 2 cảnh rất ngắn, 2 nhân vật, một căn bếp.', (1, 2)),
     ('Không quá sáu cảnh.', (1, 6)), ('Chỉ một cảnh.', (1, 1)),
     ('Đúng 2 cảnh.', (2, 2)), ('Từ một đến ba cảnh.', (1, 3)),

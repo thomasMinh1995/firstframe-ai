@@ -53,6 +53,7 @@ Hồi quy local: toàn backend **692 passed, 1 skipped** trước hai bổ sung 
 - Regex câu hỏi trước đây hiểu câu trả lời số cho “Bao nhiêu nhân vật trong cảnh?” là số cảnh. Nay chỉ đọc câu trả lời số khi câu hỏi hỏi trực tiếp số lượng cảnh, giữ đúng loại tối đa/tối thiểu. Có hồi quy Việt/Anh và ca API tự động với câu trả lời `2` nhân vật vẫn viết được một cảnh.
 - Giới hạn trong `author_request` trước đây chỉ gửi model như text. Nay được giao với bounds của nguồn để dựng schema và kiểm tra backend; yêu cầu mới được thu hẹp, không được nới giới hạn nguồn. Không thay source context lưu trong dự án. Prompt cập nhật khiến lượt chạy cũ khác cấu hình không được tiếp tục bằng prompt mới.
 - Chuỗi số quá dài trong ý tưởng (4400 chữ số, vẫn trong giới hạn 5000 ký tự) trước đây làm `int()` ném lỗi ngoài xử lý validation. Nay trả `SceneCountConflict` để API trả 422 thay vì 500.
+- Bộ lọc “hai cảnh cuối” trước đây bỏ cả giới hạn rõ ràng kèm mô tả thời gian như “Chỉ một cảnh sau cơn mưa” hoặc “Tối đa một cảnh trước khi trời tối”. Nay ưu tiên dấu hiệu giới hạn rõ ràng; vẫn không suy count từ tham chiếu cảnh đầu/cuối không có giới hạn.
 
 [Lượt Qwen kiểm tra cuối](final-review/report.json): một call 16.346s, biến thể từ brief hai cảnh đã lưu, thêm trả lời `2` nhân vật và yêu cầu trực tiếp tối đa một cảnh. Kết quả đúng một cảnh, schema maxItems=1, nguồn giữ nguyên. Request/raw response/profile lưu cạnh report; không retry, không resume run cũ. Đây là kiểm chứng count, không bổ sung nghiệm thu ngữ nghĩa.
 

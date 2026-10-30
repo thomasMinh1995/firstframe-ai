@@ -43,13 +43,13 @@ def scene_count_bounds(context: AuthorContext, ceiling: int = 60) -> tuple[int, 
     for text in texts:
         text = text.casefold()
         for match in COUNT.finditer(text):
-            if re.match(r"\s+(?:đầu|cuối|tiếp theo|trước|sau)\b", text[match.end():]):
-                continue
-            count = number(match['count'])
             prefix = text[:match.start()]
             bound = MAXIMUM.search(prefix) or MINIMUM.search(prefix) or EXACT.search(prefix)
+            if not bound and re.match(r"\s+(?:đầu|cuối|tiếp theo|trước|sau)\b", text[match.end():]):
+                continue
             if bound and re.search(r"(?:không(?: cần| phải| còn)?|not|no longer)\s*$", prefix[:bound.start()]):
                 continue
+            count = number(match['count'])
             if match['range']:
                 lower, upper = max(lower, number(match['range'])), min(upper, count)
             elif MAXIMUM.search(prefix):
