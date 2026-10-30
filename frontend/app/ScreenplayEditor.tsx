@@ -33,7 +33,7 @@ export function ScreenplayEditor({project, savedProject, onSelectSource, onDownl
   const editorId=useId();
   const [toolsOpen,setToolsOpen]=useState(false);
   const toolsOpener=useRef<HTMLElement|null>(null);
-  useEffect(()=>{if(window.innerWidth>1000)setToolsOpen(true)},[]);
+  useEffect(()=>{const wide=matchMedia('(min-width:1001px)');const update=()=>setToolsOpen(wide.matches);update();wide.addEventListener('change',update);return()=>wide.removeEventListener('change',update)},[]);
   function closeTools(){setToolsOpen(false);requestAnimationFrame(()=>toolsOpener.current?.focus({preventScroll:true}))}
 
   const editOrigin=useRef<Element|null>(null);
@@ -91,7 +91,7 @@ export function ScreenplayEditor({project, savedProject, onSelectSource, onDownl
   return <><section className="panel screenplay" data-workspace-stage="workspace-script" aria-label="Kịch bản">
     <header className="screenplay-heading"><div><p className="eyebrow">Kịch bản</p><h2 id="workspace-script" data-tour="script" tabIndex={-1}>Viết kịch bản</h2></div>
       <div className="screenplay-actions">
-        <button ref={node=>{toolsOpener.current=node}} type="button" className="secondary" disabled={!scene} aria-controls={scene?`${editorId}-support`:undefined} onClick={e=>{
+        <button ref={node=>{toolsOpener.current=node}} type="button" className="secondary" disabled={!scene} aria-expanded={toolsOpen&&!!scene} aria-haspopup="dialog" aria-controls={scene?`${editorId}-support`:undefined} onClick={e=>{
           toolsOpener.current=e.currentTarget;setToolsOpen(true);
           const host=e.currentTarget.closest('.screenplay')?.querySelector<HTMLElement>('.screenplay-tools');
           host?.querySelectorAll<HTMLDetailsElement>('.screenplay-source, .screenplay-feedback-tools').forEach(node=>{node.open=true;});

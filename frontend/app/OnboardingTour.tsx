@@ -1,4 +1,5 @@
 "use client";
+import {isComposingKey} from './inputEvents';
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { revealWorkspaceTarget } from "./WorkspaceStage";
@@ -128,7 +129,7 @@ export function OnboardingTour(props: Props) {
   useEffect(() => {
     if (!welcome && !resumable) return;
     const escape = (event: KeyboardEvent) => {
-      if (event.key !== "Escape" || event.defaultPrevented || event.isComposing || document.querySelector("dialog[open]")) return;
+      if (event.key !== "Escape" || event.defaultPrevented || isComposingKey(event) || document.querySelector("dialog:modal")) return;
       event.preventDefault(); dismiss();
     };
     document.addEventListener("keydown", escape);

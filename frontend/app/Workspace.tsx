@@ -422,7 +422,8 @@ export default function Workspace({ library = false }: { library?: boolean }) {
         <OperationProgress steps={steps} failed={operationFailed}
           timing={operationTiming} dirty={dirty} language={progressLanguage(project?.response_language ?? "auto")} />
       </details>}
-        {!library && <fieldset disabled={!!busy} className="project-fields">
+        {/* Modal dialogs escape inert ancestors; their own fieldset locks edits while Close stays usable. */}
+        {!library && <fieldset inert={!!busy} aria-busy={!!busy} className="project-fields">
           <WorkspaceStage key={`${project.id}:idea`} id="workspace-idea" tourStep="idea" title="Khoảnh khắc bạn muốn kể"
             complete={!!project.analysis && !briefChanged} preview={project.idea || "Bắt đầu bằng một khoảnh khắc nhỏ."}>
             <label htmlFor="idea">Khoảnh khắc, kỷ niệm hoặc tình huống của bạn</label>
@@ -510,7 +511,7 @@ export default function Workspace({ library = false }: { library?: boolean }) {
                 document.getElementById("draft-editor-title")?.focus();
               }}>Bỏ chọn góp ý này</button>
             </aside>}
-            <StoryPlanEditor key={`${project.id}:${draftEditorRevision}`} draft={project.draft}
+            <StoryPlanEditor key={`${project.id}:${draftEditorRevision}`} draft={project.draft} disabled={!!busy}
               dirty={dirty} onChange={updateDraftField} selectedCardId={selectedCard?.id} onSelectCard={card => {
                 const previous = selectedCard?.id;
                 setSelectedCard(card);

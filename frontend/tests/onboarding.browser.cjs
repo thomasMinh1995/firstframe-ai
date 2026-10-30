@@ -739,7 +739,7 @@ if (require.main === module) (async () => {
     const reviewStarted = page.waitForRequest(request => request.method() === 'POST' && request.url().endsWith('/review/stream'));
     await click(page, 'Nhận phản hồi trên bản hiện tại');
     await reviewStarted;
-    await page.waitForFunction(() => document.querySelector('.project-fields').disabled);
+    await page.waitForFunction(() => document.querySelector('.project-fields').inert);
     const peer = await t.context.newPage(); await peer.goto(url); await (await edit(peer, 'draft-logline')).waitFor();
     await (await edit(peer, 'draft-logline')).fill('Bản mới hơn từ cửa sổ hai.');
     await click(peer, 'Lưu thay đổi'); await peer.getByText('Đã lưu thay đổi.', { exact: true }).waitFor();
