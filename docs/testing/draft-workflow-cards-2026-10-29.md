@@ -36,3 +36,7 @@ Giữ lớp kính trên thanh lưu/điều hướng, lớp nội dung đặc và
 Đã sửa phần mobile: bỏ lề lồng 12px, giảm độ lệch card từ 14px xuống 8px; tăng nội dung và nút card từ 12px lên 14px; nút đọc chiếm chiều rộng card, cao tối thiểu 44px. Vùng nhãn checkbox cao 44px và ô chọn 18px. Select dùng chữ 16px; ngày giờ của lượt đang chọn được ghi đầy đủ bên dưới để không phụ thuộc nhãn native bị cắt. Anchor đọc candidate có scroll margin để thanh lưu không che phần đầu nội dung.
 
 Browser thực với dữ liệu QA riêng: tại 320px, scrollWidth=320, card rộng 246px, nút đọc rộng 212px/cao 46.4px, vùng checkbox cao 44px; tại 390px card rộng 316px, không tràn ngang. 768px chuyển một cột theo chiều rộng vùng nội dung; 1280px giữ ba cột. Bấm đọc ý tưởng mở đúng nội dung và focus đúng anchor; tại 320px anchor ở y=64px, dưới thanh lưu kết thúc tại y=40px. Viewport được reset sau kiểm tra. TypeScript và 16 suite frontend không dùng browser đạt. Không gọi model hoặc đổi DB chính. Chưa kiểm chứng Safari/iPhone thật, bàn phím ảo, screen reader hoặc tuân thủ WCAG toàn ứng dụng.
+
+## Review trước merge — 30/10/2026
+
+Đã sửa validator không cho array/object giả kiểu `kind` hoặc `status` đi qua bằng ép chuỗi; thêm ba ca hồi quy cho item và artifact. TypeScript, 16 suite frontend và production build đạt (còn warning CSS `align-items:start` có sẵn ở conversation). GitHub trên head trước sửa không có check-run/Actions/status nào; không coi trạng thái legacy pending với total_count=0 là CI đang chạy hoặc đã đạt. Không đổi backend/model trong review này.

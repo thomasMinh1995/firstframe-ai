@@ -13,9 +13,9 @@ export function validProgress(r:Record<string,unknown>):boolean{
  const ids=new Set<string>();
  function valid(v:unknown,child=false):boolean{
   if(!v||typeof v!=='object')return false;const i=v as Record<string,unknown>;
-  if(typeof i.id!=='string'||!i.id||ids.has(i.id)||!kinds.includes(String(i.kind))||!statuses.includes(String(i.status))||!['scene_id','started_at','finished_at','error_code'].every(k=>nullableText(i[k]))||!Array.isArray(i.children)||i.children.length>6||child&&i.children.length>0)return false;
+  if(typeof i.id!=='string'||!i.id||ids.has(i.id)||typeof i.kind!=='string'||!kinds.includes(i.kind)||typeof i.status!=='string'||!statuses.includes(i.status)||!['scene_id','started_at','finished_at','error_code'].every(k=>nullableText(i[k]))||!Array.isArray(i.children)||i.children.length>6||child&&i.children.length>0)return false;
   ids.add(i.id);
-  if(i.result!==null){if(!i.result||typeof i.result!=='object')return false;const a=i.result as Record<string,unknown>;if(!kinds.includes(String(a.kind))||!nullableText(a.id)||!integer(a.candidate_revision))return false;}
+  if(i.result!==null){if(!i.result||typeof i.result!=='object')return false;const a=i.result as Record<string,unknown>;if(typeof a.kind!=='string'||!kinds.includes(a.kind)||!nullableText(a.id)||!integer(a.candidate_revision))return false;}
   else if(i.status==='completed')return false;
   return i.children.every(c=>valid(c,true));
  }
