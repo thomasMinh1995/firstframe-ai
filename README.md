@@ -406,4 +406,36 @@ it was not enabled because author-intent and issue/suggestion errors remained.
 
 Runs use the project SQLite database and a local two-thread executor. Restart marks previous-process running jobs interrupted. A received model result can be replayed from storage; a sent request without a stored result blocks continuation. Cancel stops future calls and keeps late results. There is no multi-worker/host recovery guarantee. See `docs/testing/phase3-draft-runs-2026-10-29.md` for verification and limits.
 
-Phase 6 local checks and the remaining release gates are recorded in [workflow acceptance](docs/testing/phase6-workflow-acceptance-2026-10-29.md). A single local-model smoke produced an exportable screenplay but hit the existing context guard before screenplay review; this is retained as a limitation, not counted as a successful full AI-review round. Real-device/reader acceptance remains pending.
+Phase 6 local checks and the remaining release gates are recorded in [workflow acceptance](docs/testing/phase6-workflow-acceptance-2026-10-29.md). The initial 29 October local-model smoke produced an exportable screenplay but hit the then-existing context guard before screenplay review; this is retained as a limitation, not counted as a successful full AI-review round. Real-device/reader acceptance remains pending.
+
+### Draft workflow cards and release checks
+
+The draft-run panel offers **Xem thử tiến độ dạng card**. This is still opt-in. Cards use durable backend checkpoints: pending steps wait, the active step shows thinking/skeleton, and saved results become readable without replaying the run. Desktop follows a three-column S path; narrow layouts use one staggered column.
+
+Answer or leave questions open in the intent card. Read a result, choose **Chỉnh bản nháp** when needed, and use **Quay lại card** to save and return to the opener. Continue is enabled only when the backend confirms it is safe; an unknown model outcome must not be resent. Adoption flushes candidate edits and checks the revision. Old reviews keep their original source. The default workspace and existing recovery remain available.
+
+Reproducible deterministic checks (no model or user database required):
+
+```sh
+cd backend
+python -m pip install -r requirements-dev.txt
+python -m pytest -q
+```
+
+```sh
+cd frontend
+npm ci
+npm run typecheck
+npm test
+npm run build
+```
+
+GitHub Actions runs these backend/frontend checks for PRs to `dev` and pushes to `dev`. `npm test` compiles into a temporary directory, runs the non-browser suites, then removes the temporary output. Browser/device checks and live-model evaluation are separate evidence, not part of the green CI claim.
+
+A manual synthetic local-model check can be run from the repository root (the output directory must be new; Ollama and `qwen2.5:7b` must already be installed):
+
+```sh
+backend/.venv/bin/python backend/scripts/check_draft_release.py --output /tmp/firstframe-live-result
+```
+
+It creates its own SQLite/dataset directory, records calls and checkpoints, leaves clarification answers open, and attempts adoption/selection/PDF with AI disabled for export. It never retries an uncertain call. See the [DR-09/DR-10 report](docs/testing/draft-workflow-release-2026-10-30.md) for the two observed Qwen runs: one stopped on invalid scene structure, the other reached PDF but still had content issues. This is not a release approval. Real-device/assistive-technology and independent creator acceptance remain open under QA-01.

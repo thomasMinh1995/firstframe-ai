@@ -1,0 +1,147 @@
+[
+  {
+    "stage": "reasoning",
+    "input_bytes": 872,
+    "instructions_bytes": 3492,
+    "timeout_seconds": null,
+    "model": "qwen2.5:7b",
+    "output": {
+      "summary": "Phim ngắn hai phút, trong căn bếp chiều mưa, bố đưa Linh một lá thư trước khi cô rời quê. Hai người ngại nói lời chia tay. Linh nhận thư nhưng chưa mở. Kết ở ngưỡng cửa, cô vẫn giữ quyền quyết định có đọc thư hay không.",
+      "notes": [
+        {
+          "label": "Cảnh cuối",
+          "content": "Cảnh cuối ở ngưỡng cửa có thể làm rõ hơn cảm xúc của Linh. Bố có thể làm gì để thể hiện sự quan tâm?"
+        }
+      ],
+      "missing_information": [
+        "Bố sẽ làm gì ở ngưỡng cửa?"
+      ],
+      "ai_suggestions": []
+    },
+    "seconds": 13.145
+  },
+  {
+    "stage": "planning",
+    "input_bytes": 12114,
+    "instructions_bytes": 6908,
+    "timeout_seconds": null,
+    "model": "qwen2.5:7b",
+    "output": {
+      "story_plan": {
+        "working_title": {
+          "title": "Lời thư cuối"
+        },
+        "logline": {
+          "text": "Trong căn bếp chiều mưa, bố đưa Linh một lá thư trước khi cô rời quê. Linh nhận thư nhưng chưa mở, giữ quyền quyết định có đọc thư hay không."
+        },
+        "characters": {
+          "protagonist": "Linh",
+          "supporting_characters": [
+            "Bố"
+          ],
+          "antagonist_or_obstacle": null
+        },
+        "conflict": {
+          "external": "Linh và bố trong tình huống chia tay",
+          "internal": null,
+          "stakes": "Linh quyết định có đọc thư hay không"
+        },
+        "beginning": {
+          "setup": "Trong căn bếp chiều mưa, Linh chuẩn bị rời quê. Bố đưa cho cô một lá thư.",
+          "key_event": null
+        },
+        "middle": {
+          "escalation": "Linh nhận thư nhưng chưa mở, giữ quyền quyết định.",
+          "turning_point": null
+        },
+        "ending": {
+          "resolution": "Linh đứng trước cánh cửa, quyết định giữ quyền quyết định.",
+          "final_image": "Linh đứng trước cánh cửa, tay nắm lấy lá thư chưa mở."
+        },
+        "theme": {
+          "statement": "Quyền quyết định thuộc về bản thân mỗi người."
+        },
+        "visual_style": {
+          "description": "Cảnh trong căn bếp tối, ánh sáng từ cửa sổ chiếu vào, tạo cảm giác ấm áp và buồn bã.",
+          "visual_motifs": [
+            "lời thư",
+            "cánh cửa"
+          ]
+        },
+        "tone": {
+          "description": "Tone nhẹ nhàng, buồn bã nhưng vẫn giữ được sự hy vọng."
+        },
+        "production_notes": {
+          "notes": "Cảnh trong căn bếp chỉ diễn ra trong một căn bếp, không có nhiều chuyển cảnh. Bố và Linh chỉ hai nhân vật chính, không có nhân vật phụ. Lời thư chưa mở giữ nguyên, không có hồi tưởng, không tự xác nhận hòa giải.",
+          "locations": [
+            "căn bếp"
+          ],
+          "cast_size": "2 nhân vật"
+        }
+      }
+    },
+    "seconds": 36.27
+  },
+  {
+    "stage": "evaluation",
+    "input_bytes": 4022,
+    "instructions_bytes": 2938,
+    "timeout_seconds": null,
+    "model": "qwen2.5:7b",
+    "output": {
+      "reviews": [
+        {
+          "card_id": "section-3",
+          "decision_id": "constraint-0",
+          "related_card_id": null,
+          "observation": "Card 'section-3' và 'section-3-part-1' đều mô tả bố đưa thư cho Linh, nhưng không có sự phân biệt rõ ràng giữa hai card này.",
+          "comparison": "mismatch",
+          "suggestion": "Card 'section-3-part-1' nên mô tả bố đưa thư cho Linh một cách ngắn gọn, trong khi 'section-3' tập trung vào hành động của Linh nhận thư và giữ quyền quyết định."
+        }
+      ],
+      "passed": false,
+      "rubric_scores": null
+    },
+    "seconds": 12.136
+  },
+  {
+    "stage": "scene_generation",
+    "input_bytes": 3278,
+    "instructions_bytes": 2406,
+    "timeout_seconds": null,
+    "model": "qwen2.5:7b",
+    "output": {
+      "scenes": [
+        {
+          "title": "Trong căn bếp chiều mưa",
+          "action": "Bố đưa cho Linh một lá thư. Linh nhận thư nhưng chưa mở, giữ quyền quyết định.",
+          "location": "Căn bếp",
+          "time": "Chiều mưa",
+          "characters": "Bố, Linh",
+          "goal": "Bố trao thư cho Linh, Linh giữ quyền quyết định.",
+          "purpose": "Bố đưa thư cho Linh, tạo ra tình huống chia tay.",
+          "transition": "Bố đưa thư, Linh nhận thư."
+        },
+        {
+          "title": "Trước cánh cửa",
+          "action": "Linh đứng trước cánh cửa, tay nắm lấy lá thư chưa mở.",
+          "location": "Cánh cửa",
+          "time": "Chiều mưa",
+          "characters": "Linh",
+          "goal": "Linh quyết định giữ quyền quyết định.",
+          "purpose": "Kết thúc phim ngắn, thể hiện quyền quyết định của Linh.",
+          "transition": "Linh giữ quyền quyết định, không mở thư."
+        }
+      ]
+    },
+    "seconds": 17.901
+  },
+  {
+    "stage": "screenplay_generation",
+    "input_bytes": 4932,
+    "instructions_bytes": 1672,
+    "timeout_seconds": null,
+    "error": "Ollama returned an invalid structured response.",
+    "seconds": 30.21
+  }
+]

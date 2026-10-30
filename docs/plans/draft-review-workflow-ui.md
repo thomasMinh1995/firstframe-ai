@@ -1,6 +1,6 @@
 # Kế hoạch cập nhật Bản nháp và Review theo prototype đã chọn
 
-Ngày 29/10/2026. Trạng thái: DR-01/DR-02 đã merge PR #79; DR-03/DR-04 đã merge PR #80. DR-05/DR-06 đã merge PR #81. DR-07/DR-08 đã triển khai dạng xem thử trên nhánh `fix/draft-workflow-decisions`; DR-09/DR-10 chưa triển khai. Xem [kiểm chứng quyết định và reader](../testing/draft-workflow-decisions-2026-10-30.md). Xem [kiểm chứng chuyển trạng thái và phục hồi](../testing/draft-workflow-transitions-2026-10-30.md). Xem [kiểm chứng card và bố cục](../testing/draft-workflow-cards-2026-10-29.md). Xem [hợp đồng và kiểm chứng giai đoạn 1](../testing/draft-workflow-progress-2026-10-29.md). Phạm vi là tiến độ tạo nháp và cách đọc, nhận bản nháp trong Bản nháp & Review; tiếp nối các task hệ thống và UI đã giao của workflow AI chủ động.
+Ngày 29/10/2026. Trạng thái: DR-01/DR-02 đã merge PR #79; DR-03/DR-04 đã merge PR #80. DR-05/DR-06 đã merge PR #81. DR-07/DR-08 đã merge PR #82. DR-09/DR-10 đã có hồi quy/CI, hai ca model thật và hướng dẫn trên nhánh `fix/draft-workflow-release-qa`; nghiệm thu phát hành chưa đạt do lỗi model và phần thiết bị/người đọc còn mở. Xem [báo cáo DR-09/DR-10](../testing/draft-workflow-release-2026-10-30.md). Xem [kiểm chứng quyết định và reader](../testing/draft-workflow-decisions-2026-10-30.md). Xem [kiểm chứng chuyển trạng thái và phục hồi](../testing/draft-workflow-transitions-2026-10-30.md). Xem [kiểm chứng card và bố cục](../testing/draft-workflow-cards-2026-10-29.md). Xem [hợp đồng và kiểm chứng giai đoạn 1](../testing/draft-workflow-progress-2026-10-29.md). Phạm vi là tiến độ tạo nháp và cách đọc, nhận bản nháp trong Bản nháp & Review; tiếp nối các task hệ thống và UI đã giao của workflow AI chủ động.
 
 Áp dụng bố cục card nối theo đường chữ S, trạng thái thinking cho công việc đang chạy và skeleton được thay bằng kết quả từng bước. Người dùng phải biết hệ thống đang làm gì, phần nào đã có thể đọc và khi nào cần quyết định. Tiến độ phản ánh checkpoint backend; hiệu ứng chỉ trình bày kết quả đã có.
 
@@ -64,7 +64,7 @@ Tiếp tục dùng poll hiện có, không thêm SSE/WebSocket trong đợt này
 
 ## Các giai đoạn triển khai
 
-Các task dưới đây là backlog tiếp nối của đợt áp dụng prototype, chưa phải issue đã tạo. DR-01–DR-08 đã có triển khai và kiểm chứng kỹ thuật; card hiện bật chủ động để xem thử. Các task còn lại chưa triển khai. Các task SYS và UI cũ giữ trạng thái đã triển khai.
+Các task dưới đây là backlog tiếp nối của đợt áp dụng prototype, chưa phải issue đã tạo. DR-01–DR-08 đã merge. DR-09/DR-10 đã có triển khai kiểm chứng nhưng chưa qua đủ cổng nghiệm thu phát hành; card hiện bật chủ động để xem thử. Các task SYS và UI cũ giữ trạng thái đã triển khai.
 
 | Giai đoạn | Task | Ưu tiên | Kết quả bàn giao | Phụ thuộc |
 | --- | --- | --- | --- | --- |
@@ -128,3 +128,7 @@ Lần ghi workflow đã gặp model trả scene sai cấu trúc và tạo ba c�
 Đợt này tái sử dụng runner, SQLite, polling và autosave. Chưa thêm pause LLM, streaming token vào card, workflow engine, thư viện animation hoặc suy luận ngữ nghĩa mới. Giữ lịch sử/provenance và cảnh báo chất lượng hiện có. Hoàn tất các task DR không tự đóng QA-01 phát hành còn chờ người đọc, pilot và thiết bị thật.
 
 Mốc duyệt thiết kế tiếp theo là cuối giai đoạn 2: xem đường S trên dữ liệu thật. Mốc bật thay thế giao diện là sau giai đoạn 5: đủ skeleton/reveal, hành động tác giả, recovery và báo cáo toàn luồng.
+
+## Cập nhật giai đoạn 5 — 30/10/2026
+
+DR-09 đã bổ sung ma trận API clear/needs-input × 1/2/6 cảnh, lệnh frontend test và CI; browser kiểm tra 13 card, 320/390px, Tab, hai tab/backup và PDF. DR-10 đã ghi hai ca Qwen thật, một ca schema scene lỗi và một ca tới PDF nhưng có sai lệch nội dung; onboarding/README đã cập nhật. Toàn bộ bằng chứng và các phần chưa kiểm nằm trong [báo cáo](../testing/draft-workflow-release-2026-10-30.md). Không đánh dấu QA-01 hoặc gate bật mặc định hoàn tất.

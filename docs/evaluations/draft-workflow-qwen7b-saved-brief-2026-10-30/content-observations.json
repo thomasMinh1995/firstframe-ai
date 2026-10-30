@@ -1,0 +1,25 @@
+{
+  "assessor": "agent inspection; not independent creator acceptance",
+  "release_approved": false,
+  "observations": [
+    {
+      "issue": "Actor drift",
+      "source": "brief.json: daughter places the keys",
+      "field": "scenes[0].blocks[0].text",
+      "observed": "Mưa rơi nhẹ ngoài cửa sổ, ánh sáng mờ nhạt từ bên ngoài chiếu vào căn bếp nhỏ, làm ấm không gian. Con gái ngồi ở bàn học, chuẩn bị đi học xa. Cha đứng bên cạnh, đặt chìa khóa lên bàn, sau đó lùi về phía sau, nhìn con gái."
+    },
+    {
+      "issue": "Father standing then both sitting",
+      "field": "scenes[0].blocks[-1].text",
+      "observed": "Cha đứng im lặng, nhìn con gái uống trà. Cả hai ngồi im lặng trong căn bếp, ánh sáng từ cửa sổ làm ấm căn phòng."
+    },
+    {
+      "issue": "Second scene repeats the sitting/tea beat",
+      "field": "scenes[1].blocks",
+      "observed": [
+        "Con gái ngồi xuống, uống một ngụm trà. Cha đứng im lặng, nhìn con gái.",
+        "Ánh sáng từ cửa sổ làm ấm căn bếp, tạo nên không khí yên lặng giữa hai người."
+      ]
+    }
+  ]
+}
