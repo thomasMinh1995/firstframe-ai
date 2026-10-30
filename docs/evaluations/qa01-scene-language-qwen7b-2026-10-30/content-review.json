@@ -1,0 +1,62 @@
+{
+  "release_approved": false,
+  "semantic_gate_passed": false,
+  "cases": [
+    {
+      "case": "final-v10/quiet-open-ending",
+      "language": "pass",
+      "address": "not_exercised",
+      "progression": "pass",
+      "notes": "Letter remains sealed; daughter does not receive/open it; no added departure."
+    },
+    {
+      "case": "final-v10/gentle-comedy",
+      "language": "pass",
+      "address": "pass",
+      "progression": "pass",
+      "notes": "Nam addresses Hà as chị and self as em; handoff occurs once, zipper not repaired. Extra shared laughter remains an AI embellishment."
+    },
+    {
+      "case": "final-v10/limited-resources",
+      "language": "pass",
+      "address": "not_exercised",
+      "progression": "pass",
+      "notes": "Flashlight stays unusable; street light, curtain and paper preserved."
+    },
+    {
+      "case": "final-v10/draft-workflow-qwen7b-2026-10-30",
+      "language": "pass",
+      "address": "not_exercised",
+      "progression": "failed",
+      "notes": "Linh holds the letter before father gives it; prop state contradiction."
+    },
+    {
+      "case": "final-v10/draft-workflow-qwen7b-saved-brief-2026-10-30",
+      "language": "pass",
+      "address": "not_exercised",
+      "progression": "failed",
+      "notes": "Father places the keys instead of daughter; daughter sits twice; uses later-scene tea beat."
+    },
+    {
+      "case": "variants-v10/parent-dialogue",
+      "language": "pass",
+      "address": "failed",
+      "progression": "failed",
+      "notes": "Both dialogue lines assigned to daughter despite one line per speaker; daughter switches from con to tôi."
+    },
+    {
+      "case": "variants-v10/english",
+      "language": "failed",
+      "address": "not_exercised",
+      "progression": "pass",
+      "notes": "Action text English but heading remains Khoảnh khắc. A Latin-script guard does not classify Vietnamese versus English."
+    },
+    {
+      "case": "variants-v10/later-scene",
+      "language": "pass",
+      "address": "not_exercised",
+      "progression": "pass",
+      "notes": "Letter remains with Linh, no repeated giving or opening. Lighting prose still needs editorial review."
+    }
+  ]
+}

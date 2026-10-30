@@ -1,0 +1,15 @@
+{
+  "raw_output": "{\n  \"scene\": {\n    \"heading\": \"Trước cánh cửa\",\n    \"blocks\": [\n      {\n        \"kind\": \"action\",\n        \"text\": \"Linh đứng trước cánh cửa, tay nắm lấy lá thư chưa mở. Ánh sáng mờ nhạt từ bên trong căn bếp len lỏi qua khe cửa, tạo nên một bóng tối mờ ảo xung quanh cô. Bố vẫn đang ở bên trong, im lặng nhìn cô từ cửa sổ.\",\n        \"speaker\": \"\"\n      }\n    ]\n  }\n}",
+  "output": {
+    "scene": {
+      "heading": "Trước cánh cửa",
+      "blocks": [
+        {
+          "kind": "action",
+          "text": "Linh đứng trước cánh cửa, tay nắm lấy lá thư chưa mở. Ánh sáng mờ nhạt từ bên trong căn bếp len lỏi qua khe cửa, tạo nên một bóng tối mờ ảo xung quanh cô. Bố vẫn đang ở bên trong, im lặng nhìn cô từ cửa sổ.",
+          "speaker": ""
+        }
+      ]
+    }
+  }
+}

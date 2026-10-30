@@ -56,6 +56,30 @@ def test_undo_refuses_target_edited_after_apply(writing):
     assert client.get(url).json()==p
 
 
+@pytest.mark.parametrize('foreign_replacement', [False, True])
+def test_block_script_guard_preserves_foreign_author_text_outside_scope(writing, monkeypatch, foreign_replacement):
+    client, provider, p = setup_blocks(writing, monkeypatch)
+    url = f"/api/projects/{p['id']}"
+    body = edit(p)
+    body['screenplay']['scenes'][0]['blocks'][0]['text'] = 'Tác giả giữ nguyên chữ 原文.'
+    p = client.put(url, json=body).json()
+    target = p['screenplay']['scenes'][0]
+    selected = target['blocks'][1]
+    def output(request):
+        provider.requests.append(request)
+        return StructuredResult(output=BlockRevisionResult(replacements=[{
+            'block_id':selected['id'], 'expected':{k:selected[k] for k in ('kind','text','speaker')},
+            'replacement':{'kind':'dialogue','speaker':selected['speaker'],
+                           'text':'Con vẫn chưa quyết định.' + (' 漉漉的' if foreign_replacement else '')}}]),model='fixture')
+    monkeypatch.setattr(provider, 'request_structured', output)
+    response = client.post(url+'/screenplay-proposals', json={'revision':p['revision'],
+        'request_id':str(uuid4()),'target_scene_id':target['id'],'scope':'blocks','block_ids':[selected['id']]})
+    assert response.status_code == (502 if foreign_replacement else 200)
+    saved = client.get(url).json()
+    assert saved['screenplay'] == p['screenplay']
+    assert len(provider.requests) == 1
+
+
 def test_resolver_and_direct_api_do_not_rewrite_wrong_scene_or_structure(writing):
     client,provider,p,_=writing;url=f"/api/projects/{p['id']}";scene=p['screenplay']['scenes'][0]
     body={'revision':p['revision'],'request_id':str(uuid4()),'target_scene_id':scene['id'],'instructions':'Giảm thoại cảnh 2'}

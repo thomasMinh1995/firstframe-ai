@@ -1,0 +1,38 @@
+{
+  "model": {
+    "name": "qwen2.5:7b",
+    "model": "qwen2.5:7b",
+    "modified_at": "2026-10-21T20:26:25.328883896+07:00",
+    "size": 4683087332,
+    "digest": "845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
+    "details": {
+      "parent_model": "",
+      "format": "gguf",
+      "family": "qwen2",
+      "families": [
+        "qwen2"
+      ],
+      "parameter_size": "7.6B",
+      "quantization_level": "Q4_K_M",
+      "context_length": 32768,
+      "embedding_length": 3584,
+      "runner": "ggml"
+    },
+    "capabilities": [
+      "completion",
+      "tools"
+    ]
+  },
+  "base_revision": "08605df5d28481c831554541bbaf04affad8427a",
+  "working_tree_changes": true,
+  "prompt_version": "screenplay-scene-v10",
+  "source_sha256": {
+    "backend/app/application/screenplay_writing.py": "d853674aacd861d126653724654d5f23cc34025a04ce3256a007b313d85515a7",
+    "backend/scripts/check_scene_writing.py": "c94f5502bf95b91765eae2f0ef8927184eedbe6d9f14fd948f740eb149e6adb4",
+    "domains/short-film/prompts/screenplay_scene_prompt.md": "59d4f6ded1d6f7fb767f6fb81803578912d7543eb3945e50b9bed8d553920390"
+  },
+  "effective_temperature": 0.3,
+  "context_length": 16384,
+  "output_tokens": 4096,
+  "note": "After live cases, prompt clarified that scene_position refers to screenplay order, and reordered-script regression passed. Request files preserve the exact prompts used for each live response."
+}

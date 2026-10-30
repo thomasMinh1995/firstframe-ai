@@ -1,0 +1,15 @@
+{
+  "provider": {
+    "provider": "ollama",
+    "model": "qwen2.5:7b",
+    "parameters": {
+      "temperature": 0.3,
+      "timeout_seconds": 180.0,
+      "num_ctx": 16384,
+      "screenplay_review_temperature": 0.0
+    }
+  },
+  "prompt_version": "screenplay-scene-v10",
+  "application_revision": "08605df5d28481c831554541bbaf04affad8427a",
+  "worktree_changes": " backend/app/application/screenplay_writing.py      | 29 +++++++++-\n backend/scripts/check_scene_writing.py             | 10 ++--\n backend/tests/test_draft_runs.py                   | 20 +++++++\n backend/tests/test_screenplay_revisions.py         | 24 ++++++++\n backend/tests/test_screenplay_writing.py           | 67 +++++++++++++++++++++-\n .../short-film/prompts/screenplay_scene_prompt.md  | 12 ++--\n 6 files changed, 145 insertions(+), 17 deletions(-)\n"
+}

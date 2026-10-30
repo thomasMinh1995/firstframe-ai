@@ -1,0 +1,9 @@
+{
+  "case": "english",
+  "source": "docs/evaluations/m3-scene-writing-qwen7b-2026-10-27/quiet-open-ending/project-after.json",
+  "technical_pass": true,
+  "blocks": 2,
+  "target_preserved": true,
+  "seconds": 20.361,
+  "model_calls": 1
+}
