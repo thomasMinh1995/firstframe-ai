@@ -3,7 +3,7 @@ import {useEffect,useRef,useState,useId} from 'react';
 import type {DraftRun,Candidate} from './draftRunsApi';
 import {cardResult,workflowLabels,workflowStatusLabels,type WorkflowItem} from './draftWorkflowState';
 import './draftWorkflow.css';
-export function DraftWorkflow({run,candidate,onRead}:{run:DraftRun;candidate:Candidate|null;onRead:(target:string)=>void}){
+export function DraftWorkflow({run,candidate,onRead,reveals=[]}:{run:DraftRun;candidate:Candidate|null;onRead:(target:string)=>void;reveals?:string[]}){
  const list=useRef<HTMLOListElement>(null),[paths,setPaths]=useState<string[]>([]);
  const arrowId='workflow-arrow-'+useId().replace(/:/g,'');
  const items=run.workflow_items??[];
@@ -14,13 +14,13 @@ export function DraftWorkflow({run,candidate,onRead}:{run:DraftRun;candidate:Can
  },[items]);
  if(!items.length)return <p className="storage-note">Lượt này chưa có tiến độ chi tiết. Xem trạng thái và bản đã lưu bên dưới.</p>;
  return <section className="draft-workflow" aria-label="Tiến độ tạo nháp theo từng bước">
-  <p className="storage-note">{items.filter(i=>i.status==='completed').length}/{items.length} mục có kết quả · {items.filter(i=>['warning','failed','interrupted','needs_input'].includes(i.status)).length} mục cần xem</p>
-  <div className="draft-workflow-map"><svg aria-hidden="true" className="draft-workflow-route"><defs><marker id={arrowId} markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M1,1 L7,4 L1,7"/></marker></defs>{paths.map((d,i)=><path key={i} d={d} markerEnd={`url(#${arrowId})`}/>)}</svg>
-   <ol ref={list} className="draft-workflow-cards">{items.map((item,index)=><WorkflowCard key={item.id} item={item} index={index} candidate={candidate} onRead={onRead}/>)}</ol>
+  <p className="storage-note" role="status">{items.filter(i=>i.status==='completed').length}/{items.length} mục có kết quả · {items.filter(i=>['warning','failed','interrupted','needs_input'].includes(i.status)).length} mục cần xem{items.some(i=>i.status==='running')&&` · Đang xử lý: ${items.filter(i=>i.status==='running').map(i=>workflowLabels[i.kind]).join(', ')}`}</p>
+  <div className="draft-workflow-map"><svg aria-hidden="true" className="draft-workflow-route"><defs><marker id={arrowId} markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M1,1 L7,4 L1,7"/></marker></defs>{paths.map((d,i)=><path key={i} className={items[i+1]?.status==='running'?'is-current':undefined} d={d} markerEnd={`url(#${arrowId})`}/>)}</svg>
+   <ol ref={list} role="list" className="draft-workflow-cards">{items.map((item,index)=><WorkflowCard key={item.id} item={item} index={index} candidate={candidate} onRead={onRead} reveal={reveals.indexOf(item.id)}/>)}</ol>
   </div>
  </section>;
 }
-function WorkflowCard({item,index,candidate,onRead}:{item:WorkflowItem;index:number;candidate:Candidate|null;onRead:(target:string)=>void}){
+function WorkflowCard({item,index,candidate,onRead,reveal}:{item:WorkflowItem;index:number;candidate:Candidate|null;onRead:(target:string)=>void;reveal:number}){
  const sceneIndex=candidate?.project.screenplay?.scenes.findIndex(s=>s.id===item.scene_id)??-1;
  const result=cardResult(item,candidate),row=Math.floor(index/3),col=row%2?3-index%3:1+index%3;
  return <li className={`draft-workflow-card is-${item.status}`} style={{gridRow:row+1,gridColumn:col}}>
@@ -28,9 +28,13 @@ function WorkflowCard({item,index,candidate,onRead}:{item:WorkflowItem;index:num
    <span className="draft-workflow-badge" aria-hidden="true"><span className="draft-workflow-number">{index+1}</span>{item.status==='completed'&&<span className="draft-workflow-check">✓</span>}</span>
    <h3>{workflowLabels[item.kind]}{item.kind==='write'&&sceneIndex>=0&&` ${sceneIndex+1}`}</h3>
   </div>
-  <p className="draft-workflow-status">{workflowStatusLabels[item.status]}</p>
-  {result&&<p className="draft-workflow-preview">{result.text.slice(0,180)}{result.text.length>180?'…':''}</p>}
+  <p className={`draft-workflow-status${item.status==='running'?' draft-workflow-thinking':''}`}>{item.status==='running'&&<span className="process-spinner" aria-hidden="true"/>}{item.status==='running'?`Đang xử lý · ${workflowLabels[item.kind]}${sceneIndex>=0?` ${sceneIndex+1}`:''}`:workflowStatusLabels[item.status]}</p>
+  {(item.status==='running'&&!result?.target||result&&!result.target)&&<WorkflowSkeleton processing={item.status==='running'}/>}
+  {result&&<p className={`draft-workflow-preview${reveal>=0?' is-revealing':''}`} style={reveal>=0?{animationDelay:`${reveal*100}ms`}:undefined}>{result.text.slice(0,180)}{result.text.length>180?'…':''}</p>}
   {item.children.length>0&&<ul>{item.children.map((child,i)=><li key={child.id}>Cảnh {i+1} · {workflowStatusLabels[child.status]}</li>)}</ul>}
   {result?.target&&<button type="button" className="secondary" onClick={()=>onRead(result.target)}>Đọc nội dung</button>}
  </li>;
+}
+export function WorkflowSkeleton({processing=false}:{processing?:boolean}){
+ return <div className={`draft-workflow-skeleton${processing?' is-processing':''}`} aria-hidden="true"><span/><span/><span/><span/></div>;
 }
