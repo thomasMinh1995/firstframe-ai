@@ -62,6 +62,13 @@ screenplay theo cảnh và xuất PDF kịch bản đã có nền kỹ thuật; 
 [luồng AI-first](ai-first-workflow.md) và [roadmap](../roadmap.md). PDF story
 plan #5 là phạm vi riêng, chưa được coi là hoàn thành bởi xuất PDF kịch bản.
 
+Hành trình workspace theo [task 1 / #94](author-led-screenplay-workflow.md):
+**Chất liệu → Làm rõ → Story plan → Dàn cảnh → Viết & sửa → Đọc & xuất**.
+Người viết yêu cầu AI hỗ trợ ở từng công đoạn, đọc/chỉnh/chọn kết quả rồi
+chủ động chuyển bước. Chuyển bước chỉ mở công cụ, không tự gọi AI, tạo
+hoặc nhận bản mới. Tạo nháp tự động có lối mở riêng; lưu, nguồn và lịch sử
+vẫn dùng cơ chế hiện có. Thay đổi này không thay điều kiện demo hoặc pilot.
+
 Tour frontend đã được triển khai trên `dev`; pilot và một số nghiệm thu
 thủ công còn mở ở [#22](https://github.com/thomasMinh1995/firstframe-ai/issues/22).
 Giữ tour hiện có; chỉ điều chỉnh nội dung liên quan khi luồng demo ổn định.

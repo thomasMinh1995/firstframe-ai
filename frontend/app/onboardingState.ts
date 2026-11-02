@@ -2,7 +2,7 @@ export const tourSteps = ["new-project", "idea", "draft-run", "script", "export"
 export type TourStep = typeof tourSteps[number];
 export type TourStatus = "active" | "waiting" | "paused" | "dismissed" | "completed";
 export type TourRecord = { version: 3; status: TourStatus; stepId: TourStep; projectId: string | null };
-export type TourContext = { projectId: string | null; hasAnalysis: boolean; hasDraft: boolean; hasScreenplay?: boolean; briefChanged: boolean };
+export type TourContext = { projectId: string | null; hasAnalysis: boolean; hasDraft: boolean; hasScreenplay?: boolean; hasOutline?: boolean; briefChanged: boolean };
 export type TourOperation = "create" | "analyze" | "plan";
 export type TourRequest = { session: number; serial: number; kind: TourOperation; projectId: string | null };
 export type TourState = {
@@ -30,12 +30,13 @@ export function parseTour(raw: string | null | undefined): TourRecord | null {
 }
 
 export function entryStep(c: TourContext): TourStep {
-  return !c.projectId ? "new-project" : c.hasScreenplay ? "script" : c.hasDraft ? "draft-run" : "idea";
+  return !c.projectId ? "new-project" : c.briefChanged ? "idea" : c.hasScreenplay ? "script" : c.hasDraft ? "draft-run" : "idea";
 }
 export function available(step: TourStep, c: TourContext): boolean {
   if(step === "new-project")return true;
   if(!c.projectId)return false;
-  return step === "script" || step === "export" ? !!c.hasScreenplay : true;
+  if(step === "draft-run" && c.briefChanged)return false;
+  return step === "script" ? !!c.hasOutline || !!c.hasScreenplay : step === "export" ? !!c.hasScreenplay : true;
 }
 function safeStep(step: TourStep, c: TourContext): TourStep {
   return available(step,c) ? step : entryStep(c);
@@ -50,7 +51,10 @@ export function previousStep(step: TourStep, c: TourContext): TourStep | null {
 export function continuation(s: TourState, c: TourContext): TourStep | null {
   const r = s.record;
   if (!r || r.projectId !== c.projectId) return entryStep(c);
-  if (r.status === "waiting") return s.waitingReady || (r.stepId === "draft-run" && c.hasScreenplay) ? nextStep(r.stepId, c) : null;
+  if (r.status === "waiting") {
+    if (c.briefChanged) return "idea";
+    return s.waitingReady || (r.stepId === "draft-run" && (c.hasOutline || c.hasScreenplay)) ? nextStep(r.stepId, c) : null;
+  }
   return safeStep(r.stepId, c);
 }
 
@@ -127,4 +131,9 @@ export function reduceTour(s: TourState, a: Action): TourState {
       return { ...s, request: null, waitingReady: true, record: { ...s.record!, projectId: a.resultId } };
     case "failed": return matches(s, a.ticket) ? paused(s) : s;
   }
+}
+
+export function tourTarget(step:TourStep, c:TourContext):string {
+  if(step==='draft-run')return c.briefChanged?'idea':c.hasDraft?'draft':c.hasAnalysis?'choices':'idea';
+  return step;
 }

@@ -9,6 +9,38 @@ export const toolOperations: Partial<Record<WorkspaceTool, OperationKind[]>> = {
 export function workspaceGroup(stage:string) {
   return ['workspace-idea','workspace-choices'].includes(stage)?'idea':stage==='workspace-export'?'finish':'draft';
 }
+export function workspaceJourney(project:Project|null, briefChanged:boolean) {
+  return [
+    {id:'workspace-idea',label:'Chất liệu',available:!!project},
+    {id:'workspace-choices',label:'Làm rõ',available:!!project?.analysis&&!briefChanged},
+    {id:'workspace-draft',label:'Story plan',available:!!project?.draft},
+    {id:'workspace-outline',label:'Dàn cảnh',available:!!project?.draft||!!project?.scene_outline},
+    {id:'workspace-script',label:'Viết & sửa',available:!!project?.scene_outline||!!project?.screenplay},
+    {id:'workspace-export',label:'Đọc & xuất',available:!!project?.screenplay},
+  ];
+}
+export function workspaceNextStep(stage:string, project:Project, briefChanged:boolean, blockingRun:boolean) {
+  if(stage==='workspace-idea') {
+    if(blockingRun)return {label:'Mở lượt tự động đang có',target:'draft-run'};
+    if(!project.analysis||briefChanged)return {label:'Cùng làm rõ chất liệu',target:'analyze'};
+    return {label:'Xem các lựa chọn làm rõ',target:'workspace-choices'};
+  }
+  if(stage==='workspace-choices')return project.draft
+    ?{label:'Đọc Story plan đang có',target:'workspace-draft'}
+    :{label:'Xem lựa chọn trước khi tạo Story plan',target:'clarification-complete'};
+  if(stage==='workspace-draft')return {label:'Sang dàn cảnh',target:'workspace-outline'};
+  if(stage==='workspace-outline')return project.scene_outline||project.screenplay
+    ?{label:'Sang viết & sửa',target:'workspace-script'}
+    :{label:'Chọn nguồn để bắt đầu dàn cảnh',target:'workspace-outline'};
+  if(stage==='workspace-script')return project.screenplay
+    ?{label:'Đọc & xuất bản đã lưu',target:'workspace-export'}
+    :{label:'Xem nguồn trước khi bắt đầu viết',target:'workspace-script-start'};
+  if(stage==='workspace-export')return {label:'Chọn bản đã đọc để xuất',target:'workspace-export-choice'};
+  return {label:'Về chất liệu câu chuyện',target:'workspace-idea'};
+}
+export function workspaceFallbackStage(stage:string, briefChanged:boolean) {
+  return briefChanged && stage === 'workspace-choices' ? 'workspace-idea' : stage;
+}
 export function workspaceToolSteps(tool:WorkspaceTool, saved:Project, dirty:boolean) {
   const script=saved.screenplay;
   const written=script?.scenes.filter(s=>s.blocks.some(b=>b.text.trim())).length??0;

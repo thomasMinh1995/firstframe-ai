@@ -27,6 +27,7 @@ import {PlanCheckpointReader, type PlanReading} from "./PlanCheckpointReader";
 import { OnboardingTour, useOnboarding } from "./OnboardingTour";
 import type { TourStep } from "./onboardingState";
 import { applyProgress, progressLanguage, type OperationStep } from "./progressState";
+import { workspaceFallbackStage } from "./workspaceToolState";
 import { feedbackGuidance, sectionLabels } from "./storyLabels";
 import { responseLanguageLabels, type ResponseLanguage } from "./language";
 import type { EvaluationFinding, RevisionNote } from "./apiClient";
@@ -91,12 +92,18 @@ export default function Workspace({ library = false }: { library?: boolean }) {
     && saved?.feedback_source?.project_id === project.id
     && saved.feedback_source.artifact_id === project.feedback.artifact_id;
   const tourContext = { projectId: project?.id ?? null, hasAnalysis: !!project?.analysis,
-    hasDraft: !!project?.draft, hasScreenplay: !!project?.screenplay, briefChanged };
+    hasDraft: !!project?.draft, hasOutline: !!project?.scene_outline, hasScreenplay: !!project?.screenplay, briefChanged };
   const tour = useOnboarding(tourContext, !!busy, error);
   useEffect(() => {
     if (saved) setProjects(items => [saved, ...items.filter(item => item.id !== saved.id)]);
   }, [saved]);
   useEffect(() => { if (dirty) setNotice(null); }, [dirty]);
+  useEffect(() => {
+    if (!briefChanged) return;
+    const workspace = document.querySelector<HTMLElement>('[data-desktop-stage]');
+    if (!workspace || workspaceFallbackStage(workspace.dataset.desktopStage ?? "", briefChanged) === workspace.dataset.desktopStage) return;
+    revealWorkspaceTarget(document.getElementById("workspace-idea"));
+  }, [briefChanged]);
   useEffect(() => {
     if (!selectedFeedback || selectedCard) return;
     const frame = requestAnimationFrame(() => {
@@ -414,7 +421,7 @@ export default function Workspace({ library = false }: { library?: boolean }) {
         {library && projectToolbar}
       </header>
       <div className="workspace-layout">
-      {!library && <WorkspaceNavigation project={project} draftRun={viewedDraftRun?.project_id===project?.id?viewedDraftRun:null} briefChanged={briefChanged} analyzing={!!busy && operationTiming?.kind === "analyze"} creatingPlan={!!busy && operationTiming?.kind === "plan"}
+      {!library && <WorkspaceNavigation project={project} draftRun={viewedDraftRun?.project_id===project?.id?viewedDraftRun:null} briefChanged={briefChanged}
         tourStep={tour.state.record?.status === "active" && !busy ? tour.state.record.stepId : undefined} />}
       <div className="workspace-content">
       {!library && <OnboardingTour tour={tour} context={tourContext} ready={workspaceLoadState === "ready"}
@@ -455,7 +462,7 @@ export default function Workspace({ library = false }: { library?: boolean }) {
           {(error || saveError) && <p className="error" role="alert">{error || saveError}</p>}
         </div>}
         {library && error && <p className="error" role="alert">{error}</p>}
-        {!library && saved && <WorkspaceTools key={project.id} project={project} saved={saved} dirty={dirty} busy={!!busy} run={projectBlockingRun} steps={steps} timing={operationTiming} onStartDraft={()=>void startDraftRun(projectBlockingRun)} />}
+        {!library && saved && <WorkspaceTools key={project.id} project={project} saved={saved} dirty={dirty} busy={!!busy} run={projectBlockingRun} steps={steps} timing={operationTiming} briefChanged={briefChanged} onAnalyze={()=>action("analyze")} />}
       {!!steps.length && operationTiming && <details className="operation-details" open={operationTiming.finishedAt===null||operationFailed||!!visiblePlanReading} data-progress-stage={`workspace-${operationTiming.kind === "analyze" ? "choices" : ["plan", "review"].includes(operationTiming.kind) ? "draft" : operationTiming.kind.startsWith("scene-") ? "outline" : "script"}`}>
         <summary>{operationTiming.finishedAt===null?'Đang xử lý…':operationFailed?'Xem lỗi và phần đã giữ':'Xem tiến trình lần vừa hoàn tất'}</summary>
         <OperationProgress steps={steps} failed={operationFailed}
@@ -505,7 +512,7 @@ export default function Workspace({ library = false }: { library?: boolean }) {
             {briefChanged && (project.analysis || project.draft) && <p className="form-message">Ý tưởng đã thay đổi. Làm rõ lại trước khi tạo
               bản phát triển mới; bản thảo và câu trả lời trước đó sẽ được giữ trong lịch sử.</p>}
             {(!project.analysis || briefChanged) && <button data-tour-action="analyze" disabled={!projectBlockingRun&&!project.idea.trim()}
-              onClick={() => void startDraftRun(projectBlockingRun)}>{draftRunActionLabel(projectBlockingRun)??"Tạo bản nháp"}</button>}
+              onClick={() => projectBlockingRun ? void startDraftRun(projectBlockingRun) : action("analyze")}>{draftRunActionLabel(projectBlockingRun)??"Cùng làm rõ chất liệu"}</button>}
           </WorkspaceStage>
           {saved && <details className="workspace-author-context">
             <summary>Ý đồ và lựa chọn đã lưu <span>{dirty ? "Có thay đổi chưa lưu" : "Bản đã lưu"}</span></summary>

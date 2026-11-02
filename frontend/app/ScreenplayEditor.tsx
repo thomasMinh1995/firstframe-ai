@@ -149,7 +149,7 @@ export function ScreenplayEditor({initialScene,onInitialSceneOpened,project, sav
         : <p>Cần lưu tên và diễn tiến cho mọi cảnh trong dàn cảnh trước khi bắt đầu. Bạn vẫn lưu nháp dàn cảnh được.</p>}
       {project.scene_outline?.scenes.map((s,i)=><p key={s.id} className="preserve-lines">{i+1}. {s.title}: {s.action}</p>)}
     {script && <label><input type="checkbox" checked={replace} onChange={e=>setReplace(e.target.checked)} />Tôi muốn bắt đầu bản khác từ dàn cảnh đã lưu; bản kịch bản hiện tại sẽ giữ trong lịch sử.</label>}
-    <button type="button" disabled={uncertain || (!!script&&!replace) || !project.scene_outline?.scenes.length || project.scene_outline.scenes.some(s=>!s.title.trim()||!s.action.trim())}
+    <button id="workspace-script-start" type="button" disabled={uncertain || (!!script&&!replace) || !project.scene_outline?.scenes.length || project.scene_outline.scenes.some(s=>!s.title.trim()||!s.action.trim())}
       onClick={()=>{const id=crypto.randomUUID();setSent(id);setReplace(false);void onStart(id);}}>{script?"Bắt đầu bản kịch bản khác":"Bắt đầu viết từ bản dàn cảnh này"}</button>
     <button type="button" className="secondary" onClick={async()=>{if(await onInspect())setSent(null);}}>Kiểm tra kịch bản đã lưu</button>
     {uncertain && <p role="status">Chưa rõ kết quả bắt đầu bản mới. Kiểm tra bản đã lưu trước; không tự gửi lại.</p>}
