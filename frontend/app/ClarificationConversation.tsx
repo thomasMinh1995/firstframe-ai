@@ -1,8 +1,8 @@
 "use client";
 
-export function ClarificationConversation({ summary, questions, answers, onChange, onAskMore, onConfirm, onEditBrief, idea, constraints = [], retained = [], aiSuggestions = [], hasDraft = false, thinking = false, creatingScreenplay = false, idPrefix = "" }: {
+export function ClarificationConversation({ summary, questions, answers, onChange, onAskMore, onConfirm, confirmLabel, onEditBrief, idea, constraints = [], retained = [], aiSuggestions = [], hasDraft = false, thinking = false, creatingScreenplay = false, idPrefix = "" }: {
   idPrefix?:string;creatingScreenplay?: boolean; thinking?: boolean; summary: string; questions: string[]; answers: string[]; onChange: (index: number, value: string) => void;
-  onAskMore?: () => void; onConfirm?: () => void; onEditBrief?: () => void; confirmationKey?: string;
+  onAskMore?: () => void; onConfirm?: () => void; confirmLabel?:string; onEditBrief?: () => void; confirmationKey?: string;
   idea?: string; constraints?: string[]; retained?: { question: string; answer: string }[]; aiSuggestions?: string[]; hasDraft?: boolean;
 }) {
   const pending = questions.filter((_, i) => !answers[i]?.trim()).length;
@@ -40,7 +40,7 @@ export function ClarificationConversation({ summary, questions, answers, onChang
         <p>{creatingScreenplay ? "Tiếp tục tạo dàn cảnh và nội dung kịch bản. Các phần chưa quyết định vẫn là phương án AI để bạn review." : hasDraft ? "Bản đề xuất mới được giữ riêng để bạn đọc và chọn nhận." : "Bước này tạo story plan để bạn đọc và sửa."}</p>
         <div className="clarification-actions">
           {onConfirm && <button type="button" data-tour-action="plan" onClick={onConfirm}>
-            {creatingScreenplay ? "Tiếp tục tạo bản nháp" : pending ? "Tạo story plan với phần còn để mở" : hasDraft ? "Tạo đề xuất story plan mới" : "Tạo story plan"}
+            {confirmLabel ?? (creatingScreenplay ? "Tiếp tục tạo bản nháp" : pending ? "Tạo story plan với phần còn để mở" : hasDraft ? "Tạo đề xuất story plan mới" : "Tạo story plan")}
           </button>}
           {onAskMore && questions.length < 20 && <button type="button" className="secondary" onClick={onAskMore}>Làm rõ thêm nếu cần</button>}
         </div>

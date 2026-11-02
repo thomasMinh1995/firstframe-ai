@@ -32,12 +32,12 @@ export function ScreenplayReading({saved,dirty,onSelect,onInspect,onEdit,onDownl
         {selected.id==='current'&&<button type="button" className="secondary" onClick={()=>onEdit(s.id)}>Quay lại sửa cảnh {script.scenes.indexOf(s)+1}</button>}</li>)}</ul>
       {selected.id!=='current'&&<p>Muốn sửa bản lịch sử, dùng thao tác khôi phục ở trang Bản đã lưu; nguồn đã chọn trước vẫn giữ.</p>}
     </div>}
-    <button type="button" disabled={dirty||!!incomplete.length||uncertain||(!matching&&(saved.screenplay_selections?.length??0)>=100)}
+    <button id="workspace-export-choice" type="button" disabled={dirty||!!incomplete.length||uncertain||(!matching&&(saved.screenplay_selections?.length??0)>=100)}
       onClick={()=>{if(matching&&onDownload){void onDownload(matching.id);return;}const request_id=crypto.randomUUID();setSent(request_id);void onSelect({request_id,source_version_id:selected.id},script);}}>Chọn bản đã đọc &amp; tải PDF</button>
     <button type="button" className="secondary" onClick={async()=>{if(await onInspect())setSent(null);}}>Kiểm tra nguồn xuất kịch bản đã lưu</button>
     {uncertain&&<p role="status">Chưa rõ kết quả chọn nguồn. Kiểm tra nguồn xuất kịch bản đã lưu trước lượt chọn mới; không tự gửi lại.</p>}
     {(saved.screenplay_selections?.length??0)>=100&&<p>Đã đủ 100 lần chọn nguồn; bạn vẫn tự viết/lưu và đọc nguồn đã chọn được.</p>}
-    {handoff&&chosen&&<details className="screenplay-handoff"><summary>Kịch bản đã chọn để xuất · các bản PDF đã giữ</summary>
+    {handoff&&chosen&&<details id="workspace-export-pdf" className="screenplay-handoff" tabIndex={-1}><summary>Kịch bản đã chọn để xuất · các bản PDF đã giữ</summary>
       <label htmlFor={`${id}-export`}>Bản đã chọn để tải lại</label><select id={`${id}-export`} value={chosen.id} onChange={e=>setExportId(e.target.value)}>
         {[...(saved.screenplay_selections??[])].reverse().map(s=><option key={s.id} value={s.id}>Kịch bản phiên bản {s.screenplay.version} · {new Date(s.created_at).toLocaleString('vi-VN')}</option>)}
       </select>

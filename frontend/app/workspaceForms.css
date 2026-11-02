@@ -1,0 +1,94 @@
+/* Shared form defaults also cover nested disclosures and review dialogs. */
+:where(.story-workspace, .review-sheet, .scene-popover) label {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+:where(.story-workspace, .review-sheet, .scene-popover) :is(input:not([type="checkbox"], [type="radio"]), select, textarea):where(:not(.continuous-page input, .continuous-page textarea)) {
+  max-width: 100%;
+  min-height: 44px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--foreground);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.8;
+}
+
+:where(.story-workspace, .review-sheet, .scene-popover) label:has(> :is(input:not([type="checkbox"], [type="radio"]), select, textarea)) {
+  display: grid;
+  gap: 8px;
+}
+
+:where(.story-workspace, .review-sheet, .scene-popover) :is(input:not([type="checkbox"], [type="radio"]), select):where(:not(.continuous-page input)) {
+  height: 48px;
+}
+
+:where(.story-workspace, .review-sheet, .scene-popover) :is(input[type="checkbox"], input[type="radio"]) {
+  accent-color: var(--accent);
+}
+
+:where(.story-workspace, .review-sheet, .scene-popover) :where(details:not([class]), .idea-settings, .workspace-form-note, .scene-proposal, .script-review, .screenplay-proposal, .screenplay-handoff) > summary {
+  margin: 0;
+  padding: 8px 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+:where(.story-workspace, .review-sheet, .scene-popover) :where(details:not([class]), .workspace-form-note, .scene-proposal, .script-review, .screenplay-proposal, .screenplay-handoff)[open] > summary {
+  margin-bottom: 12px;
+}
+
+:where(.story-workspace, .review-sheet, .scene-popover) summary:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.idea-settings {
+  min-width: 0;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--soft);
+}
+.idea-settings > summary { padding: 0; }
+.workspace-form-fields {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: 18px;
+  margin-top: 18px;
+}
+.workspace-form-field { display: grid; align-content: start; gap: 8px; min-width: 0; }
+.story-workspace .workspace-form-field > label { font-size: 12px; color: #607252; }
+.workspace-form-note { grid-column: 1 / -1; }
+.workspace-form-note .storage-note { font-size: 12px; line-height: 1.8; }
+
+:where(.story-workspace, .review-sheet) :where(.screenplay-proposals > fieldset, .screenplay-proposal-edit) {
+  min-width: 0;
+  margin: 16px 0;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--soft);
+}
+:where(.story-workspace, .review-sheet) :where(.screenplay-proposals > fieldset, .screenplay-proposal-edit) > legend {
+  padding: 0 6px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+@media (max-width: 760px) {
+  :where(.story-workspace, .review-sheet, .scene-popover) :is(input:not([type="checkbox"], [type="radio"]), select, textarea):where(:not(.continuous-page input, .continuous-page textarea)) {
+    font-size: 16px;
+  }
+  .workspace-form-fields { grid-template-columns: minmax(0, 1fr); }
+}

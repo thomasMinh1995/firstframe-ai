@@ -1,6 +1,12 @@
 import type {Candidate,DraftRun} from './draftRunsApi';
 import type {Project} from './projectsApi';
 
+export function sceneAfterAdoption(script:Project['screenplay'],preferred?:string|null){
+ if(!script)return null;
+ const scene=script.scenes.find(s=>s.id===preferred)??script.scenes[0];
+ return scene?{scriptId:script.id,sceneId:scene.id}:null;
+}
+
 export function runCapabilities(run:DraftRun,candidate:Candidate|null){
  const current=!!candidate&&candidate.revision>=run.candidate_revision;
  const owned=run.adopted_revision===null;

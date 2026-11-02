@@ -47,7 +47,12 @@ def brief(run):
     if result["error"]:
         result["error"] = "Lượt tạo gặp lỗi. Phần đã lưu vẫn được giữ; hãy kiểm tra trạng thái trước khi tiếp tục."
     if result["review_error"]:
-        result["review_error"] = "Góp ý chưa hoàn tất. Bản nháp đã lưu vẫn đọc được."
+        result["review_error"] = (
+            "Góp ý Story plan có liên kết card hoặc bước sửa không hợp lệ. "
+            "Bản nháp và tiến độ đã lưu vẫn được giữ; bạn có thể sửa tiếp và xuất PDF. Không tự gọi lại AI."
+            if run["review_error"] == "Card review contains an invalid anchor or missing next step."
+            else "Góp ý chưa hoàn tất. Bản nháp đã lưu vẫn đọc được."
+        )
     return DraftRunResponse.model_validate(result).model_dump(mode="json")
 
 
@@ -99,8 +104,9 @@ def start(project_id: str, request: Start):
             if old["source_revision"] != request.revision or old.get("revision_instructions", "") != request.revision_instructions:
                 raise ProjectConflict
             return brief(old)
-        if any(active_run(r) for r in s.rows(project_id)):
-            raise HTTPException(409, "Đang có một lượt tạo chưa kết thúc. Hãy mở lại tiến độ hoặc kết thúc lượt đó trước khi tạo mới.")
+        blocking = next((r for r in s.rows(project_id) if active_run(r)), None)
+        if blocking:
+            raise active_conflict(blocking)
         p = projects.load_project(project_id, request.revision)
         if not p.idea.strip():
             raise HTTPException(422, "Hãy nhập ý tưởng trước khi tạo bản nháp.")
@@ -108,11 +114,22 @@ def start(project_id: str, request: Start):
             raise HTTPException(422, "Hãy gộp bớt giới hạn trước khi thêm yêu cầu cấu trúc mới.")
         resolve_response_language(p.idea, p.response_language)
         selected = providers()
-        run, created = s.create_run(project_id, request.request_id, request.revision,
-            workflow.configuration(selected), workflow.OWNER, request.revision_instructions)
+        try:
+            run, created = s.create_run(project_id, request.request_id, request.revision,
+                workflow.configuration(selected), workflow.OWNER, request.revision_instructions)
+        except ProjectConflict:
+            blocking = next((r for r in s.rows(project_id) if active_run(r)), None)
+            if blocking:
+                raise active_conflict(blocking)
+            raise
         if created:
             workflow.launch(s, project_id, run["id"], selected)
         return brief(run)
+
+
+def active_conflict(run):
+    return HTTPException(409, detail={"code": "active_draft_run", "run": brief(run),
+        "message": "Đang có một lượt tạo chưa kết thúc. Mở tiến độ của lượt này để tiếp tục; phần đã lưu vẫn được giữ."})
 
 
 @router.get("/{run_id}", response_model=DraftRunResponse)

@@ -126,6 +126,56 @@ def test_recovery_and_active_run_claim(drafting,monkeypatch):
     assert client.get(url).json()['cancel_requested'] is True
 
 
+@pytest.mark.parametrize('status,cancelling', [
+    ('running', False), ('running', True), ('needs_input', False),
+    ('partial', False), ('failed', False), ('interrupted', False),
+])
+def test_start_conflict_identifies_existing_run_without_changing_saved_work(drafting, monkeypatch, status, cancelling):
+    client, providers = drafting
+    launches = []
+    monkeypatch.setattr(flow, 'launch', lambda *args: launches.append(args))
+    p = start_project(client)
+    base = f"/api/projects/{p['id']}/draft-runs"
+    body = {'revision': p['revision'], 'request_id': str(uuid4())}
+    assert client.post(base, json=body).status_code == 200
+    def state(run):
+        run.update(status=status, cancel_requested=cancelling, error='private provider detail')
+    api.store().change(p['id'], body['request_id'], state)
+    before = api.store().get_run(p['id'], body['request_id'])
+    calls = [len(provider.requests) for provider in providers]
+    response = client.post(base, json={**body, 'request_id': str(uuid4())})
+    assert response.status_code == 409
+    detail = response.json()['detail']
+    assert detail['code'] == 'active_draft_run'
+    assert detail['run'] == client.get(base + '/' + body['request_id']).json()
+    assert detail['run']['status'] == status
+    assert not {'candidate', 'config', 'calls', 'owner', 'source_content'} & detail['run'].keys()
+    assert 'private provider detail' not in response.text
+    assert api.store().get_run(p['id'], body['request_id']) == before
+    assert client.get(f"/api/projects/{p['id']}").json() == p
+    assert len(api.store().rows(p['id'])) == len(launches) == 1
+    assert [len(provider.requests) for provider in providers] == calls
+
+
+def test_concurrent_start_conflict_returns_the_winning_run(drafting, monkeypatch):
+    client, providers = drafting
+    p = start_project(client)
+    winner = str(uuid4())
+    original = DraftRunStore.create_run
+    def competing(store, project_id, run_id, revision, config, owner, instructions=''):
+        original(store, project_id, winner, revision, config, owner, instructions)
+        raise ProjectConflict
+    monkeypatch.setattr(DraftRunStore, 'create_run', competing)
+    monkeypatch.setattr(flow, 'launch', lambda *args: pytest.fail('Must not launch the losing request'))
+    calls = [len(provider.requests) for provider in providers]
+    response = client.post(f"/api/projects/{p['id']}/draft-runs", json={
+        'revision': p['revision'], 'request_id': str(uuid4())})
+    assert response.status_code == 409
+    assert response.json()['detail']['run']['id'] == winner
+    assert len(api.store().rows(p['id'])) == 1
+    assert [len(provider.requests) for provider in providers] == calls
+
+
 def test_cancel_during_scene_keeps_late_result_without_starting_next(drafting):
     client,providers,p,base,url,body=begin(drafting)
     providers[2].hook=lambda:client.post(url+'/cancel')

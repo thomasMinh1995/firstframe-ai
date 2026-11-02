@@ -121,6 +121,46 @@ def test_large_context_rejected_before_call_without_losing_work(writing):
     assert saved['screenplay_proposals'][-1]['error']=='ScreenplayContextTooLarge'
 
 
+@pytest.mark.parametrize('scope', ['scene', 'blocks'])
+def test_recorded_short_scene_revision_fits_without_losing_source(scope):
+    from pathlib import Path
+    from app.api.schemas.projects import ScreenplayProposal
+    from app.application.ai_provider import strict_json_instructions
+    from app.application.screenplay_writing import PROMPT_VERSION, write_scene
+    from app.api.schemas.screenplays import BlockRevisionResult
+
+    fixture = json.loads((Path(__file__).parent / 'fixtures/screenplay-revision-context.json').read_text())
+    proposal = ScreenplayProposal(
+        **fixture, id=str(uuid4()), created_at='2026-10-30', source_revision=0,
+        source_content='', source_outline=None, prompt_version=PROMPT_VERSION, scope=scope,
+        block_ids=([fixture['source_screenplay']['scenes'][-1]['blocks'][0]['id']] if scope == 'blocks' else []))
+    before = proposal.model_dump(mode='json')
+    provider = WritingProvider()
+    if scope == 'blocks':
+        selected = proposal.source_screenplay.scenes[-1].blocks[0]
+        provider.output = BlockRevisionResult(replacements=[{
+            'block_id': selected.id, 'expected': selected.model_dump(exclude={'id'}),
+            'replacement': {'kind': 'action', 'text': 'Cô ngồi xuống cạnh cha.', 'speaker': ''}}])
+    provider.metadata = ProviderMetadata('ollama', 'qwen2.5:7b', {'num_ctx': 16384})
+    result = write_scene(proposal, provider)
+    request = provider.requests[0]
+    sent = json.loads(request.input_text)
+    script = proposal.source_screenplay
+    assert result.status == 'ready' and len(provider.requests) == 1
+    assert proposal.model_dump(mode='json') == before
+    assert sent['author_request'] == proposal.instructions
+    assert sent['author_intent'] == script.source_outline.source.context.ai_context()
+    assert sent['story_plan'] == script.source_outline.source.draft.model_dump(mode='json')
+    assert sent['source_scenes'] == [s.model_dump(mode='json') for s in script.source_outline.scenes]
+    assert sent['source_scene'] == script.source_outline.scenes[-1].model_dump(mode='json')
+    assert sent['screenplay_context'] == [s.model_dump(mode='json') for s in script.scenes]
+    assert sent['target_scene_id'] == proposal.target_scene_id
+    if scope == 'blocks':
+        assert sent['selected_blocks'] == [script.scenes[-1].blocks[0].model_dump(mode='json')]
+    size = len(request.input_text.encode()) + len(strict_json_instructions(request).encode())
+    assert size <= 11776
+
+
 def test_writer_preserves_frozen_trial_sources_with_position_and_provenance():
     from pathlib import Path
     from app.api.schemas.projects import ScreenplayProposal

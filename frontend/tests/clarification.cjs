@@ -11,4 +11,6 @@ assert.match(open,/Gợi ý AI chưa xác nhận/);
 assert.doesNotMatch(open,/disabled=""/);
 assert.match(open,/<textarea[^>]+id="answer-0"/);
 assert.match(render({questions:['Một câu?'],answers:[''],idPrefix:'run-a-'}),/id="run-a-answer-0"/);
+assert.match(render({creatingScreenplay:true,confirmLabel:'Tiếp tục và theo dõi'}),/Tiếp tục và theo dõi/);
+assert.match(render({creatingScreenplay:true}),/Tiếp tục tạo bản nháp/,'existing callers retain their default action');
 console.log('PASS clarification: clear brief, optional questions, one CTA, separate AI proposals');
