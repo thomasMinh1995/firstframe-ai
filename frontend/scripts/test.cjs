@@ -7,6 +7,7 @@ function run(args){
 }
 try{
  run(['node_modules/typescript/lib/tsc.js','--outDir',output,'--noEmit','false','--module','commonjs','--moduleResolution','node','--target','es2020','--lib','esnext,dom,dom.iterable','--jsx','react-jsx','--esModuleInterop','--skipLibCheck','app/Workspace.tsx','app/draftWorkflowState.ts','app/OnboardingTour.tsx']);
+ for(const file of fs.readdirSync(path.join(root,'app')).filter(file=>file.endsWith('.css')))fs.copyFileSync(path.join(root,'app',file),path.join(output,file));
  const suites=fs.readdirSync(path.join(root,'tests')).filter(file=>file.endsWith('.cjs')&&!file.endsWith('.browser.cjs')&&!file.endsWith('browser-helpers.cjs')).sort();
  for(const suite of suites)run([path.join('tests',suite),output]);
  console.log(`${suites.length} frontend suites passed`);

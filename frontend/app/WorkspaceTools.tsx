@@ -40,7 +40,7 @@ export function WorkspaceNavigation({project,tourStep,draftRun}: {
     revealWorkspaceTarget(document.getElementById(previous??'workspace-idea')??document.getElementById('workspace-idea'));
     return()=>workspace?.removeEventListener('workspace-stage-change',remember);
   },[project?.id]);
-  const shown=tourStep?`workspace-${tourStep}`:stage;
+  const shown=tourStep==='draft-run'?'draft-run':tourStep&&['idea','script','export'].includes(tourStep)?`workspace-${tourStep}`:stage;
   const group=workspaceGroup(shown);
   const hasPrivateDraft=!!draftRun&&draftRun.project_id===project?.id&&draftRun.adopted_revision===null&&draftRun.completed_scenes>0;
   const finishHint=hasPrivateDraft?(project?.screenplay?'Bản đang lưu · Nháp mới chưa nhận':'Chưa nhận nháp vào workspace'):null;
