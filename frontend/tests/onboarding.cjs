@@ -1,5 +1,5 @@
 const assert=require('node:assert/strict');
-const {initialTour,reduceTour:reduce,parseTour,entryStep,nextStep,previousStep,continuation,tourSteps}=require(process.argv[2]+'/onboardingState.js');
+const {initialTour,reduceTour:reduce,parseTour,entryStep,nextStep,previousStep,continuation,tourSteps,tourTarget}=require(process.argv[2]+'/onboardingState.js');
 const empty={projectId:null,hasAnalysis:false,hasDraft:false,hasScreenplay:false,briefChanged:false};
 const idea={...empty,projectId:'p1'},legacy={...idea,hasDraft:true},script={...legacy,hasScreenplay:true};
 const record=(status,stepId='idea',version=3)=>JSON.stringify({version,status,stepId,projectId:'p1'});
@@ -16,6 +16,9 @@ for(const status of ['completed','dismissed']){
  assert.equal(reduce(s,{type:'pause'}),s);
 }
 assert.equal(entryStep(empty),'new-project');assert.equal(entryStep(idea),'idea');assert.equal(entryStep(legacy),'draft-run');assert.equal(entryStep(script),'script');
+assert.equal(entryStep({...legacy,briefChanged:true}),'idea','changed material resumes at the current source');
+assert.equal(reduce(open({...legacy,briefChanged:true},'draft-run'),{type:'navigate',step:'draft-run',context:{...legacy,briefChanged:true}}).record.stepId,'idea');
+assert.equal(continuation({...load(record('paused','draft-run')),waitingReady:true},{...legacy,briefChanged:true}),'idea','waiting tour must return to changed material');
 assert.equal(continuation(load(record('paused','draft',2)),legacy),'draft-run','legacy plan cannot pretend a screenplay exists');
 assert.equal(continuation(load(record('paused','outline',2)),script),'script');
 assert.equal(nextStep('draft-run',idea),null);assert.equal(nextStep('draft-run',script),'script');assert.equal(nextStep('script',script),'export');assert.equal(nextStep('export',script),'save');assert.equal(previousStep('export',script),'script');
@@ -32,4 +35,15 @@ assert.equal(reduce(open(script,'save'),{type:'complete',context:script}).record
 assert.equal(reduce(open(idea,'idea'),{type:'complete',context:idea}).record.status,'active');
 assert.equal(reduce(open(script,'script'),{type:'external',raw:record('dismissed')}).record.status,'dismissed');
 assert.equal(reduce(load(record('completed')),{type:'open',resume:false,context:script}).record.stepId,'new-project','replay is explicit');
-console.log('PASS tour v3: six-step AI-first flow, v2 migration, skip/replay, real artifacts, request isolation and cross-tab dismissal');
+console.log('PASS tour v3: six-step author-led flow, v2 migration, skip/replay, real artifacts, request isolation and cross-tab dismissal');
+
+const outline={...legacy,hasOutline:true};
+assert.equal(nextStep('draft-run',outline),'script');
+assert.equal(nextStep('script',outline),null,'export needs a screenplay');
+assert.equal(tourTarget('draft-run',idea),'idea');
+assert.equal(tourTarget('draft-run',{...idea,hasAnalysis:true}),'choices');
+assert.equal(tourTarget('draft-run',{...idea,hasAnalysis:true,briefChanged:true}),'idea');
+assert.equal(tourTarget('draft-run',{...legacy,briefChanged:true}),'idea','changed material must not focus the stale plan');
+assert.equal(tourTarget('draft-run',legacy),'draft','legacy internal ID opens the existing plan');
+assert.equal(tourTarget('script',outline),'script');
+assert.equal(continuation(reduce(open(idea,'draft-run'),{type:'practice',context:idea}),outline),'script');

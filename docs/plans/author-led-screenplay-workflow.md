@@ -1,7 +1,7 @@
 # Task 1 — Tổ chức lại cách người dùng làm việc với FirstFrame đang có
 
 - Ngày: 02/11/2026.
-- Trạng thái: plan triển khai; chưa thay đổi runtime.
+- Trạng thái: đã triển khai trên `fix/author-led-screenplay-workflow`; chờ review và merge code vào `dev`.
 - Phạm vi: task 1 trong ba task đã gộp theo trao đổi với chủ sản phẩm.
 
 ## Kết quả cần đạt
@@ -39,7 +39,7 @@ này thay cách tiếp cận và phối hợp các chức năng đó, không xâ
 Lưu, mở bản đã có, điều hướng và xuất PDF dùng xử lý ứng dụng hiện tại;
 không cần model. Điều này không loại AI khỏi các công đoạn sáng tác ở trên.
 
-## Cơ sở từ code hiện tại
+## Cơ sở từ code khi lập plan
 
 - `Workspace.tsx` đã có `action("analyze" | "plan" | "review")`, lưu trước
   tác vụ và kiểm tra kết quả đến muộn. Nhưng CTA nhập ý tưởng gọi
@@ -168,3 +168,24 @@ các cơ chế bảo toàn dữ liệu không bị suy giảm.
 
 Đợt này không triển khai sổ tay chất liệu, nhật ký lý do sửa, reviewer mới,
 thay model, thay prompt sáng tác hoặc mở rộng sản xuất phim.
+
+## Kết quả triển khai #94
+
+- Luồng mặc định làm rõ riêng rồi dừng cho tác giả chọn tạo Story plan.
+  Sáu công đoạn dùng stage/công cụ có sẵn; nút bước tiếp theo chỉ mở đích
+  hoặc gọi làm rõ khi ghi rõ hành động. Tạo nháp tự động và lịch sử có lối riêng.
+- Hướng dẫn giữ record/version/storage key cũ; mục `draft-run` nội bộ mở
+  chất liệu, làm rõ hoặc plan phù hợp, không buộc chạy nháp tự động.
+- Không đổi API/schema/model/dependency. Các nguồn, autosave, buffer,
+  phiên bản, nhận/bỏ phương án và PDF tiếp tục dùng cơ chế hiện có.
+- Kiểm tra: 25 suite frontend, TypeScript, production build và 74 test backend về phục hồi
+  plan, dàn cảnh, chọn bản xuất và draft-run đều đạt.
+- Browser trên production build: `frontend/tests/author-led-workflow.browser.cjs` dùng
+  `backend/tests/ui_workspace_fixture.py` với SQLite tạm/provider giả;
+  kiểm tra làm rõ → plan → gợi ý/chỉnh/chọn dàn cảnh → tự viết → tạo/bỏ
+  phương án sửa → góp ý → chọn đúng bản/PDF. Có kiểm đếm lượt AI,
+  giữ buffer khi chuyển bước, đổi nguồn không ghi đè kịch bản, reload,
+  tour cũ, mở đúng lượt tự động đang chờ và màn hình 1440/390/320px.
+
+Các kiểm tra này xác nhận hành vi ứng dụng. Chưa nghiệm thu chất lượng
+sáng tác bằng model thật hoặc trải nghiệm với người viết; giữ cho task 2/3.

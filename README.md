@@ -335,6 +335,22 @@ show the analysis saved in its input even if the earlier analysis file is absent
 the demo does not invent missing model provenance. Arbitrary new ideas or edits
 need live generation and are not part of this recorded playback.
 
+## Working through a screenplay
+
+The workspace follows **Chất liệu → Làm rõ → Story plan → Dàn cảnh → Viết & sửa → Đọc & xuất**.
+Start with an everyday observation and what you want to preserve. **Cùng làm rõ chất liệu**
+asks AI to clarify that material; it stops for your answers or open choices. Request a
+Story plan when ready, read/edit it, then choose the saved source for the scene outline.
+You can build scenes yourself or request suggestions, and write/revise each scene with
+optional AI trials and critique. Suggestions stay separate until you choose to use them.
+
+Navigation and **Bước tiếp theo** open the existing tools without generating content.
+Review the saved screenplay and explicitly choose the version to export as PDF.
+**Tùy chọn: tạo nháp tự động** keeps the separate automatic workflow available;
+a running or waiting attempt is reopened rather than started again. History, unsaved
+buffers, saved sources and earlier onboarding progress remain available.
+See [the workflow plan](docs/plans/author-led-screenplay-workflow.md).
+
 ## Current Limitations
 
 - One active domain: Short Film Story Development.
