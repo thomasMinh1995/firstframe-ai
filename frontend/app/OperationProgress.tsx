@@ -1,4 +1,4 @@
-import { useId, useEffect, useState } from "react";
+import { useId, useEffect, useRef, useState } from "react";
 import type { UiLanguage } from "./language";
 import { progressCopy, processTitles, operationProgressGroups, type OperationKind, type OperationStep } from "./progressState";
 
@@ -7,15 +7,19 @@ const inlineCopy = {
   en: { running: "Processing", stopped: "Stopped", done: "Completed", substep: "Substep", show: "Show substeps", hide: "Collapse", processing: "FirstFrame is working on this step.", interrupted: "Result unknown", summary: "Completed", units: "substeps" },
 };
 
-function ProcessGroup({ group, title, index, language, finished }: {
+function ProcessGroup({ group, title, index, language, finished, reading }: {
   group: ReturnType<typeof operationProgressGroups>[number]; title: string; index: number; language: UiLanguage; finished: boolean;
+  reading: boolean;
 }) {
   const id = useId();
   const copy = progressCopy[language];
   const ui = inlineCopy[language];
   // Automatically follow status changes; users may inspect any group in between.
   const [expanded, setExpanded] = useState<{ status: string; open: boolean } | null>(null);
-  const open = expanded?.status === group.status ? expanded.open : ["active", "failed", "interrupted"].includes(group.status);
+  const autoOpen = ["active", "failed", "interrupted"].includes(group.status);
+  const previousOpen = useRef(autoOpen);
+  const open = expanded?.status === group.status ? expanded.open : reading ? previousOpen.current : autoOpen;
+  previousOpen.current = open;
   const activeIndex = group.children.findIndex(step => step.status === "active");
   const state = group.status === "pending" ? finished ? copy.notRun : copy.waiting
     : group.status === "failed" ? copy.failure : group.status === "interrupted" ? ui.interrupted : copy[group.status];
@@ -41,8 +45,9 @@ function ProcessGroup({ group, title, index, language, finished }: {
   </li>;
 }
 
-export function OperationProgress({ steps, failed, timing, language, dirty = false }: {
+export function OperationProgress({ steps, failed, timing, language, dirty = false, reading = false }: {
   steps: OperationStep[]; failed: boolean; language: UiLanguage; dirty?: boolean;
+  reading?: boolean;
   timing: { kind: OperationKind; startedAt: number; finishedAt: number | null };
 }) {
   const [now, setNow] = useState(timing.startedAt);
@@ -69,13 +74,15 @@ export function OperationProgress({ steps, failed, timing, language, dirty = fal
       </p></div>
       <span className={`process-badge${failed ? " is-failed" : ""}`}>{!failed && !completed && <span className="process-spinner" aria-hidden="true" />}{failed ? ui.stopped : completed ? ui.done : ui.running}</span>
     </div>
-    <p className="process-notice" role="status" aria-live="polite">{failed ? (dirty ? copy.unsavedError : prepared ? copy.error : copy.prepareError)
+    <p className="process-notice" role="status" aria-live="polite">{reading ? (language === "vi"
+      ? "Story plan đã lưu ở vùng đọc bên dưới. Trạng thái góp ý cập nhật ngay tại bản đọc."
+      : "The saved story plan is shown below. Feedback status updates in the reader.") : failed ? (dirty ? copy.unsavedError : prepared ? copy.error : copy.prepareError)
       : completed ? (dirty ? copy.savedWithEdits : copy.saved) : active ? copy.stages[active.stage] ?? copy.other : copy.preparing}</p>
     <ol className="process-groups" aria-label={copy.title}>
       {groups.map(group => {
         const index = ["prepare", "develop", "review"].indexOf(group.id);
         return <ProcessGroup key={`${timing.kind}-${timing.startedAt}-${group.id}`} group={group} index={index}
-          title={processTitles[language][timing.kind][index]} language={language} finished={timing.finishedAt !== null || failed} />;
+          title={processTitles[language][timing.kind][index]} language={language} finished={timing.finishedAt !== null || failed} reading={reading} />;
       })}
     </ol>
     <p className="process-summary">{ui.summary} {children.filter(step => step.status === "completed").length}/{children.length} {ui.units}</p>

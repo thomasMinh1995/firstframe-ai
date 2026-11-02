@@ -1,5 +1,7 @@
 /* The writing workspace uses the existing project buffer and API. */
 .workspace-layout, .workspace-content { min-width: 0; }
+.story-workspace .working-draft[hidden] { display: none; }
+.plan-checkpoint-reader { min-width: 0; overflow-wrap: anywhere; }
 .story-workspace { background: #f8f9f5; padding: 24px 32px 64px; --accent: #305e4b; --line: #dfe4d8; --soft: #fffefa; }
 .story-workspace .workspace { width: min(1360px, 100%); }
 .story-workspace .intro { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 8px 24px; border-bottom: 1px solid var(--line); padding-bottom: 20px; margin-bottom: 28px; }

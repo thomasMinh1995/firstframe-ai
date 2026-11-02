@@ -32,17 +32,23 @@ export function nextDraftFollow(current:{enabled:boolean;manual:boolean},enabled
 }
 export function draftReaderHeading(run:DraftRun,candidate:Candidate|null,target?:string|null,editing=false):string{
  const current=!!candidate&&candidate.revision>=run.candidate_revision;
- const heading=run.adopted_revision!=null?'Nháp đã nhận':run.status==='running'?'Nháp đang hình thành':run.status==='ready'?(current?'Nháp sẵn sàng':'Đang tải nháp đã lưu'):run.status==='partial'?'Nháp đã lưu một phần':'Phần nháp đã lưu';
+ const heading=run.adopted_revision!=null?'Nháp đã nhận':run.status==='running'?'Nháp đang hình thành':run.status==='ready'?(current?'Toàn bộ nháp sẵn sàng':'Đang tải nháp đã lưu'):run.status==='partial'?'Nháp đã lưu một phần':'Phần nháp đã lưu';
  const scenes=candidate?.project.screenplay?.scenes??[];
  const index=target?.startsWith('scene:')?scenes.findIndex(scene=>scene.id===target.slice(6)):-1;
  return heading+(index>=0?` · Đang ${editing?'sửa':'đọc'} cảnh ${index+1}/${scenes.length} · ${scenes[index].heading||'Cảnh chưa đặt tên'}`:'');
 }
-export function draftRunSummary(run:DraftRun):string{
+export function draftRunSummary(run:DraftRun,candidate?:Candidate|null):string{
  const scenes=`Đã viết ${run.completed_scenes}/${run.total_scenes||'…'} cảnh`;
  if(run.adopted_revision!=null)return `Đã nhận vào workspace · ${scenes}`;
  if(run.cancel_requested&&run.status==='running')return `Đang kết thúc lượt · ${scenes} đã được giữ`;
- if(run.status==='running')return run.step==='review'?`${scenes} · Đang góp ý kịch bản`:`Đang tạo nháp · ${scenes}`;
- if(run.status==='ready')return `Sẵn sàng nhận nháp · ${scenes}${run.review_error?' · Góp ý chưa hoàn tất':''}`;
+ if(run.status==='running'){
+  if(run.step==='review')return `${scenes} · Đang góp ý kịch bản`;
+  if(run.step==='plan_review')return 'Story plan đã lưu · Đang góp ý';
+  if(run.step==='write'&&run.completed_scenes>0)return `${run.completed_scenes} cảnh đã lưu · ${run.completed_scenes<run.total_scenes?`Đang viết cảnh ${run.completed_scenes+1}`:'Đang chuẩn bị góp ý'}`;
+  return `Đang tạo nháp · ${scenes}`;
+ }
+ if(run.status==='ready')return candidate!==undefined&&(!candidate||candidate.revision<run.candidate_revision)
+  ?'Đang tải toàn bộ nháp đã lưu':`Toàn bộ nháp sẵn sàng · ${scenes}${run.review_error?' · Góp ý chưa hoàn tất':''}`;
  if(run.status==='partial')return `Nháp đã lưu một phần · ${scenes}${run.review_error?' · Góp ý chưa hoàn tất':''}`;
  return `${run.status==='needs_input'?'Cần bạn làm rõ':run.status==='cancelled'?'Lượt đã kết thúc':'Lượt chưa hoàn tất'} · ${scenes}`;
 }
