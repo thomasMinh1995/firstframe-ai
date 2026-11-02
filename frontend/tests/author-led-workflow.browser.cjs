@@ -94,6 +94,9 @@ const {reveal}=require('./onboarding.browser.cjs');
   assert.deepEqual(ai(await state()),ai(written),'PDF selection/export makes no model calls');
   // Navigation preserves an unsaved input buffer; neither navigation nor tour writes.
   await nav('idea');await page.locator('#constraints').fill('Buffer giữ khi xem lại các bước.');
+  assert.equal(await page.locator('[aria-controls="workspace-choices"]').isDisabled(),true);
+  assert.equal(await page.locator('[aria-controls="workspace-choices"] small').innerText(),'Nguồn đã thay đổi · cần làm rõ lại');
+  assert.equal(await page.locator('.workspace-tool-picker option[value="clarify"]').innerText(),'Làm rõ · Nguồn đã thay đổi · cần làm rõ lại');
   const buffered=await state();
   await nav('draft');await nav('outline');await nav('script');await nav('idea');
   assert.equal(await page.locator('#constraints').inputValue(),'Buffer giữ khi xem lại các bước.');

@@ -9,10 +9,10 @@ The current MVP supports saved projects, clarification questions, editable story
 Current project workflow:
 
 ```text
-Idea (autosave) -> Draft run -> Clarify only if needed -> Story plan + outline + all scene text -> Read/edit candidate -> Adopt -> Review -> Preview scene/block revision -> Use / Edit / Discard -> Undo if unchanged -> Read/select screenplay -> PDF
+Material (autosave) -> Clarify -> Request/read/edit Story plan -> Choose source and build Scene Outline -> Write and revise scenes -> Read/select screenplay -> PDF
 ```
 
-Clarification has no fixed questionnaire. A clear brief can return no questions; unanswered questions remain open and do not become author decisions. AI suggestions are shown separately. The initial screen keeps project name and language under optional settings. The detailed tools still support creating a story plan separately. The “Tạo bản nháp” action starts a durable backend run. Reload reads progress without calling AI again; received model outputs and each completed scene are checkpointed. Candidate edits autosave separately, and adoption checks the original brief and target before atomically keeping the prior draft. Unknown model outcomes are never retried automatically.
+Clarification has no fixed questionnaire. A clear brief can return no questions; unanswered questions remain open and do not become author decisions. AI suggestions are shown separately. The initial screen keeps project name and language under optional settings. “Cùng làm rõ chất liệu” requests clarification only; the author requests a Story plan and starts each later stage separately. “Tùy chọn: tạo nháp tự động” opens the separate automatic workflow, where “Tạo bản nháp mới” starts a durable backend run. Reload reads progress without calling AI again; received model outputs and each completed scene are checkpointed. Candidate edits autosave separately, and adoption checks the original brief and target before atomically keeping the prior draft. Unknown model outcomes are never retried automatically.
 
 For separate Story plan generation, the UI opts into `POST /api/projects/{id}/plan/stream?checkpoints=true`. A saved plan can be read while feedback continues; preview does not accept a proposal, autosave edits or select a PDF. Completion, feedback failure and connection loss update the same reader. Default clients still receive only progress/result/error. Draft runs retain their saved-candidate polling. These are saved-content checkpoints, not token-by-token generation; see the [Streaming Interfaces plan](docs/plans/streaming-interfaces.md) and [fixture validation](docs/testing/streaming-interfaces.md).
 
@@ -60,7 +60,7 @@ See the [Vietnam first-screenplay and MVP demo plan](docs/plans/vietnam-first-sc
 
 ## Current MVP
 
-- Six-step AI-first onboarding (project, idea, automatic draft, review, PDF, saving), with practice breaks, skip/replay, preserved legacy progress and no AI/project writes from tour navigation
+- Six-step author-led onboarding (project, material, story development/scene outline, writing/revision, reading/export, saving), with practice breaks, skip/replay, preserved legacy progress and no AI/project writes from tour navigation
 - Local SQLite project storage, debounced autosave with IME support, project selection, and optional manual save controls
 - Up to three clarification questions before story-plan generation, with an explicit option to defer a decision
 - Editable story plans and feedback tied to the exact reviewed content
@@ -344,7 +344,9 @@ Story plan when ready, read/edit it, then choose the saved source for the scene 
 You can build scenes yourself or request suggestions, and write/revise each scene with
 optional AI trials and critique. Suggestions stay separate until you choose to use them.
 
-Navigation and **Bước tiếp theo** open the existing tools without generating content.
+Navigation opens the existing tools without generating content. **Bước tiếp theo**
+also opens tools, except the explicitly labelled **Cùng làm rõ chất liệu** action,
+which requests AI clarification.
 Review the saved screenplay and explicitly choose the version to export as PDF.
 **Tùy chọn: tạo nháp tự động** keeps the separate automatic workflow available;
 a running or waiting attempt is reopened rather than started again. History, unsaved

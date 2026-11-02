@@ -43,3 +43,16 @@ assert.equal(workspaceFallbackStage('workspace-choices',true),'workspace-idea');
 assert.equal(workspaceFallbackStage('workspace-choices',false),'workspace-choices');
 assert.equal(JSON.stringify(saved),original);
 console.log('PASS author-led journey: artifact availability, changed source, explicit AI entry, existing automatic run and navigation-only next steps');
+
+require.extensions['.css']=()=>{};
+const React=require('react'),{renderToStaticMarkup}=require('react-dom/server');
+const {WorkspaceNavigation,WorkspaceTools}=require(process.argv[2]+'/WorkspaceTools.js');
+for(const [project,briefChanged,label] of [[saved,true,'Chưa có nội dung'],[clarified,false,'Xem lại'],[clarified,true,'Nguồn đã thay đổi · cần làm rõ lại']]){
+  const navigation=renderToStaticMarkup(React.createElement(WorkspaceNavigation,{project,briefChanged}));
+  const button=navigation.match(/<button[^>]*aria-controls="workspace-choices"[^>]*>.*?<\/button>/)[0];
+  assert.ok(button.includes(`<small>${label}</small>`),'clarification navigation distinguishes missing, existing and changed source');
+  assert.equal(button.includes('disabled=""'),!project.analysis||briefChanged);
+  const tools=renderToStaticMarkup(React.createElement(WorkspaceTools,{project,saved:project,dirty:briefChanged,busy:false,run:null,steps:[],timing:null,briefChanged,onAnalyze(){throw Error('Rendering must not call AI')}}));
+  const option=tools.match(/<option[^>]*value="clarify"[^>]*>.*?<\/option>/)[0];
+  assert.ok(option.includes(briefChanged?label:'Làm rõ</option>'),'tool picker uses the same source status');
+}
