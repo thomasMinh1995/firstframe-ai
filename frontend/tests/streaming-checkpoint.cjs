@@ -42,6 +42,22 @@ function response(events){return new Response(new ReadableStream({start(c){for(c
  assert.deepEqual(await streamProjectOperation(project,'plan',()=>{},'vi',undefined,()=>assert.fail('old backend sends no checkpoint')),final);
  global.fetch=async()=>response([checkpoint]);
  await assert.rejects(()=>streamProjectOperation(project,'review',()=>{},'en'),/Invalid response/);
+ // Heartbeat + multiple events in one chunk, including a terminal line without newline.
+ const batched='\n'+JSON.stringify(checkpoint)+'\n\n'+JSON.stringify({type:'result',project:final});
+ global.fetch=async()=>new Response(new ReadableStream({start(c){c.enqueue(new TextEncoder().encode(batched));c.close();}}));
+ let batchCount=0;assert.deepEqual(await streamProjectOperation(project,'plan',()=>{},'vi',undefined,()=>batchCount++),final);assert.equal(batchCount,1);
+ const altered=clone(checkpoint);altered.project.plan_generations[0].draft.logline='Different saved content';altered.project.draft.logline='Different saved content';
+ global.fetch=async()=>response([checkpoint,altered]);
+ await assert.rejects(()=>streamProjectOperation(project,'plan',()=>{},'en',undefined,()=>{}),/Invalid response/);
+ for(const terminal of [{...final,revision:4},{...final,plan_generations:[generation]}]){
+  global.fetch=async()=>response([checkpoint,{type:'result',project:terminal}]);
+  await assert.rejects(()=>streamProjectOperation(project,'plan',()=>{},'en',undefined,()=>{}),/Invalid response/);
+ }
+ for(const kind of ['analyze','review','scene-suggestions','scene-sketches','screenplay-proposals','screenplay-reviews']){
+  let requested;global.fetch=async u=>{requested=u;return response([{type:'progress',stage:'saving',status:'completed'},{type:'result',project}]);};
+  assert.deepEqual(await streamProjectOperation(project,kind,()=>{},'vi'),project);assert.doesNotMatch(requested,/checkpoints=/);
+  if(kind==='analyze')assert.match(requested,/clarify\/stream$/);
+ }
  const feedback={artifact_id:'f',passed:null,rubric_scores:{},findings:[]};
  const reviewed={...generation,critic_status:'reviewed',feedback,feedback_source:{project_id:'p',artifact_id:'f',revision:5,content_key:'source',context,draft}};
  for(const status of ['pending','reviewed','failed','unknown']){

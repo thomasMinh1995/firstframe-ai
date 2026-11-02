@@ -1,11 +1,11 @@
 # Kế hoạch triển khai Streaming Interfaces cho FirstFrame
 
 - Ngày lập: 30/10/2026.
-- Cập nhật baseline: 02/11/2026, sau PR #89/#90.
+- Cập nhật baseline: 02/11/2026, `867310f` sau PR #92 (SI-01/SI-02).
 - Cập nhật kế hoạch: 02/11/2026, bổ sung trải nghiệm đọc ổn định và phạm vi luồng tạo nháp chính.
-- Trạng thái: SI-01/SI-02 đã triển khai trên nhánh `fix/streaming-interfaces`; SI-03 chưa nghiệm thu đầy đủ. Xem [bằng chứng kiểm tra hẹp](../testing/streaming-interfaces.md).
-- Issue triển khai: [#91 — Streaming Interfaces: đọc nội dung đã lưu trước khi AI hoàn tất](https://github.com/thomasMinh1995/firstframe-ai/issues/91). Issue chứa kế hoạch đầy đủ vì tài liệu local này chưa commit/push.
-- Lần chuẩn bị plan/issue chỉ sửa tài liệu. SI-01/SI-02 được triển khai và kiểm tra hẹp bằng provider giả, giữ dữ liệu, không gọi AI thật hoặc chạy QA toàn bộ. Yêu cầu tiếp theo cho phép stage/commit và push nhánh này; chưa yêu cầu tạo PR hoặc merge.
+- Trạng thái: SI-01/SI-02 đã merge qua [PR #92](https://github.com/thomasMinh1995/firstframe-ai/pull/92). SI-03 đã kiểm chứng trong phạm vi fixture/provider giả trên nhánh `fix/streaming-interfaces-si03`. Xem [bằng chứng và giới hạn](../testing/streaming-interfaces.md).
+- Issue triển khai: [#91 — Streaming Interfaces: đọc nội dung đã lưu trước khi AI hoàn tất](https://github.com/thomasMinh1995/firstframe-ai/issues/91). Chưa tự đóng issue hoặc ghi nhận nghiệm thu model/live.
+- Phạm vi hiện tại: stage/commit và push test, fixture cùng tài liệu SI-03 theo yêu cầu; giữ dữ liệu, không gọi AI thật hoặc chạy lại QA workflow toàn bộ. Không thay runtime sản phẩm; chưa yêu cầu tạo PR hoặc merge SI-03.
 - Mục tiêu: người dùng bắt đầu đọc nội dung AI đã kiểm tra và lưu trong khi các bước tiếp theo vẫn chạy; lỗi góp ý hoặc kết nối không làm mất nội dung đã có.
 - Phạm vi bản đầu: hiển thị story plan sau checkpoint, trước critic; kiểm chứng hiển thị từng cảnh trong luồng tạo bản nháp hiện có.
 - Liên quan: [workflow AI chủ động](ai-first-workflow.md), [phục hồi plan](../testing/plan-recovery.md), [stream tiến độ](../testing/workflow-progress.md), [draft runs](../testing/phase3-draft-runs-2026-10-29.md).
@@ -106,9 +106,9 @@ Vùng đọc sớm phải nằm ngoài vùng `fieldset inert` đang khóa khi bu
 | Task | Phụ thuộc | Bàn giao và điều kiện xong |
 | --- | --- | --- |
 | SI-00 — Xác nhận baseline — Đã hoàn tất 02/11/2026 | Không | `dev` tại `fd71196` sau PR #89/#90; conflict `workflow.py` đã xử lý, checkout cục bộ đồng bộ với `origin/dev`. CI backend/frontend đạt trên head đã review; giữ bản nháp, tiến độ và các tệp local |
-| SI-01 — Backend checkpoint opt-in — Đã triển khai local | SI-00 | Event phát sau commit lưu và trước critic; mặc định giữ giao thức cũ; test thứ tự, CAS, failure và disconnect đạt |
-| SI-02 — Parser và vùng đọc ổn định — Đã triển khai local | SI-01 | Đọc được plan trước terminal và khi busy; giữ cùng vùng đọc sau terminal, editor/autosave và nguồn riêng; draft run dùng lại reader/card; kiểm tra parser và HTTP/browser hẹp đạt |
-| SI-03 — Hồi quy và bằng chứng | SI-02 | Kiểm chứng lỗi/mạng/hai tab, luồng tạo nháp từng cảnh, thời gian tới nội dung đầu tiên; cập nhật tài liệu theo hành vi đã giao |
+| SI-01 — Backend checkpoint opt-in — Đã merge #92 | SI-00 | Event phát sau commit lưu và trước critic; mặc định giữ giao thức cũ; test thứ tự, CAS, failure và disconnect đạt |
+| SI-02 — Parser và vùng đọc ổn định — Đã merge #92 | SI-01 | Đọc được plan trước terminal và khi busy; giữ cùng vùng đọc sau terminal, editor/autosave và nguồn riêng; draft run dùng lại reader/card; kiểm tra parser và HTTP/browser hẹp đạt |
+| SI-03 — Đã kiểm chứng fixture | SI-02 | 13 nhóm ca HTTP/browser, 42 test backend, 10 bộ frontend, TypeScript/build đạt; có trace/thời gian và lỗi lần thử. Chưa có số đo model thật hoặc nghiệm thu live/pilot |
 
 Đóng gói SI-01 và SI-02 thành một thay đổi chức năng hoàn chỉnh có test đi kèm. SI-03 xác nhận khả năng bàn giao; không coi backend-only hoặc parser-only là đã triển khai xong trải nghiệm. Các mã SI là checklist trong issue tổng, không yêu cầu tạo thêm issue/chat riêng. Chưa gán người hoặc lịch cố định.
 
@@ -118,7 +118,7 @@ SI-00 đã hoàn tất; conflict ghi nhận ngày lập kế hoạch không còn
 - [PR #90](https://github.com/thomasMinh1995/firstframe-ai/pull/90) đã merge phần tiến trình còn thiếu và cập nhật tài liệu. [CI backend/frontend](https://github.com/thomasMinh1995/firstframe-ai/actions/runs/41387314151) đạt trên head `7e63f426d588a3c0dd044a085ef1c9137bc21e14`, được squash vào baseline trên; 18 kiểm tra backend hẹp dùng provider giả và bộ kiểm tra tiến trình frontend đã đạt. Test nhánh clarify từng kỳ vọng chuỗi sự kiện cũ đã được sửa trước khi merge.
 - Đối chiếu sau đồng bộ xác nhận bản nháp, tiến độ đã lưu và 1.356 tệp local không đổi; 8 tệp staged gốc có bản sao lưu. Không gọi model thật hoặc chạy lại QA workflow toàn bộ cho việc xác nhận này.
 
-Các bằng chứng trên xác nhận baseline. SI-01/SI-02 hiện là thay đổi chưa commit trên nền `fd71196`; bằng chứng kiểm tra hẹp nằm ở báo cáo liên kết đầu tài liệu. SI-03 vẫn chờ các ca bàn giao còn lại và số đo riêng; không suy nghiệm thu toàn bộ hoặc hiệu quả model thật từ các fixture đã chạy.
+Các bằng chứng trên là lịch sử SI-00. SI-01/SI-02 đã merge vào `dev` tại `867310f65fea783e672f6263633e3417e7d762ef`; SI-03 dùng đúng runtime này, chỉ thêm test/fixture/tài liệu. Báo cáo hiện có ma trận lỗi/mạng/hai tab/draft run 2/6 cảnh và số đo fixture; không suy hiệu quả model thật, chất lượng sáng tác hoặc nghiệm thu live từ các kết quả đó.
 
 ## 7. Ma trận kiểm thử bắt buộc
 
@@ -158,7 +158,7 @@ Ngân sách hiện có vẫn là làm rõ ≤45 giây, plan kèm critic ≤120 g
 
 ## 9. Bàn giao, rollback và bước tiếp theo
 
-- Báo cáo triển khai lưu tại `docs/testing/streaming-interfaces.md`: commit/cấu hình, ca test, ảnh UI trước terminal, số lần gọi và timings/thất bại. Đây là tài liệu sẽ tạo khi triển khai, chưa phải bằng chứng đang có.
+- Báo cáo triển khai tại [docs/testing/streaming-interfaces.md](../testing/streaming-interfaces.md): baseline/cấu hình, ma trận ca test, ảnh UI, số lần gọi giả, timings và lỗi lần thử. Artifacts local chưa commit/push; không phải bằng chứng model thật.
 - Cập nhật README để phân biệt stream tiến độ, nội dung qua checkpoint và token streaming; sửa dòng giới hạn hiện nói chưa có streaming. Chỉ chỉnh các hướng dẫn/tour bị ảnh hưởng thực sự.
 - Tắt query opt-in ở client sẽ quay về chờ `result`; giữ dữ liệu và checkpoint hiện có. Backend trước có thể chạy cùng client mới theo fallback nêu trên; backend mới mặc định phục vụ client cũ. Không có migration cần đảo ngược.
 - Phần nhãn/trạng thái đọc của draft run không thay dữ liệu và có thể revert riêng; giữ polling, quyền nhận nháp và cơ chế theo dõi hiện hành.
