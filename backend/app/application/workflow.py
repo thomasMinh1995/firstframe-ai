@@ -270,29 +270,30 @@ class LLMReasoningLayer(ReasoningLayer):
         self._prompt_loader = prompt_loader
 
     def reason(self, idea: IdeaArtifact, domain: DomainPlugin) -> ReasoningArtifact:
-        target_language = _target_response_language(idea)
-        result = self._provider.request_structured(
-            StructuredRequest(
+        with progress_step("reasoning_context"):
+            target_language = _target_response_language(idea)
+            request = StructuredRequest(
                 instructions=self._prompt_loader.load("story_mentor", domain),
                 input_text=_idea_input(idea),
                 response_model=_ReasoningOutput,
                 stage="reasoning",
             )
-        )
-        output = _expect_output(result.output, _ReasoningOutput)
-        return _LLMReasoningArtifact(
-            metadata=_metadata(idea.metadata.domain_id, "reasoning"),
-            source_idea_id=idea.metadata.artifact_id,
-            creator_context=_creator_input(idea.text, idea.constraints, idea.clarifications),
-            notes=(
-                ReasoningNote(label="Original idea", content=idea.text),
-                ReasoningNote(label="Target response language", content=target_language),
-                ReasoningNote(label="Analysis summary", content=output.summary),
-                *(ReasoningNote(label=note.label, content=note.content) for note in output.notes),
-            ),
-            open_questions=tuple(output.missing_information[:3]),
-            ai_suggestions=tuple(output.ai_suggestions),
-        )
+        result = self._provider.request_structured(request)
+        with progress_step("reasoning_validation"):
+            output = _expect_output(result.output, _ReasoningOutput)
+            return _LLMReasoningArtifact(
+                metadata=_metadata(idea.metadata.domain_id, "reasoning"),
+                source_idea_id=idea.metadata.artifact_id,
+                creator_context=_creator_input(idea.text, idea.constraints, idea.clarifications),
+                notes=(
+                    ReasoningNote(label="Original idea", content=idea.text),
+                    ReasoningNote(label="Target response language", content=target_language),
+                    ReasoningNote(label="Analysis summary", content=output.summary),
+                    *(ReasoningNote(label=note.label, content=note.content) for note in output.notes),
+                ),
+                open_questions=tuple(output.missing_information[:3]),
+                ai_suggestions=tuple(output.ai_suggestions),
+            )
 
 
 class LLMPlanningLayer(PlanningLayer):

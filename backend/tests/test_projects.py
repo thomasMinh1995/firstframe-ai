@@ -183,9 +183,12 @@ def test_stream_reports_actual_steps_and_returns_saved_project(project_client, m
     response = client.post(f"{url}/analyze/stream", json={"revision": project["revision"]})
     events = [json.loads(line) for line in response.text.splitlines() if line.strip()]
     assert [(event["stage"], event["status"]) for event in events[:-1]] == [
+        ("reasoning_context", "active"), ("reasoning_context", "completed"),
         ("reasoning", "active"), ("reasoning", "completed"),
+        ("reasoning_validation", "active"), ("reasoning_validation", "completed"),
         ("saving", "active"), ("saving", "completed"),
     ]
+    assert stages == ["reasoning"]
     project = events[-1]["project"]
     assert events[-1]["type"] == "result"
     assert client.get(url).json() == project
@@ -790,8 +793,10 @@ def test_stream_disconnect_finishes_saving_without_overwriting_newer_edits(proje
             project["id"], "analyze", RevisionRequest(revision=project["revision"])
         )
         iterator = response.body_iterator
-        first = json.loads(await anext(iterator))
-        assert first["stage"] == "reasoning" and first["status"] == "active"
+        # Preparation is now reported before the provider starts its request.
+        for expected in [("reasoning_context", "active"), ("reasoning_context", "completed"), ("reasoning", "active")]:
+            event = json.loads(await anext(iterator))
+            assert (event["stage"], event["status"]) == expected
         if change_content:
             data = payload(project)
             data["idea"] += " Bản mới chưa gửi cho AI: lab coach."

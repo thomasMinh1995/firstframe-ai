@@ -78,7 +78,8 @@ def create_sketch(project_id: str, request: SketchRequest):
             sketch.diagnostic = str(error)[:20000]
             failure = error
         sketch.duration_seconds = round(time.monotonic() - started, 3)
-        result = ProjectResponse.model_validate(projects.get_project_store().update(project_id, keep_result))
+        with progress_step("sketch_save"):
+            result = ProjectResponse.model_validate(projects.get_project_store().update(project_id, keep_result))
         if failure:
             if isinstance(failure, MissingProviderConfigurationError):
                 raise HTTPException(503, "Chưa sẵn sàng MFLUX local/model cache. Bản đang viết vẫn giữ; kiểm tra lượt ảnh đã lưu.") from failure

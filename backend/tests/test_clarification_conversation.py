@@ -78,6 +78,7 @@ def test_no_new_model_question_preserves_choices_and_streams_as_analysis(project
     project = clarify(client, project)
     project = answer_all(client, project)
     before = deepcopy(project)
+    calls_before_stream = len(provider.requests)
     response = client.post(f"/api/projects/{project['id']}/clarify/stream", json={'revision':project['revision']})
     events = [json.loads(line) for line in response.text.splitlines() if line.strip()]
     assert events[-1]['type']=='result'
@@ -85,7 +86,11 @@ def test_no_new_model_question_preserves_choices_and_streams_as_analysis(project
     assert result['answers'] == before['answers']
     assert result['analysis']['missing_information'] == before['analysis']['missing_information']
     assert result['draft'] is None
-    assert [(e['stage'], e['status']) for e in events[:-1]] == [('reasoning','active'),('reasoning','completed'),('saving','active'),('saving','completed')]
+    expected = [(stage, status)
+                for stage in ('reasoning_context', 'reasoning', 'reasoning_validation', 'saving')
+                for status in ('active', 'completed')]
+    assert [(e['stage'], e['status']) for e in events[:-1]] == expected
+    assert len(provider.requests) == calls_before_stream + 1
 
 
 def test_bounded_questions_and_legacy_analysis_remain_compatible(project_client):
