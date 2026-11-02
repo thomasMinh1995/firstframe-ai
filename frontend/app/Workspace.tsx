@@ -23,6 +23,7 @@ import "./storyWorkspace.css";
 import "./workspaceForms.css";
 import { AuthorIntentCard, FeedbackIntent, IntentDetails } from "./AuthorIntentCard";
 import { OperationProgress } from "./OperationProgress";
+import {PlanCheckpointReader, type PlanReading} from "./PlanCheckpointReader";
 import { OnboardingTour, useOnboarding } from "./OnboardingTour";
 import type { TourStep } from "./onboardingState";
 import { applyProgress, progressLanguage, type OperationStep } from "./progressState";
@@ -41,6 +42,13 @@ export default function Workspace({ library = false }: { library?: boolean }) {
   const {project, saved, saving, error: saveError, autosave} = useProjectAutosave(!busy && !library);
   const {setProject, setSaved} = autosave;
   const operation = useRef(false);
+  const streamEpoch = useRef(0);
+  const activeProjectId = useRef(project?.id);
+  activeProjectId.current = project?.id;
+  const [planReading, setPlanReading] = useState<PlanReading | null>(null);
+  const visiblePlanReading = planReading?.projectId === project?.id ? planReading : null;
+  useEffect(() => { streamEpoch.current++; setPlanReading(null); }, [project?.id]);
+  useEffect(() => () => { streamEpoch.current++; }, []);
   const candidateFlush = useRef<()=>Promise<void>>(async()=>{});
   const draftStart = useRef<{projectId:string;revision:number;request_id:string}|null>(null);
   const [openedRun,setOpenedRun] = useState<DraftRun|null>(null);
@@ -177,7 +185,7 @@ export default function Workspace({ library = false }: { library?: boolean }) {
     if (operation.current) return;
     operation.current = true;
     autosave.setEnabled(false);
-    if (!showProgress) { setSteps([]); setOperationFailed(false); setOperationTiming(null); }
+    if (!showProgress) { streamEpoch.current++; setPlanReading(null); setSteps([]); setOperationFailed(false); setOperationTiming(null); }
     setBusy(label); setError(null); setNotice(null);
     try { await autosave.idle(); await candidateFlush.current(); await action(); } catch (caught) { setError(message(caught)); }
     finally { operation.current = false; setBusy(null); autosave.setEnabled(!library); }
@@ -198,7 +206,10 @@ export default function Workspace({ library = false }: { library?: boolean }) {
   const persist = (retry = false) => autosave.flush("autosave", retry);
   const currentRevision = () => autosave.getSnapshot().project!.revision;
   function action(kind: "analyze" | "plan" | "review", confirmedKey?: string) {
+    if (operation.current) return;
     if (kind === "plan" && confirmedKey !== decisionKey) return;
+    const epoch = ++streamEpoch.current;
+    setPlanReading(null);
     const tourRequest = kind === "review" ? null : tour.begin(kind);
     const labels = { analyze: project?.analysis && !briefChanged ? "Đang đọc câu trả lời và tìm câu hỏi tiếp theo…" : "Đang tìm câu hỏi cần làm rõ…", plan: "Đang phát triển câu chuyện…",
       review: "Đang đọc và góp ý bản đã sửa…" };
@@ -210,10 +221,26 @@ export default function Workspace({ library = false }: { library?: boolean }) {
       try {
         const next = await persist();
         if (!next) throw new Error("Hãy mở dự án trước khi tiếp tục.");
+        const current = () => streamEpoch.current === epoch && activeProjectId.current === next.id;
+        let receivedCheckpoint = false;
         setSteps((items) => items.map((step) => step.stage === "prepare" ? { ...step, status: "completed" } : step));
         const result = await streamProjectOperation(next, kind, (event) => {
-          setSteps((items) => applyProgress(items, event));
-        }, progressLanguage(next.response_language));
+          if (current()) setSteps((items) => applyProgress(items, event));
+        }, progressLanguage(next.response_language), undefined, kind === "plan" ? event => {
+          if (!current()) return;
+          receivedCheckpoint = true;
+          setPlanReading({projectId: next.id, generation: event.project.plan_generations!.find(g => g.id === event.generation_id)!, status: "pending"});
+        } : undefined);
+        if (!current()) return;
+        if (receivedCheckpoint) setPlanReading(previous => {
+          const generation = result.plan_generations?.find(g => g.id === previous?.generation.id);
+          return previous && generation ? {...previous, generation, status: generation.critic_status} : previous;
+        });
+        const local = autosave.getSnapshot().project;
+        if (!local || local.id !== next.id || local.revision !== next.revision
+            || JSON.stringify(editableProject(local)) !== JSON.stringify(editableProject(next))) {
+          throw new Error("Kết quả đã được giữ trên máy chủ. Bản đang sửa đã thay đổi; hãy giữ hoặc tải bản sao trước khi mở lại dự án.");
+        }
         questionDelta = (result.analysis?.missing_information.length ?? 0) - (next.analysis?.missing_information.length ?? 0);
         accept(result);
         if (kind === "plan") {
@@ -232,16 +259,18 @@ export default function Workspace({ library = false }: { library?: boolean }) {
             return;
           }
         }
-        if (kind !== "review") setPendingStage(kind === "analyze" ? "workspace-choices" : "workspace-draft");
+        if (kind !== "review" && !receivedCheckpoint) setPendingStage(kind === "analyze" ? "workspace-choices" : "workspace-draft");
         tour.succeeded(tourRequest, result.id);
       } catch (caught) {
+        if (streamEpoch.current !== epoch) return;
+        setPlanReading(previous => previous?.status === "pending" ? {...previous, status: "unknown"} : previous);
         tour.failed(tourRequest);
         setOperationFailed(true);
         setSteps((items) => items.map((step) => step.status === "active" ? { ...step, status: "failed" } : step));
         throw caught;
       } finally {
         const finishedAt = performance.now();
-        setOperationTiming((timing) => timing ? { ...timing, finishedAt } : timing);
+        if (streamEpoch.current === epoch) setOperationTiming((timing) => timing ? { ...timing, finishedAt } : timing);
       }
       setNotice(kind === "analyze" ? questionDelta > 0 ? `Có thêm ${questionDelta} câu hỏi. Các lựa chọn trước vẫn được giữ; chưa tạo bản phát triển.`
         : "Chưa có câu hỏi mới. Các lựa chọn vẫn được giữ; bạn có thể sửa hoặc xem lại để quyết định tạo bản phát triển."
@@ -295,7 +324,7 @@ export default function Workspace({ library = false }: { library?: boolean }) {
           <h2>Các bản do AI tạo</h2>
           <p>Bản đầu được lưu trực tiếp. Các lần tạo lại giữ thành đề xuất; bản đang viết chỉ thay khi bạn chọn nhận.
             Mở xem không lưu hoặc gọi AI. Lưu hoặc tải bản sao các sửa đang có trước khi mở lại dự án.</p>
-          {[...project.plan_generations].reverse().map(generation => <details key={generation.id}>
+          {[...project.plan_generations].reverse().filter(g => g.id !== visiblePlanReading?.generation.id).map(generation => <details key={generation.id}>
             <summary>{generation.draft.title} · {generation.applied_revision === null ? "Bản đề xuất" : "Đã dùng làm bản nháp"}
               {generation.critic_status !== "reviewed" || !generation.feedback_source ? " · Chưa có góp ý hợp lệ" : " · Có góp ý riêng"}</summary>
             <p className="storage-note preserve-lines">Lượt tạo {generation.id} · nguồn revision {generation.source_revision}.
@@ -427,11 +456,12 @@ export default function Workspace({ library = false }: { library?: boolean }) {
         </div>}
         {library && error && <p className="error" role="alert">{error}</p>}
         {!library && saved && <WorkspaceTools key={project.id} project={project} saved={saved} dirty={dirty} busy={!!busy} run={projectBlockingRun} steps={steps} timing={operationTiming} onStartDraft={()=>void startDraftRun(projectBlockingRun)} />}
-      {!!steps.length && operationTiming && <details className="operation-details" open={operationTiming.finishedAt===null||operationFailed} data-progress-stage={`workspace-${operationTiming.kind === "analyze" ? "choices" : ["plan", "review"].includes(operationTiming.kind) ? "draft" : operationTiming.kind.startsWith("scene-") ? "outline" : "script"}`}>
+      {!!steps.length && operationTiming && <details className="operation-details" open={operationTiming.finishedAt===null||operationFailed||!!visiblePlanReading} data-progress-stage={`workspace-${operationTiming.kind === "analyze" ? "choices" : ["plan", "review"].includes(operationTiming.kind) ? "draft" : operationTiming.kind.startsWith("scene-") ? "outline" : "script"}`}>
         <summary>{operationTiming.finishedAt===null?'Đang xử lý…':operationFailed?'Xem lỗi và phần đã giữ':'Xem tiến trình lần vừa hoàn tất'}</summary>
         <OperationProgress steps={steps} failed={operationFailed}
-          timing={operationTiming} dirty={dirty} language={progressLanguage(project?.response_language ?? "auto")} />
+          timing={operationTiming} dirty={dirty} language={progressLanguage(project?.response_language ?? "auto")} reading={!!visiblePlanReading} />
       </details>}
+        {visiblePlanReading && <PlanCheckpointReader reading={visiblePlanReading} onClose={() => setPlanReading(null)} />}
         {/* Modal dialogs escape inert ancestors; their own fieldset locks edits while Close stays usable. */}
         {!library && <fieldset inert={!!busy} aria-busy={!!busy} className="project-fields">
           <WorkspaceStage key={`${project.id}:idea`} id="workspace-idea" tourStep="idea" title="Khoảnh khắc bạn muốn kể"
@@ -508,7 +538,8 @@ export default function Workspace({ library = false }: { library?: boolean }) {
                 ()=>runRequest(runPath(next.id,selected.id)),()=>projectRequest(`/${next.id}`),revision);
               accept(adopted);setAdoptedScene(sceneAfterAdoption(adopted.screenplay,sceneId));
             })}}/>
-          {project.draft && <section className="panel form-stack working-draft" data-workspace-stage="workspace-draft">
+          {project.draft && <section hidden={!!visiblePlanReading && visiblePlanReading.generation.applied_revision !== null
+            && JSON.stringify(project.draft) === JSON.stringify(visiblePlanReading.generation.draft)} className="panel form-stack working-draft" data-workspace-stage="workspace-draft">
             <h2 id="workspace-draft" data-tour="draft" tabIndex={-1}>Story plan đang làm việc</h2>
             <h3 id="draft-editor-title" tabIndex={-1}>Đọc và sửa ngay tại card</h3>
             {operationTiming?.kind === "plan" && operationTiming.finishedAt !== null && <a className="storage-note" href="#workspace-operation">Xem lại tiến trình tạo bản này</a>}

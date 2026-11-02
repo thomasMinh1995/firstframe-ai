@@ -107,7 +107,7 @@ function RunCandidate({id,onStatus,...props}:Props&{id:string;onStatus:(run:Draf
    {syncError&&<p role="status" className="draft-workflow-network">Chưa cập nhật được tiến độ. Bản đã tải vẫn được giữ; FirstFrame sẽ tự thử kết nối lại. {syncError}</p>}
    {!run&&!syncError&&<div role="status"><p>Đang tải lượt tạo đã lưu…</p><WorkflowSkeleton/></div>}
    {run&&<>
-     <p role="status"><strong>{draftRunSummary(run)}</strong></p>
+     <p role="status" aria-live="polite"><strong>{draftRunSummary(run,state.saved)}</strong></p>
      <label className="draft-workflow-toggle"><input type="checkbox" disabled={!run.workflow_items?.length} checked={cards} onChange={e=>{setReveals([]);setCards(e.target.checked);try{sessionStorage.setItem(`firstframe-draft-cards:${id}`,e.target.checked?'1':'0')}catch{}}}/>Xem thử tiến độ dạng card</label>
      {cards&&<DraftWorkflow run={run} candidate={state.saved} following={follow.enabled} onFollowingChange={changeFollowing} reading={!!selectedTarget} reveals={reveals} actions={cardActions} onRead={(target,trigger)=>void action(async()=>{readCard(target,trigger)})}/>}
      {run.total_scenes>0&&<progress aria-label="Số cảnh đã lưu" max={run.total_scenes} value={run.completed_scenes}/>}

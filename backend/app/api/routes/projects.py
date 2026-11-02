@@ -46,7 +46,7 @@ from app.application.provenance import attribute_edits, scene_fields, draft_fiel
 from app.infrastructure.provider_factory import create_provider
 from app.application.clarification import MAX_CHOICES, conversation_questions
 from app.application.language import LanguageSelectionRequired, resolve_response_language
-from app.application.progress import progress_listener, report_progress, progress_step
+from app.application.progress import checkpoint_listener, progress_listener, report_progress, progress_step
 from app.application.project_store import ProjectConflict, ProjectNotFound, ProjectStore
 from app.application.revision_review import review_context
 from app.core.artifacts import Constraint, PlanSection, StoryPlanArtifact
@@ -61,13 +61,14 @@ async def stream_scene_suggestions(project_id: str, request: SceneSuggestionRequ
 
 @router.post("/{project_id}/{operation}/stream")
 async def stream_project_operation(
-    project_id: str, operation: Literal["analyze", "clarify", "plan", "review"], request: RevisionRequest
+    project_id: str, operation: Literal["analyze", "clarify", "plan", "review"], request: RevisionRequest,
+    checkpoints: bool = False,
 ):
     handler = {"analyze": analyze_project, "clarify": clarify_project, "plan": plan_project, "review": review_project}
-    return project_stream(lambda: handler[operation](project_id, request))
+    return project_stream(lambda: handler[operation](project_id, request), checkpoints=checkpoints and operation == "plan")
 
 
-def project_stream(action):
+def project_stream(action, *, checkpoints: bool = False):
     events: asyncio.Queue = asyncio.Queue()
     loop = asyncio.get_running_loop()
 
@@ -76,6 +77,7 @@ def project_stream(action):
             loop.call_soon_threadsafe(events.put_nowait, event)
 
         token = progress_listener.set(publish)
+        checkpoint_token = checkpoint_listener.set(publish if checkpoints else None)
         try:
             result = action()
             publish({"type": "result", "project": result.model_dump(mode="json")})
@@ -85,6 +87,7 @@ def project_stream(action):
             logging.getLogger(__name__).exception("Streamed project operation failed")
             publish({"type": "error", "detail": "Không hoàn tất được thao tác. Hãy mở lại dự án để kiểm tra nội dung đã lưu."})
         finally:
+            checkpoint_listener.reset(checkpoint_token)
             progress_listener.reset(token)
 
     async def stream():
@@ -664,6 +667,10 @@ def plan_project(project_id: str, request: RevisionRequest):
             project.plan_generations.append(generation)
             project = save_project(project, "plan_checkpoint")
             generation_id = generation.id
+            listener = checkpoint_listener.get()
+            if listener is not None:
+                listener({"type": "checkpoint", "stage": "plan_checkpoint",
+                          "generation_id": generation_id, "project": project.model_dump(mode="json")})
 
         try:
             with capture_workflow("plan", dataset_snapshot(project)) as dataset:

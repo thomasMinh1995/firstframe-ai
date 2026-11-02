@@ -63,17 +63,20 @@ const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
 export type ProgressEvent = {
   stage: string; status: "active" | "completed" | "failed";
 };
+export type PlanCheckpoint = {type: "checkpoint"; stage: "plan_checkpoint"; generation_id: string; project: Project};
 
 export async function streamProjectOperation(
   project: Project, kind: "analyze" | "plan" | "review" | "scene-suggestions" | "scene-sketches" | "screenplay-proposals" | "screenplay-reviews",
   onProgress: (event: ProgressEvent) => void, language: UiLanguage = "vi", input?: SceneWritingInput | SceneSuggestionInput | {request_id: string; scene_id: string; instructions: string},
+  onCheckpoint?: (event: PlanCheckpoint) => void,
 ): Promise<Project> {
   const copy = progressCopy[language];
   // Backend heartbeats arrive every 15s. A silent connection must not lock the editor forever.
   const controller = new AbortController();
   let timer = setTimeout(() => controller.abort(), 45_000);
+  let checkpoint: PlanCheckpoint | undefined;
   try {
-    const response = await fetch(`${baseUrl}/api/projects/${project.id}/${kind === "analyze" ? "clarify" : kind}/stream`, {
+    const response = await fetch(`${baseUrl}/api/projects/${project.id}/${kind === "analyze" ? "clarify" : kind}/stream${kind === "plan" && onCheckpoint ? "?checkpoints=true" : ""}`, {
       method: "POST", headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ revision: project.revision, ...input }), signal: controller.signal,
     }).catch(() => { throw new Error(copy.connectionError); });
@@ -94,7 +97,22 @@ export async function streamProjectOperation(
           if (!line.trim()) continue;
           let event: unknown;
           try { event = JSON.parse(line); } catch { throw new Error(copy.invalid); }
-          if (!isRecord(event) || !["progress", "result", "error"].includes(String(event.type))) throw new Error(copy.invalid);
+          if (!isRecord(event) || !["progress", "result", "error", "checkpoint"].includes(String(event.type))) throw new Error(copy.invalid);
+          if (event.type === "checkpoint") {
+            if (kind !== "plan" || !onCheckpoint || event.stage !== "plan_checkpoint" || typeof event.generation_id !== "string"
+                || !isProject(event.project) || event.project.id !== project.id || event.project.revision !== project.revision + 1) throw new Error(copy.invalid);
+            const generation = event.project.plan_generations?.find(item => item.id === event.generation_id);
+            if (!generation || generation.source_revision !== project.revision || generation.critic_status !== "pending"
+                || generation.feedback !== null || generation.feedback_source !== null
+                || generation.applied_revision !== (project.draft ? null : event.project.revision)
+                || !sameJson(event.project.draft, project.draft ?? generation.draft)
+                || project.plan_generations?.some(item => item.id === generation.id)
+                || !checkpointSourceMatches(generation, project)) throw new Error(copy.invalid);
+            const next = event as PlanCheckpoint;
+            if (checkpoint) {
+              if (!sameJson(checkpoint, next)) throw new Error(copy.invalid);
+            } else { checkpoint = next; onCheckpoint(next); }
+          }
           if (event.type === "error") throw new Error(typeof event.detail === "string" ? event.detail : copy.invalid);
           if (event.type === "progress") {
             if (typeof event.stage !== "string" || !event.stage || typeof event.status !== "string"
@@ -105,6 +123,10 @@ export async function streamProjectOperation(
           }
           if (event.type === "result") {
             if (!isProject(event.project) || event.project.id !== project.id) throw new Error(copy.invalid);
+            if (checkpoint && (event.project.revision < checkpoint.project.revision
+                || !event.project.plan_generations?.some(item => item.id === checkpoint!.generation_id
+                  && item.critic_status !== "pending"
+                  && item.source_content === checkpoint!.project.plan_generations?.find(g => g.id === item.id)?.source_content))) throw new Error(copy.invalid);
             return event.project;
           }
         }
@@ -116,6 +138,24 @@ export async function streamProjectOperation(
     clearTimeout(timer);
     controller.abort();
   }
+}
+
+function sameJson(a: unknown, b: unknown): boolean {
+  const sorted = (_key: string, value: unknown) => isRecord(value) && !Array.isArray(value)
+    ? Object.fromEntries(Object.entries(value).sort(([a], [b]) => a.localeCompare(b))) : value;
+  return JSON.stringify(a, sorted) === JSON.stringify(b, sorted);
+}
+
+function checkpointSourceMatches(generation: PlanGeneration, project: Project): boolean {
+  try {
+    const source = JSON.parse(generation.source_content);
+    if (!isRecord(source)) return false;
+    return source.idea === project.idea && (source.response_language ?? "auto") === project.response_language
+      && sameJson(source.constraints, project.constraints) && sameJson(source.answers, project.answers)
+      && sameJson(source.questions, project.analysis?.missing_information ?? [])
+      && sameJson(source.draft, project.draft)
+      && (!project.author_context || sameJson(generation.context, project.author_context));
+  } catch { return false; }
 }
 
 export class ProjectRequestError extends Error {
