@@ -14,6 +14,8 @@ Idea (autosave) -> Draft run -> Clarify only if needed -> Story plan + outline +
 
 Clarification has no fixed questionnaire. A clear brief can return no questions; unanswered questions remain open and do not become author decisions. AI suggestions are shown separately. The initial screen keeps project name and language under optional settings. The detailed tools still support creating a story plan separately. The “Tạo bản nháp” action starts a durable backend run. Reload reads progress without calling AI again; received model outputs and each completed scene are checkpointed. Candidate edits autosave separately, and adoption checks the original brief and target before atomically keeping the prior draft. Unknown model outcomes are never retried automatically.
 
+For separate Story plan generation, the UI opts into `POST /api/projects/{id}/plan/stream?checkpoints=true`. A saved plan can be read while feedback continues; preview does not accept a proposal, autosave edits or select a PDF. Completion, feedback failure and connection loss update the same reader. Default clients still receive only progress/result/error. Draft runs retain their saved-candidate polling. These are saved-content checkpoints, not token-by-token generation; see the [Streaming Interfaces plan](docs/plans/streaming-interfaces.md) and [fixture validation](docs/testing/streaming-interfaces.md).
+
 Review gives feedback on the saved draft. Verified notes can request a separate scene/block revision without another prompt. The main editor stays beside the desktop review panel; narrow screens use a sheet. Saved comparisons and the full reader open on demand. Before/after previews show the proposed scope; accepting saves a checkpoint and undo restores the target only if it has not changed. Block revisions preserve all other blocks and IDs. Explicit scene numbers are resolved before generation; structural requests start an independent draft candidate with affected scenes listed. Changing the idea or constraints uses the existing clarification flow again.
 
 **Đọc & xuất PDF** opens the saved screenplay reader. Choose the current or a historical version, then **Chọn bản đã đọc & tải PDF**. Pending saves are flushed and the read snapshot is checked before selection; if it changed, read it again. Previously selected versions can be downloaded again without changing the selection or current draft. The export API `GET /api/projects/{id}/screenplay-selections/{selection_id}/pdf` reads only that immutable selection, including its original story-plan title. It does not call AI or write history. PDF uses bundled Liberation Mono fonts for Vietnamese, A4 pages and page numbers; long dialogue repeats its speaker on continuation pages. Characters outside the font coverage report an error instead of silently becoming missing-glyph squares. A legacy snapshot without a title exports with a neutral filename.
@@ -336,8 +338,8 @@ need live generation and are not part of this recorded playback.
 ## Current Limitations
 
 - One active domain: Short Film Story Development.
-- Output is a story plan, not a scene outline or complete screenplay.
-- No scene-level screenplay editing, account authentication, deployment, or streaming.
+- Story plans, scene outlines, scene-level screenplay editing and PDF export have technical delivery; user acceptance and creative quality still need separate evidence.
+- No account authentication or production deployment. Progress/content checkpoints are supported; token-by-token previews are not implemented.
 - Storage belongs to the local backend; there is no account-based cloud sync.
 - Domain registration is currently static in the application service.
 - Implemented providers are OpenAI and local Ollama; Gemini and Claude are not integrated.

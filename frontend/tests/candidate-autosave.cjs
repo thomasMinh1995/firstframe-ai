@@ -18,5 +18,15 @@ const gate=()=>{let resolve;const promise=new Promise(r=>resolve=r);return{promi
  ime.composition(true);ime.edit({...imeRemote.project,answers:['Chữ đang ghép']});imeGate.resolve();await inFlight;
  assert.equal(imeCalls,1,'do not send a new write during composition');assert.equal(ime.dirty,true);
  ime.composition(false);await ime.flush();assert.equal(imeCalls,2);assert.equal(ime.dirty,false);ime.stop();
- q.stop();retry.stop();conflict.stop();console.log('PASS candidate autosave: serial writes, newer input, exact lost-ack recovery, isolated answers and conflicts');
+ const {DraftRunPoller}=require(process.argv[2]+'/draftRunPolling.js');
+ let polled={status:'running',candidate_revision:2,progress_revision:2},writesByPolling=0,scheduled=0;
+ const dirty=new CandidateAutosave(async()=>{writesByPolling++;throw Error('not requested')},async()=>c(),10000);
+ dirty.accept(c());dirty.edit({...project(),answers:['Bản tác giả chưa lưu']});
+ const poller=new DraftRunPoller({readRun:async()=>polled,current:()=>polled,receive:r=>{polled=r},
+  readCandidate:async()=>({...c(),revision:2,project:{...project(),answers:['Remote']}}),
+  candidateRevision:()=>dirty.getSnapshot().saved.revision,accept:dirty.accept,onError:e=>assert.equal(e,null)},()=>{scheduled++;return()=>{}});
+ await poller.start();assert.equal(dirty.getSnapshot().local.project.answers[0],'Bản tác giả chưa lưu');assert.equal(dirty.dirty,true);
+ polled={...polled,status:'ready'};await poller.start();assert.equal(dirty.getSnapshot().local.project.answers[0],'Bản tác giả chưa lưu');
+ assert.equal(writesByPolling,0,'polling cannot write or call AI');assert.ok(scheduled>0);poller.stop();dirty.stop();
+ q.stop();retry.stop();conflict.stop();console.log('PASS candidate autosave: serial writes, newer input, exact lost-ack recovery, isolated answers, conflicts and polling with dirty buffers');
 })().catch(e=>{console.error(e);process.exit(1)});
