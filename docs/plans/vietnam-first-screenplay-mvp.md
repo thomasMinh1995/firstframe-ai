@@ -1,7 +1,7 @@
 # Định hướng và roadmap: phim ngắn đầu tiên cho người viết Việt Nam
 
-- Ngày cập nhật: 22/10/2026.
-- Trạng thái: kế hoạch sản phẩm; các thay đổi demo dưới đây chưa được triển khai.
+- Ngày cập nhật: 02/11/2026.
+- Trạng thái: M1–M4 có nền kỹ thuật trên `dev`, gồm luồng viết/sửa cảnh và xuất PDF; [PR #89](https://github.com/thomasMinh1995/firstframe-ai/pull/89) bổ sung bảo toàn tiến độ và thao tác sửa tại chỗ. Chưa có kết luận nghiệm thu người dùng; thứ tự triển khai trước pilot không thay các ngưỡng nghiệm thu.
 - Phạm vi đợt tài liệu: lưu định hướng, thứ tự ưu tiên và tiêu chí kiểm chứng;
   không thay code, prompt, rubric, schema, dữ liệu dự án hoặc cấu hình model.
 - Issue triển khai: [#26](https://github.com/thomasMinh1995/firstframe-ai/issues/26).
@@ -25,7 +25,9 @@ Khoảnh khắc → Story plan → Dàn cảnh → Viết và sửa kịch bản
 Sản phẩm dừng ở xuất kịch bản để con người đọc, diễn, dàn dựng và quay.
 Tuyển diễn viên, quản lý đoàn phim, lịch quay, quay, dựng và hậu kỳ thuộc
 quy trình sản xuất tiếp theo. Video, diễn viên và cảnh quay do AI tạo nằm
-ngoài định hướng. Hình minh họa tự động không còn là mốc roadmap chủ động.
+ngoài định hướng. Theo prototype M2 mới, hình phác tham khảo cho từng cảnh
+được tạo khi tác giả yêu cầu và chọn giữ; không tự tạo ảnh hàng loạt hoặc
+bắt buộc có ảnh để viết tiếp.
 
 Story plan giúp tác giả làm rõ câu chuyện trước khi viết chi tiết; có giá
 trị để giữ và trao đổi nhưng chưa phải kịch bản hoàn chỉnh. Độ chi tiết phải
@@ -55,14 +57,16 @@ Việt, phạm vi hẹp hoặc nhãn “mentor” tự chúng chưa chứng minh
 ## 3. Hiện trạng và trải nghiệm demo
 
 MVP có lưu dự án, làm rõ tối đa ba câu hỏi và để quyết định sau, tạo story
-plan, sửa thủ công, lưu phiên bản và nhận góp ý. Chưa có dàn cảnh, biên tập
-screenplay theo cảnh, PDF story plan hoặc xuất kịch bản hoàn chỉnh.
+plan, sửa thủ công, lưu phiên bản và nhận góp ý. Dàn cảnh, biên tập
+screenplay theo cảnh và xuất PDF kịch bản đã có nền kỹ thuật; xem
+[luồng AI-first](ai-first-workflow.md) và [roadmap](../roadmap.md). PDF story
+plan #5 là phạm vi riêng, chưa được coi là hoàn thành bởi xuất PDF kịch bản.
 
 Tour frontend đã được triển khai trên `dev`; pilot và một số nghiệm thu
 thủ công còn mở ở [#22](https://github.com/thomasMinh1995/firstframe-ai/issues/22).
 Giữ tour hiện có; chỉ điều chỉnh nội dung liên quan khi luồng demo ổn định.
 
-Demo dự kiến 3–5 phút:
+Bài demo M1 ban đầu dự kiến 3–5 phút (phạm vi này không bao gồm toàn hành trình M2–M4):
 
 1. Tác giả kể một khoảnh khắc nhỏ.
 2. FirstFrame hỏi về một lựa chọn còn chưa rõ, hoặc đi tiếp nếu đã đủ rõ.
@@ -70,9 +74,10 @@ Demo dự kiến 3–5 phút:
 4. Tác giả tự sửa một chi tiết chưa đúng ý.
 5. Lưu và nhận góp ý trên đúng bản vừa sửa; giữ bản cũ trong lịch sử.
 
-Nhận góp ý hiện không tự viết lại bản phát triển. Sửa ý tưởng hoặc ràng buộc
+Trong bài demo M1, nhận góp ý không tự viết lại bản phát triển. Sửa ý tưởng hoặc ràng buộc
 vẫn dùng luồng làm rõ lại đang có; không trình diễn như đã có chat viết lại.
-Bản đọc và mọi đề xuất mới vẫn được gọi đúng là story plan.
+Bản phát triển trong bài demo M1 vẫn được gọi đúng là story plan, tách với
+bản nháp screenplay và đề xuất sửa cảnh của luồng M3.
 
 ## 4. Đợt P0: các thay đổi nhỏ phục vụ demo
 
@@ -122,19 +127,25 @@ ra chất lượng sáng tác từ JSON hợp lệ hoặc điểm rubric của A
   câu chuyện lệch ý rõ ràng: báo sự cố rồi chuyển sang bản ghi đã duyệt.
   Nếu bản ghi cũng chưa được duyệt, hoãn phần đó; không thay kết quả âm thầm.
 
-Không mở rộng đợt demo sang trình viết screenplay, tự áp dụng góp ý, tạo
+Các giới hạn demo ở mục 4 giữ cho bài demo M1 đã định nghĩa, không ngăn
+triển khai M2–M4 theo thứ tự mới ở mục 5. Khi thử toàn hành trình sau deploy,
+ghi phạm vi mới riêng, không coi bài demo M1 là nghiệm thu kịch bản hoàn chỉnh.
+
+Không mở rộng đợt demo M1 sang trình viết screenplay, tự áp dụng góp ý, tạo
 video/ảnh, marketplace, cộng đồng trong ứng dụng hoặc quản lý sản xuất.
 
 ## 5. Thứ tự roadmap và các kế hoạch đang có
 
 | Mốc | Kết quả và điều kiện chuyển bước |
 | --- | --- |
-| M1 — Story plan đúng ý | Hoàn thành đợt P0 theo chế độ demo được duyệt và pilot đạt mục 6.1; phát lại không thay thế nghiệm thu luồng pilot |
+| M1 — Story plan đúng ý | Giữ nền đã có và các lỗi/nghiệm thu còn mở; mục 6.1 vẫn là điều kiện nghiệm thu, không còn là điều kiện bắt đầu code M2 |
 | M1 tiếp — Sửa và chia sẻ | Hoàn thiện góp ý có mục tiêu theo #7; xuất đúng story plan đã chọn theo #5 |
-| M2 — Dàn cảnh | Thêm, bỏ, sắp xếp và sửa cảnh có hành động, mục đích, liên kết; kiểm chứng tác giả dùng được để viết tiếp |
+| M2 — Dàn cảnh | Thêm, bỏ, sắp xếp và sửa cảnh; gợi ý danh sách ban đầu, góp ý dàn cảnh có quyền chọn và phác hình theo yêu cầu; giữ đường viết tiếp không phụ thuộc AI |
 | M3 — Viết và sửa kịch bản | Viết hành động/lời thoại theo cảnh, góp ý cụ thể, giữ quyết định và phiên bản; ít nhất một vòng đọc sửa |
 | M4 — Xuất kịch bản | Xuất bản đã chọn, giữ nguyên nội dung và tiếng Việt đầy đủ, định dạng dễ đọc để cộng sự sử dụng; đây là điểm bàn giao của sản phẩm |
 | Về sau — Kịch bản dài | Chỉ nghiên cứu khi người đã hoàn thành phim ngắn có nhu cầu và chất liệu phát triển; vẫn dừng ở xuất kịch bản |
+
+Thứ tự triển khai mới: **M2 → M3 → M4 → kiểm thử toàn luồng → deploy môi trường thử → trải nghiệm người dùng**. Thực hiện kiểm thử kỹ thuật sau từng mốc; không đợi hoàn thành cả ba mới kiểm tra bảo toàn dữ liệu. M2–M4 đã có nền kỹ thuật như trạng thái đầu tài liệu; thứ tự này không yêu cầu triển khai lại hoặc tự chạy thêm QA/model. Deploy và nghiệm thu người dùng cần bằng chứng riêng.
 
 Giữ số hiệu các milestone cũ để tham chiếu; thứ tự ưu tiên nằm ở bảng này và
 [roadmap](../roadmap.md), không suy ra từ số 1.1/1.2.
@@ -149,8 +160,10 @@ Giữ số hiệu các milestone cũ để tham chiếu; thứ tự ưu tiên n�
   thu; tránh xây lại tour trước khi biết luồng mới cần thay gì.
 - Harness: ưu tiên lỗi chặn hoặc làm sai hành trình viết; thử nghiệm kỹ thuật
   không tự động trở thành điều kiện chặn mọi cải thiện giao diện.
-- Hình minh họa tự động không còn là ưu tiên; không xây hạ tầng “cho phim
-  dài” trong MVP. Giữ chất liệu gốc và lịch sử hiện có để viết tiếp về sau.
+- Phác hình theo yêu cầu thuộc M2 mới; cần kiểm chứng provider tạo ảnh,
+  nguồn và chi phí riêng. Ảnh không chặn đường dàn cảnh văn bản sang M3;
+  chưa có provider thì ghi phần ảnh chưa hoàn thành. Không xây hạ tầng
+  “cho phim dài”; giữ chất liệu gốc và lịch sử hiện có để viết tiếp.
 
 ## 6. Pilot và kiểm chứng khác biệt
 
@@ -167,7 +180,11 @@ như Cinequill hoặc Screenwriting.ai. Dùng cùng chất liệu, ràng buộc 
 vụ; cho mỗi công cụ đủ ngữ cảnh và cơ hội sửa. Không coi quảng bá tính năng
 là bằng chứng chất lượng hoặc kết quả pilot nhỏ là lợi thế thị trường đã có.
 
-### 6.1. Điều kiện pilot đạt và chuyển sang M2
+<a id="61-điều-kiện-pilot-đạt-và-chuyển-sang-m2"></a>
+
+### 6.1. Điều kiện nghiệm thu pilot M1, thực hiện sau deploy
+
+Theo thứ tự mới của chủ sản phẩm, pilot không chặn việc bắt đầu M2–M4. Giữ nguyên nhiệm vụ M1 và các ngưỡng dưới đây để nghiệm thu riêng. Phiên trải nghiệm cả hành trình được chuẩn bị sau khi M2–M4 và môi trường deploy sẵn sàng; ghi thêm quan sát dàn cảnh/kịch bản/xuất bản ở phần riêng, không tự thay mẫu số, nhiệm vụ hoặc ngưỡng M1. Nếu thay nhiệm vụ chấm đạt, phải chốt một đợt mới trước khi chạy như quy tắc dưới đây.
 
 - Trước pilot, PO chốt số người bắt đầu N trong khoảng 5–8, phiên bản ứng
   dụng/model và cùng một phiếu nhiệm vụ. Nhiệm vụ gồm nhập khoảnh khắc, làm
@@ -189,9 +206,10 @@ là bằng chứng chất lượng hoặc kết quả pilot nhỏ là lợi th�
   giả đã chọn rõ hoặc lỗi tác vụ khiến không thể hoàn thành. Ghi ID/bằng
   chứng lỗi; sau sửa xác nhận lại tình huống lỗi trên phiên bản ứng viên.
 - PO quyết định **đạt / chưa đạt / cần thêm bằng chứng** trong #26 sau khi
-  xem bảng kết quả N người và nhận xét người đọc có kinh nghiệm. Chỉ ưu tiên
-  M2 khi đủ ngưỡng, có nhu cầu viết tiếp, không còn lỗi chặn và PO ghi đạt.
-  Thiếu điều kiện nào thì tiếp tục sửa M1; bản ghi demo không bù cho pilot
+  xem bảng kết quả N người và nhận xét người đọc có kinh nghiệm. Chỉ ghi M1
+  đạt khi đủ ngưỡng, có nhu cầu viết tiếp và không còn lỗi chặn. Việc code
+  M2–M4 trước pilot không thay quyết định đó. Thiếu điều kiện thì M1 vẫn
+  chưa đạt, cần xử lý/xác minh lỗi; bản ghi demo không bù cho pilot
   trượt. Không hạ ngưỡng hồi tố: thay nhiệm vụ/ngưỡng phải chốt đợt mới và
   giữ báo cáo cũ. Nếu đổi phiên bản giữa pilot, tách kết quả theo phiên bản,
   không gộp các phiên bản để đạt ngưỡng; đợt mới vẫn cần đủ N=5–8.

@@ -232,3 +232,30 @@ def test_prompt_is_bound_to_selected_saved_scene_and_keeps_legacy_history(sketch
     assert latest["scene_handoff"]=={**ready["scene_handoff"],"project_revision":latest["revision"]}
     assert latest["selected_scene_sketches"]==ready["selected_scene_sketches"]
     assert latest["feedback_source"]==ready["feedback_source"] and len(text.requests)==text_calls
+
+
+@pytest.mark.parametrize("failed", [False, True])
+def test_sketch_stream_reports_real_generation_validation_and_save(sketches, failed):
+    import json
+
+    client, provider, project, text = sketches
+    text_calls = len(text.requests)
+    if failed:
+        provider.error = ProviderRequestError("offline")
+    body = {"revision": project["revision"], "request_id": str(uuid4()),
+            "scene_id": project["scene_outline"]["scenes"][0]["id"], "instructions": "Giữ thư chưa mở."}
+    response = client.post(f"/api/projects/{project['id']}/scene-sketches/stream", json=body)
+    events = [json.loads(line) for line in response.text.splitlines() if line.strip()]
+    expected = [("sketch_checkpoint", "active"), ("sketch_checkpoint", "completed"),
+                ("sketch_generation", "active"), ("sketch_generation", "failed" if failed else "completed")]
+    if not failed:
+        expected += [("sketch_validation", "active"), ("sketch_validation", "completed")]
+    expected += [("sketch_save", "active"), ("sketch_save", "completed")]
+    assert [(event["stage"], event["status"]) for event in events[:-1]] == expected
+    assert events[-1]["type"] == ("error" if failed else "result")
+    saved = client.get(f"/api/projects/{project['id']}").json()
+    assert saved["scene_sketches"][-1]["status"] == ("failed" if failed else "ready")
+    assert len(provider.requests) == 1 and len(text.requests) == text_calls
+    assert saved["scene_outline"] == project["scene_outline"]
+    assert saved["scene_handoff"] == {**project["scene_handoff"], "project_revision": saved["revision"]}
+    assert saved["selected_scene_sketches"] == project["selected_scene_sketches"]
