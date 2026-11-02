@@ -109,7 +109,7 @@ def _card_review_schema(context: dict) -> type[_RevisionReviewOutput]:
     neighbors = list(dict.fromkeys(pair["related_card_id"] for pair in context["neighbor_checks"]))
     cards = list(dict.fromkeys([*context["focus_card_ids"], *neighbors])) or [card["id"] for card in context["cards"]]
     decisions = [item["id"] for item in context["decisions"] if item["id"] != "idea"] or ["idea"]
-    related = Literal[tuple(cards)] if neighbors else str | None
+    related = Literal[tuple(cards)] if neighbors else Literal[tuple(cards)] | None
     card_review = create_model("FocusedCardReview", __base__=CardReview,
                                card_id=(Literal[tuple(cards)], ...),
                                decision_id=(Literal[tuple(decisions)], ...),

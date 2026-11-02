@@ -38,3 +38,34 @@
 .draft-plan-fields label{display:grid;gap:8px}
 .draft-candidate-reader blockquote{border-left:3px solid var(--line);margin:12px 0;padding:8px 12px;font-size:14px;white-space:pre-wrap}
 @media(max-width:760px){.draft-candidate-reader{scroll-margin-top:64px;padding:14px}.draft-candidate-reader .draft-run-actions button{flex:1 1 160px}.draft-candidate-reader input,.draft-candidate-reader textarea{font-size:16px}}
+
+/* Keep parent steps compact; scene progress expands inside its owning step. */
+.draft-workflow-cards{align-items:start}
+.draft-workflow-card{scroll-margin-top:140px;padding:14px}
+.draft-workflow-heading{flex-direction:row;gap:10px;margin:0 0 8px}
+.draft-workflow-badge{width:32px;height:32px}.draft-workflow-number{font-size:18px}
+.draft-workflow-check{width:16px;height:16px;font-size:10px}
+.draft-workflow-card h3{text-align:left}.draft-workflow-preview{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.draft-workflow-skeleton{min-height:48px;gap:6px}.draft-workflow-skeleton span{height:7px}.draft-workflow-skeleton span:nth-child(n+3){display:none}
+.draft-workflow-current{position:sticky;top:76px;z-index:6;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 14px;margin-bottom:12px;border:1px solid var(--line);border-radius:10px;background:var(--panel);box-shadow:0 4px 12px rgb(30 55 38 / 8%)}
+.draft-workflow-current p{margin:0;font-weight:600}.draft-workflow-current button{flex:none}
+.draft-workflow-children summary{font-size:13px;cursor:pointer;min-height:36px;align-content:center}
+.draft-workflow-children ul{list-style:none;margin:4px 0 0;padding:0;max-height:260px;overflow:auto;scrollbar-gutter:stable}
+.draft-workflow-children li{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px;min-height:52px;padding:8px;border-top:1px solid var(--line);scroll-margin-top:150px}
+.draft-workflow-child-copy{min-width:0;display:grid;gap:4px;line-height:1.4}
+.draft-workflow-child-state{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)}
+.draft-workflow-child-state .process-spinner{width:12px;height:12px;flex:none}
+.draft-workflow-children li button{width:auto;min-height:32px;margin:0;padding:6px 10px;align-self:center}
+.draft-workflow-children li[aria-current=step]{border-left:3px solid var(--accent);padding-left:5px;background:var(--soft);border-radius:6px}
+@media(max-width:760px){.draft-workflow-children li button{min-width:44px;min-height:44px}.draft-workflow-child-state{font-size:12px}}
+@media(max-width:760px){.draft-workflow-current{top:76px;flex-wrap:wrap}.draft-workflow-current button{min-height:44px}.draft-workflow-card{scroll-margin-top:180px}}
+
+.draft-workflow-current{position:static;min-height:84px;box-sizing:border-box}.draft-workflow-current.is-active{position:sticky}
+.draft-workflow-card p{margin:8px 0;line-height:1.5}
+.draft-workflow-card .draft-workflow-decisions{margin-top:10px;padding-top:8px}
+.draft-workflow-follow{display:flex;align-items:center;gap:8px;min-height:36px;font-size:13px;font-weight:400}
+.draft-workflow-follow input[type=checkbox]{width:18px;height:18px;flex:none;margin:0}
+.draft-workflow-current small{display:block;color:var(--muted);font-size:12px}
+.draft-candidate-reader-header{position:sticky;top:76px;z-index:5;background:var(--panel);padding:8px 0 12px}
+
+.draft-reader-picker{display:block;max-width:560px;margin:12px 0;font-size:13px;font-weight:600;color:var(--muted)}.draft-reader-picker select{display:block;box-sizing:border-box;width:100%;min-height:44px;padding:10px 12px;margin-top:6px;border:1px solid var(--line);border-radius:9px;background:var(--panel);color:var(--foreground);font:inherit;font-weight:400}.draft-candidate-reader-header .draft-run-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;max-width:560px}.draft-candidate-reader-header .draft-run-actions button{min-width:0;min-height:44px;width:100%;margin:0;white-space:normal;line-height:1.4}

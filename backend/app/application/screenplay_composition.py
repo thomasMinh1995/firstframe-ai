@@ -232,16 +232,26 @@ def sentences(text):
 
 def actor_events(text, characters):
     """Only explicit actors, literal positive verb/object pairs; never resolve pronouns."""
+    names = {normalized(name.strip()) for name in re.split(r'[,;/\n]', characters) if name.strip()}
+    def actors_in(prefix):
+        resolved = set()
+        for mention in character_mentions(prefix, characters):
+            matches = {name for name in names if mention in {
+                name, re.sub(r'\s+\d{1,3}\s+tuổi$', '', name)}}
+            if len(matches) != 1:
+                return set()  # Ambiguous short names cannot establish an actor conflict.
+            resolved.update(matches)
+        return resolved
     for sentence in re.split(r'[.!?;]', normalized(text)):
         previous = set()
         for clause in sentence.split(','):
             matches = list(VERB.finditer(clause))
             if not matches:
-                previous = character_mentions(clause, characters)
+                previous = actors_in(clause)
                 continue
             for match in matches:
                 prefix = clause[:match.start()].strip()
-                actors = character_mentions(prefix, characters)
+                actors = actors_in(prefix)
                 if not prefix:
                     actors = previous
                 if (len(actors) != 1 or NEGATION.search(prefix)

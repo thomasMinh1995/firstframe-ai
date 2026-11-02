@@ -1,5 +1,5 @@
 import {validProgress,type WorkflowItem} from './draftWorkflowState';
-import {request, isProject, type Project} from './projectsApi';
+import {request, isProject, ProjectRequestError, type Project} from './projectsApi';
 export type DraftRun = {progress_version?:0|1;progress_revision?:number;workflow_items?:WorkflowItem[];can_continue?:boolean;continue_block_reason?:string|null;continue_block_message?:string|null;created_at?:string|null;revision_instructions?:string;affected_scene_ids?:string[];id:string;project_id:string;source_revision:number;status:'running'|'needs_input'|'ready'|'partial'|'failed'|'interrupted'|'cancelled';step:string;sending:boolean;cancel_requested:boolean;candidate_revision:number;completed_scenes:number;total_scenes:number;error:string|null;review_error:string|null;adopted_revision:number|null};
 export type Candidate={revision:number;save_id?:string|null;project:Project;plan_review?:unknown};
 export const runPath=(projectId:string,id?:string)=>`/${projectId}/draft-runs${id?`/${id}`:''}`;
@@ -16,7 +16,30 @@ export async function runRequest(path:string,method='GET',body?:unknown):Promise
   const r=await request(path,method,body);if(!isDraftRun(r))throw Error('Trạng thái tạo nháp không hợp lệ.');return r;
 }
 export async function listRuns(projectId:string):Promise<DraftRun[]>{
- const r=await request(runPath(projectId));if(!Array.isArray(r)||!r.every(isDraftRun))throw Error('Danh sách lượt tạo không hợp lệ.');return r;
+ const r=await request(runPath(projectId));if(!Array.isArray(r)||!r.every(isDraftRun)||r.some(run=>run.project_id!==projectId))throw Error('Danh sách lượt tạo không hợp lệ.');return r;
+}
+export function blockingDraftRun(runs:DraftRun[]):DraftRun|null {
+ return runs.find(r=>r.adopted_revision===null&&['running','needs_input','partial','failed','interrupted'].includes(r.status))??null;
+}
+export function draftRunActionLabel(run:DraftRun|null):string|null {
+ if(!run)return null;
+ if(run.status==='running')return run.cancel_requested?'Xem tiến độ dừng':'Xem tiến độ';
+ if(run.status==='needs_input')return 'Tiếp tục làm rõ';
+ return 'Xem lượt tạo chưa hoàn tất';
+}
+export async function startOrOpenDraftRun(projectId:string,body:{revision:number;request_id:string;revision_instructions?:string}):Promise<DraftRun>{
+ const existing=blockingDraftRun(await listRuns(projectId));
+ if(existing)return existing;
+ try{return await runRequest(runPath(projectId),'POST',body)}catch(error){
+  if(!(error instanceof ProjectRequestError)||error.status!==409)throw error;
+  const detail=error.detail;
+  if(detail&&typeof detail==='object'&&'code' in detail&&detail.code==='active_draft_run'&&'run' in detail
+    &&isDraftRun(detail.run)&&detail.run.project_id===projectId)return detail.run;
+  // Older servers and a concurrent start are reconciled by GET, never another POST.
+  const blocking=blockingDraftRun(await listRuns(projectId).catch(()=>[]));
+  if(blocking)return blocking;
+  throw error;
+ }
 }
 export async function candidateRequest(path:string,method='GET',body?:unknown):Promise<Candidate>{
  const r=await request(path,method,body) as Candidate;

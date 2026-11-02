@@ -1,0 +1,485 @@
+{
+  "source_screenplay": {
+    "id": "bdfb923c-bfb2-40bc-99eb-461b40e47b6e",
+    "version": 2,
+    "scenes": [
+      {
+        "id": "ae3ece1e-2b17-487a-975e-f51608cfea9d",
+        "source_scene_id": "ba63f0eb-cd24-4d63-b5f5-bfa8aa0d1166",
+        "heading": "Thu dọn hành lý",
+        "blocks": [
+          {
+            "kind": "action",
+            "text": "Con gái 22 tuổi ngồi trong căn phòng tối, thu dọn hành lý.",
+            "speaker": "",
+            "id": "94cc8272-e92f-433c-abbc-78edac4e3623"
+          },
+          {
+            "kind": "action",
+            "text": "Người cha ít nói mang vào một chiếc đèn pin cũ, ánh sáng chập chờn trên mặt cô.",
+            "speaker": "",
+            "id": "b195e8f1-cad1-40cf-86a9-091bc40ebde2"
+          }
+        ]
+      },
+      {
+        "id": "ca6b1a03-ab2c-4d01-af97-8ce75f28c6e1",
+        "source_scene_id": "c38602c3-333e-4f91-a42e-101368ff8e68",
+        "heading": "Sửa chữa đèn pin",
+        "blocks": [
+          {
+            "kind": "action",
+            "text": "Hai cha con cùng ngồi dưới ánh sáng điện thoại, sửa chữa đèn pin.",
+            "speaker": "",
+            "id": "53680773-3f15-4314-b54c-8a0d6023dfd1"
+          },
+          {
+            "kind": "action",
+            "text": "Con gái tìm thấy trong đèn mảnh giấy ghi tên mình từ hồi nhỏ.",
+            "speaker": "",
+            "id": "7d361abf-096c-4cba-ad28-5864792a4b38"
+          }
+        ]
+      },
+      {
+        "id": "be4fceae-40af-42d2-b28e-a2dd50eebe00",
+        "source_scene_id": "0e50ef14-10f8-4aca-bddf-3832f2c56a86",
+        "heading": "Đặt giấy vào vali",
+        "blocks": [
+          {
+            "kind": "action",
+            "text": "Đèn sáng lại. Cô gấp mảnh giấy, cất về trong thân đèn rồi đặt cả chiếc đèn pin vào vali. Cô để vali mở và ngồi xuống cạnh cha.",
+            "speaker": "",
+            "id": "3afad61e-bd1f-456b-93a1-91c307a2f691"
+          },
+          {
+            "kind": "action",
+            "text": "Cha kéo chiếc quạt giấy lại gần, quạt cho cả hai. Cô tựa nhẹ vai vào tay cha. Ngoài cửa sổ, tiếng xe đêm vẫn chạy.",
+            "speaker": "",
+            "id": "9a6fa879-7372-483f-9f6d-b36433b26683"
+          }
+        ]
+      }
+    ],
+    "source_revision": 2,
+    "source_outline": {
+      "id": "8cdedd3b-a475-475f-8448-cd33ecb382ce",
+      "version": 1,
+      "scenes": [
+        {
+          "id": "ba63f0eb-cd24-4d63-b5f5-bfa8aa0d1166",
+          "title": "Thu dọn hành lý",
+          "action": "Con gái 22 tuổi ngồi trong căn phòng tối, thu dọn hành lý. Người cha ít nói mang vào một chiếc đèn pin cũ, ánh sáng chập chờn trên mặt cô.",
+          "location": "Căn phòng",
+          "time": "Buổi tối",
+          "characters": "Con gái 22 tuổi, Người cha ít nói",
+          "goal": "Thu dọn hành lý để chuyển đi",
+          "purpose": "Introduce the setting and the main conflict",
+          "viewer_intent": "",
+          "keep_or_avoid": "",
+          "staging_choices": {}
+        },
+        {
+          "id": "c38602c3-333e-4f91-a42e-101368ff8e68",
+          "title": "Sửa chữa đèn pin",
+          "action": "Hai cha con cùng ngồi dưới ánh sáng điện thoại, sửa chữa đèn pin. Con gái tìm thấy trong đèn mảnh giấy ghi tên mình từ hồi nhỏ.",
+          "location": "Căn phòng",
+          "time": "Buổi tối",
+          "characters": "Con gái 22 tuổi, Người cha ít nói",
+          "goal": "Sửa chữa đèn pin và tìm hiểu ký ức",
+          "purpose": "Escalate pressure and reveal the emotional turn",
+          "viewer_intent": "",
+          "keep_or_avoid": "",
+          "staging_choices": {}
+        },
+        {
+          "id": "0e50ef14-10f8-4aca-bddf-3832f2c56a86",
+          "title": "Đặt giấy vào vali",
+          "action": "Con gái đặt mảnh giấy vào vali, ngồi xuống cạnh cha thêm một lát. Cô quyết định vẫn sẽ chuyển đi vào sáng mai.",
+          "location": "Căn phòng",
+          "time": "Buổi tối",
+          "characters": "Con gái 22 tuổi, Người cha ít nói",
+          "goal": "Đóng gói hành lý và quyết định",
+          "purpose": "Resolve the short film through a visible choice or image",
+          "viewer_intent": "",
+          "keep_or_avoid": "",
+          "staging_choices": {}
+        }
+      ],
+      "source": {
+        "id": "1fcc0fec-e55b-4c73-8e85-a5e52d265daa",
+        "project_revision": 2,
+        "version_id": "current",
+        "draft": {
+          "title": "Tình Cha Con",
+          "logline": "Trong một đêm mất điện ở Sài Gòn, cô con gái 22 tuổi đang thu dọn hành lý để chuyển đi. Người cha ít nói mang vào một chiếc đèn pin cũ, giúp hai cha con cùng sửa chữa dưới ánh sáng điện thoại, và cuối cùng, cô tìm thấy trong đèn mảnh giấy ghi tên mình từ hồi nhỏ.",
+          "sections": [
+            {
+              "title": "Core idea",
+              "purpose": "State the short film's central promise.",
+              "content": "Trong một đêm mất điện ở Sài Gòn, cô con gái 22 tuổi đang thu dọn hành lý để chuyển đi. Người cha ít nói mang vào một chiếc đèn pin cũ, giúp hai cha con cùng sửa chữa dưới ánh sáng điện thoại, và cuối cùng, cô tìm thấy trong đèn mảnh giấy ghi tên mình từ hồi nhỏ."
+            },
+            {
+              "title": "Main character",
+              "purpose": "Define the protagonist and key character pressure.",
+              "content": "Cô con gái 22 tuổi Người cha ít nói"
+            },
+            {
+              "title": "Main conflict",
+              "purpose": "Describe the obstacle and stakes.",
+              "content": "Mất điện, hành lý cần thu dọn, và chuyển đi vào sáng mai Hành lý đầy kỷ niệm và quyết định chuyển đi"
+            },
+            {
+              "title": "Beginning",
+              "purpose": "Set up the story world and first dramatic turn.",
+              "content": "Cô con gái 22 tuổi đang thu dọn hành lý trong căn phòng tối. Người cha ít nói mang vào một chiếc đèn pin cũ."
+            },
+            {
+              "title": "Middle",
+              "purpose": "Escalate pressure and reveal the emotional turn.",
+              "content": "Hai cha con cùng sửa chữa đèn pin dưới ánh sáng điện thoại, và cô con gái tìm thấy trong đèn mảnh giấy ghi tên mình từ hồi nhỏ."
+            },
+            {
+              "title": "Ending",
+              "purpose": "Resolve the short film through a visible choice or image.",
+              "content": "Cô con gái đặt mảnh giấy vào vali, ngồi xuống cạnh cha thêm một lát, và quyết định vẫn sẽ chuyển đi vào sáng mai. Cô con gái ngồi cạnh cha, nhìn vào vali đầy kỷ niệm, chuẩn bị chuyển đi vào sáng mai."
+            },
+            {
+              "title": "Theme",
+              "purpose": "Name the human idea underneath the plot.",
+              "content": "Tình yêu của cha mẹ luôn tồn tại, dù con cái có đi đâu xa."
+            },
+            {
+              "title": "Visual Style",
+              "purpose": "Capture the visual approach and recurring motifs.",
+              "content": "Cảnh quay ấm áp nhưng tiết chế, sử dụng ánh sáng điện thoại và đèn pin để tạo cảm giác gần gũi và ấm áp. Ánh sáng điện thoại, Đèn pin"
+            },
+            {
+              "title": "Tone",
+              "purpose": "Describe the intended emotional register.",
+              "content": "Cảm giác ấm áp nhưng tiết chế, kể tình thương qua hành động thay vì lời giải thích."
+            },
+            {
+              "title": "Production Notes",
+              "purpose": "Keep the idea grounded for short-film production.",
+              "content": "Phim ngắn 2 phút, 3 cảnh, chỉ hai nhân vật cha và con gái trưởng thành, một căn phòng, buổi tối. Thoại ít, không độc thoại, không hồi tưởng. Giữ kết thúc con gái ngồi cạnh cha, sáng mai vẫn chuyển đi. Căn phòng 2 nhân vật"
+            }
+          ]
+        },
+        "context": {
+          "idea": "Một tối mất điện ở Sài Gòn, cô con gái 22 tuổi đang thu dọn hành lý để sáng mai chuyển đi. Người cha vốn ít nói mang vào một chiếc đèn pin cũ. Đèn chập chờn, hai cha con cùng sửa dưới ánh sáng điện thoại. Cô tìm thấy trong đèn mảnh giấy ghi tên mình từ hồi nhỏ. Khi đèn sáng lại, cô đặt nó vào vali rồi ngồi xuống cạnh cha thêm một lát. Tôi muốn làm phim ngắn 2 phút, 3 cảnh, cảm giác ấm áp nhưng tiết chế, kể tình thương qua hành động thay vì lời giải thích.",
+          "constraints": [
+            "Chỉ hai nhân vật cha và con gái trưởng thành, một căn phòng, buổi tối. Tối đa 3 cảnh. Thoại ít, không độc thoại, không hồi tưởng. Giữ kết thúc con gái ngồi cạnh cha, sáng mai vẫn chuyển đi."
+          ],
+          "clarifications": [],
+          "pending_questions": []
+        },
+        "response_language": "vi",
+        "draft_provenance": {
+          "title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "logline": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:0:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:0:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:0:content": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:1:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:1:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:1:content": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:2:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:2:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:2:content": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:3:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:3:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:3:content": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:4:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:4:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:4:content": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:5:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:5:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:5:content": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:6:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:6:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:6:content": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:7:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:7:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:7:content": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:8:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:8:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:8:content": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:9:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:9:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:9:content": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          }
+        }
+      },
+      "provenance": {
+        "m2:ba63f0eb-cd24-4d63-b5f5-bfa8aa0d1166:title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:ba63f0eb-cd24-4d63-b5f5-bfa8aa0d1166:action": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:ba63f0eb-cd24-4d63-b5f5-bfa8aa0d1166:location": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:ba63f0eb-cd24-4d63-b5f5-bfa8aa0d1166:time": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:ba63f0eb-cd24-4d63-b5f5-bfa8aa0d1166:characters": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:ba63f0eb-cd24-4d63-b5f5-bfa8aa0d1166:goal": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:ba63f0eb-cd24-4d63-b5f5-bfa8aa0d1166:purpose": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:ba63f0eb-cd24-4d63-b5f5-bfa8aa0d1166:viewer_intent": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:ba63f0eb-cd24-4d63-b5f5-bfa8aa0d1166:keep_or_avoid": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:c38602c3-333e-4f91-a42e-101368ff8e68:title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:c38602c3-333e-4f91-a42e-101368ff8e68:action": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:c38602c3-333e-4f91-a42e-101368ff8e68:location": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:c38602c3-333e-4f91-a42e-101368ff8e68:time": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:c38602c3-333e-4f91-a42e-101368ff8e68:characters": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:c38602c3-333e-4f91-a42e-101368ff8e68:goal": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:c38602c3-333e-4f91-a42e-101368ff8e68:purpose": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:c38602c3-333e-4f91-a42e-101368ff8e68:viewer_intent": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:c38602c3-333e-4f91-a42e-101368ff8e68:keep_or_avoid": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:0e50ef14-10f8-4aca-bddf-3832f2c56a86:title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:0e50ef14-10f8-4aca-bddf-3832f2c56a86:action": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:0e50ef14-10f8-4aca-bddf-3832f2c56a86:location": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:0e50ef14-10f8-4aca-bddf-3832f2c56a86:time": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:0e50ef14-10f8-4aca-bddf-3832f2c56a86:characters": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:0e50ef14-10f8-4aca-bddf-3832f2c56a86:goal": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:0e50ef14-10f8-4aca-bddf-3832f2c56a86:purpose": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:0e50ef14-10f8-4aca-bddf-3832f2c56a86:viewer_intent": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:0e50ef14-10f8-4aca-bddf-3832f2c56a86:keep_or_avoid": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        }
+      }
+    },
+    "provenance": {
+      "script:ae3ece1e-2b17-487a-975e-f51608cfea9d:heading": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:94cc8272-e92f-433c-abbc-78edac4e3623:text": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:94cc8272-e92f-433c-abbc-78edac4e3623:speaker": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:b195e8f1-cad1-40cf-86a9-091bc40ebde2:text": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:b195e8f1-cad1-40cf-86a9-091bc40ebde2:speaker": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "script:ca6b1a03-ab2c-4d01-af97-8ce75f28c6e1:heading": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:53680773-3f15-4314-b54c-8a0d6023dfd1:text": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:53680773-3f15-4314-b54c-8a0d6023dfd1:speaker": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:7d361abf-096c-4cba-ad28-5864792a4b38:text": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:7d361abf-096c-4cba-ad28-5864792a4b38:speaker": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "script:be4fceae-40af-42d2-b28e-a2dd50eebe00:heading": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:3afad61e-bd1f-456b-93a1-91c307a2f691:text": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "block:3afad61e-bd1f-456b-93a1-91c307a2f691:speaker": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:9a6fa879-7372-483f-9f6d-b36433b26683:text": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "block:9a6fa879-7372-483f-9f6d-b36433b26683:speaker": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      }
+    }
+  },
+  "target_scene_id": "be4fceae-40af-42d2-b28e-a2dd50eebe00",
+  "instructions": "Giữ nguyên việc cô cất cả chiếc đèn pin và mảnh giấy vào vali, rồi ngồi cạnh cha. Làm nhịp kết chậm hơn bằng một hành động nhỏ và âm thanh trong phòng. Không thêm thoại, hồi tưởng hay nhân vật. Con gái vẫn chuyển đi vào sáng mai."
+}

@@ -119,7 +119,7 @@ export async function streamProjectOperation(
 }
 
 export class ProjectRequestError extends Error {
-  constructor(message: string, public status: number) {super(message);}
+  constructor(message: string, public status: number, public detail?: unknown) {super(message);}
 }
 
 export async function request(path: string, method = "GET", body?: unknown): Promise<unknown> {
@@ -134,9 +134,11 @@ export async function request(path: string, method = "GET", body?: unknown): Pro
   }
   const data: unknown = await response.json().catch(() => null);
   if (!response.ok) {
-    throw new ProjectRequestError(isRecord(data) && typeof data.detail === "string" ? data.detail
+    const detail = isRecord(data) ? data.detail : undefined;
+    throw new ProjectRequestError(typeof detail === "string" ? detail
+      : isRecord(detail) && typeof detail.message === "string" ? detail.message
       : response.status === 422 ? "Kiểm tra nội dung: tên và các phần không được trống hoặc vượt giới hạn."
-        : "Không hoàn tất được thao tác. Bản đang sửa vẫn được giữ; hãy thử lại.", response.status);
+        : "Không hoàn tất được thao tác. Bản đang sửa vẫn được giữ; hãy thử lại.", response.status, detail);
   }
   return data;
 }

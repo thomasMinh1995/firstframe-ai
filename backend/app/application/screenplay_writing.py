@@ -51,7 +51,7 @@ def write_scene(proposal: ScreenplayProposal, provider: StructuredProvider) -> S
             **({"revision_scope": "blocks", "block_ids": proposal.block_ids,
                 "selected_blocks": [b.model_dump(mode="json") for b in target.blocks if b.id in proposal.block_ids]} if scoped else {}),
             "author_intent": context.context.ai_context(),
-        }, ensure_ascii=False), response_model=BlockRevisionResult if scoped else SceneWritingResult)
+        }, ensure_ascii=False, separators=(",", ":")), response_model=BlockRevisionResult if scoped else SceneWritingResult)
     composed = provider.metadata.model == 'qwen2.5:7b' and can_compose(proposal, language)
     if composed:
         request, beats = composition_request(proposal, language)

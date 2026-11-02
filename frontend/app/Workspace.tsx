@@ -4,20 +4,23 @@ import {selectReadScreenplay,downloadScreenplayPdf} from "./screenplayExport";
 import { useEffect, useRef, useState } from "react";
 import {DraftRunPanel} from "./DraftRunPanel";
 import {confirmedAdoption} from "./draftWorkflowActions";
-import {runRequest,runPath,type DraftRun} from "./draftRunsApi";
+import {draftRunActionLabel,startOrOpenDraftRun,runRequest,runPath,type DraftRun} from "./draftRunsApi";
 import {useProjectAutosave} from "./useProjectAutosave";
 import { useRouter } from "next/navigation";
 import { WorkspaceStage, revealWorkspaceTarget } from "./WorkspaceStage";
+import {WorkspaceNavigation,WorkspaceTools} from "./WorkspaceTools";
 import { SavedLibrary } from "./SavedLibrary";
 import { CardFeedback } from "./CardFeedback";
 import { readRevisionNotes, validatedTargets } from "./revisionNotes";
 import { StoryFeedback } from "./StoryResultCards";
 import { StoryPlanEditor, type DraftField } from "./StoryPlanEditor";
 import type { Scene, SceneSuggestionInput } from "./sceneTypes";
-import { ScreenplayEditor } from "./ScreenplayEditor";
+import {sceneAfterAdoption} from "./draftWorkflowActions";
+import { ScreenplayEditor, ScreenplayHistory } from "./ScreenplayEditor";
 import { SceneHistory, SavedOutline, SceneOutlineEditor } from "./SceneOutlineEditor";
 import { ClarificationConversation } from "./ClarificationConversation";
 import "./storyWorkspace.css";
+import "./workspaceForms.css";
 import { AuthorIntentCard, FeedbackIntent, IntentDetails } from "./AuthorIntentCard";
 import { OperationProgress } from "./OperationProgress";
 import { OnboardingTour, useOnboarding } from "./OnboardingTour";
@@ -41,12 +44,16 @@ export default function Workspace({ library = false }: { library?: boolean }) {
   const candidateFlush = useRef<()=>Promise<void>>(async()=>{});
   const draftStart = useRef<{projectId:string;revision:number;request_id:string}|null>(null);
   const [openedRun,setOpenedRun] = useState<DraftRun|null>(null);
+  const [blockingRun,setBlockingRun] = useState<DraftRun|null>(null);
+  const [viewedDraftRun,setViewedDraftRun] = useState<DraftRun|null>(null);
+  const projectBlockingRun=blockingRun?.project_id===project?.id?blockingRun:null;
   const [draftEditorRevision, setDraftEditorRevision] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const [selectedFeedback, setSelectedFeedback] = useState<{
     projectId: string; artifactId: string; criterionId: string; message: string;
   } | null>(null);
+  const [adoptedScene,setAdoptedScene]=useState<{scriptId:string;sceneId:string}|null>(null);
   const [pendingStage, setPendingStage] = useState<string | null>(null);
   const [selectedCard, setSelectedCard] = useState<{ id: string; label: string } | null>(null);
   const [workspaceLoadState, setWorkspaceLoadState] = useState<"loading" | "ready" | "error">("loading");
@@ -105,7 +112,7 @@ export default function Workspace({ library = false }: { library?: boolean }) {
         revealWorkspaceTarget(target);
         const focus = pendingStage === "workspace-choices"
           ? document.querySelector<HTMLElement>(".clarification-current textarea") ?? target : target;
-        focus.scrollIntoView({ block: pendingStage === "workspace-draft" ? "start" : "center" }); focus.focus({ preventScroll: true });
+        focus.scrollIntoView({ block: ["workspace-draft", "draft-run"].includes(pendingStage) ? "start" : "center" }); focus.focus({ preventScroll: true });
       }
       setPendingStage(null);
     });
@@ -175,15 +182,17 @@ export default function Workspace({ library = false }: { library?: boolean }) {
     try { await autosave.idle(); await candidateFlush.current(); await action(); } catch (caught) { setError(message(caught)); }
     finally { operation.current = false; setBusy(null); autosave.setEnabled(!library); }
   }
-  async function startDraftRun() {
+  async function startDraftRun(existing?:DraftRun|null) {
     tour.pause("Theo dõi bản nháp trong công đoạn Tạo bản nháp; bản đang viết vẫn được giữ.");
     await run("Đang giữ nguồn và khởi động tạo bản nháp…",async()=>{
       const next=await persist();if(!next)return;
       if(draftStart.current?.projectId!==next.id||draftStart.current.revision!==next.revision)draftStart.current={projectId:next.id,revision:next.revision,request_id:crypto.randomUUID()};
-      setOpenedRun(await runRequest(runPath(next.id),"POST",{revision:next.revision,request_id:draftStart.current.request_id}));
+      const opened=existing?.project_id===next.id?await runRequest(runPath(next.id,existing.id))
+        :await startOrOpenDraftRun(next.id,{revision:next.revision,request_id:draftStart.current.request_id});
+      setOpenedRun(opened);
+      if(opened.id!==draftStart.current.request_id)setNotice("Đã mở lượt đang có theo nguồn đã giữ. Ý tưởng, tiến độ và bản đang viết vẫn được giữ; chưa gửi yêu cầu AI mới.");
       draftStart.current=null;
-      revealWorkspaceTarget(document.getElementById("draft-run"));
-      document.getElementById("draft-run")?.focus();
+      setPendingStage("draft-run");
     });
   }
   const persist = (retry = false) => autosave.flush("autosave", retry);
@@ -376,7 +385,7 @@ export default function Workspace({ library = false }: { library?: boolean }) {
         {library && projectToolbar}
       </header>
       <div className="workspace-layout">
-      {!library && <WorkspaceNavigation project={project} briefChanged={briefChanged} analyzing={!!busy && operationTiming?.kind === "analyze"} creatingPlan={!!busy && operationTiming?.kind === "plan"}
+      {!library && <WorkspaceNavigation project={project} draftRun={viewedDraftRun?.project_id===project?.id?viewedDraftRun:null} briefChanged={briefChanged} analyzing={!!busy && operationTiming?.kind === "analyze"} creatingPlan={!!busy && operationTiming?.kind === "plan"}
         tourStep={tour.state.record?.status === "active" && !busy ? tour.state.record.stepId : undefined} />}
       <div className="workspace-content">
       {!library && <OnboardingTour tour={tour} context={tourContext} ready={workspaceLoadState === "ready"}
@@ -417,6 +426,7 @@ export default function Workspace({ library = false }: { library?: boolean }) {
           {(error || saveError) && <p className="error" role="alert">{error || saveError}</p>}
         </div>}
         {library && error && <p className="error" role="alert">{error}</p>}
+        {!library && saved && <WorkspaceTools key={project.id} project={project} saved={saved} dirty={dirty} busy={!!busy} run={projectBlockingRun} steps={steps} timing={operationTiming} onStartDraft={()=>void startDraftRun(projectBlockingRun)} />}
       {!!steps.length && operationTiming && <details className="operation-details" open={operationTiming.finishedAt===null||operationFailed} data-progress-stage={`workspace-${operationTiming.kind === "analyze" ? "choices" : ["plan", "review"].includes(operationTiming.kind) ? "draft" : operationTiming.kind.startsWith("scene-") ? "outline" : "script"}`}>
         <summary>{operationTiming.finishedAt===null?'Đang xử lý…':operationFailed?'Xem lỗi và phần đã giữ':'Xem tiến trình lần vừa hoàn tất'}</summary>
         <OperationProgress steps={steps} failed={operationFailed}
@@ -439,27 +449,33 @@ export default function Workspace({ library = false }: { library?: boolean }) {
               placeholder="Mỗi dòng một ý, ví dụ: giữ sự lặng lẽ; chưa cần kết thúc rõ; chỉ hai nhân vật."
               onChange={(event) => setProject({ ...project, constraints: event.target.value.split("\n") })} />
             <details className="idea-settings"><summary>Tên dự án và ngôn ngữ (tùy chọn)</summary>
+            <div className="workspace-form-fields">
+            <div className="workspace-form-field">
             <label htmlFor="project-title">Tên dự án</label>
             <input id="project-title" maxLength={200} value={project.title}
               onChange={(event) => setProject({ ...project, title: event.target.value })} />
+            </div>
+            <div className="workspace-form-field">
             <label htmlFor="response-language">Ngôn ngữ đầu ra</label>
             <select id="response-language" data-tour="language" value={project.response_language} onChange={(event) =>
               setProject({ ...project, response_language: event.target.value as ResponseLanguage })}>
               {Object.entries(responseLanguageLabels).map(([value, label]) =>
                 <option key={value} value={value}>{label}</option>)}
             </select>
-            <details>
+            </div>
+            <details className="workspace-form-note">
               <summary>Về ngôn ngữ đầu ra</summary>
               <p className="storage-note">Hỗ trợ tiếng Việt và tiếng Anh. Với ý tưởng quá ngắn,
                 không dấu hoặc chưa rõ ngôn ngữ, hãy chọn ngôn ngữ đầu ra.
                 Lựa chọn áp dụng cho lần làm rõ, phát triển hoặc góp ý tiếp theo;
                 không tự dịch bản đang viết hay gọi AI.</p>
             </details>
+            </div>
             </details>
             {briefChanged && (project.analysis || project.draft) && <p className="form-message">Ý tưởng đã thay đổi. Làm rõ lại trước khi tạo
               bản phát triển mới; bản thảo và câu trả lời trước đó sẽ được giữ trong lịch sử.</p>}
-            {(!project.analysis || briefChanged) && <button data-tour-action="analyze" disabled={!project.idea.trim()}
-              onClick={() => void startDraftRun()}>Tạo bản nháp</button>}
+            {(!project.analysis || briefChanged) && <button data-tour-action="analyze" disabled={!projectBlockingRun&&!project.idea.trim()}
+              onClick={() => void startDraftRun(projectBlockingRun)}>{draftRunActionLabel(projectBlockingRun)??"Tạo bản nháp"}</button>}
           </WorkspaceStage>
           {saved && <details className="workspace-author-context">
             <summary>Ý đồ và lựa chọn đã lưu <span>{dirty ? "Có thay đổi chưa lưu" : "Bản đã lưu"}</span></summary>
@@ -484,13 +500,13 @@ export default function Workspace({ library = false }: { library?: boolean }) {
               })} />
             </div>
           </WorkspaceStage>}
-          <DraftRunPanel key={`draft-run:${project.id}`} project={project} opened={openedRun?.project_id===project.id?openedRun:null} onStart={startDraftRun}
+          <DraftRunPanel key={`draft-run:${project.id}`} project={project} opened={openedRun?.project_id===project.id?openedRun:null} onStart={startDraftRun} onBlockingRun={setBlockingRun} onViewedRun={setViewedDraftRun}
             registerFlush={fn=>{candidateFlush.current=fn;return()=>{if(candidateFlush.current===fn)candidateFlush.current=async()=>{}}}}
-            onAdopt={async(selected,revision)=>{await run("Đang giữ bản hiện tại và nhận bản nháp…",async()=>{
-              const next=await persist();if(!next)return;accept(await confirmedAdoption(
+            onAdopt={async(selected,revision,sceneId)=>{await run("Đang giữ bản hiện tại và nhận bản nháp…",async()=>{
+              const next=await persist();if(!next)return;const adopted=await confirmedAdoption(
                 ()=>projectRequest(`${runPath(next.id,selected.id)}/adopt`,"POST",{revision:next.revision,candidate_revision:revision}),
-                ()=>runRequest(runPath(next.id,selected.id)),()=>projectRequest(`/${next.id}`),revision));
-              revealWorkspaceTarget(document.getElementById("workspace-script"));
+                ()=>runRequest(runPath(next.id,selected.id)),()=>projectRequest(`/${next.id}`),revision);
+              accept(adopted);setAdoptedScene(sceneAfterAdoption(adopted.screenplay,sceneId));
             })}}/>
           {project.draft && <section className="panel form-stack working-draft" data-workspace-stage="workspace-draft">
             <h2 id="workspace-draft" data-tour="draft" tabIndex={-1}>Story plan đang làm việc</h2>
@@ -622,7 +638,7 @@ export default function Workspace({ library = false }: { library?: boolean }) {
               setNotice(`Đã lưu bản dàn cảnh phiên bản ${next.scene_handoff.version}. Có thể bắt đầu soạn thủ công tại phần Kịch bản; chưa tự tạo nội dung kịch bản.`);
               const target=document.getElementById("workspace-script");revealWorkspaceTarget(target);target?.scrollIntoView({block:"start"});target?.focus({preventScroll:true});
             })} />}
-          {saved && <ScreenplayEditor busy={!!busy} key={`script:${project.id}`} project={project} savedProject={saved} dirty={dirty}
+          {saved && <ScreenplayEditor initialScene={adoptedScene} onInitialSceneOpened={()=>setAdoptedScene(null)} busy={!!busy} key={`script:${project.id}`} project={project} savedProject={saved} dirty={dirty}
             onDownloadPdf={id=>run("Đang tải PDF bản đã chọn…",async()=>{await downloadScreenplayPdf(project.id,id);setNotice("Đã tải PDF đúng bản kịch bản đã chọn.");})}
             onSelectSource={(input,read)=>run("Đang chọn đúng bản đã đọc và tải PDF…",async()=>{
               const source=await persist();if(!source)return;
@@ -647,8 +663,11 @@ export default function Workspace({ library = false }: { library?: boolean }) {
             })}
             onStructural={instructions=>void run("Đang tạo candidate cấu trúc riêng…",async()=>{
               const next=await persist();if(!next)return;
-              setOpenedRun(await runRequest(runPath(next.id),"POST",{revision:next.revision,request_id:crypto.randomUUID(),revision_instructions:instructions}));
-              revealWorkspaceTarget(document.getElementById("draft-run"));document.getElementById("draft-run")?.focus();
+              const requestId=crypto.randomUUID();
+              const opened=await startOrOpenDraftRun(next.id,{revision:next.revision,request_id:requestId,revision_instructions:instructions});
+              setOpenedRun(opened);
+              if(opened.id!==requestId)setNotice("Đã mở lượt chưa kết thúc. Yêu cầu thay đổi cấu trúc mới chưa gửi AI; bản đang viết vẫn được giữ.");
+              setPendingStage("draft-run");
             })}
             onChange={(screenplay,proposalId)=>setProject(current=>current?{...current,screenplay,pending_screenplay_proposal_id:proposalId}:current)}
             canUse={!feedbackChanged&&!project.pending_screenplay_proposal_id&&!project.pending_scene_proposal_id&&!project.pending_staging_use
@@ -708,6 +727,20 @@ export default function Workspace({ library = false }: { library?: boolean }) {
               await inspectProject(false);checked=true;
             });return checked;}}
           />}
+          <section className="panel workspace-local-history" data-workspace-stage="workspace-history">
+            <h2 id="workspace-history" tabIndex={-1}>Các phiên bản đã giữ</h2>
+            <ScreenplayHistory project={saved??project} onRestore={id=>void run("Đang giữ bản hiện tại và khôi phục…",async()=>{
+              const next=await persist();if(!next)return;
+              accept(await projectRequest(`/${next.id}/screenplay-versions/${id}/restore`,"POST",{revision:next.revision}));
+            })}/>
+            <details><summary>Story plan và dàn cảnh đã giữ</summary>
+              <SceneHistory project={saved??project} onRestore={id=>void run("Đang khôi phục dàn cảnh…",async()=>{
+                const next=await persist();if(!next)return;
+                accept(await projectRequest(`/${next.id}/scene-versions/${id}/restore`,"POST",{revision:next.revision}));
+              })}/>
+              {[...(saved??project).versions].reverse().map(v=><details key={v.id}><summary>{v.draft.title} · {new Date(v.created_at).toLocaleString("vi-VN")}</summary><p>{v.draft.logline}</p>{v.draft.sections.map((part,i)=><p key={i}>{part.title}: {part.content}</p>)}</details>)}
+            </details>
+          </section>
         </fieldset>}
         {library && <SavedLibrary key={project.id} project={saved ?? project} busy={!!busy}
           onRestoreScreenplay={id => run("Đang khôi phục kịch bản…", async () => {
@@ -773,53 +806,6 @@ export default function Workspace({ library = false }: { library?: boolean }) {
       </>}
     </div></div></div></main>
   );
-}
-
-function WorkspaceNavigation({ project, briefChanged, creatingPlan, analyzing, tourStep }: { project: Project | null; briefChanged: boolean; creatingPlan: boolean; analyzing: boolean; tourStep?: TourStep }) {
-  const [active, setActive] = useState("workspace-idea");
-  useEffect(() => {
-    const workspace=document.querySelector<HTMLElement>('[data-desktop-stage]');
-    const selected=(event:Event)=>{
-      const stage=(event as CustomEvent<string>).detail;setActive(stage);
-      try{sessionStorage.setItem(`firstframe-stage:${project?.id}`,stage)}catch{/* Navigation works without browser storage. */}
-    };
-    workspace?.addEventListener('workspace-stage-change',selected);
-    let remembered:string|null=null;
-    try{remembered=sessionStorage.getItem(`firstframe-stage:${project?.id}`)}catch{/* Keep the default stage. */}
-    revealWorkspaceTarget(document.getElementById(remembered||'workspace-idea')??document.getElementById('workspace-idea'));
-    return()=>workspace?.removeEventListener('workspace-stage-change',selected);
-  },[project?.id]);
-  useEffect(() => {
-    if (window.innerWidth <= 760) return;
-    if ((active === "workspace-choices" && !analyzing && (!project?.analysis || briefChanged))
-      || (active === "workspace-draft" && !project?.draft && !creatingPlan)) {
-      revealWorkspaceTarget(document.getElementById("workspace-idea"));
-    }
-  }, [active, !!project?.analysis, !!project?.draft, briefChanged, creatingPlan, analyzing]);
-  const items = [
-    { id: "workspace-idea", label: "Ý tưởng", available: !!project },
-    { id: project?.screenplay ? "workspace-script" : project?.draft ? "workspace-draft" : "draft-run", label: "Bản nháp & review", available: !!project },
-    { id: "workspace-export", label: "Hoàn tất", available: !!project?.screenplay },
-  ];
-  const shown=tourStep==="draft-run"?"draft-run":tourStep&&["idea","script","export"].includes(tourStep)?`workspace-${tourStep}`:active;
-  const currentStage=shown==="workspace-export"?shown:["workspace-idea","workspace-choices"].includes(shown)?items[0].id:items[1].id;
-  return <aside className="workspace-rail"><p className="eyebrow">Câu chuyện của bạn</p>
-    <nav className="workspace-stage-nav" aria-label="Hành trình câu chuyện">
-      {items.map((item, index) => <button key={item.id} type="button" disabled={!item.available}
-        aria-controls={item.id} aria-current={item.available && item.id === currentStage ? "step" : undefined}
-        onClick={() => {
-          const target = document.getElementById((creatingPlan && item.id === "workspace-draft") || (analyzing && item.id === "workspace-choices") ? "workspace-operation" : item.id);
-          revealWorkspaceTarget(target); setActive(item.id);
-          target?.scrollIntoView({ block: "start" }); target?.focus({ preventScroll: true });
-        }}>
-        <span className="workspace-stage-number" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
-        <span>{item.label}<small>{!item.available && index > 2 ? "Chưa hỗ trợ" : item.available ? (item.id === currentStage ? (creatingPlan && item.id === "workspace-draft" ? "Đang tạo" : "Đang làm việc") : "Xem lại") : "Chưa có nội dung"}</small></span>
-      </button>)}
-    </nav>
-    <details className="workflow-deep"><summary>Mở chi tiết</summary>{[
-      ["draft-run","Tạo hoặc mở lại bản nháp"],["workspace-idea","Ý tưởng"],["workspace-choices","Làm rõ"],["workspace-draft","Story plan"],["workspace-outline","Dàn cảnh"],["workspace-script","Kịch bản"]
-    ].map(([id,label])=><button key={id} type="button" onClick={()=>{const el=document.getElementById(id);revealWorkspaceTarget(el);el?.scrollIntoView({block:"start"});el?.focus();setActive(id)}}>{label}</button>)}</details>
-  </aside>;
 }
 
 function message(error: unknown) {

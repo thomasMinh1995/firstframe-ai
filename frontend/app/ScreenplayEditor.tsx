@@ -1,6 +1,7 @@
 "use client";
 
 import {revealWorkspaceTarget} from "./WorkspaceStage";
+import {revealSceneInViewport} from "./sceneViewport";
 import {ReviewPanel} from "./ReviewPanel";
 import {useEffect,useId,useMemo,useRef,useState} from "react";
 import type {Project} from "./projectsApi";
@@ -19,7 +20,9 @@ import "./screenplay.css";
 
 const undoContent = (script: Screenplay) => JSON.stringify({id:script.id, scenes:script.scenes, source:script.source_outline.id});
 
-export function ScreenplayEditor({project, savedProject, onSelectSource, onDownloadPdf, onSourceInspect, dirty, sourceDirty, onChange, onStart, onSave, onInspect, onWrite, onProposalInspect, onPreview, onDiscard, canUse, onReview, onReviewInspect, onReviewDiscard, onReviewAssess, canNavigateReview,onApply,onUndoProposal,onStructural,busy=false}: {
+export function ScreenplayEditor({initialScene,onInitialSceneOpened,project, savedProject, onSelectSource, onDownloadPdf, onSourceInspect, dirty, sourceDirty, onChange, onStart, onSave, onInspect, onWrite, onProposalInspect, onPreview, onDiscard, canUse, onReview, onReviewInspect, onReviewDiscard, onReviewAssess, canNavigateReview,onApply,onUndoProposal,onStructural,busy=false}: {
+  initialScene?:{scriptId:string;sceneId:string}|null;
+  onInitialSceneOpened?:()=>void;
   busy?:boolean;onApply?:(id:string,scene:ScriptScene)=>void;onUndoProposal?:(id:string)=>void;onStructural?:(instructions:string)=>void;
   savedProject:Project;onSelectSource:(input:ScreenplaySelectionInput,read:Screenplay)=>Promise<void>;onDownloadPdf?:(selectionId:string)=>Promise<void>;onSourceInspect:()=>Promise<boolean>;
   onReview:(input:SceneWritingInput)=>Promise<void>;onReviewInspect:()=>Promise<boolean>;onReviewDiscard:(id:string)=>void;
@@ -40,6 +43,7 @@ export function ScreenplayEditor({project, savedProject, onSelectSource, onDownl
   const [pendingReference,setPendingReference]=useState<ReviewSource|null>(null);
   const [pendingEdit,setPendingEdit]=useState<string|null>(null);
   const [selected, setSelected] = useState<{scriptId:string;sceneId:string} | null>(null);
+  const [received,setReceived]=useState<{scriptId:string;count:number}|null>(null);
   const [useBlockEditor, setUseBlockEditor] = useState(false);
   const [replace, setReplace] = useState(false);
   const [undo, setUndo] = useState<{before: Screenplay; after: string; label:string} | null>(null);
@@ -51,7 +55,22 @@ export function ScreenplayEditor({project, savedProject, onSelectSource, onDownl
   const sketch = scene ? sketches[scene.source_scene_id] : undefined;
   const source = script?.source_outline.scenes.find(s=>s.id===scene?.source_scene_id);
   const edit = (next: ScriptScene) => script && onChange({...script,scenes:script.scenes.map(s=>s.id===next.id?next:s)});
-  useEffect(()=>{setSelected(null);setUseBlockEditor(false);setPendingReference(null);setPendingEdit(null);},[script?.id]);
+  const openedInitialScene=useRef<string|null>(null);
+  useEffect(()=>{setSelected(null);setReceived(null);setUseBlockEditor(false);setPendingReference(null);setPendingEdit(null);},[script?.id]);
+  useEffect(()=>{if(initialScene&&initialScene.scriptId===script?.id&&script.scenes.some(s=>s.id===initialScene.sceneId)){setSelected(initialScene);setReceived({scriptId:script.id,count:script.scenes.length})}},[script?.id,initialScene?.scriptId,initialScene?.sceneId]);
+  useEffect(()=>{
+    if(busy||!initialScene||initialScene.scriptId!==script?.id||initialScene.sceneId!==scene?.id)return;
+    const key=`${initialScene.scriptId}:${initialScene.sceneId}`;
+    if(openedInitialScene.current===key)return;
+    const frame=requestAnimationFrame(()=>{
+      const host=document.getElementById(editorId),heading=host?.querySelector<HTMLElement>('.screenplay-writing-heading');
+      if(!heading)return;
+      revealWorkspaceTarget(heading);revealSceneInViewport(heading,'start');
+      host?.querySelector<HTMLInputElement>('.screenplay-author-fields input')?.focus({preventScroll:true});
+      openedInitialScene.current=key;onInitialSceneOpened?.();
+    });
+    return()=>cancelAnimationFrame(frame);
+  },[busy,script?.id,scene?.id,initialScene?.scriptId,initialScene?.sceneId,editorId,onInitialSceneOpened]);
   function chooseScene(id:string, focus=true) {
     if(!script?.scenes.some(s=>s.id===id))return;
     setSelected({scriptId:script.id,sceneId:id});
@@ -83,6 +102,25 @@ export function ScreenplayEditor({project, savedProject, onSelectSource, onDownl
       setPendingReference(null);
     });return()=>cancelAnimationFrame(frame);
   },[pendingReference,scene?.id,script,canNavigateReview]);
+  const requestedReview=useRef(false);
+  useEffect(()=>{
+    const openTool=(event:Event)=>{
+      if((event as CustomEvent<string>).detail!=='review'||!script)return;
+      requestedReview.current=true;
+      if(!scene&&script.scenes[0])setSelected({scriptId:script.id,sceneId:script.scenes[0].id});
+      toolsOpener.current=document.activeElement as HTMLElement;
+      setToolsOpen(true);
+      const target=document.getElementById(editorId)?.querySelector<HTMLDetailsElement>('.screenplay-feedback-tools');
+      if(target){target.open=true;requestedReview.current=false;}
+    };
+    document.addEventListener('workspace-tool-change',openTool);
+    return()=>document.removeEventListener('workspace-tool-change',openTool);
+  },[script?.id,scene?.id]);
+  useEffect(()=>{
+    if(!requestedReview.current||!toolsOpen||!scene)return;
+    const target=document.getElementById(editorId)?.querySelector<HTMLDetailsElement>('.screenplay-feedback-tools');
+    if(target){target.open=true;requestedReview.current=false;}
+  },[toolsOpen,scene?.id,editorId]);
   function remove(id: string) {
     if (!scene || !script) return;
     const next={...script,scenes:script.scenes.map(s=>s.id===scene.id?{...s,blocks:s.blocks.filter(b=>b.id!==id)}:s)};
@@ -132,7 +170,8 @@ export function ScreenplayEditor({project, savedProject, onSelectSource, onDownl
       <div className="screenplay-columns screenplay-layout">
         <div className="screenplay-scene" id={editorId}>
           {scene ? <>
-            <div className="screenplay-writing-heading"><h3>Viết và sửa cảnh</h3><span>Cảnh {script.scenes.indexOf(scene)+1} / {script.scenes.length}</span></div>
+            <div className="screenplay-writing-heading"><h3>Viết và sửa cảnh</h3><span>Cảnh {script.scenes.indexOf(scene)+1} / {script.scenes.length} · {scene.heading||"Cảnh chưa đặt tên"}</span></div>
+            {received?.scriptId===script.id&&<p role="status" className="operation-status">Đã nhận toàn bộ {received.count} cảnh vào workspace · Đang sửa “{scene.heading||`Cảnh ${script.scenes.indexOf(scene)+1}`}”.</p>}
             <div className="screenplay-author-fields">
             <button type="button" aria-pressed={useBlockEditor} onClick={()=>setUseBlockEditor(!useBlockEditor)}>
               {useBlockEditor?'Dùng editor liền mạch':'Dùng editor dạng khối'}
