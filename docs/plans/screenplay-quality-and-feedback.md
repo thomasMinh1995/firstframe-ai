@@ -2,7 +2,9 @@
 
 - Ngày lập: 04/11/2026.
 - Review phạm vi: 04/11/2026; thu gọn đợt đầu vào Story plan và vòng góp ý–sửa.
-- Trạng thái: plan, chưa triển khai runtime hoặc chạy model thật trong đợt này.
+- Trạng thái: đã đo baseline và thử hai prompt trên nhánh triển khai #96.
+  Cả hai ứng viên chưa đạt, đã loại khỏi runtime; Task 2 tiếp tục mở.
+  Xem [báo cáo đợt đầu](../testing/task-2-screenplay-quality.md).
 - Tiếp nối Task 1, đã merge qua PR #95 vào `dev` (`d8d6b60`).
 - Source đã đối chiếu: bản triển khai Task 1 tại `8454167`, các module sáng tác,
   prompt, runner và bằng chứng hiện có. Khi triển khai phải ghi HEAD `dev`

@@ -1,0 +1,199 @@
+[
+  {
+    "case": "raincoat",
+    "operation": "plan",
+    "stage": "reasoning",
+    "output": "baseline-raincoat-1",
+    "seconds": 0.042,
+    "error": "Ollama could not be reached."
+  },
+  {
+    "case": "raincoat",
+    "operation": "plan",
+    "stage": "reasoning",
+    "output": "baseline-raincoat-2",
+    "seconds": 13.145
+  },
+  {
+    "case": "raincoat",
+    "operation": "plan",
+    "stage": "planning",
+    "output": "baseline-raincoat-2",
+    "seconds": 43.77
+  },
+  {
+    "case": "raincoat",
+    "operation": "plan",
+    "stage": "evaluation",
+    "output": "baseline-raincoat-2",
+    "seconds": 21.967
+  },
+  {
+    "case": "empty-fridge",
+    "operation": "plan",
+    "stage": "reasoning",
+    "output": "baseline-empty-fridge",
+    "seconds": 20.839
+  },
+  {
+    "case": "empty-fridge",
+    "operation": "plan",
+    "stage": "planning",
+    "output": "baseline-empty-fridge",
+    "seconds": 74.328
+  },
+  {
+    "case": "empty-fridge",
+    "operation": "plan",
+    "stage": "evaluation",
+    "output": "baseline-empty-fridge",
+    "seconds": 26.319
+  },
+  {
+    "case": "raincoat",
+    "operation": "review",
+    "stage": "evaluation",
+    "output": "edited-raincoat",
+    "seconds": 19.711
+  },
+  {
+    "case": "empty-fridge",
+    "operation": "review",
+    "stage": "evaluation",
+    "output": "edited-empty-fridge",
+    "seconds": 16.969
+  },
+  {
+    "case": "fallen-flowers",
+    "operation": "plan",
+    "stage": "reasoning",
+    "output": "baseline-held-out",
+    "seconds": 19.325
+  },
+  {
+    "case": "fallen-flowers",
+    "operation": "plan",
+    "stage": "planning",
+    "output": "baseline-held-out",
+    "seconds": 71.594
+  },
+  {
+    "case": "fallen-flowers",
+    "operation": "plan",
+    "stage": "evaluation",
+    "output": "baseline-held-out",
+    "seconds": 23.002
+  },
+  {
+    "case": "raincoat",
+    "operation": "replay",
+    "stage": "evaluation",
+    "output": "candidate-review-raincoat-1",
+    "seconds": 38.758
+  },
+  {
+    "case": "raincoat",
+    "operation": "replay",
+    "stage": "evaluation",
+    "output": "candidate-review-raincoat-2",
+    "seconds": 25.989
+  },
+  {
+    "case": "raincoat",
+    "operation": "replay",
+    "stage": "evaluation",
+    "output": "candidate-review-raincoat-3",
+    "seconds": 32.555
+  },
+  {
+    "case": "empty-fridge",
+    "operation": "replay",
+    "stage": "evaluation",
+    "output": "candidate-review-empty-fridge-1",
+    "seconds": 24.7
+  },
+  {
+    "case": "empty-fridge",
+    "operation": "replay",
+    "stage": "evaluation",
+    "output": "candidate-review-empty-fridge-2",
+    "seconds": 20.454
+  },
+  {
+    "case": "empty-fridge",
+    "operation": "replay",
+    "stage": "evaluation",
+    "output": "candidate-review-empty-fridge-3",
+    "seconds": 18.128
+  },
+  {
+    "case": "raincoat",
+    "operation": "replay",
+    "stage": "planning",
+    "output": "candidate-plan-raincoat-1",
+    "seconds": 86.079
+  },
+  {
+    "case": "raincoat",
+    "operation": "replay",
+    "stage": "planning",
+    "output": "candidate-plan-raincoat-2",
+    "seconds": 52.154
+  },
+  {
+    "case": "raincoat",
+    "operation": "replay",
+    "stage": "planning",
+    "output": "candidate-plan-raincoat-3",
+    "seconds": 46.47
+  },
+  {
+    "case": "empty-fridge",
+    "operation": "replay",
+    "stage": "planning",
+    "output": "candidate-plan-empty-fridge-1",
+    "seconds": 66.978
+  },
+  {
+    "case": "empty-fridge",
+    "operation": "replay",
+    "stage": "planning",
+    "output": "candidate-plan-empty-fridge-2",
+    "seconds": 51.713
+  },
+  {
+    "case": "empty-fridge",
+    "operation": "replay",
+    "stage": "planning",
+    "output": "candidate-plan-empty-fridge-3",
+    "seconds": 53.976
+  },
+  {
+    "case": "fallen-flowers",
+    "operation": "replay",
+    "stage": "planning",
+    "output": "candidate-plan-fallen-flowers-1",
+    "seconds": 73.35
+  },
+  {
+    "case": "fallen-flowers",
+    "operation": "replay",
+    "stage": "planning",
+    "output": "candidate-plan-fallen-flowers-2",
+    "seconds": 59.221
+  },
+  {
+    "case": "fallen-flowers",
+    "operation": "replay",
+    "stage": "planning",
+    "output": "candidate-plan-fallen-flowers-3",
+    "seconds": 59.859
+  },
+  {
+    "case": "fallen-flowers",
+    "operation": "review",
+    "stage": "evaluation",
+    "output": "edited-held-out",
+    "seconds": 41.321
+  }
+]
