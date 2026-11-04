@@ -27,6 +27,47 @@ class CardReview(BaseModel):
     suggestion: str
 
 
+class DecisionCheck(BaseModel):
+    model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
+
+    decision_id: str
+    draft_comparison: Literal["aligned", "mismatch", "uncertain", "not_applicable"]
+    card_ids: list[str]
+    draft_reason: str = Field(min_length=1)
+    suggestion_comparison: Literal["aligned", "mismatch", "uncertain", "not_applicable"]
+    suggestion_reason: str = Field(min_length=1)
+
+
+def review_card_ids(context: dict) -> list[str]:
+    neighbors = [pair["related_card_id"] for pair in context["neighbor_checks"]]
+    return list(dict.fromkeys([*context["focus_card_ids"], *neighbors])) or [
+        card["id"] for card in context["cards"]]
+
+
+def validate_decision_checks(reviews: list[CardReview], checks: list[DecisionCheck], context: dict) -> None:
+    expected = {d["id"] for d in context["decisions"]}
+    if len(reviews) != 1 or len(checks) != len(expected) or {c.decision_id for c in checks} != expected:
+        raise MalformedProviderResponseError("Card review did not check each author decision exactly once.")
+    review = reviews[0]
+    scope = set(review_card_ids(context))
+    for check in checks:
+        if (not set(check.card_ids).issubset(scope)
+                or check.draft_comparison == "mismatch" and not check.card_ids
+                or review.suggestion.strip() and check.suggestion_comparison in {"mismatch", "uncertain"}
+                or not review.suggestion.strip() and check.suggestion_comparison != "not_applicable"):
+            raise MalformedProviderResponseError("Decision check has invalid evidence or an unsafe suggestion.")
+    selected = next((c for c in checks if c.decision_id == review.decision_id), None)
+    if selected is None or selected.draft_comparison == "not_applicable":
+        raise MalformedProviderResponseError("Card review cites an unchecked or unrelated decision.")
+    mismatches = {c.decision_id for c in checks if c.draft_comparison == "mismatch"}
+    cited_evidence = set(selected.card_ids).intersection((review.card_id, review.related_card_id))
+    if mismatches and (review.comparison != "mismatch" or review.decision_id not in mismatches or not cited_evidence):
+        raise MalformedProviderResponseError("Card review skipped a decision violation.")
+    if review.comparison == "aligned" and (not cited_evidence or selected.draft_comparison != "aligned"
+            or any(c.draft_comparison == "uncertain" for c in checks)):
+        raise MalformedProviderResponseError("Card review contradicts its decision checks.")
+
+
 def card_spans(text: str) -> list[tuple[int, int]]:
     # Mirror StoryPlanEditor.splitStorySection so anchors match the visible cards.
     space = f"[{re.escape(BROWSER_WHITESPACE)}]"

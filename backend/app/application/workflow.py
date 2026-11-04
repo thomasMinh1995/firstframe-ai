@@ -10,13 +10,16 @@ from uuid import uuid4
 
 from pydantic import BaseModel, ConfigDict, Field, create_model
 
-from app.application.ai_provider import StructuredProvider, StructuredRequest
+from app.application.ai_provider import MalformedProviderResponseError, StructuredProvider, StructuredRequest
 from app.application.dataset import recording_provider
 from app.application.progress import progress_step
 from app.application.knowledge_loader import KnowledgeLoader
 from app.application.language import ResponseLanguage, resolve_response_language
 from app.application.prompt_loader import PromptLoader
-from app.application.revision_review import CardReview, feedback_messages, revision_notes, review_context
+from app.application.revision_review import (
+    CardReview, DecisionCheck, feedback_messages, revision_notes, review_context,
+    review_card_ids, validate_decision_checks,
+)
 from app.core.artifacts import (
     ArtifactKind,
     ArtifactMetadata,
@@ -95,6 +98,10 @@ class _RevisionReviewOutput(BaseModel):
     rubric_scores: EvaluationRubricScores | None = None
 
 
+class _CheckedRevisionReviewOutput(_RevisionReviewOutput):
+    decision_checks: list[DecisionCheck]
+
+
 @dataclass(frozen=True)
 class RevisionEvaluation:
     passed: bool | None
@@ -107,15 +114,19 @@ class RevisionEvaluation:
 
 def _card_review_schema(context: dict) -> type[_RevisionReviewOutput]:
     neighbors = list(dict.fromkeys(pair["related_card_id"] for pair in context["neighbor_checks"]))
-    cards = list(dict.fromkeys([*context["focus_card_ids"], *neighbors])) or [card["id"] for card in context["cards"]]
+    cards = review_card_ids(context)
     decisions = [item["id"] for item in context["decisions"]]
     related = Literal[tuple(cards)] if neighbors else Literal[tuple(cards)] | None
     card_review = create_model("FocusedCardReview", __base__=CardReview,
                                card_id=(Literal[tuple(cards)], ...),
                                decision_id=(Literal[tuple(decisions)], ...),
                                related_card_id=(related, ...))
-    return create_model("_RevisionReviewOutput", __base__=_RevisionReviewOutput,
+    decision_check = create_model("ScopedDecisionCheck", __base__=DecisionCheck,
+                                  decision_id=(Literal[tuple(decisions)], ...),
+                                  card_ids=(list[Literal[tuple(cards)]], ...))
+    return create_model("_RevisionReviewOutput", __base__=_CheckedRevisionReviewOutput,
                         reviews=(list[card_review], Field(min_length=1, max_length=1)),
+                        decision_checks=(list[decision_check], Field(min_length=len(decisions), max_length=len(decisions))),
                         rubric_scores=(type(None), ...))
 
 
@@ -389,7 +400,9 @@ class LLMEvaluationLayer(EvaluationLayer):
             )
         )
         if review_context is not None:
-            review = _expect_output(result.output, _RevisionReviewOutput)
+            if not isinstance(result.output, _CheckedRevisionReviewOutput):
+                raise MalformedProviderResponseError("Card review is missing required decision checks.")
+            review = _expect_output(result.output, _CheckedRevisionReviewOutput)
             output = revision_evaluation(review, review_context)
         else:
             output = _expect_output(result.output, _EvaluationOutput)
@@ -855,9 +868,8 @@ def _evaluation_input(planning: PlanningArtifact, rubric: object) -> str:
     target_language = getattr(planning, "target_response_language", "English")
     review_context = getattr(planning, "review_context", None)
     if review_context is not None:
-        focus = set(review_context["focus_card_ids"])
-        nearby = {pair["related_card_id"] for pair in review_context["neighbor_checks"]}
-        cards = [card for card in review_context["cards"] if not focus or card["id"] in focus | nearby]
+        scope = set(review_card_ids(review_context))
+        cards = [card for card in review_context["cards"] if card["id"] in scope]
         card_ids = {card["id"] for card in cards}
         context = {"passages": [passage for passage in review_context.get("passages", [])
                                 if card_ids.intersection(passage["card_ids"])],
@@ -875,6 +887,8 @@ def _evaluation_input(planning: PlanningArtifact, rubric: object) -> str:
 
 
 def revision_evaluation(review: _RevisionReviewOutput, context: dict) -> RevisionEvaluation:
+    if isinstance(review, _CheckedRevisionReviewOutput):
+        validate_decision_checks(review.reviews, review.decision_checks, context)
     strengths, weaknesses, suggestions, clarifications = feedback_messages(review.reviews, context)
     passed = False if weaknesses else None if clarifications else True
     return RevisionEvaluation(passed=passed, strengths=strengths, weaknesses=weaknesses,

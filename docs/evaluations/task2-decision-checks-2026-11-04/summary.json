@@ -1,0 +1,28 @@
+{
+  "baseline_commit": "8d97d5a51cfdf1b8ec3dfc38a75039c6fe3ab70f",
+  "budget": {
+    "max_calls": 28,
+    "max_provider_seconds": 1500
+  },
+  "provider_calls": 12,
+  "provider_seconds": 394.002,
+  "baseline_calls": 7,
+  "candidate_calls": 5,
+  "candidate_api_accepted": 0,
+  "candidate_api_rejected": 5,
+  "same_source_and_input_verified": true,
+  "draft_and_previous_feedback_preserved_on_errors": true,
+  "backend_tests": {
+    "passed": 894,
+    "skipped": 1
+  },
+  "focused_tests": 133,
+  "model_digest": "845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
+  "three_run_confirmation": false,
+  "held_out_candidate_comparison": false,
+  "quality_candidate_accepted": false,
+  "implementation_kept_on_draft_branch_for_review": true,
+  "ready_to_merge": false,
+  "task96_complete": false,
+  "archive_sha256": "f6489f21c738939bb82ad1b44eff42ef76b33dbf5d3e4521a16a235638752cbd"
+}

@@ -5,11 +5,13 @@
 - Trạng thái: các đợt [baseline](../testing/task-2-screenplay-quality.md),
   [ngữ cảnh card](../testing/task-2-card-context.md) và
   [chọn quyết định](../testing/task-2-decision-selection.md) đã được ghi lại.
-  Runtime giữ `e71d863`: ca thời gian có tiến bộ, đối chứng ràng buộc chưa đạt.
+  Nền trước đợt 2.2a giữ `e71d863`: ca thời gian có tiến bộ, ràng buộc chưa đạt.
   PR #98 vẫn draft; #96 còn mở.
-- Cập nhật và review 04/11: bổ sung mục 2.2a cho phép mở rộng phản hồi
-  **nội bộ** của critic để đối chiếu từng quyết định. Đây là plan cho đợt
-  tiếp theo, chưa triển khai hoặc gọi model theo hợp đồng mới.
+- Cập nhật và review 04/11: mục 2.2a đã có bản triển khai kỹ thuật trên
+  nhánh draft. Full backend 894 passed, 1 skipped; năm lượt model đầu chưa
+  qua gate, chưa nhận ứng viên vào dev. Xem
+  [báo cáo 2.2a](../testing/task-2-decision-checks.md). Checks không đồng
+  nghĩa model đã hiểu đúng các lựa chọn; #96 vẫn mở.
 - Tiếp nối Task 1, đã merge qua PR #95 vào `dev` (`d8d6b60`).
 - Source đã đối chiếu: bản triển khai Task 1 tại `8454167`, các module sáng tác,
   prompt, runner và bằng chứng hiện có. Khi triển khai phải ghi HEAD `dev`
@@ -272,7 +274,12 @@ thành hệ thống chấm điểm tác giả hay thay thế việc phát triể
 Kết luận review của agent: plan đủ rõ cho một lần triển khai thử có giới
 hạn trong #96; không có điểm chặn còn mở trong phạm vi plan. Hiệu quả của
 checks chưa được chứng minh, phải qua mục C trước khi nhận runtime. Lượt
-cập nhật này chỉ thay tài liệu, không có triển khai hoặc call model mới.
+review plan ban đầu chỉ thay tài liệu, chưa triển khai hoặc gọi model.
+
+Kết quả triển khai sau review: [báo cáo 2.2a](../testing/task-2-decision-checks.md).
+A/B đã có code và test contract trên nhánh draft; C chưa đạt. Đã dùng
+12/28 call, 394,002/1.500 giây provider, giữ nguyên nguồn/draft ở các lỗi;
+không xác nhận ba lượt hoặc nhận ứng viên chỉ vì guard từ chối output.
 
 ### 2.3 — So sánh, hồi quy và bàn giao
 
@@ -338,13 +345,13 @@ tổng quát từ vài fixture.
 
 ## Ngân sách và điểm dừng
 
-Tiếp tục ngày 04/11: [review chọn quyết định](../testing/task-2-decision-selection.md)
+Đợt chọn quyết định trước 2.2a: [review](../testing/task-2-decision-selection.md)
 đã loại thêm năm ứng viên prompt/thứ tự dữ liệu sau 15 call. Runtime giữ
 `e71d863`; chọn nguồn và giữ mọi giới hạn vẫn chưa đạt. PR #98 draft, #96
 mở; chưa chạy ba lượt xác nhận cho ứng viên nào trong đợt này.
 
-Lượt cập nhật plan này không gọi model; các batch trước giữ evidence/ngân
-sách riêng. Trước khi chạy batch mới, kiểm model đã cấu hình và chốt
+Mỗi batch giữ evidence/ngân sách riêng. Trước khi chạy batch mới, kiểm model
+đã cấu hình và chốt
 trần số call/thời gian cho batch từ số công đoạn và số đoạn đích thực tế;
 một review có thể gọi nhiều lần nên không tính một lần bấm là một call.
 Ghi cả tham số yêu cầu lẫn context thực nếu provider cung cấp. Dùng SQLite/

@@ -1,0 +1,108 @@
+{
+  "max_calls": 28,
+  "max_provider_seconds": 1500,
+  "cases": [
+    {
+      "id": "fridge-ending-violation",
+      "source": "edited-empty-fridge/review.json",
+      "focus_section": "Ending",
+      "ending": "Hai bạn nhìn hộp trống rồi cãi nhau vì ai đã ăn bánh. Sau đó cả hai ra ngoài mua bánh mới.",
+      "expectation": "Đối chứng chỉ sửa Ending sau review đã lưu: phát hiện trái constraint-2, không đánh giá thay bằng phần Beginning phù hợp."
+    },
+    {
+      "id": "raincoat-ending-violation",
+      "source": "edited-raincoat/review.json",
+      "focus_section": "Ending",
+      "ending": "Chủ chiếc áo quay lại tiệm. Người thợ nhận ra đó là bạn gái cũ của mình và kể chuyện hai người chia tay.",
+      "expectation": "Đối chứng chỉ sửa Ending sau review đã lưu: đối chiếu constraint-0 hoặc constraint-1 về người/quan hệ mới."
+    },
+    {
+      "id": "raincoat",
+      "source": "edited-raincoat/edited.json",
+      "expectation": "Không báo mâu thuẫn chỉ vì người thợ từ không chú ý chuyển sang vuốt áo; không viện số người/địa điểm để yêu cầu giữ nguyên hành động."
+    },
+    {
+      "id": "empty-fridge",
+      "source": "edited-empty-fridge/edited.json",
+      "expectation": "Ngồi rồi đứng lên là diễn tiến. Không yêu cầu nhân vật vừa ngồi vừa đứng; không coi giới hạn hai người/một bếp là cấm đổi tư thế.",
+      "overrides": {
+        "clarifications": {
+          "Áo màu gì?": "Áo xanh."
+        },
+        "analysis": null,
+        "answers": []
+      }
+    },
+    {
+      "id": "conflicting-choices",
+      "source": "edited-empty-fridge/edited.json",
+      "idea": "Người thợ buộc một tập giấy. Tôi chưa chốt cách kết.",
+      "constraints": [
+        "Dừng khi người thợ vừa buộc nút, không có ai nhận sách.",
+        "Phải có người khách nhận sách sau khi người thợ buộc nút."
+      ],
+      "clarifications": {},
+      "sections": [
+        {
+          "title": "Beginning",
+          "purpose": "",
+          "content": "Người thợ xỏ dây qua gáy tập giấy."
+        },
+        {
+          "title": "Ending",
+          "purpose": "",
+          "content": "Anh buộc nút rồi đặt tay xuống bàn. Cắt phim."
+        }
+      ],
+      "expectation": "Uncertain: hai lựa chọn kết tự mâu thuẫn; hỏi tác giả, không tự ép bỏ hoặc thêm khách."
+    },
+    {
+      "source": "edited-empty-fridge/edited.json",
+      "held_out": true,
+      "idea": "Một người thợ gốm xoay chiếc bát để nhìn đường viền. Kết khi hai tay vừa dừng.",
+      "constraints": [
+        "Chỉ một người trong xưởng.",
+        "Bát để mộc, không tô màu và không đưa vào lò. Dừng khi hai tay vừa ngừng xoay."
+      ],
+      "clarifications": {},
+      "id": "pottery",
+      "sections": [
+        {
+          "title": "Beginning",
+          "purpose": "",
+          "content": "Người thợ đặt chiếc bát mộc lên bàn xoay. Chị nhìn đường viền bát."
+        },
+        {
+          "title": "Ending",
+          "purpose": "",
+          "content": "Chị xoay chiếc bát thêm một chút. Hai tay dừng lại trên bàn xoay. Cắt phim."
+        }
+      ],
+      "expectation": "Aligned: xoay rồi dừng là diễn tiến hợp lệ, không đòi tô màu/nung hoặc hậu kết."
+    },
+    {
+      "source": "edited-empty-fridge/edited.json",
+      "held_out": true,
+      "idea": "Một người thợ gốm xoay chiếc bát để nhìn đường viền. Kết khi hai tay vừa dừng.",
+      "constraints": [
+        "Chỉ một người trong xưởng.",
+        "Bát để mộc, không tô màu và không đưa vào lò. Dừng khi hai tay vừa ngừng xoay."
+      ],
+      "clarifications": {},
+      "id": "pottery-violation",
+      "sections": [
+        {
+          "title": "Beginning",
+          "purpose": "",
+          "content": "Người thợ đặt chiếc bát mộc lên bàn xoay. Chị nhìn đường viền bát."
+        },
+        {
+          "title": "Ending",
+          "purpose": "",
+          "content": "Chị tô màu chiếc bát rồi đưa vào lò. Một khách bước vào nhận bát."
+        }
+      ],
+      "expectation": "Mismatch: nguồn cụ thể constraint-0/1, nhận ra tô màu/đưa lò/thêm khách; bước sửa phải bỏ các vi phạm và giữ điểm dừng."
+    }
+  ]
+}

@@ -13,6 +13,7 @@ from app.application.workflow import (
     _PlanningOutput,
     _ReasoningOutput,
     _RevisionReviewOutput,
+    _CheckedRevisionReviewOutput,
     revision_evaluation,
     _structured_plan_sections,
 )
@@ -42,6 +43,10 @@ def _recorded_id_allows(value: str | None, schema: dict) -> bool:
     return value is None if schema.get("type") == "null" else isinstance(value, str)
 
 
+def _recorded_review_model(schema: dict) -> type[_RevisionReviewOutput]:
+    return _CheckedRevisionReviewOutput if "decision_checks" in schema["properties"] else _RevisionReviewOutput
+
+
 def _validate_recorded_card_shape(output: _RevisionReviewOutput, raw: dict, schema: dict) -> None:
     # Recorded calls can allow three reviews or different card IDs; keep their original contract.
     properties = schema["properties"]
@@ -59,6 +64,16 @@ def _validate_recorded_card_shape(output: _RevisionReviewOutput, raw: dict, sche
         if any(not _recorded_id_allows(getattr(review, key), fields[key])
                for key in ("card_id", "decision_id", "related_card_id")):
             raise ValueError("ID đối chiếu không khớp schema của bản ghi.")
+    if isinstance(output, _CheckedRevisionReviewOutput):
+        checks = properties["decision_checks"]
+        item = checks["items"]
+        fields = schema.get("$defs", {}).get(item.get("$ref", "").rsplit("/", 1)[-1], item)["properties"]
+        if not checks.get("minItems", 0) <= len(output.decision_checks) <= checks.get("maxItems", len(output.decision_checks)):
+            raise ValueError("Số đối chiếu không khớp schema của bản ghi.")
+        for check in output.decision_checks:
+            if (not _recorded_id_allows(check.decision_id, fields["decision_id"])
+                    or any(not _recorded_id_allows(key, fields["card_ids"]["items"]) for key in check.card_ids)):
+                raise ValueError("ID kiểm tra không khớp schema của bản ghi.")
 
 
 def validate_corrections(
@@ -71,7 +86,7 @@ def validate_corrections(
         step = sample["steps"][int(key)]
         model = OUTPUT_MODELS.get(step.get("stage"))
         if step.get("stage") == "evaluation" and "reviews" in step.get("request", {}).get("response_schema", {}).get("properties", {}):
-            model = _RevisionReviewOutput
+            model = _recorded_review_model(step["request"]["response_schema"])
         if sample["status"] != "completed" or step.get("status") != "completed" or model is None:
             raise ValueError("Chỉ sửa output của bước đã hoàn tất và có cấu trúc được hỗ trợ.")
         parsed = model.model_validate(output, strict=True)
@@ -134,7 +149,10 @@ def apply_demo_corrections(
         if step.feedback is not None and "evaluation" in edits:
             if "reviews" in edits["evaluation"]:
                 source_step = next(item for item in samples[source]["steps"] if item["stage"] == "evaluation")
-                evaluation = revision_evaluation(_RevisionReviewOutput.model_validate(edits["evaluation"]),
+                model = _recorded_review_model(source_step["request"]["response_schema"])
+                parsed = model.model_validate(edits["evaluation"])
+                _validate_recorded_card_shape(parsed, edits["evaluation"], source_step["request"]["response_schema"])
+                evaluation = revision_evaluation(parsed,
                                                  card_review_context(source_step))
             else:
                 evaluation = _EvaluationOutput.model_validate(edits["evaluation"])
