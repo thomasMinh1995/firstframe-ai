@@ -1,0 +1,113 @@
+{
+  "max_calls": 28,
+  "max_provider_seconds": 1200,
+  "cases": [
+    {
+      "id": "fridge-ending-violation",
+      "source": "edited-empty-fridge/review.json",
+      "focus_section": "Ending",
+      "ending": "Hai bạn nhìn hộp trống rồi cãi nhau vì ai đã ăn bánh. Sau đó cả hai ra ngoài mua bánh mới.",
+      "expectation": "Đối chứng chỉ sửa Ending sau review đã lưu: phát hiện trái constraint-2, không đánh giá thay bằng phần Beginning phù hợp."
+    },
+    {
+      "id": "raincoat-ending-violation",
+      "source": "edited-raincoat/review.json",
+      "focus_section": "Ending",
+      "ending": "Chủ chiếc áo quay lại tiệm. Người thợ nhận ra đó là bạn gái cũ của mình và kể chuyện hai người chia tay.",
+      "expectation": "Đối chứng chỉ sửa Ending sau review đã lưu: đối chiếu constraint-0 hoặc constraint-1 về người/quan hệ mới."
+    },
+    {
+      "id": "raincoat",
+      "source": "edited-raincoat/edited.json",
+      "expectation": "Không báo mâu thuẫn chỉ vì người thợ từ không chú ý chuyển sang vuốt áo; không viện số người/địa điểm để yêu cầu giữ nguyên hành động."
+    },
+    {
+      "id": "empty-fridge",
+      "source": "edited-empty-fridge/edited.json",
+      "expectation": "Ngồi rồi đứng lên là diễn tiến. Không yêu cầu nhân vật vừa ngồi vừa đứng; không coi giới hạn hai người/một bếp là cấm đổi tư thế."
+    },
+    {
+      "id": "flowers",
+      "source": "edited-held-out/edited.json",
+      "expectation": "Âm thanh và đặt cốc ở cùng đoạn kết; không bắt lặp âm thanh ở mọi card hoặc đòi thêm hành động sau điểm cắt."
+    },
+    {
+      "id": "binding",
+      "source": "edited-empty-fridge/edited.json",
+      "held_out": true,
+      "idea": "Một người thợ đóng sách xỏ dây qua gáy tập giấy rồi buộc nút. Tôi muốn nhìn một thao tác bình thường, kết khi nút vừa siết.",
+      "constraints": [
+        "Một người, một bàn làm việc.",
+        "Cắt khi nút vừa siết; không giao sách cho người khác hoặc kể chuyện khách hàng."
+      ],
+      "clarifications": {
+        "Có dùng keo không?": "Chỉ dùng dây, không dùng keo."
+      },
+      "sections": [
+        {
+          "title": "Beginning",
+          "purpose": "",
+          "content": "Người thợ đặt tập giấy xuống bàn. Anh xỏ dây qua gáy tập giấy."
+        },
+        {
+          "title": "Ending",
+          "purpose": "",
+          "content": "Anh kéo hai đầu dây rồi buộc nút. Cắt ngay khi nút vừa siết."
+        }
+      ],
+      "expectation": "Không coi đặt giấy → xỏ dây → buộc nút là mâu thuẫn. Không bắt viện câu trả lời về keo khi góp ý điểm dừng; không thêm việc giao sách sau điểm cắt."
+    },
+    {
+      "source": "edited-empty-fridge/edited.json",
+      "held_out": true,
+      "idea": "Một người thợ may đính chiếc cúc lên áo. Chỉ nhìn thao tác bình thường, dừng khi mũi chỉ cuối được siết.",
+      "constraints": [
+        "Chỉ một người thợ trong tiệm, không có khách đến lấy áo.",
+        "Giữ nguyên thân áo; không cắt vải. Dừng ngay sau khi siết mũi chỉ cuối."
+      ],
+      "clarifications": {
+        "Áo màu gì?": "Áo xám."
+      },
+      "id": "sewing",
+      "sections": [
+        {
+          "title": "Beginning",
+          "purpose": "",
+          "content": "Người thợ đặt chiếc áo lên bàn. Chị luồn kim qua lỗ cúc."
+        },
+        {
+          "title": "Ending",
+          "purpose": "",
+          "content": "Người thợ siết mũi chỉ cuối rồi cắt sợi chỉ thừa. Cắt phim tại đó."
+        }
+      ],
+      "expectation": "Aligned: cắt chỉ không phải cắt vải; không bịa vi phạm hoặc yêu cầu thêm khách nhận áo."
+    },
+    {
+      "source": "edited-empty-fridge/edited.json",
+      "held_out": true,
+      "idea": "Một người thợ may đính chiếc cúc lên áo. Chỉ nhìn thao tác bình thường, dừng khi mũi chỉ cuối được siết.",
+      "constraints": [
+        "Chỉ một người thợ trong tiệm, không có khách đến lấy áo.",
+        "Giữ nguyên thân áo; không cắt vải. Dừng ngay sau khi siết mũi chỉ cuối."
+      ],
+      "clarifications": {
+        "Áo màu gì?": "Áo xám."
+      },
+      "id": "sewing-violation",
+      "sections": [
+        {
+          "title": "Beginning",
+          "purpose": "",
+          "content": "Người thợ đặt chiếc áo lên bàn. Chị luồn kim qua lỗ cúc."
+        },
+        {
+          "title": "Ending",
+          "purpose": "",
+          "content": "Người thợ cắt một miếng vải trên thân áo. Khách bước vào nhận áo và cảm ơn."
+        }
+      ],
+      "expectation": "Mismatch: viện constraint-0 hoặc constraint-1, nêu đúng vi phạm; bước sửa giữ cả không cắt vải, không khách và điểm dừng."
+    }
+  ]
+}

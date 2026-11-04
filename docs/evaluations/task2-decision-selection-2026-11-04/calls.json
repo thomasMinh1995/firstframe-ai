@@ -1,0 +1,77 @@
+[
+  {
+    "case": "sewing",
+    "output": "baseline-sewing",
+    "seconds": 15.542
+  },
+  {
+    "case": "sewing-violation",
+    "output": "baseline-sewing-violation",
+    "seconds": 14.573
+  },
+  {
+    "case": "fridge-ending-violation",
+    "output": "baseline-fridge-ending-violation",
+    "seconds": 13.367
+  },
+  {
+    "case": "raincoat-ending-violation",
+    "output": "baseline-raincoat-ending-violation",
+    "seconds": 19.669
+  },
+  {
+    "case": "sewing-before-cut",
+    "output": "baseline-sewing-before-cut",
+    "seconds": 11.916
+  },
+  {
+    "case": "fridge-ending-violation",
+    "output": "candidate-fridge-ending-violation-1",
+    "seconds": 23.373
+  },
+  {
+    "case": "raincoat-ending-violation",
+    "output": "candidate-raincoat-ending-violation-1",
+    "seconds": 24.626
+  },
+  {
+    "case": "fridge-ending-violation",
+    "output": "ordered-fridge-ending-violation-1",
+    "seconds": 26.655
+  },
+  {
+    "case": "raincoat-ending-violation",
+    "output": "ordered-raincoat-ending-violation-1",
+    "seconds": 17.04
+  },
+  {
+    "case": "fridge-ending-violation",
+    "output": "choices-first-fridge-ending-violation-1",
+    "seconds": 22.208
+  },
+  {
+    "case": "raincoat-ending-violation",
+    "output": "choices-first-raincoat-ending-violation-1",
+    "seconds": 16.027
+  },
+  {
+    "case": "fridge-ending-violation",
+    "output": "editing-fridge-ending-violation-1",
+    "seconds": 15.693
+  },
+  {
+    "case": "raincoat-ending-violation",
+    "output": "editing-raincoat-ending-violation-1",
+    "seconds": 17.2
+  },
+  {
+    "case": "fridge-ending-violation",
+    "output": "concise-fridge-ending-violation-1",
+    "seconds": 25.016
+  },
+  {
+    "case": "raincoat-ending-violation",
+    "output": "concise-raincoat-ending-violation-1",
+    "seconds": 17.328
+  }
+]

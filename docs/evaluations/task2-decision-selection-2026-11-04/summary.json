@@ -1,0 +1,27 @@
+{
+  "baseline_commit": "e71d863c04ba719c8ef70554f390b073e51b8354",
+  "budget": {
+    "max_calls": 28,
+    "max_provider_seconds": 1200
+  },
+  "provider_calls": 15,
+  "provider_seconds": 280.233,
+  "baseline_calls": 5,
+  "candidate_calls": 10,
+  "api_successes": 15,
+  "draft_and_feedback_source_preserved": true,
+  "accepted_candidates": 0,
+  "runtime_restored_to_baseline": true,
+  "three_run_confirmation": false,
+  "held_out_candidate_comparison": false,
+  "reason_for_stop": "All five candidates still cite unsupported decisions, retain forbidden details or invent evidence. Stop before confirmation rather than retry or spend the remaining budget on rejected candidates.",
+  "ready_to_merge": false,
+  "task96_complete": false,
+  "independent_approval": false,
+  "archive_sha256": "aeff6dfaf203f6a5e79ea9061e84731a611a08b6d42575dda5d3284762c8683d",
+  "final_backend_tests": {
+    "passed": 868,
+    "skipped": 1,
+    "runtime": "restored e71d863"
+  }
+}

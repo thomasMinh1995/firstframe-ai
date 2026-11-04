@@ -205,6 +205,11 @@ tổng quát từ vài fixture.
 
 ## Ngân sách và điểm dừng
 
+Tiếp tục ngày 04/11: [review chọn quyết định](../testing/task-2-decision-selection.md)
+đã loại thêm năm ứng viên prompt/thứ tự dữ liệu sau 15 call. Runtime giữ
+`e71d863`; chọn nguồn và giữ mọi giới hạn vẫn chưa đạt. PR #98 draft, #96
+mở; chưa chạy ba lượt xác nhận cho ứng viên nào trong đợt này.
+
 Plan này chưa gọi model. Trước khi chạy thật, kiểm model đã cấu hình và chốt
 trần số call/thời gian cho batch từ số công đoạn và số đoạn đích thực tế;
 một review có thể gọi nhiều lần nên không tính một lần bấm là một call.
