@@ -20,8 +20,8 @@ Archive đã được đối chiếu byte với bản gốc. SHA-256:
 - `candidate-*`, `ordered-*`, `choices-first-*`, `editing-*`, `concise-*`:
   năm ứng viên, mỗi ứng viên hai ca phát triển. Xem diff trong profile của
   từng call để phân biệt chính xác source thử, không gộp thành ba lượt.
-- [last-rejected.patch](last-rejected.patch): bản thử cuối đã loại, không
-  phải patch được nhận vào ứng dụng. Các patch trước giữ trong profile.
+- Diff của mọi ứng viên, gồm bản cuối bị loại, được giữ trong profile của
+  từng call; không cần lưu thêm một bản patch trùng lặp ngoài archive.
 
 `run.py` lưu thao tác đo API một lần, tái dùng script từ đợt trước với
 nguồn snapshot tổng hợp; không thêm dịch vụ hoặc QA framework. Không chạy
