@@ -1,0 +1,122 @@
+[
+  {
+    "case": "fridge-violation",
+    "output": "baseline-fridge-violation",
+    "seconds": 19.963
+  },
+  {
+    "case": "raincoat-violation",
+    "output": "baseline-raincoat-violation",
+    "seconds": 15.195
+  },
+  {
+    "case": "binding",
+    "output": "baseline-binding",
+    "seconds": 15.702
+  },
+  {
+    "case": "raincoat",
+    "output": "candidate-raincoat-1",
+    "seconds": 19.629
+  },
+  {
+    "case": "raincoat",
+    "output": "candidate-raincoat-2",
+    "seconds": 13.034
+  },
+  {
+    "case": "raincoat",
+    "output": "candidate-raincoat-3",
+    "seconds": 14.159
+  },
+  {
+    "case": "empty-fridge",
+    "output": "candidate-empty-fridge-1",
+    "seconds": 20.742
+  },
+  {
+    "case": "empty-fridge",
+    "output": "candidate-empty-fridge-2",
+    "seconds": 16.161
+  },
+  {
+    "case": "empty-fridge",
+    "output": "candidate-empty-fridge-3",
+    "seconds": 16.038
+  },
+  {
+    "case": "flowers",
+    "output": "candidate-flowers-1",
+    "seconds": 24.636
+  },
+  {
+    "case": "flowers",
+    "output": "candidate-flowers-2",
+    "seconds": 15.347
+  },
+  {
+    "case": "flowers",
+    "output": "candidate-flowers-3",
+    "seconds": 19.771
+  },
+  {
+    "case": "fridge-violation",
+    "output": "candidate-fridge-violation-1",
+    "seconds": 19.157
+  },
+  {
+    "case": "fridge-violation",
+    "output": "candidate-fridge-violation-2",
+    "seconds": 12.426
+  },
+  {
+    "case": "fridge-violation",
+    "output": "candidate-fridge-violation-3",
+    "seconds": 12.699
+  },
+  {
+    "case": "empty-fridge",
+    "output": "focused-empty-fridge-1",
+    "seconds": 14.863
+  },
+  {
+    "case": "empty-fridge",
+    "output": "focused-empty-fridge-2",
+    "seconds": 8.439
+  },
+  {
+    "case": "empty-fridge",
+    "output": "focused-empty-fridge-3",
+    "seconds": 9.661
+  },
+  {
+    "case": "fridge-violation",
+    "output": "focused-fridge-violation-1",
+    "seconds": 15.228
+  },
+  {
+    "case": "fridge-violation",
+    "output": "focused-fridge-violation-2",
+    "seconds": 11.06
+  },
+  {
+    "case": "fridge-violation",
+    "output": "focused-fridge-violation-3",
+    "seconds": 15.427
+  },
+  {
+    "case": "fridge-ending-violation",
+    "output": "scoped-fridge-ending-violation",
+    "seconds": 26.424
+  },
+  {
+    "case": "raincoat-ending-violation",
+    "output": "scoped-raincoat-ending-violation",
+    "seconds": 19.946
+  },
+  {
+    "case": "binding",
+    "output": "scoped-binding",
+    "seconds": 24.382
+  }
+]

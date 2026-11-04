@@ -5,6 +5,9 @@
 - Trạng thái: đã đo baseline và thử hai prompt trên nhánh triển khai #96.
   Cả hai ứng viên chưa đạt, đã loại khỏi runtime; Task 2 tiếp tục mở.
   Xem [báo cáo đợt đầu](../testing/task-2-screenplay-quality.md).
+- Tiếp tục 04/11: đang review adapter đoạn liên tục và lựa chọn nguồn đối
+  chiếu; ca thời gian có tiến bộ nhưng đối chứng vi phạm chưa đạt.
+  [Báo cáo tiếp](../testing/task-2-card-context.md); PR #98 giữ draft.
 - Tiếp nối Task 1, đã merge qua PR #95 vào `dev` (`d8d6b60`).
 - Source đã đối chiếu: bản triển khai Task 1 tại `8454167`, các module sáng tác,
   prompt, runner và bằng chứng hiện có. Khi triển khai phải ghi HEAD `dev`

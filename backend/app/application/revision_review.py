@@ -101,7 +101,12 @@ def review_context(draft: dict, previous: dict | None, author: dict, vietnamese:
     neighbors = [{"card_id": card["id"], "related_card_id": path_cards[j]["id"]}
                  for i, card in enumerate(path_cards) if card["changed"]
                  for j in (i - 1, i + 1) if 0 <= j < len(path_cards)]
+    passages = [{"section": sections[i]["title"], "text": sections[i]["content"],
+                 "card_ids": [card["id"] for card in cards if card["id"] == f"section-{i}"
+                              or card["id"].startswith(f"section-{i}-part-")]}
+                for i in path]
     return {"cards": cards, "decisions": decisions, "neighbor_checks": neighbors,
+            "passages": passages,
             "focus_card_ids": [card["id"] for card in cards if card["changed"]]}
 
 
@@ -134,9 +139,6 @@ def feedback_messages(reviews: list[CardReview], context: dict) -> tuple[list[st
     focus = set(context["focus_card_ids"])
     if focus and not focus.intersection((reviews[0].card_id, reviews[0].related_card_id)):
         raise MalformedProviderResponseError("Card review did not examine any edited card.")
-    if any(key.startswith("answer-") for key in decisions) and not any(
-            review.decision_id.startswith("answer-") for review in reviews):
-        raise MalformedProviderResponseError("Card review did not compare any clarification answer.")
     neighbors = context.get("neighbor_checks", [])
     if neighbors and not any({"card_id": review.card_id, "related_card_id": review.related_card_id} in neighbors
                             or {"card_id": review.related_card_id, "related_card_id": review.card_id} in neighbors

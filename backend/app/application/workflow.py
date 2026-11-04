@@ -108,7 +108,7 @@ class RevisionEvaluation:
 def _card_review_schema(context: dict) -> type[_RevisionReviewOutput]:
     neighbors = list(dict.fromkeys(pair["related_card_id"] for pair in context["neighbor_checks"]))
     cards = list(dict.fromkeys([*context["focus_card_ids"], *neighbors])) or [card["id"] for card in context["cards"]]
-    decisions = [item["id"] for item in context["decisions"] if item["id"] != "idea"] or ["idea"]
+    decisions = [item["id"] for item in context["decisions"]]
     related = Literal[tuple(cards)] if neighbors else Literal[tuple(cards)] | None
     card_review = create_model("FocusedCardReview", __base__=CardReview,
                                card_id=(Literal[tuple(cards)], ...),
@@ -857,8 +857,13 @@ def _evaluation_input(planning: PlanningArtifact, rubric: object) -> str:
     if review_context is not None:
         focus = set(review_context["focus_card_ids"])
         nearby = {pair["related_card_id"] for pair in review_context["neighbor_checks"]}
-        context = {**review_context, "cards": [card for card in review_context["cards"]
-                   if not focus or card["id"] in focus | nearby]}
+        cards = [card for card in review_context["cards"] if not focus or card["id"] in focus | nearby]
+        card_ids = {card["id"] for card in cards}
+        context = {"passages": [passage for passage in review_context.get("passages", [])
+                                if card_ids.intersection(passage["card_ids"])],
+                   "decisions": review_context["decisions"], "cards": cards,
+                   "neighbor_checks": review_context["neighbor_checks"],
+                   "focus_card_ids": review_context["focus_card_ids"]}
         return (_feedback_language_header(target_language) + "Card review context (JSON data):\n"
                 + json.dumps(context, ensure_ascii=False))
     return (

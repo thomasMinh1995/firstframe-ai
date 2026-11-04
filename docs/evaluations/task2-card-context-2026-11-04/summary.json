@@ -1,0 +1,23 @@
+{
+  "baseline_commit": "b650c49",
+  "model": "qwen2.5:7b",
+  "provider_calls": 24,
+  "provider_seconds": 400.089,
+  "budget": {"calls": 24, "provider_seconds": 900},
+  "api_successes": 23,
+  "api_rejected_aligned_with_suggestion": 1,
+  "draft_and_feedback_source_preserved_on_23_successful_calls": true,
+  "candidate_1_accepted": false,
+  "focused_sit_then_stand_correct": "3/3",
+  "new_binding_case_correct": "1/1, not three-run confirmation",
+  "ending_violation_fridge": "mismatch found but wrong decision and suggestion violates constraint; not accepted",
+  "ending_violation_raincoat": "false aligned; not accepted",
+  "runtime_adapter_unit_regressions": "pass",
+  "backend_full_before_compact_prompt": {"passed": 868, "skipped": 1},
+  "backend_final_focused": {"passed": 119},
+  "frontend_suites_passed": 25,
+  "frontend_typecheck": "pass",
+  "ready_to_merge": false,
+  "task_96_complete": false,
+  "independent_reader_approval": false
+}
