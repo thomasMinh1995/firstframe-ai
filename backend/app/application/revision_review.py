@@ -38,10 +38,37 @@ class DecisionCheck(BaseModel):
     suggestion_reason: str = Field(min_length=1)
 
 
+class GroundedDecisionCheck(DecisionCheck):
+    draft_quote: str = Field(description="Exact excerpt from cited card(s) in original source order, not author decisions. Empty only for uncertain/not_applicable.")
+    suggestion_comparison: Literal["aligned", "mismatch", "uncertain", "not_applicable"] = Field(
+        description="If reviews[0].suggestion is empty, this MUST be not_applicable. Otherwise check that exact suggestion.")
+
+
 def review_card_ids(context: dict) -> list[str]:
     neighbors = [pair["related_card_id"] for pair in context["neighbor_checks"]]
     return list(dict.fromkeys([*context["focus_card_ids"], *neighbors])) or [
         card["id"] for card in context["cards"]]
+
+
+def _quote_matches_cards(check: GroundedDecisionCheck, context: dict) -> bool:
+    cited = set(check.card_ids)
+    if any(check.draft_quote in c["text"] for c in context["cards"] if c["id"] in cited):
+        return True
+    # Preserve original separators when a quote spans adjacent cited cards.
+    for passage in context.get("passages", []):
+        spans = card_spans(passage["text"])
+        ids = passage["card_ids"]
+        if len(spans) != len(ids):
+            continue
+        start = 0
+        while start < len(ids):
+            end = start
+            while end < len(ids) and ids[end] in cited:
+                end += 1
+            if end > start and check.draft_quote in passage["text"][spans[start][0]:spans[end - 1][1]]:
+                return True
+            start = max(end, start + 1)
+    return False
 
 
 def validate_decision_checks(reviews: list[CardReview], checks: list[DecisionCheck], context: dict) -> None:
@@ -49,13 +76,17 @@ def validate_decision_checks(reviews: list[CardReview], checks: list[DecisionChe
     if len(reviews) != 1 or len(checks) != len(expected) or {c.decision_id for c in checks} != expected:
         raise MalformedProviderResponseError("Card review did not check each author decision exactly once.")
     review = reviews[0]
-    scope = set(review_card_ids(context))
+    scope = set(review_card_ids(context)) & {card["id"] for card in context["cards"]}
     for check in checks:
         if (not set(check.card_ids).issubset(scope)
                 or check.draft_comparison == "mismatch" and not check.card_ids
                 or review.suggestion.strip() and check.suggestion_comparison in {"mismatch", "uncertain"}
                 or not review.suggestion.strip() and check.suggestion_comparison != "not_applicable"):
             raise MalformedProviderResponseError("Decision check has invalid evidence or an unsafe suggestion.")
+        if isinstance(check, GroundedDecisionCheck):
+            if (check.draft_quote and not _quote_matches_cards(check, context)
+                    or not check.draft_quote and check.draft_comparison in {"aligned", "mismatch"}):
+                raise MalformedProviderResponseError("Decision check does not quote its cited draft evidence.")
     selected = next((c for c in checks if c.decision_id == review.decision_id), None)
     if selected is None or selected.draft_comparison == "not_applicable":
         raise MalformedProviderResponseError("Card review cites an unchecked or unrelated decision.")

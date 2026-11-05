@@ -1,0 +1,37 @@
+[
+  {
+    "case": "fridge-ending-violation",
+    "output": "baseline-fridge-ending-violation",
+    "seconds": 92.189
+  },
+  {
+    "case": "raincoat-ending-violation",
+    "output": "baseline-raincoat-ending-violation",
+    "seconds": 58.922
+  },
+  {
+    "case": "fridge-ending-violation",
+    "output": "grounded-fridge-ending-violation-1",
+    "seconds": 74.765
+  },
+  {
+    "case": "raincoat-ending-violation",
+    "output": "grounded-raincoat-ending-violation-1",
+    "seconds": 66.578
+  },
+  {
+    "case": "empty-fridge",
+    "output": "grounded-empty-fridge-1",
+    "seconds": 68.956
+  },
+  {
+    "case": "raincoat",
+    "output": "grounded-raincoat-1",
+    "seconds": 72.764
+  },
+  {
+    "case": "conflicting-choices",
+    "output": "grounded-conflicting-choices-1",
+    "seconds": 53.624
+  }
+]

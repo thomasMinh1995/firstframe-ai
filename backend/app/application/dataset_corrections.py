@@ -14,6 +14,7 @@ from app.application.workflow import (
     _ReasoningOutput,
     _RevisionReviewOutput,
     _CheckedRevisionReviewOutput,
+    _GroundedRevisionReviewOutput,
     revision_evaluation,
     _structured_plan_sections,
 )
@@ -44,7 +45,11 @@ def _recorded_id_allows(value: str | None, schema: dict) -> bool:
 
 
 def _recorded_review_model(schema: dict) -> type[_RevisionReviewOutput]:
-    return _CheckedRevisionReviewOutput if "decision_checks" in schema["properties"] else _RevisionReviewOutput
+    if "decision_checks" not in schema["properties"]:
+        return _RevisionReviewOutput
+    item = schema["properties"]["decision_checks"]["items"]
+    fields = schema.get("$defs", {}).get(item.get("$ref", "").rsplit("/", 1)[-1], item)["properties"]
+    return _GroundedRevisionReviewOutput if "draft_quote" in fields else _CheckedRevisionReviewOutput
 
 
 def _validate_recorded_card_shape(output: _RevisionReviewOutput, raw: dict, schema: dict) -> None:

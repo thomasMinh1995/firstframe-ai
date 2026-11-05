@@ -1,0 +1,60 @@
+{
+  "baseline_commit": "f77385c191366ee9c27705f625dcc5c949e35c60",
+  "budget": {
+    "max_calls": 28,
+    "max_provider_seconds": 1800
+  },
+  "provider_calls": 7,
+  "provider_seconds": 487.798,
+  "fresh_baselines": 2,
+  "candidate_initial_calls": 5,
+  "candidate_api_accepted": 0,
+  "candidate_api_rejected": 5,
+  "comparisons": {
+    "fridge-ending-violation": {
+      "baseline": "fresh",
+      "same_source": true,
+      "same_input": true
+    },
+    "raincoat-ending-violation": {
+      "baseline": "fresh",
+      "same_source": true,
+      "same_input": true
+    },
+    "empty-fridge": {
+      "baseline": "historical 2026-11-04",
+      "same_source": true,
+      "same_input": true
+    },
+    "raincoat": {
+      "baseline": "historical 2026-11-04",
+      "same_source": true,
+      "same_input": true
+    },
+    "conflicting-choices": {
+      "baseline": "historical 2026-11-04",
+      "same_source": true,
+      "same_input": true
+    }
+  },
+  "final_adapter_replay_accepted": 0,
+  "backend_tests": {
+    "passed": 902,
+    "skipped": 1
+  },
+  "decision_check_tests": 34,
+  "model_digest": "845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
+  "ready_to_merge": false,
+  "task96_complete": false,
+  "three_run_confirmation": false,
+  "held_out_calls": 0,
+  "final_source_sha256": {
+    "backend/app/application/revision_review.py": "e37372ab1f7bcd389c056029dcb751102daac1a81fb0399905c553c84c639822",
+    "backend/app/application/workflow.py": "7860e114ff3188d2844166e808f0efb7e25a188668d14e0f82cf989fed41c396",
+    "backend/app/application/dataset_corrections.py": "77485af3eec4e08f2ec2d646c67652212846804178abf73c977484e3db712652",
+    "domains/short-film/prompts/card_review_vi_prompt.md": "5b9a5a9ed8a971f849f370c675c7aa5e7737b25c66732b91c23801b2e56dd256",
+    "domains/short-film/prompts/card_review_prompt.md": "7fc6d48cf2ab76281720ce5a2376b04c0b6efefd8a2c7bb42d4419af0d0db520"
+  },
+  "archive_sha256": "58aa34fd835d6b20b33f698ff56d451bed89d2ea68901a58d1d55f2e406f2273",
+  "final_focused_tests": 162
+}

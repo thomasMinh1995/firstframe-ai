@@ -1,0 +1,108 @@
+{
+  "max_calls": 28,
+  "max_provider_seconds": 1800,
+  "cases": [
+    {
+      "id": "fridge-ending-violation",
+      "source": "edited-empty-fridge/review.json",
+      "focus_section": "Ending",
+      "ending": "Hai bạn nhìn hộp trống rồi cãi nhau vì ai đã ăn bánh. Sau đó cả hai ra ngoài mua bánh mới.",
+      "expectation": "Đối chứng chỉ sửa Ending sau review đã lưu: phát hiện trái constraint-2, không đánh giá thay bằng phần Beginning phù hợp."
+    },
+    {
+      "id": "raincoat-ending-violation",
+      "source": "edited-raincoat/review.json",
+      "focus_section": "Ending",
+      "ending": "Chủ chiếc áo quay lại tiệm. Người thợ nhận ra đó là bạn gái cũ của mình và kể chuyện hai người chia tay.",
+      "expectation": "Đối chứng chỉ sửa Ending sau review đã lưu: đối chiếu constraint-0 hoặc constraint-1 về người/quan hệ mới."
+    },
+    {
+      "id": "raincoat",
+      "source": "edited-raincoat/edited.json",
+      "expectation": "Không báo mâu thuẫn chỉ vì người thợ từ không chú ý chuyển sang vuốt áo; không viện số người/địa điểm để yêu cầu giữ nguyên hành động."
+    },
+    {
+      "id": "empty-fridge",
+      "source": "edited-empty-fridge/edited.json",
+      "expectation": "Ngồi rồi đứng lên là diễn tiến. Không yêu cầu nhân vật vừa ngồi vừa đứng; không coi giới hạn hai người/một bếp là cấm đổi tư thế.",
+      "overrides": {
+        "clarifications": {
+          "Áo màu gì?": "Áo xanh."
+        },
+        "analysis": null,
+        "answers": []
+      }
+    },
+    {
+      "id": "conflicting-choices",
+      "source": "edited-empty-fridge/edited.json",
+      "idea": "Người thợ buộc một tập giấy. Tôi chưa chốt cách kết.",
+      "constraints": [
+        "Dừng khi người thợ vừa buộc nút, không có ai nhận sách.",
+        "Phải có người khách nhận sách sau khi người thợ buộc nút."
+      ],
+      "clarifications": {},
+      "sections": [
+        {
+          "title": "Beginning",
+          "purpose": "",
+          "content": "Người thợ xỏ dây qua gáy tập giấy."
+        },
+        {
+          "title": "Ending",
+          "purpose": "",
+          "content": "Anh buộc nút rồi đặt tay xuống bàn. Cắt phim."
+        }
+      ],
+      "expectation": "Uncertain: hai lựa chọn kết tự mâu thuẫn; hỏi tác giả, không tự ép bỏ hoặc thêm khách."
+    },
+    {
+      "source": "edited-empty-fridge/edited.json",
+      "held_out": true,
+      "idea": "Một người lên dây đàn trong phòng. Tôi muốn nhìn thao tác nhỏ, kết khi tiếng dây cuối vừa tắt.",
+      "constraints": [
+        "Chỉ một người trong phòng.",
+        "Chỉ lên dây, không chơi trọn bài nhạc và không mở buổi biểu diễn. Dừng khi tiếng dây cuối vừa tắt."
+      ],
+      "clarifications": {},
+      "id": "tuning",
+      "sections": [
+        {
+          "title": "Beginning",
+          "purpose": "",
+          "content": "Người đàn ông đặt cây đàn lên đùi. Anh nghe tiếng một dây vừa gảy."
+        },
+        {
+          "title": "Ending",
+          "purpose": "",
+          "content": "Anh vặn khóa đàn, gảy thử một dây. Tiếng dây vừa tắt, hai tay dừng lại. Cắt phim."
+        }
+      ],
+      "expectation": "Aligned: gảy thử dây khi lên dây không phải chơi trọn bài; giữ một người và điểm dừng."
+    },
+    {
+      "source": "edited-empty-fridge/edited.json",
+      "held_out": true,
+      "idea": "Một người lên dây đàn trong phòng. Tôi muốn nhìn thao tác nhỏ, kết khi tiếng dây cuối vừa tắt.",
+      "constraints": [
+        "Chỉ một người trong phòng.",
+        "Chỉ lên dây, không chơi trọn bài nhạc và không mở buổi biểu diễn. Dừng khi tiếng dây cuối vừa tắt."
+      ],
+      "clarifications": {},
+      "id": "tuning-violation",
+      "sections": [
+        {
+          "title": "Beginning",
+          "purpose": "",
+          "content": "Người đàn ông đặt cây đàn lên đùi. Anh nghe tiếng một dây vừa gảy."
+        },
+        {
+          "title": "Ending",
+          "purpose": "",
+          "content": "Anh chơi trọn một bài, rồi mời khán giả vào nghe buổi biểu diễn."
+        }
+      ],
+      "expectation": "Mismatch: viện giới hạn đúng, không bịa lý do; bước sửa bỏ chơi trọn bài/khán giả/biểu diễn và giữ điểm dừng."
+    }
+  ]
+}

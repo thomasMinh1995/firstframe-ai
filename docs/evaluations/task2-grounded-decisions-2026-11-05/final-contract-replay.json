@@ -1,0 +1,32 @@
+[
+  {
+    "output": "grounded-conflicting-choices-1",
+    "accepted": false,
+    "error": "MalformedProviderResponseError",
+    "reason": "Decision check does not quote its cited draft evidence."
+  },
+  {
+    "output": "grounded-empty-fridge-1",
+    "accepted": false,
+    "error": "MalformedProviderResponseError",
+    "reason": "Card review contains an invalid anchor or missing next step."
+  },
+  {
+    "output": "grounded-fridge-ending-violation-1",
+    "accepted": false,
+    "error": "MalformedProviderResponseError",
+    "reason": "Decision check has invalid evidence or an unsafe suggestion."
+  },
+  {
+    "output": "grounded-raincoat-1",
+    "accepted": false,
+    "error": "MalformedProviderResponseError",
+    "reason": "Card review contains an invalid anchor or missing next step."
+  },
+  {
+    "output": "grounded-raincoat-ending-violation-1",
+    "accepted": false,
+    "error": "MalformedProviderResponseError",
+    "reason": "Decision check has invalid evidence or an unsafe suggestion."
+  }
+]

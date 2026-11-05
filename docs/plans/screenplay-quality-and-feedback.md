@@ -12,6 +12,10 @@
   qua gate, chưa nhận ứng viên vào dev. Xem
   [báo cáo 2.2a](../testing/task-2-decision-checks.md). Checks không đồng
   nghĩa model đã hiểu đúng các lựa chọn; #96 vẫn mở.
+- Tiếp tục 05/11: thêm quote nguyên văn trong checks để kiểm nguồn thực,
+  giữ parser dataset cũ; full backend 902 passed, 1 skipped. Năm lượt đầu
+  vẫn chưa đạt nội dung/khả năng sử dụng, PR vẫn draft. Xem
+  [review neo nguồn](../testing/task-2-grounded-decisions.md).
 - Tiếp nối Task 1, đã merge qua PR #95 vào `dev` (`d8d6b60`).
 - Source đã đối chiếu: bản triển khai Task 1 tại `8454167`, các module sáng tác,
   prompt, runner và bằng chứng hiện có. Khi triển khai phải ghi HEAD `dev`
@@ -280,6 +284,12 @@ Kết quả triển khai sau review: [báo cáo 2.2a](../testing/task-2-decision
 A/B đã có code và test contract trên nhánh draft; C chưa đạt. Đã dùng
 12/28 call, 394,002/1.500 giây provider, giữ nguyên nguồn/draft ở các lỗi;
 không xác nhận ba lượt hoặc nhận ứng viên chỉ vì guard từ chối output.
+
+Tiếp tục ngày 05/11: [neo quote vào nguồn](../testing/task-2-grounded-decisions.md)
+đã có code/test trên nhánh draft. Chỉ mở rộng bằng chứng của checks nội bộ,
+không đổi API/dự án/model hoặc thêm call. Bản ghi checklist trước khi có
+quote giữ shape cũ; request mới bắt buộc quote cho nhận định có căn cứ.
+Đã dùng 7/28 call, 487,798/1.800 giây; C vẫn chưa đạt, không nhận ứng viên.
 
 ### 2.3 — So sánh, hồi quy và bàn giao
 

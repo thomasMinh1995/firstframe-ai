@@ -17,7 +17,7 @@ from app.application.knowledge_loader import KnowledgeLoader
 from app.application.language import ResponseLanguage, resolve_response_language
 from app.application.prompt_loader import PromptLoader
 from app.application.revision_review import (
-    CardReview, DecisionCheck, feedback_messages, revision_notes, review_context,
+    CardReview, DecisionCheck, GroundedDecisionCheck, feedback_messages, revision_notes, review_context,
     review_card_ids, validate_decision_checks,
 )
 from app.core.artifacts import (
@@ -102,6 +102,10 @@ class _CheckedRevisionReviewOutput(_RevisionReviewOutput):
     decision_checks: list[DecisionCheck]
 
 
+class _GroundedRevisionReviewOutput(_CheckedRevisionReviewOutput):
+    decision_checks: list[GroundedDecisionCheck]
+
+
 @dataclass(frozen=True)
 class RevisionEvaluation:
     passed: bool | None
@@ -121,10 +125,10 @@ def _card_review_schema(context: dict) -> type[_RevisionReviewOutput]:
                                card_id=(Literal[tuple(cards)], ...),
                                decision_id=(Literal[tuple(decisions)], ...),
                                related_card_id=(related, ...))
-    decision_check = create_model("ScopedDecisionCheck", __base__=DecisionCheck,
+    decision_check = create_model("ScopedDecisionCheck", __base__=GroundedDecisionCheck,
                                   decision_id=(Literal[tuple(decisions)], ...),
                                   card_ids=(list[Literal[tuple(cards)]], ...))
-    return create_model("_RevisionReviewOutput", __base__=_CheckedRevisionReviewOutput,
+    return create_model("_RevisionReviewOutput", __base__=_GroundedRevisionReviewOutput,
                         reviews=(list[card_review], Field(min_length=1, max_length=1)),
                         decision_checks=(list[decision_check], Field(min_length=len(decisions), max_length=len(decisions))),
                         rubric_scores=(type(None), ...))
@@ -400,9 +404,9 @@ class LLMEvaluationLayer(EvaluationLayer):
             )
         )
         if review_context is not None:
-            if not isinstance(result.output, _CheckedRevisionReviewOutput):
-                raise MalformedProviderResponseError("Card review is missing required decision checks.")
-            review = _expect_output(result.output, _CheckedRevisionReviewOutput)
+            if not isinstance(result.output, _GroundedRevisionReviewOutput):
+                raise MalformedProviderResponseError("Card review is missing grounded decision checks.")
+            review = _expect_output(result.output, _GroundedRevisionReviewOutput)
             output = revision_evaluation(review, review_context)
         else:
             output = _expect_output(result.output, _EvaluationOutput)

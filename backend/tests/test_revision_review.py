@@ -29,6 +29,7 @@ def context_fixture():
 def with_checks(raw, context):
     raw = deepcopy(raw)
     raw["decision_checks"] = [dict(decision_id=d["id"], draft_comparison="aligned",
+        draft_quote=next(c["text"] for c in context["cards"] if c["id"] == raw["reviews"][0]["card_id"]),
         card_ids=[raw["reviews"][0]["card_id"]], draft_reason="Synthetic contract fixture.",
         suggestion_comparison="aligned" if raw["reviews"][0]["suggestion"] else "not_applicable",
         suggestion_reason="Synthetic contract fixture.") for d in context["decisions"]]
