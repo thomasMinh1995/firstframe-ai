@@ -2,7 +2,23 @@
 
 - Ngày lập: 04/11/2026.
 - Review phạm vi: 04/11/2026; thu gọn đợt đầu vào Story plan và vòng góp ý–sửa.
-- Trạng thái: plan, chưa triển khai runtime hoặc chạy model thật trong đợt này.
+- Trạng thái: các đợt [baseline](../testing/task-2-screenplay-quality.md),
+  [ngữ cảnh card](../testing/task-2-card-context.md) và
+  [chọn quyết định](../testing/task-2-decision-selection.md) đã được ghi lại.
+  Nền trước đợt 2.2a giữ `e71d863`: ca thời gian có tiến bộ, ràng buộc chưa đạt.
+  PR #98 vẫn draft; #96 còn mở.
+- Cập nhật và review 04/11: mục 2.2a đã có bản triển khai kỹ thuật trên
+  nhánh draft. Full backend 894 passed, 1 skipped; năm lượt model đầu chưa
+  qua gate, chưa nhận ứng viên vào dev. Xem
+  [báo cáo 2.2a](../testing/task-2-decision-checks.md). Checks không đồng
+  nghĩa model đã hiểu đúng các lựa chọn; #96 vẫn mở.
+- Tiếp tục 05/11: thêm quote nguyên văn trong checks để kiểm nguồn thực,
+  giữ parser dataset cũ; full backend 902 passed, 1 skipped. Năm lượt đầu
+  vẫn chưa đạt nội dung/khả năng sử dụng, PR vẫn draft. Xem
+  [review neo nguồn](../testing/task-2-grounded-decisions.md).
+- Plan tiếp theo đã review 05/11: neo quote vào đúng đích nhận xét và thử
+  đối chiếu tối thiểu để tách lỗi hiểu ràng buộc khỏi lỗi toàn phản hồi.
+  Đây là kế hoạch trong 2.2a, chưa triển khai hoặc gọi model cho đợt mới.
 - Tiếp nối Task 1, đã merge qua PR #95 vào `dev` (`d8d6b60`).
 - Source đã đối chiếu: bản triển khai Task 1 tại `8454167`, các module sáng tác,
   prompt, runner và bằng chứng hiện có. Khi triển khai phải ghi HEAD `dev`
@@ -110,7 +126,7 @@ Các runner sau chỉ dùng khi thay đổi đụng tới phạm vi của chúng
 - `check_draft_release.py`: smoke luồng tự động đang có; không dùng nó làm
   bằng chứng đã kiểm đủ luồng từng công đoạn của Task 1.
 
-### 2.2 — Sửa đúng điểm đã đo, dùng hợp đồng hiện tại
+### 2.2 — Sửa đúng điểm đã đo, giữ hợp đồng ứng dụng
 
 Điểm xuất phát là mentor/planner/góp ý plan. Bảng dưới là bản đồ chỗ sửa khi
 có lỗi, không phải danh sách tính năng phải triển khai đủ. Ưu tiên một nhóm
@@ -135,6 +151,260 @@ ngữ cảnh cảnh/lân cận, trước hết xem snapshot hiện có có đủ
 đúng phạm vi và kiểm nguồn hay không. Giữ cơ chế đề xuất sửa độc lập. Không
 hứa đánh giá toàn phim bằng cách sửa prompt từng đoạn; nhu cầu đó cần quyết
 định phạm vi tiếp theo. Báo cáo phải ghi rõ phần nào của Task 2 còn mở.
+
+### 2.2a — Đợt tiếp: đối chiếu từng quyết định trong critic card
+
+Đợt chọn quyết định đã loại năm ứng viên sau 15 call: có ID thật vẫn có thể
+viện sai nguồn; dẫn đúng lệnh cấm vẫn có thể gợi ý làm điều bị cấm. Đợt này
+thử làm rõ kết quả đối chiếu trong output thay vì tiếp tục đổi thứ tự hoặc
+nối dài prompt. Không suy từ một nhận xét rằng mọi lựa chọn đã được kiểm.
+
+**Điều chỉnh phạm vi đã review:** cho phép bổ sung `decision_checks` vào
+schema phản hồi nội bộ của đường critic card có `review_context`. Vẫn một
+call model và một nhận xét chính trong `reviews`. Không thêm field vào
+public API, feedback/RevisionNote lưu trong dự án hoặc schema database.
+Checks chỉ đi cùng response trong dataset/evidence hiện có; không thêm UI.
+Các đường góp ý khác, planner và critic v8 theo cảnh giữ nguyên.
+Cùng hợp đồng áp dụng cho plan mới và bản tác giả đã sửa khi đi qua đường
+critic card này. Tiếp tục nhánh `fix/screenplay-quality-and-feedback`, ghi
+HEAD thực dùng khi bắt đầu; không reset nhánh hoặc chạm workspace chính.
+
+#### A. Phản hồi có đối chiếu từng nguồn, giữ nguyên quyền tác giả
+
+- Dùng nguyên các `decision_id`, nội dung và câu hỏi từ context; không dùng
+  AI tách thành luật mới, phân hạng ý đồ hay gán câu chưa trả lời thành lựa
+  chọn. Một quyết định có nhiều mệnh đề phải được xét đầy đủ trong cùng mục.
+- Mỗi quyết định có đúng một mục check. Mục đó ghi trạng thái đối chiếu
+  bản sửa, căn cứ card và lý do ngắn; đồng thời ghi trạng thái/lý do đối
+  chiếu suggestion nếu có. Trạng thái gồm `aligned`, `mismatch`, `uncertain`
+  và `not_applicable` (không liên quan đến phần đang xét).
+- Đặt checks sau `reviews` trong phản hồi để đối chiếu đúng chuỗi suggestion
+  vừa sinh, không phải một phương án sửa khác chưa được trả cho người viết.
+  Không thêm lượt tự sửa hoặc call kiểm tra riêng.
+- `mismatch` phải có căn cứ card thuộc phạm vi review và nêu chi tiết thực
+  sự xuất hiện. `not_applicable` phải giải thích vì sao không liên quan;
+  không dùng thay cho thiếu thông tin. Nếu cần nguồn ngoài đoạn được gửi
+  thì dùng `uncertain`, không suy thành toàn phim đã tuân thủ.
+- Phân biệt điều bắt buộc, điều cấm, quyền đề xuất và phần còn để mở. Một
+  chi tiết chưa có trong brief vẫn hợp lệ nếu tương thích; quyền đề xuất
+  không thành yêu cầu bắt buộc. Các lựa chọn tự mâu thuẫn cần hỏi tác giả,
+  không tự chọn một phía hoặc ép kết luận vi phạm.
+- Giữ các đoạn liên tục trước mẩu card, scope bản sửa/lân cận và ID/trích
+  dẫn hiện có. Không coi các card là trạng thái đồng thời. Không ép kịch
+  tính, thông điệp, hòa giải hay kết đóng để tạo một nhận xét.
+
+#### B. Kiểm tính đầy đủ và nhất quán trước khi lưu feedback
+
+Tận dụng `workflow.py` và `revision_review.py`; không tạo lớp điều phối mới.
+Chỉ kiểm bằng code những điều xác định được từ output và context:
+
+| Điều kiện | Cách xử lý |
+| --- | --- |
+| Thiếu, trùng hoặc thêm decision ID; căn cứ card ngoài scope | Từ chối output; giữ toàn bộ guard nguồn/đích hiện có |
+| Có check bản sửa là `mismatch` | Nhận xét chính phải nêu vi phạm và viện một quyết định được đánh dấu vi phạm; không thay bằng lời khen/ý tưởng chung |
+| Không có vi phạm nhưng có bất định liên quan chưa giải quyết | Không nhận `aligned`; output bất nhất bị từ chối, không tự đổi nhãn. Nhận xét `uncertain` nhất quán dùng đường trung tính hiện có |
+| Các check quyết định đều phù hợp nhưng cặp card có lỗi tiếp nối | Vẫn cho phép `mismatch` về diễn tiến với cặp/nguồn hợp lệ; không buộc bịa một quyết định bị vi phạm |
+| Có suggestion nhưng check nào đánh dấu nó vi phạm hoặc chưa đủ căn cứ | Từ chối toàn bộ output qua đường lỗi review hiện có; không xóa suggestion để cứu nhận xét |
+| Suggestion rỗng | Check suggestion là không áp dụng; guard `mismatch` cần bước sửa vẫn giữ nguyên |
+
+Một check `not_applicable` không được dùng làm căn cứ trực tiếp cho nhận
+xét chính. `aligned` cần căn cứ phù hợp, không được suy từ mọi check đều
+không áp dụng. `passed` tiếp tục suy từ nhận xét hợp lệ; không dùng điểm hay
+cờ tự chấm của model để bỏ qua các kiểm tra này.
+
+Checks là tự đối chiếu của cùng model, không phải bộ chấm độc lập. Code
+không chứng minh được lý do có đúng ngữ nghĩa hay model đã xét hết các mệnh
+đề. Các trường hợp viện sai nguồn, bịa chi tiết, bỏ sót hoặc đánh dấu sai
+`not_applicable` vẫn phải được đọc trên output thật; checklist đủ mục chưa
+được tính là chất lượng đã đạt.
+
+Output không hợp lệ dùng lỗi review hiện có: giữ draft, feedback cũ cùng
+nguồn và lịch sử; không công bố feedback mới, không sửa hộ hoặc retry model.
+Lựa chọn chưa rõ nhưng được trình bày nhất quán bằng `uncertain` là góp ý
+trung tính hợp lệ, không phải lỗi kỹ thuật. Câu hỏi làm rõ không được coi
+là đã chốt hoặc thay đổi lựa chọn; check suggestion xét nó có áp đặt điều
+gì trái nguồn hay không. Tác giả vẫn tự sửa/giữ/bỏ.
+
+Trong `dataset_corrections.py`, đọc/biên tập/replay output theo schema đã
+ghi: bản cũ giữ hợp đồng cũ, bản mới bắt buộc checks mới. Không thêm default
+checks hoặc fallback legacy để cứu response mới bị thiếu. Tái dùng cùng
+kiểm tra nhất quán cho output mới ở runtime và dataset; không migrate dữ
+liệu dự án hay sửa bản ghi gốc. Cập nhật fake provider/fixture liên quan.
+
+#### C. Kiểm thử nhỏ trước khi nhận ứng viên
+
+1. Test contract cho đủ/thiếu/trùng/ID lạ, căn cứ ngoài scope, kết luận
+   không khớp checks, suggestion còn vi phạm/bất định, cùng ca hợp lệ.
+   Giữ hồi quy nguồn/quote, sửa–lưu–review thất bại, `uncertain`, ngôn ngữ,
+   lỗi tiếp nối độc lập với quyết định và dataset cũ/mới. Test mới chỉ bảo
+   đảm logic, không mô phỏng rằng model hiểu ràng buộc bằng mock.
+2. Trước model, đóng băng input/kỳ vọng và ngân sách call/thời gian cho
+   batch mới. Giữ model/tham số, nguồn snapshot và scope; so với baseline
+   bằng đúng các input đó. Output mới dài hơn phải được đo thời gian và
+   mức hoàn tất; không cắt bớt quyết định hoặc chia thêm call ngầm để vừa
+   context/timeout. Nếu không chạy được trong giới hạn thì loại ứng viên,
+   chưa xây hệ thống chia batch hoặc ngân sách mới.
+3. Kiểm trước các cặp bánh/áo: bản vi phạm phải viện đúng lựa chọn, giải
+   thích đúng chi tiết và đề nghị giữ mọi giới hạn; bản tuân thủ không bị
+   bịa lỗi. Có ca ngồi → đứng, câu trả lời không liên quan, lựa chọn cho
+   phép/để mở và một ràng buộc nhiều mệnh đề. Chốt thêm ca các lựa chọn tự
+   mâu thuẫn và một cặp mới giữ lại. Không tính ca từng dùng để chỉnh prompt
+   là ca giữ lại. Đọc căn cứ và suggestion, không chỉ đếm nhãn/ID.
+4. Chỉ khi qua lượt kiểm tra đầu mới xác nhận ba lượt cho các ca bị ảnh
+   hưởng; giữ mọi lượt lỗi, không chọn lượt đẹp. Tận dụng runner/evidence
+   hiện có, không thêm model judge, dashboard hoặc framework. Chạy hồi quy
+   module bị đổi; không chạy toàn writer/v8/PDF vì thay critic card.
+
+Nhận ứng viên chỉ khi đối chiếu có ích hơn baseline, không tái hiện các lỗi
+chặn trong ba lượt xác nhận và giữ các ca đúng. Nếu checks vẫn đủ mục nhưng
+lý do sai hoặc suggestion trái giới hạn, loại ứng viên. Chưa có PO/người
+đọc độc lập duyệt thì ghi đúng mức bằng chứng; không coi đó là nghiệm thu
+chất lượng tổng quát hoặc tự đóng #96. Checklist nội bộ không biến FirstFrame
+thành hệ thống chấm điểm tác giả hay thay thế việc phát triển kịch bản.
+
+#### Review plan cập nhật — 04/11/2026
+
+Đã đối chiếu với source hiện có và bằng chứng năm ứng viên bị loại. Những
+điểm đã chỉnh sau review:
+
+- Giới hạn phép kiểm vào đoạn đang xét; `not_applicable` cần lý do và thiếu
+  nguồn phải để mở. Tránh một checklist giả vờ đã kiểm toàn phim.
+- Tách lỗi tiếp nối khỏi vi phạm lựa chọn, giữ sáng tạo tương thích, kết
+  mở và quyền đề xuất. Tránh ép một “cốt truyện đúng” hoặc bịa quyết định.
+- Từ chối cả output nếu suggestion tự bị đánh dấu không an toàn với lựa
+  chọn; không âm thầm cắt phần lỗi và vẫn công bố như góp ý đã đạt.
+- Ghi rõ tương thích dataset và giới hạn dài/thời gian; giữ một call,
+  một nhận xét hiển thị, không thêm công đoạn, migration hay hạ tầng.
+- Kiểm đúng suggestion đã sinh, không đổi nhãn hộ model hoặc coi câu hỏi
+  làm rõ là một quyết định mới của tác giả.
+
+Kết luận review của agent: plan đủ rõ cho một lần triển khai thử có giới
+hạn trong #96; không có điểm chặn còn mở trong phạm vi plan. Hiệu quả của
+checks chưa được chứng minh, phải qua mục C trước khi nhận runtime. Lượt
+review plan ban đầu chỉ thay tài liệu, chưa triển khai hoặc gọi model.
+
+Kết quả triển khai sau review: [báo cáo 2.2a](../testing/task-2-decision-checks.md).
+A/B đã có code và test contract trên nhánh draft; C chưa đạt. Đã dùng
+12/28 call, 394,002/1.500 giây provider, giữ nguyên nguồn/draft ở các lỗi;
+không xác nhận ba lượt hoặc nhận ứng viên chỉ vì guard từ chối output.
+
+Tiếp tục ngày 05/11: [neo quote vào nguồn](../testing/task-2-grounded-decisions.md)
+đã có code/test trên nhánh draft. Chỉ mở rộng bằng chứng của checks nội bộ,
+không đổi API/dự án/model hoặc thêm call. Bản ghi checklist trước khi có
+quote giữ shape cũ; request mới bắt buộc quote cho nhận định có căn cứ.
+Đã dùng 7/28 call, 487,798/1.800 giây; C vẫn chưa đạt, không nhận ứng viên.
+
+#### Đợt tiếp trong 2.2a — Quote–đích nhận xét và đối chiếu tối thiểu
+
+**Căn cứ tại `204339a`:** guard hiện chỉ kiểm quote thuộc các card được
+dẫn và tập ID có giao với cặp review. Ca áo mưa dẫn cả phần giữa/kết,
+nhưng quote chỉ nằm ở phần giữa trong khi nhận xét kết đã thêm chủ áo.
+ID thật/quote thật chưa chứng minh nhận xét đang xét đúng đích. Ca bánh
+còn nhầm hỏi ai ăn với tiết lộ người ăn; ca áo đọc ngược điều cấm; check
+suggestion có lúc xét lại bản thảo. Self-pair là lỗi hợp đồng riêng, không
+được suy rằng mọi output bị từ chối đều hiểu sai ràng buộc.
+
+Giả thuyết nhiều nhiệm vụ trong một phản hồi làm model lẫn đối tượng chưa
+được cô lập. Không lấy giả thuyết đó làm lý do đổi pipeline hoặc đổi thứ
+tự `reviews`/checks ngay. Thực hiện hai phần dưới, rồi mới quyết định tiếp.
+
+**1. Sửa nhỏ liên kết quote–đích trong adapter hiện có.**
+
+- Với check được dùng làm căn cứ nhận xét chính và có quote, quote phải
+  thực sự chứa văn bản thuộc `review.card_id`. Chỉ liệt kê ID đích cùng
+  một card khác trong `card_ids` không đủ. Giữ quy tắc quote nguyên văn,
+  đúng thứ tự, không nối tắt qua card không dẫn; dùng lại `card_spans()`.
+- Đích chính có thể là card lân cận cũ nếu đó là nơi có vấn đề; cặp review
+  vẫn phải bao phủ card sửa theo guard hiện có. Không ép mọi quote của
+  mọi check vào card sửa, không bắt quote luôn chứa cả hai card. Giữ ca
+  quote qua nhiều card và lỗi tiếp nối độc lập với lựa chọn tác giả.
+- `uncertain` thiếu bằng chứng vẫn có thể không có quote theo hợp đồng
+  hiện tại; không bịa quote để qua guard. Không dùng kiểm chuỗi để kết
+  luận model đã hiểu đúng điều cấm, quyền đề xuất hoặc nội dung suggestion.
+- Chạm `revision_review.py`, đường gọi/schema nội bộ trong `workflow.py`,
+  và `dataset_corrections.py` khi cần giữ hợp đồng bản ghi. Hợp đồng mới
+  phải nhận diện được từ schema/metadata request đã lưu: bản ghi cũ,
+  kể cả shape đã có quote, không bị áp guard mới hồi tố. Dùng dấu hiệu
+  nội bộ tối thiểu trong cơ chế ghi schema hiện có; không thêm response
+  field, registry phiên bản, migration hoặc fallback cho request mới.
+- Test đỏ cho ca liệt kê đích nhưng chỉ quote lân cận; ca hợp lệ quote
+  chạm đích, quote qua card liền nhau, lân cận cũ làm đích, `uncertain`
+  không quote và tiếp nối. Giữ hồi quy guard cũ, dataset ba shape cũ và
+  hợp đồng mới, lỗi review bảo toàn draft/feedback/nguồn, không retry.
+  Không sửa self-pair hộ model hoặc nới guard để cứu output.
+
+**2. Phép thử đối chiếu tối thiểu, chỉ phục vụ chẩn đoán ngoài runtime.**
+
+Tận dụng provider và cách ghi evidence/ledger của runner hiện có. Chỉ cần
+một script tuần tự mỏng nếu runner API hiện tại không gọi được tác vụ
+chẩn đoán; không xây framework. Mỗi ca gửi một quyết định tác giả và đoạn
+văn cần xét, chỉ yêu cầu quote, kết luận đối chiếu và lý do ngắn; không
+sinh nhận xét chính hay suggestion. Ngoại lệ có chủ đích: ca xung đột phải
+gửi cả hai lựa chọn, nếu bỏ một thì phép thử mất ý nghĩa.
+
+Đóng băng bảy input và kỳ vọng trước call đầu:
+
+| Đối chiếu | Kỳ vọng đọc nội dung |
+| --- | --- |
+| Hai đoạn: hỏi ai đã ăn / xác định người đã ăn | Với lệnh cấm tiết lộ người ăn, hỏi chưa tự động là tiết lộ; chỉ đánh giá giới hạn này, không lẫn lệnh cấm cãi nhau |
+| Hai đoạn: hành động bị cấm xuất hiện / không xuất hiện | Nhận đúng vi phạm ở bản có; không đảo điều cấm thành yêu cầu phải làm |
+| Hai đoạn: hành động được phép có / không có | Quyền đề xuất không bắt buộc hành động xuất hiện; cả hai có thể phù hợp |
+| Một đoạn với hai lựa chọn tác giả mâu thuẫn | Nhận ra chưa đủ cơ sở để chọn một phía, cần hỏi tác giả; không tự áp một kết thúc |
+
+Mỗi cặp chỉ đổi chi tiết đang đối chiếu, dùng chất liệu đời thường ngắn và
+giữ đoạn đủ nghĩa. Giữ nguyên evidence cũ; nếu cần bỏ chuỗi literal `null`
+trong fixture cũ thì tạo input/ID mới trước khi chạy. Lỗi áo không có
+`null` vẫn xảy ra nên không coi làm sạch fixture là cách sửa đã chứng minh.
+Đây là phép cô lập năng lực, không phải ca giữ lại hay so sánh chất lượng
+toàn workflow với baseline.
+
+- Ghi HEAD, request/schema, hash input/kỳ vọng, model/digest và cấu hình
+  thực dùng. Giữ model/tham số đang cấu hình; đóng băng trần riêng cho
+  probe: tối đa 28 call / 1.800 giây provider, gồm bảy call đầu và tối đa
+  ba lượt xác nhận cho cả bảy ca nếu lượt đầu đều đạt. Hết thời gian thì
+  ghi chưa đủ; không retry hoặc chọn lượt đẹp. Không gọi model ở lượt
+  cập nhật plan này.
+- Đọc quote, lý do và kết luận cho từng ca; lỗi cấu trúc ghi riêng, không
+  dùng mock/JSON hợp lệ/guard 502 để chứng minh ngữ nghĩa đúng. Giữ toàn bộ
+  request, output thô, lỗi và thời gian. Probe không lưu feedback dự án.
+- Runtime vẫn nhận đầy đủ mọi quyết định và kiểm suggestion thực đã sinh
+  trong một call/một nhận xét như A/B. Không đưa cách rút gọn đầu vào của
+  probe vào sản phẩm để tăng tỷ lệ đạt.
+
+**Điểm quyết định sau kiểm chứng:**
+
+- Probe còn đảo điều cấm hoặc nhầm quyền đề xuất: ghi giới hạn và dừng
+  thêm checklist/prompt dài; không tự đổi/tải model hoặc dùng API trả phí.
+- Probe đạt nhưng toàn phản hồi còn sai: chỉ khi đó đề xuất cách tổ chức
+  nhiệm vụ/phản hồi gọn hơn trong một call, đối chiếu lại plan trước khi
+  đổi thứ tự/schema. Chưa tự triển khai tách bước hoặc thêm call kiểm tra.
+- Probe đạt không thay thế mục C: ứng viên runtime còn phải kiểm nguyên
+  nguồn, đúng đích, suggestion, các bản tuân thủ/vi phạm, thời gian và
+  cặp mới giữ lại trên toàn phản hồi; qua lượt đầu mới xác nhận ba lượt.
+  Chốt ngân sách riêng trước batch runtime, không nhập nhằng với call
+  probe hoặc replay. Chưa qua gate thì PR #98 draft và #96 mở.
+
+#### Review đợt tiếp — 05/11/2026
+
+Đã đọc adapter quote, caller runtime/schema, parser dataset và runner cùng
+output/báo cáo mới nhất. Phạm vi sử dụng vẫn là MVP local một người viết.
+Review đã làm rõ bốn điểm để tránh sửa quá tay:
+
+- Neo đúng card nhận xét nhưng vẫn cho card lân cận làm đích; không biến
+  phạm vi card sửa thành lệnh cấm nhận xét lỗi thật ở đoạn trước/sau.
+- Giữ hợp đồng của bản ghi đã có quote, không chỉ hai shape trước quote;
+  không đổi luật đọc evidence cũ để làm replay trông đạt hơn.
+- Một quyết định trong probe là cách cô lập lỗi, không lọc bớt lựa chọn
+  trong sản phẩm; ca xung đột giữ hai lựa chọn. Probe không nghiệm thu
+  chất lượng kể chuyện hoặc thay gate toàn phản hồi.
+- Chưa có bằng chứng để thêm judge, pipeline, field phản hồi hoặc đổi
+  thứ tự nhiệm vụ. Chỉ sửa liên kết xác định được và chạy phép thử nhỏ.
+
+Plan giữ quyền tác giả, sáng tạo tương thích, im lặng/kết mở và chất liệu
+gần đời sống; không ép cao trào hay một đáp án cốt truyện. Kết luận review:
+đủ rõ để triển khai thử giới hạn trong 2.2a, không còn điểm chặn ở plan.
+Chất lượng critic vẫn chưa đạt; lượt này chỉ cập nhật tài liệu, không
+thực thi probe, sửa runtime hoặc nhận ứng viên vào dev.
 
 ### 2.3 — So sánh, hồi quy và bàn giao
 
@@ -200,7 +470,13 @@ tổng quát từ vài fixture.
 
 ## Ngân sách và điểm dừng
 
-Plan này chưa gọi model. Trước khi chạy thật, kiểm model đã cấu hình và chốt
+Đợt chọn quyết định trước 2.2a: [review](../testing/task-2-decision-selection.md)
+đã loại thêm năm ứng viên prompt/thứ tự dữ liệu sau 15 call. Runtime giữ
+`e71d863`; chọn nguồn và giữ mọi giới hạn vẫn chưa đạt. PR #98 draft, #96
+mở; chưa chạy ba lượt xác nhận cho ứng viên nào trong đợt này.
+
+Mỗi batch giữ evidence/ngân sách riêng. Trước khi chạy batch mới, kiểm model
+đã cấu hình và chốt
 trần số call/thời gian cho batch từ số công đoạn và số đoạn đích thực tế;
 một review có thể gọi nhiều lần nên không tính một lần bấm là một call.
 Ghi cả tham số yêu cầu lẫn context thực nếu provider cung cấp. Dùng SQLite/
@@ -212,8 +488,10 @@ tiêu chí. Không gắn giới hạn toàn bộ chuỗi thử với deadline 60
 critic từng review hoặc ngân sách demo M1.
 
 Đợt đầu giao một thay đổi nhỏ cho tối đa hai nhóm lỗi đã đo và báo cáo đi
-kèm. Không thêm schema/migration, agent mới, RAG/vector database, hệ thống
-chấm nghệ thuật, dashboard, nhật ký sáng tác hoặc workflow engine. Không mở
+kèm. Chỉ cho phép mở rộng schema phản hồi nội bộ critic card ở mục 2.2a;
+không đổi schema public API/dữ liệu dự án hoặc thêm migration, agent mới,
+RAG/vector database, hệ thống chấm nghệ thuật, dashboard, nhật ký sáng tác
+hoặc workflow engine. Không mở
 rộng sản xuất phim/video AI; không bỏ cơ chế nguồn/lịch sử để model sáng tác
 tự do hơn. Nếu cần năng lực mới vượt hợp đồng hiện tại, ghi thành quyết định
 phạm vi tiếp theo cùng ví dụ lỗi, thay vì dựng hạ tầng trước.

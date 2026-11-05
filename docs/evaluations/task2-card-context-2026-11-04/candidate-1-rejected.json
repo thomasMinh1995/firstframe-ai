@@ -1,0 +1,4 @@
+{
+  "accepted": false,
+  "reason": "Full passages appended after separate cards still produced false temporal contradictions in all nine positive runs. Stop the remaining phase-1 cases before another model call; keep completed results. Next check changes how the same source is presented, not the fixture or expected outcome."
+}

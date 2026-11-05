@@ -111,6 +111,11 @@ class FakeProvider:
                           "suggestion": ""}],
                 passed=True,
                 rubric_scores=None,
+                decision_checks=[dict(decision_id=item["id"], draft_comparison="aligned",
+                    draft_quote=next(item["text"] for item in context["cards"] if item["id"] == card),
+                    card_ids=[card], draft_reason="Synthetic contract fixture, not a semantic assessment.",
+                    suggestion_comparison="not_applicable", suggestion_reason="No suggestion.")
+                    for item in context["decisions"]],
             )
         else:
             output = response_model(

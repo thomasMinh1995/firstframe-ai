@@ -1,0 +1,21 @@
+{
+  "baseline_commit": "b929ea268c1440b52633711a1db66f75600e583b",
+  "model": "qwen2.5:7b",
+  "attempts": 28,
+  "successful_model_responses": 27,
+  "connection_failures_before_model_response": 1,
+  "measured_provider_seconds_including_connection_failure": 1102.716,
+  "budget": {"attempts": 32, "provider_seconds": 1200},
+  "planner_candidate_runs": 9,
+  "card_review_candidate_runs": 6,
+  "same_input_and_schema_verified_for_all_15_comparisons": true,
+  "three_manual_edit_save_review_rounds_preserve_draft": true,
+  "accepted_runtime_changes": [],
+  "planner_candidate_accepted": false,
+  "card_review_candidate_accepted": false,
+  "runtime_matches_baseline": true,
+  "backend_focused_tests_passed": 110,
+  "independent_reader_approval": false,
+  "task_96_complete": false,
+  "next_step": "Investigate card/neighbor temporal context and decision selection against saved failures before another bounded candidate. No automatic prompt/model search."
+}

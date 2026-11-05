@@ -26,6 +26,23 @@ def context_fixture():
     return draft, previous, author
 
 
+def with_checks(raw, context):
+    raw = deepcopy(raw)
+    raw["decision_checks"] = [dict(decision_id=d["id"], draft_comparison="aligned",
+        draft_quote=next(c["text"] for c in context["cards"] if c["id"] == raw["reviews"][0]["card_id"]),
+        card_ids=[raw["reviews"][0]["card_id"]], draft_reason="Synthetic contract fixture.",
+        suggestion_comparison="aligned" if raw["reviews"][0]["suggestion"] else "not_applicable",
+        suggestion_reason="Synthetic contract fixture.") for d in context["decisions"]]
+    return raw
+
+
+def legacy_schema(context):
+    schema = _card_review_schema(context).model_json_schema()
+    schema["properties"].pop("decision_checks")
+    schema["required"].remove("decision_checks")
+    return schema
+
+
 def test_context_targets_only_changed_card_without_mutating_source():
     draft, previous, author = context_fixture()
     original = deepcopy((draft, previous, author))
@@ -40,6 +57,50 @@ def test_context_targets_only_changed_card_without_mutating_source():
     assert review_context(draft, draft, author, True)["focus_card_ids"] == []
     assert review_context(draft, None, author, True)["focus_card_ids"] == []
     assert review_context(draft, previous, author, False)["cards"][4]["label"] == "Card 5 · Ending · 2"
+
+
+def test_review_preserves_continuous_passages_in_source_order():
+    draft, previous, author = context_fixture()
+    context = review_context(draft, previous, author, True)
+    passages = context['passages']
+    assert [p['section'] for p in passages] == ['Beginning', 'Middle', 'Ending']
+    assert passages[-1]['text'] == draft['sections'][3]['content']
+    assert passages[-1]['card_ids'] == ['section-3', 'section-3-part-1']
+    assert 'Main character' not in [p['section'] for p in passages]
+
+
+@pytest.mark.parametrize('decision', ['idea', 'constraint-0'])
+def test_review_may_cite_relevant_brief_or_constraint_despite_unrelated_answer(decision):
+    from app.application.revision_review import revision_notes
+    draft, previous, author = context_fixture()
+    author['constraints'] = ['Dừng khi cuộc gọi vừa kết nối.']
+    author['clarifications'] = [{'question': 'Áo màu gì?', 'answer': 'Áo xanh.'}]
+    context = review_context(draft, previous, author, True)
+    raw = dict(reviews=[dict(card_id='section-3-part-1', related_card_id='section-3',
+        decision_id=decision, observation='Đối chiếu điểm dừng.', comparison='uncertain', suggestion='')],
+        passed=False, rubric_scores=None)
+    parsed = _card_review_schema(context).model_validate(with_checks(raw, context))
+    notes = revision_notes(parsed.reviews, context, 'review-id')
+    assert notes[0].decision_id == decision
+    assert notes[0].decision_quote == next(d['text'] for d in context['decisions'] if d['id'] == decision)
+    assert notes[0].decision_question is None
+
+
+def test_model_receives_whole_passage_but_only_edited_and_neighbor_targets():
+    from test_generate_workflow import FakeProvider
+    from app.application.workflow import create_story_generation_service
+    from app.core.artifacts import PlanSection
+    draft, previous, author = context_fixture()
+    context = review_context(draft, previous, author, True)
+    provider = FakeProvider()
+    create_story_generation_service(provider).review(author['idea'], draft['title'], draft['logline'],
+        tuple(PlanSection(str(i), purpose='', **s) for i, s in enumerate(draft['sections'])),
+        json.dumps(author), response_language='vi', review_context=context)
+    sent = json.loads(provider.requests[-1].input_text.split('Card review context (JSON data):\n')[1])
+    assert [p['section'] for p in sent['passages']] == ['Ending']
+    assert sent['passages'][0]['text'] == draft['sections'][3]['content']
+    assert {c['id'] for c in sent['cards']} == {'section-3', 'section-3-part-1'}
+    assert sent['decisions'] == context['decisions']
 
 
 @pytest.mark.parametrize("text,count", [
@@ -78,6 +139,7 @@ def test_provider_schema_limits_focus_sources_neighbor_and_disables_film_scores(
     data = {"reviews": [{"card_id": "section-3-part-1", "decision_id": "answer-1",
             "related_card_id": "section-3", "observation": "Đối chiếu hai card.",
             "comparison": "aligned", "suggestion": ""}], "passed": True, "rubric_scores": None}
+    data = with_checks(data, context)
     assert model.model_validate(data).reviews[0].card_id == "section-3-part-1"
     for field, value in [("card_id", "section-1"), ("decision_id", "invented"), ("related_card_id", None)]:
         invalid = deepcopy(data)
@@ -118,7 +180,8 @@ def test_review_can_target_neighbor_while_preserving_valid_edited_card():
     data = dict(card_id="section-3", related_card_id="section-3-part-1", decision_id="answer-1",
                 comparison="mismatch", observation="Card trước chưa khớp cách kể đã chọn.",
                 suggestion="Sửa card trước, giữ cử chỉ trong card mới.")
-    parsed = _card_review_schema(context).model_validate(dict(reviews=[data], passed=False, rubric_scores=None))
+    parsed = _card_review_schema(context).model_validate(with_checks(
+        dict(reviews=[data], passed=False, rubric_scores=None), context))
     _, issues, steps, _ = feedback_messages(parsed.reviews, context)
     assert issues[0].startswith("Card 4")
     assert steps[0].startswith("Card 4")
@@ -129,7 +192,7 @@ def test_review_can_target_neighbor_while_preserving_valid_edited_card():
 def test_dataset_corrections_keep_recorded_review_count_and_source_enums():
     from app.application.dataset_corrections import validate_corrections
     context = review_context(*context_fixture(), True)
-    schema = _card_review_schema(context).model_json_schema()
+    schema = legacy_schema(context)
     schema["properties"]["reviews"]["maxItems"] = 3
     schema["$defs"]["FocusedCardReview"]["properties"]["card_id"] = {"const": "section-3-part-1"}
     data = dict(reviews=[dict(card_id="section-3-part-1", related_card_id="section-3", decision_id="answer-1",
@@ -149,9 +212,22 @@ def test_dataset_corrections_keep_recorded_review_count_and_source_enums():
         validate_corrections(sample, {"0": changed})
 
 
+def test_legacy_dataset_decision_enum_is_not_widened_by_new_runtime_choices():
+    from app.application.dataset_corrections import validate_corrections
+    context = review_context(*context_fixture(), True)
+    schema = legacy_schema(context)
+    schema['$defs']['FocusedCardReview']['properties']['decision_id'] = {'enum': ['answer-0', 'answer-1']}
+    output = dict(reviews=[dict(card_id='section-3-part-1', related_card_id='section-3', decision_id='idea',
+        observation='Đối chiếu nguồn.', comparison='aligned', suggestion='')], passed=True, rubric_scores=None)
+    sample = dict(status='completed', steps=[dict(stage='evaluation', status='completed', output={},
+        request=dict(response_schema=schema, input_text='Card review context (JSON data):\n' + json.dumps(context)))])
+    with pytest.raises(ValueError, match='schema'):
+        validate_corrections(sample, {'0': output})
+
+
 @pytest.mark.parametrize("change", [
     {"card_id": "invented"}, {"decision_id": "answer-99"}, {"related_card_id": "invented"},
-    {"card_id": "section-1"}, {"decision_id": "idea"}, {"suggestion": ""}, {"related_card_id": None},
+    {"card_id": "section-1"}, {"suggestion": ""}, {"related_card_id": None},
     {"related_card_id": "section-3-part-1"},
     {"comparison": "aligned"},
 ])
@@ -289,10 +365,10 @@ def test_uncertain_is_neutral_and_keeps_exact_sources(suggestion):
     draft, previous, author = context_fixture()
     original = deepcopy((draft, previous, author))
     context = review_context(draft, previous, author, True)
-    review = _card_review_schema(context).model_validate(dict(reviews=[dict(
+    review = _card_review_schema(context).model_validate(with_checks(dict(reviews=[dict(
         card_id='section-3-part-1', related_card_id='section-3', decision_id='answer-1',
         comparison='uncertain', observation='Chưa đủ căn cứ để xác định điểm dừng có trái ý đồ.',
-        suggestion=suggestion)], passed=True, rubric_scores=None))
+        suggestion=suggestion)], passed=True, rubric_scores=None), context))
     result = revision_evaluation(review, context)
     assert result.passed is None, 'Neither a confirmed violation nor a pass'
     assert not result.weaknesses and not result.strengths

@@ -27,6 +27,78 @@ class CardReview(BaseModel):
     suggestion: str
 
 
+class DecisionCheck(BaseModel):
+    model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
+
+    decision_id: str
+    draft_comparison: Literal["aligned", "mismatch", "uncertain", "not_applicable"]
+    card_ids: list[str]
+    draft_reason: str = Field(min_length=1)
+    suggestion_comparison: Literal["aligned", "mismatch", "uncertain", "not_applicable"]
+    suggestion_reason: str = Field(min_length=1)
+
+
+class GroundedDecisionCheck(DecisionCheck):
+    draft_quote: str = Field(description="Exact excerpt from cited card(s) in original source order, not author decisions. Empty only for uncertain/not_applicable.")
+    suggestion_comparison: Literal["aligned", "mismatch", "uncertain", "not_applicable"] = Field(
+        description="If reviews[0].suggestion is empty, this MUST be not_applicable. Otherwise check that exact suggestion.")
+
+
+def review_card_ids(context: dict) -> list[str]:
+    neighbors = [pair["related_card_id"] for pair in context["neighbor_checks"]]
+    return list(dict.fromkeys([*context["focus_card_ids"], *neighbors])) or [
+        card["id"] for card in context["cards"]]
+
+
+def _quote_matches_cards(check: GroundedDecisionCheck, context: dict) -> bool:
+    cited = set(check.card_ids)
+    if any(check.draft_quote in c["text"] for c in context["cards"] if c["id"] in cited):
+        return True
+    # Preserve original separators when a quote spans adjacent cited cards.
+    for passage in context.get("passages", []):
+        spans = card_spans(passage["text"])
+        ids = passage["card_ids"]
+        if len(spans) != len(ids):
+            continue
+        start = 0
+        while start < len(ids):
+            end = start
+            while end < len(ids) and ids[end] in cited:
+                end += 1
+            if end > start and check.draft_quote in passage["text"][spans[start][0]:spans[end - 1][1]]:
+                return True
+            start = max(end, start + 1)
+    return False
+
+
+def validate_decision_checks(reviews: list[CardReview], checks: list[DecisionCheck], context: dict) -> None:
+    expected = {d["id"] for d in context["decisions"]}
+    if len(reviews) != 1 or len(checks) != len(expected) or {c.decision_id for c in checks} != expected:
+        raise MalformedProviderResponseError("Card review did not check each author decision exactly once.")
+    review = reviews[0]
+    scope = set(review_card_ids(context)) & {card["id"] for card in context["cards"]}
+    for check in checks:
+        if (not set(check.card_ids).issubset(scope)
+                or check.draft_comparison == "mismatch" and not check.card_ids
+                or review.suggestion.strip() and check.suggestion_comparison in {"mismatch", "uncertain"}
+                or not review.suggestion.strip() and check.suggestion_comparison != "not_applicable"):
+            raise MalformedProviderResponseError("Decision check has invalid evidence or an unsafe suggestion.")
+        if isinstance(check, GroundedDecisionCheck):
+            if (check.draft_quote and not _quote_matches_cards(check, context)
+                    or not check.draft_quote and check.draft_comparison in {"aligned", "mismatch"}):
+                raise MalformedProviderResponseError("Decision check does not quote its cited draft evidence.")
+    selected = next((c for c in checks if c.decision_id == review.decision_id), None)
+    if selected is None or selected.draft_comparison == "not_applicable":
+        raise MalformedProviderResponseError("Card review cites an unchecked or unrelated decision.")
+    mismatches = {c.decision_id for c in checks if c.draft_comparison == "mismatch"}
+    cited_evidence = set(selected.card_ids).intersection((review.card_id, review.related_card_id))
+    if mismatches and (review.comparison != "mismatch" or review.decision_id not in mismatches or not cited_evidence):
+        raise MalformedProviderResponseError("Card review skipped a decision violation.")
+    if review.comparison == "aligned" and (not cited_evidence or selected.draft_comparison != "aligned"
+            or any(c.draft_comparison == "uncertain" for c in checks)):
+        raise MalformedProviderResponseError("Card review contradicts its decision checks.")
+
+
 def card_spans(text: str) -> list[tuple[int, int]]:
     # Mirror StoryPlanEditor.splitStorySection so anchors match the visible cards.
     space = f"[{re.escape(BROWSER_WHITESPACE)}]"
@@ -101,7 +173,12 @@ def review_context(draft: dict, previous: dict | None, author: dict, vietnamese:
     neighbors = [{"card_id": card["id"], "related_card_id": path_cards[j]["id"]}
                  for i, card in enumerate(path_cards) if card["changed"]
                  for j in (i - 1, i + 1) if 0 <= j < len(path_cards)]
+    passages = [{"section": sections[i]["title"], "text": sections[i]["content"],
+                 "card_ids": [card["id"] for card in cards if card["id"] == f"section-{i}"
+                              or card["id"].startswith(f"section-{i}-part-")]}
+                for i in path]
     return {"cards": cards, "decisions": decisions, "neighbor_checks": neighbors,
+            "passages": passages,
             "focus_card_ids": [card["id"] for card in cards if card["changed"]]}
 
 
@@ -134,9 +211,6 @@ def feedback_messages(reviews: list[CardReview], context: dict) -> tuple[list[st
     focus = set(context["focus_card_ids"])
     if focus and not focus.intersection((reviews[0].card_id, reviews[0].related_card_id)):
         raise MalformedProviderResponseError("Card review did not examine any edited card.")
-    if any(key.startswith("answer-") for key in decisions) and not any(
-            review.decision_id.startswith("answer-") for review in reviews):
-        raise MalformedProviderResponseError("Card review did not compare any clarification answer.")
     neighbors = context.get("neighbor_checks", [])
     if neighbors and not any({"card_id": review.card_id, "related_card_id": review.related_card_id} in neighbors
                             or {"card_id": review.related_card_id, "related_card_id": review.card_id} in neighbors

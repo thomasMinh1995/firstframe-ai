@@ -284,11 +284,11 @@ def test_stale_save_cannot_overwrite_another_windows_work(project_client):
     [
         (
             "Một lab coach giúp học viên làm bài build phase tại VinUni; kết quả tuyển dụng để mở.",
-            "Ngôn ngữ góp ý: tiếng Việt",
+            "bằng tiếng Việt",
         ),
         (
             "A young tutor helps a learner finish an AI exercise. Her job result stays unknown.",
-            "Use the explicit target response language for feedback",
+            "requested response language",
         ),
     ],
 )

@@ -1,0 +1,12 @@
+{
+  "source": "Ollama /api/tags and /api/ps before candidate changes",
+  "model": "qwen2.5:7b",
+  "digest": "845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
+  "quantization": "Q4_K_M",
+  "requested_context_length": 16384,
+  "observed_context_length": 16384,
+  "temperature": 0.3,
+  "provider_timeout_seconds": 180,
+  "seed": null,
+  "note": "No seed is sent by the runtime. Same inputs/settings do not imply deterministic outputs."
+}

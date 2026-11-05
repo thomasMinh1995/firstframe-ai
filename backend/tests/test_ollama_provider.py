@@ -1,3 +1,5 @@
+import json
+
 import httpx
 import pytest
 from pydantic import BaseModel, ConfigDict
@@ -140,7 +142,7 @@ def test_project_workflow_uses_local_fallback_and_preserves_edits(tmp_path, monk
 
     from app.api.routes import projects as routes
     from app.application.project_store import ProjectStore
-    from app.application.workflow import _EvaluationOutput, _PlanningOutput, _ReasoningOutput, _RevisionReviewOutput
+    from app.application.workflow import _EvaluationOutput, _PlanningOutput, _ReasoningOutput, _RevisionReviewOutput, _card_review_schema
     from app.main import create_app
 
     monkeypatch.setenv("AI_PROVIDER", "auto")
@@ -157,11 +159,15 @@ def test_project_workflow_uses_local_fallback_and_preserves_edits(tmp_path, monk
     def post(url, **kwargs):
         body = kwargs["json"]
         assert body["model"] == "local-test"
+        model = models[body["format"]["title"]]
+        if "decision_checks" in body["format"]["properties"]:
+            context = json.loads(body["messages"][1]["content"].split("Card review context (JSON data):\n", 1)[1])
+            model = _card_review_schema(context)
         result = fake.request_structured(
             StructuredRequest(
                 instructions=body["messages"][0]["content"],
                 input_text=body["messages"][1]["content"],
-                response_model=models[body["format"]["title"]],
+                response_model=model,
             )
         )
         return httpx.Response(

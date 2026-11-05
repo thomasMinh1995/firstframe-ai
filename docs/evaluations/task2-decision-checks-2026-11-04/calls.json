@@ -1,0 +1,62 @@
+[
+  {
+    "case": "fridge-ending-violation",
+    "output": "baseline-fridge-ending-violation",
+    "seconds": 19.919
+  },
+  {
+    "case": "raincoat-ending-violation",
+    "output": "baseline-raincoat-ending-violation",
+    "seconds": 10.802
+  },
+  {
+    "case": "empty-fridge",
+    "output": "baseline-empty-fridge",
+    "seconds": 14.759
+  },
+  {
+    "case": "raincoat",
+    "output": "baseline-raincoat",
+    "seconds": 11.885
+  },
+  {
+    "case": "conflicting-choices",
+    "output": "baseline-conflicting-choices",
+    "seconds": 16.427
+  },
+  {
+    "case": "pottery",
+    "output": "baseline-pottery",
+    "seconds": 15.926
+  },
+  {
+    "case": "pottery-violation",
+    "output": "baseline-pottery-violation",
+    "seconds": 16.123
+  },
+  {
+    "case": "fridge-ending-violation",
+    "output": "checks-fridge-ending-violation-1",
+    "seconds": 67.148
+  },
+  {
+    "case": "raincoat-ending-violation",
+    "output": "checks-raincoat-ending-violation-1",
+    "seconds": 59.966
+  },
+  {
+    "case": "empty-fridge",
+    "output": "checks-empty-fridge-1",
+    "seconds": 60.749
+  },
+  {
+    "case": "raincoat",
+    "output": "checks-raincoat-1",
+    "seconds": 50.344
+  },
+  {
+    "case": "conflicting-choices",
+    "output": "checks-conflicting-choices-1",
+    "seconds": 49.954
+  }
+]

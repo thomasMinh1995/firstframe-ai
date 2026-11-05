@@ -7,6 +7,7 @@ from app.application.revision_review import review_context
 from app.application.workflow import _card_review_schema
 from test_draft_runs import begin, complete, drafting
 from test_projects import project_client
+from test_revision_review import with_checks
 
 
 @pytest.mark.parametrize('unchanged', [False, True])
@@ -26,6 +27,7 @@ def test_related_card_is_constrained_even_without_an_edited_card(unchanged):
         'related_card_id': 'section-1-part-4', 'comparison': 'mismatch',
         'observation': 'Đối chiếu kết thúc.', 'suggestion': 'Giữ hình ảnh hai người chờ.'}],
         'passed': False, 'rubric_scores': None}
+    data = with_checks(data, context)
     with pytest.raises(ValidationError):
         model.model_validate(data)
     # The fourth visible card is part-3; never invent part-4 or guess an alias.

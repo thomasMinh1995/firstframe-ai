@@ -1,0 +1,27 @@
+{
+  "budget": {"max_model_calls": 32, "max_model_seconds": 1200, "retry": false},
+  "profile": {"model": "qwen2.5:7b", "temperature": 0.3, "context_length": 16384, "timeout_seconds": 180},
+  "cases": [
+    {
+      "id": "raincoat",
+      "role": "development",
+      "idea": "Tôi thấy người thợ sửa xe ở đầu hẻm, trước lúc đóng cửa, vuốt thẳng một chiếc áo mưa khách để quên trên móc. Chỉ là một việc rất nhỏ mà tôi cứ nhớ. Tôi chưa biết nên kể chuyện này thế nào.",
+      "constraints": ["Phim khoảng một phút, trong tiệm sửa xe, chỉ thấy người thợ.", "Không giải thích ai để quên áo hoặc bịa chuyện mất mát, tình cảm của người đó.", "Có thể đề xuất diễn tiến nhỏ trong tiệm; đó chưa phải lựa chọn tôi đã chốt."],
+      "criteria": ["Hỏi điều chưa rõ có ích, không hỏi lại số người/địa điểm.", "Phát triển một diễn tiến nhìn/nghe được, thay vì chỉ diễn giải người thợ cô đơn.", "Không tự tạo người chủ áo trở lại hoặc tiểu sử để giải thích cử chỉ.", "Các chi tiết mới phù hợp được chấp nhận như phương án, không cần khớp một đáp án câu chữ."]
+    },
+    {
+      "id": "empty-fridge",
+      "role": "development",
+      "idea": "Hai bạn cùng phòng đều muốn miếng bánh cuối trong tủ lạnh. Cả hai giả vờ đi lấy nước, nhường nhau mở tủ rồi cùng nhìn hộp bánh đã trống. Tôi muốn cái buồn cười nằm ở chuyện cả hai cố tỏ ra mình không thèm.",
+      "constraints": ["Phim một phút, hai bạn ngang tuổi, một gian bếp.", "Không có người thứ ba xuất hiện và không giải thích ai đã ăn bánh.", "Dừng ở hai người nhìn hộp trống. Không thêm cãi nhau, bài học nhường nhịn hoặc cảnh cùng đi mua bánh."],
+      "criteria": ["Không hỏi lại mục đích gây cười, điểm dừng, số người hoặc địa điểm đã rõ.", "Tình huống phát triển bằng hành vi giả vờ/nhường nhau; có khoảng cho người xem nhận ra ham muốn trái lời nói.", "Giữ đoạn kết ở hộp trống, không giải quyết quan hệ hay bí ẩn ai ăn bánh.", "Góp ý phải nêu đúng chi tiết đang có và tôn trọng một phim hài rất ngắn."]
+    },
+    {
+      "id": "fallen-flowers",
+      "role": "held_out",
+      "idea": "Cuối buổi bán hoa, một người nhặt những bông rụng trên bàn, xếp vào chiếc cốc nhựa. Tiếng xe rác vẫn nghe ngoài hẻm. Tôi muốn nhìn một việc chăm chút rất bình thường, không giải thích người ấy nghĩ gì.",
+      "constraints": ["Phim quan sát khoảng 45 giây, một người và một quầy hoa, không thoại.", "Không có khách mới, không làm hoa héo tươi trở lại, không thêm lời dẫn hay bài học.", "Cắt khi chiếc cốc vừa được đặt xuống; không thêm chuyện về nhà hoặc kết cục cho những bông hoa."],
+      "criteria": ["Không đặt câu hỏi để ép cốt truyện/kết đóng khi hình thức và điểm dừng đã rõ.", "Hình ảnh/âm thanh phục vụ việc chăm chút, không chỉ là liệt kê kỹ thuật máy quay.", "Giữ im lặng, một người và điểm cắt đã chọn.", "Góp ý không đòi nhân vật phải nhận ra một bài học hay giải thích nội tâm."]
+    }
+  ]
+}
