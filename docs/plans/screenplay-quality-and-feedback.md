@@ -16,6 +16,9 @@
   giữ parser dataset cũ; full backend 902 passed, 1 skipped. Năm lượt đầu
   vẫn chưa đạt nội dung/khả năng sử dụng, PR vẫn draft. Xem
   [review neo nguồn](../testing/task-2-grounded-decisions.md).
+- Plan tiếp theo đã review 05/11: neo quote vào đúng đích nhận xét và thử
+  đối chiếu tối thiểu để tách lỗi hiểu ràng buộc khỏi lỗi toàn phản hồi.
+  Đây là kế hoạch trong 2.2a, chưa triển khai hoặc gọi model cho đợt mới.
 - Tiếp nối Task 1, đã merge qua PR #95 vào `dev` (`d8d6b60`).
 - Source đã đối chiếu: bản triển khai Task 1 tại `8454167`, các module sáng tác,
   prompt, runner và bằng chứng hiện có. Khi triển khai phải ghi HEAD `dev`
@@ -290,6 +293,118 @@ Tiếp tục ngày 05/11: [neo quote vào nguồn](../testing/task-2-grounded-de
 không đổi API/dự án/model hoặc thêm call. Bản ghi checklist trước khi có
 quote giữ shape cũ; request mới bắt buộc quote cho nhận định có căn cứ.
 Đã dùng 7/28 call, 487,798/1.800 giây; C vẫn chưa đạt, không nhận ứng viên.
+
+#### Đợt tiếp trong 2.2a — Quote–đích nhận xét và đối chiếu tối thiểu
+
+**Căn cứ tại `204339a`:** guard hiện chỉ kiểm quote thuộc các card được
+dẫn và tập ID có giao với cặp review. Ca áo mưa dẫn cả phần giữa/kết,
+nhưng quote chỉ nằm ở phần giữa trong khi nhận xét kết đã thêm chủ áo.
+ID thật/quote thật chưa chứng minh nhận xét đang xét đúng đích. Ca bánh
+còn nhầm hỏi ai ăn với tiết lộ người ăn; ca áo đọc ngược điều cấm; check
+suggestion có lúc xét lại bản thảo. Self-pair là lỗi hợp đồng riêng, không
+được suy rằng mọi output bị từ chối đều hiểu sai ràng buộc.
+
+Giả thuyết nhiều nhiệm vụ trong một phản hồi làm model lẫn đối tượng chưa
+được cô lập. Không lấy giả thuyết đó làm lý do đổi pipeline hoặc đổi thứ
+tự `reviews`/checks ngay. Thực hiện hai phần dưới, rồi mới quyết định tiếp.
+
+**1. Sửa nhỏ liên kết quote–đích trong adapter hiện có.**
+
+- Với check được dùng làm căn cứ nhận xét chính và có quote, quote phải
+  thực sự chứa văn bản thuộc `review.card_id`. Chỉ liệt kê ID đích cùng
+  một card khác trong `card_ids` không đủ. Giữ quy tắc quote nguyên văn,
+  đúng thứ tự, không nối tắt qua card không dẫn; dùng lại `card_spans()`.
+- Đích chính có thể là card lân cận cũ nếu đó là nơi có vấn đề; cặp review
+  vẫn phải bao phủ card sửa theo guard hiện có. Không ép mọi quote của
+  mọi check vào card sửa, không bắt quote luôn chứa cả hai card. Giữ ca
+  quote qua nhiều card và lỗi tiếp nối độc lập với lựa chọn tác giả.
+- `uncertain` thiếu bằng chứng vẫn có thể không có quote theo hợp đồng
+  hiện tại; không bịa quote để qua guard. Không dùng kiểm chuỗi để kết
+  luận model đã hiểu đúng điều cấm, quyền đề xuất hoặc nội dung suggestion.
+- Chạm `revision_review.py`, đường gọi/schema nội bộ trong `workflow.py`,
+  và `dataset_corrections.py` khi cần giữ hợp đồng bản ghi. Hợp đồng mới
+  phải nhận diện được từ schema/metadata request đã lưu: bản ghi cũ,
+  kể cả shape đã có quote, không bị áp guard mới hồi tố. Dùng dấu hiệu
+  nội bộ tối thiểu trong cơ chế ghi schema hiện có; không thêm response
+  field, registry phiên bản, migration hoặc fallback cho request mới.
+- Test đỏ cho ca liệt kê đích nhưng chỉ quote lân cận; ca hợp lệ quote
+  chạm đích, quote qua card liền nhau, lân cận cũ làm đích, `uncertain`
+  không quote và tiếp nối. Giữ hồi quy guard cũ, dataset ba shape cũ và
+  hợp đồng mới, lỗi review bảo toàn draft/feedback/nguồn, không retry.
+  Không sửa self-pair hộ model hoặc nới guard để cứu output.
+
+**2. Phép thử đối chiếu tối thiểu, chỉ phục vụ chẩn đoán ngoài runtime.**
+
+Tận dụng provider và cách ghi evidence/ledger của runner hiện có. Chỉ cần
+một script tuần tự mỏng nếu runner API hiện tại không gọi được tác vụ
+chẩn đoán; không xây framework. Mỗi ca gửi một quyết định tác giả và đoạn
+văn cần xét, chỉ yêu cầu quote, kết luận đối chiếu và lý do ngắn; không
+sinh nhận xét chính hay suggestion. Ngoại lệ có chủ đích: ca xung đột phải
+gửi cả hai lựa chọn, nếu bỏ một thì phép thử mất ý nghĩa.
+
+Đóng băng bảy input và kỳ vọng trước call đầu:
+
+| Đối chiếu | Kỳ vọng đọc nội dung |
+| --- | --- |
+| Hai đoạn: hỏi ai đã ăn / xác định người đã ăn | Với lệnh cấm tiết lộ người ăn, hỏi chưa tự động là tiết lộ; chỉ đánh giá giới hạn này, không lẫn lệnh cấm cãi nhau |
+| Hai đoạn: hành động bị cấm xuất hiện / không xuất hiện | Nhận đúng vi phạm ở bản có; không đảo điều cấm thành yêu cầu phải làm |
+| Hai đoạn: hành động được phép có / không có | Quyền đề xuất không bắt buộc hành động xuất hiện; cả hai có thể phù hợp |
+| Một đoạn với hai lựa chọn tác giả mâu thuẫn | Nhận ra chưa đủ cơ sở để chọn một phía, cần hỏi tác giả; không tự áp một kết thúc |
+
+Mỗi cặp chỉ đổi chi tiết đang đối chiếu, dùng chất liệu đời thường ngắn và
+giữ đoạn đủ nghĩa. Giữ nguyên evidence cũ; nếu cần bỏ chuỗi literal `null`
+trong fixture cũ thì tạo input/ID mới trước khi chạy. Lỗi áo không có
+`null` vẫn xảy ra nên không coi làm sạch fixture là cách sửa đã chứng minh.
+Đây là phép cô lập năng lực, không phải ca giữ lại hay so sánh chất lượng
+toàn workflow với baseline.
+
+- Ghi HEAD, request/schema, hash input/kỳ vọng, model/digest và cấu hình
+  thực dùng. Giữ model/tham số đang cấu hình; đóng băng trần riêng cho
+  probe: tối đa 28 call / 1.800 giây provider, gồm bảy call đầu và tối đa
+  ba lượt xác nhận cho cả bảy ca nếu lượt đầu đều đạt. Hết thời gian thì
+  ghi chưa đủ; không retry hoặc chọn lượt đẹp. Không gọi model ở lượt
+  cập nhật plan này.
+- Đọc quote, lý do và kết luận cho từng ca; lỗi cấu trúc ghi riêng, không
+  dùng mock/JSON hợp lệ/guard 502 để chứng minh ngữ nghĩa đúng. Giữ toàn bộ
+  request, output thô, lỗi và thời gian. Probe không lưu feedback dự án.
+- Runtime vẫn nhận đầy đủ mọi quyết định và kiểm suggestion thực đã sinh
+  trong một call/một nhận xét như A/B. Không đưa cách rút gọn đầu vào của
+  probe vào sản phẩm để tăng tỷ lệ đạt.
+
+**Điểm quyết định sau kiểm chứng:**
+
+- Probe còn đảo điều cấm hoặc nhầm quyền đề xuất: ghi giới hạn và dừng
+  thêm checklist/prompt dài; không tự đổi/tải model hoặc dùng API trả phí.
+- Probe đạt nhưng toàn phản hồi còn sai: chỉ khi đó đề xuất cách tổ chức
+  nhiệm vụ/phản hồi gọn hơn trong một call, đối chiếu lại plan trước khi
+  đổi thứ tự/schema. Chưa tự triển khai tách bước hoặc thêm call kiểm tra.
+- Probe đạt không thay thế mục C: ứng viên runtime còn phải kiểm nguyên
+  nguồn, đúng đích, suggestion, các bản tuân thủ/vi phạm, thời gian và
+  cặp mới giữ lại trên toàn phản hồi; qua lượt đầu mới xác nhận ba lượt.
+  Chốt ngân sách riêng trước batch runtime, không nhập nhằng với call
+  probe hoặc replay. Chưa qua gate thì PR #98 draft và #96 mở.
+
+#### Review đợt tiếp — 05/11/2026
+
+Đã đọc adapter quote, caller runtime/schema, parser dataset và runner cùng
+output/báo cáo mới nhất. Phạm vi sử dụng vẫn là MVP local một người viết.
+Review đã làm rõ bốn điểm để tránh sửa quá tay:
+
+- Neo đúng card nhận xét nhưng vẫn cho card lân cận làm đích; không biến
+  phạm vi card sửa thành lệnh cấm nhận xét lỗi thật ở đoạn trước/sau.
+- Giữ hợp đồng của bản ghi đã có quote, không chỉ hai shape trước quote;
+  không đổi luật đọc evidence cũ để làm replay trông đạt hơn.
+- Một quyết định trong probe là cách cô lập lỗi, không lọc bớt lựa chọn
+  trong sản phẩm; ca xung đột giữ hai lựa chọn. Probe không nghiệm thu
+  chất lượng kể chuyện hoặc thay gate toàn phản hồi.
+- Chưa có bằng chứng để thêm judge, pipeline, field phản hồi hoặc đổi
+  thứ tự nhiệm vụ. Chỉ sửa liên kết xác định được và chạy phép thử nhỏ.
+
+Plan giữ quyền tác giả, sáng tạo tương thích, im lặng/kết mở và chất liệu
+gần đời sống; không ép cao trào hay một đáp án cốt truyện. Kết luận review:
+đủ rõ để triển khai thử giới hạn trong 2.2a, không còn điểm chặn ở plan.
+Chất lượng critic vẫn chưa đạt; lượt này chỉ cập nhật tài liệu, không
+thực thi probe, sửa runtime hoặc nhận ứng viên vào dev.
 
 ### 2.3 — So sánh, hồi quy và bàn giao
 
