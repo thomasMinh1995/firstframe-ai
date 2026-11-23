@@ -52,6 +52,7 @@ jobs:
         working-directory: frontend
     env:
       NEXT_TELEMETRY_DISABLED: '1'
+      PYTHON_DOTENV_DISABLED: '1'
       NEXT_PUBLIC_API_BASE_URL: http://127.0.0.1:8034
       TOUR_TEST_URL: http://127.0.0.1:3034
     steps:
@@ -59,6 +60,10 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: '24'
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - run: python -m pip install -r ../backend/requirements-dev.txt
       - run: npm ci
       - run: npm install --prefix "$RUNNER_TEMP/browser" --package-lock=false playwright@1.65.1
       - run: '"$RUNNER_TEMP/browser/node_modules/.bin/playwright" install --with-deps chrome'
@@ -72,3 +77,20 @@ jobs:
           cat "$RUNNER_TEMP/frontend.log"
           exit 1
       - run: NODE_PATH="$RUNNER_TEMP/browser/node_modules" node tests/saved-library.browser.cjs
+      - run: |
+          python ../backend/tests/ui_workspace_fixture.py > "$RUNNER_TEMP/fixture.log" 2>&1 &
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:8034/__test/state > /dev/null; then
+              python - <<'PYTHON' >> "$GITHUB_ENV"
+          import json, os
+          from pathlib import Path
+          lines = (Path(os.environ['RUNNER_TEMP']) / 'fixture.log').read_text().splitlines()
+          print('FIRSTFRAME_QA_DIRECTORY=' + next(json.loads(line)['directory'] for line in lines if line.startswith('{')))
+          PYTHON
+              exit 0
+            fi
+            sleep 1
+          done
+          cat "$RUNNER_TEMP/fixture.log"
+          exit 1
+      - run: NODE_PATH="$RUNNER_TEMP/browser/node_modules" node tests/screenplay-context.browser.cjs
