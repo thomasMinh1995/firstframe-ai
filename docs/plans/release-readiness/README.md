@@ -1,0 +1,24 @@
+# Chuẩn bị dev → main — 23/11/2026
+
+Được yêu cầu triển khai R1–R3; không bao gồm merge dev vào main hoặc deploy.
+Baseline đầu: origin/dev 41bca1c; main 9db2f6f. Dùng clone sạch, SQLite/ảnh tạm, không .env/production/model thật.
+Mỗi nhánh tạo từ dev mới nhất sau PR trước đã squash merge; PR vào dev, tổng additions + deletions <500.
+Thân PR copy mẫu tương ứng, điền ___ và Closes # bằng issue thật. Không sửa assertion hành vi cũ để che lỗi.
+
+| Task | Nhánh | Phạm vi / nghiệm thu |
+|---|---|---|
+| R1 | codex/ff-release-01-main-ci | CI cho pull_request/push cả dev và main; test cấu hình đỏ trước sửa, xanh sau sửa. |
+| R2a | codex/ff-release-02a-browser-setup | Sửa setup/điều hướng fixture dùng chung và saved-library; giữ kiểm tra nguồn, restore, ảnh, focus, không gọi AI. |
+| R2b | codex/ff-release-02b-onboarding | Khôi phục suite hướng dẫn; ánh xạ metadata 7 bước cũ sang contract 6 bước đã duyệt ở Task 1, giữ các kiểm tra dữ liệu/nguồn/IME/focus. |
+| R2c | codex/ff-release-02c-screenplay-context | Khôi phục suite ngữ cảnh: mở đúng stage; giữ toàn bộ assertion buffer/nguồn/ảnh/lưu. |
+| R3 | codex/ff-release-03-sqlite-recovery | DB sinh từ main cũ đọc/sửa được; backup/restore DB + ảnh trong thư mục tạm; integrity_check, restart, không mất bản/ảnh. |
+
+R2 tách thành ba PR để tránh một diff lớn và xác nhận từng suite độc lập.
+Nếu phải tách thêm: bổ sung nhánh/mẫu trước khi mở PR. Không bỏ ca cũ hoặc nới assertion để đạt trần dòng.
+Contract hướng dẫn hiện tại có 6 bước; thay nhãn/mapping trong fixture phải ghi riêng với sửa hành vi runtime.
+
+Trước mỗi PR, từ frontend:
+`pnpm typecheck && pnpm lint && pnpm test && pnpm build && git diff --check`
+PR backend chạy thêm `PYTHON_DOTENV_DISABLED=1 python -m pytest -q` trong backend bằng venv riêng.
+Browser chạy production build local và provider giả; lưu baseline thất bại và kết quả sau sửa. Test tương thích vốn xanh thì ghi baseline PASS, không tạo lỗi giả.
+CI phải xanh trên đúng head trước squash merge vào dev. main không thay đổi trong R1–R3.
