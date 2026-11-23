@@ -8,7 +8,7 @@ Thân PR copy mẫu tương ứng, điền ___ và Closes # bằng issue thật.
 | Task | Nhánh | Phạm vi / nghiệm thu |
 |---|---|---|
 | R1 | codex/ff-release-01-main-ci | CI cho pull_request/push cả dev và main; test cấu hình đỏ trước sửa, xanh sau sửa. |
-| R2a | codex/ff-release-02a-browser-setup | Sửa setup/điều hướng fixture dùng chung và saved-library; giữ kiểm tra nguồn, restore, ảnh, focus, không gọi AI. |
+| R2a | codex/ff-release-02a-browser-setup | Sửa setup/điều hướng fixture dùng chung và saved-library, đưa suite vào CI; giữ kiểm tra nguồn, restore, ảnh, focus, không gọi AI. |
 | R2b | codex/ff-release-02b-onboarding | Khôi phục suite hướng dẫn; ánh xạ metadata 7 bước cũ sang contract 6 bước đã duyệt ở Task 1, giữ các kiểm tra dữ liệu/nguồn/IME/focus. |
 | R2c | codex/ff-release-02c-screenplay-context | Khôi phục suite ngữ cảnh: mở đúng stage; giữ toàn bộ assertion buffer/nguồn/ảnh/lưu. |
 | R3 | codex/ff-release-03-sqlite-recovery | DB sinh từ main cũ đọc/sửa được; backup/restore DB + ảnh trong thư mục tạm; integrity_check, restart, không mất bản/ảnh. |
