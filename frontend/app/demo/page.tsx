@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { StoryFeedback } from "../StoryResultCards";
 import { getDemoScenario, listDemoScenarios, type DemoScenario, type DemoStep, type DemoSummary } from "../demoApi";
 import { sectionLabels } from "../storyLabels";
@@ -57,7 +58,7 @@ export default function DemoPage() {
       <h1>Một ý tưởng, từng bước thành câu chuyện.</h1>
       <p className="summary">Chọn một kịch bản có sẵn rồi đi qua những lựa chọn và bản sửa đã ghi.
         Demo phát lại dữ liệu trên máy, không gọi OpenAI hay Ollama.</p>
-      <a className="demo-entry secondary" href="/">Về không gian viết</a>
+      <Link className="demo-entry secondary" href="/">Về không gian viết</Link>
     </header>
 
     <section className="panel form-stack" aria-label="Chọn kịch bản demo">
