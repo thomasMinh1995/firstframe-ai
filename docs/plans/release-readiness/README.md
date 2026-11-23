@@ -22,3 +22,10 @@ Trước mỗi PR, từ frontend:
 PR backend chạy thêm `PYTHON_DOTENV_DISABLED=1 python -m pytest -q` trong backend bằng venv riêng.
 Browser chạy production build local và provider giả; lưu baseline thất bại và kết quả sau sửa. Test tương thích vốn xanh thì ghi baseline PASS, không tạo lỗi giả.
 CI phải xanh trên đúng head trước squash merge vào dev. main không thay đổi trong R1–R3.
+
+## Kết quả triển khai
+- R1: #104 đã squash merge; CI nhận PR/push dev và main.
+- R2a: #106 đã squash merge; saved-library xanh ở 4 kích thước và CI Linux, giữ assertion cũ.
+- R2b: tạm hoãn theo yêu cầu người dùng; giữ nguyên mọi kỳ vọng, kể cả 7 bước.
+- R2c: #108 đã squash merge; screenplay-context xanh local/CI, giữ assertion cũ; chỉ sửa cách mở stage/selector.
+- R3: baseline hai ca tương thích/recovery đã PASS; bổ sung fixture main thật, hồi quy và runbook, không đổi runtime. Xem docs/testing/sqlite-recovery-2026-11-23.md.
