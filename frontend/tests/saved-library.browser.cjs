@@ -1,6 +1,7 @@
 // Real local UI; every project/image request is intercepted. No model or saved user data is used.
 const {chromium}=require('playwright');
 const assert=require('node:assert/strict');
+const os=require('node:os'),path=require('node:path');
 const {randomUUID:uuid}=require('node:crypto');
 const {setup,fullProject}=require('./onboarding.browser.cjs');
 const fixture=require('../../docs/evaluations/m3-scene-review-qwen7b-2026-10-27/inputs.json')[0].project;
@@ -73,7 +74,7 @@ const pixel=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR
    await page.waitForFunction(()=>document.querySelector('.library-versions button[aria-pressed="true"]')?.textContent.includes('Phiên bản 4'));
    assert.deepEqual(mock.projects[0].scene_outline,outline);assert.deepEqual(mock.projects[0].draft,draft);
    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
-   if(width===1280||width===390)await page.screenshot({path:`/private/tmp/firstframe-saved-library-${width}.png`,fullPage:true});
+   if(width===1280||width===390)await page.screenshot({path:path.join(os.tmpdir(),`firstframe-saved-library-${width}.png`),fullPage:true});
    await page.locator('#project-picker').selectOption('empty');await page.getByRole('heading',{name:'Chưa có kịch bản đã lưu',exact:true}).waitFor();
    assert.equal(await page.locator('.library-scene,.library-attachment').count(),0,'project switch clears old script/images');
    // An unavailable image is reported without losing the scene text.

@@ -32,6 +32,10 @@ const buffer = page => page.evaluate(() => {
   return [...fields, ...draftFields].sort(([a], [b]) => a.localeCompare(b));
 });
 async function reveal(page, locator) {
+  await locator.waitFor({state: 'attached'});
+  const stage = await locator.evaluate(node => node.closest('[data-workspace-stage]')?.getAttribute('data-workspace-stage'));
+  const navigation = stage && page.locator(`.workspace-stage-nav button[aria-controls="${stage}"]`);
+  if (navigation && await navigation.count()) await navigation.click();
   const ancestors = locator.locator('xpath=ancestor::details');
   for (let i = await ancestors.count() - 1; i >= 0; i--) {
     const item = ancestors.nth(i);
@@ -117,6 +121,7 @@ async function setup(browser, options = {}) {
       const created = { ...project(`p${mock.projects.length + 1}`), idea: '' };
       mock.projects.push(created); return reply(created);
     }
+    if (method === 'GET' && parts[3] === 'draft-runs') return reply([]);
     const p = mock.projects.find(p => p.id === id);
     if (!p) return reply({ detail: 'missing' }, 404);
     if (method === 'GET') return reply(p);
@@ -186,7 +191,9 @@ async function setup(browser, options = {}) {
   const page = await context.newPage();
   const entry = new URL(url);
   await page.goto(entry.href);
-  await page.getByRole('button', { name: 'Dự án mới', exact: true }).waitFor();
+  const create = page.getByRole('button', { name: 'Dự án mới', exact: true, includeHidden: true });
+  await create.waitFor({state: 'attached'}); await reveal(page, create);
+  await create.waitFor();
   await page.waitForFunction(() => !document.querySelector('[data-tour="new-project"]').disabled);
   return { context, page, mock, errors, close: async () => { assert.deepEqual(errors, []); await context.close(); } };
 }
