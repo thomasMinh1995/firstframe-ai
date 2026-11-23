@@ -23,7 +23,7 @@
 .library-versions small { font-weight: 400; display: block; font-size: 11px; margin-top: 4px; color: #69766b; }
 .library-saved-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--library-green); margin: 0 5px 1px 0; }
 .library-document { min-width: 0; }
-.library-document-heading { display: flex; justify-content: space-between; align-items: start; gap: 12px; margin-bottom: 20px; }
+.library-document-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 20px; }
 .library-document-heading h3 { font-size: 16px; font-weight: 500; margin: 0; }
 .library-document-heading p { font-size: 12px; color: #69766b; margin-top: 5px; }
 .library-tag { display: inline-block; font-size: 11px; background: var(--library-soft); color: var(--library-green); padding: 4px 9px; border-radius: 16px; white-space: nowrap; }

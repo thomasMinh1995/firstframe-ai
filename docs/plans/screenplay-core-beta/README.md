@@ -90,7 +90,7 @@ Dự toán dưới đây là giới hạn lập kế hoạch, chưa phải số 
 
 ## Bổ sung sau PR 1: dọn lint trước khi tiếp tục
 - Nhánh: `codex/ff-sb-01-lint-cleanup`, tạo từ `origin/dev` 3453fae; PR vào `dev`, squash, dưới 500 dòng cộng/xóa.
-- Phạm vi: sửa 20 warning React hooks/ảnh; dùng ESLint CLI thay `next lint` deprecated; lint không cho phép warning.
+- Phạm vi: sửa 20 warning React hooks/ảnh và 2 warning CSS trong build; dùng ESLint CLI thay `next lint` deprecated; lint không cho phép warning.
 - Đỏ trên dev: `pnpm lint --max-warnings=0`; test hồi quy callback theo dõi và mở góp ý với nội dung cảnh mới.
 - Nghiệm thu: giữ nguyên assertion cũ, chạy đủ năm lệnh, browser suite liên quan với SQLite tạm; không đọc `.env` hay gọi model thật.
 - Thân PR theo `pr-1-lint-body.md`; không gom PR 2 hoặc thay đổi workspace chính.

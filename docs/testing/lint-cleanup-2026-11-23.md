@@ -9,6 +9,7 @@ Nhánh `codex/ff-sb-01-lint-cleanup`; issue #101; PR vào dev và squash.
 - Ca 1: wheel phải gọi callback mới sau rerender; ca 2: mở góp ý phải chọn cảnh hiện tại khi script giữ cùng ID.
 - Dependency hooks được sửa tại nguồn; callback polling/flush ổn định, không tắt rule hay thay assertion cũ.
 - ESLint CLI dùng cùng next/core-web-vitals; `--max-warnings=0` bắt warning trong CI.
+- Clean build còn 2 warning autoprefixer tại flex headers: đổi align-items start thành flex-start; giữ start trong các grid.
 - next/image dùng unoptimized, kích thước 768×432 và fallback lỗi; URL ảnh local tải trực tiếp.
 
 ## Kiểm chứng

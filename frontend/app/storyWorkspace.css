@@ -163,7 +163,7 @@
 .story-draft-path > li.is-selected > .story-field { border: 2px solid #305e4b; box-shadow: 0 0 0 3px #eaf0e3; }
 .card-feedback-trigger { align-self: flex-start; padding: 7px 10px; font-size: 11px; }
 .card-feedback { min-width: 0; border: 1px solid #b7cbb0; border-radius: 12px; background: #f1f5ed; padding: 16px; overflow-wrap: anywhere; }
-.card-feedback header { display: flex; justify-content: space-between; gap: 8px; align-items: start; }
+.card-feedback header { display: flex; justify-content: space-between; gap: 8px; align-items: flex-start; }
 .card-feedback .eyebrow { font-size: 10px; }
 .card-feedback h4 { font-size: 14px; margin: 7px 0 12px; }
 .card-feedback p { font-size: 13px; line-height: 1.7; margin: 10px 0; }
