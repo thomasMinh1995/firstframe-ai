@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { datasetBase, getSample, listSamples, restoreOutputs, restoreSavedBranch, saveOutputs, saveReview, type Review, type Sample, type SampleDetail } from "../datasetApi";
 
 import SavedBranchesPanel from "./SavedBranches";
@@ -113,7 +114,7 @@ export default function DatasetsPage() {
       <h1>Duyệt mẫu trước khi dùng lại.</h1>
       <p className="summary">Đọc đầu vào, kết quả và model đã dùng; ghi nhận đánh giá của bạn.
         Điểm của AI trong workflow không tự quyết định chất lượng mẫu.</p>
-      <div className="demo-controls"><a href="/">Về không gian viết</a><a href="/demo?curated=true">Mở demo đã duyệt</a></div>
+      <div className="demo-controls"><Link href="/">Về không gian viết</Link><a href="/demo?curated=true">Mở demo đã duyệt</a></div>
     </header>
     <section className="panel form-stack">
       <p>{samples.length} mẫu · {samples.filter((item) => item.review.status === "approved").length} đã duyệt

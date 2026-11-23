@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import Link from "next/link";
 import styles from "./prototype.module.css";
 
 type Beat = { id: string; label: string; title: string; text: string; source: string; reason: string; added?: boolean };
@@ -143,7 +144,7 @@ export default function Prototype() {
 
   return <div className={styles.app}>
     <header className={styles.header}>
-      <a className={styles.brand} href="/" aria-label="Firstframe — về ứng dụng chính"><span className={styles.brandMark}>f<span>f</span></span>firstframe<span className={styles.brandDot}>.</span></a>
+      <Link className={styles.brand} href="/" aria-label="Firstframe — về ứng dụng chính"><span className={styles.brandMark}>f<span>f</span></span>firstframe<span className={styles.brandDot}>.</span></Link>
       <div className={styles.headerProject}><span className={styles.projectDot} /> {stage === 0 ? "Câu chuyện mới" : "Vải đầu mùa"} <span className={styles.separator}>/</span><span>Phim ngắn</span></div>
       <span className={styles.prototypeBadge}>PROTOTYPE <span>· Dữ liệu mẫu</span></span>
     </header>
