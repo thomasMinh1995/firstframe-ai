@@ -26,7 +26,7 @@ try {
   write('package.json', fs.readFileSync(path.join(source, 'package.json')));
   write('scripts/test.cjs', stub);
   for (const file of ['node_modules/.bin/tsc', 'node_modules/.bin/next',
-    'node_modules/typescript/bin/tsc', 'node_modules/next/dist/bin/next']) write(file, stub);
+    'node_modules/eslint/bin/eslint.js', 'node_modules/typescript/bin/tsc', 'node_modules/next/dist/bin/next']) write(file, stub);
   const guard = path.join(source, 'scripts/checks.cjs');
   if (fs.existsSync(guard)) write('scripts/checks.cjs', fs.readFileSync(guard));
   const failures = [];

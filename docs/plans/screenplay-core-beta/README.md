@@ -1,5 +1,5 @@
 # Kế hoạch PR: kịch bản, thoại Việt và hình minh họa
-Ngày rà soát: 23/11/2026. Trạng thái: PR 1 đã triển khai và kiểm tra local; PR 2–17 là kế hoạch. Không chạy model trong PR 1.
+Ngày rà soát: 23/11/2026. Trạng thái: PR 1 đã squash merge qua #100 vào dev; PR 2–17 là kế hoạch. Không chạy model trong PR 1.
 Kế thừa [định hướng](../vietnam-first-screenplay-mvp.md) và [Task 2](../screenplay-quality-and-feedback.md).
 BK/HA/QA là nhóm mục tiêu; bảng bên dưới mới là đơn vị PR. Không gom một nhóm vào một PR lớn.
 
@@ -87,3 +87,10 @@ Dự toán dưới đây là giới hạn lập kế hoạch, chưa phải số 
 - Nền auth/quota/backup còn thiếu trên dev cần một kế hoạch PR riêng trước beta; không coi thay đổi local là đã merge hoặc lén nhét vào PR 16.
 - M1 giữ nhiệm vụ và ngưỡng hiện có. Nhiệm vụ toàn hành trình/ảnh đo riêng, chốt trước người đầu tiên tham gia.
 - Đợt đầu nên thực hiện PR 1–3, rồi chọn lỗi để làm PR 4–9. HA có thể làm song song khi nền dữ liệu đã chốt.
+
+## Bổ sung sau PR 1: dọn lint trước khi tiếp tục
+- Nhánh: `codex/ff-sb-01-lint-cleanup`, tạo từ `origin/dev` 3453fae; PR vào `dev`, squash, dưới 500 dòng cộng/xóa.
+- Phạm vi: sửa 20 warning React hooks/ảnh; dùng ESLint CLI thay `next lint` deprecated; lint không cho phép warning.
+- Đỏ trên dev: `pnpm lint --max-warnings=0`; test hồi quy callback theo dõi và mở góp ý với nội dung cảnh mới.
+- Nghiệm thu: giữ nguyên assertion cũ, chạy đủ năm lệnh, browser suite liên quan với SQLite tạm; không đọc `.env` hay gọi model thật.
+- Thân PR theo `pr-1-lint-body.md`; không gom PR 2 hoặc thay đổi workspace chính.

@@ -30,11 +30,12 @@ export function SavedLibrary({project, busy, outline, storyPlan, onRestoreScreen
   const source = script?.source_outline.scenes.find(scene => scene.id === selectedScene?.source_scene_id);
   const images = script ? screenplaySketches(project, script.source_outline) : {};
 
+  const firstSceneId = project.screenplay?.scenes[0]?.id ?? null;
   useEffect(() => {
     setVersionId("current");
-    setSourceId(project.screenplay?.scenes[0]?.id ?? null);
+    setSourceId(firstSceneId);
     setPreview(null);
-  }, [project.screenplay?.id, project.screenplay?.version]);
+  }, [project.screenplay?.id, project.screenplay?.version, firstSceneId]);
 
   function closeSource() {
     const id = sourceId;

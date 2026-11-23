@@ -12,7 +12,7 @@ for (const directory of [root, path.dirname(root)]) {
 }
 const commands = {
   typecheck: [require.resolve('typescript/bin/tsc'), '--noEmit'],
-  lint: [require.resolve('next/dist/bin/next'), 'lint'],
+  lint: [path.join(root, 'node_modules/eslint/bin/eslint.js'), 'app', '--max-warnings=0'],
   test: [path.join(__dirname, 'test.cjs')],
   build: [require.resolve('next/dist/bin/next'), 'build'],
 };

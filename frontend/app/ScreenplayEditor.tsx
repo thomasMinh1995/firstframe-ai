@@ -51,16 +51,19 @@ export function ScreenplayEditor({initialScene,onInitialSceneOpened,project, sav
   const script = project.screenplay;
   const uncertain = sent !== null && script?.id !== sent && !project.screenplay_versions?.some(v=>v.screenplay.id===sent);
   const scene = selected?.scriptId===script?.id ? script?.scenes.find(s=>s.id===selected?.sceneId) : undefined;
-  const sketches = useMemo(()=>savedProject.id===project.id && script ? screenplaySketches(savedProject,script.source_outline) : {},[savedProject,project.id,script?.source_outline]);
+  const sourceOutline = script?.source_outline;
+  const sketches = useMemo(()=>savedProject.id===project.id && sourceOutline ? screenplaySketches(savedProject,sourceOutline) : {},[savedProject,project.id,sourceOutline]);
   const sketch = scene ? sketches[scene.source_scene_id] : undefined;
   const source = script?.source_outline.scenes.find(s=>s.id===scene?.source_scene_id);
   const edit = (next: ScriptScene) => script && onChange({...script,scenes:script.scenes.map(s=>s.id===next.id?next:s)});
   const openedInitialScene=useRef<string|null>(null);
   useEffect(()=>{setSelected(null);setReceived(null);setUseBlockEditor(false);setPendingReference(null);setPendingEdit(null);},[script?.id]);
-  useEffect(()=>{if(initialScene&&initialScene.scriptId===script?.id&&script.scenes.some(s=>s.id===initialScene.sceneId)){setSelected(initialScene);setReceived({scriptId:script.id,count:script.scenes.length})}},[script?.id,initialScene?.scriptId,initialScene?.sceneId]);
+  const initialScriptId=initialScene?.scriptId,initialSceneId=initialScene?.sceneId,scriptId=script?.id,sceneCount=script?.scenes.length;
+  const initialSceneExists=!!script?.scenes.some(s=>s.id===initialSceneId);
+  useEffect(()=>{if(initialScriptId&&initialSceneId&&initialScriptId===scriptId&&initialSceneExists){setSelected({scriptId:initialScriptId,sceneId:initialSceneId});setReceived({scriptId:initialScriptId,count:sceneCount??0})}},[scriptId,initialScriptId,initialSceneId,initialSceneExists,sceneCount]);
   useEffect(()=>{
-    if(busy||!initialScene||initialScene.scriptId!==script?.id||initialScene.sceneId!==scene?.id)return;
-    const key=`${initialScene.scriptId}:${initialScene.sceneId}`;
+    if(busy||!initialScriptId||!initialSceneId||initialScriptId!==script?.id||initialSceneId!==scene?.id)return;
+    const key=`${initialScriptId}:${initialSceneId}`;
     if(openedInitialScene.current===key)return;
     const frame=requestAnimationFrame(()=>{
       const host=document.getElementById(editorId),heading=host?.querySelector<HTMLElement>('.screenplay-writing-heading');
@@ -70,7 +73,7 @@ export function ScreenplayEditor({initialScene,onInitialSceneOpened,project, sav
       openedInitialScene.current=key;onInitialSceneOpened?.();
     });
     return()=>cancelAnimationFrame(frame);
-  },[busy,script?.id,scene?.id,initialScene?.scriptId,initialScene?.sceneId,editorId,onInitialSceneOpened]);
+  },[busy,script?.id,scene?.id,initialScriptId,initialSceneId,editorId,onInitialSceneOpened]);
   function chooseScene(id:string, focus=true) {
     if(!script?.scenes.some(s=>s.id===id))return;
     setSelected({scriptId:script.id,sceneId:id});
@@ -115,9 +118,9 @@ export function ScreenplayEditor({initialScene,onInitialSceneOpened,project, sav
     };
     document.addEventListener('workspace-tool-change',openTool);
     return()=>document.removeEventListener('workspace-tool-change',openTool);
-  },[script?.id,scene?.id]);
+  },[script,scene,editorId]);
   useEffect(()=>{
-    if(!requestedReview.current||!toolsOpen||!scene)return;
+    if(!requestedReview.current||!toolsOpen||!scene?.id)return;
     const target=document.getElementById(editorId)?.querySelector<HTMLDetailsElement>('.screenplay-feedback-tools');
     if(target){target.open=true;requestedReview.current=false;}
   },[toolsOpen,scene?.id,editorId]);

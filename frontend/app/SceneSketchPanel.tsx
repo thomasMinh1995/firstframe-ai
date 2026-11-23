@@ -1,5 +1,6 @@
 "use client";
 import {useState} from "react";
+import Image from "next/image";
 import {sceneSketchUrl, type Project} from "./projectsApi";
 import {SceneHint} from "./SceneHint";
 import type {Scene} from "./sceneTypes";
@@ -8,7 +9,7 @@ export type SketchInput = {request_id: string; scene_id: string; instructions: s
 export function SketchImage({projectId, sketchId, alt}: {projectId: string; sketchId: string; alt: string}) {
   const [missing, setMissing] = useState(false);
   return missing ? <span role="status">Tệp ảnh thiếu hoặc lỗi. Nội dung cảnh vẫn được giữ; có thể viết tiếp không cần ảnh.</span>
-    : <img className="scene-sketch-image" src={sceneSketchUrl(projectId, sketchId)} alt={alt} onError={() => setMissing(true)} />;
+    : <Image unoptimized width={768} height={432} className="scene-sketch-image" src={sceneSketchUrl(projectId, sketchId)} alt={alt} onError={() => setMissing(true)} />;
 }
 
 export function SceneSketchPanel({project, scene, dirty, onGenerate, onInspect, onDecide}: {

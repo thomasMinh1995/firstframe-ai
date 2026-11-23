@@ -1,7 +1,7 @@
 "use client";
 import {selectReadScreenplay,downloadScreenplayPdf} from "./screenplayExport";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {DraftRunPanel} from "./DraftRunPanel";
 import {confirmedAdoption} from "./draftWorkflowActions";
 import {draftRunActionLabel,startOrOpenDraftRun,runRequest,runPath,type DraftRun} from "./draftRunsApi";
@@ -51,6 +51,7 @@ export default function Workspace({ library = false }: { library?: boolean }) {
   useEffect(() => { streamEpoch.current++; setPlanReading(null); }, [project?.id]);
   useEffect(() => () => { streamEpoch.current++; }, []);
   const candidateFlush = useRef<()=>Promise<void>>(async()=>{});
+  const registerCandidateFlush=useCallback((fn:()=>Promise<void>)=>{candidateFlush.current=fn;return()=>{if(candidateFlush.current===fn)candidateFlush.current=async()=>{}}},[]);
   const draftStart = useRef<{projectId:string;revision:number;request_id:string}|null>(null);
   const [openedRun,setOpenedRun] = useState<DraftRun|null>(null);
   const [blockingRun,setBlockingRun] = useState<DraftRun|null>(null);
@@ -142,7 +143,7 @@ export default function Workspace({ library = false }: { library?: boolean }) {
       target?.scrollIntoView({ block: "start" }); target?.focus({ preventScroll: true });
     });
     return () => cancelAnimationFrame(frame);
-  }, [operationTiming?.startedAt]);
+  }, [operationTiming]);
 
   function syncProjectUi(next: Project, previous: Project | null) {
     setSelectedFeedback(current => current?.projectId === next.id
@@ -179,7 +180,7 @@ export default function Workspace({ library = false }: { library?: boolean }) {
     }
     void openLastProject();
     return () => { cancelled = true; };
-  }, []);
+  }, [autosave]);
   useEffect(() => {
     function warnBeforeLeaving(event: BeforeUnloadEvent) {
       if (dirty || busy || saving || saveError) { event.preventDefault(); event.returnValue = ""; }
@@ -538,7 +539,7 @@ export default function Workspace({ library = false }: { library?: boolean }) {
             </div>
           </WorkspaceStage>}
           <DraftRunPanel key={`draft-run:${project.id}`} project={project} opened={openedRun?.project_id===project.id?openedRun:null} onStart={startDraftRun} onBlockingRun={setBlockingRun} onViewedRun={setViewedDraftRun}
-            registerFlush={fn=>{candidateFlush.current=fn;return()=>{if(candidateFlush.current===fn)candidateFlush.current=async()=>{}}}}
+            registerFlush={registerCandidateFlush}
             onAdopt={async(selected,revision,sceneId)=>{await run("Đang giữ bản hiện tại và nhận bản nháp…",async()=>{
               const next=await persist();if(!next)return;const adopted=await confirmedAdoption(
                 ()=>projectRequest(`${runPath(next.id,selected.id)}/adopt`,"POST",{revision:next.revision,candidate_revision:revision}),
