@@ -17,7 +17,8 @@ const {chromium}=require('playwright'),assert=require('node:assert/strict'),fs=r
  p=await req(url+'/screenplay','POST',{revision:p.revision,request_id:uuid()});
  const frozen=structuredClone(p.screenplay.source_outline),page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
  const area=page.locator('.screenplay'),nav=area.locator('.screenplay-scene-list'),editor=area.getByLabel('Editor liền mạch',{exact:true}),sourcePanel=area.locator('.screenplay-source');
- await page.goto('http://127.0.0.1:3034');await nav.getByRole('button').first().waitFor();
+ const openScript=()=>page.locator('.workspace-stage-nav button[aria-controls="workspace-script"]').click();
+ await page.goto('http://127.0.0.1:3034');await openScript();await nav.getByRole('button').first().waitFor();
  assert.equal(await nav.locator('img').count(),1);assert.ok((await nav.locator('img').getAttribute('src')).includes(sketchId));
  const before=await state();
  // Hold the navigation frame so fast typing precedes its delayed heading focus.
@@ -31,7 +32,7 @@ const {chromium}=require('playwright'),assert=require('node:assert/strict'),fs=r
   const panel=area.locator('.'+cls);await panel.locator(':scope > summary').click();await panel.locator(':scope > summary').click();
  }
  const writing=area.locator('.screenplay-writing-tools');await writing.locator(':scope > summary').click();
- const request=writing.getByLabel('Bạn muốn viết thử theo hướng nào? · tùy chọn',{exact:true});await request.fill('Giữ khoảng lặng.');
+ const request=writing.getByLabel('Bạn muốn sửa điều gì? · tùy chọn',{exact:true});await request.fill('Giữ khoảng lặng.');
  await writing.locator(':scope > summary').click();await writing.locator(':scope > summary').click();assert.equal(await request.inputValue(),'Giữ khoảng lặng.');await writing.locator(':scope > summary').click();
  assert.equal(await editor.locator('textarea').inputValue(),'Tác giả đang viết, chưa lưu.');
  assert.equal(writes(await state()),writes(before));assert.equal((await state()).image_requests,1);
@@ -45,16 +46,16 @@ const {chromium}=require('playwright'),assert=require('node:assert/strict'),fs=r
  assert.equal((await read()).screenplay.scenes[0].blocks[0].text,'Tác giả đang viết, chưa lưu.','fast typing before delayed navigation focus survives save');
  // Change/reorder current M2: old kept image still matches the frozen M3 source.
  p=await read();p=await req(url,'PUT',{...payload(p),scene_outline:{id:p.scene_outline.id,version:p.scene_outline.version,scenes:[{...p.scene_outline.scenes[1]},{...p.scene_outline.scenes[0],action:'M2 mới: mở thư.'}]}});
- await page.reload();await nav.getByRole('button').first().click();await sourcePanel.locator(':scope > summary').click();
+ await page.reload();await openScript();await nav.getByRole('button').first().click();await sourcePanel.locator(':scope > summary').click();
  assert.equal(await nav.locator('img').count(),1);await sourcePanel.getByText(source.scenes[0].action,{exact:true}).waitFor();
  // Keeping a new image from the new M2 does not silently reuse the old unselected image.
  const other=uuid();p=await req(url+'/scene-sketches','POST',{revision:p.revision,request_id:other,scene_id:first,instructions:''});p=await req(url+'/scene-sketches/'+other+'/keep','POST',{revision:p.revision});
- await page.reload();await nav.getByRole('button').first().click();await sourcePanel.locator(':scope > summary').click();
+ await page.reload();await openScript();await nav.getByRole('button').first().click();await sourcePanel.locator(':scope > summary').click();
  assert.equal(await nav.locator('img').count(),0);await nav.getByText('Ảnh dàn cảnh khác nguồn',{exact:true}).waitFor();
  await sourcePanel.locator('.screenplay-sketch-other > summary').click();await sourcePanel.getByText(/Ảnh này không khớp nguồn kịch bản/).waitFor();
  assert.ok((await sourcePanel.locator('img').getAttribute('src')).includes(other));
  // A missing asset is a neutral fallback; writing and saving remain available.
- await page.route('**/scene-sketches/*/image',r=>r.fulfill({status:404,body:'missing'}));await page.reload();await nav.getByRole('button').first().click();await sourcePanel.locator(':scope > summary').click();await sourcePanel.locator('.screenplay-sketch-other > summary').click();
+ await page.route('**/scene-sketches/*/image',r=>r.fulfill({status:404,body:'missing'}));await page.reload();await openScript();await nav.getByRole('button').first().click();await sourcePanel.locator(':scope > summary').click();await sourcePanel.locator('.screenplay-sketch-other > summary').click();
  await sourcePanel.getByText(/Tệp ảnh thiếu hoặc lỗi/).waitFor();await editor.locator('textarea').fill('Vẫn lưu được khi ảnh thiếu.');await area.getByRole('button',{name:'Lưu kịch bản',exact:true}).click();await page.getByText('Đã lưu kịch bản và mọi sửa đang chờ.',{exact:true}).waitFor();
  p=await read();assert.equal(p.screenplay.scenes[0].blocks[0].text,'Vẫn lưu được khi ảnh thiếu.');assert.deepEqual(p.screenplay.source_outline,frozen);assert.equal(p.scene_outline.scenes[0].id,second);
  for(const width of [1440,390,320]){await page.setViewportSize({width,height:1000});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));await area.screenshot({path:path.join(directory,`context-${width}.png`)});}

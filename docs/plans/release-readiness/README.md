@@ -9,13 +9,13 @@ Thân PR copy mẫu tương ứng, điền ___ và Closes # bằng issue thật.
 |---|---|---|
 | R1 | codex/ff-release-01-main-ci | CI cho pull_request/push cả dev và main; test cấu hình đỏ trước sửa, xanh sau sửa. |
 | R2a | codex/ff-release-02a-browser-setup | Sửa setup/điều hướng fixture dùng chung và saved-library, đưa suite vào CI; giữ kiểm tra nguồn, restore, ảnh, focus, không gọi AI. |
-| R2b | codex/ff-release-02b-onboarding | Khôi phục suite hướng dẫn; ánh xạ metadata 7 bước cũ sang contract 6 bước đã duyệt ở Task 1, giữ các kiểm tra dữ liệu/nguồn/IME/focus. |
+| R2b | codex/ff-release-02b-onboarding | TẠM HOÃN theo xác nhận người dùng: giữ nguyên mọi kỳ vọng cũ, kể cả 7 bước; không đổi metadata hoặc assertion của suite. |
 | R2c | codex/ff-release-02c-screenplay-context | Khôi phục suite ngữ cảnh: mở đúng stage; giữ toàn bộ assertion buffer/nguồn/ảnh/lưu. |
 | R3 | codex/ff-release-03-sqlite-recovery | DB sinh từ main cũ đọc/sửa được; backup/restore DB + ảnh trong thư mục tạm; integrity_check, restart, không mất bản/ảnh. |
 
 R2 tách thành ba PR để tránh một diff lớn và xác nhận từng suite độc lập.
 Nếu phải tách thêm: bổ sung nhánh/mẫu trước khi mở PR. Không bỏ ca cũ hoặc nới assertion để đạt trần dòng.
-Contract hướng dẫn hiện tại có 6 bước; thay nhãn/mapping trong fixture phải ghi riêng với sửa hành vi runtime.
+Contract giao diện hiện tại có 6 bước; người dùng yêu cầu giữ suite hướng dẫn 7 bước và để chờ xử lý riêng (23/11/2026).
 
 Trước mỗi PR, từ frontend:
 `pnpm typecheck && pnpm lint && pnpm test && pnpm build && git diff --check`
