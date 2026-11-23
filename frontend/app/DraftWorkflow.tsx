@@ -1,5 +1,5 @@
 'use client';
-import {useEffect,useRef,useState,useId,useMemo,type ReactNode} from 'react';
+import {useCallback,useEffect,useRef,useState,useId,useMemo,type ReactNode} from 'react';
 import type {DraftRun,Candidate} from './draftRunsApi';
 import {cardResult,parentWorkflowItems,currentWorkflowItem,workflowItemLabel,workflowStatusLabels,workflowItemDisplay,type WorkflowItem} from './draftWorkflowState';
 import {revealSceneInViewport} from './sceneViewport';
@@ -13,12 +13,12 @@ export function DraftWorkflow({run,candidate,onRead,reveals=[],actions,reading=f
  const current=currentWorkflowItem(items);
  const completed=run.status==='ready'&&run.adopted_revision===null;
  const ready=completed&&runCapabilities(run,candidate).canAdopt;
- function goCurrent(focus=true){
+ const goCurrent=useCallback((focus=true)=>{
   const target=[...list.current?.querySelectorAll<HTMLElement>('[data-workflow-id]')??[]].find(el=>el.dataset.workflowId===current?.id);
   const details=target?.closest('details');if(details)details.open=true;
   if(target?.getClientRects().length){revealSceneInViewport(target,'center');if(focus)target.focus({preventScroll:true});}
- }
- useEffect(()=>{if(reading)onFollowingChange(false)},[reading]);
+ },[current?.id]);
+ useEffect(()=>{if(reading)onFollowingChange(false)},[reading,onFollowingChange]);
  useEffect(()=>{
   if(!following||reading||current?.status!=='running')return;
   let frame=0;
@@ -27,7 +27,7 @@ export function DraftWorkflow({run,candidate,onRead,reveals=[],actions,reading=f
   if(list.current){observer.observe(list.current);for(const card of list.current.children)observer.observe(card)}
   window.addEventListener('resize',reveal);reveal();
   return()=>{observer.disconnect();window.removeEventListener('resize',reveal);cancelAnimationFrame(frame)};
- },[following,reading,current?.id,current?.status,candidate?.revision]);
+ },[following,reading,current?.id,current?.status,candidate?.revision,goCurrent]);
  useEffect(()=>{
   const pause=()=>onFollowingChange(false);
   const interact=(event:Event)=>{if(event.target instanceof Element&&event.target.closest('.draft-workflow-card')){
@@ -37,7 +37,7 @@ export function DraftWorkflow({run,candidate,onRead,reveals=[],actions,reading=f
   const key=(event:KeyboardEvent)=>{if(['ArrowUp','ArrowDown','PageUp','PageDown','Home','End',' '].includes(event.key)&&!(event.target as HTMLElement)?.closest('input,textarea,select,button,summary,[contenteditable="true"]'))pause()};
   window.addEventListener('wheel',pause,{passive:true});window.addEventListener('touchmove',pause,{passive:true});window.addEventListener('keydown',key);window.addEventListener('pointerdown',interact);window.addEventListener('click',interact);
   return()=>{window.removeEventListener('wheel',pause);window.removeEventListener('touchmove',pause);window.removeEventListener('keydown',key);window.removeEventListener('pointerdown',interact);window.removeEventListener('click',interact)};
- },[following]);
+ },[following,onFollowingChange]);
  const read:Read=(target,trigger)=>{onFollowingChange(false);onRead(target,trigger)};
  useEffect(()=>{
   const el=list.current;if(!el)return;let frame=0;

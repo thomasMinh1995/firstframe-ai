@@ -38,21 +38,22 @@ export function useOnboarding(context: TourContext, busy: boolean, error: string
     return () => { mounted.current = false; window.removeEventListener("storage", changed); };
   }, [update]);
   useEffect(() => {
-    const r = current.current.record;
-    if (r && ["active", "waiting"].includes(r.status) && r.projectId !== context.projectId) update({ type: "pause" });
-    else if (r?.status === "active" && (busy || !available(r.stepId, context))) {
+    const r = current.current.record, activeContext = contextRef.current;
+    if (r && ["active", "waiting"].includes(r.status) && r.projectId !== activeContext.projectId) update({ type: "pause" });
+    else if (r?.status === "active" && (busy || !available(r.stepId, activeContext))) {
       update({ type: "pause", hint: busy ? undefined : "Chưa thể mở bước này. Bạn có thể thử lại." });
     }
   }, [context.projectId, context.hasAnalysis, context.hasDraft, context.hasScreenplay, context.hasOutline, context.briefChanged, busy, update]);
   // A pre-existing error must not close help the user explicitly opens to correct it.
   useEffect(() => { if (error) update({ type: "pause" }); }, [error, update]);
 
+  const dismiss = useCallback(() => update({ type: "dismiss", context: contextRef.current }), [update]);
   return {
     state,
     open: (resume = false) => update({ type: "open", resume, context: contextRef.current }),
     navigate: (step: TourStep) => update({ type: "navigate", step, context: contextRef.current }),
     practice: () => update({ type: "practice", context: contextRef.current }),
-    dismiss: () => update({ type: "dismiss", context: contextRef.current }),
+    dismiss,
     complete: () => update({ type: "complete", context: contextRef.current }),
     pause: (hint?: string) => update({ type: "pause", hint }),
     begin: (kind: TourOperation) => {
@@ -83,12 +84,12 @@ function instructions(step:TourStep,_hasDraft:boolean):string[]{
 
 export function OnboardingTour(props: Props) {
   const { tour, context, ready, empty, busy, error } = props;
-  const { state } = tour;
+  const { state, dismiss: dismissTour } = tour;
   const record = state.record;
   const focusFrame = useRef(0);
   const opener = useRef<HTMLElement | null>(null);
   useEffect(() => () => cancelAnimationFrame(focusFrame.current), []);
-  const focusAfter = (destination: string | HTMLElement | null) => {
+  const focusAfter = useCallback((destination: string | HTMLElement | null) => {
     cancelAnimationFrame(focusFrame.current);
     focusFrame.current = requestAnimationFrame(() => {
       const active = document.activeElement;
@@ -106,12 +107,12 @@ export function OnboardingTour(props: Props) {
       target?.scrollIntoView({ block: "center", behavior: "auto" });
       target?.focus({ preventScroll: true });
     });
-  };
+  }, []);
   const open = (button: HTMLElement, resume = false) => { opener.current = button; tour.open(resume); };
-  const dismiss = () => {
+  const dismiss = useCallback(() => {
     const destination = record?.status === "active" ? opener.current : document.activeElement as HTMLElement | null;
-    tour.dismiss(); focusAfter(destination);
-  };
+    dismissTour(); focusAfter(destination);
+  }, [record?.status, dismissTour, focusAfter]);
   const practice = () => {
     if (!record) return;
     const step = record.stepId;
