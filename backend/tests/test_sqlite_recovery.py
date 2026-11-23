@@ -7,8 +7,8 @@ from uuid import uuid4
 
 import pytest
 from fastapi.testclient import TestClient
-from test_projects import project_client, payload
-from test_screenplay_selection import written, select
+from test_projects import project_client as project_client, payload
+from test_screenplay_selection import written as written, select
 from test_scene_sketches import FakeImageProvider, generate, decide
 from app.api.routes import projects, scene_sketches, draft_runs
 from app.application import draft_workflow
