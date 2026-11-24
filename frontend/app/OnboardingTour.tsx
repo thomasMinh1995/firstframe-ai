@@ -5,7 +5,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react
 import { revealWorkspaceTarget } from "./WorkspaceStage";
 import { createPortal } from "react-dom";
 import {
-  available, continuation, initialTour, nextStep, previousStep, reduceTour, tourSteps, tourStorageKey, tourTarget,
+  available, continuation, initialTour, nextStep, previousStep, reduceTour, tourSteps, tourStorageKey,
   type TourContext, type TourOperation, type TourRequest, type TourStep,
 } from "./onboardingState";
 
@@ -72,14 +72,35 @@ type Props = {
   idea: string; answers: string[]; questionCount: number;
 };
 const titles: Record<TourStep, string> = {
-  "new-project":"Dự án của bạn",idea:"Kể một khoảnh khắc","draft-run":"Phát triển câu chuyện",script:"Viết và sửa từng cảnh",export:"Hoàn tất và tải PDF",save:"Lưu và quay lại",
+  "new-project": "Dự án mới", idea: "Chất liệu", choices: "Làm rõ", draft: "Story plan",
+  outline: "Dàn cảnh", script: "Viết & sửa", save: "Lưu",
 };
-const targetLabels:Record<TourStep,string>={"new-project":"Dự án mới",idea:"Chất liệu","draft-run":"Làm rõ và Story plan",script:"Kịch bản",export:"Bản đã đọc và chọn",save:"Trạng thái lưu"};
-function copy(step:TourStep,p:Props){
-  return {"new-project":p.context.projectId?"Bạn có thể giữ câu chuyện hiện tại hoặc tạo dự án khác. Thay đổi được lưu trước khi chuyển.":"Tạo nơi viết cho câu chuyện của bạn.",idea:"Kể điều bạn nhớ và điều muốn giữ. Không cần biết trước toàn bộ cốt truyện.","draft-run":"Xem lại lựa chọn làm rõ, yêu cầu AI phát triển khi sẵn sàng, rồi đọc và sửa Story plan. Sau đó tự dựng dàn cảnh hoặc yêu cầu gợi ý.",script:"AI gợi ý cạnh nội dung; bạn chọn giữ, chỉnh hoặc bỏ qua. Mỗi lần sửa có phạm vi và bản xem trước.",export:"Đọc đúng bản hiện tại hoặc lịch sử, chọn rồi tải PDF. Tải lại vẫn giữ đúng nội dung đã chọn.",save:"Chữ tự lưu khi dừng gõ. Nếu có lỗi, buffer vẫn giữ để thử lại hoặc tải bản sao."}[step];
+const targetLabels: Record<TourStep, string> = {
+  "new-project": "Dự án mới", idea: "Vùng Ý tưởng", choices: "Vùng Làm rõ",
+  draft: "Vùng Story plan", outline: "Vùng Dàn cảnh", script: "Vùng Kịch bản", save: "Thanh lưu",
+};
+function copy(step: TourStep, p: Props) {
+  switch (step) {
+    case "new-project": return p.context.projectId ? "Tạo câu chuyện mới; thay đổi hiện tại sẽ được lưu trước." : "Tạo nơi viết cho câu chuyện của bạn.";
+    case "idea": return "Ghi lại khoảnh khắc, điều muốn giữ và giới hạn nếu có.";
+    case "choices": return p.questionCount ? "Trả lời từng câu hỏi để chọn hướng phát triển." : "Xem lại lựa chọn trước khi tạo Story plan.";
+    case "draft": return "Đọc và sửa trực tiếp trên từng card.";
+    case "outline": return "Chia Story plan thành các cảnh. Tự viết trước; AI là tùy chọn.";
+    case "script": return "Chọn một cảnh để viết và lưu kịch bản.";
+    case "save": return "Lưu thay đổi trước khi rời đi hoặc mở lại dự án.";
+  }
 }
-function instructions(step:TourStep,_hasDraft:boolean):string[]{
-  return {"new-project":["Chọn Dự án mới khi muốn kể câu chuyện khác; có thể bỏ qua hướng dẫn."],idea:["Nhập khoảnh khắc và điều muốn giữ, rồi chọn Cùng làm rõ chất liệu."],"draft-run":["Trả lời hoặc để mở câu hỏi; xem lại lựa chọn trước khi yêu cầu AI tạo Story plan.","Đọc và sửa bản đã tạo. Sang Dàn cảnh để tự dựng cảnh hoặc yêu cầu AI gợi ý; chọn và lưu bản dàn cảnh để viết tiếp.","Chuyển bước chỉ mở công cụ. AI chỉ chạy khi bạn yêu cầu; tạo nháp tự động là lựa chọn riêng."],script:["Chọn cảnh, mở Góp ý khi cần. Xem phạm vi và trước/sau trước khi Dùng, Chỉnh hoặc Bỏ qua.","Có thể tự viết, giữ cảnh im lặng hoặc kết mở. Không cần đạt điểm AI."],export:["Chọn bản để đọc; Chọn bản đã đọc & tải PDF. Không cần AI hoặc ảnh.","Các bản PDF đã giữ cho phép tải lại nguồn cũ mà không đổi bản đang viết."],save:["Chờ Đã lưu trước khi rời đi. Tùy chọn bản lưu có thử lưu lại và tải bản sao JSON."]}[step];
+
+function instructions(step: TourStep, hasDraft: boolean): string[] {
+  switch (step) {
+    case "new-project": return ["Chọn Dự án mới để bắt đầu."];
+    case "idea": return ["Viết ý tưởng, rồi chọn Cùng làm rõ ý tưởng."];
+    case "choices": return ["Trả lời hoặc để quyết định sau. Chọn tạo Story plan khi đã sẵn sàng."];
+    case "draft": return [hasDraft ? "Sửa từng card; Xong để giữ, Lưu thay đổi để lưu." : "Story plan sẽ xuất hiện sau bước Làm rõ."];
+    case "outline": return ["Chọn nguồn, thêm cảnh, rồi lưu dàn cảnh."];
+    case "script": return ["Chọn cảnh, viết và lưu kịch bản. Sang Đọc & xuất để tải PDF của bản đã chọn."];
+    case "save": return ["Chờ trạng thái Đã lưu trước khi đóng hoặc chuyển dự án. Mở Tùy chọn bản lưu để lưu ngay hoặc tải bản sao JSON."];
+  }
 }
 
 export function OnboardingTour(props: Props) {
@@ -116,9 +137,24 @@ export function OnboardingTour(props: Props) {
   const practice = () => {
     if (!record) return;
     const step = record.stepId;
-    let selector = `[data-tour="${tourTarget(step,context)}"]`;
+    let selector = `[data-tour="${step}"]`;
     if (step === "idea") selector = "#idea";
-    if(step === "export")selector="#workspace-export";
+    if (step === "choices") {
+      const index = Array.from({ length: props.questionCount }, (_, i) => i).find(i => !props.answers[i]?.trim());
+      selector = index === undefined ? "#clarification-complete" : `#answer-${index}`;
+    }
+    if (step === "draft") {
+      const editor = document.querySelector<HTMLButtonElement>('[data-draft-open="logline"]');
+      if (editor && !editor.disabled) {
+        tour.practice();
+        cancelAnimationFrame(focusFrame.current);
+        focusFrame.current = requestAnimationFrame(() => {
+          if (!document.activeElement?.matches("input, textarea, select")) { revealWorkspaceTarget(editor); editor.click(); }
+        });
+        return;
+      }
+      selector = "#draft-logline";
+    }
     tour.practice(); focusAfter(selector);
   };
   const welcome = state.initialized && state.offerAllowed && !record && ready && empty && !context.projectId && !busy && !error;
@@ -145,25 +181,38 @@ export function OnboardingTour(props: Props) {
       <button className="secondary" onClick={dismiss}>Bỏ qua</button>
     </section>}
     {resumable && <section className="tour-notice" aria-label="Tiến độ hướng dẫn">
-      <p role="status">{state.hint ?? (busy && record.stepId === "draft-run" ? "Theo dõi tiến trình ngay bên dưới: chuẩn bị lựa chọn → phát triển Story plan → đối chiếu và giữ kết quả. Mỗi nhóm có các bước con; khi hoàn tất, bạn có thể tiếp tục hướng dẫn."
+      <p role="status">{state.hint ?? (busy && record.stepId === "choices" ? "Theo dõi tiến trình ngay bên dưới: chuẩn bị lựa chọn → phát triển Story plan → đối chiếu và giữ kết quả. Mỗi nhóm có các bước con; khi hoàn tất, bạn có thể tiếp tục hướng dẫn."
         : record.status === "paused" ? "Hướng dẫn đang tạm dừng. Bạn có thể tiếp tục khi sẵn sàng."
         : "Bạn đang thực hành. Tiếp tục hướng dẫn khi sẵn sàng, hoặc bỏ qua để tự khám phá.")}</p>
       <button disabled={!ready || busy || !continuation(state, context)} onClick={event => open(event.currentTarget, true)}>Tiếp tục hướng dẫn</button>
       <button className="secondary" onClick={dismiss}>Bỏ qua</button>
     </section>}
-    {active && createPortal(<TourDialog targetStep={tourTarget(record.stepId,context)} step={record.stepId} title={titles[record.stepId]} description={copy(record.stepId, props)}
+    {active && createPortal(<TourDialog targetStep={record.stepId} step={record.stepId} title={titles[record.stepId]} description={copy(record.stepId, props)}
       onMissing={() => tour.pause("Chưa thể mở bước này. Bạn có thể thử lại hoặc bỏ qua.")}
       onDismiss={dismiss}>
       <ol aria-label="Cách thực hiện" className="tour-instructions">
         {instructions(record.stepId, context.hasDraft).map(instruction => <li key={instruction}>{instruction}</li>)}
       </ol>
+      {record.stepId === "draft" && <button className="secondary" onClick={() => {
+        tour.practice();
+        focusAfter(document.querySelector(".card-feedback-trigger") ? ".card-feedback-trigger" : "[data-tour-review]");
+      }}>Thử xem góp ý</button>}
+      {record.stepId === "save" && <button className="secondary" onClick={() => {
+        tour.pause(); focusAfter(".workspace-library > summary");
+      }}>Khám phá đề xuất và lịch sử</button>}
+      {record.stepId === "save" && <button className="secondary" onClick={() => {
+        tour.pause();
+        const guide = document.querySelector<HTMLButtonElement>('.scene-outline .scene-info');
+        if (guide?.getAttribute("aria-expanded") === "false") guide.click();
+        focusAfter(guide ?? "#workspace-outline");
+      }}>Khám phá dàn cảnh</button>}
       <div className="tour-footer">
         <span>Bước {tourSteps.indexOf(record.stepId) + 1}/{tourSteps.length}</span>
         <button className="secondary" disabled={!previous} onClick={() => previous && tour.navigate(previous)}>Trước</button>
         {record.stepId !== "save" && <button className={next ? "secondary" : ""} onClick={practice}>Thực hành</button>}
         {next && <button onClick={() => tour.navigate(next)}>Tiếp</button>}
         {record.stepId === "save" && <button onClick={() => {
-          tour.complete(); focusAfter("#save-status");
+          tour.complete(); focusAfter(document.querySelector('[data-tour-action="save"]:enabled') ? '[data-tour-action="save"]' : "#save-status");
         }}>Hoàn tất hướng dẫn</button>}
       </div>
       <button className="tour-skip" onClick={dismiss}>Bỏ qua hướng dẫn</button>

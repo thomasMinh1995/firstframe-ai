@@ -41,12 +41,12 @@ export function WorkspaceNavigation({project,tourStep,draftRun,briefChanged}: {
     revealWorkspaceTarget(document.getElementById(previous??'workspace-idea')??document.getElementById('workspace-idea'));
     return()=>workspace?.removeEventListener('workspace-stage-change',remember);
   },[project?.id]);
-  const shown=tourStep==='draft-run'?(!briefChanged&&project?.draft?'workspace-draft':project?.analysis&&!briefChanged?'workspace-choices':'workspace-idea'):tourStep&&['idea','script','export'].includes(tourStep)?`workspace-${tourStep}`:stage;
+  const shown=tourStep&&['idea','choices','draft','outline','script'].includes(tourStep)?`workspace-${tourStep}`:stage;
   const hasPrivateDraft=!!draftRun&&draftRun.project_id===project?.id&&draftRun.adopted_revision===null&&draftRun.completed_scenes>0;
   const finishHint=hasPrivateDraft?(project?.screenplay?'Bản đang lưu · Nháp mới chưa nhận':'Chưa nhận nháp vào workspace'):null;
   const items=workspaceJourney(project,briefChanged);
   return <aside className="workspace-rail"><p className="eyebrow">Câu chuyện của bạn</p><nav className="workspace-stage-nav" aria-label="Hành trình câu chuyện">
-    {items.map((item,i)=><Fragment key={item.id}>{i>0&&<span className="workspace-journey-arrow" aria-hidden="true">↓</span>}<button type="button" disabled={!item.available} aria-controls={item.id} aria-current={item.available&&shown===item.id?'step':undefined} onClick={()=>openTarget(item.id)}>
+    {items.map((item,i)=><Fragment key={item.id}>{i>0&&<span className="workspace-journey-arrow" aria-hidden="true">↓</span>}<button type="button" disabled={!item.available} aria-controls={item.id} aria-current={shown===item.id&&(item.available||tourStep==='script')?'step':undefined} onClick={()=>openTarget(item.id)}>
       <span className="workspace-stage-number" aria-hidden="true">{String(i+1).padStart(2,'0')}</span><span>{item.label}<small>{item.id==='workspace-choices'&&project?.analysis&&briefChanged?changedClarificationLabel:item.id==='workspace-export'&&finishHint?finishHint:!item.available?(item.id==='workspace-export'?'Chưa có kịch bản':'Chưa có nội dung'):shown===item.id?'Đang làm việc':'Xem lại'}</small></span>
     </button></Fragment>)}
   </nav><button type="button" className="secondary workspace-run-link" disabled={!project} onClick={()=>openTarget('draft-run')}>Tùy chọn: tạo nháp tự động</button><button type="button" className="secondary workspace-run-link" disabled={!project} onClick={()=>openTarget('workspace-history')}>Các phiên bản đã giữ</button></aside>;

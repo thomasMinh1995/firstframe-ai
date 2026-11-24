@@ -513,7 +513,7 @@ export default function Workspace({ library = false }: { library?: boolean }) {
             {briefChanged && (project.analysis || project.draft) && <p className="form-message">Ý tưởng đã thay đổi. Làm rõ lại trước khi tạo
               bản phát triển mới; bản thảo và câu trả lời trước đó sẽ được giữ trong lịch sử.</p>}
             {(!project.analysis || briefChanged) && <button data-tour-action="analyze" disabled={!projectBlockingRun&&!project.idea.trim()}
-              onClick={() => projectBlockingRun ? void startDraftRun(projectBlockingRun) : action("analyze")}>{draftRunActionLabel(projectBlockingRun)??"Cùng làm rõ chất liệu"}</button>}
+              onClick={() => projectBlockingRun ? void startDraftRun(projectBlockingRun) : action("analyze")}>{draftRunActionLabel(projectBlockingRun)??"Cùng làm rõ ý tưởng"}</button>}
           </WorkspaceStage>
           {saved && <details className="workspace-author-context">
             <summary>Ý đồ và lựa chọn đã lưu <span>{dirty ? "Có thay đổi chưa lưu" : "Bản đã lưu"}</span></summary>
@@ -772,7 +772,7 @@ export default function Workspace({ library = false }: { library?: boolean }) {
               const next=await persist();if(!next)return;
               accept(await projectRequest(`/${next.id}/screenplay-versions/${id}/restore`,"POST",{revision:next.revision}));
             })}/>
-            <details><summary>Story plan và dàn cảnh đã giữ</summary>
+            <details className="workspace-library"><summary>Story plan và dàn cảnh đã giữ</summary>
               <SceneHistory project={saved??project} onRestore={id=>void run("Đang khôi phục dàn cảnh…",async()=>{
                 const next=await persist();if(!next)return;
                 accept(await projectRequest(`/${next.id}/scene-versions/${id}/restore`,"POST",{revision:next.revision}));
