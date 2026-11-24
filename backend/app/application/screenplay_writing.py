@@ -20,7 +20,7 @@ from app.application.screenplay_composition import (
     speaker_addresses, speaker_voices,
 )
 
-PROMPT_VERSION = "screenplay-scene-v27-scene-progression"
+PROMPT_VERSION = "screenplay-scene-v28-vietnamese-dialogue"
 PROMPT = Path(__file__).resolve().parents[3] / "domains/short-film/prompts/screenplay_scene_prompt.md"
 
 

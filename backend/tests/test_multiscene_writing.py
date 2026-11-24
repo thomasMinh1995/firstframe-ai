@@ -158,6 +158,47 @@ def test_scene_refinement_uses_full_writer_instead_of_ignoring_new_request():
     assert not can_compose(p)
 
 
+@pytest.mark.parametrize(("speaker", "unusable"), [
+    ("Hạnh", "Chị nghe tiếng máy rè!"),
+    ("Nam", "Hạnh ơi, chị nghe tiếng máy rè!"),
+    ("Nam", "Em trai Nam lấy tua vít rồi ngồi xuống cạnh bàn."),
+    ("Hạnh", "Tôi chưa biết."),
+])
+def test_optional_vietnamese_dialogue_retains_only_usable_reactions(speaker, unusable):
+    case = deepcopy(CASES[1])
+    case["constraints"] = ["Hạnh xưng chị gọi em.", "Nam xưng em gọi chị."]
+    p = proposal(case, index=1)
+    script = p.source_screenplay
+    script.scenes[0].blocks = [
+        ScriptBlock(id=str(uuid4()), kind="action", text=case["scenes"][0]["action"]),
+        ScriptBlock(id=str(uuid4()), kind="dialogue", speaker="HẠNH", text="Hạnh: “Nam ơi, chị nghe tiếng máy rè.”"),
+        ScriptBlock(id=str(uuid4()), kind="dialogue", speaker="Nam", text="Ừ."),
+    ]
+    before = p.model_dump()
+
+    class Provider:
+        metadata = ProviderMetadata("fake", "writer", {})
+
+        def request_structured(self, request):
+            output = request.response_model.model_validate({
+                "heading": script.scenes[1].heading, "translations": [], "dialogue": [
+                    {"speaker": speaker, "text": unusable, "after_action": 1},
+                    {"speaker": "Hạnh", "text": "Hạnh: 'Em cứ từ từ.'", "after_action": 1},
+                    {"speaker": "Hạnh", "text": "Em cứ từ từ!", "after_action": 1},
+                    {"speaker": "Nam", "text": "Ừ.", "after_action": 1},
+                ],
+            })
+            return StructuredResult(output=output, model="writer")
+
+    scene = write_scene(p, Provider()).scene
+    assert [(block.kind, block.speaker, block.text) for block in scene.blocks] == [
+        ("action", "", case["scenes"][1]["action"]),
+        ("dialogue", "Hạnh", "Em cứ từ từ."),
+        ("dialogue", "Nam", "Ừ."),
+    ]
+    assert p.model_dump() == before
+
+
 def test_explicit_silence_conflicting_with_two_turns_stops_before_model():
     p=proposal(CASES[0]);p.source_screenplay.source_outline.source.context.constraints.append('Hoàn toàn không thoại.')
     provider=CompositionProvider()
