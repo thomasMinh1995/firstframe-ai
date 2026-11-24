@@ -353,6 +353,7 @@ def composition_request(proposal, language, *, preserve_actions=False):
     roles = roles if len(set(roles)) == len(roles) and all(contains(author_text, r) for r in roles) else []
     turn_type = list[DialogueTurn]
     turn_field = Field(max_length=0)
+    optional_dialogue = False
     pair = per_scene_dialogue(proposal, reconciled)
     speakers = pair or (cast_names([source]) if preserve_actions else [])
     voices = speaker_voices(proposal, speakers)
@@ -383,6 +384,7 @@ def composition_request(proposal, language, *, preserve_actions=False):
         turn_type = create_model('RequestedDialogue', __config__=ConfigDict(extra='forbid'), **lines)
         turn_field = Field()
     elif preserve_actions and not any(SILENCE.search(normalized(text)) for text in author_text.splitlines()):
+        optional_dialogue = True
         turn_field = Field(max_length=100)
         if speakers:
             turn_type = list[create_model('ContinuationLine', __base__=DialogueTurn,
@@ -421,6 +423,7 @@ def composition_request(proposal, language, *, preserve_actions=False):
                          'location':source.location, 'time':source.time, 'goal':source.goal} if not reconciled else {'number':index+1,'characters':pair},
         'speaker_self_references':voices, 'speaker_addresses':addresses,
         'dialogue_options':reactions,
+        **({'optional_dialogue': True} if optional_dialogue else {}),
         'future_scene_actions':([' '.join(s) for s in author_sequence(context.context, len(script.scenes))[index+1:]]
                                 if reconciled else [s.action for s in outline.scenes[index+1:]]),
         'previous_scenes':[s.model_dump(exclude={'id','source_scene_id'}) for s in script.scenes[:index]],
@@ -433,7 +436,15 @@ def composition_request(proposal, language, *, preserve_actions=False):
         instructions += '\nTranslate explicit negation as explicit negation (not, not yet, without). Never replace a negative fact with hesitation, intention or uncertainty; preserve what has and has not happened.'
     if unanswered:
         instructions += UNANSWERED_QUESTIONS_RULE
-    if preserve_actions:
+    if optional_dialogue:
+        instructions += (
+            '\nThoại tùy chọn. Viết lời nói đời thường, ngắn, có lý do để nói ngay lúc đó: người này muốn '
+            'người kia hiểu gì hoặc đang ngại điều gì? Xưng và gọi theo quan hệ tác giả đã ghi, lược đại từ '
+            'nếu tự nhiên. Điền tên vào speaker, chỉ điền lời nói vào text. '
+            'after_action=N nghĩa là N nhịp đầu đã xảy ra. Đừng kể lại, giao việc đã xong, '
+            'chép lời cảnh trước hay nói hộ kết quả chưa xảy ra. Chừa khoảng im, có thể trả dialogue=[].'
+        )
+    elif preserve_actions:
         instructions += (
             '\nContinue from the last saved scene. The application inserts all fixed_action_beats in order. '
             'If the schema allows optional dialogue, add only short reactions that fit that moment. '
@@ -444,6 +455,38 @@ def composition_request(proposal, language, *, preserve_actions=False):
         input_text=json.dumps(data,ensure_ascii=False), response_model=result_model), beats
 
 
+def spoken_text(speaker, text):
+    label, separator, words = text.partition(':')
+    if not separator or normalized(label) != normalized(speaker):
+        return text
+    words = words.strip()
+    if len(words) >= 2 and (words[0], words[-1]) in {('"', '"'), ("'", "'"), ('“', '”'), ('‘', '’')}:
+        words = words[1:-1].strip()
+    return words
+
+
+def dialogue_key(speaker, text):
+    words = normalized(spoken_text(speaker, text)).strip(' .!?…"\'“”‘’')
+    address, separator, body = words.partition(',')
+    return body.strip() if separator and address.endswith(' ơi') else words
+
+
+def dialogue_problem(turn, source, action_sentences, optional):
+    text = normalized(turn['text'])
+    if any(normalized(s) in action_sentences for s in sentences(turn['text'])):
+        return 'A spoken line repeats source action instead of speech.'
+    voice = source['speaker_self_references'].get(turn['speaker'])
+    chosen_voice = voice and voice != 'tôi' if optional else voice in {'mẹ','cha','bố','con','chị','em'}
+    if chosen_voice and re.search(r'(?:^|[,;.!?]\s*)tôi\b', text):
+        return 'Spoken self-reference contradicts the author voice.'
+    address = source['speaker_addresses'].get(turn['speaker'])
+    vocative = re.search(r',\s*(mẹ|cha|bố|con|chị|em)\s*(?:ạ|ơi)?[.!?]*$', text)
+    vocative = vocative or re.match(r'(mẹ|cha|bố|con|chị|em)\s+(?:ạ|ơi)\s*[,!?.]', text)
+    if address and vocative and vocative.group(1) != address:
+        return 'Spoken address contradicts the author voice.'
+    return None
+
+
 def render_composition(output, beats, language, source=None):
     actions = output.translations if language == 'English' and (source is None or source['translate_actions']) else beats
     turns = list(output.dialogue.model_dump().values()) if isinstance(output.dialogue, BaseModel) else [t.model_dump() for t in output.dialogue]
@@ -451,24 +494,38 @@ def render_composition(output, beats, language, source=None):
         if 'intent' in turn:
             turn['text'] = (source['dialogue_options'][turn['speaker']][turn['intent']] if source and source.get('dialogue_options')
                             else turn['self_reference'] + ' ' + UTTERANCE_SUFFIXES[language][turn['intent']])
-    if source:
-        action_texts = [*beats, *actions, *source['already_completed_actions'], *source['future_scene_actions']]
-        action_sentences = {normalized(s) for t in action_texts for s in sentences(t)}
-        for turn in turns:
-            if any(normalized(s) in action_sentences for s in sentences(turn['text'])):
-                raise ValueError('A spoken line repeats source action instead of speech.')
-            voice = source['speaker_self_references'].get(turn['speaker'])
-            if voice in {'mẹ','cha','bố','con','chị','em'} and re.search(r'(?:^|[,;.!?]\s*)tôi\b', normalized(turn['text'])):
-                raise ValueError('Spoken self-reference contradicts the author voice.')
-            address = source['speaker_addresses'].get(turn['speaker'])
-            vocative = re.search(r',\s*(mẹ|cha|bố|con|chị|em)\s*(?:ạ|ơi)?[.!?]*$', normalized(turn['text']))
-            vocative = vocative or re.match(r'(mẹ|cha|bố|con|chị|em)\s+(?:ạ|ơi)\s*[,!?.]', normalized(turn['text']))
-            if address and vocative and vocative.group(1) != address:
-                raise ValueError('Spoken address contradicts the author voice.')
     if any(t['after_action'] > len(actions) for t in turns):
         raise ValueError('Dialogue position is outside the fixed action beats.')
     if [t['after_action'] for t in turns] != sorted(t['after_action'] for t in turns):
         raise ValueError('Requested dialogue order must follow the action order.')
+    if source:
+        action_texts = [*beats, *actions, *source['already_completed_actions'], *source['future_scene_actions']]
+        action_sentences = {normalized(s) for t in action_texts for s in sentences(t)}
+        optional = source.get('optional_dialogue', False)
+        seen = set()
+        author_text = ''
+        if optional:
+            seen = {dialogue_key(block['speaker'], block['text'])
+                    for scene in source['previous_scenes'] for block in scene['blocks'] if block['kind'] == 'dialogue'}
+            author = source['author_intent']
+            author_text = '\n'.join([author['idea'], *author['constraints'],
+                                      *[answer['answer'] for answer in author['clarifications']]])
+        kept = []
+        for turn in turns:
+            if optional:
+                turn['text'] = spoken_text(turn['speaker'], turn['text'])
+            if problem := dialogue_problem(turn, source, action_sentences, optional):
+                if optional:
+                    continue
+                raise ValueError(problem)
+            if optional:
+                key = dialogue_key(turn['speaker'], turn['text'])
+                # shortcut: compare literal speech and retain short acknowledgments that can naturally recur.
+                if not key or (len(key.split()) >= 4 and key in seen and not contains(author_text, key)):
+                    continue
+                seen.add(key)
+            kept.append(turn)
+        turns = kept
     blocks = []
     for index in range(len(actions)+1):
         if index:
