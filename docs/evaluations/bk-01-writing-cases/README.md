@@ -1,6 +1,6 @@
 # BK-01 · Bộ ca đọc kịch bản và lời thoại Việt
 
-Phiên bản đề nghị duyệt ngày 24/11/2026. Hai ca phát triển dành cho PR 3. Ca giữ lại dành cho đánh giá độc lập sau khi chốt bản sửa. Biên kịch hoặc chủ sản phẩm xác nhận nguồn, điều phải giữ và tiêu chí đọc trước khi dùng làm baseline.
+Bộ ca ngày 24/11/2026 đã chốt qua PR #115. Hai ca phát triển dành cho PR 3. Ca giữ lại dành cho đánh giá độc lập sau khi chốt bản sửa. Biên kịch hoặc chủ sản phẩm xác nhận nguồn, điều phải giữ và tiêu chí đọc trước khi dùng làm baseline.
 
 | Ca | File | Điểm cần đọc |
 |---|---|---|
@@ -36,4 +36,4 @@ Mẫu ghi một dòng
 Ca / công đoạn / lượt / tiêu chí | kết luận | trích đoạn và nguồn | điều muốn giữ hoặc sửa | người đọc / ngày
 ```
 
-Trạng thái duyệt nội dung đang chờ biên kịch hoặc chủ sản phẩm. PR này chuẩn bị dữ liệu và tiêu chí. Đo model thuộc PR 3, còn nghiệm thu với người dùng cuối thuộc R4.
+Bộ ca đã được chủ sản phẩm cho tiếp tục và merge. Xem [kết quả đo model trên hai ca phát triển](../bk-02-baseline-2026-11-24/README.md). Nghiệm thu với người dùng cuối thuộc R4.
