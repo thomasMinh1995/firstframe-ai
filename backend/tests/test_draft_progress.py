@@ -234,6 +234,23 @@ def test_continuation_capabilities_match_backend_guards(drafting,monkeypatch,rea
     assert response.status_code in (409,503),response.text
 
 
+def test_saved_draft_run_requires_same_writer_request_version(drafting):
+    client, providers, project, _, url, body = begin(drafting)
+    candidate = client.get(url + "/candidate").json()
+    calls = [len(provider.requests) for provider in providers]
+
+    def legacy(run):
+        run["config"].pop("writer_prompt_version", None)
+
+    api.store().change(project["id"], body["request_id"], legacy)
+    status = client.get(url).json()
+    assert status["continue_block_reason"] == "configuration_changed"
+    response = client.post(url + "/continue", json={"candidate_revision": candidate["revision"]})
+    assert response.status_code == 409
+    assert client.get(url + "/candidate").json() == candidate
+    assert [len(provider.requests) for provider in providers] == calls
+
+
 def test_invalid_progress_and_artifact_update_roll_back_together(drafting):
     client,providers,p,base,url,body=begin(drafting)
     original=api.store().get_run(p['id'],body['request_id'])
