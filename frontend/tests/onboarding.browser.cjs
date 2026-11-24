@@ -3,10 +3,11 @@
 const { chromium, firefox, webkit } = require('playwright');
 const assert = require('node:assert/strict');
 const path = require('node:path');
+const os = require('node:os');
 const fs = require('node:fs/promises');
 const url = process.env.TOUR_TEST_URL || 'http://localhost:3033';
 const engine = process.env.TOUR_BROWSER || 'chrome';
-const screenshots = process.env.TOUR_SCREENSHOTS || '/private/tmp/firstframe-tour-screenshots';
+const screenshots = process.env.TOUR_SCREENSHOTS || path.join(os.tmpdir(), 'firstframe-tour-screenshots');
 const key = 'firstframe:onboarding:v2';
 const clone = value => structuredClone(value);
 const project = (id = 'p1') => ({ id, revision: 0, updated_at: '2026-10-21T10:00:00Z', title: 'Câu chuyện thử nghiệm',
@@ -146,6 +147,8 @@ async function setup(browser, options = {}) {
       if (changed) { p.analysis = null; p.answers = []; }
       if (mock.savePatch) Object.assign(p, clone(mock.savePatch));
       if (mock.loseSaveResponse) return route.abort('failed');
+      p.last_save_id = body.save_id;
+      p.last_save_revision = p.revision;
       return reply(p);
     }
     if (mock.hold) await mock.hold;
