@@ -112,6 +112,60 @@ def test_scope_forgery_conflict_metadata_and_no_new_m1_leak(writing):
     assert proposal['id'] not in changed['applicable_screenplay_proposal_ids']
 
 
+def test_writer_uses_saved_character_choices_and_leaves_unanswered_questions_open(project_client, monkeypatch):
+    from test_projects import start_project
+    from test_scene_outline import scene, update
+
+    client, mentor = project_client
+    original = mentor.request_structured
+    relationship = "Hai người xưng hô thế nào khi soi ổ khóa?"
+    pending = "Vì sao ổ khóa bị kẹt?"
+    suggestion = "Chủ trọ cố ý thay ổ khóa."
+
+    def reason(request):
+        result = original(request)
+        return StructuredResult(output=result.output.model_copy(update={
+            "missing_information": [relationship, pending], "ai_suggestions": [suggestion],
+        }), model=result.model)
+
+    monkeypatch.setattr(mentor, "request_structured", reason)
+    project = start_project(client)
+    url = f"/api/projects/{project['id']}"
+    idea = "Ngân và Cô Tư là hàng xóm. Cô Tư đưa đèn ra soi ổ cho Ngân xoay chìa."
+    project = client.put(url, json={
+        **payload(project), "idea": idea, "constraints": [], "response_language": "vi",
+    }).json()
+    clarified = client.post(url + "/clarify", json={"revision": project["revision"]})
+    assert clarified.status_code == 200, clarified.text
+    project = clarified.json()
+    assert project["analysis"]["ai_suggestions"] == [suggestion]
+    choice = "Cô Tư xưng cô gọi cháu, Ngân xưng cháu gọi cô. Ngân ngại nhờ vả."
+    draft = {"title": "Ổ khóa", "logline": idea, "sections": [{
+        "title": "Hành lang", "purpose": "Ngân ngại nhờ vả", "content": "Cô Tư rọi đèn vào ổ.",
+    }]}
+    project = client.put(url, json={**payload(project), "answers": [choice, ""], "draft": draft}).json()
+    project = client.post(url + "/scene-outline", json={
+        "revision": project["revision"], "source_version_id": "current",
+    }).json()
+    target = {**scene("Hành lang"), "action": "Cô Tư rọi đèn vào ổ.", "characters": "Ngân, Cô Tư"}
+    project = client.put(url, json=update(project, [target])).json()
+    project = start(client, project).json()
+    provider = WritingProvider()
+    monkeypatch.setattr(routes, "get_screenplay_provider", lambda: provider)
+
+    response, _ = generate(client, project)
+    assert response.status_code == 200, response.text
+    assert len(provider.requests) == 1
+    sent = json.loads(provider.requests[0].input_text)
+    assert sent["author_intent"]["clarifications"] == [{"question": relationship, "answer": choice}]
+    assert sent.get("speaker_self_references") == {"Cô Tư": "cô", "Ngân": "cháu"}
+    assert sent.get("speaker_addresses") == {"Cô Tư": "cháu", "Ngân": "cô"}
+    assert sent.get("unanswered_questions") == [pending]
+    assert idea == sent["author_intent"]["idea"]
+    assert suggestion not in provider.requests[0].input_text
+    assert response.json()["screenplay"] == project["screenplay"]
+
+
 def test_large_context_rejected_before_call_without_losing_work(writing):
     client,provider,p,_=writing;url=f"/api/projects/{p['id']}"
     body=edit(p);body['screenplay']['scenes'][1]['blocks']=[block(text='Nội dung dài. '*700)]

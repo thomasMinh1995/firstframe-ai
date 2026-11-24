@@ -91,6 +91,10 @@ class AuthorContext(BaseModel):
             "clarifications": [item.model_dump(exclude={"input_index"}) for item in self.clarifications],
         }
 
+    def unanswered_questions(self) -> list[str]:
+        answered = {item.question for item in self.clarifications if item.answer.strip()}
+        return [item.question for item in self.pending_questions if item.question not in answered]
+
 
 def author_context(
     idea: str, constraints: list[str], choices: Iterable[tuple[str, str]],

@@ -10,12 +10,16 @@ from app.api.schemas.screenplays import SceneWritingResult, ScriptScene, BlockRe
 from app.api.schemas.provenance import TextProvenance
 from app.application.ai_provider import MalformedProviderResponseError, StructuredProvider, StructuredRequest
 from app.application.language import resolve_response_language
-from app.application.screenplay_context import ScreenplayContextTooLarge, check_context_budget
+from app.application.screenplay_context import (
+    UNANSWERED_QUESTIONS_RULE, ScreenplayContextTooLarge, check_context_budget,
+)
 from app.application.progress import progress_step
 from app.application.provenance import scene_fields
-from app.application.screenplay_composition import can_compose, composition_request, render_composition
+from app.application.screenplay_composition import (
+    can_compose, cast_names, composition_request, render_composition, speaker_addresses, speaker_voices,
+)
 
-PROMPT_VERSION = "screenplay-scene-v25-bounded-reactions"
+PROMPT_VERSION = "screenplay-scene-v26-character-context"
 PROMPT = Path(__file__).resolve().parents[3] / "domains/short-film/prompts/screenplay_scene_prompt.md"
 
 
@@ -27,8 +31,21 @@ def write_scene(proposal: ScreenplayProposal, provider: StructuredProvider) -> S
     scoped = proposal.scope == "blocks"
     language = resolve_response_language(context.context.idea, context.response_language)
     position = next(i for i, s in enumerate(script.scenes) if s.id == target.id)
+    speakers = cast_names([source]) if language == "Vietnamese" else []
+    voices = speaker_voices(proposal, speakers) if speakers else {}
+    addresses = speaker_addresses(proposal, speakers, voices, use_role_defaults=False) if len(speakers) == 2 else {}
+    unanswered = context.context.unanswered_questions()
+    instructions = PROMPT.read_text(encoding="utf-8")
+    if voices or addresses:
+        instructions += (
+            "\nIf a character speaks, write from that named speaker's point of view and goal. "
+            "speaker_self_references is their own pronoun; speaker_addresses is how they call the other person. "
+            "Follow these saved choices over generic examples. Omit a pronoun when natural."
+        )
+    if unanswered:
+        instructions += UNANSWERED_QUESTIONS_RULE
     request = StructuredRequest(
-        stage="screenplay_generation", instructions=PROMPT.read_text(encoding="utf-8") + (
+        stage="screenplay_generation", instructions=instructions + (
             "\nRevise ONLY the selected block IDs. Return replacements with exact expected original kind/text/speaker and a replacement. "
             "Return every selected ID once; never add, remove, reorder blocks or change the heading. Preserve silence and open endings. "
             "Response contract: return only the JSON object with replacements required by the schema; no scene wrapper." if scoped else
@@ -48,6 +65,9 @@ def write_scene(proposal: ScreenplayProposal, provider: StructuredProvider) -> S
                 for origin in [script.source_outline.provenance.get(key, TextProvenance())]},
             "screenplay_context": [s.model_dump(mode="json") for s in script.scenes],
             "author_request": proposal.instructions,
+            **({"speaker_self_references": voices} if voices else {}),
+            **({"speaker_addresses": addresses} if addresses else {}),
+            **({"unanswered_questions": unanswered} if unanswered else {}),
             **({"revision_scope": "blocks", "block_ids": proposal.block_ids,
                 "selected_blocks": [b.model_dump(mode="json") for b in target.blocks if b.id in proposal.block_ids]} if scoped else {}),
             "author_intent": context.context.ai_context(),

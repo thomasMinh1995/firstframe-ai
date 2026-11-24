@@ -32,7 +32,8 @@ def configuration(providers):
     prompts = Path(__file__).resolve().parents[3] / "domains/short-film/prompts"
     return {"providers": [asdict(p.metadata) for p in providers],
         "prompts": {str(p.relative_to(prompts)): sha256(p.read_bytes()).hexdigest()
-                    for p in sorted(prompts.rglob("*.md"))}, "max_scenes": MAX_AUTO_SCENES}
+                    for p in sorted(prompts.rglob("*.md"))},
+        "writer_prompt_version": WRITING_PROMPT_VERSION, "max_scenes": MAX_AUTO_SCENES}
 
 
 class RecordedProvider:

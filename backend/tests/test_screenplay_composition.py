@@ -188,6 +188,20 @@ def test_composition_keeps_author_and_legacy_data_and_does_not_promote_ai_questi
     assert not can_compose(p)
 
 
+def test_composition_keeps_unanswered_questions_outside_author_choices():
+    from app.api.schemas.projects import PendingQuestion
+
+    p = saved()
+    context = p.source_screenplay.source_outline.source.context
+    question = "Vì sao phong thư chưa được mở?"
+    context.pending_questions = [PendingQuestion(question=question, input_index=0)]
+    provider = CompositionProvider()
+    assert write_scene(p, provider).parameters["composition"] == "source-preserving-v1"
+    data = json.loads(provider.requests[0].input_text)
+    assert data.get("unanswered_questions") == [question]
+    assert question not in json.dumps(data["author_intent"], ensure_ascii=False)
+
+
 @pytest.mark.parametrize('name,variant', [('quiet-open-ending',False),('gentle-comedy',False),('limited-resources',False),
     ('draft-workflow-qwen7b-2026-10-30',False),('draft-workflow-qwen7b-saved-brief-2026-10-30',False),
     ('parent-dialogue',True),('english',True),('later-scene',True)])

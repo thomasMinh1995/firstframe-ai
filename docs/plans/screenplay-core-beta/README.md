@@ -1,5 +1,5 @@
 # Kế hoạch PR: kịch bản, thoại Việt và hình minh họa
-Ngày rà soát: 23/11/2026. Trạng thái: PR 1 đã squash merge qua #100 vào dev; PR 2 đã merge qua #115. PR 3 có báo cáo baseline BK-02. PR 4–17 là kế hoạch. Không chạy model trong PR 1.
+Ngày rà soát: 24/11/2026. PR 1–3 đã squash merge vào dev qua #100, #115 và #117. PR 4 có kết quả kiểm tra ngữ cảnh nhân vật BK-03. PR 5–17 là kế hoạch.
 Kế thừa [định hướng](../vietnam-first-screenplay-mvp.md) và [Task 2](../screenplay-quality-and-feedback.md).
 BK/HA/QA là nhóm mục tiêu; bảng bên dưới mới là đơn vị PR. Không gom một nhóm vào một PR lớn.
 
@@ -62,7 +62,7 @@ Dự toán dưới đây là giới hạn lập kế hoạch, chưa phải số 
 | 1 | Nền kiểm thử | codex/ff-sb-01-isolated-checks | Không; SQLite tạm đã được chốt. | 400 |
 | 2 | [BK-01 — Bộ ca kịch bản và thoại Việt](../../evaluations/bk-01-writing-cases/README.md) | codex/ff-sb-02-writing-cases | PR 1. | 350 |
 | 3 | [BK-02 — Baseline trên hai ca phát triển](../../evaluations/bk-02-baseline-2026-11-24/README.md) | codex/ff-sb-03-quality-baseline | PR 2; cấu hình và ngân sách model được chốt trước chạy. | 300 |
-| 4 | BK-03 | codex/ff-sb-04-character-context | PR 3. | 350 |
+| 4 | [BK-03 — Ngữ cảnh nhân vật khi viết cảnh](../../evaluations/bk-03-character-context-2026-11-24/README.md) | codex/ff-sb-04-character-context | PR 3. | 350 |
 | 5 | BK-04 | codex/ff-sb-05-scene-progression | PR 3–4; bỏ task nếu baseline không có lỗi này. | 350 |
 | 6 | BK-05 | codex/ff-sb-06-vietnamese-dialogue | PR 4–5 nếu cần; model và ngân sách giữ cố định trong phép so sánh. | 450 |
 | 7 | BK-06 | codex/ff-sb-07-dialogue-revision | PR 4, 6. | 450 |

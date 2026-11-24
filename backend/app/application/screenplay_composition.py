@@ -9,6 +9,7 @@ from pydantic import BaseModel, ConfigDict, Field, create_model
 from app.api.schemas.provenance import TextProvenance
 from app.api.schemas.screenplays import SceneWritingResult
 from app.application.ai_provider import StructuredRequest
+from app.application.screenplay_context import UNANSWERED_QUESTIONS_RULE
 from app.application.provenance import draft_fields, scene_fields
 from app.application.language import detect_response_language, resolve_response_language
 from app.application.review_opposition import character_mentions, normalized, contains, NEGATION
@@ -72,18 +73,21 @@ class SceneComposition(BaseModel):
     dialogue: list[DialogueTurn]
 
 
+def cast_names(scenes):
+    names = {}
+    for scene in scenes:
+        for name in re.split(r'[,;/\n]', scene.characters):
+            if name.strip():
+                names.setdefault(normalized(name), name.strip())
+    return list(names.values())
+
+
 def per_scene_dialogue(proposal, reconciled=False):
     """Bind two speakers only when the author explicitly requests that order per scene."""
     script = proposal.source_screenplay
     target = next(s for s in script.scenes if s.id == proposal.target_scene_id)
     source = next(s for s in script.source_outline.scenes if s.id == target.source_scene_id)
-    sources = script.source_outline.scenes if reconciled else [source]
-    names = {}
-    for s in sources:
-        for name in re.split(r'[,;/\n]', s.characters):
-            if name.strip():
-                names.setdefault(normalized(name), name.strip())
-    cast = list(names.values())
+    cast = cast_names(script.source_outline.scenes if reconciled else [source])
     if len(cast) != 2 or len(set(map(normalized, cast))) != 2:
         return []
     context = script.source_outline.source.context
@@ -110,10 +114,17 @@ def per_scene_dialogue(proposal, reconciled=False):
     return list(next(iter(requested))) if len(requested) == 1 else []
 
 
-def speaker_voices(proposal, speakers):
+def speaker_statements(proposal):
     context = proposal.source_screenplay.source_outline.source.context
-    clauses = [clause for text in [context.idea, *context.constraints, *[a.answer for a in context.clarifications]]
-               for clause in re.split(r'[,;.!?]', normalized(text))]
+    return [clause for text in [context.idea, *context.constraints, *[a.answer for a in context.clarifications]]
+            if not QUOTED.search(text)
+            for sentence in re.split(r'[.!?]', normalized(text))
+            if not re.search(r'\b(có thể|nếu|hoặc|hay là|thử cho|ví dụ)\b', sentence)
+            for clause in re.split(r'[,;]', sentence)]
+
+
+def speaker_voices(proposal, speakers):
+    clauses = speaker_statements(proposal)
     voices = {}
     for speaker in speakers:
         choices = {match.group(1) for clause in clauses
@@ -124,10 +135,8 @@ def speaker_voices(proposal, speakers):
     return voices
 
 
-def speaker_addresses(proposal, speakers, voices):
-    context = proposal.source_screenplay.source_outline.source.context
-    clauses = [clause for text in [context.idea, *context.constraints, *[a.answer for a in context.clarifications]]
-               for clause in re.split(r'[,;.!?]', normalized(text))]
+def speaker_addresses(proposal, speakers, voices, *, use_role_defaults=True):
+    clauses = speaker_statements(proposal)
     addresses = {}
     for speaker in speakers:
         choices = set()
@@ -142,7 +151,7 @@ def speaker_addresses(proposal, speakers, voices):
                     choices.add(call.group(1))
         if len(choices) == 1:
             addresses[speaker] = choices.pop()
-        elif not mentions_call and len(speakers) == 2:
+        elif use_role_defaults and not mentions_call and len(speakers) == 2:
             peer = next(s for s in speakers if s != speaker)
             pair = {voices.get(speaker), voices.get(peer)}
             if pair in ({'mẹ','con'},{'cha','con'},{'bố','con'},{'chị','em'}):
@@ -380,12 +389,14 @@ def composition_request(proposal, language):
                    if context.draft_provenance.get(k, TextProvenance()).origin == 'legacy_unknown'}
     source_choices = {k:v for k,v in scene_fields(outline.scenes).items()
                       if outline.provenance.get(k, TextProvenance()).is_author_choice}
+    unanswered = context.context.unanswered_questions()
     data = {'response_language':language, 'translate_actions':translate_actions, 'scene_number':index+1, 'total_scenes':len(script.scenes),
         'heading_source': {'text':script.scenes[index].heading,
             'origin': 'author_choice' if script.provenance.get(f'script:{script.scenes[index].id}:heading', TextProvenance()).is_author_choice
                       else script.provenance.get(f'script:{script.scenes[index].id}:heading', TextProvenance()).origin},
         'fixed_action_beats':beats, 'reconciled_ai_outline':reconciled,
         'author_intent':context.context.ai_context(), 'author_plan_fields':authored_plan,
+        **({'unanswered_questions': unanswered} if unanswered else {}),
         'legacy_plan_context':legacy_plan,
         'author_scene_choices':source_choices,
         'target_scene': {'title':source.title, 'characters':source.characters,
@@ -402,6 +413,8 @@ def composition_request(proposal, language):
         instructions = instructions.split('Vietnamese dialogue:')[0] + 'Use English for every translation and dialogue line. Preserve actual proper names; translate unnamed role labels.'
     if translate_actions:
         instructions += '\nTranslate explicit negation as explicit negation (not, not yet, without). Never replace a negative fact with hesitation, intention or uncertainty; preserve what has and has not happened.'
+    if unanswered:
+        instructions += UNANSWERED_QUESTIONS_RULE
     return StructuredRequest(stage='screenplay_generation', instructions=instructions,
         input_text=json.dumps(data,ensure_ascii=False), response_model=result_model), beats
 

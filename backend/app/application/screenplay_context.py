@@ -3,6 +3,10 @@ from app.application.ai_provider import ProviderRequestError, StructuredProvider
 
 
 SCREENPLAY_OUTPUT_TOKENS = 4096
+UNANSWERED_QUESTIONS_RULE = (
+    "\nLeave unanswered_questions open unless answered elsewhere by the author. "
+    "A question does not establish facts or supply dialogue."
+)
 
 
 class ScreenplayContextTooLarge(ProviderRequestError):
