@@ -6,7 +6,7 @@ from uuid import uuid4
 import pytest
 
 from app.api.schemas.projects import ScreenplayProposal, PendingQuestion
-from app.api.schemas.screenplays import ScriptBlock
+from app.api.schemas.screenplays import SceneWritingResult, ScriptBlock
 from app.application.screenplay_composition import (
     can_compose, composition_request, fixed_beats, per_scene_dialogue, speaker_voices, speaker_addresses,
     reaction_options, render_composition, SceneComposition, SceneSourceConflict,
@@ -94,6 +94,63 @@ def test_completed_dialogue_does_not_block_next_reconciled_author_beat():
     assert data['target_scene']['characters']==['Mẹ','Con gái']
     first.blocks[0].text='Mẹ cất vé vào ngăn kéo.'
     assert not fixed_beats(p)[1]
+
+
+@pytest.mark.parametrize("silence", [False, True])
+def test_later_scene_keeps_authored_action_order_actors_and_prop_state(silence):
+    prior_action = "Lan đặt hộp còn niêm phong lên bàn."
+    target_actions = [
+        "Mai đẩy hộp về phía Lan.",
+        "Lan đặt ngón tay lên mép giấy niêm phong. Hộp vẫn đóng.",
+    ]
+    p = proposal({
+        "title": "Chiếc hộp", "idea": 'Lan nghe Mai bảo “chờ một lát” trước khi đặt hộp.',
+        "constraints": ["Không lời thoại."] if silence else ["Lan xưng mình gọi cậu."],
+        "origin": "author_input", "language": "vi", "scenes": [
+            {"title": "Đặt hộp", "action": prior_action, "characters": "Lan, Mai"},
+            {"title": "Giấy niêm phong", "action": "\n".join(target_actions), "characters": "Lan, Mai"},
+        ],
+    }, index=1)
+    script = p.source_screenplay
+    script.scenes[0].blocks = [ScriptBlock(id=str(uuid4()), kind="action", text=prior_action)]
+    before = p.model_dump()
+
+    class Provider:
+        metadata = ProviderMetadata("fake", "writer", {})
+        requests = []
+
+        def request_structured(self, request):
+            self.requests.append(json.loads(request.input_text))
+            if "fixed_action_beats" in self.requests[-1]:
+                assert self.requests[-1]["already_completed_actions"] == [prior_action]
+                data = {"heading": script.scenes[1].heading, "translations": [], "dialogue": []}
+                if silence:
+                    assert request.response_model.model_json_schema()["properties"]["dialogue"]["maxItems"] == 0
+                else:
+                    data["dialogue"] = [{"speaker": "Lan", "after_action": 1, "text": "Để mình nghĩ đã."}]
+                return StructuredResult(output=request.response_model.model_validate(data), model="writer")
+            return StructuredResult(output=SceneWritingResult(scene={
+                "heading": script.scenes[1].heading, "blocks": [
+                    {"kind": "action", "text": prior_action},
+                    {"kind": "action", "text": "Mai mở hộp."},
+                ],
+            }), model="writer")
+
+    provider = Provider()
+    result = write_scene(p, provider)
+    assert result.status == "ready"
+    assert (result.scene.id, result.scene.source_scene_id) == (script.scenes[1].id, script.scenes[1].source_scene_id)
+    assert [block.text for block in result.scene.blocks if block.kind == "action"] == [
+        "Mai đẩy hộp về phía Lan.", "Lan đặt ngón tay lên mép giấy niêm phong.", "Hộp vẫn đóng.",
+    ]
+    assert [block.kind for block in result.scene.blocks] == (
+        ["action", "action", "action"] if silence else ["action", "dialogue", "action", "action"]
+    )
+    assert len(provider.requests) == 1 and p.model_dump() == before
+    if not silence:
+        assert result.scene.blocks[1].speaker == "Lan"
+        assert provider.requests[0]["speaker_self_references"] == {"Lan": "mình"}
+        assert provider.requests[0]["speaker_addresses"] == {"Lan": "cậu"}
 
 
 def test_scene_refinement_uses_full_writer_instead_of_ignoring_new_request():

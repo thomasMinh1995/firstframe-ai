@@ -21,6 +21,7 @@ TURN_REQUEST = re.compile(r'\b(cha|bố|con gái|con trai|chị|em)\s+(?:nói|đ
 PRODUCTION_ONLY = re.compile(r'(?i)^(?:phim(?: ngắn)?|(?:a )?short film)\s+(?:dài\s+)?(?:\d+|một|hai|ba|bốn|năm|sáu|one|two|three|four|five|six)\s*(?:phút|giây|minutes?|seconds?)\s*[.!?]?$')
 VISIBLE = re.compile(r'\b(ngồi|đứng|uống|đi|bước|nhìn|kéo|đẩy|nghiêng|sit|sits|stand|stands|drink|drinks|walk|walks|look|looks|pull|pulls|push|pushes|tilt|tilts)\b')
 QUOTED = re.compile(r'''["“”]|(?:^|[\s(])'[^'\n]+'(?=$|[\s).,;!?])''')
+SILENCE = re.compile(r'\b(?:không(?: có)? (?:lời )?thoại|không ai nói(?: gì)?|no dialogue|without dialogue)(?=\s*(?:[.!?,;]|$))|\bim lặng suốt cảnh\b')
 
 
 class SceneSourceConflict(ValueError):
@@ -183,7 +184,18 @@ def reaction_options(proposal, pair, language):
     return result
 
 
-def can_compose(proposal, language=None):
+def preserve_continuation_actions(proposal, source, index, language):
+    script = proposal.source_screenplay
+    return (
+        language == 'Vietnamese' and proposal.scope == 'scene' and index > 0
+        and not proposal.instructions.strip() and not script.scenes[index].blocks
+        and any(block.kind == 'action' and block.text.strip() for block in script.scenes[index-1].blocks)
+        and script.source_outline.provenance.get(f'm2:{source.id}:action', TextProvenance()).is_author_choice
+        and 0 < len(sentences(source.action)) <= 100
+    )
+
+
+def can_compose(proposal, language=None, *, preserve_actions=False):
     if proposal.scope != 'scene':
         return False
     script = proposal.source_screenplay
@@ -201,13 +213,13 @@ def can_compose(proposal, language=None):
             return False  # Action/performance changes need the expressive writer, not fixed beats.
     texts = [script.source_outline.source.context.idea, *script.source_outline.source.context.constraints,
              *[a.answer for a in script.source_outline.source.context.clarifications], proposal.instructions]
-    if any(QUOTED.search(text) for text in texts):
+    if not preserve_actions and any(QUOTED.search(text) for text in texts):
         return False
     if not all(b.kind == 'action' and b.text.strip() in source.action
                and not script.provenance.get(f'block:{b.id}:text', TextProvenance()).is_author_choice
                for b in target.blocks):
         return False
-    beats, reconciled = fixed_beats(proposal)
+    beats, reconciled = (sentences(source.action), False) if preserve_actions else fixed_beats(proposal)
     action = ' '.join(beats)
     if not action or not (VERB.search(normalized(action)) or VISIBLE.search(normalized(action))) or QUOTED.search(action):
         return False
@@ -222,7 +234,7 @@ def can_compose(proposal, language=None):
             r'\bmỗi cảnh\b.{0,100}\b(câu|thoại)\b|\beach scene\b.{0,100}\b(dialogue|lines)\b|\b(nói|đáp)\s+(một|hai|ba|\d+)\s+câu\b',
             normalized(text)) for text in texts[:-1]):
         return False  # Unknown counts/order must not silently become zero dialogue.
-    if not pair and any(re.search(r'\bxưng\s+(?!hô\b)\w+|\b(dùng|gọi|use|address)\b.{0,40}\b(tôi|bạn)\b|\bgọi\b.{1,40}\blà\b', clause)
+    if not pair and not preserve_actions and any(re.search(r'\bxưng\s+(?!hô\b)\w+|\b(dùng|gọi|use|address)\b.{0,40}\b(tôi|bạn)\b|\bgọi\b.{1,40}\blà\b', clause)
            and not NEGATION.search(clause) and not contains(clause, 'đừng')
            for text in texts for clause in re.split(r'[,.!?;]|\b(nhưng|mà|but)\b', normalized(text)) if clause):
         return False
@@ -326,13 +338,13 @@ def fixed_beats(proposal):
     return sequence[index], True
 
 
-def composition_request(proposal, language):
+def composition_request(proposal, language, *, preserve_actions=False):
     script = proposal.source_screenplay
     outline = script.source_outline
     context = outline.source
     index = next(i for i, s in enumerate(script.scenes) if s.id == proposal.target_scene_id)
     source = next(s for s in outline.scenes if s.id == script.scenes[index].source_scene_id)
-    beats, reconciled = fixed_beats(proposal)
+    beats, reconciled = (sentences(source.action), False) if preserve_actions else fixed_beats(proposal)
     if not beats or len(beats) > 100:
         raise SceneSourceConflict('Cảnh cần có 1–100 nhịp nguồn không rỗng trước khi viết.')
     author_text = '\n'.join([context.context.idea, *context.context.constraints,
@@ -342,8 +354,9 @@ def composition_request(proposal, language):
     turn_type = list[DialogueTurn]
     turn_field = Field(max_length=0)
     pair = per_scene_dialogue(proposal, reconciled)
-    voices = speaker_voices(proposal, pair)
-    addresses = speaker_addresses(proposal, pair, voices)
+    speakers = pair or (cast_names([source]) if preserve_actions else [])
+    voices = speaker_voices(proposal, speakers)
+    addresses = speaker_addresses(proposal, speakers, voices, use_role_defaults=bool(pair)) if len(speakers) == 2 else {}
     reactions = reaction_options(proposal, pair, language) if pair else {}
     if pair:
         if not reactions:
@@ -369,6 +382,11 @@ def composition_request(proposal, language):
             lines[f'line_{i+1}'] = (line, ...)
         turn_type = create_model('RequestedDialogue', __config__=ConfigDict(extra='forbid'), **lines)
         turn_field = Field()
+    elif preserve_actions and not any(SILENCE.search(normalized(text)) for text in author_text.splitlines()):
+        turn_field = Field(max_length=100)
+        if speakers:
+            turn_type = list[create_model('ContinuationLine', __base__=DialogueTurn,
+                speaker=(Literal[tuple(speakers)], ...), after_action=(int, Field(ge=0, le=len(beats))))]
     elif (re.search(r'(?i)\b(thoại|dialogue|conversation|tranh luận|trò chuyện|talk|argue)\b', proposal.instructions)
           and not re.search(r'(?i)\b(có thể|may|optional)\b', proposal.instructions)
           and not re.search(r'(?i)\b(không|no|without)\b.{0,25}\b(thoại|dialogue|speech)\b', proposal.instructions)):
@@ -415,6 +433,13 @@ def composition_request(proposal, language):
         instructions += '\nTranslate explicit negation as explicit negation (not, not yet, without). Never replace a negative fact with hesitation, intention or uncertainty; preserve what has and has not happened.'
     if unanswered:
         instructions += UNANSWERED_QUESTIONS_RULE
+    if preserve_actions:
+        instructions += (
+            '\nContinue from the last saved scene. The application inserts all fixed_action_beats in order. '
+            'If the schema allows optional dialogue, add only short reactions that fit that moment. '
+            'Neither narration nor speech should replay completed actions, change who holds a prop, '
+            'invent an event, or resolve the ending. When a visual beat is enough, return no dialogue.'
+        )
     return StructuredRequest(stage='screenplay_generation', instructions=instructions,
         input_text=json.dumps(data,ensure_ascii=False), response_model=result_model), beats
 

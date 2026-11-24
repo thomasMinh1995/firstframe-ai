@@ -16,10 +16,11 @@ from app.application.screenplay_context import (
 from app.application.progress import progress_step
 from app.application.provenance import scene_fields
 from app.application.screenplay_composition import (
-    can_compose, cast_names, composition_request, render_composition, speaker_addresses, speaker_voices,
+    can_compose, cast_names, composition_request, preserve_continuation_actions, render_composition,
+    speaker_addresses, speaker_voices,
 )
 
-PROMPT_VERSION = "screenplay-scene-v26-character-context"
+PROMPT_VERSION = "screenplay-scene-v27-scene-progression"
 PROMPT = Path(__file__).resolve().parents[3] / "domains/short-film/prompts/screenplay_scene_prompt.md"
 
 
@@ -73,8 +74,11 @@ def write_scene(proposal: ScreenplayProposal, provider: StructuredProvider) -> S
             "author_intent": context.context.ai_context(),
         }, ensure_ascii=False, separators=(",", ":")), response_model=BlockRevisionResult if scoped else SceneWritingResult)
     composed = provider.metadata.model == 'qwen2.5:7b' and can_compose(proposal, language)
+    preserve_actions = (not composed and preserve_continuation_actions(proposal, source, position, language)
+                        and can_compose(proposal, language, preserve_actions=True))
+    composed = composed or preserve_actions
     if composed:
-        request, beats = composition_request(proposal, language)
+        request, beats = composition_request(proposal, language, preserve_actions=preserve_actions)
     check_context_budget(request, provider)
     result = provider.request_structured(request)
     with progress_step("screenplay_validation"):
