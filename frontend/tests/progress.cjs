@@ -155,3 +155,37 @@ console.log('Nested plan progress checks passed: planned/pending children, real 
 
 const retry = ['plan_checkpoint','evaluation','fidelity_audit','evaluation','fidelity_audit','plan_save'].map((stage,i)=>({stage,status:'completed',occurrence:i+1}));
 assert.deepEqual(planProgressGroups(retry)[2].children.map(step=>step.stage), retry.map(step=>step.stage), 'nested progress keeps real critic/audit retry order');
+
+const { operationProgressGroups, processTitles } = require(process.argv[2] + '/progressState.js');
+const workflows = {
+ analyze: ['prepare','reasoning_context','reasoning','reasoning_validation','saving'],
+ plan: ['prepare','plan_choices','planning_context','planning','planning_structure','plan_checkpoint','evaluation','plan_save'],
+ review: ['prepare','fidelity','fidelity_audit','evaluation','fidelity_audit','saving'],
+ 'scene-suggestions': ['prepare','scene_source','scene_checkpoint','staging_generation','staging_validation','scene_proposal_save'],
+ 'scene-sketches': ['prepare','sketch_checkpoint','sketch_generation','sketch_validation','sketch_save'],
+ 'screenplay-proposals': ['prepare','screenplay_source','screenplay_checkpoint','screenplay_generation','screenplay_validation','screenplay_proposal_save'],
+ 'screenplay-reviews': ['prepare','screenplay_review_source','screenplay_review_checkpoint','screenplay_review','screenplay_review_validation','screenplay_review_save'],
+};
+for (const [kind, stages] of Object.entries(workflows)) {
+ let events=[];
+ for(const stage of stages) {
+  events=applyProgress(events,{stage,status:'active'});
+  const running=operationProgressGroups(kind,events);
+  assert.equal(running.some(g=>g.status==='active'),true,kind);
+  events=applyProgress(events,{stage,status:'completed'});
+ }
+ const done=operationProgressGroups(kind,events,'completed');
+ assert.equal(done.every(g=>g.status==='completed'),true,kind);
+ assert.equal(done.flatMap(g=>g.children).length,events.length,`${kind}: no phantom/skipped stages after success`);
+ assert.equal(done.every(g=>processTitles.vi[kind][['prepare','develop','review'].indexOf(g.id)]),true);
+ const failed=operationProgressGroups(kind,[{stage:'prepare',status:'failed',occurrence:1}],'failed');
+ assert.equal(failed[0].status,'failed');
+ assert.equal(failed.slice(1).flatMap(g=>g.children).every(s=>s.status==='pending'),true);
+ const interrupted=operationProgressGroups(kind,[{stage:stages[2],status:'active',occurrence:1}],'failed');
+ assert.equal(interrupted.flatMap(g=>g.children).some(s=>s.status==='active'),false,`${kind}: interrupted operations must stop spinning`);
+ assert.equal(interrupted.some(g=>g.status==='interrupted'),true);
+}
+const unknown=operationProgressGroups('scene-suggestions',[{stage:'future_backend_step',status:'active',occurrence:1}]);
+assert.equal(unknown[1].children[0].stage,'future_backend_step');
+assert.equal(operationProgressGroups('review',[]).flatMap(g=>g.children).some(s=>s.stage==='evaluation'),false,'optional critic is never invented');
+console.log('All seven workflows: real stage grouping, conditional/skipped steps, failure, interruption and unknown events passed.');

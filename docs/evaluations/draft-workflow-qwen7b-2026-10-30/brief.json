@@ -1,0 +1,9 @@
+{
+  "idea": "Phim ngắn hai phút. Trong căn bếp chiều mưa, bố đưa Linh một lá thư trước khi cô rời quê. Hai người ngại nói lời chia tay. Linh nhận thư nhưng chưa mở. Kết ở cánh cửa, cô vẫn giữ quyền quyết định có đọc thư hay không.",
+  "constraints": [
+    "Tối đa hai cảnh, một căn bếp và ngưỡng cửa.",
+    "Chỉ hai nhân vật bố và Linh.",
+    "Giữ lá thư chưa mở; không hồi tưởng, không thuyết minh, không tự xác nhận hòa giải."
+  ],
+  "response_language": "vi"
+}

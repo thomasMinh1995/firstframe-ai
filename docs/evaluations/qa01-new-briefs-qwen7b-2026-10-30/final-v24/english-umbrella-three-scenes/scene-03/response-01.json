@@ -1,0 +1,19 @@
+{
+  "output": {
+    "heading": "SCENE 3",
+    "translations": [],
+    "dialogue": {
+      "line_1": {
+        "after_action": 1,
+        "speaker": "Mara",
+        "text": "Still not sure about leaving?"
+      },
+      "line_2": {
+        "after_action": 1,
+        "speaker": "Owen",
+        "text": "Let's wait a bit longer, just in case."
+      }
+    }
+  },
+  "raw_output": "{\n  \"heading\": \"SCENE 3\",\n  \"translations\": [],\n  \"dialogue\": {\n    \"line_1\": {\n      \"after_action\": 1,\n      \"speaker\": \"Mara\",\n      \"text\": \"Still not sure about leaving?\"\n    },\n    \"line_2\": {\n      \"after_action\": 1,\n      \"speaker\": \"Owen\",\n      \"text\": \"Let's wait a bit longer, just in case.\"\n    }\n  }\n}"
+}

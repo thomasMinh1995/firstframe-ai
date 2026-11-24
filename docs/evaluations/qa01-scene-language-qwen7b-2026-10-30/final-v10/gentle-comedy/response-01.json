@@ -1,0 +1,25 @@
+{
+  "raw_output": "{\n  \"scene\": {\n    \"heading\": \"Khoảnh khắc\",\n    \"blocks\": [\n      {\n        \"kind\": \"action\",\n        \"text\": \"Nam cầm chiếc túi nhỏ, cố gắng che chỗ khóa áo kẹt. Hà đứng bên cạnh, nhìn Nam lúng túng.\",\n        \"speaker\": \"\"\n      },\n      {\n        \"kind\": \"dialogue\",\n        \"text\": \"Em... em không biết sao cả, chị ạ.\",\n        \"speaker\": \"Nam\"\n      },\n      {\n        \"kind\": \"action\",\n        \"text\": \"Hà đưa tay ra, mỉm cười nhẹ nhàng. Nam ngại ngùng đưa vạt áo ra, hai người cùng cười.\",\n        \"speaker\": \"\"\n      }\n    ]\n  }\n}",
+  "output": {
+    "scene": {
+      "heading": "Khoảnh khắc",
+      "blocks": [
+        {
+          "kind": "action",
+          "text": "Nam cầm chiếc túi nhỏ, cố gắng che chỗ khóa áo kẹt. Hà đứng bên cạnh, nhìn Nam lúng túng.",
+          "speaker": ""
+        },
+        {
+          "kind": "dialogue",
+          "text": "Em... em không biết sao cả, chị ạ.",
+          "speaker": "Nam"
+        },
+        {
+          "kind": "action",
+          "text": "Hà đưa tay ra, mỉm cười nhẹ nhàng. Nam ngại ngùng đưa vạt áo ra, hai người cùng cười.",
+          "speaker": ""
+        }
+      ]
+    }
+  }
+}

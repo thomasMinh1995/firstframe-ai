@@ -1,0 +1,53 @@
+{
+  "model": "qwen2.5:7b",
+  "context_length": 16384,
+  "temperature": 0.3,
+  "started_at": "2026-10-30T04:36:47.216487+00:00",
+  "database": "/var/folders/5q/2y5tf10x3pg8jm8d6_mkf80h0000gn/T/firstframe-live-draft-bvd9gg94/projects.sqlite3",
+  "providers": [
+    {
+      "provider": "ollama",
+      "model": "qwen2.5:7b",
+      "parameters": {
+        "temperature": 0.3,
+        "timeout_seconds": 180.0,
+        "num_ctx": 16384,
+        "screenplay_review_temperature": 0.0
+      }
+    },
+    {
+      "provider": "ollama",
+      "model": "qwen2.5:7b",
+      "parameters": {
+        "temperature": 0.3,
+        "timeout_seconds": 180.0,
+        "num_ctx": 16384,
+        "screenplay_review_temperature": 0.0
+      }
+    },
+    {
+      "provider": "ollama",
+      "model": "qwen2.5:7b",
+      "parameters": {
+        "temperature": 0.3,
+        "timeout_seconds": 180.0,
+        "num_ctx": 16384,
+        "screenplay_review_temperature": 0.0
+      }
+    },
+    {
+      "provider": "ollama",
+      "model": "qwen2.5:7b",
+      "parameters": {
+        "temperature": 0.3,
+        "timeout_seconds": 180.0,
+        "num_ctx": 16384,
+        "screenplay_review_temperature": 0.0
+      }
+    }
+  ],
+  "max_calls": 14,
+  "budget_seconds": 600,
+  "application_revision": "d5d12fe18ae56638b1ebf03e5f0751685b62fa2a",
+  "brief_source": "docs/evaluations/draft-workflow-qwen7b-2026-10-30/candidate.json.gz"
+}

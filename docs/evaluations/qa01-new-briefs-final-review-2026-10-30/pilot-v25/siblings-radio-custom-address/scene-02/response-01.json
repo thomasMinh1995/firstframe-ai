@@ -1,0 +1,21 @@
+{
+  "output": {
+    "heading": "Tua vít",
+    "translations": [],
+    "dialogue": {
+      "line_1": {
+        "after_action": 1,
+        "speaker": "Hạnh",
+        "self_reference": "chị",
+        "intent": "unhurried"
+      },
+      "line_2": {
+        "after_action": 1,
+        "speaker": "Nam",
+        "self_reference": "em",
+        "intent": "thinking"
+      }
+    }
+  },
+  "raw_output": "{\n  \"heading\": \"Tua vít\",\n  \"translations\": [],\n  \"dialogue\": {\n    \"line_1\": {\n      \"after_action\": 1,\n      \"speaker\": \"Hạnh\",\n      \"self_reference\": \"chị\",\n      \"intent\": \"unhurried\"\n    },\n    \"line_2\": {\n      \"after_action\": 1,\n      \"speaker\": \"Nam\",\n      \"self_reference\": \"em\",\n      \"intent\": \"thinking\"\n    }\n  }\n}"
+}

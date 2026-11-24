@@ -1,0 +1,53 @@
+{
+  "reviewer": "agent reading captured outputs; not independent reader acceptance",
+  "new_cases": 5,
+  "planned_scenes": 19,
+  "attempted_scenes": 18,
+  "technical_contract_cases_at_capture": 4,
+  "cases_accepted_by_final_validation": 3,
+  "content_pass_cases": 2,
+  "content_pass": false,
+  "release_approved": false,
+  "cases": [
+    {
+      "case": "mother-daughter-ticket",
+      "content_pass": false,
+      "language": true,
+      "address": true,
+      "progression": false,
+      "note": "Cảnh 1 con nói đã cất vé vào túi trước cảnh 2 nhận/cất vé; cảnh 2 lặp cùng câu. Schema và nhãn người nói đúng chưa đủ."
+    },
+    {
+      "case": "siblings-radio-custom-address",
+      "content_pass": false,
+      "language": true,
+      "address": true,
+      "progression": null,
+      "note": "Cảnh 2 Hạnh chép nguyên action Nam lấy tua vít/ngồi vào thoại; validator từ chối, giữ raw frame và cảnh 1. Cảnh 3 không chạy sau lỗi, không coi là đạt."
+    },
+    {
+      "case": "english-umbrella-three-scenes",
+      "content_pass": true,
+      "language": true,
+      "address": true,
+      "progression": true,
+      "note": "Action English lấy nguyên nguồn cả ba cảnh, không còn gọi dịch lại. Ô trên ghế trước khi Owen cầm; cửa còn đóng, quyết định chưa chốt. Thoại ngắn nhưng còn chung chung; câu đề nghị giữ ô không được tính là động tác đã thực hiện."
+    },
+    {
+      "case": "father-son-four-scenes",
+      "content_pass": false,
+      "language": true,
+      "address": false,
+      "progression": false,
+      "note": "Cảnh 2 bố yêu cầu ngồi sau khi Minh đã ngồi; cảnh 4 câu của bố lại là lời con gọi Bố ơi và trùng câu Minh. Revalidation mã cuối chặn sai vocative đầu câu; không sửa lời rồi tính pass."
+    },
+    {
+      "case": "silent-six-scenes",
+      "content_pass": true,
+      "language": true,
+      "address": null,
+      "progression": true,
+      "note": "Sáu action đúng thứ tự nguồn, không thoại; chỉ An tưới một lần, bình rỗng sau tưới, cây chưa có lá mới."
+    }
+  ]
+}

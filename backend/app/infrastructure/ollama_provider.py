@@ -17,6 +17,8 @@ from app.application.ai_provider import (
     strict_json_instructions,
 )
 
+from app.application.screenplay_context import SCREENPLAY_OUTPUT_TOKENS
+
 logger = logging.getLogger(__name__)
 
 
@@ -44,6 +46,7 @@ class OllamaProvider:
                 "temperature": self._config.temperature,
                 "timeout_seconds": self._config.timeout_seconds,
                 "num_ctx": self._config.context_length,
+                "screenplay_review_temperature": 0.0,
             },
         )
 
@@ -73,6 +76,11 @@ class OllamaProvider:
 
     def request_structured(self, request: StructuredRequest) -> StructuredResult:
         logger.info("Sending structured Ollama request with model=%s", self._config.model)
+        options = {"temperature": self._config.temperature, "num_ctx": self._config.context_length}
+        if request.stage == "screenplay_review":
+            options["temperature"] = 0.0
+        if request.stage in {"screenplay_review", "screenplay_generation"}:
+            options["num_predict"] = SCREENPLAY_OUTPUT_TOKENS
         try:
             response = httpx.post(
                 f"{self._config.base_url}/api/chat",
@@ -84,12 +92,9 @@ class OllamaProvider:
                     ],
                     "stream": False,
                     "format": request.response_model.model_json_schema(),
-                    "options": {
-                        "temperature": self._config.temperature,
-                        "num_ctx": self._config.context_length,
-                    },
+                    "options": options,
                 },
-                timeout=self._config.timeout_seconds,
+                timeout=min(self._config.timeout_seconds, request.timeout_seconds) if request.timeout_seconds is not None else self._config.timeout_seconds,
                 trust_env=False,
             )
             response.raise_for_status()

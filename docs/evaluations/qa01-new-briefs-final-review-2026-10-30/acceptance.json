@@ -1,0 +1,153 @@
+{
+  "reviewer": "Agent reading actual captures, not independent reader/pilot",
+  "fixture_sha256": "6c2dbbf595fb4328fde46bc4f119d7367f69a40aceace50edd9f821f30f91ffa",
+  "new_briefs_pass_each_run": 5,
+  "scenes_each_run": 19,
+  "previous_cases_pass": 8,
+  "full_workflow_content_pass": true,
+  "pr_content_gate_pass": true,
+  "qa01_release_approved": false,
+  "bounded_dialogue_tradeoff": "Model selects non-event speech acts; application localizes role-safe reactions. This does not certify free-form model prose or literary quality.",
+  "reviews": [
+    {
+      "run": "pilot-v25",
+      "case": "mother-daughter-ticket",
+      "content_pass": true,
+      "checks": {
+        "source_actions_exact_and_in_order": true,
+        "requested_dialogue_count_and_order": true,
+        "no_repeated_lines": true,
+        "language_and_address_read": true,
+        "prop_and_open_state_read": true,
+        "source_snapshot_unchanged": true
+      },
+      "reading": "Vé được đặt trên bàn rồi con mới nhận/cất; đứng ở cửa chưa quyết định. Thoại mẹ/con đúng vai, không nói đã cất vé sớm."
+    },
+    {
+      "run": "pilot-v25",
+      "case": "siblings-radio-custom-address",
+      "content_pass": true,
+      "checks": {
+        "source_actions_exact_and_in_order": true,
+        "requested_dialogue_count_and_order": true,
+        "no_repeated_lines": true,
+        "language_and_address_read": true,
+        "prop_and_open_state_read": true,
+        "source_snapshot_unchanged": true
+      },
+      "reading": "Chị/em đúng vai; Nam ngồi một lần, không kể động tác trong thoại; radio còn im tiếng."
+    },
+    {
+      "run": "pilot-v25",
+      "case": "english-umbrella-three-scenes",
+      "content_pass": true,
+      "checks": {
+        "source_actions_exact_and_in_order": true,
+        "requested_dialogue_count_and_order": true,
+        "no_repeated_lines": true,
+        "language_and_address_read": true,
+        "prop_and_open_state_read": true,
+        "source_snapshot_unchanged": true
+      },
+      "reading": "English xuyên suốt; ô trên ghế trước khi Owen lấy, cửa còn đóng, chưa quyết định đi."
+    },
+    {
+      "run": "pilot-v25",
+      "case": "father-son-four-scenes",
+      "content_pass": true,
+      "checks": {
+        "source_actions_exact_and_in_order": true,
+        "requested_dialogue_count_and_order": true,
+        "no_repeated_lines": true,
+        "language_and_address_read": true,
+        "prop_and_open_state_read": true,
+        "source_snapshot_unchanged": true
+      },
+      "reading": "Bố/con đúng vai; không ra lệnh ngồi lại, không mở hộp hoặc tha thứ; không có câu bố gọi Bố ơi."
+    },
+    {
+      "run": "pilot-v25",
+      "case": "silent-six-scenes",
+      "content_pass": true,
+      "checks": {
+        "source_actions_exact_and_in_order": true,
+        "requested_dialogue_count_and_order": true,
+        "no_repeated_lines": true,
+        "language_and_address_read": true,
+        "prop_and_open_state_read": true,
+        "source_snapshot_unchanged": true
+      },
+      "reading": "Đủ sáu action theo thứ tự; An tưới một lần, bình rỗng sau đó, cây chưa có lá mới; không thoại."
+    },
+    {
+      "run": "final-v25",
+      "case": "mother-daughter-ticket",
+      "content_pass": true,
+      "checks": {
+        "source_actions_exact_and_in_order": true,
+        "requested_dialogue_count_and_order": true,
+        "no_repeated_lines": true,
+        "language_and_address_read": true,
+        "prop_and_open_state_read": true,
+        "source_snapshot_unchanged": true
+      },
+      "reading": "Vé được đặt trên bàn rồi con mới nhận/cất; đứng ở cửa chưa quyết định. Thoại mẹ/con đúng vai, không nói đã cất vé sớm."
+    },
+    {
+      "run": "final-v25",
+      "case": "siblings-radio-custom-address",
+      "content_pass": true,
+      "checks": {
+        "source_actions_exact_and_in_order": true,
+        "requested_dialogue_count_and_order": true,
+        "no_repeated_lines": true,
+        "language_and_address_read": true,
+        "prop_and_open_state_read": true,
+        "source_snapshot_unchanged": true
+      },
+      "reading": "Chị/em đúng vai; Nam ngồi một lần, không kể động tác trong thoại; radio còn im tiếng."
+    },
+    {
+      "run": "final-v25",
+      "case": "english-umbrella-three-scenes",
+      "content_pass": true,
+      "checks": {
+        "source_actions_exact_and_in_order": true,
+        "requested_dialogue_count_and_order": true,
+        "no_repeated_lines": true,
+        "language_and_address_read": true,
+        "prop_and_open_state_read": true,
+        "source_snapshot_unchanged": true
+      },
+      "reading": "English xuyên suốt; ô trên ghế trước khi Owen lấy, cửa còn đóng, chưa quyết định đi."
+    },
+    {
+      "run": "final-v25",
+      "case": "father-son-four-scenes",
+      "content_pass": true,
+      "checks": {
+        "source_actions_exact_and_in_order": true,
+        "requested_dialogue_count_and_order": true,
+        "no_repeated_lines": true,
+        "language_and_address_read": true,
+        "prop_and_open_state_read": true,
+        "source_snapshot_unchanged": true
+      },
+      "reading": "Bố/con đúng vai; không ra lệnh ngồi lại, không mở hộp hoặc tha thứ; không có câu bố gọi Bố ơi."
+    },
+    {
+      "run": "final-v25",
+      "case": "silent-six-scenes",
+      "content_pass": true,
+      "checks": {
+        "source_actions_exact_and_in_order": true,
+        "requested_dialogue_count_and_order": true,
+        "no_repeated_lines": true,
+        "language_and_address_read": true,
+        "prop_and_open_state_read": true,
+        "source_snapshot_unchanged": true
+      },
+      "reading": "Đủ sáu action theo thứ tự; An tưới một lần, bình rỗng sau đó, cây chưa có lá mới; không thoại."
+    }
+  ]
+}

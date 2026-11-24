@@ -1,0 +1,35 @@
+{
+  "status": "ready",
+  "scene": {
+    "id": "0848f8d6-db2f-4bfa-bdfb-e0f3018ef9cf",
+    "source_scene_id": "91d6fbf5-3918-4451-8283-0e408a5b79c9",
+    "heading": "SCENE 3",
+    "blocks": [
+      {
+        "kind": "action",
+        "text": "Mara and Owen stand by the closed door, still unsure whether to leave.",
+        "speaker": "",
+        "id": "9cd19105-8ecf-412f-814c-16375540e0ad"
+      },
+      {
+        "kind": "dialogue",
+        "text": "I'm not sure where to start.",
+        "speaker": "Mara",
+        "id": "5b729abc-92c2-458e-beef-5f6ea23272a8"
+      },
+      {
+        "kind": "dialogue",
+        "text": "I'd like to think it through.",
+        "speaker": "Owen",
+        "id": "07b5137e-53ef-4678-bb27-85b4ce97c04b"
+      }
+    ]
+  },
+  "model": "qwen2.5:7b",
+  "parameters": {
+    "composition": "source-preserving-v1",
+    "outline_reconciled": true,
+    "dialogue_mode": "bounded-reactions-v1"
+  },
+  "prompt_version": "screenplay-scene-v25-bounded-reactions"
+}

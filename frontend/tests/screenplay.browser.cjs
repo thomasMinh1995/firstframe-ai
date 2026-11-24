@@ -16,7 +16,7 @@ const fs=require('node:fs/promises');const path=require('node:path');const {rand
  p=await request(url,'PUT',{...payload(p),scene_outline:{id:p.scene_outline.id,version:p.scene_outline.version,scenes}});
  const before=await request('/__test/state');
  const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
- await page.goto(base);const area=page.getByRole('region',{name:'M3 Kịch bản',exact:true});await area.waitFor();
+ await page.goto(base);const area=page.getByRole('region',{name:'Kịch bản',exact:true});await area.waitFor();
  await page.getByRole('navigation',{name:'Hành trình câu chuyện'}).getByRole('button',{name:/Kịch bản/}).click();assert.equal(await page.evaluate(()=>document.activeElement.id),'workspace-script');
  const save=async()=>{await area.getByRole('button',{name:'Lưu kịch bản',exact:true}).click();await page.getByText('Đã lưu kịch bản và mọi sửa đang chờ.',{exact:true}).waitFor()};
  const nav=area.getByRole('navigation',{name:'Các cảnh kịch bản'});
@@ -82,7 +82,7 @@ const fs=require('node:fs/promises');const path=require('node:path');const {rand
  const previous=history.locator(':scope > div').first();await previous.getByText('Đọc phiên bản này',{exact:true}).click();
  assert.match(await previous.innerText(),/Sửa trước khi bắt đầu bản khác/);
  await previous.getByRole('button',{name:'Khôi phục kịch bản này',exact:true}).click();
- await page.getByText('Đã khôi phục kịch bản; M1/M2 và bản trước vẫn giữ.',{exact:true}).waitFor();await openScriptScene(area,0,{legacy:true});
+ await page.getByText('Đã khôi phục kịch bản; Story plan và Dàn cảnh và bản trước vẫn giữ.',{exact:true}).waitFor();await openScriptScene(area,0,{legacy:true});
  assert.equal(await area.getByLabel('Nội dung hành động',{exact:true}).inputValue(),'Sửa trước khi bắt đầu bản khác.');
  p=await read();assert.deepEqual(p.screenplay_versions.at(-1).screenplay,newScript);
  assert.deepEqual(p.screenplay.source_outline,original);assert.equal(p.scene_outline.scenes[0].action,'Diễn tiến M2 mới.');

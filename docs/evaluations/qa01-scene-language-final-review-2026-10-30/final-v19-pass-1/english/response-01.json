@@ -1,0 +1,11 @@
+{
+  "raw_output": "{\n  \"heading\": \"SCENE 2\",\n  \"translations\": [\n    \"Father places the sealed letter on the table and steps back.\",\n    \"Daughter places her hand next to the sealed letter, not picking it up or opening it; she stops there.\"\n  ],\n  \"dialogue\": []\n}",
+  "output": {
+    "heading": "SCENE 2",
+    "translations": [
+      "Father places the sealed letter on the table and steps back.",
+      "Daughter places her hand next to the sealed letter, not picking it up or opening it; she stops there."
+    ],
+    "dialogue": []
+  }
+}

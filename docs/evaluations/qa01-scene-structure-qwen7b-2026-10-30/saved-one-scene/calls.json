@@ -1,0 +1,219 @@
+[
+  {
+    "stage": "reasoning",
+    "input_bytes": 915,
+    "instructions_bytes": 3492,
+    "timeout_seconds": null,
+    "model": "qwen2.5:7b",
+    "output": {
+      "summary": "Trong căn bếp nhỏ, con gái đặt chìa khóa lên bàn trước khi đi học xa. Cha đặt một lá thư xin lỗi cạnh đó rồi lùi lại. Cô chưa mở thư, nhưng ngồi xuống uống cùng cha một ngụm trà.",
+      "notes": [
+        {
+          "label": "Hành động và khoảng lặng",
+          "content": "Hai nhân vật đều có hành động rõ ràng, nhưng cần cân nhắc cách thể hiện sự im lặng giữa họ."
+        }
+      ],
+      "missing_information": [
+        "Cách thể hiện sự im lặng giữa cha và con gái"
+      ],
+      "ai_suggestions": []
+    },
+    "raw_output": "{\n  \"summary\": \"Trong căn bếp nhỏ, con gái đặt chìa khóa lên bàn trước khi đi học xa. Cha đặt một lá thư xin lỗi cạnh đó rồi lùi lại. Cô chưa mở thư, nhưng ngồi xuống uống cùng cha một ngụm trà.\",\n  \"notes\": [\n    {\n      \"label\": \"Hành động và khoảng lặng\",\n      \"content\": \"Hai nhân vật đều có hành động rõ ràng, nhưng cần cân nhắc cách thể hiện sự im lặng giữa họ.\"\n    }\n  ],\n  \"missing_information\": [\"Cách thể hiện sự im lặng giữa cha và con gái\"],\n  \"ai_suggestions\": []\n}",
+    "seconds": 11.728
+  },
+  {
+    "stage": "planning",
+    "input_bytes": 12218,
+    "instructions_bytes": 6908,
+    "timeout_seconds": null,
+    "model": "qwen2.5:7b",
+    "output": {
+      "story_plan": {
+        "working_title": {
+          "title": "Chiều mưa trong căn bếp nhỏ"
+        },
+        "logline": {
+          "text": "Trong căn bếp nhỏ vào chiều mưa, con gái đặt chìa khóa lên bàn trước khi đi học xa. Cha đặt một lá thư xin lỗi cạnh đó, cô chưa mở thư, nhưng ngồi xuống uống cùng cha một ngụm trà."
+        },
+        "characters": {
+          "protagonist": "Con gái",
+          "supporting_characters": [
+            "Cha"
+          ],
+          "antagonist_or_obstacle": null
+        },
+        "conflict": {
+          "external": "Lá thư xin lỗi từ cha",
+          "internal": null,
+          "stakes": "Quyền quyết định của con gái về việc liệu có mở thư và đối mặt với quá khứ không"
+        },
+        "beginning": {
+          "setup": "Chiều mưa, con gái đặt chìa khóa lên bàn trước khi đi học xa. Cha ngồi cạnh cô, đặt một lá thư xin lỗi cạnh đó.",
+          "key_event": null
+        },
+        "middle": {
+          "escalation": "Con gái ngồi xuống uống cùng cha một ngụm trà, không mở thư.",
+          "turning_point": null
+        },
+        "ending": {
+          "resolution": "Con gái giữ lại lá thư, quyết định không mở nó ngay lập tức.",
+          "final_image": "Con gái và cha ngồi im lặng trong căn bếp, lá thư xin lỗi nằm cạnh chìa khóa."
+        },
+        "theme": {
+          "statement": "Quyết định giữ lại quá khứ và không đối mặt với nó."
+        },
+        "visual_style": {
+          "description": "Căn bếp nhỏ, ánh sáng mờ ảo từ cửa sổ, chén trà, chìa khóa, và lá thư xin lỗi.",
+          "visual_motifs": [
+            "Chiều mưa",
+            "Căn bếp nhỏ",
+            "Chìa khóa",
+            "Lá thư"
+          ]
+        },
+        "tone": {
+          "description": "Sâu lắng, im lặng, và đầy cảm xúc."
+        },
+        "production_notes": {
+          "notes": "Phim 30 giây, tối đa một cảnh rất ngắn, hai nhân vật, một căn bếp. Giữ lá thư chưa mở và quyền quyết định của con gái; không giải quyết hết mâu thuẫn. Ưu tiên hành động và khoảng lặng, ít thoại.",
+          "locations": [
+            "Căn bếp nhỏ"
+          ],
+          "cast_size": "Hai nhân vật"
+        }
+      }
+    },
+    "raw_output": "{\n  \"story_plan\": {\n    \"working_title\": {\n      \"title\": \"Chiều mưa trong căn bếp nhỏ\"\n    },\n    \"logline\": {\n      \"text\": \"Trong căn bếp nhỏ vào chiều mưa, con gái đặt chìa khóa lên bàn trước khi đi học xa. Cha đặt một lá thư xin lỗi cạnh đó, cô chưa mở thư, nhưng ngồi xuống uống cùng cha một ngụm trà.\"\n    },\n    \"characters\": {\n      \"protagonist\": \"Con gái\",\n      \"supporting_characters\": [\"Cha\"],\n      \"antagonist_or_obstacle\": null\n    },\n    \"conflict\": {\n      \"external\": \"Lá thư xin lỗi từ cha\",\n      \"internal\": null,\n      \"stakes\": \"Quyền quyết định của con gái về việc liệu có mở thư và đối mặt với quá khứ không\"\n    },\n    \"beginning\": {\n      \"setup\": \"Chiều mưa, con gái đặt chìa khóa lên bàn trước khi đi học xa. Cha ngồi cạnh cô, đặt một lá thư xin lỗi cạnh đó.\",\n      \"key_event\": null\n    },\n    \"middle\": {\n      \"escalation\": \"Con gái ngồi xuống uống cùng cha một ngụm trà, không mở thư.\",\n      \"turning_point\": null\n    },\n    \"ending\": {\n      \"resolution\": \"Con gái giữ lại lá thư, quyết định không mở nó ngay lập tức.\",\n      \"final_image\": \"Con gái và cha ngồi im lặng trong căn bếp, lá thư xin lỗi nằm cạnh chìa khóa.\"\n    },\n    \"theme\": {\n      \"statement\": \"Quyết định giữ lại quá khứ và không đối mặt với nó.\"\n    },\n    \"visual_style\": {\n      \"description\": \"Căn bếp nhỏ, ánh sáng mờ ảo từ cửa sổ, chén trà, chìa khóa, và lá thư xin lỗi.\",\n      \"visual_motifs\": [\"Chiều mưa\", \"Căn bếp nhỏ\", \"Chìa khóa\", \"Lá thư\"]\n    },\n    \"tone\": {\n      \"description\": \"Sâu lắng, im lặng, và đầy cảm xúc.\"\n    },\n    \"production_notes\": {\n      \"notes\": \"Phim 30 giây, tối đa một cảnh rất ngắn, hai nhân vật, một căn bếp. Giữ lá thư chưa mở và quyền quyết định của con gái; không giải quyết hết mâu thuẫn. Ưu tiên hành động và khoảng lặng, ít thoại.\",\n      \"locations\": [\"Căn bếp nhỏ\"],\n      \"cast_size\": \"Hai nhân vật\"\n    }\n  }\n}",
+    "seconds": 59.039
+  },
+  {
+    "stage": "evaluation",
+    "input_bytes": 4314,
+    "instructions_bytes": 2938,
+    "timeout_seconds": null,
+    "model": "qwen2.5:7b",
+    "output": {
+      "reviews": [
+        {
+          "card_id": "section-3",
+          "decision_id": "constraint-1",
+          "related_card_id": "section-5",
+          "observation": "Card 1 và Card 5 đều mô tả cảnh con gái giữ lại lá thư, nhưng Card 1 chỉ nói cô chưa mở thư, trong khi Card 5 mô tả cô ngồi im lặng uống trà. Điều này tạo ra sự mâu thuẫn giữa hai card.",
+          "comparison": "mismatch",
+          "suggestion": "Sửa lại Card 5 để chỉ mô tả cô chưa mở thư, giữ nguyên nội dung của Card 1."
+        }
+      ],
+      "passed": false,
+      "rubric_scores": null
+    },
+    "raw_output": "{\n    \"reviews\": [\n        {\n            \"card_id\": \"section-3\",\n            \"decision_id\": \"constraint-1\",\n            \"related_card_id\": \"section-5\",\n            \"observation\": \"Card 1 và Card 5 đều mô tả cảnh con gái giữ lại lá thư, nhưng Card 1 chỉ nói cô chưa mở thư, trong khi Card 5 mô tả cô ngồi im lặng uống trà. Điều này tạo ra sự mâu thuẫn giữa hai card.\",\n            \"comparison\": \"mismatch\",\n            \"suggestion\": \"Sửa lại Card 5 để chỉ mô tả cô chưa mở thư, giữ nguyên nội dung của Card 1.\"\n        }\n    ],\n    \"passed\": false,\n    \"rubric_scores\": null\n}",
+    "seconds": 20.514
+  },
+  {
+    "stage": "scene_generation",
+    "input_bytes": 3644,
+    "instructions_bytes": 2677,
+    "timeout_seconds": null,
+    "model": "qwen2.5:7b",
+    "output": {
+      "scenes": [
+        {
+          "title": "Chiều mưa trong căn bếp nhỏ",
+          "action": "Con gái đặt chìa khóa lên bàn, cha ngồi cạnh cô, đặt một lá thư xin lỗi cạnh đó. Cô không mở thư, ngồi xuống uống cùng cha một ngụm trà.",
+          "location": "Căn bếp nhỏ",
+          "time": "Chiều mưa",
+          "characters": "Con gái, Cha",
+          "goal": "Tạo ra không gian im lặng giữa cha và con gái, để con gái quyết định liệu có mở thư hay không.",
+          "purpose": "Nhập cảnh và giới thiệu tình huống ban đầu.",
+          "transition": "Im lặng giữa cha và con gái, lá thư xin lỗi nằm cạnh chìa khóa."
+        }
+      ]
+    },
+    "raw_output": "{\n  \"scenes\": [\n    {\n      \"title\": \"Chiều mưa trong căn bếp nhỏ\",\n      \"action\": \"Con gái đặt chìa khóa lên bàn, cha ngồi cạnh cô, đặt một lá thư xin lỗi cạnh đó. Cô không mở thư, ngồi xuống uống cùng cha một ngụm trà.\",\n      \"location\": \"Căn bếp nhỏ\",\n      \"time\": \"Chiều mưa\",\n      \"characters\": \"Con gái, Cha\",\n      \"goal\": \"Tạo ra không gian im lặng giữa cha và con gái, để con gái quyết định liệu có mở thư hay không.\",\n      \"purpose\": \"Nhập cảnh và giới thiệu tình huống ban đầu.\",\n      \"transition\": \"Im lặng giữa cha và con gái, lá thư xin lỗi nằm cạnh chìa khóa.\"\n    }\n  ]\n}",
+    "seconds": 21.434
+  },
+  {
+    "stage": "screenplay_generation",
+    "input_bytes": 4921,
+    "instructions_bytes": 1951,
+    "timeout_seconds": null,
+    "model": "qwen2.5:7b",
+    "output": {
+      "scene": {
+        "heading": "Chiều mưa trong căn bếp nhỏ",
+        "blocks": [
+          {
+            "kind": "action",
+            "text": "Con gái đặt chìa khóa lên bàn, đôi mắt nhìn về phía lá thư xin lỗi, chưa mở.",
+            "speaker": ""
+          },
+          {
+            "kind": "action",
+            "text": "Cha ngồi cạnh cô, tay run run đặt một tách trà trước mặt con gái.",
+            "speaker": ""
+          },
+          {
+            "kind": "action",
+            "text": "Con gái nhấp một ngụm trà, không nói lời nào, chỉ nhìn về phía cha.",
+            "speaker": ""
+          },
+          {
+            "kind": "action",
+            "text": "Cha lùi về phía sau, ánh mắt đầy ân hận.",
+            "speaker": ""
+          }
+        ]
+      }
+    },
+    "raw_output": "{\n    \"scene\": {\n        \"heading\": \"Chiều mưa trong căn bếp nhỏ\",\n        \"blocks\": [\n            {\n                \"kind\": \"action\",\n                \"text\": \"Con gái đặt chìa khóa lên bàn, đôi mắt nhìn về phía lá thư xin lỗi, chưa mở.\",\n                \"speaker\": \"\"\n            },\n            {\n                \"kind\": \"action\",\n                \"text\": \"Cha ngồi cạnh cô, tay run run đặt một tách trà trước mặt con gái.\",\n                \"speaker\": \"\"\n            },\n            {\n                \"kind\": \"action\",\n                \"text\": \"Con gái nhấp một ngụm trà, không nói lời nào, chỉ nhìn về phía cha.\",\n                \"speaker\": \"\"\n            },\n            {\n                \"kind\": \"action\",\n                \"text\": \"Cha lùi về phía sau, ánh mắt đầy ân hận.\",\n                \"speaker\": \"\"\n            }\n        ]\n    }\n}",
+    "seconds": 21.907
+  },
+  {
+    "stage": "screenplay_review",
+    "input_bytes": 336,
+    "instructions_bytes": 1200,
+    "timeout_seconds": 59.997202790982556,
+    "model": "qwen2.5:7b",
+    "output": {
+      "craft_issue": "none"
+    },
+    "raw_output": "{\"craft_issue\": \"none\"}",
+    "seconds": 1.096
+  },
+  {
+    "stage": "screenplay_review",
+    "input_bytes": 320,
+    "instructions_bytes": 1200,
+    "timeout_seconds": 58.888670832966454,
+    "model": "qwen2.5:7b",
+    "output": {
+      "craft_issue": "none"
+    },
+    "raw_output": "{\"craft_issue\": \"none\"}",
+    "seconds": 0.882
+  },
+  {
+    "stage": "screenplay_review",
+    "input_bytes": 323,
+    "instructions_bytes": 1200,
+    "timeout_seconds": 57.967007374973036,
+    "model": "qwen2.5:7b",
+    "output": {
+      "craft_issue": "none"
+    },
+    "raw_output": "{\"craft_issue\": \"none\"}",
+    "seconds": 1.005
+  },
+  {
+    "stage": "screenplay_review",
+    "input_bytes": 290,
+    "instructions_bytes": 1200,
+    "timeout_seconds": 56.952307332947385,
+    "model": "qwen2.5:7b",
+    "output": {
+      "craft_issue": "none"
+    },
+    "raw_output": "{\"craft_issue\": \"none\"}",
+    "seconds": 0.913
+  }
+]

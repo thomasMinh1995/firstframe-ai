@@ -1,0 +1,24 @@
+{
+  "scene": {
+    "id": "309e1a8e-5563-4415-aed7-cb832abce7a8",
+    "source_scene_id": "c5d358ed-0a16-4b6f-8b27-6dc3600aedbf",
+    "heading": "Khoảnh khắc",
+    "blocks": [
+      {
+        "kind": "action",
+        "text": "Bình đặt đèn pin xuống bàn, thở dài. Lan nhìn đèn pin, sau đó nhìn ra cửa sổ.",
+        "speaker": "",
+        "id": "945fbd06-dc36-4dd3-87dd-cd243d4bf8ea"
+      },
+      {
+        "kind": "action",
+        "text": "Lan kéo nhẹ rèm cửa, ánh đèn đường từ bên ngoài rọi vào phòng, đủ sáng để đọc. Bình và Lan nghiêng tờ giấy để tận dụng ánh sáng.",
+        "speaker": "",
+        "id": "6a1d4fa1-5c12-46e9-a9ed-cdd531228365"
+      }
+    ]
+  },
+  "prompt_version": "screenplay-scene-v10",
+  "model": "qwen2.5:7b",
+  "status": "ready"
+}

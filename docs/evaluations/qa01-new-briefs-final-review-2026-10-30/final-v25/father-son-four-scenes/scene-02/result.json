@@ -1,0 +1,35 @@
+{
+  "status": "ready",
+  "scene": {
+    "id": "e7fd3e1c-7c2f-4c0b-910f-c9f97906dd22",
+    "source_scene_id": "dc7eefff-4fa4-48f5-885e-2d371652f7f5",
+    "heading": "Kéo ghế",
+    "blocks": [
+      {
+        "kind": "action",
+        "text": "Con trai Minh kéo ghế rồi ngồi xuống.",
+        "speaker": "",
+        "id": "e5a9b65b-d13d-41d6-8453-3931671dffff"
+      },
+      {
+        "kind": "dialogue",
+        "text": "Bố không muốn giục con.",
+        "speaker": "Bố",
+        "id": "d4ff273d-088b-4978-8d70-67ce5d150828"
+      },
+      {
+        "kind": "dialogue",
+        "text": "Con vẫn đang nghĩ, bố.",
+        "speaker": "Minh",
+        "id": "a0f9b036-dbc6-4482-9110-d1a1f805d4e1"
+      }
+    ]
+  },
+  "model": "qwen2.5:7b",
+  "parameters": {
+    "composition": "source-preserving-v1",
+    "outline_reconciled": false,
+    "dialogue_mode": "bounded-reactions-v1"
+  },
+  "prompt_version": "screenplay-scene-v25-bounded-reactions"
+}

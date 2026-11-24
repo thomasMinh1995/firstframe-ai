@@ -234,6 +234,7 @@ class RecordingProvider:
                 "instructions": request.instructions,
                 "effective_instructions": effective_instructions,
                 "input_text": request.input_text,
+                "timeout_seconds": request.timeout_seconds,
                 "response_schema": schema,
                 "prompt_sha256": _hash(effective_instructions),
                 "schema_sha256": _hash(_json(schema)),

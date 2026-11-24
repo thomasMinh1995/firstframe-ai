@@ -1,0 +1,18 @@
+{
+  "scene": {
+    "id": "c2792bfe-33e6-4fcd-9b4c-f240e5e8d4a9",
+    "source_scene_id": "de176dc1-8f42-4889-8bc9-4d4188815d75",
+    "heading": "Trước cánh cửa",
+    "blocks": [
+      {
+        "kind": "action",
+        "text": "Linh đứng trước cánh cửa, tay nắm lấy lá thư chưa mở. Ánh sáng mờ nhạt từ bên trong căn bếp len lỏi qua khe cửa, tạo nên một bóng tối mờ ảo xung quanh cô. Bố vẫn đang ở bên trong, im lặng nhìn cô từ cửa sổ.",
+        "speaker": "",
+        "id": "a636c269-076d-46b4-b921-00be2280d19c"
+      }
+    ]
+  },
+  "prompt_version": "screenplay-scene-v10",
+  "model": "qwen2.5:7b",
+  "status": "ready"
+}

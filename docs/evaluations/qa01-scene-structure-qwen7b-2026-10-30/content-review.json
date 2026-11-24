@@ -1,0 +1,35 @@
+{
+  "release_approved": false,
+  "schema_replay": {
+    "passed": 5,
+    "total": 5
+  },
+  "known_content_failures": [
+    {
+      "case": "saved-scenes/draft-workflow-qwen7b-2026-10-30",
+      "issues": [
+        "Chinese characters inside Vietnamese action text",
+        "Father addresses daughter as Tôi/bạn"
+      ]
+    },
+    {
+      "case": "saved-scenes/draft-workflow-qwen7b-saved-brief-2026-10-30",
+      "issues": [
+        "Daughter sits down twice; father remains standing instead of sharing the sip as brief specifies"
+      ]
+    },
+    {
+      "case": "saved-scenes/gentle-comedy",
+      "issues": [
+        "Repeats the action of offering the shirt for help"
+      ]
+    },
+    {
+      "case": "saved-scenes/quiet-open-ending",
+      "issues": [
+        "Adds father leaving; requires author review against the chosen progression"
+      ]
+    }
+  ],
+  "scope": "Schema passes are not content acceptance. No language rewriting, content deletion or automatic retry was used."
+}

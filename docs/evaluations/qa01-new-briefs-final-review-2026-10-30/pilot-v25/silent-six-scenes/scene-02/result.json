@@ -1,0 +1,22 @@
+{
+  "scene": {
+    "id": "ed1af303-bdcc-4c2f-913b-47f5a3766c73",
+    "source_scene_id": "abaeb60d-666a-47f9-ac34-f096dadd9ea7",
+    "heading": "CẢNH 2",
+    "blocks": [
+      {
+        "kind": "action",
+        "text": "Bình đặt bình nước cạnh chậu cây.",
+        "speaker": "",
+        "id": "138c4ae1-3be0-4c6f-808f-1cf7a86f676a"
+      }
+    ]
+  },
+  "status": "ready",
+  "model": "qwen2.5:7b",
+  "parameters": {
+    "composition": "source-preserving-v1",
+    "outline_reconciled": true
+  },
+  "prompt_version": "screenplay-scene-v25-bounded-reactions"
+}

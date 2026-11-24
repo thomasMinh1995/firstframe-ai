@@ -1,0 +1,314 @@
+{
+  "base_commit": "aa64f209fe5dd5db7524150d26b293a06e136307",
+  "uncommitted_at_evaluation": true,
+  "prompt_version": "screenplay-scene-v25-bounded-reactions",
+  "sha256": {
+    "backend/app/application/screenplay_composition.py": "4ffd095a2be0fb780bfd4fbcfb4ae6167ecaf88728f8c6accd48eee1a5e7ad0d",
+    "backend/app/application/screenplay_writing.py": "c45f5998aa00bb3e7783f596fbce92d1aaa77c94c5e3695ec8f779d8471d2f33",
+    "domains/short-film/prompts/screenplay_composition_prompt.md": "639f3fc1bf63b57b00ca4300fbb1903632e364763eea9dd28b0feb85feece601",
+    "backend/scripts/check_multiscene_writing.py": "6c8254edb44fb772d0b0f0c19822dca940603df05c9976d70d8f3635b3c0977c",
+    "backend/tests/test_multiscene_writing.py": "55a6b1da04e06d00624ee4ac269ec0fde1e1249b4dbbf2533423af482f69e720",
+    "backend/tests/test_screenplay_composition.py": "70b1bd798cf7e5c7b26dd0b7baded663e05f9fcdbe8d6148a7d02aa3ef039513"
+  },
+  "frames": [
+    {
+      "case": "pilot-v25/english-umbrella-three-scenes/scene-01",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "pilot-v25/english-umbrella-three-scenes/scene-02",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "pilot-v25/english-umbrella-three-scenes/scene-03",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "pilot-v25/father-son-four-scenes/scene-01",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "pilot-v25/father-son-four-scenes/scene-02",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "pilot-v25/father-son-four-scenes/scene-03",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "pilot-v25/father-son-four-scenes/scene-04",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "pilot-v25/mother-daughter-ticket/scene-01",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "pilot-v25/mother-daughter-ticket/scene-02",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "pilot-v25/mother-daughter-ticket/scene-03",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "pilot-v25/siblings-radio-custom-address/scene-01",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "pilot-v25/siblings-radio-custom-address/scene-02",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "pilot-v25/siblings-radio-custom-address/scene-03",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "pilot-v25/silent-six-scenes/scene-01",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "pilot-v25/silent-six-scenes/scene-02",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "pilot-v25/silent-six-scenes/scene-03",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "pilot-v25/silent-six-scenes/scene-04",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "pilot-v25/silent-six-scenes/scene-05",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "pilot-v25/silent-six-scenes/scene-06",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "final-v25/english-umbrella-three-scenes/scene-01",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "final-v25/english-umbrella-three-scenes/scene-02",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "final-v25/english-umbrella-three-scenes/scene-03",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "final-v25/father-son-four-scenes/scene-01",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "final-v25/father-son-four-scenes/scene-02",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "final-v25/father-son-four-scenes/scene-03",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "final-v25/father-son-four-scenes/scene-04",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "final-v25/mother-daughter-ticket/scene-01",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "final-v25/mother-daughter-ticket/scene-02",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "final-v25/mother-daughter-ticket/scene-03",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "final-v25/siblings-radio-custom-address/scene-01",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "final-v25/siblings-radio-custom-address/scene-02",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "final-v25/siblings-radio-custom-address/scene-03",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "final-v25/silent-six-scenes/scene-01",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "final-v25/silent-six-scenes/scene-02",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "final-v25/silent-six-scenes/scene-03",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "final-v25/silent-six-scenes/scene-04",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "final-v25/silent-six-scenes/scene-05",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "final-v25/silent-six-scenes/scene-06",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "previous-eight-final-v25/draft-workflow-qwen7b-2026-10-30",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "previous-eight-final-v25/draft-workflow-qwen7b-saved-brief-2026-10-30",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "previous-eight-final-v25/english",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "previous-eight-final-v25/gentle-comedy",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "previous-eight-final-v25/later-scene",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "previous-eight-final-v25/limited-resources",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "previous-eight-final-v25/parent-dialogue",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "previous-eight-final-v25/quiet-open-ending",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "full-workflow-v25/scene-01",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "full-workflow-v25/scene-02",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    },
+    {
+      "case": "full-workflow-v25/scene-03",
+      "request_schema_input_identical": true,
+      "rendered_content_identical": true,
+      "source_unchanged": true
+    }
+  ],
+  "note": "Local replay of captured responses, not additional model calls. UUIDs of newly rendered blocks are excluded from comparison.",
+  "backend_tests": {
+    "passed": 831,
+    "skipped": 1
+  }
+}

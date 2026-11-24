@@ -1,0 +1,9 @@
+{
+  "scene": 2,
+  "technical_pass": false,
+  "error": "Invalid single-scene screenplay",
+  "raw_output": "{\n  \"heading\": \"Tua vít\",\n  \"translations\": [],\n  \"dialogue\": {\n    \"line_1\": {\n      \"after_action\": 1,\n      \"speaker\": \"Hạnh\",\n      \"text\": \"Em trai Nam lấy tua vít rồi ngồi xuống cạnh bàn.\"\n    },\n    \"line_2\": {\n      \"after_action\": 1,\n      \"speaker\": \"Nam\",\n      \"text\": \"Chị, em sẽ xem có thể sửa được không.\"\n    }\n  }\n}",
+  "cause": "A spoken line repeats source action instead of speech.",
+  "model_calls": 1,
+  "seconds": 11.294
+}

@@ -1,0 +1,2 @@
+# npm ci installs from package-lock.json; pnpm only runs the check scripts.
+verifyDepsBeforeRun: false

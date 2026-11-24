@@ -4,15 +4,21 @@
 
 FirstFrame helps people in Vietnam write their first short film from their own experiences, understand their creative choices, and revise a screenplay to share with human collaborators. The author keeps control of the story.
 
-The current MVP supports saved projects, clarification questions, editable story plans, version history, and feedback on the revised draft through a **Creative Reasoning Harness**. It does not yet provide a scene outline, scene-level screenplay editor, or screenplay export.
+The current MVP supports saved projects, clarification questions, editable story plans, version history, and feedback on the revised draft through a **Creative Reasoning Harness**. Scene outlines and a scene-level screenplay editor are available as separate steps; checkpointed automatic drafting is available for short scripts of up to 6 scenes within the provider context budget. Selected screenplay snapshots can be exported to PDF without AI.
 
 Current project workflow:
 
 ```text
-Save Idea -> Analyze -> Answer/Defer Questions -> Generate Story Plan -> Edit -> Review -> Save/Reopen
+Material (autosave) -> Clarify -> Request/read/edit Story plan -> Choose source and build Scene Outline -> Write and revise scenes -> Read/select screenplay -> PDF
 ```
 
-Review gives feedback on the saved draft; it does not rewrite it. Changing the idea or constraints uses the existing clarification flow again.
+Clarification has no fixed questionnaire. A clear brief can return no questions; unanswered questions remain open and do not become author decisions. AI suggestions are shown separately. The initial screen keeps project name and language under optional settings. “Cùng làm rõ chất liệu” requests clarification only; the author requests a Story plan and starts each later stage separately. “Tùy chọn: tạo nháp tự động” opens the separate automatic workflow, where “Tạo bản nháp mới” starts a durable backend run. Reload reads progress without calling AI again; received model outputs and each completed scene are checkpointed. Candidate edits autosave separately, and adoption checks the original brief and target before atomically keeping the prior draft. Unknown model outcomes are never retried automatically.
+
+For separate Story plan generation, the UI opts into `POST /api/projects/{id}/plan/stream?checkpoints=true`. A saved plan can be read while feedback continues; preview does not accept a proposal, autosave edits or select a PDF. Completion, feedback failure and connection loss update the same reader. Default clients still receive only progress/result/error. Draft runs retain their saved-candidate polling. These are saved-content checkpoints, not token-by-token generation; see the [Streaming Interfaces plan](docs/plans/streaming-interfaces.md) and [fixture validation](docs/testing/streaming-interfaces.md).
+
+Review gives feedback on the saved draft. Verified notes can request a separate scene/block revision without another prompt. The main editor stays beside the desktop review panel; narrow screens use a sheet. Saved comparisons and the full reader open on demand. Before/after previews show the proposed scope; accepting saves a checkpoint and undo restores the target only if it has not changed. Block revisions preserve all other blocks and IDs. Explicit scene numbers are resolved before generation; structural requests start an independent draft candidate with affected scenes listed. Changing the idea or constraints uses the existing clarification flow again.
+
+**Đọc & xuất PDF** opens the saved screenplay reader. Choose the current or a historical version, then **Chọn bản đã đọc & tải PDF**. Pending saves are flushed and the read snapshot is checked before selection; if it changed, read it again. Previously selected versions can be downloaded again without changing the selection or current draft. The export API `GET /api/projects/{id}/screenplay-selections/{selection_id}/pdf` reads only that immutable selection, including its original story-plan title. It does not call AI or write history. PDF uses bundled Liberation Mono fonts for Vietnamese, A4 pages and page numbers; long dialogue repeats its speaker on continuation pages. Characters outside the font coverage report an error instead of silently becoming missing-glyph squares. A legacy snapshot without a title exports with a neutral filename.
 
 ## Why It Exists
 
@@ -44,18 +50,18 @@ Moment -> Story Plan -> Scene Outline -> Write and Revise Screenplay -> Export S
 
 A story plan clarifies the intended story before detailed scene writing. It is a useful milestone to keep or share, but a good plan does not guarantee a good screenplay. Its detail should fit the size and form of the story.
 
-The product goal is a complete short-film screenplay: all scenes are written, action and dialogue communicate the intended story, at least one feedback-and-revision round has taken place, and the selected draft can be exported for reading and further development. This is not a capability already delivered by the MVP.
+The product goal is a complete short-film screenplay: all scenes are written, action and dialogue communicate the intended story, at least one feedback-and-revision round has taken place, and the selected draft can be exported for reading and further development. The local implementation supports this journey; pilot and full release acceptance remain pending.
 
 FirstFrame's handoff ends at screenplay export. Casting, staging, shooting, editing, and post-production belong to a separate process with real people and actors. AI video, synthetic actors, generated footage, and production management are outside the product direction. Automatic scene illustrations are no longer an active roadmap milestone.
 
 Feature-film and television **screenwriting** may be explored after the short-film journey is validated and users demonstrate a need. This is a conditional long-term direction, not an MVP commitment; the handoff would still end at screenplay export.
 
-See the [Vietnam first-screenplay and MVP demo plan](docs/plans/vietnam-first-screenplay-mvp.md) for priorities, acceptance criteria, and pilot design. This update is documentation only; proposed demo improvements are not implemented by it.
+See the [Vietnam first-screenplay and MVP demo plan](docs/plans/vietnam-first-screenplay-mvp.md) for priorities, acceptance criteria, and pilot design. That plan retains the pilot and acceptance requirements; technical implementation does not establish a passing pilot.
 
 ## Current MVP
 
-- Optional six-step onboarding tour with practice breaks, replay, and browser-local progress; tour navigation preserves unsaved text and makes no AI or project-write requests
-- Local SQLite project storage, project selection, and explicit save controls
+- Six-step author-led onboarding (project, material, story development/scene outline, writing/revision, reading/export, saving), with practice breaks, skip/replay, preserved legacy progress and no AI/project writes from tour navigation
+- Local SQLite project storage, debounced autosave with IME support, project selection, and optional manual save controls
 - Up to three clarification questions before story-plan generation, with an explicit option to defer a decision
 - Editable story plans and feedback tied to the exact reviewed content
 - Saved author-context card from the backend's effective idea, constraints and clarification answers, with unsaved-edit warnings and navigation that does not save or call AI
@@ -78,13 +84,19 @@ See the [Vietnam first-screenplay and MVP demo plan](docs/plans/vietnam-first-sc
   including the provider and actual model used by every step
 - Local demo at `/demo`: select and replay exported scenarios without calling AI
 
-Use **Save changes / Lưu thay đổi** before closing a project. Switching projects, creating another project, and requesting AI work save pending edits first. Unsaved changes trigger a browser warning when leaving. Projects are stored in `backend/.data/projects.sqlite3`, which is ignored by Git; keep this file when restarting or moving the local installation. JSON downloads provide a readable backup; importing them is not implemented yet.
+Wait for **Đã lưu** before closing a project. Edits autosave after about one second without typing; **Tùy chọn bản lưu** contains manual save and JSON backup controls. Switching projects, creating another project, and requesting AI work save pending edits first. Unsaved changes trigger a browser warning when leaving. Projects are stored in `backend/.data/projects.sqlite3`, which is ignored by Git; keep this file when restarting or moving the local installation. JSON downloads provide a readable backup; importing them is not implemented yet.
+
+Autosave uses one in-flight write, an editing-session ID and an exact save ID. It preserves newer local input when an older acknowledgement arrives. A lost acknowledgement is checked by reading that exact saved result; unresolved errors stop automatic writes until explicit recovery. Conflicts retain the buffer and offer a JSON backup before reopening. Scene and screenplay versions still advance, while autosaves in the same editing session share a history checkpoint; accepting proposals, restoring, reviewing and selecting sources close that session. Legacy clients retain explicit-save behavior.
+
+Source attribution is stored by the server for story-plan fields, scene fields and screenplay blocks. AI proposals remain identified after adoption; editing a field records a human edit, and selecting one staging choice confirms only that choice. Missing legacy attribution stays unknown. New screenplay reviews use these distinctions when identifying author choices; older feedback remains readable without promoting unknown scene material to verified author intent.
 
 The writing workspace at `/` uses the card UI for every project. Story prose is split into short cards at existing sentence/paragraph boundaries, with a soft 200-character limit at word boundaries. A curved S path runs across three columns on desktop, two at medium widths, and one on mobile. Card edits replace only the corresponding text in the original section, preserving other cards and separators; saving/review still uses the original draft format. There is no view switch; old `workspace=story` or `workspace=classic` links open the same UI.
 
-Clarification is a guided conversation: one answer editor at a time, 5–6 initial questions, and follow-up batches of up to three new questions, up to 20 in the current question set. Prior answers remain visible and editable; **Tiếp tục** and **Để quyết định sau** only update the buffer. **Hỏi thêm từ câu trả lời của tôi** saves and requests follow-up questions. **Xem lại các lựa chọn** opens a recap; only **Đồng ý, tạo bản phát triển** starts planning. Editing a choice requires reviewing and confirming again. Planning displays three groups with eight required substeps, using actual backend progress events and preserving optional/repeated audit steps. The new `/clarify` and `/clarify/stream` endpoints support this conversation; legacy `/analyze` retains its existing behavior. Project fields and revision requests retain their existing shape, with answer validation extended from 3 to 20.
+The main workspace has three stages: **Ý tưởng → Bản nháp & review → Hoàn tất**. Manual story-plan, scene-outline and run tools remain under **Mở chi tiết**. Editors stay mounted across navigation, so changing stages keeps pending text. Saved comparisons open on demand; the PDF reader has its own final stage. Completed operation details collapse while failures stay open. Writing surfaces remain opaque; navigation uses restrained glass with solid/reduced-transparency fallbacks and reduced-motion rules.
 
-**Xong** closes a card editor; **Hủy** or Escape restores only that card's text when opened. A successful save ends card editing sessions. Save or download a JSON backup before accepting a reload: unsaved text lives in memory. The user approved the Idea → Clarification → Story plan UI on 24 October 2026. Outline and screenplay steps remain disabled, with their UI to be agreed when implemented. See the [approved scope](docs/plans/approved-story-workspace.md) and [UI checks](docs/testing/approved-story-workspace.md).
+Clarification only asks for missing information; unanswered choices stay open. Automatic runs create a separate candidate, autosave its answers/text, and wait for explicit adoption. The six-step tour follows this flow and the selected-PDF export. Legacy tour v2 records migrate by artifact availability; dismissed/completed tours stay dismissed/completed. Help can be resumed or replayed without generating AI work.
+
+**Xong** closes a card editor; **Hủy** or Escape restores only that card's text when opened. Autosave keeps the card editor and focus open. Cancel restores that card to the text present when it was opened; that restoration also autosaves. Save or download a JSON backup before accepting a reload: unsaved text lives in memory. The user approved the Idea → Clarification → Story plan UI on 24 October 2026. The initial approval covered the first three stages; current scene-outline and screenplay editors have their own saved sources and histories. See the [approved scope](docs/plans/approved-story-workspace.md) and [UI checks](docs/testing/approved-story-workspace.md).
 
 Changing the idea or constraints requires a new clarification round. Earlier answers remain readable in **Các lựa chọn trước đây** and are not silently applied to a new brief. Feedback freshness checks include the questions as well as the answers and draft. Older saved projects remain readable; feedback without this complete context is conservatively marked outdated until reviewed again.
 
@@ -121,7 +133,7 @@ other unsupported inputs should use an explicit supported output choice. Mixed
 author terminology such as `lab coach`, `build phase` and names remains allowed.
 
 The output choice is saved per project and recorded with versions. Changing it
-keeps unsaved text in the editor and does not save, call AI or translate existing
+keeps text in the editor and autosaves the choice without calling AI or translating existing
 content automatically. The next AI action saves pending edits and uses the choice;
 feedback for a different explicit choice is marked outdated. Existing projects
 default to automatic mode without rewriting their data or invalidating compatible
@@ -323,11 +335,29 @@ show the analysis saved in its input even if the earlier analysis file is absent
 the demo does not invent missing model provenance. Arbitrary new ideas or edits
 need live generation and are not part of this recorded playback.
 
+## Working through a screenplay
+
+The workspace follows **Chất liệu → Làm rõ → Story plan → Dàn cảnh → Viết & sửa → Đọc & xuất**.
+Start with an everyday observation and what you want to preserve. **Cùng làm rõ chất liệu**
+asks AI to clarify that material; it stops for your answers or open choices. Request a
+Story plan when ready, read/edit it, then choose the saved source for the scene outline.
+You can build scenes yourself or request suggestions, and write/revise each scene with
+optional AI trials and critique. Suggestions stay separate until you choose to use them.
+
+Navigation opens the existing tools without generating content. **Bước tiếp theo**
+also opens tools, except the explicitly labelled **Cùng làm rõ chất liệu** action,
+which requests AI clarification.
+Review the saved screenplay and explicitly choose the version to export as PDF.
+**Tùy chọn: tạo nháp tự động** keeps the separate automatic workflow available;
+a running or waiting attempt is reopened rather than started again. History, unsaved
+buffers, saved sources and earlier onboarding progress remain available.
+See [the workflow plan](docs/plans/author-led-screenplay-workflow.md).
+
 ## Current Limitations
 
 - One active domain: Short Film Story Development.
-- Output is a story plan, not a scene outline or complete screenplay.
-- No scene-level screenplay editing, account authentication, deployment, or streaming.
+- Story plans, scene outlines, scene-level screenplay editing and PDF export have technical delivery; user acceptance and creative quality still need separate evidence.
+- No account authentication or production deployment. Progress/content checkpoints are supported; token-by-token previews are not implemented.
 - Storage belongs to the local backend; there is no account-based cloud sync.
 - Domain registration is currently static in the application service.
 - Implemented providers are OpenAI and local Ollama; Gemini and Claude are not integrated.
@@ -389,3 +419,45 @@ this updated app on the receiving machine; version 1 packages remain supported.
 The subsequent [multi-scenario Qwen critic evaluation](docs/evaluations/qwen-critic-2026-10-21.md)
 records 24 primary outputs and rejected pilots. The candidate is benchmark-only;
 it was not enabled because author-intent and issue/suggestion errors remained.
+
+### Automatic draft runs (local)
+
+`POST /api/projects/{id}/draft-runs` starts or recovers an idempotent `request_id` and project `revision`. GET list/status/candidate reads never invoke AI. Candidate PUT uses its own revision and optional save ID. Continue, cancel and adopt are explicit POST actions; adoption requires both project and candidate revisions.
+
+Runs use the project SQLite database and a local two-thread executor. Restart marks previous-process running jobs interrupted. A received model result can be replayed from storage; a sent request without a stored result blocks continuation. Cancel stops future calls and keeps late results. There is no multi-worker/host recovery guarantee. See `docs/testing/phase3-draft-runs-2026-10-29.md` for verification and limits.
+
+Phase 6 local checks and the remaining release gates are recorded in [workflow acceptance](docs/testing/phase6-workflow-acceptance-2026-10-29.md). The initial 29 October local-model smoke produced an exportable screenplay but hit the then-existing context guard before screenplay review; this is retained as a limitation, not counted as a successful full AI-review round. Real-device/reader acceptance remains pending.
+
+### Draft workflow cards and release checks
+
+The draft-run panel offers **Xem thử tiến độ dạng card**. This is still opt-in. Cards use durable backend checkpoints: pending steps wait, the active step shows thinking/skeleton, and saved results become readable without replaying the run. Desktop follows a three-column S path; narrow layouts use one staggered column.
+
+Answer or leave questions open in the intent card. Read a result, choose **Chỉnh bản nháp** when needed, and use **Quay lại card** to save and return to the opener. Continue is enabled only when the backend confirms it is safe; an unknown model outcome must not be resent. Adoption flushes candidate edits and checks the revision. Old reviews keep their original source. The default workspace and existing recovery remain available.
+
+Reproducible deterministic checks (no model or user database required):
+
+```sh
+cd backend
+python -m pip install -r requirements-dev.txt
+python -m pytest -q
+```
+
+```sh
+cd frontend
+npm ci
+npm run typecheck
+npm test
+npm run build
+```
+
+GitHub Actions runs these backend/frontend checks for PRs to `dev` and pushes to `dev`. `npm test` compiles into a temporary directory, runs the non-browser suites, then removes the temporary output. Browser/device checks and live-model evaluation are separate evidence, not part of the green CI claim.
+
+A manual synthetic local-model check can be run from the repository root (the output directory must be new; Ollama and `qwen2.5:7b` must already be installed):
+
+```sh
+backend/.venv/bin/python backend/scripts/check_draft_release.py --output /tmp/firstframe-live-result
+```
+
+It creates its own SQLite/dataset directory, records calls and checkpoints, leaves clarification answers open, and attempts adoption/selection/PDF with AI disabled for export. It never retries an uncertain call. See the [DR-09/DR-10 report](docs/testing/draft-workflow-release-2026-10-30.md) for the two observed Qwen runs: one stopped on invalid scene structure, the other reached PDF but still had content issues. This is not a release approval. Real-device/assistive-technology and independent creator acceptance remain open under QA-01.
+
+For local `qwen2.5:7b`, the conservative first-draft profile keeps scene actions close to their source. When a brief explicitly requests two ordered turns in each scene, the model selects brief reactions that do not introduce story events; the application renders them with the author’s forms of address. These suggestions remain editable, and a scene-specific rewrite uses the full writer. This improves continuity at the cost of freer dialogue; see the [PR #86 final evaluation](docs/evaluations/qa01-new-briefs-final-review-2026-10-30/README.md) for the five-brief results and remaining QA-01 limits.

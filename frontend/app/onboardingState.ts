@@ -1,8 +1,8 @@
 export const tourSteps = ["new-project", "idea", "choices", "draft", "outline", "script", "save"] as const;
 export type TourStep = typeof tourSteps[number];
 export type TourStatus = "active" | "waiting" | "paused" | "dismissed" | "completed";
-export type TourRecord = { version: 2; status: TourStatus; stepId: TourStep; projectId: string | null };
-export type TourContext = { projectId: string | null; hasAnalysis: boolean; hasDraft: boolean; briefChanged: boolean };
+export type TourRecord = { version: 4; status: TourStatus; stepId: TourStep; projectId: string | null };
+export type TourContext = { projectId: string | null; hasAnalysis: boolean; hasDraft: boolean; hasScreenplay?: boolean; hasOutline?: boolean; briefChanged: boolean };
 export type TourOperation = "create" | "analyze" | "plan";
 export type TourRequest = { session: number; serial: number; kind: TourOperation; projectId: string | null };
 export type TourState = {
@@ -20,10 +20,12 @@ export function parseTour(raw: string | null | undefined): TourRecord | null {
     const value: unknown = raw ? JSON.parse(raw) : null;
     if (!value || typeof value !== "object") return null;
     const r = value as Record<string, unknown>;
-    if (r.version !== 2 || typeof r.status !== "string" || !["active", "waiting", "paused", "dismissed", "completed"].includes(r.status)
+    if (r.version === 3 && r.stepId === "draft-run") r.stepId = "choices";
+    if (r.version === 3 && r.stepId === "export") r.stepId = "save";
+    if ((r.version !== 2 && r.version !== 3 && r.version !== 4) || typeof r.status !== "string" || !["active", "waiting", "paused", "dismissed", "completed"].includes(r.status)
       || !tourSteps.includes(r.stepId as TourStep)
       || !(r.projectId === null || (typeof r.projectId === "string" && r.projectId.length > 0))) return null;
-    return { version: 2, status: r.status as TourStatus, stepId: r.stepId as TourStep, projectId: r.projectId as string | null };
+    return { version: 4, status: r.status as TourStatus, stepId: r.stepId as TourStep, projectId: r.projectId as string | null };
   } catch { return null; }
 }
 
@@ -99,7 +101,7 @@ export function reduceTour(s: TourState, a: Action): TourState {
       const step = a.resume ? continuation(s, a.context) : "new-project";
       if (!step) return s;
       return { ...s, offerAllowed: false, session: s.session + 1, request: null, waitingReady: false, hint: null,
-        record: { version: 2, status: "active", stepId: step, projectId: a.context.projectId } };
+        record: { version: 4, status: "active", stepId: step, projectId: a.context.projectId } };
     }
     case "navigate":
       if (s.record?.status !== "active") return s;
@@ -111,7 +113,7 @@ export function reduceTour(s: TourState, a: Action): TourState {
     case "pause": return paused(s, a.hint ?? null);
     case "dismiss":
       return { ...s, offerAllowed: false, session: s.session + 1, request: null, waitingReady: false, hint: null,
-        record: { version: 2, status: "dismissed", stepId: s.record?.stepId ?? "new-project", projectId: a.context.projectId } };
+        record: { version: 4, status: "dismissed", stepId: s.record?.stepId ?? "new-project", projectId: a.context.projectId } };
     case "complete":
       if (s.record?.status !== "active" || s.record.stepId !== "save") return s;
       if (!validAnalysis(a.context) || !a.context.hasDraft) return reduceTour(s, { type: "navigate", step: "save", context: a.context });

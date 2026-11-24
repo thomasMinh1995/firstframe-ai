@@ -1,0 +1,19 @@
+{
+  "output": {
+    "heading": "Kéo ghế",
+    "translations": [],
+    "dialogue": {
+      "line_1": {
+        "after_action": 1,
+        "speaker": "Bố",
+        "text": "Con trai, ngồi xuống đi."
+      },
+      "line_2": {
+        "after_action": 1,
+        "speaker": "Minh",
+        "text": "Bố, con sẽ ngồi đây."
+      }
+    }
+  },
+  "raw_output": "{\n  \"heading\": \"Kéo ghế\",\n  \"translations\": [],\n  \"dialogue\": {\n    \"line_1\": {\n      \"after_action\": 1,\n      \"speaker\": \"Bố\",\n      \"text\": \"Con trai, ngồi xuống đi.\"\n    },\n    \"line_2\": {\n      \"after_action\": 1,\n      \"speaker\": \"Minh\",\n      \"text\": \"Bố, con sẽ ngồi đây.\"\n    }\n  }\n}"
+}

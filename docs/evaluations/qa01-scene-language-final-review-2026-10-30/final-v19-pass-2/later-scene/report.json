@@ -1,0 +1,14 @@
+{
+  "case": "later-scene",
+  "source": "docs/evaluations/draft-workflow-qwen7b-2026-10-30/candidate.json.gz",
+  "technical_pass": true,
+  "blocks": 1,
+  "target_preserved": true,
+  "content_checks": {
+    "no_unrequested_dialogue": true,
+    "source_actions_in_exact_order_once": true
+  },
+  "content_pass": true,
+  "seconds": 2.398,
+  "model_calls": 1
+}

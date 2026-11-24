@@ -1,0 +1,346 @@
+{
+  "id": "e78a9c78-7cdf-421a-a50b-09d6e26babdf",
+  "created_at": "2026-10-30T04:38:35.851938+00:00",
+  "source_revision": 3,
+  "source_version_id": "current",
+  "screenplay": {
+    "id": "d7059679-5e8d-4638-b2ea-33345b49feb8",
+    "version": 1,
+    "scenes": [
+      {
+        "id": "79e4058c-5d68-479a-99dd-4589bdc51eb9",
+        "source_scene_id": "7025b940-ced9-4926-9757-af28f23aee70",
+        "heading": "Trong căn bếp chiều mưa",
+        "blocks": [
+          {
+            "kind": "action",
+            "text": "Bố nhẹ nhàng đưa cho Linh một lá thư, đôi mắt đều im lặng, không nói lời chia tay. Linh nhận thư, giữ trong tay, không mở.",
+            "speaker": "",
+            "id": "6e7c9026-4fb0-4cde-b644-546c9230e5f0"
+          },
+          {
+            "kind": "action",
+            "text": "Linh đứng đó, tay nắm chặt lá thư, đôi mắt nhìn về phía cửa, như đang cân nhắc.",
+            "speaker": "",
+            "id": "274f9efc-f62e-4569-ac96-c3ca6ae2341f"
+          },
+          {
+            "kind": "action",
+            "text": "Bố nhìn Linh, đôi mắt ấm áp, như muốn truyền đạt điều gì.",
+            "speaker": "",
+            "id": "ce8f4f9e-7aa7-4355-b221-7550db5f4822"
+          },
+          {
+            "kind": "action",
+            "text": "Linh cuối cùng cũng bước về phía cửa, tay vẫn cầm lá thư chưa mở.",
+            "speaker": "",
+            "id": "eda6564a-15d1-4fa8-92c6-7c09d5678094"
+          }
+        ]
+      }
+    ],
+    "source_revision": 2,
+    "source_outline": {
+      "id": "0643ac27-dcbf-4b1f-a800-e4ce5b8b20ca",
+      "version": 1,
+      "scenes": [
+        {
+          "id": "7025b940-ced9-4926-9757-af28f23aee70",
+          "title": "Trong căn bếp chiều mưa",
+          "action": "Bố và Linh đứng trong căn bếp, trời mưa nhẹ. Bố đưa cho Linh một lá thư, đôi mắt đều im lặng, không nói lời chia tay. Linh nhận thư, giữ trong tay, không mở.",
+          "location": "Căn bếp",
+          "time": "Chiều mưa",
+          "characters": "Bố, Linh",
+          "goal": "Bố trao thư cho Linh, Linh nhận thư nhưng chưa mở.",
+          "purpose": "Đặt ra tình huống và tạo ra áp lực cho Linh.",
+          "viewer_intent": "",
+          "keep_or_avoid": "",
+          "staging_choices": {}
+        }
+      ],
+      "source": {
+        "id": "05481aee-a0f0-4c63-82d0-c0ccff09886a",
+        "project_revision": 2,
+        "version_id": "current",
+        "draft": {
+          "title": "Lời thư cuối",
+          "logline": "Trong căn bếp chiều mưa, bố trao cho Linh một lá thư trước khi cô rời quê, để cô tự quyết định có mở thư hay không.",
+          "sections": [
+            {
+              "title": "Core idea",
+              "purpose": "State the short film's central promise.",
+              "content": "Trong căn bếp chiều mưa, bố trao cho Linh một lá thư trước khi cô rời quê, để cô tự quyết định có mở thư hay không."
+            },
+            {
+              "title": "Main character",
+              "purpose": "Define the protagonist and key character pressure.",
+              "content": "Linh Bố"
+            },
+            {
+              "title": "Main conflict",
+              "purpose": "Describe the obstacle and stakes.",
+              "content": "Linh phải quyết định có mở thư của bố hay không trước khi rời quê. Linh giữ quyền quyết định và không bị ép buộc."
+            },
+            {
+              "title": "Beginning",
+              "purpose": "Set up the story world and first dramatic turn.",
+              "content": "Trong căn bếp chiều mưa, Linh chuẩn bị rời quê. Bố trao cho Linh một lá thư."
+            },
+            {
+              "title": "Middle",
+              "purpose": "Escalate pressure and reveal the emotional turn.",
+              "content": "Linh nhận thư nhưng chưa mở."
+            },
+            {
+              "title": "Ending",
+              "purpose": "Resolve the short film through a visible choice or image.",
+              "content": "Linh vẫn giữ quyền quyết định có mở thư hay không. Linh đứng trước cửa, tay cầm lá thư chưa mở."
+            },
+            {
+              "title": "Theme",
+              "purpose": "Name the human idea underneath the plot.",
+              "content": "Quyền quyết định cuối cùng thuộc về bản thân mỗi người."
+            },
+            {
+              "title": "Visual Style",
+              "purpose": "Capture the visual approach and recurring motifs.",
+              "content": "Lá thư, Chiều mưa"
+            },
+            {
+              "title": "Tone",
+              "purpose": "Describe the intended emotional register.",
+              "content": "Nghiêm túc, nhẹ nhàng"
+            },
+            {
+              "title": "Production Notes",
+              "purpose": "Keep the idea grounded for short-film production.",
+              "content": "Cảnh cuối ở ngưỡng cửa biểu cảm như thế nào? Căn bếp, Ngưỡng cửa Hai nhân vật"
+            }
+          ]
+        },
+        "context": {
+          "idea": "Phim ngắn hai phút. Trong căn bếp chiều mưa, bố đưa Linh một lá thư trước khi cô rời quê. Hai người ngại nói lời chia tay. Linh nhận thư nhưng chưa mở. Kết ở cánh cửa, cô vẫn giữ quyền quyết định có đọc thư hay không.",
+          "constraints": [
+            "Tối đa hai cảnh, một căn bếp và ngưỡng cửa.",
+            "Chỉ hai nhân vật bố và Linh.",
+            "Giữ lá thư chưa mở; không hồi tưởng, không thuyết minh, không tự xác nhận hòa giải."
+          ],
+          "clarifications": [],
+          "pending_questions": [
+            {
+              "question": "Cảnh cuối ở ngưỡng cửa biểu cảm như thế nào?",
+              "input_index": 0
+            }
+          ]
+        },
+        "response_language": "vi",
+        "draft_provenance": {
+          "title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "logline": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:0:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:0:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:0:content": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:1:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:1:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:1:content": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:2:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:2:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:2:content": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:3:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:3:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:3:content": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:4:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:4:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:4:content": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:5:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:5:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:5:content": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:6:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:6:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:6:content": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:7:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:7:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:7:content": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:8:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:8:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:8:content": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:9:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:9:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:9:content": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          }
+        }
+      },
+      "provenance": {
+        "m2:7025b940-ced9-4926-9757-af28f23aee70:title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:7025b940-ced9-4926-9757-af28f23aee70:action": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:7025b940-ced9-4926-9757-af28f23aee70:location": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:7025b940-ced9-4926-9757-af28f23aee70:time": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:7025b940-ced9-4926-9757-af28f23aee70:characters": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:7025b940-ced9-4926-9757-af28f23aee70:goal": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:7025b940-ced9-4926-9757-af28f23aee70:purpose": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:7025b940-ced9-4926-9757-af28f23aee70:viewer_intent": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:7025b940-ced9-4926-9757-af28f23aee70:keep_or_avoid": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        }
+      }
+    },
+    "provenance": {
+      "script:79e4058c-5d68-479a-99dd-4589bdc51eb9:heading": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:6e7c9026-4fb0-4cde-b644-546c9230e5f0:text": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:6e7c9026-4fb0-4cde-b644-546c9230e5f0:speaker": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:274f9efc-f62e-4569-ac96-c3ca6ae2341f:text": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:274f9efc-f62e-4569-ac96-c3ca6ae2341f:speaker": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:ce8f4f9e-7aa7-4355-b221-7550db5f4822:text": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:ce8f4f9e-7aa7-4355-b221-7550db5f4822:speaker": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:eda6564a-15d1-4fa8-92c6-7c09d5678094:text": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:eda6564a-15d1-4fa8-92c6-7c09d5678094:speaker": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      }
+    }
+  }
+}

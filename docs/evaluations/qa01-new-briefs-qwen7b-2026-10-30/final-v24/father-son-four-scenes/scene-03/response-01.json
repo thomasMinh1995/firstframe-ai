@@ -1,0 +1,19 @@
+{
+  "output": {
+    "heading": "Đẩy hộp",
+    "translations": [],
+    "dialogue": {
+      "line_1": {
+        "after_action": 1,
+        "speaker": "Bố",
+        "text": "Con, hộp này đẩy về phía con, con có muốn mở không?"
+      },
+      "line_2": {
+        "after_action": 1,
+        "speaker": "Minh",
+        "text": "Bố ơi, con chưa biết mở như thế nào."
+      }
+    }
+  },
+  "raw_output": "{\n  \"heading\": \"Đẩy hộp\",\n  \"translations\": [],\n  \"dialogue\": {\n    \"line_1\": {\n      \"after_action\": 1,\n      \"speaker\": \"Bố\",\n      \"text\": \"Con, hộp này đẩy về phía con, con có muốn mở không?\"\n    },\n    \"line_2\": {\n      \"after_action\": 1,\n      \"speaker\": \"Minh\",\n      \"text\": \"Bố ơi, con chưa biết mở như thế nào.\"\n    }\n  }\n}"
+}

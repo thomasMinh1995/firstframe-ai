@@ -1,0 +1,35 @@
+{
+  "status": "ready",
+  "scene": {
+    "id": "513aba90-1a59-4757-a280-ac4dc9e4ec34",
+    "source_scene_id": "5f727fcb-e1b1-485e-ac8e-5cbd4ba22a7a",
+    "heading": "Đặt hộp",
+    "blocks": [
+      {
+        "kind": "action",
+        "text": "Bố đặt chiếc hộp đóng kín lên bàn.",
+        "speaker": "",
+        "id": "18c1e476-6ccb-49e1-bf55-e84a9b20e5ca"
+      },
+      {
+        "kind": "dialogue",
+        "text": "Con, bố nghe đây.",
+        "speaker": "Bố",
+        "id": "16be44a8-f0d9-4772-87f0-2ff7bd2d2bd3"
+      },
+      {
+        "kind": "dialogue",
+        "text": "Con cần thêm một chút thời gian, bố.",
+        "speaker": "Minh",
+        "id": "cb84308c-105f-4335-8f19-29e6e6f123ea"
+      }
+    ]
+  },
+  "model": "qwen2.5:7b",
+  "parameters": {
+    "composition": "source-preserving-v1",
+    "outline_reconciled": false,
+    "dialogue_mode": "bounded-reactions-v1"
+  },
+  "prompt_version": "screenplay-scene-v25-bounded-reactions"
+}

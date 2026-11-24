@@ -1,0 +1,75 @@
+{
+  "case": "silent-six-scenes",
+  "expected_scenes": 6,
+  "scenes": [
+    {
+      "scene": 1,
+      "technical_pass": true,
+      "contract_checks": {
+        "requested_dialogue_count": true,
+        "requested_speaker_order": true,
+        "english_heading": true
+      },
+      "model_calls": 1,
+      "seconds": 4.073
+    },
+    {
+      "scene": 2,
+      "technical_pass": true,
+      "contract_checks": {
+        "requested_dialogue_count": true,
+        "requested_speaker_order": true,
+        "english_heading": true
+      },
+      "model_calls": 1,
+      "seconds": 4.727
+    },
+    {
+      "scene": 3,
+      "technical_pass": true,
+      "contract_checks": {
+        "requested_dialogue_count": true,
+        "requested_speaker_order": true,
+        "english_heading": true
+      },
+      "model_calls": 1,
+      "seconds": 4.325
+    },
+    {
+      "scene": 4,
+      "technical_pass": true,
+      "contract_checks": {
+        "requested_dialogue_count": true,
+        "requested_speaker_order": true,
+        "english_heading": true
+      },
+      "model_calls": 1,
+      "seconds": 4.971
+    },
+    {
+      "scene": 5,
+      "technical_pass": true,
+      "contract_checks": {
+        "requested_dialogue_count": true,
+        "requested_speaker_order": true,
+        "english_heading": true
+      },
+      "model_calls": 1,
+      "seconds": 5.016
+    },
+    {
+      "scene": 6,
+      "technical_pass": true,
+      "contract_checks": {
+        "requested_dialogue_count": true,
+        "requested_speaker_order": true,
+        "english_heading": true
+      },
+      "model_calls": 1,
+      "seconds": 4.081
+    }
+  ],
+  "technical_pass": true,
+  "contract_pass": true,
+  "content_approved": false
+}

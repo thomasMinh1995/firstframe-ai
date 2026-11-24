@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "node scripts/checks.cjs build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "node scripts/checks.cjs lint",
+    "typecheck": "node scripts/checks.cjs typecheck",
+    "test": "node scripts/checks.cjs test"
   },
   "dependencies": {
     "next": "^15.0.0",
@@ -19,6 +21,7 @@
     "@types/react-dom": "^19.0.0",
     "eslint": "^9.0.0",
     "eslint-config-next": "^15.0.0",
-    "typescript": "^5.6.0"
+    "typescript": "^5.6.0",
+    "@eslint/eslintrc": "^3.3.5"
   }
 }

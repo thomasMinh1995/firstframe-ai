@@ -121,7 +121,47 @@ def test_large_context_rejected_before_call_without_losing_work(writing):
     assert saved['screenplay_proposals'][-1]['error']=='ScreenplayContextTooLarge'
 
 
-def test_runtime_prompt_matches_frozen_real_trial_requests():
+@pytest.mark.parametrize('scope', ['scene', 'blocks'])
+def test_recorded_short_scene_revision_fits_without_losing_source(scope):
+    from pathlib import Path
+    from app.api.schemas.projects import ScreenplayProposal
+    from app.application.ai_provider import strict_json_instructions
+    from app.application.screenplay_writing import PROMPT_VERSION, write_scene
+    from app.api.schemas.screenplays import BlockRevisionResult
+
+    fixture = json.loads((Path(__file__).parent / 'fixtures/screenplay-revision-context.json').read_text())
+    proposal = ScreenplayProposal(
+        **fixture, id=str(uuid4()), created_at='2026-10-30', source_revision=0,
+        source_content='', source_outline=None, prompt_version=PROMPT_VERSION, scope=scope,
+        block_ids=([fixture['source_screenplay']['scenes'][-1]['blocks'][0]['id']] if scope == 'blocks' else []))
+    before = proposal.model_dump(mode='json')
+    provider = WritingProvider()
+    if scope == 'blocks':
+        selected = proposal.source_screenplay.scenes[-1].blocks[0]
+        provider.output = BlockRevisionResult(replacements=[{
+            'block_id': selected.id, 'expected': selected.model_dump(exclude={'id'}),
+            'replacement': {'kind': 'action', 'text': 'Cô ngồi xuống cạnh cha.', 'speaker': ''}}])
+    provider.metadata = ProviderMetadata('ollama', 'qwen2.5:7b', {'num_ctx': 16384})
+    result = write_scene(proposal, provider)
+    request = provider.requests[0]
+    sent = json.loads(request.input_text)
+    script = proposal.source_screenplay
+    assert result.status == 'ready' and len(provider.requests) == 1
+    assert proposal.model_dump(mode='json') == before
+    assert sent['author_request'] == proposal.instructions
+    assert sent['author_intent'] == script.source_outline.source.context.ai_context()
+    assert sent['story_plan'] == script.source_outline.source.draft.model_dump(mode='json')
+    assert sent['source_scenes'] == [s.model_dump(mode='json') for s in script.source_outline.scenes]
+    assert sent['source_scene'] == script.source_outline.scenes[-1].model_dump(mode='json')
+    assert sent['screenplay_context'] == [s.model_dump(mode='json') for s in script.scenes]
+    assert sent['target_scene_id'] == proposal.target_scene_id
+    if scope == 'blocks':
+        assert sent['selected_blocks'] == [script.scenes[-1].blocks[0].model_dump(mode='json')]
+    size = len(request.input_text.encode()) + len(strict_json_instructions(request).encode())
+    assert size <= 11776
+
+
+def test_writer_preserves_frozen_trial_sources_with_position_and_provenance():
     from pathlib import Path
     from app.api.schemas.projects import ScreenplayProposal
     from app.application.screenplay_writing import write_scene
@@ -131,9 +171,93 @@ def test_runtime_prompt_matches_frozen_real_trial_requests():
         proposal=ScreenplayProposal.model_validate(after['screenplay_proposals'][-1]);provider=WritingProvider()
         write_scene(proposal,provider)
         frozen=json.loads((root/name/'request.json').read_text());actual=provider.requests[0]
-        assert actual.instructions==frozen['instructions']
-        assert json.loads(actual.input_text)==frozen['input']
-        assert actual.response_model.model_json_schema()==frozen['schema']
+        assert actual.instructions != frozen['instructions']
+        assert 'The scene wrapper is required' in actual.instructions
+        data = json.loads(actual.input_text)
+        assert list(data)[-1] == 'author_intent'
+        script = proposal.source_screenplay
+        assert data.pop('scene_position') == {'number':next(i+1 for i,s in enumerate(script.scenes) if s.id == proposal.target_scene_id), 'total':len(script.scenes)}
+        origins = data.pop('source_scene_field_origins')
+        assert origins and set(origins.values()) <= {'author_choice','ai_proposal','legacy_unknown'}
+        assert data == frozen['input']
+        schema = actual.response_model.model_json_schema()
+        assert schema['$defs']['WrittenAction']['properties']['speaker']['const'] == ''
+        assert 'speaker' in schema['$defs']['WrittenDialogue']['required']
+
+
+@pytest.mark.parametrize('field', ['heading', 'text', 'speaker'])
+def test_new_foreign_script_is_rejected_without_altering_author_script(writing, field):
+    client, provider, p, _ = writing
+    value = provider.output.model_dump()
+    if field == 'heading': value['scene']['heading'] = 'Bếp 漉漉的'
+    else: value['scene']['blocks'][1][field] += ' 漉漉的'
+    provider.output = SceneWritingResult.model_validate(value)
+    result, _ = generate(client, p)
+    assert result.status_code == 502
+    saved = client.get(f"/api/projects/{p['id']}").json()
+    assert saved['screenplay'] == p['screenplay']
+    assert saved['screenplay_proposals'][-1]['status'] == 'failed'
+    assert len(provider.requests) == 1
+
+
+def test_script_guard_preserves_supplied_names_quotes_and_latin_languages():
+    from app.application.screenplay_writing import validate_writing_language
+    validate_writing_language({'text':'  Con chưa mở thư.\nCha chờ. Café — ☂  '}, '')
+    validate_writing_language({'text':'Alice waits by the door.'}, '')
+    validate_writing_language({'text':'Lan đọc tên 李白 và chữ 你好.'}, 'Tên 李白, chữ 你好 do tác giả cung cấp.')
+    with pytest.raises(ValueError, match='writing script'):
+        validate_writing_language({'text':'Lan 漉漉的'}, 'Lan đọc tên 李白.')
+
+
+def test_saved_qwen_mixed_language_response_cannot_be_adopted_as_ready(writing):
+    from pathlib import Path
+    client, provider, p, _ = writing
+    root = Path(__file__).resolve().parents[2]
+    saved = root/'docs/evaluations/qa01-scene-structure-qwen7b-2026-10-30/saved-scenes/draft-workflow-qwen7b-2026-10-30/response.json'
+    provider.output = SceneWritingResult.model_validate(json.loads(saved.read_text())['output'])
+    response, _ = generate(client, p)
+    assert response.status_code == 502
+    assert client.get(f"/api/projects/{p['id']}").json()['screenplay'] == p['screenplay']
+
+
+def test_writer_labels_ai_and_author_fields_without_promoting_legacy(writing):
+    from app.api.schemas.projects import ScreenplayProposal
+    from app.api.schemas.provenance import TextProvenance
+    from app.application.screenplay_writing import write_scene, PROMPT_VERSION
+    _, provider, p, _ = writing
+    script = routes.projects.load_project(p['id']).screenplay.model_copy(deep=True)
+    source = script.source_outline.scenes[0]
+    script.source_outline.provenance[f'm2:{source.id}:action'] = TextProvenance(origin='ai_proposal')
+    script.source_outline.provenance[f'm2:{source.id}:title'] = TextProvenance(origin='ai_proposal', author_confirmed=True)
+    script.source_outline.provenance.pop(f'm2:{source.id}:location', None)
+    source.location = 'Bếp'
+    proposal = ScreenplayProposal(id=str(uuid4()), created_at='2026-10-30', source_revision=p['revision'],
+        source_content='', source_screenplay=script, source_outline=script.source_outline,
+        target_scene_id=script.scenes[0].id, prompt_version=PROMPT_VERSION)
+    write_scene(proposal, provider)
+    data = json.loads(provider.requests[-1].input_text)
+    assert data['source_scene_field_origins']['action'] == 'ai_proposal'
+    assert data['source_scene_field_origins']['title'] == 'author_choice'
+    assert data['source_scene_field_origins']['location'] == 'legacy_unknown'
+    assert 'If an AI/unknown beat contradicts the author' in provider.requests[-1].instructions
+    proposal.source_screenplay.scenes.reverse()
+    write_scene(proposal, provider)
+    reordered = json.loads(provider.requests[-1].input_text)
+    assert reordered['scene_position'] == {'number':2, 'total':2}
+    assert reordered['source_scene']['id'] == source.id
+
+
+@pytest.mark.parametrize('block', [
+    {'kind':'action', 'text':'Đặt thư.', 'speaker':'Cha'},
+    {'kind':'dialogue', 'text':'Con à.'},
+    {'kind':'dialogue', 'text':'Con à.', 'speaker':'   '},
+    {'kind':'action', 'text':'   ', 'speaker':''},
+    {'kind':'narration', 'text':'Đặt thư.', 'speaker':''},
+])
+def test_writing_contract_does_not_repair_invalid_blocks(block):
+    from pydantic import ValidationError
+    with pytest.raises(ValidationError):
+        SceneWritingResult.model_validate({'scene':{'heading':'NỘI. BẾP', 'blocks':[block]}})
 
 
 def test_wrong_target_project_extra_fields_and_quota_never_call(writing):

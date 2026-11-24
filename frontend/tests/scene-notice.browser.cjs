@@ -16,6 +16,8 @@ const { setup, fullProject, reveal } = require('./onboarding.browser.cjs');
     mock.savePatch = { get scene_outline() {
       return { ...mock.projects[0].scene_outline, source: project.scene_outline.source };
     } };
+    const navigate = label => page.locator('.workspace-stage-nav').getByRole('button',{name:new RegExp('^'+label+'(?: |$)')}).click();
+    await navigate('Dàn cảnh');
     const area = page.locator('.scene-outline');
     const notice = area.locator('.scene-heading > [role="status"]');
     const pop = page.locator('.scene-popover:popover-open');
@@ -35,10 +37,12 @@ const { setup, fullProject, reveal } = require('./onboarding.browser.cjs');
     assert.equal(await notice.textContent(), '');
     await pop.getByRole('button', { name: 'Đóng', exact: true }).click();
     // A later unrelated edit must not resurrect the old unsaved-scene message.
+    await navigate('Ý tưởng');
     await reveal(page, page.locator('#project-title'));
     await page.locator('#project-title').fill('Tên mới');
     assert.equal(await notice.textContent(), '');
     // The global save button must clear the same notice too.
+    await navigate('Dàn cảnh');
     await reveal(page, area);
     await area.getByRole('button', { name: 'Tự thêm cảnh', exact: true }).click();
     await pop.getByRole('button', { name: 'Đóng', exact: true }).click();

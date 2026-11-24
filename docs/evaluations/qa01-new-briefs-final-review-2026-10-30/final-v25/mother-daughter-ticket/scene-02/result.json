@@ -1,0 +1,35 @@
+{
+  "status": "ready",
+  "scene": {
+    "id": "89a0c8cc-9c82-4ef4-b18e-b51933b1abe5",
+    "source_scene_id": "6d596ba4-b6c2-4b79-a65b-5e3a5a2099ef",
+    "heading": "Túi áo",
+    "blocks": [
+      {
+        "kind": "action",
+        "text": "Con gái nhận vé rồi cất vào túi áo.",
+        "speaker": "",
+        "id": "388ad92a-b88f-433c-9068-132fac72215a"
+      },
+      {
+        "kind": "dialogue",
+        "text": "Mẹ không muốn giục con.",
+        "speaker": "Mẹ",
+        "id": "7e7b1533-fc79-43bd-8501-cdf0c871e81b"
+      },
+      {
+        "kind": "dialogue",
+        "text": "Con cần thêm một chút thời gian, mẹ.",
+        "speaker": "Con gái",
+        "id": "034c9140-fb2e-4261-8a35-20124866a86c"
+      }
+    ]
+  },
+  "model": "qwen2.5:7b",
+  "parameters": {
+    "composition": "source-preserving-v1",
+    "outline_reconciled": false,
+    "dialogue_mode": "bounded-reactions-v1"
+  },
+  "prompt_version": "screenplay-scene-v25-bounded-reactions"
+}

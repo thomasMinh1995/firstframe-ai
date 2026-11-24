@@ -1,0 +1,19 @@
+{
+  "output": {
+    "heading": "Đặt hộp",
+    "translations": [],
+    "dialogue": {
+      "line_1": {
+        "after_action": 1,
+        "speaker": "Bố",
+        "text": "Đặt hộp lên bàn, con có thấy gì không?"
+      },
+      "line_2": {
+        "after_action": 1,
+        "speaker": "Minh",
+        "text": "Bố ơi, con không biết."
+      }
+    }
+  },
+  "raw_output": "{\n  \"heading\": \"Đặt hộp\",\n  \"translations\": [],\n  \"dialogue\": {\n    \"line_1\": {\n      \"after_action\": 1,\n      \"speaker\": \"Bố\",\n      \"text\": \"Đặt hộp lên bàn, con có thấy gì không?\"\n    },\n    \"line_2\": {\n      \"after_action\": 1,\n      \"speaker\": \"Minh\",\n      \"text\": \"Bố ơi, con không biết.\"\n    }\n  }\n}"
+}

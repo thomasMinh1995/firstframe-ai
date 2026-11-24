@@ -1,0 +1,24 @@
+{
+  "scene": {
+    "id": "4a14368b-25cd-4a03-bbb6-bb21bbfcd4c5",
+    "source_scene_id": "d474b831-9e36-4dcc-9c3a-757abd04e3e4",
+    "heading": "Trong căn bếp chiều mưa",
+    "blocks": [
+      {
+        "kind": "action",
+        "text": "Bố nhẹ nhàng đưa cho Linh một lá thư, mặt mũi ướt漉漉的，眼神中带着一丝不舍。",
+        "speaker": "",
+        "id": "52d3ad8b-37e3-44c2-b95e-285769469063"
+      },
+      {
+        "kind": "dialogue",
+        "text": "Linh, đây là... một lá thư. Tôi không biết nên nói gì, chỉ mong nó có thể giúp ích cho bạn.",
+        "speaker": "Bố",
+        "id": "a357ab2e-8194-4206-b80f-5688d8ad3eaa"
+      }
+    ]
+  },
+  "prompt_version": "screenplay-scene-v2",
+  "model": "qwen2.5:7b",
+  "status": "ready"
+}

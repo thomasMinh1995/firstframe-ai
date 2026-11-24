@@ -1,0 +1,21 @@
+{
+  "output": {
+    "heading": "SCENE 1",
+    "translations": [],
+    "dialogue": {
+      "line_1": {
+        "after_action": 1,
+        "speaker": "Mara",
+        "self_reference": "I",
+        "intent": "give_space"
+      },
+      "line_2": {
+        "after_action": 1,
+        "speaker": "Owen",
+        "self_reference": "I",
+        "intent": "thinking"
+      }
+    }
+  },
+  "raw_output": "{\n  \"heading\": \"SCENE 1\",\n  \"translations\": [],\n  \"dialogue\": {\n    \"line_1\": {\n      \"after_action\": 1,\n      \"speaker\": \"Mara\",\n      \"self_reference\": \"I\",\n      \"intent\": \"give_space\"\n    },\n    \"line_2\": {\n      \"after_action\": 1,\n      \"speaker\": \"Owen\",\n      \"self_reference\": \"I\",\n      \"intent\": \"thinking\"\n    }\n  }\n}"
+}

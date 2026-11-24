@@ -7,6 +7,9 @@ from contextlib import contextmanager
 progress_listener: ContextVar[Callable[[dict], None] | None] = ContextVar(
     "progress_listener", default=None
 )
+checkpoint_listener: ContextVar[Callable[[dict], None] | None] = ContextVar(
+    "checkpoint_listener", default=None
+)
 
 
 def report_progress(stage: str, status: str) -> None:

@@ -12,9 +12,11 @@ export type Scene = {
   staging_choices: Partial<Record<StagingKey, string>>;
 };
 export type SceneOutline = {
+  provenance?: Record<string, import('./provenance').TextProvenance>;
   id: string; version: number; scenes: Scene[];
   source: { id: string; project_revision: number; version_id: string; draft: StoryDraft;
-    context: AuthorContext; response_language: "auto" | "vi" | "en" };
+    context: AuthorContext; response_language: "auto" | "vi" | "en";
+    draft_provenance?: Record<string, import('./provenance').TextProvenance> };
 };
 export type SceneVersion = { id: string; created_at: string; outline: SceneOutline };
 export type SceneHandoff = { outline_id: string; version: number; project_revision: number;

@@ -1,0 +1,25 @@
+{
+  "raw_output": "{\n  \"scene\": {\n    \"heading\": \"Khoảnh khắc\",\n    \"blocks\": [\n      {\n        \"kind\": \"action\",\n        \"text\": \"Cha đặt phong thư kín lên bàn rồi lùi lại. Ánh mắt ông dừng ở con gái, nhẹ nhàng nhưng đầy mong đợi.\",\n        \"speaker\": \"\"\n      },\n      {\n        \"kind\": \"action\",\n        \"text\": \"Con gái nhìn phong thư, tay run nhẹ. Ông thấy cô ấy ngập ngừng, không biết nên mở hay không.\",\n        \"speaker\": \"\"\n      },\n      {\n        \"kind\": \"action\",\n        \"text\": \"Ông bước về phía cửa, chuẩn bị ra đi. Con gái vẫn chưa quyết định, tay vẫn đặt gần phong thư.\",\n        \"speaker\": \"\"\n      }\n    ]\n  }\n}",
+  "output": {
+    "scene": {
+      "heading": "Khoảnh khắc",
+      "blocks": [
+        {
+          "kind": "action",
+          "text": "Cha đặt phong thư kín lên bàn rồi lùi lại. Ánh mắt ông dừng ở con gái, nhẹ nhàng nhưng đầy mong đợi.",
+          "speaker": ""
+        },
+        {
+          "kind": "action",
+          "text": "Con gái nhìn phong thư, tay run nhẹ. Ông thấy cô ấy ngập ngừng, không biết nên mở hay không.",
+          "speaker": ""
+        },
+        {
+          "kind": "action",
+          "text": "Ông bước về phía cửa, chuẩn bị ra đi. Con gái vẫn chưa quyết định, tay vẫn đặt gần phong thư.",
+          "speaker": ""
+        }
+      ]
+    }
+  }
+}

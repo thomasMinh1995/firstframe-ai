@@ -23,7 +23,7 @@ const selected={...base,screenplay_selections:[selection],screenplay_handoff:sel
  ]){const p=structuredClone(selected);mutate(p);await assert.rejects(()=>decode(p),/không hợp lệ/);}
  const props={saved:selected,dirty:true,onSelect:async()=>{},onInspect:async()=>true,onEdit:()=>{}};
  const html=renderToStaticMarkup(React.createElement(ScreenplayReading,props));
- assert.match(html,/Có sửa chưa lưu/);assert.match(html,/Chưa xuất bản|chưa xuất bản/);assert.match(html,/Nguồn đã chọn cho M4/);
+ assert.match(html,/Có sửa chưa lưu/);assert.match(html,/Chưa xuất bản|chưa xuất bản/);assert.match(html,/Kịch bản đã chọn để xuất/);
  assert.equal((html.match(/data-reading-scene=/g)||[]).length,selection.screenplay.scenes.length*2);
  assert.ok(!html.includes('<textarea'),'reader must never edit a source');
  const draft=structuredClone(base);draft.screenplay.scenes[0].blocks=[];draft.screenplay.scenes[1].blocks[0].text='<script>alert(1)</script>';

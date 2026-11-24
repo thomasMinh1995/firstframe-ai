@@ -1,0 +1,10 @@
+{
+  "content_pass": true,
+  "checks": {
+    "all_three_author_beats_exactly_once_and_in_order": true,
+    "one_scene": true,
+    "letter_still_unopened": true,
+    "author_input_and_outline_snapshots_kept": true
+  },
+  "review_note": "Con gái đặt chìa khóa; cha đặt thư và lùi lại; con chưa mở thư, ngồi uống trà một lần. Không tự tha thứ hay kết thúc mâu thuẫn."
+}

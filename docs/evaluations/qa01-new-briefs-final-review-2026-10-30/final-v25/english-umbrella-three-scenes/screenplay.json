@@ -1,0 +1,371 @@
+{
+  "id": "768673a7-ee96-4617-934e-5806ef4bf9cb",
+  "version": 1,
+  "scenes": [
+    {
+      "id": "bee7b354-b853-4326-9c94-a0dbc62aaf39",
+      "source_scene_id": "ae6dfc8a-f03b-4c5f-92ee-24f999a4c19e",
+      "heading": "SCENE 1",
+      "blocks": [
+        {
+          "kind": "action",
+          "text": "Mara puts the folded umbrella on a chair.",
+          "speaker": "",
+          "id": "ba90e320-7875-41d2-a67c-0c4e4d40d57c"
+        },
+        {
+          "kind": "dialogue",
+          "text": "You can take your time.",
+          "speaker": "Mara",
+          "id": "b4813345-a951-4349-8aa3-43c0a7144a0c"
+        },
+        {
+          "kind": "dialogue",
+          "text": "I'm still thinking about it.",
+          "speaker": "Owen",
+          "id": "c768e88b-3308-4eb3-a0e7-a8318e58a6f0"
+        }
+      ]
+    },
+    {
+      "id": "f0e77f28-10eb-4ac9-b0fe-8afbe210b730",
+      "source_scene_id": "cf9e104c-dfd3-499b-a276-8451130a3fe3",
+      "heading": "SCENE 2",
+      "blocks": [
+        {
+          "kind": "action",
+          "text": "Owen takes the umbrella from the chair and holds it.",
+          "speaker": "",
+          "id": "01b83492-0eaf-4c44-bd2e-a7d876cfbc5f"
+        },
+        {
+          "kind": "dialogue",
+          "text": "I want to hear what you think.",
+          "speaker": "Mara",
+          "id": "c6429de8-25bb-4571-9dc8-fb0e97f940d5"
+        },
+        {
+          "kind": "dialogue",
+          "text": "I don't know what to say yet.",
+          "speaker": "Owen",
+          "id": "e83f233b-91c8-4e9a-b8d5-82c4a55bb541"
+        }
+      ]
+    },
+    {
+      "id": "0848f8d6-db2f-4bfa-bdfb-e0f3018ef9cf",
+      "source_scene_id": "91d6fbf5-3918-4451-8283-0e408a5b79c9",
+      "heading": "SCENE 3",
+      "blocks": [
+        {
+          "kind": "action",
+          "text": "Mara and Owen stand by the closed door, still unsure whether to leave.",
+          "speaker": "",
+          "id": "9cd19105-8ecf-412f-814c-16375540e0ad"
+        },
+        {
+          "kind": "dialogue",
+          "text": "I'm not sure where to start.",
+          "speaker": "Mara",
+          "id": "5b729abc-92c2-458e-beef-5f6ea23272a8"
+        },
+        {
+          "kind": "dialogue",
+          "text": "I'd like to think it through.",
+          "speaker": "Owen",
+          "id": "07b5137e-53ef-4678-bb27-85b4ce97c04b"
+        }
+      ]
+    }
+  ],
+  "source_revision": 1,
+  "source_outline": {
+    "id": "0b59a0af-ddd2-4b0e-ba86-5422b524d42a",
+    "version": 1,
+    "scenes": [
+      {
+        "id": "ae6dfc8a-f03b-4c5f-92ee-24f999a4c19e",
+        "title": "The chair",
+        "action": "Mara puts the folded umbrella on a chair.",
+        "location": "Hallway",
+        "time": "",
+        "characters": "Mara, Owen",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      },
+      {
+        "id": "cf9e104c-dfd3-499b-a276-8451130a3fe3",
+        "title": "The umbrella",
+        "action": "Owen takes the umbrella from the chair and holds it.",
+        "location": "Hallway",
+        "time": "",
+        "characters": "Mara, Owen",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      },
+      {
+        "id": "91d6fbf5-3918-4451-8283-0e408a5b79c9",
+        "title": "The closed door",
+        "action": "Mara and Owen stand by the closed door, still unsure whether to leave.",
+        "location": "Hallway",
+        "time": "",
+        "characters": "Mara, Owen",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      }
+    ],
+    "source": {
+      "id": "9a35d26d-3bc6-4993-ae0e-0cd346274f42",
+      "project_revision": 1,
+      "version_id": "current",
+      "draft": {
+        "title": "The folded umbrella",
+        "logline": "Mara puts the folded umbrella on a chair. Owen takes the umbrella from the chair and holds it. Mara and Owen stand by the closed door, still unsure whether to leave.",
+        "sections": [
+          {
+            "title": "Story",
+            "purpose": "Author brief",
+            "content": "Mara puts the folded umbrella on a chair. Owen takes the umbrella from the chair and holds it. Mara and Owen stand by the closed door, still unsure whether to leave."
+          }
+        ]
+      },
+      "context": {
+        "idea": "Mara puts the folded umbrella on a chair. Owen takes the umbrella from the chair and holds it. Mara and Owen stand by the closed door, still unsure whether to leave.",
+        "constraints": [
+          "Exactly three scenes, two adult friends Mara and Owen. Write all headings, action and dialogue in English.",
+          "Each scene has exactly two short dialogue lines, Mara first and Owen second. Owen keeps the umbrella after taking it; do not take it twice, open the door or resolve whether they leave."
+        ],
+        "clarifications": [],
+        "pending_questions": []
+      },
+      "response_language": "en",
+      "draft_provenance": {
+        "title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "logline": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:0:title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:0:purpose": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:0:content": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        }
+      }
+    },
+    "provenance": {
+      "m2:ae6dfc8a-f03b-4c5f-92ee-24f999a4c19e:title": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:ae6dfc8a-f03b-4c5f-92ee-24f999a4c19e:action": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:ae6dfc8a-f03b-4c5f-92ee-24f999a4c19e:location": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:ae6dfc8a-f03b-4c5f-92ee-24f999a4c19e:time": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:ae6dfc8a-f03b-4c5f-92ee-24f999a4c19e:characters": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:ae6dfc8a-f03b-4c5f-92ee-24f999a4c19e:goal": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:ae6dfc8a-f03b-4c5f-92ee-24f999a4c19e:purpose": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:ae6dfc8a-f03b-4c5f-92ee-24f999a4c19e:viewer_intent": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:ae6dfc8a-f03b-4c5f-92ee-24f999a4c19e:keep_or_avoid": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:cf9e104c-dfd3-499b-a276-8451130a3fe3:title": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:cf9e104c-dfd3-499b-a276-8451130a3fe3:action": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:cf9e104c-dfd3-499b-a276-8451130a3fe3:location": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:cf9e104c-dfd3-499b-a276-8451130a3fe3:time": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:cf9e104c-dfd3-499b-a276-8451130a3fe3:characters": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:cf9e104c-dfd3-499b-a276-8451130a3fe3:goal": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:cf9e104c-dfd3-499b-a276-8451130a3fe3:purpose": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:cf9e104c-dfd3-499b-a276-8451130a3fe3:viewer_intent": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:cf9e104c-dfd3-499b-a276-8451130a3fe3:keep_or_avoid": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:91d6fbf5-3918-4451-8283-0e408a5b79c9:title": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:91d6fbf5-3918-4451-8283-0e408a5b79c9:action": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:91d6fbf5-3918-4451-8283-0e408a5b79c9:location": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:91d6fbf5-3918-4451-8283-0e408a5b79c9:time": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:91d6fbf5-3918-4451-8283-0e408a5b79c9:characters": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:91d6fbf5-3918-4451-8283-0e408a5b79c9:goal": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:91d6fbf5-3918-4451-8283-0e408a5b79c9:purpose": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:91d6fbf5-3918-4451-8283-0e408a5b79c9:viewer_intent": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:91d6fbf5-3918-4451-8283-0e408a5b79c9:keep_or_avoid": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      }
+    }
+  },
+  "provenance": {
+    "script:bee7b354-b853-4326-9c94-a0dbc62aaf39:heading": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:ba90e320-7875-41d2-a67c-0c4e4d40d57c:text": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:ba90e320-7875-41d2-a67c-0c4e4d40d57c:speaker": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:b4813345-a951-4349-8aa3-43c0a7144a0c:text": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:b4813345-a951-4349-8aa3-43c0a7144a0c:speaker": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:c768e88b-3308-4eb3-a0e7-a8318e58a6f0:text": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:c768e88b-3308-4eb3-a0e7-a8318e58a6f0:speaker": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "script:f0e77f28-10eb-4ac9-b0fe-8afbe210b730:heading": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:01b83492-0eaf-4c44-bd2e-a7d876cfbc5f:text": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:01b83492-0eaf-4c44-bd2e-a7d876cfbc5f:speaker": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:c6429de8-25bb-4571-9dc8-fb0e97f940d5:text": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:c6429de8-25bb-4571-9dc8-fb0e97f940d5:speaker": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:e83f233b-91c8-4e9a-b8d5-82c4a55bb541:text": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:e83f233b-91c8-4e9a-b8d5-82c4a55bb541:speaker": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "script:0848f8d6-db2f-4bfa-bdfb-e0f3018ef9cf:heading": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:9cd19105-8ecf-412f-814c-16375540e0ad:text": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:9cd19105-8ecf-412f-814c-16375540e0ad:speaker": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:5b729abc-92c2-458e-beef-5f6ea23272a8:text": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:5b729abc-92c2-458e-beef-5f6ea23272a8:speaker": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:07b5137e-53ef-4678-bb27-85b4ce97c04b:text": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    },
+    "block:07b5137e-53ef-4678-bb27-85b4ce97c04b:speaker": {
+      "origin": "ai_proposal",
+      "author_confirmed": false
+    }
+  }
+}

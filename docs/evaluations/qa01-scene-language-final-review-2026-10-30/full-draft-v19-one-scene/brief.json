@@ -1,0 +1,9 @@
+{
+  "idea": "Chiều mưa trong căn bếp nhỏ, con gái đặt chìa khóa lên bàn trước khi đi học xa. Cha đặt cạnh đó một lá thư xin lỗi rồi lùi lại. Cô chưa mở thư, nhưng ngồi xuống uống cùng cha một ngụm trà.",
+  "constraints": [
+    "Phim 30 giây, tối đa một cảnh rất ngắn, hai nhân vật, một căn bếp.",
+    "Giữ lá thư chưa mở và quyền quyết định của con gái; không giải quyết hết mâu thuẫn.",
+    "Bản phát triển gọn; ưu tiên hành động và khoảng lặng, ít thoại."
+  ],
+  "response_language": "vi"
+}

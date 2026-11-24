@@ -1,0 +1,42 @@
+[
+  {
+    "case": "draft-workflow-qwen7b-2026-10-30",
+    "request_identical": true,
+    "render_identical": true
+  },
+  {
+    "case": "limited-resources",
+    "request_identical": true,
+    "render_identical": true
+  },
+  {
+    "case": "quiet-open-ending",
+    "request_identical": true,
+    "render_identical": true
+  },
+  {
+    "case": "english",
+    "request_identical": true,
+    "render_identical": true
+  },
+  {
+    "case": "draft-workflow-qwen7b-saved-brief-2026-10-30",
+    "request_identical": true,
+    "render_identical": true
+  },
+  {
+    "case": "parent-dialogue",
+    "request_identical": true,
+    "render_identical": true
+  },
+  {
+    "case": "later-scene",
+    "request_identical": true,
+    "render_identical": true
+  },
+  {
+    "case": "gentle-comedy",
+    "request_identical": true,
+    "render_identical": true
+  }
+]

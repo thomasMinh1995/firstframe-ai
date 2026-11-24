@@ -1,0 +1,9 @@
+{
+  "case": "parent-dialogue",
+  "source": "docs/evaluations/m3-scene-writing-qwen7b-2026-10-27/quiet-open-ending/project-after.json",
+  "technical_pass": true,
+  "blocks": 3,
+  "target_preserved": true,
+  "seconds": 21.436,
+  "model_calls": 1
+}

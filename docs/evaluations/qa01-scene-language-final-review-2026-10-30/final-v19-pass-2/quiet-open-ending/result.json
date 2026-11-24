@@ -1,0 +1,24 @@
+{
+  "scene": {
+    "id": "c4a6954a-4405-4ca9-8698-84e83474e0bf",
+    "source_scene_id": "6b9d8dd8-c29b-43ef-af8d-d8fb94f45409",
+    "heading": "Khoảnh khắc",
+    "blocks": [
+      {
+        "kind": "action",
+        "text": "Cha đặt phong thư kín lên bàn rồi lùi lại.",
+        "speaker": "",
+        "id": "30cdcd57-9a6c-42b8-b5e7-09fe0635a99d"
+      },
+      {
+        "kind": "action",
+        "text": "Con gái đặt tay cạnh phong thư, chưa nhận hoặc mở; dừng ở đó.",
+        "speaker": "",
+        "id": "6463cade-a4f6-47a3-85c1-982df2a2fd73"
+      }
+    ]
+  },
+  "prompt_version": "screenplay-scene-v19-source-composition",
+  "model": "qwen2.5:7b",
+  "status": "ready"
+}

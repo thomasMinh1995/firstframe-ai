@@ -1,0 +1,19 @@
+{
+  "provider": {
+    "provider": "ollama",
+    "model": "qwen2.5:7b",
+    "parameters": {
+      "temperature": 0.3,
+      "timeout_seconds": 180.0,
+      "num_ctx": 16384,
+      "screenplay_review_temperature": 0.0
+    }
+  },
+  "prompt_version": "screenplay-scene-v25-bounded-reactions",
+  "revision": "aa64f209fe5dd5db7524150d26b293a06e136307",
+  "fixtures_sha256": "6c2dbbf595fb4328fde46bc4f119d7367f69a40aceace50edd9f821f30f91ffa",
+  "expected_cases": 5,
+  "expected_scenes": 19,
+  "result_format": "Proposal snapshot plus scene/status/model/parameters/prompt_version delta",
+  "scope": "Controlled outlines; sequential writing uses all previously returned scenes. No automatic content approval."
+}

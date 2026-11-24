@@ -62,6 +62,7 @@ def test_local_request_preserves_context_and_enforces_schema(monkeypatch):
     assert kwargs["trust_env"] is False
     assert kwargs["timeout"] == 180
     assert body["options"]["num_ctx"] == 16384
+    assert "num_predict" not in body["options"]
 
 
 @pytest.mark.parametrize(
@@ -215,3 +216,25 @@ def test_project_workflow_uses_local_fallback_and_preserves_edits(tmp_path, monk
     assert response.status_code == 502
     assert "private diagnostic" not in response.text
     assert client.get(url).json() == project
+
+
+@pytest.mark.parametrize("stage", ["screenplay_review", "screenplay_generation"])
+def test_guarded_screenplay_requests_cap_reserved_output(monkeypatch, stage):
+    from dataclasses import replace
+    calls = install_response(monkeypatch, {
+        "done": True, "done_reason": "stop", "message": {"content": '{"title":"Chờ"}'},
+    })
+    provider = OllamaProvider(OllamaProviderConfig(model="qwen2.5:7b"))
+    provider.request_structured(replace(structured_request(), stage=stage))
+    assert calls[0][1]["json"]["options"] == {
+        "temperature": 0.0 if stage == "screenplay_review" else 0.3, "num_ctx": 16384, "num_predict": 4096,
+    }
+
+
+@pytest.mark.parametrize('configured,requested,expected', [(180,2.5,2.5),(1,2.5,1)])
+def test_request_deadline_never_extends_provider_timeout(monkeypatch,configured,requested,expected):
+    from dataclasses import replace
+    calls=install_response(monkeypatch,{'done':True,'message':{'content':'{"title":"Chờ"}'}})
+    provider=OllamaProvider(OllamaProviderConfig(model='qwen2.5:7b',timeout_seconds=configured))
+    provider.request_structured(replace(structured_request(),timeout_seconds=requested))
+    assert calls[0][1]['timeout']==expected

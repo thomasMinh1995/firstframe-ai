@@ -1,0 +1,12 @@
+{
+  "model": "qwen2.5:7b",
+  "temperature": 0.3,
+  "num_ctx": 16384,
+  "max_calls": 10,
+  "total_seconds": 600,
+  "clarification_seconds": 45,
+  "planning_seconds": 120,
+  "review_seconds": 60,
+  "other_call_seconds": 90,
+  "brief": "Hai cảnh ngắn, hai nhân vật, kết mở; synthetic QA only."
+}

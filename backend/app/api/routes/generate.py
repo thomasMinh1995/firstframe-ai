@@ -73,6 +73,7 @@ def _to_response(run: HarnessRun) -> GenerateResponse:
                 for note in run.analysis.notes
             ],
             missing_information=list(run.analysis.open_questions),
+            ai_suggestions=list(getattr(run.analysis, "ai_suggestions", ())),
         ),
         story_plan=StoryPlanResponse(
             request_id=run.story_plan.metadata.artifact_id,

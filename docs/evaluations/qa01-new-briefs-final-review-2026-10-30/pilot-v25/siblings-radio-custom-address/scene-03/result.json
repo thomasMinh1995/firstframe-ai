@@ -1,0 +1,35 @@
+{
+  "scene": {
+    "id": "a267ff46-9be9-40b7-9d7b-0d9f726d3c89",
+    "source_scene_id": "3e6e410f-3c8b-4b3c-834f-762579a82e88",
+    "heading": "Chờ tiếng nhạc",
+    "blocks": [
+      {
+        "kind": "action",
+        "text": "Hạnh và Nam nhìn chiếc radio vẫn im tiếng.",
+        "speaker": "",
+        "id": "74a7f79e-6e56-4246-aaea-4b3a4677bf8b"
+      },
+      {
+        "kind": "dialogue",
+        "text": "Em, chị nghe đây.",
+        "speaker": "Hạnh",
+        "id": "b4d6fb36-b6fd-4512-a308-62ac4e58b120"
+      },
+      {
+        "kind": "dialogue",
+        "text": "Em chưa biết trả lời thế nào, chị.",
+        "speaker": "Nam",
+        "id": "dbf2786c-0005-44f2-b6e0-30718b652d4f"
+      }
+    ]
+  },
+  "status": "ready",
+  "model": "qwen2.5:7b",
+  "parameters": {
+    "composition": "source-preserving-v1",
+    "outline_reconciled": false,
+    "dialogue_mode": "bounded-reactions-v1"
+  },
+  "prompt_version": "screenplay-scene-v25-bounded-reactions"
+}

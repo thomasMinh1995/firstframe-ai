@@ -1,0 +1,3 @@
+# Exploratory compact-prompt run (retained failures)
+
+Two local `qwen2.5:7b` requests, temperature 0.3, num_ctx 16384, num_predict 4096, timeout 60s/call, no retry. This first compact prompt changed too much wording; it is not the final prompt. Full instructions, request, raw Ollama response, token counts, latency and saved failure are retained in calls.json/results.json. Both requests passed the unchanged context guard but failed source-evidence validation (HTTP 502); both screenplays stayed unchanged. No quality pass is claimed. The final narrower prompt and eight-case evaluation are in ../qa01-review-context-qwen7b-final-2026-10-29/.

@@ -1,0 +1,24 @@
+{
+  "scene": {
+    "id": "c4a6954a-4405-4ca9-8698-84e83474e0bf",
+    "source_scene_id": "6b9d8dd8-c29b-43ef-af8d-d8fb94f45409",
+    "heading": "Khoảnh khắc",
+    "blocks": [
+      {
+        "kind": "action",
+        "text": "Father stands by the table, hands slightly trembling as he places the sealed letter down. He takes a step back, his eyes lingering on the envelope.",
+        "speaker": "",
+        "id": "6265f9a4-5aec-453a-bf05-4df492c141dc"
+      },
+      {
+        "kind": "action",
+        "text": "Daughter stands by the table, her hand hovering above the letter. She hesitates, her gaze shifting between the envelope and her father's face, then back to the letter.",
+        "speaker": "",
+        "id": "3ce1a6e8-c5c8-4c02-a747-4601fb4cb7e9"
+      }
+    ]
+  },
+  "prompt_version": "screenplay-scene-v10",
+  "model": "qwen2.5:7b",
+  "status": "ready"
+}

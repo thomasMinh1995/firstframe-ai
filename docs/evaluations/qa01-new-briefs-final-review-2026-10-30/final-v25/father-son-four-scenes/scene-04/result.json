@@ -1,0 +1,35 @@
+{
+  "status": "ready",
+  "scene": {
+    "id": "d871b1bf-e061-4050-8912-19ab1c297524",
+    "source_scene_id": "1ecc996a-e97c-4fb1-8295-64ea6cc456ee",
+    "heading": "Tay trên nắp",
+    "blocks": [
+      {
+        "kind": "action",
+        "text": "Minh đặt tay lên nắp hộp nhưng chưa mở, bố vẫn đứng cạnh bàn.",
+        "speaker": "",
+        "id": "e195d45a-f455-4f11-ada3-f49e056cf048"
+      },
+      {
+        "kind": "dialogue",
+        "text": "Bố chưa biết bắt đầu thế nào.",
+        "speaker": "Bố",
+        "id": "93f6719e-9452-4cc8-b6dc-00d0bde0af7a"
+      },
+      {
+        "kind": "dialogue",
+        "text": "Con chưa có câu trả lời, bố.",
+        "speaker": "Minh",
+        "id": "6e93170f-b581-4a87-b5d1-ad8e552427da"
+      }
+    ]
+  },
+  "model": "qwen2.5:7b",
+  "parameters": {
+    "composition": "source-preserving-v1",
+    "outline_reconciled": false,
+    "dialogue_mode": "bounded-reactions-v1"
+  },
+  "prompt_version": "screenplay-scene-v25-bounded-reactions"
+}

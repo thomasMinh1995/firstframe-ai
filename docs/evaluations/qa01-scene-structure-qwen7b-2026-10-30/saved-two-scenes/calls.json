@@ -1,0 +1,218 @@
+[
+  {
+    "stage": "reasoning",
+    "input_bytes": 872,
+    "instructions_bytes": 3492,
+    "timeout_seconds": null,
+    "model": "qwen2.5:7b",
+    "output": {
+      "summary": "Phim ngắn hai phút, trong căn bếp chiều mưa, bố đưa Linh một lá thư trước khi cô rời quê. Hai người ngại nói lời chia tay. Linh nhận thư nhưng chưa mở. Kết ở ngưỡng cửa, cô giữ quyền quyết định có đọc thư hay không.",
+      "notes": [
+        {
+          "label": "Cảnh cuối",
+          "content": "Cảnh cuối ở ngưỡng cửa có thể gây khó khăn trong việc thể hiện cảm xúc của Linh. Cần đảm bảo có đủ biểu cảm để khán giả hiểu cô đang cân nhắc."
+        }
+      ],
+      "missing_information": [
+        "Cảnh cuối ở ngưỡng cửa biểu cảm như thế nào?"
+      ],
+      "ai_suggestions": []
+    },
+    "raw_output": "{\n  \"summary\": \"Phim ngắn hai phút, trong căn bếp chiều mưa, bố đưa Linh một lá thư trước khi cô rời quê. Hai người ngại nói lời chia tay. Linh nhận thư nhưng chưa mở. Kết ở ngưỡng cửa, cô giữ quyền quyết định có đọc thư hay không.\",\n  \"notes\": [\n    {\n      \"label\": \"Cảnh cuối\",\n      \"content\": \"Cảnh cuối ở ngưỡng cửa có thể gây khó khăn trong việc thể hiện cảm xúc của Linh. Cần đảm bảo có đủ biểu cảm để khán giả hiểu cô đang cân nhắc.\"\n    }\n  ],\n  \"missing_information\": [\"Cảnh cuối ở ngưỡng cửa biểu cảm như thế nào?\"],\n  \"ai_suggestions\": []\n}",
+    "seconds": 8.596
+  },
+  {
+    "stage": "planning",
+    "input_bytes": 12138,
+    "instructions_bytes": 6908,
+    "timeout_seconds": null,
+    "model": "qwen2.5:7b",
+    "output": {
+      "story_plan": {
+        "working_title": {
+          "title": "Lời thư cuối"
+        },
+        "logline": {
+          "text": "Trong căn bếp chiều mưa, bố trao cho Linh một lá thư trước khi cô rời quê, để cô tự quyết định có mở thư hay không."
+        },
+        "characters": {
+          "protagonist": "Linh",
+          "supporting_characters": [
+            "Bố"
+          ],
+          "antagonist_or_obstacle": null
+        },
+        "conflict": {
+          "external": "Linh phải quyết định có mở thư của bố hay không trước khi rời quê.",
+          "internal": null,
+          "stakes": "Linh giữ quyền quyết định và không bị ép buộc."
+        },
+        "beginning": {
+          "setup": "Trong căn bếp chiều mưa, Linh chuẩn bị rời quê.",
+          "key_event": "Bố trao cho Linh một lá thư."
+        },
+        "middle": {
+          "escalation": "Linh nhận thư nhưng chưa mở.",
+          "turning_point": null
+        },
+        "ending": {
+          "resolution": "Linh vẫn giữ quyền quyết định có mở thư hay không.",
+          "final_image": "Linh đứng trước cửa, tay cầm lá thư chưa mở."
+        },
+        "theme": {
+          "statement": "Quyền quyết định cuối cùng thuộc về bản thân mỗi người."
+        },
+        "visual_style": {
+          "description": null,
+          "visual_motifs": [
+            "Lá thư",
+            "Chiều mưa"
+          ]
+        },
+        "tone": {
+          "description": "Nghiêm túc, nhẹ nhàng"
+        },
+        "production_notes": {
+          "notes": "Cảnh cuối ở ngưỡng cửa biểu cảm như thế nào?",
+          "locations": [
+            "Căn bếp",
+            "Ngưỡng cửa"
+          ],
+          "cast_size": "Hai nhân vật"
+        }
+      }
+    },
+    "raw_output": "{\n  \"story_plan\": {\n    \"working_title\": {\n      \"title\": \"Lời thư cuối\"\n    },\n    \"logline\": {\n      \"text\": \"Trong căn bếp chiều mưa, bố trao cho Linh một lá thư trước khi cô rời quê, để cô tự quyết định có mở thư hay không.\"\n    },\n    \"characters\": {\n      \"protagonist\": \"Linh\",\n      \"supporting_characters\": [\"Bố\"],\n      \"antagonist_or_obstacle\": null\n    },\n    \"conflict\": {\n      \"external\": \"Linh phải quyết định có mở thư của bố hay không trước khi rời quê.\",\n      \"internal\": null,\n      \"stakes\": \"Linh giữ quyền quyết định và không bị ép buộc.\"\n    },\n    \"beginning\": {\n      \"setup\": \"Trong căn bếp chiều mưa, Linh chuẩn bị rời quê.\",\n      \"key_event\": \"Bố trao cho Linh một lá thư.\"\n    },\n    \"middle\": {\n      \"escalation\": \"Linh nhận thư nhưng chưa mở.\",\n      \"turning_point\": null\n    },\n    \"ending\": {\n      \"resolution\": \"Linh vẫn giữ quyền quyết định có mở thư hay không.\",\n      \"final_image\": \"Linh đứng trước cửa, tay cầm lá thư chưa mở.\"\n    },\n    \"theme\": {\n      \"statement\": \"Quyền quyết định cuối cùng thuộc về bản thân mỗi người.\"\n    },\n    \"visual_style\": {\n      \"description\": null,\n      \"visual_motifs\": [\"Lá thư\", \"Chiều mưa\"]\n    },\n    \"tone\": {\n      \"description\": \"Nghiêm túc, nhẹ nhàng\"\n    },\n    \"production_notes\": {\n      \"notes\": \"Cảnh cuối ở ngưỡng cửa biểu cảm như thế nào?\",\n      \"locations\": [\"Căn bếp\", \"Ngưỡng cửa\"],\n      \"cast_size\": \"Hai nhân vật\"\n    }\n  }\n}",
+    "seconds": 31.193
+  },
+  {
+    "stage": "evaluation",
+    "input_bytes": 3615,
+    "instructions_bytes": 2938,
+    "timeout_seconds": null,
+    "model": "qwen2.5:7b",
+    "output": {
+      "reviews": [
+        {
+          "card_id": "section-3",
+          "decision_id": "constraint-0",
+          "related_card_id": null,
+          "observation": "Card 1 mô tả cảnh trong căn bếp chiều mưa, bố trao cho Linh một lá thư. Đây là cảnh đầu tiên và cũng là cảnh duy nhất trong căn bếp.",
+          "comparison": "aligned",
+          "suggestion": ""
+        }
+      ],
+      "passed": true,
+      "rubric_scores": null
+    },
+    "raw_output": "{\n  \"reviews\": [\n    {\n      \"card_id\": \"section-3\",\n      \"decision_id\": \"constraint-0\",\n      \"related_card_id\": null,\n      \"observation\": \"Card 1 mô tả cảnh trong căn bếp chiều mưa, bố trao cho Linh một lá thư. Đây là cảnh đầu tiên và cũng là cảnh duy nhất trong căn bếp.\",\n      \"comparison\": \"aligned\",\n      \"suggestion\": \"\"\n    }\n  ],\n  \"passed\": true,\n  \"rubric_scores\": null\n}",
+    "seconds": 10.319
+  },
+  {
+    "stage": "scene_generation",
+    "input_bytes": 2951,
+    "instructions_bytes": 2406,
+    "timeout_seconds": null,
+    "model": "qwen2.5:7b",
+    "output": {
+      "scenes": [
+        {
+          "title": "Trong căn bếp chiều mưa",
+          "action": "Bố và Linh đứng trong căn bếp, trời mưa nhẹ. Bố đưa cho Linh một lá thư, đôi mắt đều im lặng, không nói lời chia tay. Linh nhận thư, giữ trong tay, không mở.",
+          "location": "Căn bếp",
+          "time": "Chiều mưa",
+          "characters": "Bố, Linh",
+          "goal": "Bố trao thư cho Linh, Linh nhận thư nhưng chưa mở.",
+          "purpose": "Đặt ra tình huống và tạo ra áp lực cho Linh.",
+          "transition": "Bố và Linh im lặng, không nói lời chia tay."
+        }
+      ]
+    },
+    "raw_output": "{\n  \"scenes\": [\n    {\n      \"title\": \"Trong căn bếp chiều mưa\",\n      \"action\": \"Bố và Linh đứng trong căn bếp, trời mưa nhẹ. Bố đưa cho Linh một lá thư, đôi mắt đều im lặng, không nói lời chia tay. Linh nhận thư, giữ trong tay, không mở.\",\n      \"location\": \"Căn bếp\",\n      \"time\": \"Chiều mưa\",\n      \"characters\": \"Bố, Linh\",\n      \"goal\": \"Bố trao thư cho Linh, Linh nhận thư nhưng chưa mở.\",\n      \"purpose\": \"Đặt ra tình huống và tạo ra áp lực cho Linh.\",\n      \"transition\": \"Bố và Linh im lặng, không nói lời chia tay.\"\n    }\n  ]\n}",
+    "seconds": 14.478
+  },
+  {
+    "stage": "screenplay_generation",
+    "input_bytes": 4106,
+    "instructions_bytes": 1951,
+    "timeout_seconds": null,
+    "model": "qwen2.5:7b",
+    "output": {
+      "scene": {
+        "heading": "Trong căn bếp chiều mưa",
+        "blocks": [
+          {
+            "kind": "action",
+            "text": "Bố nhẹ nhàng đưa cho Linh một lá thư, đôi mắt đều im lặng, không nói lời chia tay. Linh nhận thư, giữ trong tay, không mở.",
+            "speaker": ""
+          },
+          {
+            "kind": "action",
+            "text": "Linh đứng đó, tay nắm chặt lá thư, đôi mắt nhìn về phía cửa, như đang cân nhắc.",
+            "speaker": ""
+          },
+          {
+            "kind": "action",
+            "text": "Bố nhìn Linh, đôi mắt ấm áp, như muốn truyền đạt điều gì.",
+            "speaker": ""
+          },
+          {
+            "kind": "action",
+            "text": "Linh cuối cùng cũng bước về phía cửa, tay vẫn cầm lá thư chưa mở.",
+            "speaker": ""
+          }
+        ]
+      }
+    },
+    "raw_output": "{\n  \"scene\": {\n    \"heading\": \"Trong căn bếp chiều mưa\",\n    \"blocks\": [\n      {\n        \"kind\": \"action\",\n        \"text\": \"Bố nhẹ nhàng đưa cho Linh một lá thư, đôi mắt đều im lặng, không nói lời chia tay. Linh nhận thư, giữ trong tay, không mở.\",\n        \"speaker\": \"\"\n      },\n      {\n        \"kind\": \"action\",\n        \"text\": \"Linh đứng đó, tay nắm chặt lá thư, đôi mắt nhìn về phía cửa, như đang cân nhắc.\",\n        \"speaker\": \"\"\n      },\n      {\n        \"kind\": \"action\",\n        \"text\": \"Bố nhìn Linh, đôi mắt ấm áp, như muốn truyền đạt điều gì.\",\n        \"speaker\": \"\"\n      },\n      {\n        \"kind\": \"action\",\n        \"text\": \"Linh cuối cùng cũng bước về phía cửa, tay vẫn cầm lá thư chưa mở.\",\n        \"speaker\": \"\"\n      }\n    ]\n  }\n}",
+    "seconds": 23.238
+  },
+  {
+    "stage": "screenplay_review",
+    "input_bytes": 385,
+    "instructions_bytes": 1200,
+    "timeout_seconds": 59.997756458993535,
+    "model": "qwen2.5:7b",
+    "output": {
+      "craft_issue": "none"
+    },
+    "raw_output": "{\"craft_issue\": \"none\"}",
+    "seconds": 2.626
+  },
+  {
+    "stage": "screenplay_review",
+    "input_bytes": 336,
+    "instructions_bytes": 1200,
+    "timeout_seconds": 57.3568731250125,
+    "model": "qwen2.5:7b",
+    "output": {
+      "craft_issue": "none"
+    },
+    "raw_output": "{\"craft_issue\": \"none\"}",
+    "seconds": 1.189
+  },
+  {
+    "stage": "screenplay_review",
+    "input_bytes": 310,
+    "instructions_bytes": 1200,
+    "timeout_seconds": 56.122406249982305,
+    "model": "qwen2.5:7b",
+    "output": {
+      "craft_issue": "none"
+    },
+    "raw_output": "{\"craft_issue\": \"none\"}",
+    "seconds": 1.059
+  },
+  {
+    "stage": "screenplay_review",
+    "input_bytes": 317,
+    "instructions_bytes": 1200,
+    "timeout_seconds": 55.051154542015865,
+    "model": "qwen2.5:7b",
+    "output": {
+      "craft_issue": "none"
+    },
+    "raw_output": "{\"craft_issue\": \"none\"}",
+    "seconds": 1.095
+  }
+]

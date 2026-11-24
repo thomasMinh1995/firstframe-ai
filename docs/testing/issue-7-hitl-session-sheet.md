@@ -1,6 +1,6 @@
 # Phiếu kiểm chứng vòng sửa #7 + tour theo HITL
 
-Ngày chuẩn bị: 26/10/2026. **Mẫu chưa chạy, chưa có kết quả nghiệm thu.**
+Ngày chuẩn bị: 26/10/2026; cập nhật: 02/11/2026. **Mẫu chưa có kết quả người thử hoặc nghiệm thu.**
 Dùng sau PR #43; không thay tiêu chí [#7](../plans/p0-author-intent-revision-flow.md),
 [tour #22](../plans/new-user-tour.md) hoặc [pilot #26](../plans/vietnam-first-screenplay-mvp.md#61-điều-kiện-pilot-đạt-và-chuyển-sang-m2).
 Chuẩn bị phiếu không cho phép tự gọi model hoặc bắt đầu pilot.
@@ -12,9 +12,9 @@ Chuẩn bị phiếu không cho phép tự gọi model hoặc bắt đầu pilot
 | Trường | Ghi trước khi bắt đầu |
 | --- | --- |
 | Mã đợt / mã người / ngày / người quan sát | … |
-| Mục đích và chế độ | … / diễn tập với output đã lưu hoặc kiểm chứng luồng model thật |
+| Mục đích và chế độ | … / khám phá có giám sát, diễn tập với output đã lưu hoặc kiểm chứng luồng model thật; không gộp các chế độ |
 | Phạm vi bằng chứng dự kiến | #7 / tour #22 / pilot #26; ghi riêng, không mặc định nghiệm thu cả ba |
-| Commit/build ứng dụng | …; bản HITL đã merge: `4119366f9180870bc5604a8c37c1bd09f1ea254e` |
+| Commit/build ứng dụng | …; nếu có thay đổi chưa commit, lưu diff/hash source và build thực dùng, không chỉ ghi HEAD; bản HITL đã merge: `4119366f9180870bc5604a8c37c1bd09f1ea254e` |
 | Model/provider/digest/daemon/tham số | …; phát lại ghi cấu hình của output gốc, không gọi là cấu hình vừa chạy |
 | Phiên bản prompt/schema và seed nếu có | …; phát lại ghi nguồn gốc, không đổi cấu hình giữa đợt rồi gộp kết quả |
 | Thiết bị/trình duyệt/cách nhập/trợ năng | …; phân biệt thiết bị thật với viewport mô phỏng |
@@ -88,11 +88,14 @@ ID kỹ thuật từ log/snapshot, không buộc người dùng hiểu artifact 
 | Card nguyên văn theo thứ tự cần để hiểu | … |
 | Nhận xét và gợi ý nguyên văn của AI | …; giữ cả ví dụ sửa nếu có |
 | Người dùng hiểu góp ý nói gì? | …; nguyên lời, không viết lại cho hợp lý |
+| Trước góp ý, tác giả định làm gì? | …; dẫn lời/bản đã có trước lúc đọc. Chưa ghi được thì để thiếu, không suy ngược từ bản sửa cuối |
 | Quyết định và lý do của tác giả | Giữ / sửa / từ chối / cần làm rõ / chưa quyết; … |
+| Góp ý đóng góp gì vào quyết định? | Phát hiện lệch ý / làm rõ lựa chọn / xác nhận giữ / không giúp / chưa biết; chi tiết và lời người viết: …; không suy từ việc có sửa chữ |
 | Nhận xét đúng không? | Đúng / một phần / sai / chưa đủ căn cứ; câu/card đối chiếu: … |
 | Có ích cho tác giả không? | Có / một phần / không / chưa biết; họ nói gì hoặc làm được gì nhờ góp ý: … |
 | Có nguy cơ dẫn sai không? | Trái ý đồ / bịa hoặc dẫn sai nguồn / ép sửa thiếu căn cứ / lặp nhịp / chưa thấy / chưa rõ; bằng chứng: … |
 | Tác động quan sát được | Chưa làm theo / từ chối / sửa hợp ý / sửa trái ý / mất phương hướng / chưa rõ; bản trước–sau: … |
+| Công sức kiểm tra hoặc sửa sai AI | Người viết phải đọc lại nguồn, tự bác bỏ, nhờ giải thích hay khôi phục gì? …; thời gian nếu quan sát được, tách khỏi chờ model; chưa biết thì ghi chưa biết |
 | Trợ giúp khi quyết định và sửa | H0/H1/H2, ai gợi ý điều gì: … |
 | Nhận định người đọc độc lập, nếu có | Mã người/ngày/phạm vi kinh nghiệm; đồng ý hoặc bất đồng với tác giả/AI, lý do: … |
 
@@ -105,6 +108,10 @@ nguyên bản hợp lệ sau khi đọc góp ý aligned cũng có giá trị. Ng
 từ chối đúng một lời khuyên sai không làm output ấy đạt; họ làm theo cũng chưa
 chứng minh bản thảo tốt hơn. Ghi cả phần dùng được và phần có thể dẫn sai.
 Nhận định “có nguy cơ” khác với bằng chứng đã gây tác động trong bản sửa.
+Tác giả phải tự sửa sai cho critic là công sức cần ghi nhận, không tự tính
+thành giá trị của critic. Giữ bản nhờ một nhận xét aligned có căn cứ khác với
+giữ bản sau khi mất công bác bỏ một cáo buộc sai. Câu hỏi dựa trên tiền đề sai
+vẫn có thể dẫn lệch, dù AI không đưa câu thay thế.
 
 Ca tham chiếu cho người đọc sau quan sát: N1 là đọc ngược kết mở hoặc giữ hành
 vi giấu hộ chiếu trái yêu cầu; N2 là bịa mâu thuẫn giữa im lặng–trả lời hoặc
@@ -137,7 +144,7 @@ xóa lỗi chặn hoặc đổi kết quả gốc thành đạt.
 | --- | --- |
 | #7 | Kế hoạch đề xuất 5–10 người mới qua hai vòng sửa và 1–2 người đọc có kinh nghiệm; đối chiếu đủ tiêu chí dữ liệu/thao tác/nội dung. Không đóng issue từ điểm AI hoặc một phiên diễn tập |
 | #22 | Pilot 3–5 người cùng tổng kết; screen reader, mobile/IME/bàn phím thật và full Safari vẫn cần bằng chứng riêng. Không lấy viewport mô phỏng thay thiết bị thật |
-| #26 | PO chốt N=5–8 trước; ít nhất 80% hoàn thành toàn nhiệm vụ ở H0, làm tròn lên (N=5/6/7/8 cần 4/5/6/7). Ít nhất hai người đạt muốn viết tiếp; không còn lỗi chặn; PO ghi đạt/chưa đạt/cần thêm bằng chứng trước M2 |
+| #26 | PO chốt N=5–8 trước; ít nhất 80% hoàn thành toàn nhiệm vụ M1 ở H0, làm tròn lên (N=5/6/7/8 cần 4/5/6/7). Ít nhất hai người đạt muốn viết tiếp; không còn lỗi chặn; PO ghi đạt/chưa đạt/cần thêm bằng chứng khi nghiệm thu M1 sau deploy, không chặn bắt đầu code M2–M4 |
 
 Có thể chuẩn bị chung một đợt nếu chốt trước nhiệm vụ/phiên bản và đủ bằng
 chứng cho từng phạm vi; không tự dùng một kết quả để đóng cả ba issue. Đổi
@@ -155,3 +162,58 @@ demo. Bản ghi không thay pilot hoặc nghiệm thu live.
 Phiếu chỉ chuẩn bị thu bằng chứng; không tự tuyển/gửi lời mời người thử,
 chạy model, sửa code/runtime/plan hoặc xác nhận #7 đã đạt. Kết quả thực tế
 cần được ghi tại đúng issue #7/#22/#26 theo phạm vi đã chốt.
+
+## 7. Chuẩn bị khám phá giá trị critic
+
+**Chưa có kết quả phiên người thật trong phiếu này.** Chốt mã người, kinh
+nghiệm, chất liệu, thiết bị, người quan sát, lịch và quyền lưu bằng chứng
+ở mục 1 trước phiên. Không suy vai trò người mới/người đọc độc lập từ
+việc tham gia một nhóm làm phim; không tự tuyển/liên hệ ai.
+
+Thứ tự ngày 26/10 là M2 → M3 → M4, kiểm thử kỹ thuật và
+deploy môi trường thử trước, rồi mới bắt đầu phiên trải nghiệm người dùng.
+Luồng kỹ thuật đã có trên `dev` sau PR #89; phiếu này được giữ cho giai đoạn người dùng; chưa có người đọc là điều
+còn thiếu cho nghiệm thu, không phải điều kiện ngăn code M2. Tham chiếu thứ
+tự hiện hành tại [roadmap](../roadmap.md). Nếu quan sát cả hành trình mới,
+ghi riêng M2–M4, không tự đổi nhiệm vụ hoặc cách tính đạt M1 trong mục 6.
+
+Khi dùng output baseline đã lưu, cung cấp đủ ba phần: ý đồ, draft và nhận
+xét/lời khuyên để người đọc tự đối chiếu. Ghi nguồn và phiên bản của output;
+không kèm nhãn kỳ vọng hoặc phần chấm của người chuẩn bị. Người đã xem đáp
+án ghi rõ việc đó; không gọi là đánh giá kín. Đọc ca tổng hợp chỉ cho biết
+đúng/sai và ích lợi dự kiến, chưa đo giá trị đối với tác giả thật hoặc tour.
+
+Phiên người viết sau đó dùng nguyên nhiệm vụ mục 2, ghi đủ ba câu hỏi cho
+mỗi góp ý đã tiếp xúc: đúng không, giúp quyết định gì, gây tốn công/dẫn sai
+không. Không chỉ ghi góp ý được làm theo; góp ý bị bỏ qua/chưa hiểu vẫn thuộc
+nhật ký. Dùng tình trạng chưa rõ thay cho ép kết luận. Nếu dùng ca tổng hợp
+hoặc output phát lại, ghi rõ đây không phải chuyện của người thử hoặc review
+model mới. Việc chuẩn bị này không tự khởi chạy thêm model.
+
+Sau nhiệm vụ mới hỏi ngắn, không cung cấp đáp án trước:
+
+- “Góp ý nào giúp bạn quyết định cụ thể điều gì?”
+- “Có góp ý nào bạn không dùng được hoặc chưa hiểu không? Vì sao?”
+- “Bạn phải kiểm tra lại hoặc nhờ trợ giúp ở chỗ nào?”
+- “Nếu chưa đọc góp ý đó, bạn nghĩ mình sẽ giữ hay sửa gì?” — đây là hồi
+  tưởng sau nhiệm vụ, ghi riêng với quyết định thực đã ghi trước khi đọc.
+
+Nếu trao đổi trong lúc làm ảnh hưởng lựa chọn, ghi thời điểm/câu hỏi và trợ
+giúp. Người quan sát không chọn giúp lời khuyên đúng; nếu cần hỗ trợ nội dung,
+ghi H2. Không hy sinh quyền giữ bản hoặc gây mất nội dung để thử phản ứng.
+
+Tổng kết lượt khám phá bằng bảng sau, chưa thêm điểm tổng hoặc ngưỡng đạt:
+
+| Phần cần quyết định | Bằng chứng thực tế | Còn thiếu/bất đồng | Hành động nhỏ được đề xuất và người chốt |
+| --- | --- | --- | --- |
+| Nhận xét có căn cứ | … / chưa có người đọc | … | … |
+| Góp ý giúp quyết định cụ thể | … / chưa có người thử | … | … |
+| Công sức bác bỏ AI và tác động dẫn sai | … / chưa quan sát | … | … |
+| Tour, nguồn dẫn, lưu/mở lại và trợ giúp | … / chưa quan sát | … | … |
+
+Chỉ khi có bằng chứng mới chọn một việc: giữ phần có ích; xem xét giảm đề
+xuất sửa nếu nhận xét dùng được nhưng lời sửa gây hại; hoặc đánh giá lại vai
+trò/model nếu cả nhận xét không đáng tin. Nếu vấn đề nằm ở thao tác/nguồn,
+xử lý lỗi UI hoặc dữ liệu cụ thể. Không tự đổi model, ẩn lỗi, chuyển mọi
+nhận xét thành câu hỏi hoặc chạy vòng prompt mới từ bảng này. Kết quả chưa
+rõ thì ghi chưa rõ. N1/N2 và tiêu chí nghiệm thu mục 6 giữ nguyên.

@@ -1,0 +1,9 @@
+{
+  "case": "draft-workflow-qwen7b-2026-10-30",
+  "source": "docs/evaluations/draft-workflow-qwen7b-2026-10-30/candidate.json.gz",
+  "technical_pass": true,
+  "blocks": 2,
+  "target_preserved": true,
+  "seconds": 22.661,
+  "model_calls": 1
+}

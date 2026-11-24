@@ -22,7 +22,7 @@ const {randomUUID: uuid} = require('node:crypto');
   const source = structuredClone(project.screenplay.source_outline), scriptId = project.screenplay.id;
   const page = await context.newPage(), errors = [];
   page.on('pageerror', e => errors.push(e.message)); await page.goto('http://127.0.0.1:3034');
-  const area = page.getByRole('region', {name: 'M3 Kịch bản', exact: true});
+  const area = page.getByRole('region', {name: 'Kịch bản', exact: true});
   const editor = area.getByLabel('Editor liền mạch', {exact: true});
   const enable = async () => {if (!await editor.count()) await area.getByRole('navigation', {name: 'Các cảnh kịch bản'}).getByRole('button').first().click(); await editor.waitFor();};
   const save = async () => {

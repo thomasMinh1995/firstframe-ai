@@ -1,0 +1,24 @@
+{
+  "scene": {
+    "id": "4a14368b-25cd-4a03-bbb6-bb21bbfcd4c5",
+    "source_scene_id": "d474b831-9e36-4dcc-9c3a-757abd04e3e4",
+    "heading": "Trong căn bếp chiều mưa",
+    "blocks": [
+      {
+        "kind": "action",
+        "text": "Bố đứng bên cửa sổ, ánh sáng mờ nhạt từ bên ngoài chiếu vào căn bếp. Linh ngồi bên bàn, tay cầm lá thư chưa mở. Bố đưa cho Linh một lá thư, giọng nhẹ nhàng.",
+        "speaker": "",
+        "id": "9e5afb2c-666d-4618-8e0b-dae7f87afd9a"
+      },
+      {
+        "kind": "action",
+        "text": "Linh nhận thư, mắt nhìn vào lá thư nhưng không mở ra. Bố đứng bên cạnh, hai người im lặng. Cuối cùng, Linh nắm chặt lá thư, quyết định giữ quyền quyết định.",
+        "speaker": "",
+        "id": "5b1b1244-0582-4553-9a17-b53a34926a9f"
+      }
+    ]
+  },
+  "prompt_version": "screenplay-scene-v10",
+  "model": "qwen2.5:7b",
+  "status": "ready"
+}

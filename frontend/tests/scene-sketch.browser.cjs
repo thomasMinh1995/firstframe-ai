@@ -78,7 +78,7 @@ const fs=require('node:fs/promises');const path=require('node:path');
  // Missing image leaves text/references readable and never blocks the text handoff.
  await fs.unlink(path.join(directory,'scene-images',seed.id,selected.asset_id+'.png'));
  await page.reload();await area.locator('.scene-select').last().getByText(/Tệp ảnh thiếu hoặc lỗi/).waitFor();
- await area.getByRole('button',{name:'Lưu bản dàn cảnh để viết tiếp',exact:true}).click();await page.getByText(/Đã lưu bản nguồn M2 phiên bản/).waitFor();
+ await area.getByRole('button',{name:'Lưu bản dàn cảnh để viết tiếp',exact:true}).click();await page.getByText(/Đã lưu bản dàn cảnh phiên bản/).waitFor();
  assert.ok((await read()).scene_handoff);assert.equal((await read()).feedback_source.content_key,seed.feedback_source.content_key);
  for(const width of [1280,390,320]){
    await page.setViewportSize({width,height:900});await area.locator('[data-select-scene]').last().click();

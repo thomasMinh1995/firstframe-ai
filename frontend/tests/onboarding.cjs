@@ -1,7 +1,13 @@
 const assert = require('node:assert/strict');
 const {
-  initialTour, reduceTour: reduce, parseTour, entryStep, nextStep, previousStep, continuation,
+  initialTour, reduceTour: reduce, parseTour, entryStep, nextStep, previousStep, continuation, tourSteps,
 } = require(process.argv[2] + '/onboardingState.js');
+
+assert.deepEqual(tourSteps, ['new-project', 'idea', 'choices', 'draft', 'outline', 'script', 'save']);
+for (const [version, before, after] of [[2, 'draft', 'draft'], [3, 'draft-run', 'choices'], [3, 'export', 'save'], [4, 'outline', 'outline']]) {
+  assert.deepEqual(parseTour(JSON.stringify({version, status: 'paused', stepId: before, projectId: 'p1'})),
+    {version: 4, status: 'paused', stepId: after, projectId: 'p1'});
+}
 
 const empty = Object.freeze({ projectId: null, hasAnalysis: false, hasDraft: false, briefChanged: false });
 const idea = Object.freeze({ ...empty, projectId: 'p1' });

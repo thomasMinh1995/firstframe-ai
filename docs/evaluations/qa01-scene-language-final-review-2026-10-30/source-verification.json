@@ -1,0 +1,96 @@
+{
+  "prompt_version": "screenplay-scene-v19-source-composition",
+  "base_commit": "532c11812a89a6fbfb920fbcf6395c51a28cf547",
+  "uncommitted_at_evaluation": true,
+  "sha256": {
+    "backend/app/application/screenplay_composition.py": "f7db9db2cb26a25d6c89b71a6f419d8f4696a8f9dfd8b576ea623892b12ebbe5",
+    "backend/app/application/screenplay_writing.py": "3aed0e2da76c4d67c7dd655e00ee16c9e1353b326d13747ff6814038763cc483",
+    "backend/app/api/routes/screenplays.py": "aadd2ece14f9ba04af0a87556fc6ffdcdac72869a129fd1ecc5ab5c4429013a8",
+    "backend/scripts/check_scene_writing.py": "213bb16773afff9702ef1052f8703c39a87d49088b38d2bcb8087699f21af86b",
+    "backend/scripts/scene_writing_acceptance.py": "ad159faf5f8ea5e35126aeb9849c658b14d55bf7fb113dcb4835dd1205da130a",
+    "backend/tests/test_screenplay_composition.py": "fe1b4559b234a84999741773728b648782297b1389b8da4c39704b784764ce40",
+    "domains/short-film/prompts/screenplay_composition_prompt.md": "3f1beae63f3fe6d55a4325e2350560f0b4c18de8ae55e1bd5d09dabd4d8a608e"
+  },
+  "replayed_frames": [
+    {
+      "case": "final-v19-pass-1/draft-workflow-qwen7b-2026-10-30",
+      "request_schema_and_input_match_final_source": true,
+      "rendered_content_matches": true
+    },
+    {
+      "case": "final-v19-pass-1/draft-workflow-qwen7b-saved-brief-2026-10-30",
+      "request_schema_and_input_match_final_source": true,
+      "rendered_content_matches": true
+    },
+    {
+      "case": "final-v19-pass-1/english",
+      "request_schema_and_input_match_final_source": true,
+      "rendered_content_matches": true
+    },
+    {
+      "case": "final-v19-pass-1/gentle-comedy",
+      "request_schema_and_input_match_final_source": true,
+      "rendered_content_matches": true
+    },
+    {
+      "case": "final-v19-pass-1/later-scene",
+      "request_schema_and_input_match_final_source": true,
+      "rendered_content_matches": true
+    },
+    {
+      "case": "final-v19-pass-1/limited-resources",
+      "request_schema_and_input_match_final_source": true,
+      "rendered_content_matches": true
+    },
+    {
+      "case": "final-v19-pass-1/parent-dialogue",
+      "request_schema_and_input_match_final_source": true,
+      "rendered_content_matches": true
+    },
+    {
+      "case": "final-v19-pass-1/quiet-open-ending",
+      "request_schema_and_input_match_final_source": true,
+      "rendered_content_matches": true
+    },
+    {
+      "case": "final-v19-pass-2/draft-workflow-qwen7b-2026-10-30",
+      "request_schema_and_input_match_final_source": true,
+      "rendered_content_matches": true
+    },
+    {
+      "case": "final-v19-pass-2/draft-workflow-qwen7b-saved-brief-2026-10-30",
+      "request_schema_and_input_match_final_source": true,
+      "rendered_content_matches": true
+    },
+    {
+      "case": "final-v19-pass-2/english",
+      "request_schema_and_input_match_final_source": true,
+      "rendered_content_matches": true
+    },
+    {
+      "case": "final-v19-pass-2/gentle-comedy",
+      "request_schema_and_input_match_final_source": true,
+      "rendered_content_matches": true
+    },
+    {
+      "case": "final-v19-pass-2/later-scene",
+      "request_schema_and_input_match_final_source": true,
+      "rendered_content_matches": true
+    },
+    {
+      "case": "final-v19-pass-2/limited-resources",
+      "request_schema_and_input_match_final_source": true,
+      "rendered_content_matches": true
+    },
+    {
+      "case": "final-v19-pass-2/parent-dialogue",
+      "request_schema_and_input_match_final_source": true,
+      "rendered_content_matches": true
+    },
+    {
+      "case": "final-v19-pass-2/quiet-open-ending",
+      "request_schema_and_input_match_final_source": true,
+      "rendered_content_matches": true
+    }
+  ]
+}

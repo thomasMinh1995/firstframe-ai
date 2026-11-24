@@ -1,0 +1,25 @@
+{
+  "raw_output": "{\n  \"scene\": {\n    \"heading\": \"Khoảnh khắc\",\n    \"blocks\": [\n      {\n        \"kind\": \"action\",\n        \"text\": \"Cha đặt phong thư kín lên bàn rồi lùi lại. Con gái đặt tay cạnh phong thư, chưa nhận hoặc mở; dừng ở đó.\",\n        \"speaker\": \"\"\n      },\n      {\n        \"kind\": \"dialogue\",\n        \"text\": \"Con chưa biết phải làm sao.\",\n        \"speaker\": \"Con gái\"\n      },\n      {\n        \"kind\": \"dialogue\",\n        \"text\": \"Để tôi nghĩ thêm.\",\n        \"speaker\": \"Con gái\"\n      }\n    ]\n  }\n}",
+  "output": {
+    "scene": {
+      "heading": "Khoảnh khắc",
+      "blocks": [
+        {
+          "kind": "action",
+          "text": "Cha đặt phong thư kín lên bàn rồi lùi lại. Con gái đặt tay cạnh phong thư, chưa nhận hoặc mở; dừng ở đó.",
+          "speaker": ""
+        },
+        {
+          "kind": "dialogue",
+          "text": "Con chưa biết phải làm sao.",
+          "speaker": "Con gái"
+        },
+        {
+          "kind": "dialogue",
+          "text": "Để tôi nghĩ thêm.",
+          "speaker": "Con gái"
+        }
+      ]
+    }
+  }
+}

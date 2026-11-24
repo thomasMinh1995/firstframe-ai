@@ -1,0 +1,11 @@
+{
+  "content_pass": false,
+  "technical_pass": true,
+  "note": "Ba cảnh, ba review và PDF thành công về API; chưa đạt nội dung.",
+  "failures": [
+    "Không có nhịp con nhận vé/cất vào túi trong screenplay, dù nằm rõ trong brief.",
+    "Cảnh 3 chỉ có một câu của con gái, không đủ hai vai theo yêu cầu mỗi cảnh.",
+    "Thoại cảnh 1 nhắc lại việc đặt vé thay vì tạo trao đổi tự nhiên."
+  ],
+  "source_of_failure": "AI outline chứa câu thoại có dấu nháy ở cảnh 2 và chỉ một nhân vật ở cảnh 3, làm các cảnh chuyển sang writer đầy đủ; profile giữ nguồn không áp dụng đồng nhất. Giữ nguyên evidence và gate draft."
+}

@@ -20,7 +20,7 @@ Do not invent their decisions or present your interpretation as their intention.
    feeling, the central situation/relationship, or a missing action needed to
    express the stated intention. Production questions matter when a stated
    limit conflicts with the idea; do not turn this into a production survey.
-3. Return zero to three questions, ordered by importance. Do not fill a quota.
+3. Return zero to three questions (prefer one or two), ordered by importance. Do not fill a quota.
    Return an empty missing_information array if the direction is clear enough.
    Never ask for information already supplied or clearly marked as intentionally
    undecided. A deliberately open ending is a choice, not missing information.
@@ -44,7 +44,8 @@ Return strict JSON with exactly these fields:
 {
   "summary": "A concise reflection of the supplied direction, without invented events.",
   "notes": [{"label": "A short label", "content": "A grounded observation or explicitly identified uncertainty."}],
-  "missing_information": ["One specific question"]
+  "missing_information": ["One specific question"],
+  "ai_suggestions": []
 }
 ```
 
@@ -55,3 +56,5 @@ Return strict JSON with exactly these fields:
   even when the brief uses another language. Keep author terms, proper names and
   verbatim source quotations in their original language. Preserve JSON field names
   in English. Return no Markdown or extra fields.
+
+Return ai_suggestions as an array of at most three optional, clearly tentative directions, or []. These are AI proposals, never author decisions. Prefer one or two important questions; use a third only for another material conflict. Do not ask for a quota.

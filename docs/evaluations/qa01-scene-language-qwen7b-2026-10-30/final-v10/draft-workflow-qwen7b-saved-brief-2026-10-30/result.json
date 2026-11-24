@@ -1,0 +1,24 @@
+{
+  "scene": {
+    "id": "42e34759-54de-4207-af54-283ac45e1a6d",
+    "source_scene_id": "db594006-295a-4fec-a75d-192f2b53760b",
+    "heading": "Chiều mưa trong căn bếp nhỏ",
+    "blocks": [
+      {
+        "kind": "action",
+        "text": "Mưa rơi nhẹ ngoài cửa sổ, ánh sáng mờ nhạt từ bên ngoài chiếu vào căn bếp nhỏ, làm ấm không gian. Con gái ngồi ở bàn học, chuẩn bị đi học xa. Cha đứng bên cạnh, đặt chìa khóa lên bàn, sau đó lùi về phía sau, nhìn con gái.",
+        "speaker": "",
+        "id": "06ca5d51-9ac6-4cc2-a179-4118e7164a1e"
+      },
+      {
+        "kind": "action",
+        "text": "Con gái ngồi xuống, uống một ngụm trà. Cha đứng im lặng, nhìn con gái. Con gái chưa mở lá thư xin lỗi, nhưng ngồi uống trà cùng cha, để lại một tình cảm phức tạp chưa giải quyết.",
+        "speaker": "",
+        "id": "92f72a64-aae2-4ef5-9680-b85d66769a92"
+      }
+    ]
+  },
+  "prompt_version": "screenplay-scene-v10",
+  "model": "qwen2.5:7b",
+  "status": "ready"
+}

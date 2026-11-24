@@ -3,10 +3,11 @@
 const { chromium, firefox, webkit } = require('playwright');
 const assert = require('node:assert/strict');
 const path = require('node:path');
+const os = require('node:os');
 const fs = require('node:fs/promises');
 const url = process.env.TOUR_TEST_URL || 'http://localhost:3033';
 const engine = process.env.TOUR_BROWSER || 'chrome';
-const screenshots = process.env.TOUR_SCREENSHOTS || '/private/tmp/firstframe-tour-screenshots';
+const screenshots = process.env.TOUR_SCREENSHOTS || path.join(os.tmpdir(), 'firstframe-tour-screenshots');
 const key = 'firstframe:onboarding:v2';
 const clone = value => structuredClone(value);
 const project = (id = 'p1') => ({ id, revision: 0, updated_at: '2026-10-21T10:00:00Z', title: 'Câu chuyện thử nghiệm',
@@ -32,6 +33,10 @@ const buffer = page => page.evaluate(() => {
   return [...fields, ...draftFields].sort(([a], [b]) => a.localeCompare(b));
 });
 async function reveal(page, locator) {
+  await locator.waitFor({state: 'attached'});
+  const stage = await locator.evaluate(node => node.closest('[data-workspace-stage]')?.getAttribute('data-workspace-stage'));
+  const navigation = stage && page.locator(`.workspace-stage-nav button[aria-controls="${stage}"]`);
+  if (navigation && await navigation.count()) await navigation.click();
   const ancestors = locator.locator('xpath=ancestor::details');
   for (let i = await ancestors.count() - 1; i >= 0; i--) {
     const item = ancestors.nth(i);
@@ -117,6 +122,7 @@ async function setup(browser, options = {}) {
       const created = { ...project(`p${mock.projects.length + 1}`), idea: '' };
       mock.projects.push(created); return reply(created);
     }
+    if (method === 'GET' && parts[3] === 'draft-runs') return reply([]);
     const p = mock.projects.find(p => p.id === id);
     if (!p) return reply({ detail: 'missing' }, 404);
     if (method === 'GET') return reply(p);
@@ -141,6 +147,8 @@ async function setup(browser, options = {}) {
       if (changed) { p.analysis = null; p.answers = []; }
       if (mock.savePatch) Object.assign(p, clone(mock.savePatch));
       if (mock.loseSaveResponse) return route.abort('failed');
+      p.last_save_id = body.save_id;
+      p.last_save_revision = p.revision;
       return reply(p);
     }
     if (mock.hold) await mock.hold;
@@ -186,7 +194,9 @@ async function setup(browser, options = {}) {
   const page = await context.newPage();
   const entry = new URL(url);
   await page.goto(entry.href);
-  await page.getByRole('button', { name: 'Dự án mới', exact: true }).waitFor();
+  const create = page.getByRole('button', { name: 'Dự án mới', exact: true, includeHidden: true });
+  await create.waitFor({state: 'attached'}); await reveal(page, create);
+  await create.waitFor();
   await page.waitForFunction(() => !document.querySelector('[data-tour="new-project"]').disabled);
   return { context, page, mock, errors, close: async () => { assert.deepEqual(errors, []); await context.close(); } };
 }
@@ -739,7 +749,7 @@ if (require.main === module) (async () => {
     const reviewStarted = page.waitForRequest(request => request.method() === 'POST' && request.url().endsWith('/review/stream'));
     await click(page, 'Nhận phản hồi trên bản hiện tại');
     await reviewStarted;
-    await page.waitForFunction(() => document.querySelector('.project-fields').disabled);
+    await page.waitForFunction(() => document.querySelector('.project-fields').inert);
     const peer = await t.context.newPage(); await peer.goto(url); await (await edit(peer, 'draft-logline')).waitFor();
     await (await edit(peer, 'draft-logline')).fill('Bản mới hơn từ cửa sổ hai.');
     await click(peer, 'Lưu thay đổi'); await peer.getByText('Đã lưu thay đổi.', { exact: true }).waitFor();

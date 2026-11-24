@@ -1,0 +1,13 @@
+{
+  "calls": 20,
+  "http_200": 10,
+  "all_screenplays_unchanged": true,
+  "context_rejections": 0,
+  "false_positives": 0,
+  "missed_conflicts": 0,
+  "bad_evidence_pairs": 0,
+  "unexpected_cjk": 0,
+  "bad_presentations": 0,
+  "spurious_notes": 0,
+  "release_acceptance": "pending independent reading and model reliability"
+}

@@ -1,0 +1,21 @@
+{
+  "output": {
+    "heading": "Túi áo",
+    "translations": [],
+    "dialogue": {
+      "line_1": {
+        "after_action": 1,
+        "speaker": "Mẹ",
+        "self_reference": "mẹ",
+        "intent": "listening"
+      },
+      "line_2": {
+        "after_action": 1,
+        "speaker": "Con gái",
+        "self_reference": "con",
+        "intent": "needs_time"
+      }
+    }
+  },
+  "raw_output": "{\n  \"heading\": \"Túi áo\",\n  \"translations\": [],\n  \"dialogue\": {\n    \"line_1\": {\n      \"after_action\": 1,\n      \"speaker\": \"Mẹ\",\n      \"self_reference\": \"mẹ\",\n      \"intent\": \"listening\"\n    },\n    \"line_2\": {\n      \"after_action\": 1,\n      \"speaker\": \"Con gái\",\n      \"self_reference\": \"con\",\n      \"intent\": \"needs_time\"\n    }\n  }\n}"
+}

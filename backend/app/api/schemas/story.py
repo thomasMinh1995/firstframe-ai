@@ -31,6 +31,7 @@ class AnalysisResponse(BaseModel):
     summary: str
     notes: list[AnalysisNoteResponse] = Field(default_factory=list)
     missing_information: list[str] = Field(default_factory=list)
+    ai_suggestions: list[str] = Field(default_factory=list, max_length=3)
 
 
 class StoryPlanSectionResponse(BaseModel):

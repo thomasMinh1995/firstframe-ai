@@ -79,7 +79,7 @@ const path=require('node:path');
  assert.equal((await read()).scene_proposals.length,before);
  assert.equal((await read()).scene_outline.scenes.length,manualCount);
  // Discard doesn't modify scenes; failure still permits manual edits.
- await suggestions.getByRole('button',{name:'Lưu sửa đang chờ và bỏ đề xuất',exact:true}).first().click();await page.waitForFunction(()=>!document.querySelector('.project-fields:disabled'));
+ await suggestions.getByRole('button',{name:'Lưu sửa đang chờ và bỏ đề xuất',exact:true}).first().click();await page.waitForFunction(()=>!document.querySelector('.project-fields[inert]'));
  await context.request.post(api+'/__test/control',{data:{fail_scenes:true}});
  await suggestions.getByRole('button',{name:'Gợi ý thêm một cảnh',exact:true}).click();await page.locator('.save-toolbar .error').waitFor();
  await area.getByRole('button',{name:'Tự thêm cảnh',exact:true}).click();await pop.getByLabel('Tên cảnh',{exact:true}).fill('Cảnh tự viết sau lỗi AI');

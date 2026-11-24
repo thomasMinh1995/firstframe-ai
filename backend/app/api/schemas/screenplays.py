@@ -1,9 +1,10 @@
 """Editable screenplay text; source snapshots are supplied only by the server."""
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, model_validator, model_serializer
 
 from app.api.schemas.scenes import SceneId
+from app.api.schemas.provenance import TextProvenance
 
 
 class BlockText(BaseModel):
@@ -58,6 +59,10 @@ class StartScreenplay(BaseModel):
 
 
 class SceneWritingRequest(StartScreenplay):
+    scope: Literal["scene", "blocks"] = "scene"
+    block_ids: list[SceneId] = Field(default_factory=list, max_length=20)
+    review_id: SceneId | None = None
+    note_id: SceneId | None = None
     target_scene_id: SceneId
     instructions: str = Field(default="", max_length=2000)
 
@@ -66,10 +71,22 @@ class SelectScreenplay(StartScreenplay):
     source_version_id: Literal["current"] | SceneId
 
 
+class WrittenAction(BlockText):
+    kind: Literal["action"]
+    text: str = Field(min_length=1, max_length=10000)
+    speaker: Literal[""] = ""
+
+
+class WrittenDialogue(BlockText):
+    kind: Literal["dialogue"]
+    text: str = Field(min_length=1, max_length=10000)
+    speaker: str = Field(min_length=1, max_length=200)
+
+
 class WrittenScene(BaseModel):
     model_config = ConfigDict(extra="forbid")
     heading: str = Field(min_length=1, max_length=500)
-    blocks: list[BlockText] = Field(min_length=1, max_length=200)
+    blocks: list[WrittenAction | WrittenDialogue] = Field(min_length=1, max_length=200)
 
     @model_validator(mode="after")
     def require_content(self):
@@ -91,9 +108,17 @@ class ReviewSource(BaseModel):
     label: str
     text: str
     category: Literal["screenplay", "author_choice", "context"]
+    provenance: TextProvenance | None = None
     scene_id: SceneId | None = None
     block_id: SceneId | None = None
     field: Literal["text", "speaker", "heading", "choice", "context"]
+
+    @model_serializer(mode="wrap")
+    def serialize(self, handler):
+        data = handler(self)
+        if self.provenance is None:
+            data.pop("provenance", None)
+        return data
 
 
 class ReviewEvidence(BaseModel):
@@ -126,3 +151,15 @@ class ReviewAssessment(BaseModel):
     model_config = ConfigDict(extra="forbid")
     revision: int = Field(ge=0)
     assessment: Literal["helpful", "misleading", "uncertain", "dismissed"]
+
+
+class BlockReplacement(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    block_id: SceneId
+    expected: BlockText
+    replacement: BlockText
+
+
+class BlockRevisionResult(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    replacements: list[BlockReplacement] = Field(min_length=1, max_length=20)

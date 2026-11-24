@@ -1,4 +1,5 @@
 "use client";
+import {isComposingKey} from './inputEvents';
 
 import {useEffect, useId, useRef, useState, type KeyboardEvent} from 'react';
 import {SceneHint} from './SceneHint';
@@ -55,7 +56,7 @@ export function ContinuousSceneEditor({scene, scope, blockLimit, onChange}: {
     } catch (caught) {setError((caught as Error).message);}
   }
   function key(event: KeyboardEvent<HTMLTextAreaElement>, b: ScriptBlock) {
-    if (event.nativeEvent.isComposing || event.keyCode === 229) return;
+    if (isComposingKey(event)) return;
     const {selectionStart: start, selectionEnd: end} = event.currentTarget;
     if (event.key === 'Enter' && !event.shiftKey && !event.ctrlKey && !event.metaKey && !event.altKey) {
       event.preventDefault(); const id = crypto.randomUUID();
@@ -90,7 +91,7 @@ export function ContinuousSceneEditor({scene, scope, blockLimit, onChange}: {
           <label className="sr-only" htmlFor={`${prefix}-${b.id}-speaker`}>Người nói đoạn {index + 1}</label>
           <input id={`${prefix}-${b.id}-speaker`} data-script-field="speaker" maxLength={200} placeholder="Tên nhân vật" value={b.speaker}
             onFocus={() => setActive({id: b.id, part: 'character'})} onChange={e => edit(b.id, 'speaker', e.target.value)}
-            onKeyDown={e => {if (e.key === 'Enter' && !e.nativeEvent.isComposing && e.keyCode !== 229) {e.preventDefault(); setActive({id: b.id, part: 'dialogue'}); setFocus({id: b.id, field: 'text', position: 0});}}}/>
+            onKeyDown={e => {if (e.key === 'Enter' && !isComposingKey(e)) {e.preventDefault(); setActive({id: b.id, part: 'dialogue'}); setFocus({id: b.id, field: 'text', position: 0});}}}/>
         </>}
         <label className="sr-only" htmlFor={`${prefix}-${b.id}-text`}>{b.kind === 'action' ? 'Hành động' : 'Lời thoại'} đoạn {index + 1}</label>
         <textarea id={`${prefix}-${b.id}-text`} data-script-field="text" rows={3} maxLength={10000} value={b.text}

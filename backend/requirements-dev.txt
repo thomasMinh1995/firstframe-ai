@@ -8,3 +8,6 @@ pytest-cov~=7.0
 ruff~=0.15
 mypy~=1.18
 pre-commit~=4.0
+
+# Inspect generated PDF text and metadata.
+pypdf>=6,<7

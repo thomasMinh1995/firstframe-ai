@@ -1,0 +1,22 @@
+{
+  "provider": {
+    "provider": "ollama",
+    "model": "qwen2.5:7b",
+    "parameters": {
+      "temperature": 0.3,
+      "timeout_seconds": 180.0,
+      "num_ctx": 16384,
+      "screenplay_review_temperature": 0.0
+    }
+  },
+  "prompt_version": "screenplay-scene-v19-source-composition",
+  "variants": {
+    "parent-dialogue": "Explicit request for two parent/child dialogue lines; source constraints unchanged.",
+    "english": "Explicit English response language; Vietnamese source retained.",
+    "later-scene": "Target second scene with a synthetic saved first scene: the letter has already changed hands."
+  },
+  "content_gate": true,
+  "expected_cases": 8,
+  "application_revision": "532c11812a89a6fbfb920fbcf6395c51a28cf547",
+  "worktree_changes": " backend/app/api/routes/screenplays.py         |  3 ++-\n backend/app/application/screenplay_writing.py | 15 ++++++++++++---\n backend/scripts/check_scene_writing.py        | 21 ++++++++++++++++++---\n 3 files changed, 32 insertions(+), 7 deletions(-)\n"
+}

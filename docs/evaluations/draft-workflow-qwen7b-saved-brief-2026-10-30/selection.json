@@ -1,0 +1,434 @@
+{
+  "id": "34e64bbe-4151-4ee8-a51b-ffeef2c394b6",
+  "created_at": "2026-10-30T03:53:40.492994+00:00",
+  "source_revision": 3,
+  "source_version_id": "current",
+  "screenplay": {
+    "id": "89bd2bfe-0dd5-4ae5-bbba-582c0d235e2c",
+    "version": 1,
+    "scenes": [
+      {
+        "id": "42e34759-54de-4207-af54-283ac45e1a6d",
+        "source_scene_id": "db594006-295a-4fec-a75d-192f2b53760b",
+        "heading": "Chiều mưa",
+        "blocks": [
+          {
+            "kind": "action",
+            "text": "Mưa rơi nhẹ ngoài cửa sổ, ánh sáng mờ nhạt từ bên ngoài chiếu vào căn bếp nhỏ, làm ấm không gian. Con gái ngồi ở bàn học, chuẩn bị đi học xa. Cha đứng bên cạnh, đặt chìa khóa lên bàn, sau đó lùi về phía sau, nhìn con gái.",
+            "speaker": "",
+            "id": "913c4adf-3737-4fb8-920a-0d717ce5e988"
+          },
+          {
+            "kind": "action",
+            "text": "Cha đặt một lá thư xin lỗi cạnh chìa khóa, rồi lùi về phía sau, nhìn con gái một cách đầy tình cảm.",
+            "speaker": "",
+            "id": "d1ce95b8-9bfa-4dd9-9a3e-7b3e393520bc"
+          },
+          {
+            "kind": "action",
+            "text": "Con gái nhìn chìa khóa và lá thư, nhưng chưa mở thư. Cô ngồi xuống, uống một ngụm trà.",
+            "speaker": "",
+            "id": "88b6f97f-34d8-4918-839d-d0e6beaab671"
+          },
+          {
+            "kind": "action",
+            "text": "Cha đứng im lặng, nhìn con gái uống trà. Cả hai ngồi im lặng trong căn bếp, ánh sáng từ cửa sổ làm ấm căn phòng.",
+            "speaker": "",
+            "id": "8e84d9ee-012a-415e-8f05-bac9f727f897"
+          }
+        ]
+      },
+      {
+        "id": "c1b1ae83-41da-45c4-bd86-72faf5222d42",
+        "source_scene_id": "684806e2-68c1-467d-9981-612b514755e1",
+        "heading": "Chiều mưa trong căn bếp nhỏ",
+        "blocks": [
+          {
+            "kind": "action",
+            "text": "Con gái ngồi xuống, uống một ngụm trà. Cha đứng im lặng, nhìn con gái.",
+            "speaker": "",
+            "id": "80026378-0ba8-48b9-9f8f-5787ae77f630"
+          },
+          {
+            "kind": "action",
+            "text": "Ánh sáng từ cửa sổ làm ấm căn bếp, tạo nên không khí yên lặng giữa hai người.",
+            "speaker": "",
+            "id": "7744d922-7b18-4e99-a630-c0867b012ca1"
+          }
+        ]
+      }
+    ],
+    "source_revision": 2,
+    "source_outline": {
+      "id": "32833a02-13d0-4863-89ad-ba970a34aa39",
+      "version": 1,
+      "scenes": [
+        {
+          "id": "db594006-295a-4fec-a75d-192f2b53760b",
+          "title": "Chiều mưa",
+          "action": "Mưa rơi nhẹ ngoài cửa sổ, ánh sáng mờ nhạt từ bên ngoài chiếu vào căn bếp nhỏ, làm ấm không gian. Con gái ngồi ở bàn học, chuẩn bị đi học xa. Cha đứng bên cạnh, đặt chìa khóa lên bàn, sau đó lùi về phía sau, nhìn con gái.",
+          "location": "Căn bếp nhỏ",
+          "time": "Chiều mưa",
+          "characters": "Con gái, Cha",
+          "goal": "Cha muốn thể hiện sự quan tâm và xin lỗi con gái trước khi cô đi học xa.",
+          "purpose": "Tạo ra bối cảnh và giới thiệu nhân vật, đồng thời đặt ra vấn đề cần giải quyết.",
+          "viewer_intent": "",
+          "keep_or_avoid": "",
+          "staging_choices": {}
+        },
+        {
+          "id": "684806e2-68c1-467d-9981-612b514755e1",
+          "title": "Uống trà",
+          "action": "Con gái ngồi xuống, uống một ngụm trà. Cha đứng im lặng, nhìn con gái. Con gái chưa mở lá thư xin lỗi, nhưng ngồi uống trà cùng cha, để lại một tình cảm phức tạp chưa giải quyết.",
+          "location": "Căn bếp nhỏ",
+          "time": "Chiều mưa",
+          "characters": "Con gái, Cha",
+          "goal": "Con gái chưa mở lá thư xin lỗi, nhưng ngồi uống trà cùng cha, để lại một tình cảm phức tạp chưa giải quyết.",
+          "purpose": "Tăng thêm áp lực và tiết lộ xoay quanh tình cảm phức tạp giữa cha và con gái.",
+          "viewer_intent": "",
+          "keep_or_avoid": "",
+          "staging_choices": {}
+        }
+      ],
+      "source": {
+        "id": "04f95582-5816-4a86-b739-17f2d27b5a12",
+        "project_revision": 2,
+        "version_id": "current",
+        "draft": {
+          "title": "Chiều mưa trong căn bếp nhỏ",
+          "logline": "Trong căn bếp nhỏ, con gái và cha cùng uống trà, con gái chưa mở lá thư xin lỗi của cha, để lại một tình cảm phức tạp chưa giải quyết.",
+          "sections": [
+            {
+              "title": "Core idea",
+              "purpose": "State the short film's central promise.",
+              "content": "Trong căn bếp nhỏ, con gái và cha cùng uống trà, con gái chưa mở lá thư xin lỗi của cha, để lại một tình cảm phức tạp chưa giải quyết."
+            },
+            {
+              "title": "Main character",
+              "purpose": "Define the protagonist and key character pressure.",
+              "content": "Con gái Cha"
+            },
+            {
+              "title": "Main conflict",
+              "purpose": "Describe the obstacle and stakes.",
+              "content": "Lá thư xin lỗi của cha Con gái chưa thể mở lòng tha thứ Quyền quyết định của con gái về tình cảm với cha"
+            },
+            {
+              "title": "Beginning",
+              "purpose": "Set up the story world and first dramatic turn.",
+              "content": "Chiều mưa, con gái chuẩn bị đi học xa, cha đặt lá thư xin lỗi cạnh chìa khóa của con."
+            },
+            {
+              "title": "Middle",
+              "purpose": "Escalate pressure and reveal the emotional turn.",
+              "content": "Con gái ngồi xuống uống trà cùng cha, chưa mở lá thư."
+            },
+            {
+              "title": "Ending",
+              "purpose": "Resolve the short film through a visible choice or image.",
+              "content": "Con gái không mở lá thư, ngồi uống trà cùng cha, để lại một tình cảm phức tạp chưa giải quyết. Con gái và cha ngồi im lặng trong căn bếp, con gái chưa mở lá thư, chỉ uống trà, ánh sáng từ cửa sổ chiếu vào làm ấm căn bếp."
+            },
+            {
+              "title": "Theme",
+              "purpose": "Name the human idea underneath the plot.",
+              "content": "Tình cảm giữa cha và con gái cần thời gian để được hiểu và chấp nhận."
+            },
+            {
+              "title": "Visual Style",
+              "purpose": "Capture the visual approach and recurring motifs.",
+              "content": "Căn bếp nhỏ, ánh sáng từ cửa sổ, chén trà, lá thư xin lỗi. Ánh sáng từ cửa sổ, Chén trà"
+            },
+            {
+              "title": "Tone",
+              "purpose": "Describe the intended emotional register.",
+              "content": "Tình cảm, im lặng, phức tạp."
+            },
+            {
+              "title": "Production Notes",
+              "purpose": "Keep the idea grounded for short-film production.",
+              "content": "Cảnh ngắn, chỉ hai nhân vật, một căn bếp. Sử dụng ánh sáng từ cửa sổ để tạo cảm giác ấm áp và tâm trạng. Căn bếp 2 nhân vật"
+            }
+          ]
+        },
+        "context": {
+          "idea": "Chiều mưa trong căn bếp nhỏ, con gái đặt chìa khóa lên bàn trước khi đi học xa. Cha đặt cạnh đó một lá thư xin lỗi rồi lùi lại. Cô chưa mở thư, nhưng ngồi xuống uống cùng cha một ngụm trà.",
+          "constraints": [
+            "Phim 30 giây, tối đa 2 cảnh rất ngắn, 2 nhân vật, một căn bếp.",
+            "Giữ lá thư chưa mở và quyền quyết định của con gái; không giải quyết hết mâu thuẫn.",
+            "Bản phát triển gọn; ưu tiên hành động và khoảng lặng, ít thoại."
+          ],
+          "clarifications": [],
+          "pending_questions": [
+            {
+              "question": "Cách cha xin lỗi qua lá thư",
+              "input_index": 0
+            }
+          ]
+        },
+        "response_language": "vi",
+        "draft_provenance": {
+          "title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "logline": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:0:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:0:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:0:content": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:1:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:1:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:1:content": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:2:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:2:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:2:content": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:3:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:3:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:3:content": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:4:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:4:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:4:content": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:5:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:5:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:5:content": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:6:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:6:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:6:content": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:7:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:7:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:7:content": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:8:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:8:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:8:content": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:9:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:9:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:9:content": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          }
+        }
+      },
+      "provenance": {
+        "m2:db594006-295a-4fec-a75d-192f2b53760b:title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:db594006-295a-4fec-a75d-192f2b53760b:action": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:db594006-295a-4fec-a75d-192f2b53760b:location": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:db594006-295a-4fec-a75d-192f2b53760b:time": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:db594006-295a-4fec-a75d-192f2b53760b:characters": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:db594006-295a-4fec-a75d-192f2b53760b:goal": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:db594006-295a-4fec-a75d-192f2b53760b:purpose": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:db594006-295a-4fec-a75d-192f2b53760b:viewer_intent": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:db594006-295a-4fec-a75d-192f2b53760b:keep_or_avoid": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:684806e2-68c1-467d-9981-612b514755e1:title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:684806e2-68c1-467d-9981-612b514755e1:action": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:684806e2-68c1-467d-9981-612b514755e1:location": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:684806e2-68c1-467d-9981-612b514755e1:time": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:684806e2-68c1-467d-9981-612b514755e1:characters": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:684806e2-68c1-467d-9981-612b514755e1:goal": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:684806e2-68c1-467d-9981-612b514755e1:purpose": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:684806e2-68c1-467d-9981-612b514755e1:viewer_intent": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "m2:684806e2-68c1-467d-9981-612b514755e1:keep_or_avoid": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        }
+      }
+    },
+    "provenance": {
+      "script:42e34759-54de-4207-af54-283ac45e1a6d:heading": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:913c4adf-3737-4fb8-920a-0d717ce5e988:text": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:913c4adf-3737-4fb8-920a-0d717ce5e988:speaker": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:d1ce95b8-9bfa-4dd9-9a3e-7b3e393520bc:text": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:d1ce95b8-9bfa-4dd9-9a3e-7b3e393520bc:speaker": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:88b6f97f-34d8-4918-839d-d0e6beaab671:text": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:88b6f97f-34d8-4918-839d-d0e6beaab671:speaker": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:8e84d9ee-012a-415e-8f05-bac9f727f897:text": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:8e84d9ee-012a-415e-8f05-bac9f727f897:speaker": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "script:c1b1ae83-41da-45c4-bd86-72faf5222d42:heading": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:80026378-0ba8-48b9-9f8f-5787ae77f630:text": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:80026378-0ba8-48b9-9f8f-5787ae77f630:speaker": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:7744d922-7b18-4e99-a630-c0867b012ca1:text": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:7744d922-7b18-4e99-a630-c0867b012ca1:speaker": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      }
+    }
+  }
+}

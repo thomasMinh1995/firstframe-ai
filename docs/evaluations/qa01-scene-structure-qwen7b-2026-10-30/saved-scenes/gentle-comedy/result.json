@@ -1,0 +1,48 @@
+{
+  "scene": {
+    "id": "e40317cd-07a3-4a95-b7f6-0ba50f908d6f",
+    "source_scene_id": "474fcdcf-6fb1-485f-9293-03411fe34e66",
+    "heading": "Khoảnh khắc",
+    "blocks": [
+      {
+        "kind": "action",
+        "text": "Nam cố gắng kéo vạt áo ra, khóa kẹt ở giữa gây ra sự lúng túng.",
+        "speaker": "",
+        "id": "42f9dd06-71f0-45f8-9800-8ecc0e879e72"
+      },
+      {
+        "kind": "dialogue",
+        "text": "Chị Hà, em xin lỗi, cái khóa này khó quá.",
+        "speaker": "Nam",
+        "id": "65520628-eb1a-40c6-a235-d40bdccca449"
+      },
+      {
+        "kind": "dialogue",
+        "text": "Không sao, em lấy túi ra che chỗ kẹt đi.",
+        "speaker": "Chị Hà",
+        "id": "aff9f41a-307e-441a-8349-26ccdd991be6"
+      },
+      {
+        "kind": "action",
+        "text": "Nam lấy chiếc túi đang cầm che chỗ khóa kẹt, Hà nhìn thấy, đưa tay chờ Nam chịu nhờ giúp; Nam miễn cưỡng đưa vạt áo ra.",
+        "speaker": "",
+        "id": "50ecf4e6-d80a-42d7-8079-86ed743aef5c"
+      },
+      {
+        "kind": "dialogue",
+        "text": "Em để ý xem có cách nào mở ra không?",
+        "speaker": "Chị Hà",
+        "id": "1fa72946-8431-44fa-85fc-4acd30cfe953"
+      },
+      {
+        "kind": "action",
+        "text": "Nam miễn cưỡng đưa vạt áo ra, Hà cười nhẹ.",
+        "speaker": "",
+        "id": "53ab40bf-e12c-4266-8d10-53d96df07d57"
+      }
+    ]
+  },
+  "prompt_version": "screenplay-scene-v2",
+  "model": "qwen2.5:7b",
+  "status": "ready"
+}

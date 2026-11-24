@@ -1,0 +1,21 @@
+{
+  "output": {
+    "heading": "Chờ tiếng nhạc",
+    "translations": [],
+    "dialogue": {
+      "line_1": {
+        "after_action": 1,
+        "speaker": "Hạnh",
+        "self_reference": "chị",
+        "intent": "invite"
+      },
+      "line_2": {
+        "after_action": 1,
+        "speaker": "Nam",
+        "self_reference": "em",
+        "intent": "uncertain"
+      }
+    }
+  },
+  "raw_output": "{\n  \"heading\": \"Chờ tiếng nhạc\",\n  \"translations\": [],\n  \"dialogue\": {\n    \"line_1\": {\n      \"after_action\": 1,\n      \"speaker\": \"Hạnh\",\n      \"self_reference\": \"chị\",\n      \"intent\": \"invite\"\n    },\n    \"line_2\": {\n      \"after_action\": 1,\n      \"speaker\": \"Nam\",\n      \"self_reference\": \"em\",\n      \"intent\": \"uncertain\"\n    }\n  }\n}"
+}

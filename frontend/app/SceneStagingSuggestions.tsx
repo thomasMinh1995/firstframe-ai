@@ -24,7 +24,7 @@ export function SceneStagingSuggestions({ project, scene, canUse, onSuggest, onI
       <button type="button" className="secondary" onClick={async () => { if (await onInspect()) setSent(null); }}>Kiểm tra góp ý đã lưu</button></div>
     {uncertain && <p role="status">Chưa rõ kết quả yêu cầu. Kiểm tra góp ý đã lưu; không tự gọi AI lại.</p>}
     {[...batches].reverse().map(p => <details key={p.id} className="scene-proposal" open={p.status === "ready"}>
-      <summary>Góp ý cảnh · nguồn M2 phiên bản {p.source_outline.version} · {p.status === "pending" ? "đang chờ" : p.status === "failed" ? "lỗi" : p.status === "discarded" ? "đã bỏ" : "đã giữ kết quả"}</summary>
+      <summary>Góp ý cảnh · nguồn dàn cảnh phiên bản {p.source_outline.version} · {p.status === "pending" ? "đang chờ" : p.status === "failed" ? "lỗi" : p.status === "discarded" ? "đã bỏ" : "đã giữ kết quả"}</summary>
       {p.status === "pending" && <div><p role="status">Chưa rõ kết quả. Bỏ yêu cầu chỉ dừng chờ; model có thể vẫn chạy, kết quả đến sau sẽ không được dùng.</p>
         <button type="button" className="secondary" onClick={() => onDiscardBatch(p.id)}>Lưu sửa và bỏ yêu cầu dàn cảnh đang chờ</button></div>}
       {p.status === "failed" && <p role="status">Chưa có góp ý có nguồn hợp lệ ({p.error}). Bản đang viết vẫn được giữ.</p>}

@@ -1,0 +1,22 @@
+{
+  "status": "ready",
+  "scene": {
+    "id": "eff76dc9-b1a1-4ee4-ab22-8983f1f794f9",
+    "source_scene_id": "83a5f89a-0b04-4c56-a60b-ccee72559760",
+    "heading": "CẢNH 4",
+    "blocks": [
+      {
+        "kind": "action",
+        "text": "An nghiêng bình, một ít nước rơi vào đất.",
+        "speaker": "",
+        "id": "84db3e1c-a1b6-4370-82fc-55c673271a24"
+      }
+    ]
+  },
+  "model": "qwen2.5:7b",
+  "parameters": {
+    "composition": "source-preserving-v1",
+    "outline_reconciled": true
+  },
+  "prompt_version": "screenplay-scene-v25-bounded-reactions"
+}

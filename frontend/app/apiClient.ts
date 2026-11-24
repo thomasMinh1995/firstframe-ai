@@ -30,6 +30,7 @@ export type GenerateResponse = {
     summary: string;
     notes: AnalysisNote[];
     missing_information: string[];
+    ai_suggestions?: string[];
   };
   story_plan: {
     title: string | null;
@@ -93,6 +94,7 @@ function isGenerateResponse(value: unknown): value is GenerateResponse {
     isRecord(analysis) &&
     typeof analysis.summary === "string" &&
     Array.isArray(analysis.notes) &&
+    (analysis.ai_suggestions === undefined || (Array.isArray(analysis.ai_suggestions) && analysis.ai_suggestions.every((s: unknown) => typeof s === "string"))) &&
     Array.isArray(analysis.missing_information) &&
     isRecord(storyPlan) &&
     Array.isArray(storyPlan.sections) &&

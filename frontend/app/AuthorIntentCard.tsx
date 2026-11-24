@@ -30,7 +30,7 @@ export function IntentDetails({ context, editAnswers = false }: { context: Autho
       </div>)}
     </dd></div>
     {!!context.pending_questions.length && <div><dt>Câu hỏi chưa trả lời</dt><dd>
-      <p className="storage-note">Đây là câu hỏi đang chờ, chưa phải lựa chọn gửi cho AI.</p>
+      <p className="storage-note">Bạn có thể tiếp tục với phần này để mở. Câu hỏi không phải lựa chọn tác giả; phương án AI sẽ được giữ là đề xuất.</p>
       {context.pending_questions.map(item => <div className="intent-answer" key={item.input_index}>
         <p className="preserve-lines">{item.question}</p>
         {editAnswers && <button type="button" className="secondary"

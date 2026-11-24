@@ -1,11 +1,14 @@
 # Kế hoạch cải tiến harness FirstFrame
 
-- Cập nhật: 26/10/2026. Chốt phần còn lại của #7 → kiểm chứng/nghiệm thu
-  luồng đang có → dừng đợt harness story plan → dàn cảnh và kịch bản.
+- Cập nhật: 02/11/2026. Giữ thứ tự đã chốt ngày 26/10: nền story
+  plan → triển khai M2 dàn cảnh → M3 viết/sửa kịch bản → M4 xuất bản đã chọn
+  → deploy môi trường thử → trải nghiệm người dùng. Pilot không còn chặn
+  bắt đầu M2; các lỗi/nghiệm thu #7/#22/#26 vẫn mở.
   Không mở lại lịch tám gói hoặc tối ưu critic không có điểm dừng.
 - Trạng thái: nền tảng bốn phần, phần kỹ thuật #7/tour (PR #38) và bộ thử
   offline (PR #40, issue #39) đã merge; #7 chưa được nghiệm thu chất lượng
   hoặc pilot. Không triển khai lại phần đã có, không coi test là nghiệm thu.
+- Hiện trạng sau [PR #89](https://github.com/thomasMinh1995/firstframe-ai/pull/89): luồng M2–M4 đã có nền kỹ thuật trên `dev`; các phần dưới ghi thứ tự và phạm vi nghiệm thu, không yêu cầu triển khai lại. Xem [roadmap](../roadmap.md).
 - Cơ sở sản phẩm: [kế hoạch trong PR #27](vietnam-first-screenplay-mvp.md),
   theo dõi triển khai và nghiệm thu tại [issue #26](https://github.com/thomasMinh1995/firstframe-ai/issues/26).
 - Bước 0–1 của đợt thử cũ đã merge trong [PR #28](https://github.com/thomasMinh1995/firstframe-ai/pull/28).
@@ -90,19 +93,22 @@ vẫn còn lỗi nghĩa và tăng thời gian chờ. Chưa đổi model mặc đ
 hợp đồng dựa trên kết quả đó. Runner lịch sử phải chạy trên nguồn tương thích;
 baseline mới cần đo đúng API/luồng và hợp đồng hiện tại.
 
-## 3. Ba việc ưu tiên để hoàn tất #7
+## 3. Ba việc còn theo dõi của #7, không chặn bắt đầu M2
 
 Phần này thay lịch H1–H8 trước đây. Không có yêu cầu hoàn thành tám gói hoặc
 hoàn thiện một critic tổng quát trước khi kiểm chứng MVP. Harness phục vụ
 vòng đọc–sửa story plan đang có, không trở thành một sản phẩm riêng.
+Ba việc dưới đây theo dõi phần còn thiếu của #7; không phải ba điều kiện
+phải hoàn tất trước khi code M2–M4. Lỗi bảo vệ nguồn/dữ liệu hoặc ngăn hoàn
+thành mốc kỹ thuật phải được xử lý trước khi bàn giao mốc bị ảnh hưởng.
 Thứ tự ngày 26/10/2026 thay các tham chiếu lịch tám gói trong tài liệu cũ;
-không thay tiêu chí nghiệm thu của #7, tour hoặc kế hoạch sản phẩm.
+giữ tiêu chí nghiệm thu của #7/tour/pilot, nhưng bỏ phụ thuộc bắt đầu code M2 vào pilot theo quyết định mới của chủ sản phẩm.
 
 | Việc | Phạm vi nhỏ nhất | Bàn giao và điểm dừng |
 | --- | --- | --- |
 | 1 — Chốt phần còn lại của #7 | Dùng lại audit code/test và các ca đã đối chiếu; chốt lỗi chặn, vấn đề biên tập và bằng chứng còn thiếu theo tiêu chí hiện có | Không triển khai lại phần đã merge; mỗi mục thiếu phải có cách xác minh, không chuyển thành một dự án harness mới |
 | 2 — Kết thúc hướng thử không hiệu quả | Giữ baseline; các ứng viên prompt đã thử chưa cải thiện đủ để tích hợp. Chỉ sửa hẹp lỗi chặn đã xác nhận khi có hướng xử lý cụ thể | Lưu toàn bộ lỗi và quyết định không tích hợp; không tự thêm vòng model/prompt, schema hoặc judge. Lỗi chặn vẫn mở cho tới khi có bằng chứng xử lý |
-| 3 — Kiểm chứng và bàn giao | Kiểm chứng #7 + tour trên cấu hình được chọn; thực hiện demo/pilot theo mục 4 khi đủ điều kiện | Chỉ kết thúc nghiệm thu khi đủ tiêu chí; sau đó chuyển trọng tâm sang M2 dàn cảnh, M3 viết/sửa kịch bản và M4 xuất kịch bản |
+| 3 — Kiểm chứng và bàn giao | Kiểm chứng #7 + tour trên cấu hình được chọn; thực hiện demo/pilot theo mục 4 khi đủ điều kiện | M2–M4 được triển khai trước; phiên người dùng sau deploy thu bằng chứng còn thiếu. Chỉ kết thúc nghiệm thu khi đủ tiêu chí |
 
 ### Phần đã làm và phần còn phải chốt
 
@@ -131,15 +137,17 @@ thực tế của #7 trong kế hoạch liên kết; không gộp hoặc thay b�
 - Kết thúc đợt bàn giao khi luồng #7 có đủ bằng chứng theo tiêu chí hiện có,
   các bảo vệ dữ liệu vẫn đạt và không còn lỗi chặn. Không đòi critic hoàn hảo
   hoặc mọi sở thích biên tập đều được model đáp ứng; không tự đặt thêm ngưỡng.
-- Ưu tiên triển khai M2 sau khi pilot #26 đạt và PO ghi quyết định theo mục 4;
-  tiếp đến M3/M4 theo roadmap. Không chờ embedding, judge, tám gói harness,
+- Ưu tiên triển khai M2 rồi M3/M4, kiểm thử kỹ thuật từng mốc, sau đó deploy
+  và trải nghiệm người dùng. Pilot/PO theo mục 4 vẫn cần cho nghiệm thu,
+  không còn là điều kiện bắt đầu M2. Không chờ embedding, judge, tám gói harness,
   mọi tối ưu prompt hoặc đóng toàn bộ #22 mới chuyển trọng tâm sản phẩm.
 
 Nếu còn vi phạm ý đồ rõ, sai nguồn, mất dữ liệu, lỗi không hoàn thành luồng
 hoặc chưa đủ bằng chứng theo tiêu chí hiện hành thì ghi **chưa đạt**, giữ mục
 chặn cụ thể và cách xác minh. Quyền từ chối góp ý giúp tác giả giữ kiểm soát,
-không biến góp ý sai thành đạt. Dừng thử nghiệm không đồng nghĩa đóng #7 hoặc
-cho phép vượt điều kiện sang M2. Sau bàn giao, harness chỉ được sửa khi có
+không biến góp ý sai thành đạt. Dừng thử nghiệm không đồng nghĩa đóng #7.
+Cho phép phát triển M2–M4 trước pilot là thay đổi thứ tự triển khai của chủ
+sản phẩm, không phải kết luận lỗi đã hết hoặc tiêu chí nghiệm thu đã đạt. Sau bàn giao, harness chỉ được sửa khi có
 lỗi cụ thể ảnh hưởng hành trình viết; không có backlog tối ưu thường trực.
 
 ### 3.1. Đối chiếu trước khi viết thêm code
@@ -209,7 +217,7 @@ bằng chứng tiếp tục mở riêng; không dùng pilot khám phá hay ngư�
 chiếu thay pilot/nghiệm thu đã chốt của #7, #22 hoặc #26. Không bắt #7 chờ
 hoàn thành mọi cải tiến harness, cũng không chờ đóng toàn bộ #22 mới xử lý
 các lỗi hẹp hoặc bước tiếp phù hợp. Thiếu điều kiện demo/pilot thì ghi chưa
-sẵn sàng, không ép nghiệm thu để đi tiếp milestone.
+sẵn sàng; vẫn có thể phát triển M2–M4, không ép nghiệm thu để hợp thức hóa tiến độ.
 
 ### Các bảo vệ giữ nguyên cho mọi công việc
 
@@ -253,8 +261,9 @@ sẵn sàng, không ép nghiệm thu để đi tiếp milestone.
 - Routing nhiều model, multi-agent, workflow engine mới và các vòng đổi
   model/chỉnh prompt không có điểm dừng. Không mặc định công cụ nào giải
   quyết được lỗi nghĩa đã thấy dù nguồn trích đúng.
-- Schema lựa chọn mở rộng, tự áp dụng/tự viết lại, đồng bộ story plan–kịch
-  bản và screenplay editor. Hướng sửa hai chiều ở mục 5 giữ cho giai đoạn sau.
+- Schema lựa chọn mở rộng, tự áp dụng/tự viết lại và tự đồng bộ story
+  plan–kịch bản. Screenplay editor cơ bản thuộc M3 theo thứ tự mới; hướng
+  sửa hai chiều ở mục 5 vẫn chưa phải yêu cầu của đợt triển khai này.
 
 [PDF #5](story-plan-pdf-export.md) vẫn sau demo và không chặn #7. Các nghiệm
 thu #22 còn thiếu theo dõi riêng. Chỉ ưu tiên phần mở rộng khi bằng chứng từ
@@ -280,10 +289,11 @@ Không thay đổi các ngưỡng đã chốt trong kế hoạch sản phẩm:
   từng bước, H2 là gợi ý sáng tác/thao tác hộ. Người bỏ dở vẫn thuộc N.
 - Ít nhất 80% N hoàn thành độc lập, làm tròn lên; ít nhất hai người đạt muốn
   viết tiếp bản của họ và nêu bước tiếp. Không còn lỗi chặn chưa xử lý; PO
-  ghi đạt/chưa đạt/cần thêm bằng chứng trước M2. Không hạ ngưỡng hồi tố hoặc
+  ghi đạt/chưa đạt/cần thêm bằng chứng khi nghiệm thu sau deploy. Không hạ ngưỡng hồi tố hoặc
   gộp kết quả khác phiên bản để đạt; thay nhiệm vụ/ngưỡng cần đợt mới.
 
-Pilot diễn ra khi vòng MVP cơ bản sẵn sàng; không chờ toàn bộ hợp đồng khóa,
+Theo thứ tự mới, thử người dùng sau khi M2–M4 và deploy kỹ thuật sẵn sàng;
+nghiệm thu M1/#7 ghi riêng, không tự mở rộng nhiệm vụ chấm đạt. Không chờ toàn bộ hợp đồng khóa,
 trạng thái lựa chọn hoặc tối ưu review. Lưu đủ lý do sửa/từ chối và mức hỗ trợ.
 Lỗi mất dữ liệu, sai nguồn, không lưu/mở lại được hoặc vi phạm lựa chọn rõ là
 lỗi chặn, cần bằng chứng xác nhận lại sau sửa trên phiên bản ứng viên.
@@ -309,10 +319,11 @@ và vòng sửa; chỉ đánh giá hoàn thành kịch bản khi M3/M4 khả d�
 
 ## 5. Về sau: sửa hai chiều giữa story plan và kịch bản
 
-Phần này là hướng M2–M4, triển khai khi có dàn cảnh và trình viết kịch bản;
-không đưa screenplay editor, liên kết cảnh hoặc tự viết lại vào đợt demo MVP.
+Dàn cảnh và trình viết kịch bản đã có nền kỹ thuật. Phần này giữ hướng sửa
+hai chiều tự động cho về sau; không yêu cầu mở rộng bài demo M1 hoặc tự
+viết lại nội dung đã lưu.
 
-Sau điểm dừng ở mục 3 và nghiệm thu hiện hành, ưu tiên dùng story plan đã
+Theo thứ tự triển khai mới, chưa cần pilot M1 đạt trước khi dùng story plan đã
 chọn để xây dàn cảnh có thể chỉnh sửa (M2), rồi viết/sửa hành động và thoại
 theo cảnh (M3), cuối cùng xuất đúng bản kịch bản được chọn (M4). Kiểm chứng
 story plan có giúp người dùng viết được cảnh và giải thích lựa chọn tốt hơn;
@@ -355,12 +366,12 @@ quan và từ chối đề xuất không làm mất nội dung.
 
 ## 6. Phạm vi lần cập nhật tài liệu
 
-Thu gọn lịch tám gói thành đối chiếu nghiệm thu #7 → xác nhận/sửa một lỗi
-ảnh hưởng lớn → kiểm chứng luồng người dùng. Cập nhật trạng thái kỹ thuật
-đã merge qua PR #38 và bằng chứng offline PR #40; không coi các PR này là
-nghiệm thu #7 hoặc chất lượng model. Giữ nguyên bảo vệ dữ liệu ở mục 3 và
-nguyên tiêu chí demo/pilot ở mục 4, hướng sửa hai chiều về sau ở mục 5.
+Đồng bộ thứ tự M2 → M3 → M4 → deploy → thử người dùng theo quyết định mới
+của chủ sản phẩm. Bỏ điều kiện phải có pilot đạt trước khi bắt đầu M2, giữ
+nguyên tiêu chí để ghi nghiệm thu và lỗi còn mở. Không tái mở lịch tám gói,
+thêm vòng prompt/model hoặc coi PR kỹ thuật là bằng chứng chất lượng. Bảo
+vệ dữ liệu ở mục 3, ngưỡng demo/pilot mục 4 và hướng sửa hai chiều mục 5 giữ nguyên.
 
-Chỉ sửa tài liệu này và roadmap. Không sửa code, prompt/schema, runtime,
-model, prototype hoặc dữ liệu; không gọi model, chạy pilot, tạo PR, cập nhật
-issue hay tự ghi nhận nghiệm thu trong lần cập nhật tài liệu này.
+Phần tài liệu đồng bộ kế hoạch và trạng thái sau PR #89; không thay prompt,
+schema, cấu hình model hoặc dữ liệu và không ghi nhận thêm bằng chứng pilot.
+Sửa lỗi tiến trình kỹ thuật không tự đồng nghĩa nghiệm thu chất lượng critic.

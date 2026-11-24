@@ -1,4 +1,5 @@
 "use client";
+import {isComposingKey} from './inputEvents';
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { revealWorkspaceTarget } from "./WorkspaceStage";
@@ -37,21 +38,22 @@ export function useOnboarding(context: TourContext, busy: boolean, error: string
     return () => { mounted.current = false; window.removeEventListener("storage", changed); };
   }, [update]);
   useEffect(() => {
-    const r = current.current.record;
-    if (r && ["active", "waiting"].includes(r.status) && r.projectId !== context.projectId) update({ type: "pause" });
-    else if (r?.status === "active" && (busy || !available(r.stepId, context))) {
+    const r = current.current.record, activeContext = contextRef.current;
+    if (r && ["active", "waiting"].includes(r.status) && r.projectId !== activeContext.projectId) update({ type: "pause" });
+    else if (r?.status === "active" && (busy || !available(r.stepId, activeContext))) {
       update({ type: "pause", hint: busy ? undefined : "Chưa thể mở bước này. Bạn có thể thử lại." });
     }
-  }, [context.projectId, context.hasAnalysis, context.hasDraft, context.briefChanged, busy, update]);
+  }, [context.projectId, context.hasAnalysis, context.hasDraft, context.hasScreenplay, context.hasOutline, context.briefChanged, busy, update]);
   // A pre-existing error must not close help the user explicitly opens to correct it.
   useEffect(() => { if (error) update({ type: "pause" }); }, [error, update]);
 
+  const dismiss = useCallback(() => update({ type: "dismiss", context: contextRef.current }), [update]);
   return {
     state,
     open: (resume = false) => update({ type: "open", resume, context: contextRef.current }),
     navigate: (step: TourStep) => update({ type: "navigate", step, context: contextRef.current }),
     practice: () => update({ type: "practice", context: contextRef.current }),
-    dismiss: () => update({ type: "dismiss", context: contextRef.current }),
+    dismiss,
     complete: () => update({ type: "complete", context: contextRef.current }),
     pause: (hint?: string) => update({ type: "pause", hint }),
     begin: (kind: TourOperation) => {
@@ -70,8 +72,8 @@ type Props = {
   idea: string; answers: string[]; questionCount: number;
 };
 const titles: Record<TourStep, string> = {
-  "new-project": "Dự án mới", idea: "Ý tưởng", choices: "Làm rõ", draft: "Story plan",
-  outline: "Dàn cảnh", script: "Kịch bản", save: "Lưu",
+  "new-project": "Dự án mới", idea: "Chất liệu", choices: "Làm rõ", draft: "Story plan",
+  outline: "Dàn cảnh", script: "Viết & sửa", save: "Lưu",
 };
 const targetLabels: Record<TourStep, string> = {
   "new-project": "Dự án mới", idea: "Vùng Ý tưởng", choices: "Vùng Làm rõ",
@@ -93,22 +95,22 @@ function instructions(step: TourStep, hasDraft: boolean): string[] {
   switch (step) {
     case "new-project": return ["Chọn Dự án mới để bắt đầu."];
     case "idea": return ["Viết ý tưởng, rồi chọn Cùng làm rõ ý tưởng."];
-    case "choices": return ["Trả lời hoặc để quyết định sau."];
+    case "choices": return ["Trả lời hoặc để quyết định sau. Chọn tạo Story plan khi đã sẵn sàng."];
     case "draft": return [hasDraft ? "Sửa từng card; Xong để giữ, Lưu thay đổi để lưu." : "Story plan sẽ xuất hiện sau bước Làm rõ."];
     case "outline": return ["Chọn nguồn, thêm cảnh, rồi lưu dàn cảnh."];
-    case "script": return ["Chọn cảnh, viết, rồi lưu kịch bản."];
-    case "save": return ["Lưu bản đang sửa trước khi đóng hoặc chuyển dự án."];
+    case "script": return ["Chọn cảnh, viết và lưu kịch bản. Sang Đọc & xuất để tải PDF của bản đã chọn."];
+    case "save": return ["Chờ trạng thái Đã lưu trước khi đóng hoặc chuyển dự án. Mở Tùy chọn bản lưu để lưu ngay hoặc tải bản sao JSON."];
   }
 }
 
 export function OnboardingTour(props: Props) {
   const { tour, context, ready, empty, busy, error } = props;
-  const { state } = tour;
+  const { state, dismiss: dismissTour } = tour;
   const record = state.record;
   const focusFrame = useRef(0);
   const opener = useRef<HTMLElement | null>(null);
   useEffect(() => () => cancelAnimationFrame(focusFrame.current), []);
-  const focusAfter = (destination: string | HTMLElement | null) => {
+  const focusAfter = useCallback((destination: string | HTMLElement | null) => {
     cancelAnimationFrame(focusFrame.current);
     focusFrame.current = requestAnimationFrame(() => {
       const active = document.activeElement;
@@ -126,12 +128,12 @@ export function OnboardingTour(props: Props) {
       target?.scrollIntoView({ block: "center", behavior: "auto" });
       target?.focus({ preventScroll: true });
     });
-  };
+  }, []);
   const open = (button: HTMLElement, resume = false) => { opener.current = button; tour.open(resume); };
-  const dismiss = () => {
+  const dismiss = useCallback(() => {
     const destination = record?.status === "active" ? opener.current : document.activeElement as HTMLElement | null;
-    tour.dismiss(); focusAfter(destination);
-  };
+    dismissTour(); focusAfter(destination);
+  }, [record?.status, dismissTour, focusAfter]);
   const practice = () => {
     if (!record) return;
     const step = record.stepId;
@@ -139,7 +141,7 @@ export function OnboardingTour(props: Props) {
     if (step === "idea") selector = "#idea";
     if (step === "choices") {
       const index = Array.from({ length: props.questionCount }, (_, i) => i).find(i => !props.answers[i]?.trim());
-      selector = index === undefined ? '[data-choice-review]' : `#answer-${index}`;
+      selector = index === undefined ? "#clarification-complete" : `#answer-${index}`;
     }
     if (step === "draft") {
       const editor = document.querySelector<HTMLButtonElement>('[data-draft-open="logline"]');
@@ -163,7 +165,7 @@ export function OnboardingTour(props: Props) {
   useEffect(() => {
     if (!welcome && !resumable) return;
     const escape = (event: KeyboardEvent) => {
-      if (event.key !== "Escape" || event.defaultPrevented || event.isComposing || document.querySelector("dialog[open]")) return;
+      if (event.key !== "Escape" || event.defaultPrevented || isComposingKey(event) || document.querySelector("dialog:modal")) return;
       event.preventDefault(); dismiss();
     };
     document.addEventListener("keydown", escape);
@@ -185,7 +187,7 @@ export function OnboardingTour(props: Props) {
       <button disabled={!ready || busy || !continuation(state, context)} onClick={event => open(event.currentTarget, true)}>Tiếp tục hướng dẫn</button>
       <button className="secondary" onClick={dismiss}>Bỏ qua</button>
     </section>}
-    {active && createPortal(<TourDialog step={record.stepId} title={titles[record.stepId]} description={copy(record.stepId, props)}
+    {active && createPortal(<TourDialog targetStep={record.stepId} step={record.stepId} title={titles[record.stepId]} description={copy(record.stepId, props)}
       onMissing={() => tour.pause("Chưa thể mở bước này. Bạn có thể thử lại hoặc bỏ qua.")}
       onDismiss={dismiss}>
       <ol aria-label="Cách thực hiện" className="tour-instructions">
@@ -219,8 +221,8 @@ export function OnboardingTour(props: Props) {
 }
 
 type Placement = { left: number; top: number; width: number; maxHeight: number; hole: { left: number; top: number; width: number; height: number } | null };
-function TourDialog({ step, title, description, onMissing, onDismiss, children }: {
-  step: TourStep; title: string; description: string; onMissing: () => void; onDismiss: () => void; children: React.ReactNode;
+function TourDialog({ step, targetStep, title, description, onMissing, onDismiss, children }: {
+  step: TourStep; targetStep:string; title: string; description: string; onMissing: () => void; onDismiss: () => void; children: React.ReactNode;
 }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const card = useRef<HTMLDivElement>(null);
@@ -230,7 +232,7 @@ function TourDialog({ step, title, description, onMissing, onDismiss, children }
   useLayoutEffect(() => {
     const layer = dialog.current!;
     const panel = card.current!;
-    const targets = document.querySelectorAll<HTMLElement>(`[data-tour="${step}"]`);
+    const targets = document.querySelectorAll<HTMLElement>(`[data-tour="${targetStep}"]`);
     const target = targets.length === 1 ? targets[0] : null;
     revealWorkspaceTarget(target);
     if (!target || !target.getClientRects().length || getComputedStyle(target).visibility === "hidden") { missing.current(); return; }
@@ -282,7 +284,7 @@ function TourDialog({ step, title, description, onMissing, onDismiss, children }
         document.getElementById("workspace-title")?.focus({ preventScroll: true });
       }
     };
-  }, [step]);
+  }, [step,targetStep]);
   return <dialog ref={dialog} className="tour-layer" aria-labelledby="tour-title" aria-describedby="tour-description"
     onCancel={event => { event.preventDefault(); onDismiss(); }}
     onKeyDown={event => {

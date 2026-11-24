@@ -1,5 +1,6 @@
 import type { GenerateResponse, StoryPlanSection } from "./apiClient";
 import { progressCopy } from "./progressState";
+import {isProvenanceMap} from './provenance';
 import type { UiLanguage } from "./language";
 import type { ResponseLanguage } from "./language";
 import { stagingLabels, type Scene, type SceneOutline, type SceneVersion, type SceneHandoff, type SceneProposal, type SceneSuggestionInput, type StagingIdea, type StagingUse, type SceneSketch } from "./sceneTypes";
@@ -33,6 +34,8 @@ export type PlanGeneration = {
   applied_revision: number | null; feedback: Feedback | null; feedback_source: FeedbackSource | null;
 };
 export type Project = {
+  last_save_id?: string | null;
+  last_save_revision?: number | null;
   response_language: ResponseLanguage;
   id: string; revision: number; updated_at: string; title: string; idea: string;
   constraints: string[]; analysis: (GenerateResponse["analysis"] & { artifact_id: string }) | null; answers: string[];
@@ -60,17 +63,20 @@ const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
 export type ProgressEvent = {
   stage: string; status: "active" | "completed" | "failed";
 };
+export type PlanCheckpoint = {type: "checkpoint"; stage: "plan_checkpoint"; generation_id: string; project: Project};
 
 export async function streamProjectOperation(
   project: Project, kind: "analyze" | "plan" | "review" | "scene-suggestions" | "scene-sketches" | "screenplay-proposals" | "screenplay-reviews",
   onProgress: (event: ProgressEvent) => void, language: UiLanguage = "vi", input?: SceneWritingInput | SceneSuggestionInput | {request_id: string; scene_id: string; instructions: string},
+  onCheckpoint?: (event: PlanCheckpoint) => void,
 ): Promise<Project> {
   const copy = progressCopy[language];
   // Backend heartbeats arrive every 15s. A silent connection must not lock the editor forever.
   const controller = new AbortController();
   let timer = setTimeout(() => controller.abort(), 45_000);
+  let checkpoint: PlanCheckpoint | undefined;
   try {
-    const response = await fetch(`${baseUrl}/api/projects/${project.id}/${kind === "analyze" ? "clarify" : kind}/stream`, {
+    const response = await fetch(`${baseUrl}/api/projects/${project.id}/${kind === "analyze" ? "clarify" : kind}/stream${kind === "plan" && onCheckpoint ? "?checkpoints=true" : ""}`, {
       method: "POST", headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ revision: project.revision, ...input }), signal: controller.signal,
     }).catch(() => { throw new Error(copy.connectionError); });
@@ -91,7 +97,22 @@ export async function streamProjectOperation(
           if (!line.trim()) continue;
           let event: unknown;
           try { event = JSON.parse(line); } catch { throw new Error(copy.invalid); }
-          if (!isRecord(event) || !["progress", "result", "error"].includes(String(event.type))) throw new Error(copy.invalid);
+          if (!isRecord(event) || !["progress", "result", "error", "checkpoint"].includes(String(event.type))) throw new Error(copy.invalid);
+          if (event.type === "checkpoint") {
+            if (kind !== "plan" || !onCheckpoint || event.stage !== "plan_checkpoint" || typeof event.generation_id !== "string"
+                || !isProject(event.project) || event.project.id !== project.id || event.project.revision !== project.revision + 1) throw new Error(copy.invalid);
+            const generation = event.project.plan_generations?.find(item => item.id === event.generation_id);
+            if (!generation || generation.source_revision !== project.revision || generation.critic_status !== "pending"
+                || generation.feedback !== null || generation.feedback_source !== null
+                || generation.applied_revision !== (project.draft ? null : event.project.revision)
+                || !sameJson(event.project.draft, project.draft ?? generation.draft)
+                || project.plan_generations?.some(item => item.id === generation.id)
+                || !checkpointSourceMatches(generation, project)) throw new Error(copy.invalid);
+            const next = event as PlanCheckpoint;
+            if (checkpoint) {
+              if (!sameJson(checkpoint, next)) throw new Error(copy.invalid);
+            } else { checkpoint = next; onCheckpoint(next); }
+          }
           if (event.type === "error") throw new Error(typeof event.detail === "string" ? event.detail : copy.invalid);
           if (event.type === "progress") {
             if (typeof event.stage !== "string" || !event.stage || typeof event.status !== "string"
@@ -102,6 +123,10 @@ export async function streamProjectOperation(
           }
           if (event.type === "result") {
             if (!isProject(event.project) || event.project.id !== project.id) throw new Error(copy.invalid);
+            if (checkpoint && (event.project.revision < checkpoint.project.revision
+                || !event.project.plan_generations?.some(item => item.id === checkpoint!.generation_id
+                  && item.critic_status !== "pending"
+                  && item.source_content === checkpoint!.project.plan_generations?.find(g => g.id === item.id)?.source_content))) throw new Error(copy.invalid);
             return event.project;
           }
         }
@@ -115,7 +140,29 @@ export async function streamProjectOperation(
   }
 }
 
-async function request(path: string, method = "GET", body?: unknown): Promise<unknown> {
+function sameJson(a: unknown, b: unknown): boolean {
+  const sorted = (_key: string, value: unknown) => isRecord(value) && !Array.isArray(value)
+    ? Object.fromEntries(Object.entries(value).sort(([a], [b]) => a.localeCompare(b))) : value;
+  return JSON.stringify(a, sorted) === JSON.stringify(b, sorted);
+}
+
+function checkpointSourceMatches(generation: PlanGeneration, project: Project): boolean {
+  try {
+    const source = JSON.parse(generation.source_content);
+    if (!isRecord(source)) return false;
+    return source.idea === project.idea && (source.response_language ?? "auto") === project.response_language
+      && sameJson(source.constraints, project.constraints) && sameJson(source.answers, project.answers)
+      && sameJson(source.questions, project.analysis?.missing_information ?? [])
+      && sameJson(source.draft, project.draft)
+      && (!project.author_context || sameJson(generation.context, project.author_context));
+  } catch { return false; }
+}
+
+export class ProjectRequestError extends Error {
+  constructor(message: string, public status: number, public detail?: unknown) {super(message);}
+}
+
+export async function request(path: string, method = "GET", body?: unknown): Promise<unknown> {
   let response: Response;
   try {
     response = await fetch(`${baseUrl}/api/projects${path}`, {
@@ -127,9 +174,11 @@ async function request(path: string, method = "GET", body?: unknown): Promise<un
   }
   const data: unknown = await response.json().catch(() => null);
   if (!response.ok) {
-    throw new Error(isRecord(data) && typeof data.detail === "string" ? data.detail
+    const detail = isRecord(data) ? data.detail : undefined;
+    throw new ProjectRequestError(typeof detail === "string" ? detail
+      : isRecord(detail) && typeof detail.message === "string" ? detail.message
       : response.status === 422 ? "Kiểm tra nội dung: tên và các phần không được trống hoặc vượt giới hạn."
-        : "Không hoàn tất được thao tác. Bản đang sửa vẫn được giữ; hãy thử lại.");
+        : "Không hoàn tất được thao tác. Bản đang sửa vẫn được giữ; hãy thử lại.", response.status, detail);
   }
   return data;
 }
@@ -178,8 +227,9 @@ export function sameEditableContent(a: Project, b: Project): boolean {
     .map(x=>[x.id,x.status==='applied'||x.status==='discarded'?x.status:null,x.preview_scene]);
   const reviewDecisions=(p:Project)=>(p.screenplay_reviews??[]).filter(r=>r.status==='discarded'||r.notes.some(n=>n.assessment!==null)).map(r=>[r.id,r.status==='discarded',r.notes.map(n=>[n.id,n.assessment])]);
   const selections=(p:Project)=>(p.screenplay_selections??[]).map(s=>s.id);
-  return JSON.stringify([selections(a),reviewDecisions(a),scriptDecisions(a),left, previews(a), ideaEdits(a), ideaDecisions(a), imageDecisions(a)])
-    === JSON.stringify([selections(b),reviewDecisions(b),scriptDecisions(b),right, previews(b), ideaEdits(b), ideaDecisions(b), imageDecisions(b)]);
+  const questions=(p:Project)=>p.analysis?.missing_information??[];
+  return JSON.stringify([questions(a),selections(a),reviewDecisions(a),scriptDecisions(a),left, previews(a), ideaEdits(a), ideaDecisions(a), imageDecisions(a)])
+    === JSON.stringify([questions(b),selections(b),reviewDecisions(b),scriptDecisions(b),right, previews(b), ideaEdits(b), ideaDecisions(b), imageDecisions(b)]);
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -222,14 +272,14 @@ export function isFeedback(value: unknown): value is Feedback {
       && typeof finding.criterion_id === "string" && typeof finding.message === "string"
       && typeof finding.severity === "string");
 }
-function isProject(value: unknown): value is Project {
+export function isProject(value: unknown): value is Project {
   if (!isSummary(value) || !isRecord(value)) return false;
   const analysis = value.analysis;
   return ["auto", "vi", "en"].includes(String(value.response_language))
     && Number.isInteger(value.revision) && typeof value.idea === "string"
     && strings(value.constraints) && strings(value.answers)
     && (analysis === null || (isRecord(analysis) && typeof analysis.artifact_id === "string" && typeof analysis.summary === "string"
-      && strings(analysis.missing_information) && Array.isArray(analysis.notes)))
+      && strings(analysis.missing_information) && (analysis.ai_suggestions === undefined || strings(analysis.ai_suggestions)) && Array.isArray(analysis.notes)))
     && (value.draft === null || isDraft(value.draft))
     && (value.feedback === null || isFeedback(value.feedback))
     && (value.author_context === undefined || isAuthorContext(value.author_context))
@@ -282,6 +332,7 @@ function isScenes(v: unknown): v is Scene[] {
 }
 function isSceneOutline(v: unknown): v is SceneOutline {
   return isRecord(v) && uuid(v.id) && positive(v.version) && isScenes(v.scenes) && isRecord(v.source)
+    && isProvenanceMap(v.provenance) && isProvenanceMap(v.source.draft_provenance)
     && uuid(v.source.id) && Number.isInteger(v.source.project_revision) && Number(v.source.project_revision) >= 0
     && typeof v.source.version_id === "string" && isDraft(v.source.draft) && isAuthorContext(v.source.context)
     && ["auto", "vi", "en"].includes(String(v.source.response_language));
@@ -348,7 +399,7 @@ function isScriptScene(v:unknown):v is ScriptScene {
     &&Array.from(v.heading).length+v.blocks.reduce((n,b)=>n+Array.from(b.text).length+Array.from(b.speaker).length,0)<=200000;
 }
 function isScreenplay(v: unknown): v is Screenplay {
-  if(!isRecord(v)||!uuid(v.id)||!positive(v.version)||!Number.isInteger(v.source_revision)||Number(v.source_revision)<0
+  if(!isRecord(v)||!isProvenanceMap(v.provenance)||!uuid(v.id)||!positive(v.version)||!Number.isInteger(v.source_revision)||Number(v.source_revision)<0
     ||!isSceneOutline(v.source_outline)||!Array.isArray(v.scenes)||!v.scenes.length||v.scenes.length>60||!v.scenes.every(isScriptScene))return false;
   const scenes=v.scenes,outline=v.source_outline;
   const ids=scenes.flatMap(s=>[s.id,...s.blocks.map(b=>b.id)]);
@@ -364,6 +415,17 @@ function isScreenplayProposal(v:unknown):v is ScreenplayProposal {
     ||(v.model!==null&&typeof v.model!=='string')||(v.error!==null&&typeof v.error!=='string')
     ||(v.applied_revision!==null&&(!Number.isInteger(v.applied_revision)||Number(v.applied_revision)<0)))return false;
   const target=v.source_screenplay.scenes.find(s=>s.id===v.target_scene_id);
+  const scope=v.scope??'scene', ids=v.block_ids??[];
+  if(!['scene','blocks'].includes(String(scope))||!Array.isArray(ids)||!ids.every(uuid)||new Set(ids).size!==ids.length
+    ||(scope==='blocks'&&(!ids.length||!target||!ids.every(id=>target.blocks.some(b=>b.id===id))))||(scope==='scene'&&ids.length))return false;
+  if(v.undone_revision!==undefined&&v.undone_revision!==null&&!positive(v.undone_revision))return false;
+  if(v.applied_scene!==undefined&&v.applied_scene!==null&&(!isScriptScene(v.applied_scene)||v.applied_scene.id!==target?.id||v.applied_scene.source_scene_id!==target?.source_scene_id))return false;
+  if((v.review_id!=null&&!uuid(v.review_id))||(v.note_id!=null&&!uuid(v.note_id))||!!v.review_id!==!!v.note_id)return false;
+  if(scope==='blocks'&&target&&![v.scene,v.preview_scene].every(value=>{
+    if(value===null)return true;if(!isScriptScene(value))return false;
+    return value.heading===target.heading&&JSON.stringify(value.blocks.map(b=>b.id))===JSON.stringify(target.blocks.map(b=>b.id))
+      &&value.blocks.every((b,i)=>ids.includes(b.id)||JSON.stringify([b.id,b.kind,b.text,b.speaker])===JSON.stringify([target.blocks[i].id,target.blocks[i].kind,target.blocks[i].text,target.blocks[i].speaker]));
+  }))return false;
   return !!target&&[v.scene,v.preview_scene].every(s=>s===null||(isScriptScene(s)&&s.id===target.id&&s.source_scene_id===target.source_scene_id))
     &&(!['ready','applied'].includes(String(v.status))||v.scene!==null);
 }
@@ -381,9 +443,11 @@ function isScreenplayReview(v:unknown):v is ScreenplayReview {
     ||!isRecord(v.parameters)||(v.provider!==null&&typeof v.provider!=='string')||(v.model!==null&&typeof v.model!=='string')
     ||(v.error!==null&&typeof v.error!=='string')||!Array.isArray(v.sources)||v.sources.length>1500||!Array.isArray(v.notes)||v.notes.length>6)return false;
   const script=v.source_screenplay;
+  const legacy = v.prompt_version !== 'screenplay-review-v5-provenance'
+    && v.sources.every(s=>isRecord(s)&&s.provenance==null);
   if(!v.sources.every(s=>isRecord(s)&&typeof s.id==='string'&&typeof s.label==='string'&&typeof s.text==='string'
     &&['screenplay','author_choice','context'].includes(String(s.category))&&['text','speaker','heading','choice','context'].includes(String(s.field))
-    &&(s.scene_id===null||uuid(s.scene_id))&&(s.block_id===null||uuid(s.block_id))&&reviewSourceMatches(script,s as ReviewSource))
+    &&(s.scene_id===null||uuid(s.scene_id))&&(s.block_id===null||uuid(s.block_id))&&reviewSourceMatches(script,s as ReviewSource,legacy))
     ||new Set(v.sources.map(s=>s.id)).size!==v.sources.length)return false;
   return v.notes.every(n=>isRecord(n)&&uuid(n.id)&&['intent_mismatch','craft','uncertain'].includes(String(n.kind))
     &&typeof n.observation==='string'&&!!n.observation.trim()&&Array.from(n.observation).length<=2000
@@ -392,5 +456,5 @@ function isScreenplayReview(v:unknown):v is ScreenplayReview {
     &&(n.assessment===null||['helpful','misleading','uncertain','dismissed'].includes(String(n.assessment)))
     &&Array.isArray(n.evidence)&&n.evidence.length>=1&&n.evidence.length<=4&&n.evidence.every(e=>isRecord(e)&&typeof e.source_id==='string'
       &&typeof e.quote==='string'&&!!e.quote.trim()&&Array.from(e.quote).length<=1000)
-    &&reviewNoteSupported(v as ScreenplayReview,n as ReviewNote))&&new Set(v.notes.map(n=>n.id)).size===v.notes.length;
+    &&reviewNoteSupported(v as ScreenplayReview,n as ReviewNote,legacy))&&new Set(v.notes.map(n=>n.id)).size===v.notes.length;
 }

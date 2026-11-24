@@ -57,6 +57,7 @@ class _ReasoningOutput(BaseModel):
     summary: str
     notes: list[_ReasoningNoteOutput] = Field(default_factory=list)
     missing_information: list[str] = Field(default_factory=list, max_length=3)
+    ai_suggestions: list[str] = Field(default_factory=list, max_length=3)
 
 
 class _PlanningOutput(BaseModel):
@@ -108,7 +109,7 @@ def _card_review_schema(context: dict) -> type[_RevisionReviewOutput]:
     neighbors = list(dict.fromkeys(pair["related_card_id"] for pair in context["neighbor_checks"]))
     cards = list(dict.fromkeys([*context["focus_card_ids"], *neighbors])) or [card["id"] for card in context["cards"]]
     decisions = [item["id"] for item in context["decisions"] if item["id"] != "idea"] or ["idea"]
-    related = Literal[tuple(cards)] if neighbors else str | None
+    related = Literal[tuple(cards)] if neighbors else Literal[tuple(cards)] | None
     card_review = create_model("FocusedCardReview", __base__=CardReview,
                                card_id=(Literal[tuple(cards)], ...),
                                decision_id=(Literal[tuple(decisions)], ...),
@@ -259,6 +260,8 @@ class HarnessRun:
 class _LLMReasoningArtifact(ReasoningArtifact):
     creator_context: str = ""
     review_initial: bool = False
+    ai_suggestions: tuple[str, ...] = ()
+    leave_questions_open: bool = False
 
 
 class LLMReasoningLayer(ReasoningLayer):
@@ -267,28 +270,30 @@ class LLMReasoningLayer(ReasoningLayer):
         self._prompt_loader = prompt_loader
 
     def reason(self, idea: IdeaArtifact, domain: DomainPlugin) -> ReasoningArtifact:
-        target_language = _target_response_language(idea)
-        result = self._provider.request_structured(
-            StructuredRequest(
+        with progress_step("reasoning_context"):
+            target_language = _target_response_language(idea)
+            request = StructuredRequest(
                 instructions=self._prompt_loader.load("story_mentor", domain),
                 input_text=_idea_input(idea),
                 response_model=_ReasoningOutput,
                 stage="reasoning",
             )
-        )
-        output = _expect_output(result.output, _ReasoningOutput)
-        return _LLMReasoningArtifact(
-            metadata=_metadata(idea.metadata.domain_id, "reasoning"),
-            source_idea_id=idea.metadata.artifact_id,
-            creator_context=_creator_input(idea.text, idea.constraints, idea.clarifications),
-            notes=(
-                ReasoningNote(label="Original idea", content=idea.text),
-                ReasoningNote(label="Target response language", content=target_language),
-                ReasoningNote(label="Analysis summary", content=output.summary),
-                *(ReasoningNote(label=note.label, content=note.content) for note in output.notes),
-            ),
-            open_questions=tuple(output.missing_information[:3]),
-        )
+        result = self._provider.request_structured(request)
+        with progress_step("reasoning_validation"):
+            output = _expect_output(result.output, _ReasoningOutput)
+            return _LLMReasoningArtifact(
+                metadata=_metadata(idea.metadata.domain_id, "reasoning"),
+                source_idea_id=idea.metadata.artifact_id,
+                creator_context=_creator_input(idea.text, idea.constraints, idea.clarifications),
+                notes=(
+                    ReasoningNote(label="Original idea", content=idea.text),
+                    ReasoningNote(label="Target response language", content=target_language),
+                    ReasoningNote(label="Analysis summary", content=output.summary),
+                    *(ReasoningNote(label=note.label, content=note.content) for note in output.notes),
+                ),
+                open_questions=tuple(output.missing_information[:3]),
+                ai_suggestions=tuple(output.ai_suggestions),
+            )
 
 
 class LLMPlanningLayer(PlanningLayer):
@@ -323,7 +328,10 @@ class LLMPlanningLayer(PlanningLayer):
             input_text = _reasoning_input(reasoning, knowledge)
         result = self._provider.request_structured(
             StructuredRequest(
-                instructions=self._prompt_loader.load("story_planner", domain),
+                instructions=self._prompt_loader.load("story_planner", domain) + (
+                    "\nUnanswered questions are intentionally left open. Do not attribute proposed answers, "
+                    "endings or messages to the creator. Your additions are proposals, not author constraints. "
+                    "Quiet scenes, silence and open endings are valid." if getattr(reasoning, "leave_questions_open", False) else ""),
                 input_text=input_text,
                 response_model=_PlanningOutput,
                 stage="planning",
@@ -476,6 +484,7 @@ class StoryGenerationService:
         response_language: ResponseLanguage = "auto",
         on_planned: Callable[[StoryPlanArtifact], None] | None = None,
         structured_review: bool = False,
+        pending_questions: tuple[str, ...] = (),
     ) -> HarnessRun:
         return self._harness.plan(
             _LLMReasoningArtifact(
@@ -483,6 +492,8 @@ class StoryGenerationService:
                 source_idea_id=str(uuid4()),
                 creator_context=_creator_input(idea_text, constraints, answers),
                 review_initial=structured_review,
+                open_questions=pending_questions,
+                leave_questions_open=bool(pending_questions),
                 notes=(
                     ReasoningNote(label="Original idea", content=idea_text),
                     ReasoningNote(

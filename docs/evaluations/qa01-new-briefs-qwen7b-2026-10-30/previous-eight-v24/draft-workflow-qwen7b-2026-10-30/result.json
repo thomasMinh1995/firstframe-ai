@@ -1,0 +1,24 @@
+{
+  "scene": {
+    "id": "4a14368b-25cd-4a03-bbb6-bb21bbfcd4c5",
+    "source_scene_id": "d474b831-9e36-4dcc-9c3a-757abd04e3e4",
+    "heading": "Trong căn bếp chiều mưa",
+    "blocks": [
+      {
+        "kind": "action",
+        "text": "Bố đưa cho Linh một lá thư.",
+        "speaker": "",
+        "id": "475df3b5-bc3c-472e-8e2f-ffeaf134951e"
+      },
+      {
+        "kind": "action",
+        "text": "Linh nhận thư nhưng chưa mở, giữ quyền quyết định.",
+        "speaker": "",
+        "id": "e1033c52-464a-45a2-9c39-b7ffa876f981"
+      }
+    ]
+  },
+  "prompt_version": "screenplay-scene-v24-dialogue-voices",
+  "model": "qwen2.5:7b",
+  "status": "ready"
+}

@@ -1,0 +1,180 @@
+{
+  "base_commit": "4bc8a38d3e6a65d09e11151daa7e9fd437b498d5",
+  "prompt_version": "screenplay-scene-v24-dialogue-voices",
+  "uncommitted_at_evaluation": true,
+  "sha256": {
+    "backend/app/application/screenplay_composition.py": "b96c47228fffa0442edea52d584a98864c068b83b2db58921a1c45c4b71f6c5a",
+    "backend/app/application/screenplay_writing.py": "2e8bba24ad64a3752ed86d9e818e211cb9a76c6a8235b33fc082be56335a8e75",
+    "backend/app/application/language.py": "24e324259f0e2f31f5da9b42dec842313ac2f710935d71cbcef36f77d0e8eea2",
+    "domains/short-film/prompts/screenplay_composition_prompt.md": "de0197b15111188cf11c9f4fc9cfbe2b0f75ca22e41f755e7b281e6ea477e791",
+    "backend/scripts/check_multiscene_writing.py": "2dee1066bd3ab26193a9837066d1ab49dce351880de1315be21fefea5f859ca3",
+    "backend/scripts/check_draft_release.py": "89e1bcdbc21d8de6e6d1b678841d7766797d0696dca302569a6faecbbc83e0ff",
+    "backend/tests/test_multiscene_writing.py": "c3ee54beb05dd33fa100ce485956fa98e92251935067583194bb678c027f2b64",
+    "backend/tests/test_screenplay_composition.py": "f0b235bfd864f3f84ace16402b2574f5fe3bf1215e3d4e710a3beb2dd4b6a7aa"
+  },
+  "frames": [
+    {
+      "case": "final-v24/english-umbrella-three-scenes/scene-01",
+      "accepted_by_final_validation": true,
+      "content_matches_capture": true,
+      "request_schema_input_identical": true
+    },
+    {
+      "case": "final-v24/english-umbrella-three-scenes/scene-02",
+      "accepted_by_final_validation": true,
+      "content_matches_capture": true,
+      "request_schema_input_identical": true
+    },
+    {
+      "case": "final-v24/english-umbrella-three-scenes/scene-03",
+      "accepted_by_final_validation": true,
+      "content_matches_capture": true,
+      "request_schema_input_identical": true
+    },
+    {
+      "case": "final-v24/father-son-four-scenes/scene-01",
+      "accepted_by_final_validation": true,
+      "content_matches_capture": true,
+      "request_schema_input_identical": true
+    },
+    {
+      "case": "final-v24/father-son-four-scenes/scene-02",
+      "accepted_by_final_validation": true,
+      "content_matches_capture": true,
+      "request_schema_input_identical": true
+    },
+    {
+      "case": "final-v24/father-son-four-scenes/scene-03",
+      "accepted_by_final_validation": true,
+      "content_matches_capture": true,
+      "request_schema_input_identical": true
+    },
+    {
+      "case": "final-v24/father-son-four-scenes/scene-04",
+      "accepted_by_final_validation": false,
+      "error": "Spoken address contradicts the author voice.",
+      "raw_preserved": true,
+      "request_schema_input_identical": true
+    },
+    {
+      "case": "final-v24/mother-daughter-ticket/scene-01",
+      "accepted_by_final_validation": true,
+      "content_matches_capture": true,
+      "request_schema_input_identical": true
+    },
+    {
+      "case": "final-v24/mother-daughter-ticket/scene-02",
+      "accepted_by_final_validation": true,
+      "content_matches_capture": true,
+      "request_schema_input_identical": true
+    },
+    {
+      "case": "final-v24/mother-daughter-ticket/scene-03",
+      "accepted_by_final_validation": true,
+      "content_matches_capture": true,
+      "request_schema_input_identical": true
+    },
+    {
+      "case": "final-v24/siblings-radio-custom-address/scene-01",
+      "accepted_by_final_validation": true,
+      "content_matches_capture": true,
+      "request_schema_input_identical": true
+    },
+    {
+      "case": "final-v24/siblings-radio-custom-address/scene-02",
+      "accepted_by_final_validation": false,
+      "error": "A spoken line repeats source action instead of speech.",
+      "raw_preserved": true,
+      "request_schema_input_identical": true
+    },
+    {
+      "case": "final-v24/silent-six-scenes/scene-01",
+      "accepted_by_final_validation": true,
+      "content_matches_capture": true,
+      "request_schema_input_identical": true
+    },
+    {
+      "case": "final-v24/silent-six-scenes/scene-02",
+      "accepted_by_final_validation": true,
+      "content_matches_capture": true,
+      "request_schema_input_identical": true
+    },
+    {
+      "case": "final-v24/silent-six-scenes/scene-03",
+      "accepted_by_final_validation": true,
+      "content_matches_capture": true,
+      "request_schema_input_identical": true
+    },
+    {
+      "case": "final-v24/silent-six-scenes/scene-04",
+      "accepted_by_final_validation": true,
+      "content_matches_capture": true,
+      "request_schema_input_identical": true
+    },
+    {
+      "case": "final-v24/silent-six-scenes/scene-05",
+      "accepted_by_final_validation": true,
+      "content_matches_capture": true,
+      "request_schema_input_identical": true
+    },
+    {
+      "case": "final-v24/silent-six-scenes/scene-06",
+      "accepted_by_final_validation": true,
+      "content_matches_capture": true,
+      "request_schema_input_identical": true
+    },
+    {
+      "case": "previous-eight-v24/draft-workflow-qwen7b-2026-10-30",
+      "accepted_by_final_validation": true,
+      "content_matches_capture": true,
+      "request_schema_input_identical": true
+    },
+    {
+      "case": "previous-eight-v24/draft-workflow-qwen7b-saved-brief-2026-10-30",
+      "accepted_by_final_validation": true,
+      "content_matches_capture": true,
+      "request_schema_input_identical": true
+    },
+    {
+      "case": "previous-eight-v24/english",
+      "accepted_by_final_validation": true,
+      "content_matches_capture": true,
+      "request_schema_input_identical": true
+    },
+    {
+      "case": "previous-eight-v24/gentle-comedy",
+      "accepted_by_final_validation": true,
+      "content_matches_capture": true,
+      "request_schema_input_identical": true
+    },
+    {
+      "case": "previous-eight-v24/later-scene",
+      "accepted_by_final_validation": true,
+      "content_matches_capture": true,
+      "request_schema_input_identical": true
+    },
+    {
+      "case": "previous-eight-v24/limited-resources",
+      "accepted_by_final_validation": true,
+      "content_matches_capture": true,
+      "request_schema_input_identical": true
+    },
+    {
+      "case": "previous-eight-v24/parent-dialogue",
+      "accepted_by_final_validation": true,
+      "content_matches_capture": true,
+      "request_schema_input_identical": true
+    },
+    {
+      "case": "previous-eight-v24/quiet-open-ending",
+      "accepted_by_final_validation": true,
+      "content_matches_capture": true,
+      "request_schema_input_identical": true
+    }
+  ],
+  "note": "Final validation includes leading-vocative protection added after captures. Revalidation is not a model retry. Historical reports are unchanged.",
+  "backend_tests": {
+    "passed": 816,
+    "skipped": 1
+  }
+}

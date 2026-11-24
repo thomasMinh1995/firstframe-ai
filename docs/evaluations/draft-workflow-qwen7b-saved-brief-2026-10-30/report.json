@@ -1,0 +1,28 @@
+{
+  "checks": {
+    "ready": true,
+    "review_completed": true,
+    "author_scene_limit": true,
+    "all_scenes_written": true,
+    "exact_selected_script": true,
+    "pdf_without_ai": true
+  },
+  "http": {
+    "start": 200,
+    "continue": 200,
+    "adopt": 200,
+    "select": 200,
+    "pdf": 200
+  },
+  "project_id": "f3a51432-bdaf-4848-b9ff-371f9c75735d",
+  "run_id": "556c4ad6-1886-4de9-a83e-5196e5143475",
+  "run_status": "ready",
+  "review_error": null,
+  "scene_count": 2,
+  "reviewed_scenes": 2,
+  "total_seconds": 128.963,
+  "model_seconds": 126.016,
+  "call_count": 12,
+  "technical_pass": true,
+  "release_approved": false
+}

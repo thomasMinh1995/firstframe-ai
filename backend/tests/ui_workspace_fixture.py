@@ -25,6 +25,7 @@ from test_projects import develop_project, start_project
 from app.api.routes import projects as routes
 from app.api.routes import screenplay_reviews
 from test_screenplay_review import ReviewProvider
+from app.api.routes import draft_runs
 from app.api.routes import screenplays
 from test_screenplay_writing import WritingProvider
 from app.api.routes import scene_sketches
@@ -79,7 +80,25 @@ provider = WorkspaceProvider()
 review_provider = ReviewProvider()
 screenplay_reviews.get_review_provider = lambda: review_provider
 writing_provider = WritingProvider()
+from app.api.schemas.screenplays import BlockRevisionResult
+original_writing = writing_provider.request_structured
+
+def scoped_writing(request):
+    if request.response_model is not BlockRevisionResult:
+        return original_writing(request)
+    writing_provider.requests.append(request)
+    writing_provider.hook()
+    if writing_provider.error:
+        raise writing_provider.error
+    data = json.loads(request.input_text)
+    return StructuredResult(output=BlockRevisionResult(replacements=[{
+        "block_id":b["id"], "expected":{k:b[k] for k in ("kind","text","speaker")},
+        "replacement":{"kind":b["kind"],"speaker":b["speaker"],"text":"Khoảng lặng vẫn được giữ."}
+    } for b in data["selected_blocks"]]), model="fixture-block-revision")
+
+writing_provider.request_structured = scoped_writing
 screenplays.get_screenplay_provider = lambda: writing_provider
+draft_runs.providers = lambda: [provider, provider, writing_provider, review_provider]
 image_provider = FakeImageProvider()
 scene_sketches.get_image_provider = lambda: image_provider
 routes.get_project_store = lambda: ProjectStore(directory / "projects.sqlite3")

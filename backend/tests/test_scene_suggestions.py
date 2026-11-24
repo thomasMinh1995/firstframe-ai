@@ -50,7 +50,7 @@ def test_durable_preview_idempotency_and_explicit_save(setup):
     assert ready["scene_outline"] == project["scene_outline"]
     assert ready["draft"] == project["draft"]
     assert proposal["status"] == "ready"
-    assert proposal["prompt_version"] == "scene-suggestions-v2"
+    assert proposal["prompt_version"] == "scene-suggestions-v3"
     import json
     list_input = json.loads(provider.requests[-1].input_text)
     assert list_input["scenes"] == project["scene_outline"]["scenes"]
@@ -70,6 +70,68 @@ def test_durable_preview_idempotency_and_explicit_save(setup):
     assert saved["applicable_scene_proposal_ids"] == []
     assert saved["feedback_source"] == project["feedback_source"]
     assert client.put(url, json={**update(saved, edited), "scene_proposal_id": proposal["id"]}).status_code == 409
+
+
+def test_conflicting_author_counts_return_422_without_sending_ai(setup):
+    client, provider, project = setup
+    store = routes.get_project_store()
+    raw = store.get(project['id'])
+    raw['scene_outline']['source']['context']['constraints'] = ['Đúng hai cảnh.', 'Tối đa một cảnh.']
+    store.save(raw, raw['revision'])
+    project = client.get(f"/api/projects/{project['id']}").json()
+    response, _ = suggest(client, project)
+    assert response.status_code == 422 and 'Giới hạn số cảnh' in response.text
+    assert not provider.requests
+    saved = client.get(f"/api/projects/{project['id']}").json()
+    assert saved['scene_proposals'][-1]['status'] == 'failed'
+    assert saved['scene_outline'] == project['scene_outline']
+
+
+def test_append_cannot_exceed_author_cap_but_develop_can_still_edit(setup):
+    client, provider, project = setup
+    store = routes.get_project_store()
+    raw = store.get(project['id'])
+    raw['scene_outline']['source']['context']['constraints'] = ['Tối đa một cảnh.']
+    raw['scene_outline']['scenes'] = [scene()]
+    store.save(raw, raw['revision'])
+    project = client.get(f"/api/projects/{project['id']}").json()
+    target = project['scene_outline']['scenes'][0]['id']
+    before = project['scene_outline']['scenes']
+    response, _ = suggest(client, project, 'append', target)
+    assert response.status_code == 422 and not provider.requests
+    project = client.get(f"/api/projects/{project['id']}").json()
+    assert project['scene_outline']['scenes'] == before
+    provider.count = 1
+    response, _ = suggest(client, project, 'develop', target)
+    assert response.status_code == 200 and len(provider.requests) == 1
+
+
+@pytest.mark.parametrize('returned,status', [(1, 200), (2, 502)])
+def test_author_request_scene_cap_is_enforced_without_rewriting_source(setup, returned, status):
+    client, provider, project = setup
+    provider.count = returned
+    body = {'revision':project['revision'], 'request_id':str(uuid4()), 'mode':'list',
+            'instructions':'Tối đa một cảnh. Giữ kết mở.'}
+    response = client.post(f"/api/projects/{project['id']}/scene-suggestions", json=body)
+    assert response.status_code == status
+    request = provider.requests[-1]
+    schema = request.response_model.model_json_schema()['properties']['scenes']
+    assert schema['maxItems'] == 1
+    saved = client.get(f"/api/projects/{project['id']}").json()
+    assert saved['scene_outline'] == project['scene_outline']
+    assert len(provider.requests) == 1
+
+
+def test_request_cannot_relax_source_scene_cap(setup):
+    client, provider, project = setup
+    store = routes.get_project_store()
+    raw = store.get(project['id'])
+    raw['scene_outline']['source']['context']['constraints'] = ['Tối đa một cảnh.']
+    store.save(raw, raw['revision'])
+    project = client.get(f"/api/projects/{project['id']}").json()
+    response = client.post(f"/api/projects/{project['id']}/scene-suggestions", json={
+        'revision':project['revision'], 'request_id':str(uuid4()), 'mode':'list', 'instructions':'Đúng hai cảnh.'})
+    assert response.status_code == 422 and not provider.requests
 
 
 def test_late_result_preserves_concurrent_author_edits(setup):
@@ -101,7 +163,7 @@ def test_failed_request_recorded_no_retry_manual_edit_works(setup, error):
     latest = client.get(url).json()
     assert latest["scene_proposals"][-1]["status"] == "failed"
     assert latest["scene_proposals"][-1]["error"] == type(error).__name__
-    assert latest["scene_proposals"][-1]["prompt_version"] == "scene-suggestions-v2"
+    assert latest["scene_proposals"][-1]["prompt_version"] == "scene-suggestions-v3"
     assert latest["scene_outline"] == project["scene_outline"]
     assert client.post(url + "/scene-suggestions", json=body).status_code == 200
     assert len(provider.requests) == 1
@@ -266,4 +328,4 @@ def test_append_input_marks_readonly_references_and_exact_insertion_without_chan
     result = response.json()
     assert result["scene_outline"] == source
     assert result["scene_proposals"][-1]["source_outline"] == source
-    assert result["scene_proposals"][-1]["prompt_version"] == "scene-suggestions-v2"
+    assert result["scene_proposals"][-1]["prompt_version"] == "scene-suggestions-v3"

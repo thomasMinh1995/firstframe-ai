@@ -12,6 +12,7 @@ VI_WORDS = frozenset(
 EN_WORDS = frozenset(
     ["a", "an", "the", "and", "or", "but", "of", "to", "for", "with", "without", "from", "in", "on", "at", "before", "after", "while", "who", "whose", "that", "this", "these", "those", "is", "are", "was", "were", "be", "has", "have", "her", "his", "their", "he", "she", "they", "we", "you", "i", "it", "my", "our", "not", "wants", "want", "helps", "help", "young", "named", "tutor", "learner", "student", "mother", "father", "daughter", "son", "story", "idea", "film", "short", "quiet", "kitchen", "waits", "waiting", "goodbye", "leaves", "meet", "must", "one", "last", "time", "learning", "exercise"]
 )
+EN_WORDS = EN_WORDS | {"stand", "stands", "whether", "leave"}
 
 
 class LanguageSelectionRequired(ValueError):

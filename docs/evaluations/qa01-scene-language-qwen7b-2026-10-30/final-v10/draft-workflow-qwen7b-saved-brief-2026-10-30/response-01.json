@@ -1,0 +1,20 @@
+{
+  "raw_output": "{\"scene\": {\"heading\": \"Chiều mưa trong căn bếp nhỏ\", \"blocks\": [{\"kind\": \"action\", \"text\": \"Mưa rơi nhẹ ngoài cửa sổ, ánh sáng mờ nhạt từ bên ngoài chiếu vào căn bếp nhỏ, làm ấm không gian. Con gái ngồi ở bàn học, chuẩn bị đi học xa. Cha đứng bên cạnh, đặt chìa khóa lên bàn, sau đó lùi về phía sau, nhìn con gái.\", \"speaker\": \"\"}, {\"kind\": \"action\", \"text\": \"Con gái ngồi xuống, uống một ngụm trà. Cha đứng im lặng, nhìn con gái. Con gái chưa mở lá thư xin lỗi, nhưng ngồi uống trà cùng cha, để lại một tình cảm phức tạp chưa giải quyết.\", \"speaker\": \"\"}]} }",
+  "output": {
+    "scene": {
+      "heading": "Chiều mưa trong căn bếp nhỏ",
+      "blocks": [
+        {
+          "kind": "action",
+          "text": "Mưa rơi nhẹ ngoài cửa sổ, ánh sáng mờ nhạt từ bên ngoài chiếu vào căn bếp nhỏ, làm ấm không gian. Con gái ngồi ở bàn học, chuẩn bị đi học xa. Cha đứng bên cạnh, đặt chìa khóa lên bàn, sau đó lùi về phía sau, nhìn con gái.",
+          "speaker": ""
+        },
+        {
+          "kind": "action",
+          "text": "Con gái ngồi xuống, uống một ngụm trà. Cha đứng im lặng, nhìn con gái. Con gái chưa mở lá thư xin lỗi, nhưng ngồi uống trà cùng cha, để lại một tình cảm phức tạp chưa giải quyết.",
+          "speaker": ""
+        }
+      ]
+    }
+  }
+}

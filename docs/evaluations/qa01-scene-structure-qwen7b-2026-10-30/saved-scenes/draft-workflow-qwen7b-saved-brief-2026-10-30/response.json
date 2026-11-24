@@ -1,0 +1,35 @@
+{
+  "raw_output": "{\"scene\": {\"heading\": \"Chiều mưa trong căn bếp nhỏ\", \"blocks\": [{\"kind\": \"action\", \"text\": \"Mưa rơi nhẹ ngoài cửa sổ, ánh sáng mờ nhạt từ bên ngoài chiếu vào căn bếp nhỏ, làm ấm không gian.\", \"speaker\": \"\"}, {\"kind\": \"action\", \"text\": \"Con gái ngồi xuống, đặt chìa khóa lên bàn. Cha đứng cạnh, nhìn con gái.\", \"speaker\": \"\"}, {\"kind\": \"action\", \"text\": \"Cha đặt một lá thư xin lỗi cạnh chìa khóa, sau đó lùi về phía sau, nhìn con gái.\", \"speaker\": \"\"}, {\"kind\": \"action\", \"text\": \"Con gái ngồi xuống, uống một ngụm trà. Cha đứng im lặng, nhìn con gái.\", \"speaker\": \"\"}, {\"kind\": \"action\", \"text\": \"Con gái không mở lá thư, chỉ ngồi uống trà, ánh sáng từ cửa sổ chiếu vào làm ấm căn bếp.\", \"speaker\": \"\"}]} }",
+  "output": {
+    "scene": {
+      "heading": "Chiều mưa trong căn bếp nhỏ",
+      "blocks": [
+        {
+          "kind": "action",
+          "text": "Mưa rơi nhẹ ngoài cửa sổ, ánh sáng mờ nhạt từ bên ngoài chiếu vào căn bếp nhỏ, làm ấm không gian.",
+          "speaker": ""
+        },
+        {
+          "kind": "action",
+          "text": "Con gái ngồi xuống, đặt chìa khóa lên bàn. Cha đứng cạnh, nhìn con gái.",
+          "speaker": ""
+        },
+        {
+          "kind": "action",
+          "text": "Cha đặt một lá thư xin lỗi cạnh chìa khóa, sau đó lùi về phía sau, nhìn con gái.",
+          "speaker": ""
+        },
+        {
+          "kind": "action",
+          "text": "Con gái ngồi xuống, uống một ngụm trà. Cha đứng im lặng, nhìn con gái.",
+          "speaker": ""
+        },
+        {
+          "kind": "action",
+          "text": "Con gái không mở lá thư, chỉ ngồi uống trà, ánh sáng từ cửa sổ chiếu vào làm ấm căn bếp.",
+          "speaker": ""
+        }
+      ]
+    }
+  }
+}

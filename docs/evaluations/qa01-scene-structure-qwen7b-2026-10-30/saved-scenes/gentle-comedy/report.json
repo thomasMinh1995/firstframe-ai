@@ -1,0 +1,9 @@
+{
+  "case": "gentle-comedy",
+  "source": "docs/evaluations/m3-scene-writing-qwen7b-2026-10-27/gentle-comedy/project-after.json",
+  "technical_pass": true,
+  "blocks": 6,
+  "target_preserved": true,
+  "seconds": 21.619,
+  "model_calls": 1
+}

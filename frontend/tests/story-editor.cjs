@@ -17,6 +17,14 @@ const draft = { title: 'Cơm tối', logline: 'Một cử chỉ nhỏ.', section
   section('Middle', 'Con kéo ghế.'), section('Ending', 'Mẹ đẩy bát cơm.'),
 ] };
 let html = render(draft);
+for (const disabled of [true, false]) {
+  const panel = renderToStaticMarkup(React.createElement(StoryPlanEditor, {
+    draft, dirty:false, onChange:()=>assert.fail('Rendering must not edit'), disabled,
+    inspector:React.createElement('button', null, 'Review action'),
+  })).split('<dialog')[1].split('</dialog>')[0];
+  assert.equal(/<fieldset[^>]*disabled/.test(panel), disabled, 'Busy locks inspector actions even when a modal escapes the workspace inert ancestor');
+  assert.doesNotMatch(panel.split('<fieldset')[0], /disabled/, 'Close stays outside the disabled inspector fields');
+}
 const path = html.split('<ol')[1].split('</ol>')[0];
 assert.ok(path.includes('section-1-label') && path.includes('section-2-label') && path.includes('section-3-label'));
 assert.ok(!path.includes('Nhân vật giữ nguyên.'));

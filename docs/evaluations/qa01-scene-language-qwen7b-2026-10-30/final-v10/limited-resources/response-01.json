@@ -1,0 +1,20 @@
+{
+  "raw_output": "{\"scene\": {\"heading\": \"Khoảnh khắc\", \"blocks\": [{\"kind\": \"action\", \"text\": \"Bình đặt đèn pin xuống bàn, thở dài. Lan nhìn đèn pin, sau đó nhìn ra cửa sổ.\", \"speaker\": \"\"}, {\"kind\": \"action\", \"text\": \"Lan kéo nhẹ rèm cửa, ánh đèn đường từ bên ngoài rọi vào phòng, đủ sáng để đọc. Bình và Lan nghiêng tờ giấy để tận dụng ánh sáng.\", \"speaker\": \"\"}]} }",
+  "output": {
+    "scene": {
+      "heading": "Khoảnh khắc",
+      "blocks": [
+        {
+          "kind": "action",
+          "text": "Bình đặt đèn pin xuống bàn, thở dài. Lan nhìn đèn pin, sau đó nhìn ra cửa sổ.",
+          "speaker": ""
+        },
+        {
+          "kind": "action",
+          "text": "Lan kéo nhẹ rèm cửa, ánh đèn đường từ bên ngoài rọi vào phòng, đủ sáng để đọc. Bình và Lan nghiêng tờ giấy để tận dụng ánh sáng.",
+          "speaker": ""
+        }
+      ]
+    }
+  }
+}

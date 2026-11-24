@@ -1,0 +1,103 @@
+{
+  "id": "a1f5b7e9-07f4-4c7d-a521-6fcb79226396",
+  "project_id": "785bacf4-4288-413a-a268-d78a38b4b613",
+  "source_revision": 2,
+  "created_at": "2026-10-30T04:36:47.269962+00:00",
+  "updated_at": "2026-10-30T04:36:47.272755+00:00",
+  "revision_instructions": "",
+  "affected_scene_ids": [],
+  "status": "interrupted",
+  "step": "clarify",
+  "sending": true,
+  "cancel_requested": false,
+  "candidate_revision": 1,
+  "completed_scenes": 0,
+  "total_scenes": 0,
+  "error": "Lượt tạo gặp lỗi. Phần đã lưu vẫn được giữ; hãy kiểm tra trạng thái trước khi tiếp tục.",
+  "review_error": null,
+  "adopted_revision": null,
+  "progress_version": 1,
+  "progress_revision": 2,
+  "workflow_items": [
+    {
+      "id": "analysis",
+      "kind": "analysis",
+      "scene_id": null,
+      "status": "interrupted",
+      "started_at": "2026-10-30T04:36:47.270883+00:00",
+      "finished_at": "2026-10-30T04:36:47.272732+00:00",
+      "result": null,
+      "error_code": "unknown_result",
+      "children": []
+    },
+    {
+      "id": "intent",
+      "kind": "intent",
+      "scene_id": null,
+      "status": "pending",
+      "started_at": null,
+      "finished_at": null,
+      "result": null,
+      "error_code": null,
+      "children": []
+    },
+    {
+      "id": "plan",
+      "kind": "plan",
+      "scene_id": null,
+      "status": "pending",
+      "started_at": null,
+      "finished_at": null,
+      "result": null,
+      "error_code": null,
+      "children": []
+    },
+    {
+      "id": "plan_review",
+      "kind": "plan_review",
+      "scene_id": null,
+      "status": "pending",
+      "started_at": null,
+      "finished_at": null,
+      "result": null,
+      "error_code": null,
+      "children": []
+    },
+    {
+      "id": "outline",
+      "kind": "outline",
+      "scene_id": null,
+      "status": "pending",
+      "started_at": null,
+      "finished_at": null,
+      "result": null,
+      "error_code": null,
+      "children": []
+    },
+    {
+      "id": "review",
+      "kind": "review",
+      "scene_id": null,
+      "status": "pending",
+      "started_at": null,
+      "finished_at": null,
+      "result": null,
+      "error_code": null,
+      "children": []
+    },
+    {
+      "id": "draft",
+      "kind": "draft",
+      "scene_id": null,
+      "status": "pending",
+      "started_at": null,
+      "finished_at": null,
+      "result": null,
+      "error_code": null,
+      "children": []
+    }
+  ],
+  "can_continue": false,
+  "continue_block_reason": "unknown_result",
+  "continue_block_message": "Lần gọi AI chưa rõ kết quả; không gửi lại. Hãy giữ bản đã có hoặc hủy và tạo lượt mới."
+}

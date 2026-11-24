@@ -1,0 +1,336 @@
+{
+  "id": "c5b9ffca-6a96-4a81-b9e0-5e9e0962a6cd",
+  "version": 1,
+  "scenes": [
+    {
+      "id": "04721b3c-fc6e-4462-8a1a-f122c30279ba",
+      "source_scene_id": "0e376971-c6b3-4425-9d7a-9bcc475c738f",
+      "heading": "Nét chì bị lệch",
+      "blocks": []
+    },
+    {
+      "id": "2b863071-ddda-42d0-b2c3-478033287462",
+      "source_scene_id": "c969cac1-868a-4cb9-ada4-7628872e842c",
+      "heading": "Con gái tự kẻ lại",
+      "blocks": []
+    }
+  ],
+  "source_revision": 2,
+  "source_outline": {
+    "id": "03555648-3df5-49d3-925c-0e3925700978",
+    "version": 1,
+    "scenes": [
+      {
+        "id": "0e376971-c6b3-4425-9d7a-9bcc475c738f",
+        "title": "Nét chì bị lệch",
+        "action": "Con gái 30 tuổi đặt thước lên miếng gỗ để kẻ đường cắt. Nét chì bị lệch khi tấm gỗ trượt. Cha 58 tuổi đặt lòng bàn tay lên đầu tấm gỗ, giữ cho gỗ đứng yên. Con gái nhìn lại, đặt thước và tự kẻ một đường thẳng mới.",
+        "location": "Xưởng mộc",
+        "time": "Buổi sáng",
+        "characters": "Con gái 30 tuổi, Cha 58 tuổi",
+        "goal": "Con gái tự khắc phục sai lầm",
+        "purpose": "Hiện thực hóa sự tự lập và trưởng thành của con gái",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      },
+      {
+        "id": "c969cac1-868a-4cb9-ada4-7628872e842c",
+        "title": "Con gái tự kẻ lại",
+        "action": "Con gái nhìn cây bút chì của cha, tự nhấc lên và kẻ một nét mới theo thước. Cha lùi nửa bước, vẫn ở trong khung. Cắt ở bàn tay con gái đang kẻ nét tiếp theo.",
+        "location": "Xưởng mộc",
+        "time": "Buổi sáng",
+        "characters": "Con gái 30 tuổi, Cha 58 tuổi",
+        "goal": "Con gái tiếp tục làm việc với sự tự tin",
+        "purpose": "Hiện thực hóa sự trưởng thành của con gái thông qua hành động tự lập",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      }
+    ],
+    "source": {
+      "id": "acd2f724-ef2c-4cd7-8e28-f515eb46b1d8",
+      "project_revision": 2,
+      "version_id": "current",
+      "draft": {
+        "title": "Buổi sáng đầu tiên",
+        "logline": "Trong xưởng mộc, con gái 30 tuổi tự khắc phục sai lầm bằng bút chì của cha, thể hiện sự trưởng thành.",
+        "sections": [
+          {
+            "title": "Core idea",
+            "purpose": "State the short film's central promise.",
+            "content": "Trong xưởng mộc, con gái 30 tuổi tự khắc phục sai lầm bằng bút chì của cha, thể hiện sự trưởng thành."
+          },
+          {
+            "title": "Main character",
+            "purpose": "Define the protagonist and key character pressure.",
+            "content": "Con gái 30 tuổi Cha 58 tuổi"
+          },
+          {
+            "title": "Main conflict",
+            "purpose": "Describe the obstacle and stakes.",
+            "content": "Nét chì bị lệch khi kẻ đường trên gỗ Sự tự lập và trưởng thành của con gái"
+          },
+          {
+            "title": "Beginning",
+            "purpose": "Set up the story world and first dramatic turn.",
+            "content": "Con gái 30 tuổi đến làm cùng cha 58 tuổi trong xưởng mộc. Cô đặt thước lên một miếng gỗ để kẻ đường cắt nhưng nét chì bị lệch khi tấm gỗ trượt. Nét chì bị lệch khi kẻ đường trên gỗ"
+          },
+          {
+            "title": "Middle",
+            "purpose": "Escalate pressure and reveal the emotional turn.",
+            "content": "Cha giữ gỗ cho chắc, không sửa hộ, chỉ dùng tay giữ cho gỗ đứng yên."
+          },
+          {
+            "title": "Ending",
+            "purpose": "Resolve the short film through a visible choice or image.",
+            "content": "Con gái tự kẻ một đường thẳng mới, nhận cây bút chì của cha và tiếp tục làm việc. Bàn tay con gái tự kẻ nét tiếp theo bằng bút của cha."
+          },
+          {
+            "title": "Theme",
+            "purpose": "Name the human idea underneath the plot.",
+            "content": "Sự trưởng thành đến từ việc tự khắc phục sai lầm."
+          },
+          {
+            "title": "Visual Style",
+            "purpose": "Capture the visual approach and recurring motifs.",
+            "content": "Phong cách gần gũi, tiết chế, tập trung vào hành động và hình ảnh. Bút chì, Thước, Miếng gỗ"
+          },
+          {
+            "title": "Tone",
+            "purpose": "Describe the intended emotional register.",
+            "content": "Tone gần gũi, tiết chế, tập trung vào hành động và hình ảnh."
+          },
+          {
+            "title": "Production Notes",
+            "purpose": "Keep the idea grounded for short-film production.",
+            "content": "Phim ngắn 90 giây, đúng 2 cảnh: nét chì bị lệch và cha giữ gỗ; rồi cô tự kẻ lại, nhận cây bút và làm tiếp. Không thêm nhân vật, không hồi tưởng, không độc thoại. Không giải thích cảm xúc bằng lời. Giữ kết thúc ở bàn tay con gái tự kẻ nét tiếp theo bằng bút của cha; không thêm cảnh ăn mừng hay rời xưởng. Xưởng mộc 2 nhân vật trưởng thành"
+          }
+        ]
+      },
+      "context": {
+        "idea": "Buổi sáng đầu tiên con gái 30 tuổi đến làm cùng cha 58 tuổi trong xưởng mộc nhỏ. Cô đặt thước lên một miếng gỗ để kẻ đường cắt nhưng nét chì bị lệch khi tấm gỗ trượt. Người cha không sửa hộ, chỉ dùng tay giữ miếng gỗ cho chắc. Cô nhìn lại, đặt thước và tự kẻ một đường thẳng mới. Cha đặt cây bút chì quen dùng của mình cạnh tay cô rồi lùi sang bên. Cô cầm cây bút ấy, tiếp tục đánh dấu trên gỗ; cha đứng cạnh nhìn. Cắt ở bàn tay cô đang kẻ nét tiếp theo. Tôi muốn phim ngắn 90 giây, đúng 2 cảnh: nét chì bị lệch và cha giữ gỗ; rồi cô tự kẻ lại, nhận cây bút và làm tiếp. Không khí gần gũi, tiết chế, kể qua hành động, không cần thoại.",
+        "constraints": [
+          "Chỉ hai nhân vật trưởng thành: cha 58 tuổi và con gái 30 tuổi. Một bàn làm việc trong xưởng mộc, cùng một buổi sáng. Đúng 2 cảnh, khoảng 90 giây. Chỉ thao tác đo và kẻ chì, không vận hành máy hay cắt gỗ. Không thêm nhân vật, không hồi tưởng, không độc thoại. Không giải thích cảm xúc bằng lời. Giữ kết thúc ở bàn tay con gái tự kẻ nét tiếp theo bằng bút của cha; không thêm cảnh ăn mừng hay rời xưởng."
+        ],
+        "clarifications": [
+          {
+            "question": "Cách cha giữ gỗ khi đường chì bị lệch",
+            "answer": "Cha đặt lòng bàn tay lên đầu tấm gỗ, tránh thước và nét chì. Ông chỉ giữ cho gỗ đứng yên, không cầm tay con, không kẻ lại hộ và không nói lời hướng dẫn.",
+            "input_index": 0
+          },
+          {
+            "question": "Cách con gái nhận cây bút của cha và tiếp tục làm việc",
+            "answer": "Cô nhìn cây bút cha đặt xuống, tự nhấc lên và kẻ một nét mới theo thước. Cha lùi nửa bước, vẫn ở trong khung. Cắt ở bàn tay cô đang kẻ nét tiếp theo; không thêm lời tổng kết hay cảnh sau đó.",
+            "input_index": 1
+          }
+        ],
+        "pending_questions": []
+      },
+      "response_language": "vi",
+      "draft_provenance": {
+        "title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "logline": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:0:title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:0:purpose": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:0:content": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:1:title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:1:purpose": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:1:content": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:2:title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:2:purpose": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:2:content": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:3:title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:3:purpose": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:3:content": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:4:title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:4:purpose": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:4:content": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:5:title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:5:purpose": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:5:content": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:6:title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:6:purpose": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:6:content": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:7:title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:7:purpose": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:7:content": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:8:title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:8:purpose": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:8:content": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:9:title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:9:purpose": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:9:content": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        }
+      }
+    },
+    "provenance": {
+      "m2:0e376971-c6b3-4425-9d7a-9bcc475c738f:title": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:0e376971-c6b3-4425-9d7a-9bcc475c738f:action": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:0e376971-c6b3-4425-9d7a-9bcc475c738f:location": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:0e376971-c6b3-4425-9d7a-9bcc475c738f:time": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:0e376971-c6b3-4425-9d7a-9bcc475c738f:characters": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:0e376971-c6b3-4425-9d7a-9bcc475c738f:goal": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:0e376971-c6b3-4425-9d7a-9bcc475c738f:purpose": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:0e376971-c6b3-4425-9d7a-9bcc475c738f:viewer_intent": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:0e376971-c6b3-4425-9d7a-9bcc475c738f:keep_or_avoid": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:c969cac1-868a-4cb9-ada4-7628872e842c:title": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:c969cac1-868a-4cb9-ada4-7628872e842c:action": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:c969cac1-868a-4cb9-ada4-7628872e842c:location": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:c969cac1-868a-4cb9-ada4-7628872e842c:time": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:c969cac1-868a-4cb9-ada4-7628872e842c:characters": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:c969cac1-868a-4cb9-ada4-7628872e842c:goal": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:c969cac1-868a-4cb9-ada4-7628872e842c:purpose": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:c969cac1-868a-4cb9-ada4-7628872e842c:viewer_intent": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "m2:c969cac1-868a-4cb9-ada4-7628872e842c:keep_or_avoid": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      }
+    }
+  }
+}

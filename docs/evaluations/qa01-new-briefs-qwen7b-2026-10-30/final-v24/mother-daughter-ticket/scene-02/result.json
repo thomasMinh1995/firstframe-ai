@@ -1,0 +1,530 @@
+{
+  "scope": "scene",
+  "block_ids": [],
+  "review_id": null,
+  "note_id": null,
+  "applied_scene": null,
+  "undone_revision": null,
+  "id": "cecc7fa7-f6e8-437c-8a31-d4114cc6eb41",
+  "created_at": "2026-10-30",
+  "source_revision": 1,
+  "source_content": "synthetic QA",
+  "source_screenplay": {
+    "id": "37eded8a-5ad1-4794-bdf6-499677766d36",
+    "version": 1,
+    "scenes": [
+      {
+        "id": "4d28e05d-a920-4849-bd5d-6dba5a2ee733",
+        "source_scene_id": "087c6d58-e447-41d5-812c-bbf451484d51",
+        "heading": "Bếp",
+        "blocks": [
+          {
+            "kind": "action",
+            "text": "Mẹ đặt vé tàu lên bàn bếp.",
+            "speaker": "",
+            "id": "c81f5ca7-93c9-4287-8ca0-8ccde267e358"
+          },
+          {
+            "kind": "dialogue",
+            "text": "Con đã nhận vé chưa?",
+            "speaker": "Mẹ",
+            "id": "c141dd16-7a44-480c-a598-dc292477d1ad"
+          },
+          {
+            "kind": "dialogue",
+            "text": "Con đã cất vào túi áo rồi, mẹ.",
+            "speaker": "Con gái",
+            "id": "36f6ebda-5ee2-40af-abea-1437755394a3"
+          }
+        ]
+      },
+      {
+        "id": "c2d7efe0-6002-45ea-9860-8eada1818614",
+        "source_scene_id": "18db7718-0aff-4140-8cc4-8c32e80342a7",
+        "heading": "Túi áo",
+        "blocks": []
+      },
+      {
+        "id": "a7cd7485-76b6-4950-9440-9af63ae5678c",
+        "source_scene_id": "010e1f40-be96-4857-ab85-e2898b9dd370",
+        "heading": "Cửa nhà",
+        "blocks": []
+      }
+    ],
+    "source_revision": 1,
+    "source_outline": {
+      "id": "0e1b49f7-7858-44ba-8dee-0bbef60fc3e5",
+      "version": 1,
+      "scenes": [
+        {
+          "id": "087c6d58-e447-41d5-812c-bbf451484d51",
+          "title": "Bếp",
+          "action": "Mẹ đặt vé tàu lên bàn bếp.",
+          "location": "Bếp",
+          "time": "",
+          "characters": "Mẹ, Con gái",
+          "goal": "",
+          "purpose": "",
+          "viewer_intent": "",
+          "keep_or_avoid": "",
+          "staging_choices": {}
+        },
+        {
+          "id": "18db7718-0aff-4140-8cc4-8c32e80342a7",
+          "title": "Túi áo",
+          "action": "Con gái nhận vé rồi cất vào túi áo.",
+          "location": "Bếp",
+          "time": "",
+          "characters": "Mẹ, Con gái",
+          "goal": "",
+          "purpose": "",
+          "viewer_intent": "",
+          "keep_or_avoid": "",
+          "staging_choices": {}
+        },
+        {
+          "id": "010e1f40-be96-4857-ab85-e2898b9dd370",
+          "title": "Cửa nhà",
+          "action": "Mẹ và con gái đứng ở cửa, con gái vẫn chưa quyết định có lên tàu hay không.",
+          "location": "Cửa nhà",
+          "time": "",
+          "characters": "Mẹ, Con gái",
+          "goal": "",
+          "purpose": "",
+          "viewer_intent": "",
+          "keep_or_avoid": "",
+          "staging_choices": {}
+        }
+      ],
+      "source": {
+        "id": "83d111b0-95c6-4b62-8513-200889dde406",
+        "project_revision": 1,
+        "version_id": "current",
+        "draft": {
+          "title": "Tấm vé trên bàn",
+          "logline": "Mẹ đặt vé tàu lên bàn bếp. Con gái nhận vé rồi cất vào túi áo. Mẹ và con gái đứng ở cửa, con gái vẫn chưa quyết định có lên tàu hay không.",
+          "sections": [
+            {
+              "title": "Story",
+              "purpose": "Author brief",
+              "content": "Mẹ đặt vé tàu lên bàn bếp. Con gái nhận vé rồi cất vào túi áo. Mẹ và con gái đứng ở cửa, con gái vẫn chưa quyết định có lên tàu hay không."
+            }
+          ]
+        },
+        "context": {
+          "idea": "Mẹ đặt vé tàu lên bàn bếp. Con gái nhận vé rồi cất vào túi áo. Mẹ và con gái đứng ở cửa, con gái vẫn chưa quyết định có lên tàu hay không.",
+          "constraints": [
+            "Đúng ba cảnh, chỉ mẹ và con gái; giữ kết mở.",
+            "Mỗi cảnh có đúng hai câu thoại ngắn: mẹ nói một câu, con gái đáp một câu. Mẹ xưng mẹ, con gái xưng con; không dùng tôi/bạn. Không lặp việc trao vé hoặc tự xác nhận con lên tàu."
+          ],
+          "clarifications": [],
+          "pending_questions": []
+        },
+        "response_language": "vi",
+        "draft_provenance": {
+          "title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "logline": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:0:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:0:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "section:0:content": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          }
+        }
+      },
+      "provenance": {
+        "m2:087c6d58-e447-41d5-812c-bbf451484d51:title": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:087c6d58-e447-41d5-812c-bbf451484d51:action": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:087c6d58-e447-41d5-812c-bbf451484d51:location": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:087c6d58-e447-41d5-812c-bbf451484d51:time": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:087c6d58-e447-41d5-812c-bbf451484d51:characters": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:087c6d58-e447-41d5-812c-bbf451484d51:goal": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:087c6d58-e447-41d5-812c-bbf451484d51:purpose": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:087c6d58-e447-41d5-812c-bbf451484d51:viewer_intent": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:087c6d58-e447-41d5-812c-bbf451484d51:keep_or_avoid": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:18db7718-0aff-4140-8cc4-8c32e80342a7:title": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:18db7718-0aff-4140-8cc4-8c32e80342a7:action": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:18db7718-0aff-4140-8cc4-8c32e80342a7:location": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:18db7718-0aff-4140-8cc4-8c32e80342a7:time": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:18db7718-0aff-4140-8cc4-8c32e80342a7:characters": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:18db7718-0aff-4140-8cc4-8c32e80342a7:goal": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:18db7718-0aff-4140-8cc4-8c32e80342a7:purpose": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:18db7718-0aff-4140-8cc4-8c32e80342a7:viewer_intent": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:18db7718-0aff-4140-8cc4-8c32e80342a7:keep_or_avoid": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:010e1f40-be96-4857-ab85-e2898b9dd370:title": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:010e1f40-be96-4857-ab85-e2898b9dd370:action": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:010e1f40-be96-4857-ab85-e2898b9dd370:location": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:010e1f40-be96-4857-ab85-e2898b9dd370:time": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:010e1f40-be96-4857-ab85-e2898b9dd370:characters": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:010e1f40-be96-4857-ab85-e2898b9dd370:goal": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:010e1f40-be96-4857-ab85-e2898b9dd370:purpose": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:010e1f40-be96-4857-ab85-e2898b9dd370:viewer_intent": {
+          "origin": "author_input",
+          "author_confirmed": false
+        },
+        "m2:010e1f40-be96-4857-ab85-e2898b9dd370:keep_or_avoid": {
+          "origin": "author_input",
+          "author_confirmed": false
+        }
+      }
+    },
+    "provenance": {
+      "script:4d28e05d-a920-4849-bd5d-6dba5a2ee733:heading": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:c81f5ca7-93c9-4287-8ca0-8ccde267e358:text": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:c81f5ca7-93c9-4287-8ca0-8ccde267e358:speaker": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:c141dd16-7a44-480c-a598-dc292477d1ad:text": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:c141dd16-7a44-480c-a598-dc292477d1ad:speaker": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:36f6ebda-5ee2-40af-abea-1437755394a3:text": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      },
+      "block:36f6ebda-5ee2-40af-abea-1437755394a3:speaker": {
+        "origin": "ai_proposal",
+        "author_confirmed": false
+      }
+    }
+  },
+  "source_outline": {
+    "id": "0e1b49f7-7858-44ba-8dee-0bbef60fc3e5",
+    "version": 1,
+    "scenes": [
+      {
+        "id": "087c6d58-e447-41d5-812c-bbf451484d51",
+        "title": "Bếp",
+        "action": "Mẹ đặt vé tàu lên bàn bếp.",
+        "location": "Bếp",
+        "time": "",
+        "characters": "Mẹ, Con gái",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      },
+      {
+        "id": "18db7718-0aff-4140-8cc4-8c32e80342a7",
+        "title": "Túi áo",
+        "action": "Con gái nhận vé rồi cất vào túi áo.",
+        "location": "Bếp",
+        "time": "",
+        "characters": "Mẹ, Con gái",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      },
+      {
+        "id": "010e1f40-be96-4857-ab85-e2898b9dd370",
+        "title": "Cửa nhà",
+        "action": "Mẹ và con gái đứng ở cửa, con gái vẫn chưa quyết định có lên tàu hay không.",
+        "location": "Cửa nhà",
+        "time": "",
+        "characters": "Mẹ, Con gái",
+        "goal": "",
+        "purpose": "",
+        "viewer_intent": "",
+        "keep_or_avoid": "",
+        "staging_choices": {}
+      }
+    ],
+    "source": {
+      "id": "83d111b0-95c6-4b62-8513-200889dde406",
+      "project_revision": 1,
+      "version_id": "current",
+      "draft": {
+        "title": "Tấm vé trên bàn",
+        "logline": "Mẹ đặt vé tàu lên bàn bếp. Con gái nhận vé rồi cất vào túi áo. Mẹ và con gái đứng ở cửa, con gái vẫn chưa quyết định có lên tàu hay không.",
+        "sections": [
+          {
+            "title": "Story",
+            "purpose": "Author brief",
+            "content": "Mẹ đặt vé tàu lên bàn bếp. Con gái nhận vé rồi cất vào túi áo. Mẹ và con gái đứng ở cửa, con gái vẫn chưa quyết định có lên tàu hay không."
+          }
+        ]
+      },
+      "context": {
+        "idea": "Mẹ đặt vé tàu lên bàn bếp. Con gái nhận vé rồi cất vào túi áo. Mẹ và con gái đứng ở cửa, con gái vẫn chưa quyết định có lên tàu hay không.",
+        "constraints": [
+          "Đúng ba cảnh, chỉ mẹ và con gái; giữ kết mở.",
+          "Mỗi cảnh có đúng hai câu thoại ngắn: mẹ nói một câu, con gái đáp một câu. Mẹ xưng mẹ, con gái xưng con; không dùng tôi/bạn. Không lặp việc trao vé hoặc tự xác nhận con lên tàu."
+        ],
+        "clarifications": [],
+        "pending_questions": []
+      },
+      "response_language": "vi",
+      "draft_provenance": {
+        "title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "logline": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:0:title": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:0:purpose": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        },
+        "section:0:content": {
+          "origin": "ai_proposal",
+          "author_confirmed": false
+        }
+      }
+    },
+    "provenance": {
+      "m2:087c6d58-e447-41d5-812c-bbf451484d51:title": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:087c6d58-e447-41d5-812c-bbf451484d51:action": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:087c6d58-e447-41d5-812c-bbf451484d51:location": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:087c6d58-e447-41d5-812c-bbf451484d51:time": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:087c6d58-e447-41d5-812c-bbf451484d51:characters": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:087c6d58-e447-41d5-812c-bbf451484d51:goal": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:087c6d58-e447-41d5-812c-bbf451484d51:purpose": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:087c6d58-e447-41d5-812c-bbf451484d51:viewer_intent": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:087c6d58-e447-41d5-812c-bbf451484d51:keep_or_avoid": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:18db7718-0aff-4140-8cc4-8c32e80342a7:title": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:18db7718-0aff-4140-8cc4-8c32e80342a7:action": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:18db7718-0aff-4140-8cc4-8c32e80342a7:location": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:18db7718-0aff-4140-8cc4-8c32e80342a7:time": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:18db7718-0aff-4140-8cc4-8c32e80342a7:characters": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:18db7718-0aff-4140-8cc4-8c32e80342a7:goal": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:18db7718-0aff-4140-8cc4-8c32e80342a7:purpose": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:18db7718-0aff-4140-8cc4-8c32e80342a7:viewer_intent": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:18db7718-0aff-4140-8cc4-8c32e80342a7:keep_or_avoid": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:010e1f40-be96-4857-ab85-e2898b9dd370:title": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:010e1f40-be96-4857-ab85-e2898b9dd370:action": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:010e1f40-be96-4857-ab85-e2898b9dd370:location": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:010e1f40-be96-4857-ab85-e2898b9dd370:time": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:010e1f40-be96-4857-ab85-e2898b9dd370:characters": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:010e1f40-be96-4857-ab85-e2898b9dd370:goal": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:010e1f40-be96-4857-ab85-e2898b9dd370:purpose": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:010e1f40-be96-4857-ab85-e2898b9dd370:viewer_intent": {
+        "origin": "author_input",
+        "author_confirmed": false
+      },
+      "m2:010e1f40-be96-4857-ab85-e2898b9dd370:keep_or_avoid": {
+        "origin": "author_input",
+        "author_confirmed": false
+      }
+    }
+  },
+  "target_scene_id": "c2d7efe0-6002-45ea-9860-8eada1818614",
+  "instructions": "",
+  "status": "ready",
+  "scene": {
+    "id": "c2d7efe0-6002-45ea-9860-8eada1818614",
+    "source_scene_id": "18db7718-0aff-4140-8cc4-8c32e80342a7",
+    "heading": "Túi áo",
+    "blocks": [
+      {
+        "kind": "action",
+        "text": "Con gái nhận vé rồi cất vào túi áo.",
+        "speaker": "",
+        "id": "388b8f3a-b471-4aea-be60-abb0a61316d5"
+      },
+      {
+        "kind": "dialogue",
+        "text": "Con đã cất vé vào túi áo chưa?",
+        "speaker": "Mẹ",
+        "id": "598e5876-0291-440b-b3a2-5f12ca0be171"
+      },
+      {
+        "kind": "dialogue",
+        "text": "Con đã cất vào túi áo rồi, mẹ.",
+        "speaker": "Con gái",
+        "id": "b6a8711f-c7c5-4a53-b2bd-86f07f397bb3"
+      }
+    ]
+  },
+  "preview_scene": null,
+  "provider": null,
+  "model": "qwen2.5:7b",
+  "parameters": {
+    "composition": "source-preserving-v1",
+    "outline_reconciled": false
+  },
+  "prompt_version": "screenplay-scene-v24-dialogue-voices",
+  "error": null,
+  "applied_revision": null
+}

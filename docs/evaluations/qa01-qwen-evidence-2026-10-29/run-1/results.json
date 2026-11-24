@@ -1,0 +1,4271 @@
+[
+  {
+    "case": "original",
+    "expected_conflict": false,
+    "status": 200,
+    "review": {
+      "id": "a4717441-cbe7-4266-89ad-a0af3e13f862",
+      "created_at": "2026-10-29T08:34:40.412779+00:00",
+      "source_revision": 1,
+      "source_content": "{\"answers\": [\"\"], \"clarifications\": {}, \"constraints\": [\"Phim 30 giây, tối đa 2 cảnh rất ngắn, 2 nhân vật, một căn bếp.\", \"Giữ lá thư chưa mở và quyền quyết định của con gái; không giải quyết hết mâu thuẫn.\", \"Bản phát triển gọn; ưu tiên hành động và khoảng lặng, ít thoại.\"], \"draft\": {\"logline\": \"Trong căn bếp nhỏ dưới mưa, con gái nhận chìa khóa và lá thư xin lỗi từ cha, quyết định giữ im lặng trước khi rời đi.\", \"sections\": [{\"content\": \"Trong căn bếp nhỏ dưới mưa, con gái nhận chìa khóa và lá thư xin lỗi từ cha, quyết định giữ im lặng trước khi rời đi.\", \"purpose\": \"State the short film's central promise.\", \"title\": \"Core idea\"}, {\"content\": \"Con gái Cha\", \"purpose\": \"Define the protagonist and key character pressure.\", \"title\": \"Main character\"}, {\"content\": \"Lá thư xin lỗi từ cha Con gái phải quyết định liệu có mở và đọc lá thư hay không Quyền quyết định của con gái về việc tiếp nhận hay không tiếp nhận sự xin lỗi từ cha\", \"purpose\": \"Describe the obstacle and stakes.\", \"title\": \"Main conflict\"}, {\"content\": \"Chiều mưa, con gái đặt chìa khóa lên bàn trước khi rời đi học. Cha đặt lá thư xin lỗi cạnh chìa khóa.\", \"purpose\": \"Set up the story world and first dramatic turn.\", \"title\": \"Beginning\"}, {\"content\": \"Con gái ngồi xuống uống trà cùng cha, vẫn chưa mở lá thư.\", \"purpose\": \"Escalate pressure and reveal the emotional turn.\", \"title\": \"Middle\"}, {\"content\": \"Con gái quyết định không mở lá thư và rời đi, để lại lá thư và chìa khóa trên bàn. Con gái bước ra khỏi căn bếp, bóng lưng trong mưa, lá thư và chìa khóa vẫn còn trên bàn.\", \"purpose\": \"Resolve the short film through a visible choice or image.\", \"title\": \"Ending\"}, {\"content\": \"Sự tha thứ và quyền quyết định của con gái.\", \"purpose\": \"Name the human idea underneath the plot.\", \"title\": \"Theme\"}, {\"content\": \"Căn bếp nhỏ, ánh sáng mờ ảo của chiều mưa, chìa khóa và lá thư xin lỗi. Chiều mưa, Căn bếp nhỏ, Chìa khóa, Lá thư xin lỗi\", \"purpose\": \"Capture the visual approach and recurring motifs.\", \"title\": \"Visual Style\"}, {\"content\": \"Tĩnh lặng, đầy cảm xúc.\", \"purpose\": \"Describe the intended emotional register.\", \"title\": \"Tone\"}, {\"content\": \"Cảnh đầu và cuối nên ngắn gọn, tập trung vào hành động và khoảng lặng. Sử dụng chìa khóa và lá thư xin lỗi làm biểu tượng. Căn bếp nhỏ 2 nhân vật\", \"purpose\": \"Keep the idea grounded for short-film production.\", \"title\": \"Production Notes\"}], \"title\": \"Chiều mưa trong căn bếp nhỏ\"}, \"idea\": \"Chiều mưa trong căn bếp nhỏ, con gái đặt chìa khóa lên bàn trước khi đi học xa. Cha đặt cạnh đó một lá thư xin lỗi rồi lùi lại. Cô chưa mở thư, nhưng ngồi xuống uống cùng cha một ngụm trà.\", \"questions\": [\"Con gái sẽ mở thư hay không\"], \"response_language\": \"vi\"}",
+      "source_screenplay": {
+        "id": "39f267e6-0b72-4492-ab3d-c60543b6f205",
+        "version": 1,
+        "scenes": [
+          {
+            "id": "21cd8b17-699d-41d9-b099-6b37056df782",
+            "source_scene_id": "8f793a98-fcaf-41d4-8dea-320a820c61cd",
+            "heading": "Chiều mưa, con gái đi học",
+            "blocks": [
+              {
+                "kind": "action",
+                "text": "Con gái bước vào căn bếp nhỏ, trời mưa phù phù. Cô đặt chìa khóa lên bàn, nhìn ra cửa sổ. Cha đứng ở góc phòng, im lặng.",
+                "speaker": "",
+                "id": "a43e5388-c7b3-42e3-8cfa-4e766c31e464"
+              },
+              {
+                "kind": "action",
+                "text": "Cha đặt một lá thư xin lỗi lên bàn, cạnh chìa khóa.",
+                "speaker": "",
+                "id": "8f846729-93bf-4bfa-b822-12c8c3c5e075"
+              },
+              {
+                "kind": "action",
+                "text": "Con gái ngồi xuống, uống một ngụm trà, vẫn chưa mở lá thư.",
+                "speaker": "",
+                "id": "dcd01ce1-89b2-4331-b915-0c9cf070219e"
+              }
+            ]
+          }
+        ],
+        "source_revision": 1,
+        "source_outline": {
+          "id": "7b919efc-7dd1-4d40-9a00-1b4a3d7b93b3",
+          "version": 1,
+          "scenes": [
+            {
+              "id": "8f793a98-fcaf-41d4-8dea-320a820c61cd",
+              "title": "Chiều mưa, con gái đi học",
+              "action": "Con gái bước vào căn bếp nhỏ, trời mưa phù phù. Cô đặt chìa khóa lên bàn, nhìn ra cửa sổ. Cha đứng ở góc phòng, im lặng.",
+              "location": "Căn bếp nhỏ",
+              "time": "Chiều mưa",
+              "characters": "Con gái, Cha",
+              "goal": "Con gái đặt chìa khóa lên bàn trước khi đi học.",
+              "purpose": "Đặt bối cảnh và giới thiệu nhân vật.",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {}
+            }
+          ],
+          "source": {
+            "id": "8593a0e2-60e7-4b94-8dfb-65fa6a2fa645",
+            "project_revision": 1,
+            "version_id": "current",
+            "draft": {
+              "title": "Chiều mưa trong căn bếp nhỏ",
+              "logline": "Trong căn bếp nhỏ dưới mưa, con gái nhận chìa khóa và lá thư xin lỗi từ cha, quyết định giữ im lặng trước khi rời đi.",
+              "sections": [
+                {
+                  "title": "Core idea",
+                  "purpose": "State the short film's central promise.",
+                  "content": "Trong căn bếp nhỏ dưới mưa, con gái nhận chìa khóa và lá thư xin lỗi từ cha, quyết định giữ im lặng trước khi rời đi."
+                },
+                {
+                  "title": "Main character",
+                  "purpose": "Define the protagonist and key character pressure.",
+                  "content": "Con gái Cha"
+                },
+                {
+                  "title": "Main conflict",
+                  "purpose": "Describe the obstacle and stakes.",
+                  "content": "Lá thư xin lỗi từ cha Con gái phải quyết định liệu có mở và đọc lá thư hay không Quyền quyết định của con gái về việc tiếp nhận hay không tiếp nhận sự xin lỗi từ cha"
+                },
+                {
+                  "title": "Beginning",
+                  "purpose": "Set up the story world and first dramatic turn.",
+                  "content": "Chiều mưa, con gái đặt chìa khóa lên bàn trước khi rời đi học. Cha đặt lá thư xin lỗi cạnh chìa khóa."
+                },
+                {
+                  "title": "Middle",
+                  "purpose": "Escalate pressure and reveal the emotional turn.",
+                  "content": "Con gái ngồi xuống uống trà cùng cha, vẫn chưa mở lá thư."
+                },
+                {
+                  "title": "Ending",
+                  "purpose": "Resolve the short film through a visible choice or image.",
+                  "content": "Con gái quyết định không mở lá thư và rời đi, để lại lá thư và chìa khóa trên bàn. Con gái bước ra khỏi căn bếp, bóng lưng trong mưa, lá thư và chìa khóa vẫn còn trên bàn."
+                },
+                {
+                  "title": "Theme",
+                  "purpose": "Name the human idea underneath the plot.",
+                  "content": "Sự tha thứ và quyền quyết định của con gái."
+                },
+                {
+                  "title": "Visual Style",
+                  "purpose": "Capture the visual approach and recurring motifs.",
+                  "content": "Căn bếp nhỏ, ánh sáng mờ ảo của chiều mưa, chìa khóa và lá thư xin lỗi. Chiều mưa, Căn bếp nhỏ, Chìa khóa, Lá thư xin lỗi"
+                },
+                {
+                  "title": "Tone",
+                  "purpose": "Describe the intended emotional register.",
+                  "content": "Tĩnh lặng, đầy cảm xúc."
+                },
+                {
+                  "title": "Production Notes",
+                  "purpose": "Keep the idea grounded for short-film production.",
+                  "content": "Cảnh đầu và cuối nên ngắn gọn, tập trung vào hành động và khoảng lặng. Sử dụng chìa khóa và lá thư xin lỗi làm biểu tượng. Căn bếp nhỏ 2 nhân vật"
+                }
+              ]
+            },
+            "context": {
+              "idea": "Chiều mưa trong căn bếp nhỏ, con gái đặt chìa khóa lên bàn trước khi đi học xa. Cha đặt cạnh đó một lá thư xin lỗi rồi lùi lại. Cô chưa mở thư, nhưng ngồi xuống uống cùng cha một ngụm trà.",
+              "constraints": [
+                "Phim 30 giây, tối đa 2 cảnh rất ngắn, 2 nhân vật, một căn bếp.",
+                "Giữ lá thư chưa mở và quyền quyết định của con gái; không giải quyết hết mâu thuẫn.",
+                "Bản phát triển gọn; ưu tiên hành động và khoảng lặng, ít thoại."
+              ],
+              "clarifications": [],
+              "pending_questions": [
+                {
+                  "question": "Con gái sẽ mở thư hay không",
+                  "input_index": 0
+                }
+              ]
+            },
+            "response_language": "vi",
+            "draft_provenance": {
+              "title": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "logline": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:0:title": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:0:purpose": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:0:content": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:1:title": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:1:purpose": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:1:content": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:2:title": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:2:purpose": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:2:content": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:3:title": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:3:purpose": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:3:content": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:4:title": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:4:purpose": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:4:content": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:5:title": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:5:purpose": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:5:content": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:6:title": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:6:purpose": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:6:content": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:7:title": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:7:purpose": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:7:content": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:8:title": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:8:purpose": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:8:content": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:9:title": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:9:purpose": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:9:content": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              }
+            }
+          },
+          "provenance": {
+            "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:title": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:action": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:location": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:time": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:characters": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:goal": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:purpose": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:viewer_intent": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:keep_or_avoid": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            }
+          }
+        },
+        "provenance": {
+          "script:21cd8b17-699d-41d9-b099-6b37056df782:heading": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "block:a43e5388-c7b3-42e3-8cfa-4e766c31e464:text": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "block:a43e5388-c7b3-42e3-8cfa-4e766c31e464:speaker": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "block:8f846729-93bf-4bfa-b822-12c8c3c5e075:text": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "block:8f846729-93bf-4bfa-b822-12c8c3c5e075:speaker": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "block:dcd01ce1-89b2-4331-b915-0c9cf070219e:text": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "block:dcd01ce1-89b2-4331-b915-0c9cf070219e:speaker": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          }
+        }
+      },
+      "source_outline": {
+        "id": "7b919efc-7dd1-4d40-9a00-1b4a3d7b93b3",
+        "version": 1,
+        "scenes": [
+          {
+            "id": "8f793a98-fcaf-41d4-8dea-320a820c61cd",
+            "title": "Chiều mưa, con gái đi học",
+            "action": "Con gái bước vào căn bếp nhỏ, trời mưa phù phù. Cô đặt chìa khóa lên bàn, nhìn ra cửa sổ. Cha đứng ở góc phòng, im lặng.",
+            "location": "Căn bếp nhỏ",
+            "time": "Chiều mưa",
+            "characters": "Con gái, Cha",
+            "goal": "Con gái đặt chìa khóa lên bàn trước khi đi học.",
+            "purpose": "Đặt bối cảnh và giới thiệu nhân vật.",
+            "viewer_intent": "",
+            "keep_or_avoid": "",
+            "staging_choices": {}
+          }
+        ],
+        "source": {
+          "id": "8593a0e2-60e7-4b94-8dfb-65fa6a2fa645",
+          "project_revision": 1,
+          "version_id": "current",
+          "draft": {
+            "title": "Chiều mưa trong căn bếp nhỏ",
+            "logline": "Trong căn bếp nhỏ dưới mưa, con gái nhận chìa khóa và lá thư xin lỗi từ cha, quyết định giữ im lặng trước khi rời đi.",
+            "sections": [
+              {
+                "title": "Core idea",
+                "purpose": "State the short film's central promise.",
+                "content": "Trong căn bếp nhỏ dưới mưa, con gái nhận chìa khóa và lá thư xin lỗi từ cha, quyết định giữ im lặng trước khi rời đi."
+              },
+              {
+                "title": "Main character",
+                "purpose": "Define the protagonist and key character pressure.",
+                "content": "Con gái Cha"
+              },
+              {
+                "title": "Main conflict",
+                "purpose": "Describe the obstacle and stakes.",
+                "content": "Lá thư xin lỗi từ cha Con gái phải quyết định liệu có mở và đọc lá thư hay không Quyền quyết định của con gái về việc tiếp nhận hay không tiếp nhận sự xin lỗi từ cha"
+              },
+              {
+                "title": "Beginning",
+                "purpose": "Set up the story world and first dramatic turn.",
+                "content": "Chiều mưa, con gái đặt chìa khóa lên bàn trước khi rời đi học. Cha đặt lá thư xin lỗi cạnh chìa khóa."
+              },
+              {
+                "title": "Middle",
+                "purpose": "Escalate pressure and reveal the emotional turn.",
+                "content": "Con gái ngồi xuống uống trà cùng cha, vẫn chưa mở lá thư."
+              },
+              {
+                "title": "Ending",
+                "purpose": "Resolve the short film through a visible choice or image.",
+                "content": "Con gái quyết định không mở lá thư và rời đi, để lại lá thư và chìa khóa trên bàn. Con gái bước ra khỏi căn bếp, bóng lưng trong mưa, lá thư và chìa khóa vẫn còn trên bàn."
+              },
+              {
+                "title": "Theme",
+                "purpose": "Name the human idea underneath the plot.",
+                "content": "Sự tha thứ và quyền quyết định của con gái."
+              },
+              {
+                "title": "Visual Style",
+                "purpose": "Capture the visual approach and recurring motifs.",
+                "content": "Căn bếp nhỏ, ánh sáng mờ ảo của chiều mưa, chìa khóa và lá thư xin lỗi. Chiều mưa, Căn bếp nhỏ, Chìa khóa, Lá thư xin lỗi"
+              },
+              {
+                "title": "Tone",
+                "purpose": "Describe the intended emotional register.",
+                "content": "Tĩnh lặng, đầy cảm xúc."
+              },
+              {
+                "title": "Production Notes",
+                "purpose": "Keep the idea grounded for short-film production.",
+                "content": "Cảnh đầu và cuối nên ngắn gọn, tập trung vào hành động và khoảng lặng. Sử dụng chìa khóa và lá thư xin lỗi làm biểu tượng. Căn bếp nhỏ 2 nhân vật"
+              }
+            ]
+          },
+          "context": {
+            "idea": "Chiều mưa trong căn bếp nhỏ, con gái đặt chìa khóa lên bàn trước khi đi học xa. Cha đặt cạnh đó một lá thư xin lỗi rồi lùi lại. Cô chưa mở thư, nhưng ngồi xuống uống cùng cha một ngụm trà.",
+            "constraints": [
+              "Phim 30 giây, tối đa 2 cảnh rất ngắn, 2 nhân vật, một căn bếp.",
+              "Giữ lá thư chưa mở và quyền quyết định của con gái; không giải quyết hết mâu thuẫn.",
+              "Bản phát triển gọn; ưu tiên hành động và khoảng lặng, ít thoại."
+            ],
+            "clarifications": [],
+            "pending_questions": [
+              {
+                "question": "Con gái sẽ mở thư hay không",
+                "input_index": 0
+              }
+            ]
+          },
+          "response_language": "vi",
+          "draft_provenance": {
+            "title": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "logline": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:0:title": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:0:purpose": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:0:content": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:1:title": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:1:purpose": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:1:content": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:2:title": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:2:purpose": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:2:content": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:3:title": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:3:purpose": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:3:content": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:4:title": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:4:purpose": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:4:content": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:5:title": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:5:purpose": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:5:content": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:6:title": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:6:purpose": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:6:content": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:7:title": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:7:purpose": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:7:content": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:8:title": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:8:purpose": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:8:content": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:9:title": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:9:purpose": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:9:content": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            }
+          }
+        },
+        "provenance": {
+          "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:action": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:location": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:time": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:characters": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:goal": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:viewer_intent": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:keep_or_avoid": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          }
+        }
+      },
+      "target_scene_id": "21cd8b17-699d-41d9-b099-6b37056df782",
+      "instructions": "",
+      "status": "ready",
+      "sources": [
+        {
+          "id": "script:21cd8b17-699d-41d9-b099-6b37056df782:heading",
+          "label": "Chiều mưa, con gái đi học",
+          "text": "Chiều mưa, con gái đi học",
+          "category": "screenplay",
+          "provenance": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "scene_id": "21cd8b17-699d-41d9-b099-6b37056df782",
+          "block_id": null,
+          "field": "heading"
+        },
+        {
+          "id": "block:a43e5388-c7b3-42e3-8cfa-4e766c31e464:text",
+          "label": "Chiều mưa, con gái đi học · khối 1",
+          "text": "Con gái bước vào căn bếp nhỏ, trời mưa phù phù. Cô đặt chìa khóa lên bàn, nhìn ra cửa sổ. Cha đứng ở góc phòng, im lặng.",
+          "category": "screenplay",
+          "provenance": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "scene_id": "21cd8b17-699d-41d9-b099-6b37056df782",
+          "block_id": "a43e5388-c7b3-42e3-8cfa-4e766c31e464",
+          "field": "text"
+        },
+        {
+          "id": "block:8f846729-93bf-4bfa-b822-12c8c3c5e075:text",
+          "label": "Chiều mưa, con gái đi học · khối 2",
+          "text": "Cha đặt một lá thư xin lỗi lên bàn, cạnh chìa khóa.",
+          "category": "screenplay",
+          "provenance": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "scene_id": "21cd8b17-699d-41d9-b099-6b37056df782",
+          "block_id": "8f846729-93bf-4bfa-b822-12c8c3c5e075",
+          "field": "text"
+        },
+        {
+          "id": "block:dcd01ce1-89b2-4331-b915-0c9cf070219e:text",
+          "label": "Chiều mưa, con gái đi học · khối 3",
+          "text": "Con gái ngồi xuống, uống một ngụm trà, vẫn chưa mở lá thư.",
+          "category": "screenplay",
+          "provenance": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "scene_id": "21cd8b17-699d-41d9-b099-6b37056df782",
+          "block_id": "dcd01ce1-89b2-4331-b915-0c9cf070219e",
+          "field": "text"
+        },
+        {
+          "id": "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:action",
+          "label": "Diễn tiến dàn cảnh đã chọn",
+          "text": "Con gái bước vào căn bếp nhỏ, trời mưa phù phù. Cô đặt chìa khóa lên bàn, nhìn ra cửa sổ. Cha đứng ở góc phòng, im lặng.",
+          "category": "context",
+          "provenance": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:location",
+          "label": "Địa điểm",
+          "text": "Căn bếp nhỏ",
+          "category": "context",
+          "provenance": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:time",
+          "label": "Thời điểm",
+          "text": "Chiều mưa",
+          "category": "context",
+          "provenance": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:characters",
+          "label": "Nhân vật",
+          "text": "Con gái, Cha",
+          "category": "context",
+          "provenance": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:goal",
+          "label": "Mục tiêu",
+          "text": "Con gái đặt chìa khóa lên bàn trước khi đi học.",
+          "category": "context",
+          "provenance": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:purpose",
+          "label": "Đóng góp",
+          "text": "Đặt bối cảnh và giới thiệu nhân vật.",
+          "category": "context",
+          "provenance": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "intent:idea",
+          "label": "Ý tưởng tác giả",
+          "text": "Chiều mưa trong căn bếp nhỏ, con gái đặt chìa khóa lên bàn trước khi đi học xa. Cha đặt cạnh đó một lá thư xin lỗi rồi lùi lại. Cô chưa mở thư, nhưng ngồi xuống uống cùng cha một ngụm trà.",
+          "category": "author_choice",
+          "provenance": {
+            "origin": "author_input",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "intent:constraint:0",
+          "label": "Giới hạn 1",
+          "text": "Phim 30 giây, tối đa 2 cảnh rất ngắn, 2 nhân vật, một căn bếp.",
+          "category": "author_choice",
+          "provenance": {
+            "origin": "author_input",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "intent:constraint:1",
+          "label": "Giới hạn 2",
+          "text": "Giữ lá thư chưa mở và quyền quyết định của con gái; không giải quyết hết mâu thuẫn.",
+          "category": "author_choice",
+          "provenance": {
+            "origin": "author_input",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "intent:constraint:2",
+          "label": "Giới hạn 3",
+          "text": "Bản phát triển gọn; ưu tiên hành động và khoảng lặng, ít thoại.",
+          "category": "author_choice",
+          "provenance": {
+            "origin": "author_input",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "plan:logline",
+          "label": "Logline nguồn",
+          "text": "Trong căn bếp nhỏ dưới mưa, con gái nhận chìa khóa và lá thư xin lỗi từ cha, quyết định giữ im lặng trước khi rời đi.",
+          "category": "context",
+          "provenance": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        },
+        {
+          "id": "plan:section:0",
+          "label": "Core idea",
+          "text": "Trong căn bếp nhỏ dưới mưa, con gái nhận chìa khóa và lá thư xin lỗi từ cha, quyết định giữ im lặng trước khi rời đi.",
+          "category": "context",
+          "provenance": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        },
+        {
+          "id": "plan:section:1",
+          "label": "Main character",
+          "text": "Con gái Cha",
+          "category": "context",
+          "provenance": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        },
+        {
+          "id": "plan:section:2",
+          "label": "Main conflict",
+          "text": "Lá thư xin lỗi từ cha Con gái phải quyết định liệu có mở và đọc lá thư hay không Quyền quyết định của con gái về việc tiếp nhận hay không tiếp nhận sự xin lỗi từ cha",
+          "category": "context",
+          "provenance": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        },
+        {
+          "id": "plan:section:3",
+          "label": "Beginning",
+          "text": "Chiều mưa, con gái đặt chìa khóa lên bàn trước khi rời đi học. Cha đặt lá thư xin lỗi cạnh chìa khóa.",
+          "category": "context",
+          "provenance": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        },
+        {
+          "id": "plan:section:4",
+          "label": "Middle",
+          "text": "Con gái ngồi xuống uống trà cùng cha, vẫn chưa mở lá thư.",
+          "category": "context",
+          "provenance": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        },
+        {
+          "id": "plan:section:5",
+          "label": "Ending",
+          "text": "Con gái quyết định không mở lá thư và rời đi, để lại lá thư và chìa khóa trên bàn. Con gái bước ra khỏi căn bếp, bóng lưng trong mưa, lá thư và chìa khóa vẫn còn trên bàn.",
+          "category": "context",
+          "provenance": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        },
+        {
+          "id": "plan:section:6",
+          "label": "Theme",
+          "text": "Sự tha thứ và quyền quyết định của con gái.",
+          "category": "context",
+          "provenance": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        },
+        {
+          "id": "plan:section:7",
+          "label": "Visual Style",
+          "text": "Căn bếp nhỏ, ánh sáng mờ ảo của chiều mưa, chìa khóa và lá thư xin lỗi. Chiều mưa, Căn bếp nhỏ, Chìa khóa, Lá thư xin lỗi",
+          "category": "context",
+          "provenance": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        },
+        {
+          "id": "plan:section:8",
+          "label": "Tone",
+          "text": "Tĩnh lặng, đầy cảm xúc.",
+          "category": "context",
+          "provenance": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        },
+        {
+          "id": "plan:section:9",
+          "label": "Production Notes",
+          "text": "Cảnh đầu và cuối nên ngắn gọn, tập trung vào hành động và khoảng lặng. Sử dụng chìa khóa và lá thư xin lỗi làm biểu tượng. Căn bếp nhỏ 2 nhân vật",
+          "category": "context",
+          "provenance": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        }
+      ],
+      "notes": [],
+      "question": "",
+      "provider": "ollama",
+      "model": "qwen2.5:7b",
+      "parameters": {
+        "temperature": 0.3,
+        "timeout_seconds": 60,
+        "num_ctx": 16384,
+        "screenplay_review_temperature": 0.0
+      },
+      "prompt_version": "screenplay-review-v7-evidence-selection",
+      "error": null
+    },
+    "unchanged_screenplay": true,
+    "detected_conflict": false,
+    "matches_expected_conflict": true,
+    "original_gate_fields": {
+      "matches_expected_conflict": true
+    },
+    "matches_expected_evidence": true,
+    "unexpected_cjk": false
+  },
+  {
+    "case": "contradiction",
+    "expected_conflict": true,
+    "status": 200,
+    "review": {
+      "id": "006f4c85-9a60-43fa-b7ae-947f81abf57b",
+      "created_at": "2026-10-29T08:34:55.163379+00:00",
+      "source_revision": 1,
+      "source_content": "{\"answers\": [\"\"], \"clarifications\": {}, \"constraints\": [\"Phim 30 giây, tối đa 2 cảnh rất ngắn, 2 nhân vật, một căn bếp.\", \"Giữ lá thư chưa mở và quyền quyết định của con gái; không giải quyết hết mâu thuẫn.\", \"Bản phát triển gọn; ưu tiên hành động và khoảng lặng, ít thoại.\"], \"draft\": {\"logline\": \"Trong căn bếp nhỏ dưới mưa, con gái nhận chìa khóa và lá thư xin lỗi từ cha, quyết định giữ im lặng trước khi rời đi.\", \"sections\": [{\"content\": \"Trong căn bếp nhỏ dưới mưa, con gái nhận chìa khóa và lá thư xin lỗi từ cha, quyết định giữ im lặng trước khi rời đi.\", \"purpose\": \"State the short film's central promise.\", \"title\": \"Core idea\"}, {\"content\": \"Con gái Cha\", \"purpose\": \"Define the protagonist and key character pressure.\", \"title\": \"Main character\"}, {\"content\": \"Lá thư xin lỗi từ cha Con gái phải quyết định liệu có mở và đọc lá thư hay không Quyền quyết định của con gái về việc tiếp nhận hay không tiếp nhận sự xin lỗi từ cha\", \"purpose\": \"Describe the obstacle and stakes.\", \"title\": \"Main conflict\"}, {\"content\": \"Chiều mưa, con gái đặt chìa khóa lên bàn trước khi rời đi học. Cha đặt lá thư xin lỗi cạnh chìa khóa.\", \"purpose\": \"Set up the story world and first dramatic turn.\", \"title\": \"Beginning\"}, {\"content\": \"Con gái ngồi xuống uống trà cùng cha, vẫn chưa mở lá thư.\", \"purpose\": \"Escalate pressure and reveal the emotional turn.\", \"title\": \"Middle\"}, {\"content\": \"Con gái quyết định không mở lá thư và rời đi, để lại lá thư và chìa khóa trên bàn. Con gái bước ra khỏi căn bếp, bóng lưng trong mưa, lá thư và chìa khóa vẫn còn trên bàn.\", \"purpose\": \"Resolve the short film through a visible choice or image.\", \"title\": \"Ending\"}, {\"content\": \"Sự tha thứ và quyền quyết định của con gái.\", \"purpose\": \"Name the human idea underneath the plot.\", \"title\": \"Theme\"}, {\"content\": \"Căn bếp nhỏ, ánh sáng mờ ảo của chiều mưa, chìa khóa và lá thư xin lỗi. Chiều mưa, Căn bếp nhỏ, Chìa khóa, Lá thư xin lỗi\", \"purpose\": \"Capture the visual approach and recurring motifs.\", \"title\": \"Visual Style\"}, {\"content\": \"Tĩnh lặng, đầy cảm xúc.\", \"purpose\": \"Describe the intended emotional register.\", \"title\": \"Tone\"}, {\"content\": \"Cảnh đầu và cuối nên ngắn gọn, tập trung vào hành động và khoảng lặng. Sử dụng chìa khóa và lá thư xin lỗi làm biểu tượng. Căn bếp nhỏ 2 nhân vật\", \"purpose\": \"Keep the idea grounded for short-film production.\", \"title\": \"Production Notes\"}], \"title\": \"Chiều mưa trong căn bếp nhỏ\"}, \"idea\": \"Chiều mưa trong căn bếp nhỏ, con gái đặt chìa khóa lên bàn trước khi đi học xa. Cha đặt cạnh đó một lá thư xin lỗi rồi lùi lại. Cô chưa mở thư, nhưng ngồi xuống uống cùng cha một ngụm trà.\", \"questions\": [\"Con gái sẽ mở thư hay không\"], \"response_language\": \"vi\"}",
+      "source_screenplay": {
+        "id": "39f267e6-0b72-4492-ab3d-c60543b6f205",
+        "version": 1,
+        "scenes": [
+          {
+            "id": "21cd8b17-699d-41d9-b099-6b37056df782",
+            "source_scene_id": "8f793a98-fcaf-41d4-8dea-320a820c61cd",
+            "heading": "Chiều mưa, con gái đi học",
+            "blocks": [
+              {
+                "kind": "action",
+                "text": "Cô mở lá thư và đọc lời xin lỗi của cha.",
+                "speaker": "",
+                "id": "a43e5388-c7b3-42e3-8cfa-4e766c31e464"
+              },
+              {
+                "kind": "action",
+                "text": "Cha đặt một lá thư xin lỗi lên bàn, cạnh chìa khóa.",
+                "speaker": "",
+                "id": "8f846729-93bf-4bfa-b822-12c8c3c5e075"
+              },
+              {
+                "kind": "action",
+                "text": "Con gái ngồi xuống, uống một ngụm trà, vẫn chưa mở lá thư.",
+                "speaker": "",
+                "id": "dcd01ce1-89b2-4331-b915-0c9cf070219e"
+              }
+            ]
+          }
+        ],
+        "source_revision": 1,
+        "source_outline": {
+          "id": "7b919efc-7dd1-4d40-9a00-1b4a3d7b93b3",
+          "version": 1,
+          "scenes": [
+            {
+              "id": "8f793a98-fcaf-41d4-8dea-320a820c61cd",
+              "title": "Chiều mưa, con gái đi học",
+              "action": "Con gái bước vào căn bếp nhỏ, trời mưa phù phù. Cô đặt chìa khóa lên bàn, nhìn ra cửa sổ. Cha đứng ở góc phòng, im lặng.",
+              "location": "Căn bếp nhỏ",
+              "time": "Chiều mưa",
+              "characters": "Con gái, Cha",
+              "goal": "Con gái đặt chìa khóa lên bàn trước khi đi học.",
+              "purpose": "Đặt bối cảnh và giới thiệu nhân vật.",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {}
+            }
+          ],
+          "source": {
+            "id": "8593a0e2-60e7-4b94-8dfb-65fa6a2fa645",
+            "project_revision": 1,
+            "version_id": "current",
+            "draft": {
+              "title": "Chiều mưa trong căn bếp nhỏ",
+              "logline": "Trong căn bếp nhỏ dưới mưa, con gái nhận chìa khóa và lá thư xin lỗi từ cha, quyết định giữ im lặng trước khi rời đi.",
+              "sections": [
+                {
+                  "title": "Core idea",
+                  "purpose": "State the short film's central promise.",
+                  "content": "Trong căn bếp nhỏ dưới mưa, con gái nhận chìa khóa và lá thư xin lỗi từ cha, quyết định giữ im lặng trước khi rời đi."
+                },
+                {
+                  "title": "Main character",
+                  "purpose": "Define the protagonist and key character pressure.",
+                  "content": "Con gái Cha"
+                },
+                {
+                  "title": "Main conflict",
+                  "purpose": "Describe the obstacle and stakes.",
+                  "content": "Lá thư xin lỗi từ cha Con gái phải quyết định liệu có mở và đọc lá thư hay không Quyền quyết định của con gái về việc tiếp nhận hay không tiếp nhận sự xin lỗi từ cha"
+                },
+                {
+                  "title": "Beginning",
+                  "purpose": "Set up the story world and first dramatic turn.",
+                  "content": "Chiều mưa, con gái đặt chìa khóa lên bàn trước khi rời đi học. Cha đặt lá thư xin lỗi cạnh chìa khóa."
+                },
+                {
+                  "title": "Middle",
+                  "purpose": "Escalate pressure and reveal the emotional turn.",
+                  "content": "Con gái ngồi xuống uống trà cùng cha, vẫn chưa mở lá thư."
+                },
+                {
+                  "title": "Ending",
+                  "purpose": "Resolve the short film through a visible choice or image.",
+                  "content": "Con gái quyết định không mở lá thư và rời đi, để lại lá thư và chìa khóa trên bàn. Con gái bước ra khỏi căn bếp, bóng lưng trong mưa, lá thư và chìa khóa vẫn còn trên bàn."
+                },
+                {
+                  "title": "Theme",
+                  "purpose": "Name the human idea underneath the plot.",
+                  "content": "Sự tha thứ và quyền quyết định của con gái."
+                },
+                {
+                  "title": "Visual Style",
+                  "purpose": "Capture the visual approach and recurring motifs.",
+                  "content": "Căn bếp nhỏ, ánh sáng mờ ảo của chiều mưa, chìa khóa và lá thư xin lỗi. Chiều mưa, Căn bếp nhỏ, Chìa khóa, Lá thư xin lỗi"
+                },
+                {
+                  "title": "Tone",
+                  "purpose": "Describe the intended emotional register.",
+                  "content": "Tĩnh lặng, đầy cảm xúc."
+                },
+                {
+                  "title": "Production Notes",
+                  "purpose": "Keep the idea grounded for short-film production.",
+                  "content": "Cảnh đầu và cuối nên ngắn gọn, tập trung vào hành động và khoảng lặng. Sử dụng chìa khóa và lá thư xin lỗi làm biểu tượng. Căn bếp nhỏ 2 nhân vật"
+                }
+              ]
+            },
+            "context": {
+              "idea": "Chiều mưa trong căn bếp nhỏ, con gái đặt chìa khóa lên bàn trước khi đi học xa. Cha đặt cạnh đó một lá thư xin lỗi rồi lùi lại. Cô chưa mở thư, nhưng ngồi xuống uống cùng cha một ngụm trà.",
+              "constraints": [
+                "Phim 30 giây, tối đa 2 cảnh rất ngắn, 2 nhân vật, một căn bếp.",
+                "Giữ lá thư chưa mở và quyền quyết định của con gái; không giải quyết hết mâu thuẫn.",
+                "Bản phát triển gọn; ưu tiên hành động và khoảng lặng, ít thoại."
+              ],
+              "clarifications": [],
+              "pending_questions": [
+                {
+                  "question": "Con gái sẽ mở thư hay không",
+                  "input_index": 0
+                }
+              ]
+            },
+            "response_language": "vi",
+            "draft_provenance": {
+              "title": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "logline": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:0:title": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:0:purpose": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:0:content": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:1:title": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:1:purpose": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:1:content": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:2:title": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:2:purpose": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:2:content": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:3:title": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:3:purpose": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:3:content": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:4:title": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:4:purpose": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:4:content": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:5:title": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:5:purpose": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:5:content": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:6:title": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:6:purpose": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:6:content": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:7:title": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:7:purpose": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:7:content": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:8:title": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:8:purpose": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:8:content": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:9:title": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:9:purpose": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              },
+              "section:9:content": {
+                "origin": "ai_proposal",
+                "author_confirmed": false
+              }
+            }
+          },
+          "provenance": {
+            "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:title": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:action": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:location": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:time": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:characters": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:goal": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:purpose": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:viewer_intent": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:keep_or_avoid": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            }
+          }
+        },
+        "provenance": {
+          "script:21cd8b17-699d-41d9-b099-6b37056df782:heading": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "block:a43e5388-c7b3-42e3-8cfa-4e766c31e464:text": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "block:a43e5388-c7b3-42e3-8cfa-4e766c31e464:speaker": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "block:8f846729-93bf-4bfa-b822-12c8c3c5e075:text": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "block:8f846729-93bf-4bfa-b822-12c8c3c5e075:speaker": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "block:dcd01ce1-89b2-4331-b915-0c9cf070219e:text": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "block:dcd01ce1-89b2-4331-b915-0c9cf070219e:speaker": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          }
+        }
+      },
+      "source_outline": {
+        "id": "7b919efc-7dd1-4d40-9a00-1b4a3d7b93b3",
+        "version": 1,
+        "scenes": [
+          {
+            "id": "8f793a98-fcaf-41d4-8dea-320a820c61cd",
+            "title": "Chiều mưa, con gái đi học",
+            "action": "Con gái bước vào căn bếp nhỏ, trời mưa phù phù. Cô đặt chìa khóa lên bàn, nhìn ra cửa sổ. Cha đứng ở góc phòng, im lặng.",
+            "location": "Căn bếp nhỏ",
+            "time": "Chiều mưa",
+            "characters": "Con gái, Cha",
+            "goal": "Con gái đặt chìa khóa lên bàn trước khi đi học.",
+            "purpose": "Đặt bối cảnh và giới thiệu nhân vật.",
+            "viewer_intent": "",
+            "keep_or_avoid": "",
+            "staging_choices": {}
+          }
+        ],
+        "source": {
+          "id": "8593a0e2-60e7-4b94-8dfb-65fa6a2fa645",
+          "project_revision": 1,
+          "version_id": "current",
+          "draft": {
+            "title": "Chiều mưa trong căn bếp nhỏ",
+            "logline": "Trong căn bếp nhỏ dưới mưa, con gái nhận chìa khóa và lá thư xin lỗi từ cha, quyết định giữ im lặng trước khi rời đi.",
+            "sections": [
+              {
+                "title": "Core idea",
+                "purpose": "State the short film's central promise.",
+                "content": "Trong căn bếp nhỏ dưới mưa, con gái nhận chìa khóa và lá thư xin lỗi từ cha, quyết định giữ im lặng trước khi rời đi."
+              },
+              {
+                "title": "Main character",
+                "purpose": "Define the protagonist and key character pressure.",
+                "content": "Con gái Cha"
+              },
+              {
+                "title": "Main conflict",
+                "purpose": "Describe the obstacle and stakes.",
+                "content": "Lá thư xin lỗi từ cha Con gái phải quyết định liệu có mở và đọc lá thư hay không Quyền quyết định của con gái về việc tiếp nhận hay không tiếp nhận sự xin lỗi từ cha"
+              },
+              {
+                "title": "Beginning",
+                "purpose": "Set up the story world and first dramatic turn.",
+                "content": "Chiều mưa, con gái đặt chìa khóa lên bàn trước khi rời đi học. Cha đặt lá thư xin lỗi cạnh chìa khóa."
+              },
+              {
+                "title": "Middle",
+                "purpose": "Escalate pressure and reveal the emotional turn.",
+                "content": "Con gái ngồi xuống uống trà cùng cha, vẫn chưa mở lá thư."
+              },
+              {
+                "title": "Ending",
+                "purpose": "Resolve the short film through a visible choice or image.",
+                "content": "Con gái quyết định không mở lá thư và rời đi, để lại lá thư và chìa khóa trên bàn. Con gái bước ra khỏi căn bếp, bóng lưng trong mưa, lá thư và chìa khóa vẫn còn trên bàn."
+              },
+              {
+                "title": "Theme",
+                "purpose": "Name the human idea underneath the plot.",
+                "content": "Sự tha thứ và quyền quyết định của con gái."
+              },
+              {
+                "title": "Visual Style",
+                "purpose": "Capture the visual approach and recurring motifs.",
+                "content": "Căn bếp nhỏ, ánh sáng mờ ảo của chiều mưa, chìa khóa và lá thư xin lỗi. Chiều mưa, Căn bếp nhỏ, Chìa khóa, Lá thư xin lỗi"
+              },
+              {
+                "title": "Tone",
+                "purpose": "Describe the intended emotional register.",
+                "content": "Tĩnh lặng, đầy cảm xúc."
+              },
+              {
+                "title": "Production Notes",
+                "purpose": "Keep the idea grounded for short-film production.",
+                "content": "Cảnh đầu và cuối nên ngắn gọn, tập trung vào hành động và khoảng lặng. Sử dụng chìa khóa và lá thư xin lỗi làm biểu tượng. Căn bếp nhỏ 2 nhân vật"
+              }
+            ]
+          },
+          "context": {
+            "idea": "Chiều mưa trong căn bếp nhỏ, con gái đặt chìa khóa lên bàn trước khi đi học xa. Cha đặt cạnh đó một lá thư xin lỗi rồi lùi lại. Cô chưa mở thư, nhưng ngồi xuống uống cùng cha một ngụm trà.",
+            "constraints": [
+              "Phim 30 giây, tối đa 2 cảnh rất ngắn, 2 nhân vật, một căn bếp.",
+              "Giữ lá thư chưa mở và quyền quyết định của con gái; không giải quyết hết mâu thuẫn.",
+              "Bản phát triển gọn; ưu tiên hành động và khoảng lặng, ít thoại."
+            ],
+            "clarifications": [],
+            "pending_questions": [
+              {
+                "question": "Con gái sẽ mở thư hay không",
+                "input_index": 0
+              }
+            ]
+          },
+          "response_language": "vi",
+          "draft_provenance": {
+            "title": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "logline": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:0:title": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:0:purpose": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:0:content": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:1:title": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:1:purpose": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:1:content": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:2:title": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:2:purpose": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:2:content": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:3:title": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:3:purpose": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:3:content": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:4:title": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:4:purpose": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:4:content": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:5:title": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:5:purpose": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:5:content": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:6:title": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:6:purpose": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:6:content": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:7:title": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:7:purpose": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:7:content": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:8:title": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:8:purpose": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:8:content": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:9:title": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:9:purpose": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            },
+            "section:9:content": {
+              "origin": "ai_proposal",
+              "author_confirmed": false
+            }
+          }
+        },
+        "provenance": {
+          "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:title": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:action": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:location": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:time": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:characters": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:goal": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:purpose": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:viewer_intent": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:keep_or_avoid": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          }
+        }
+      },
+      "target_scene_id": "21cd8b17-699d-41d9-b099-6b37056df782",
+      "instructions": "",
+      "status": "ready",
+      "sources": [
+        {
+          "id": "script:21cd8b17-699d-41d9-b099-6b37056df782:heading",
+          "label": "Chiều mưa, con gái đi học",
+          "text": "Chiều mưa, con gái đi học",
+          "category": "screenplay",
+          "provenance": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "scene_id": "21cd8b17-699d-41d9-b099-6b37056df782",
+          "block_id": null,
+          "field": "heading"
+        },
+        {
+          "id": "block:a43e5388-c7b3-42e3-8cfa-4e766c31e464:text",
+          "label": "Chiều mưa, con gái đi học · khối 1",
+          "text": "Cô mở lá thư và đọc lời xin lỗi của cha.",
+          "category": "screenplay",
+          "provenance": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "scene_id": "21cd8b17-699d-41d9-b099-6b37056df782",
+          "block_id": "a43e5388-c7b3-42e3-8cfa-4e766c31e464",
+          "field": "text"
+        },
+        {
+          "id": "block:8f846729-93bf-4bfa-b822-12c8c3c5e075:text",
+          "label": "Chiều mưa, con gái đi học · khối 2",
+          "text": "Cha đặt một lá thư xin lỗi lên bàn, cạnh chìa khóa.",
+          "category": "screenplay",
+          "provenance": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "scene_id": "21cd8b17-699d-41d9-b099-6b37056df782",
+          "block_id": "8f846729-93bf-4bfa-b822-12c8c3c5e075",
+          "field": "text"
+        },
+        {
+          "id": "block:dcd01ce1-89b2-4331-b915-0c9cf070219e:text",
+          "label": "Chiều mưa, con gái đi học · khối 3",
+          "text": "Con gái ngồi xuống, uống một ngụm trà, vẫn chưa mở lá thư.",
+          "category": "screenplay",
+          "provenance": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "scene_id": "21cd8b17-699d-41d9-b099-6b37056df782",
+          "block_id": "dcd01ce1-89b2-4331-b915-0c9cf070219e",
+          "field": "text"
+        },
+        {
+          "id": "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:action",
+          "label": "Diễn tiến dàn cảnh đã chọn",
+          "text": "Con gái bước vào căn bếp nhỏ, trời mưa phù phù. Cô đặt chìa khóa lên bàn, nhìn ra cửa sổ. Cha đứng ở góc phòng, im lặng.",
+          "category": "context",
+          "provenance": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:location",
+          "label": "Địa điểm",
+          "text": "Căn bếp nhỏ",
+          "category": "context",
+          "provenance": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:time",
+          "label": "Thời điểm",
+          "text": "Chiều mưa",
+          "category": "context",
+          "provenance": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:characters",
+          "label": "Nhân vật",
+          "text": "Con gái, Cha",
+          "category": "context",
+          "provenance": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:goal",
+          "label": "Mục tiêu",
+          "text": "Con gái đặt chìa khóa lên bàn trước khi đi học.",
+          "category": "context",
+          "provenance": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "m2:8f793a98-fcaf-41d4-8dea-320a820c61cd:purpose",
+          "label": "Đóng góp",
+          "text": "Đặt bối cảnh và giới thiệu nhân vật.",
+          "category": "context",
+          "provenance": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "intent:idea",
+          "label": "Ý tưởng tác giả",
+          "text": "Chiều mưa trong căn bếp nhỏ, con gái đặt chìa khóa lên bàn trước khi đi học xa. Cha đặt cạnh đó một lá thư xin lỗi rồi lùi lại. Cô chưa mở thư, nhưng ngồi xuống uống cùng cha một ngụm trà.",
+          "category": "author_choice",
+          "provenance": {
+            "origin": "author_input",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "intent:constraint:0",
+          "label": "Giới hạn 1",
+          "text": "Phim 30 giây, tối đa 2 cảnh rất ngắn, 2 nhân vật, một căn bếp.",
+          "category": "author_choice",
+          "provenance": {
+            "origin": "author_input",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "intent:constraint:1",
+          "label": "Giới hạn 2",
+          "text": "Giữ lá thư chưa mở và quyền quyết định của con gái; không giải quyết hết mâu thuẫn.",
+          "category": "author_choice",
+          "provenance": {
+            "origin": "author_input",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "intent:constraint:2",
+          "label": "Giới hạn 3",
+          "text": "Bản phát triển gọn; ưu tiên hành động và khoảng lặng, ít thoại.",
+          "category": "author_choice",
+          "provenance": {
+            "origin": "author_input",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "plan:logline",
+          "label": "Logline nguồn",
+          "text": "Trong căn bếp nhỏ dưới mưa, con gái nhận chìa khóa và lá thư xin lỗi từ cha, quyết định giữ im lặng trước khi rời đi.",
+          "category": "context",
+          "provenance": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        },
+        {
+          "id": "plan:section:0",
+          "label": "Core idea",
+          "text": "Trong căn bếp nhỏ dưới mưa, con gái nhận chìa khóa và lá thư xin lỗi từ cha, quyết định giữ im lặng trước khi rời đi.",
+          "category": "context",
+          "provenance": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        },
+        {
+          "id": "plan:section:1",
+          "label": "Main character",
+          "text": "Con gái Cha",
+          "category": "context",
+          "provenance": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        },
+        {
+          "id": "plan:section:2",
+          "label": "Main conflict",
+          "text": "Lá thư xin lỗi từ cha Con gái phải quyết định liệu có mở và đọc lá thư hay không Quyền quyết định của con gái về việc tiếp nhận hay không tiếp nhận sự xin lỗi từ cha",
+          "category": "context",
+          "provenance": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        },
+        {
+          "id": "plan:section:3",
+          "label": "Beginning",
+          "text": "Chiều mưa, con gái đặt chìa khóa lên bàn trước khi rời đi học. Cha đặt lá thư xin lỗi cạnh chìa khóa.",
+          "category": "context",
+          "provenance": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        },
+        {
+          "id": "plan:section:4",
+          "label": "Middle",
+          "text": "Con gái ngồi xuống uống trà cùng cha, vẫn chưa mở lá thư.",
+          "category": "context",
+          "provenance": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        },
+        {
+          "id": "plan:section:5",
+          "label": "Ending",
+          "text": "Con gái quyết định không mở lá thư và rời đi, để lại lá thư và chìa khóa trên bàn. Con gái bước ra khỏi căn bếp, bóng lưng trong mưa, lá thư và chìa khóa vẫn còn trên bàn.",
+          "category": "context",
+          "provenance": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        },
+        {
+          "id": "plan:section:6",
+          "label": "Theme",
+          "text": "Sự tha thứ và quyền quyết định của con gái.",
+          "category": "context",
+          "provenance": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        },
+        {
+          "id": "plan:section:7",
+          "label": "Visual Style",
+          "text": "Căn bếp nhỏ, ánh sáng mờ ảo của chiều mưa, chìa khóa và lá thư xin lỗi. Chiều mưa, Căn bếp nhỏ, Chìa khóa, Lá thư xin lỗi",
+          "category": "context",
+          "provenance": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        },
+        {
+          "id": "plan:section:8",
+          "label": "Tone",
+          "text": "Tĩnh lặng, đầy cảm xúc.",
+          "category": "context",
+          "provenance": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        },
+        {
+          "id": "plan:section:9",
+          "label": "Production Notes",
+          "text": "Cảnh đầu và cuối nên ngắn gọn, tập trung vào hành động và khoảng lặng. Sử dụng chìa khóa và lá thư xin lỗi làm biểu tượng. Căn bếp nhỏ 2 nhân vật",
+          "category": "context",
+          "provenance": {
+            "origin": "ai_proposal",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        }
+      ],
+      "notes": [
+        {
+          "kind": "intent_mismatch",
+          "observation": "Cô mở lá thư và đọc lời xin lỗi của cha.",
+          "impact": "Vi phạm giới hạn 3, vì hành động mở và đọc thư không phù hợp với yêu cầu giữ lá thư chưa mở và không giải quyết hết mâu thuẫn.",
+          "suggestion": "",
+          "evidence": [
+            {
+              "source_id": "block:a43e5388-c7b3-42e3-8cfa-4e766c31e464:text",
+              "quote": "Cô mở lá thư và đọc lời xin lỗi của cha."
+            },
+            {
+              "source_id": "intent:constraint:1",
+              "quote": "Giữ lá thư chưa mở và quyền quyết định của con gái; không giải quyết hết mâu thuẫn."
+            }
+          ],
+          "id": "2212c6cd-0bda-465e-8042-535927342897",
+          "assessment": null
+        }
+      ],
+      "question": "",
+      "provider": "ollama",
+      "model": "qwen2.5:7b",
+      "parameters": {
+        "temperature": 0.3,
+        "timeout_seconds": 60,
+        "num_ctx": 16384,
+        "screenplay_review_temperature": 0.0
+      },
+      "prompt_version": "screenplay-review-v7-evidence-selection",
+      "error": null
+    },
+    "unchanged_screenplay": true,
+    "detected_conflict": true,
+    "matches_expected_conflict": true,
+    "original_gate_fields": {
+      "matches_expected_conflict": true
+    },
+    "matches_expected_evidence": true,
+    "unexpected_cjk": false
+  },
+  {
+    "case": "open-ending-compliant",
+    "expected_conflict": false,
+    "status": 200,
+    "review": {
+      "id": "796fab3b-2cbe-4af9-bbb4-b452848804e1",
+      "created_at": "2026-10-29T08:35:08.612749+00:00",
+      "source_revision": 4,
+      "source_content": "{\"answers\": [], \"clarifications\": {}, \"constraints\": [\"Chỉ cha và con gái.\", \"Kết mở; con gái không nói hoặc xác nhận đã tha thứ, không chốt hòa giải.\", \"Lá thư vẫn kín.\"], \"draft\": {\"logline\": \"Cha xin lỗi; con gái ở lại nhưng chưa nói đã tha thứ.\", \"sections\": [{\"content\": \"Cha đặt phong thư kín lên bàn rồi lùi lại.\", \"purpose\": \"Mở\", \"title\": \"Đầu\"}, {\"content\": \"Con gái ở lại, giữ khoảng lặng và chưa khẳng định đã tha thứ. Dừng ở kết mở.\", \"purpose\": \"Diễn tiến\", \"title\": \"Cuối\"}], \"title\": \"Lá thư\"}, \"idea\": \"Cha xin lỗi; con gái ở lại nhưng chưa nói đã tha thứ.\", \"questions\": [], \"response_language\": \"vi\"}",
+      "source_screenplay": {
+        "id": "974879b1-f694-4d86-ad0a-a8be65643506",
+        "version": 2,
+        "scenes": [
+          {
+            "id": "aaf1c0c1-dd71-415b-839f-958dedde03fc",
+            "source_scene_id": "1d1cf0e1-8562-4293-98c6-df4931a2e451",
+            "heading": "Trước đó",
+            "blocks": [
+              {
+                "kind": "action",
+                "text": "Cha đặt phong thư kín lên bàn rồi lùi lại.",
+                "speaker": "",
+                "id": "17ee4416-5390-484d-b100-6923baa6431c"
+              }
+            ]
+          },
+          {
+            "id": "f49eba0e-b0bf-459e-a840-60bf391f9d4b",
+            "source_scene_id": "179508ce-deeb-409f-9dc1-a030e6ee7924",
+            "heading": "Khoảnh khắc",
+            "blocks": [
+              {
+                "kind": "action",
+                "text": "Con gái nhìn cha, kéo ghế ngồi. Phong thư còn kín trên bàn.",
+                "speaker": "",
+                "id": "6ff34ab6-f637-4a16-a45c-c6322a0024b8"
+              },
+              {
+                "kind": "dialogue",
+                "text": "Cha…",
+                "speaker": "Con gái",
+                "id": "39d53851-72e3-424f-b7e2-1ca7fe93e0bd"
+              }
+            ]
+          }
+        ],
+        "source_revision": 2,
+        "source_outline": {
+          "id": "281d2d83-e391-40cb-8d56-8792ccf00a64",
+          "version": 2,
+          "scenes": [
+            {
+              "id": "1d1cf0e1-8562-4293-98c6-df4931a2e451",
+              "title": "Trước đó",
+              "action": "Cha đặt phong thư kín lên bàn rồi lùi lại.",
+              "location": "",
+              "time": "",
+              "characters": "",
+              "goal": "",
+              "purpose": "",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {}
+            },
+            {
+              "id": "179508ce-deeb-409f-9dc1-a030e6ee7924",
+              "title": "Khoảnh khắc",
+              "action": "Con gái ở lại, giữ khoảng lặng và chưa khẳng định đã tha thứ. Dừng ở kết mở.",
+              "location": "",
+              "time": "",
+              "characters": "",
+              "goal": "",
+              "purpose": "",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {}
+            }
+          ],
+          "source": {
+            "id": "38c43c08-2428-4ee0-a418-f0e825a6794d",
+            "project_revision": 0,
+            "version_id": "current",
+            "draft": {
+              "title": "Lá thư",
+              "logline": "Cha xin lỗi; con gái ở lại nhưng chưa nói đã tha thứ.",
+              "sections": [
+                {
+                  "title": "Đầu",
+                  "purpose": "Mở",
+                  "content": "Cha đặt phong thư kín lên bàn rồi lùi lại."
+                },
+                {
+                  "title": "Cuối",
+                  "purpose": "Diễn tiến",
+                  "content": "Con gái ở lại, giữ khoảng lặng và chưa khẳng định đã tha thứ. Dừng ở kết mở."
+                }
+              ]
+            },
+            "context": {
+              "idea": "Cha xin lỗi; con gái ở lại nhưng chưa nói đã tha thứ.",
+              "constraints": [
+                "Chỉ cha và con gái.",
+                "Kết mở; con gái không nói hoặc xác nhận đã tha thứ, không chốt hòa giải.",
+                "Lá thư vẫn kín."
+              ],
+              "clarifications": [],
+              "pending_questions": []
+            },
+            "response_language": "vi"
+          }
+        }
+      },
+      "source_outline": {
+        "id": "281d2d83-e391-40cb-8d56-8792ccf00a64",
+        "version": 2,
+        "scenes": [
+          {
+            "id": "1d1cf0e1-8562-4293-98c6-df4931a2e451",
+            "title": "Trước đó",
+            "action": "Cha đặt phong thư kín lên bàn rồi lùi lại.",
+            "location": "",
+            "time": "",
+            "characters": "",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "",
+            "keep_or_avoid": "",
+            "staging_choices": {}
+          },
+          {
+            "id": "179508ce-deeb-409f-9dc1-a030e6ee7924",
+            "title": "Khoảnh khắc",
+            "action": "Con gái ở lại, giữ khoảng lặng và chưa khẳng định đã tha thứ. Dừng ở kết mở.",
+            "location": "",
+            "time": "",
+            "characters": "",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "",
+            "keep_or_avoid": "",
+            "staging_choices": {}
+          }
+        ],
+        "source": {
+          "id": "38c43c08-2428-4ee0-a418-f0e825a6794d",
+          "project_revision": 0,
+          "version_id": "current",
+          "draft": {
+            "title": "Lá thư",
+            "logline": "Cha xin lỗi; con gái ở lại nhưng chưa nói đã tha thứ.",
+            "sections": [
+              {
+                "title": "Đầu",
+                "purpose": "Mở",
+                "content": "Cha đặt phong thư kín lên bàn rồi lùi lại."
+              },
+              {
+                "title": "Cuối",
+                "purpose": "Diễn tiến",
+                "content": "Con gái ở lại, giữ khoảng lặng và chưa khẳng định đã tha thứ. Dừng ở kết mở."
+              }
+            ]
+          },
+          "context": {
+            "idea": "Cha xin lỗi; con gái ở lại nhưng chưa nói đã tha thứ.",
+            "constraints": [
+              "Chỉ cha và con gái.",
+              "Kết mở; con gái không nói hoặc xác nhận đã tha thứ, không chốt hòa giải.",
+              "Lá thư vẫn kín."
+            ],
+            "clarifications": [],
+            "pending_questions": []
+          },
+          "response_language": "vi"
+        }
+      },
+      "target_scene_id": "f49eba0e-b0bf-459e-a840-60bf391f9d4b",
+      "instructions": "",
+      "status": "ready",
+      "sources": [
+        {
+          "id": "script:aaf1c0c1-dd71-415b-839f-958dedde03fc:heading",
+          "label": "Trước đó",
+          "text": "Trước đó",
+          "category": "screenplay",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": "aaf1c0c1-dd71-415b-839f-958dedde03fc",
+          "block_id": null,
+          "field": "heading"
+        },
+        {
+          "id": "block:17ee4416-5390-484d-b100-6923baa6431c:text",
+          "label": "Trước đó · khối 1",
+          "text": "Cha đặt phong thư kín lên bàn rồi lùi lại.",
+          "category": "screenplay",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": "aaf1c0c1-dd71-415b-839f-958dedde03fc",
+          "block_id": "17ee4416-5390-484d-b100-6923baa6431c",
+          "field": "text"
+        },
+        {
+          "id": "script:f49eba0e-b0bf-459e-a840-60bf391f9d4b:heading",
+          "label": "Khoảnh khắc",
+          "text": "Khoảnh khắc",
+          "category": "screenplay",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": "f49eba0e-b0bf-459e-a840-60bf391f9d4b",
+          "block_id": null,
+          "field": "heading"
+        },
+        {
+          "id": "block:6ff34ab6-f637-4a16-a45c-c6322a0024b8:text",
+          "label": "Khoảnh khắc · khối 1",
+          "text": "Con gái nhìn cha, kéo ghế ngồi. Phong thư còn kín trên bàn.",
+          "category": "screenplay",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": "f49eba0e-b0bf-459e-a840-60bf391f9d4b",
+          "block_id": "6ff34ab6-f637-4a16-a45c-c6322a0024b8",
+          "field": "text"
+        },
+        {
+          "id": "block:39d53851-72e3-424f-b7e2-1ca7fe93e0bd:text",
+          "label": "Khoảnh khắc · khối 2",
+          "text": "Cha…",
+          "category": "screenplay",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": "f49eba0e-b0bf-459e-a840-60bf391f9d4b",
+          "block_id": "39d53851-72e3-424f-b7e2-1ca7fe93e0bd",
+          "field": "text"
+        },
+        {
+          "id": "block:39d53851-72e3-424f-b7e2-1ca7fe93e0bd:speaker",
+          "label": "Khoảnh khắc · khối 2 · người nói",
+          "text": "Con gái",
+          "category": "screenplay",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": "f49eba0e-b0bf-459e-a840-60bf391f9d4b",
+          "block_id": "39d53851-72e3-424f-b7e2-1ca7fe93e0bd",
+          "field": "speaker"
+        },
+        {
+          "id": "m2:179508ce-deeb-409f-9dc1-a030e6ee7924:action",
+          "label": "Diễn tiến dàn cảnh đã chọn",
+          "text": "Con gái ở lại, giữ khoảng lặng và chưa khẳng định đã tha thứ. Dừng ở kết mở.",
+          "category": "context",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "intent:idea",
+          "label": "Ý tưởng tác giả",
+          "text": "Cha xin lỗi; con gái ở lại nhưng chưa nói đã tha thứ.",
+          "category": "author_choice",
+          "provenance": {
+            "origin": "author_input",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "intent:constraint:0",
+          "label": "Giới hạn 1",
+          "text": "Chỉ cha và con gái.",
+          "category": "author_choice",
+          "provenance": {
+            "origin": "author_input",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "intent:constraint:1",
+          "label": "Giới hạn 2",
+          "text": "Kết mở; con gái không nói hoặc xác nhận đã tha thứ, không chốt hòa giải.",
+          "category": "author_choice",
+          "provenance": {
+            "origin": "author_input",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "intent:constraint:2",
+          "label": "Giới hạn 3",
+          "text": "Lá thư vẫn kín.",
+          "category": "author_choice",
+          "provenance": {
+            "origin": "author_input",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "plan:logline",
+          "label": "Logline nguồn",
+          "text": "Cha xin lỗi; con gái ở lại nhưng chưa nói đã tha thứ.",
+          "category": "context",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        },
+        {
+          "id": "plan:section:0",
+          "label": "Đầu",
+          "text": "Cha đặt phong thư kín lên bàn rồi lùi lại.",
+          "category": "context",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        },
+        {
+          "id": "plan:section:1",
+          "label": "Cuối",
+          "text": "Con gái ở lại, giữ khoảng lặng và chưa khẳng định đã tha thứ. Dừng ở kết mở.",
+          "category": "context",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        }
+      ],
+      "notes": [
+        {
+          "kind": "craft",
+          "observation": "Con gái nhìn cha, kéo ghế ngồi. Phong thư còn kín trên bàn.",
+          "impact": "Tùy chỉnh này tuân thủ yêu cầu về việc thư vẫn kín.",
+          "suggestion": "",
+          "evidence": [
+            {
+              "source_id": "block:6ff34ab6-f637-4a16-a45c-c6322a0024b8:text",
+              "quote": "Con gái nhìn cha, kéo ghế ngồi. Phong thư còn kín trên bàn."
+            }
+          ],
+          "id": "34d8e693-6ce1-4e83-bb2f-96d3fa0e1831",
+          "assessment": null
+        }
+      ],
+      "question": "",
+      "provider": "ollama",
+      "model": "qwen2.5:7b",
+      "parameters": {
+        "temperature": 0.3,
+        "timeout_seconds": 60,
+        "num_ctx": 16384,
+        "screenplay_review_temperature": 0.0
+      },
+      "prompt_version": "screenplay-review-v7-evidence-selection",
+      "error": null
+    },
+    "unchanged_screenplay": true,
+    "detected_conflict": false,
+    "matches_expected_conflict": true,
+    "original_gate_fields": {
+      "matches_expected_conflict": true
+    },
+    "matches_expected_evidence": true,
+    "unexpected_cjk": false
+  },
+  {
+    "case": "open-ending-violating",
+    "expected_conflict": true,
+    "status": 200,
+    "review": {
+      "id": "cc6d042b-0d82-469c-b026-d15b6f5f8fad",
+      "created_at": "2026-10-29T08:35:18.402588+00:00",
+      "source_revision": 4,
+      "source_content": "{\"answers\": [], \"clarifications\": {}, \"constraints\": [\"Chỉ cha và con gái.\", \"Kết mở; con gái không nói hoặc xác nhận đã tha thứ, không chốt hòa giải.\", \"Lá thư vẫn kín.\"], \"draft\": {\"logline\": \"Cha xin lỗi; con gái ở lại nhưng chưa nói đã tha thứ.\", \"sections\": [{\"content\": \"Cha đặt phong thư kín lên bàn rồi lùi lại.\", \"purpose\": \"Mở\", \"title\": \"Đầu\"}, {\"content\": \"Con gái ở lại, giữ khoảng lặng và chưa khẳng định đã tha thứ. Dừng ở kết mở.\", \"purpose\": \"Diễn tiến\", \"title\": \"Cuối\"}], \"title\": \"Lá thư\"}, \"idea\": \"Cha xin lỗi; con gái ở lại nhưng chưa nói đã tha thứ.\", \"questions\": [], \"response_language\": \"vi\"}",
+      "source_screenplay": {
+        "id": "974879b1-f694-4d86-ad0a-a8be65643506",
+        "version": 2,
+        "scenes": [
+          {
+            "id": "aaf1c0c1-dd71-415b-839f-958dedde03fc",
+            "source_scene_id": "1d1cf0e1-8562-4293-98c6-df4931a2e451",
+            "heading": "Trước đó",
+            "blocks": [
+              {
+                "kind": "action",
+                "text": "Cha đặt phong thư kín lên bàn rồi lùi lại.",
+                "speaker": "",
+                "id": "17ee4416-5390-484d-b100-6923baa6431c"
+              }
+            ]
+          },
+          {
+            "id": "f49eba0e-b0bf-459e-a840-60bf391f9d4b",
+            "source_scene_id": "179508ce-deeb-409f-9dc1-a030e6ee7924",
+            "heading": "Khoảnh khắc",
+            "blocks": [
+              {
+                "kind": "action",
+                "text": "Con gái nhìn cha, kéo ghế ngồi. Phong thư còn kín trên bàn.",
+                "speaker": "",
+                "id": "6ff34ab6-f637-4a16-a45c-c6322a0024b8"
+              },
+              {
+                "kind": "dialogue",
+                "text": "Con tha thứ cho cha. Mọi chuyện đã được giải quyết.",
+                "speaker": "Con gái",
+                "id": "39d53851-72e3-424f-b7e2-1ca7fe93e0bd"
+              }
+            ]
+          }
+        ],
+        "source_revision": 2,
+        "source_outline": {
+          "id": "281d2d83-e391-40cb-8d56-8792ccf00a64",
+          "version": 2,
+          "scenes": [
+            {
+              "id": "1d1cf0e1-8562-4293-98c6-df4931a2e451",
+              "title": "Trước đó",
+              "action": "Cha đặt phong thư kín lên bàn rồi lùi lại.",
+              "location": "",
+              "time": "",
+              "characters": "",
+              "goal": "",
+              "purpose": "",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {}
+            },
+            {
+              "id": "179508ce-deeb-409f-9dc1-a030e6ee7924",
+              "title": "Khoảnh khắc",
+              "action": "Con gái ở lại, giữ khoảng lặng và chưa khẳng định đã tha thứ. Dừng ở kết mở.",
+              "location": "",
+              "time": "",
+              "characters": "",
+              "goal": "",
+              "purpose": "",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {}
+            }
+          ],
+          "source": {
+            "id": "38c43c08-2428-4ee0-a418-f0e825a6794d",
+            "project_revision": 0,
+            "version_id": "current",
+            "draft": {
+              "title": "Lá thư",
+              "logline": "Cha xin lỗi; con gái ở lại nhưng chưa nói đã tha thứ.",
+              "sections": [
+                {
+                  "title": "Đầu",
+                  "purpose": "Mở",
+                  "content": "Cha đặt phong thư kín lên bàn rồi lùi lại."
+                },
+                {
+                  "title": "Cuối",
+                  "purpose": "Diễn tiến",
+                  "content": "Con gái ở lại, giữ khoảng lặng và chưa khẳng định đã tha thứ. Dừng ở kết mở."
+                }
+              ]
+            },
+            "context": {
+              "idea": "Cha xin lỗi; con gái ở lại nhưng chưa nói đã tha thứ.",
+              "constraints": [
+                "Chỉ cha và con gái.",
+                "Kết mở; con gái không nói hoặc xác nhận đã tha thứ, không chốt hòa giải.",
+                "Lá thư vẫn kín."
+              ],
+              "clarifications": [],
+              "pending_questions": []
+            },
+            "response_language": "vi"
+          }
+        }
+      },
+      "source_outline": {
+        "id": "281d2d83-e391-40cb-8d56-8792ccf00a64",
+        "version": 2,
+        "scenes": [
+          {
+            "id": "1d1cf0e1-8562-4293-98c6-df4931a2e451",
+            "title": "Trước đó",
+            "action": "Cha đặt phong thư kín lên bàn rồi lùi lại.",
+            "location": "",
+            "time": "",
+            "characters": "",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "",
+            "keep_or_avoid": "",
+            "staging_choices": {}
+          },
+          {
+            "id": "179508ce-deeb-409f-9dc1-a030e6ee7924",
+            "title": "Khoảnh khắc",
+            "action": "Con gái ở lại, giữ khoảng lặng và chưa khẳng định đã tha thứ. Dừng ở kết mở.",
+            "location": "",
+            "time": "",
+            "characters": "",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "",
+            "keep_or_avoid": "",
+            "staging_choices": {}
+          }
+        ],
+        "source": {
+          "id": "38c43c08-2428-4ee0-a418-f0e825a6794d",
+          "project_revision": 0,
+          "version_id": "current",
+          "draft": {
+            "title": "Lá thư",
+            "logline": "Cha xin lỗi; con gái ở lại nhưng chưa nói đã tha thứ.",
+            "sections": [
+              {
+                "title": "Đầu",
+                "purpose": "Mở",
+                "content": "Cha đặt phong thư kín lên bàn rồi lùi lại."
+              },
+              {
+                "title": "Cuối",
+                "purpose": "Diễn tiến",
+                "content": "Con gái ở lại, giữ khoảng lặng và chưa khẳng định đã tha thứ. Dừng ở kết mở."
+              }
+            ]
+          },
+          "context": {
+            "idea": "Cha xin lỗi; con gái ở lại nhưng chưa nói đã tha thứ.",
+            "constraints": [
+              "Chỉ cha và con gái.",
+              "Kết mở; con gái không nói hoặc xác nhận đã tha thứ, không chốt hòa giải.",
+              "Lá thư vẫn kín."
+            ],
+            "clarifications": [],
+            "pending_questions": []
+          },
+          "response_language": "vi"
+        }
+      },
+      "target_scene_id": "f49eba0e-b0bf-459e-a840-60bf391f9d4b",
+      "instructions": "",
+      "status": "ready",
+      "sources": [
+        {
+          "id": "script:aaf1c0c1-dd71-415b-839f-958dedde03fc:heading",
+          "label": "Trước đó",
+          "text": "Trước đó",
+          "category": "screenplay",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": "aaf1c0c1-dd71-415b-839f-958dedde03fc",
+          "block_id": null,
+          "field": "heading"
+        },
+        {
+          "id": "block:17ee4416-5390-484d-b100-6923baa6431c:text",
+          "label": "Trước đó · khối 1",
+          "text": "Cha đặt phong thư kín lên bàn rồi lùi lại.",
+          "category": "screenplay",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": "aaf1c0c1-dd71-415b-839f-958dedde03fc",
+          "block_id": "17ee4416-5390-484d-b100-6923baa6431c",
+          "field": "text"
+        },
+        {
+          "id": "script:f49eba0e-b0bf-459e-a840-60bf391f9d4b:heading",
+          "label": "Khoảnh khắc",
+          "text": "Khoảnh khắc",
+          "category": "screenplay",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": "f49eba0e-b0bf-459e-a840-60bf391f9d4b",
+          "block_id": null,
+          "field": "heading"
+        },
+        {
+          "id": "block:6ff34ab6-f637-4a16-a45c-c6322a0024b8:text",
+          "label": "Khoảnh khắc · khối 1",
+          "text": "Con gái nhìn cha, kéo ghế ngồi. Phong thư còn kín trên bàn.",
+          "category": "screenplay",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": "f49eba0e-b0bf-459e-a840-60bf391f9d4b",
+          "block_id": "6ff34ab6-f637-4a16-a45c-c6322a0024b8",
+          "field": "text"
+        },
+        {
+          "id": "block:39d53851-72e3-424f-b7e2-1ca7fe93e0bd:text",
+          "label": "Khoảnh khắc · khối 2",
+          "text": "Con tha thứ cho cha. Mọi chuyện đã được giải quyết.",
+          "category": "screenplay",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": "f49eba0e-b0bf-459e-a840-60bf391f9d4b",
+          "block_id": "39d53851-72e3-424f-b7e2-1ca7fe93e0bd",
+          "field": "text"
+        },
+        {
+          "id": "block:39d53851-72e3-424f-b7e2-1ca7fe93e0bd:speaker",
+          "label": "Khoảnh khắc · khối 2 · người nói",
+          "text": "Con gái",
+          "category": "screenplay",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": "f49eba0e-b0bf-459e-a840-60bf391f9d4b",
+          "block_id": "39d53851-72e3-424f-b7e2-1ca7fe93e0bd",
+          "field": "speaker"
+        },
+        {
+          "id": "m2:179508ce-deeb-409f-9dc1-a030e6ee7924:action",
+          "label": "Diễn tiến dàn cảnh đã chọn",
+          "text": "Con gái ở lại, giữ khoảng lặng và chưa khẳng định đã tha thứ. Dừng ở kết mở.",
+          "category": "context",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "intent:idea",
+          "label": "Ý tưởng tác giả",
+          "text": "Cha xin lỗi; con gái ở lại nhưng chưa nói đã tha thứ.",
+          "category": "author_choice",
+          "provenance": {
+            "origin": "author_input",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "intent:constraint:0",
+          "label": "Giới hạn 1",
+          "text": "Chỉ cha và con gái.",
+          "category": "author_choice",
+          "provenance": {
+            "origin": "author_input",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "intent:constraint:1",
+          "label": "Giới hạn 2",
+          "text": "Kết mở; con gái không nói hoặc xác nhận đã tha thứ, không chốt hòa giải.",
+          "category": "author_choice",
+          "provenance": {
+            "origin": "author_input",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "intent:constraint:2",
+          "label": "Giới hạn 3",
+          "text": "Lá thư vẫn kín.",
+          "category": "author_choice",
+          "provenance": {
+            "origin": "author_input",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "plan:logline",
+          "label": "Logline nguồn",
+          "text": "Cha xin lỗi; con gái ở lại nhưng chưa nói đã tha thứ.",
+          "category": "context",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        },
+        {
+          "id": "plan:section:0",
+          "label": "Đầu",
+          "text": "Cha đặt phong thư kín lên bàn rồi lùi lại.",
+          "category": "context",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        },
+        {
+          "id": "plan:section:1",
+          "label": "Cuối",
+          "text": "Con gái ở lại, giữ khoảng lặng và chưa khẳng định đã tha thứ. Dừng ở kết mở.",
+          "category": "context",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        }
+      ],
+      "notes": [
+        {
+          "kind": "intent_mismatch",
+          "observation": "Con tha thứ cho cha. Mọi chuyện đã được giải quyết.",
+          "impact": "Vi phạm giới hạn 3: Lá thư vẫn kín. Vi phạm giới hạn 2: Con gái xác nhận đã tha thứ và chốt hòa giải.",
+          "suggestion": "",
+          "evidence": [
+            {
+              "source_id": "block:39d53851-72e3-424f-b7e2-1ca7fe93e0bd:text",
+              "quote": "Con tha thứ cho cha. Mọi chuyện đã được giải quyết."
+            },
+            {
+              "source_id": "intent:idea",
+              "quote": "Cha xin lỗi; con gái ở lại nhưng chưa nói đã tha thứ."
+            }
+          ],
+          "id": "ccd499c0-7e5e-415a-a075-51a4789237b7",
+          "assessment": null
+        }
+      ],
+      "question": "",
+      "provider": "ollama",
+      "model": "qwen2.5:7b",
+      "parameters": {
+        "temperature": 0.3,
+        "timeout_seconds": 60,
+        "num_ctx": 16384,
+        "screenplay_review_temperature": 0.0
+      },
+      "prompt_version": "screenplay-review-v7-evidence-selection",
+      "error": null
+    },
+    "unchanged_screenplay": true,
+    "detected_conflict": true,
+    "matches_expected_conflict": true,
+    "original_gate_fields": {
+      "matches_expected_conflict": true
+    },
+    "matches_expected_evidence": true,
+    "unexpected_cjk": false
+  },
+  {
+    "case": "free-choice-compliant",
+    "expected_conflict": false,
+    "status": 200,
+    "review": {
+      "id": "d2cee9b3-cb1c-4d61-878d-7b99ae0c339d",
+      "created_at": "2026-10-29T08:35:28.626478+00:00",
+      "source_revision": 4,
+      "source_content": "{\"answers\": [], \"clarifications\": {}, \"constraints\": [\"Chỉ cha và con gái trong nhà.\", \"Cha không giữ giấy tờ hoặc ép con gái ở lại.\", \"Con gái tự quyết định việc ra đi.\"], \"draft\": {\"logline\": \"Người cha xin lỗi và để con gái tự quyết định ở lại hay ra đi.\", \"sections\": [{\"content\": \"Con gái đặt túi cạnh cửa. Cha đứng bên bàn.\", \"purpose\": \"Mở\", \"title\": \"Đầu\"}, {\"content\": \"Cha đặt lá thư xin lỗi lên bàn, lùi lại và để lối đi trống; con gái tự quyết định.\", \"purpose\": \"Diễn tiến\", \"title\": \"Cuối\"}], \"title\": \"Lối đi\"}, \"idea\": \"Người cha xin lỗi và để con gái tự quyết định ở lại hay ra đi.\", \"questions\": [], \"response_language\": \"vi\"}",
+      "source_screenplay": {
+        "id": "65b29b63-f68f-43f9-983f-6ce2216fe910",
+        "version": 2,
+        "scenes": [
+          {
+            "id": "b7940d9f-e5ab-4bdd-ba6c-eb7f148dfe81",
+            "source_scene_id": "79befc08-14b5-451a-99aa-8e850c571261",
+            "heading": "Trước đó",
+            "blocks": [
+              {
+                "kind": "action",
+                "text": "Con gái đặt túi cạnh cửa. Cha đứng bên bàn.",
+                "speaker": "",
+                "id": "ccd921b2-f5fe-436b-b8b3-7f29f1061ed1"
+              }
+            ]
+          },
+          {
+            "id": "31a2abaf-8a56-4c72-b4e5-121688122a71",
+            "source_scene_id": "6ef7df96-80c4-4cc9-891c-65fb603a670d",
+            "heading": "Khoảnh khắc",
+            "blocks": [
+              {
+                "kind": "action",
+                "text": "Con gái nhìn về cửa, chưa bước đi.",
+                "speaker": "",
+                "id": "86a65c6f-d51e-450b-8992-c5fb65f4d5f4"
+              },
+              {
+                "kind": "action",
+                "text": "Cha đặt lá thư xin lỗi lên bàn, lùi lại để lối đi trống.",
+                "speaker": "",
+                "id": "e84adbfa-3b40-4ae9-8fc8-44b4c4791b21"
+              }
+            ]
+          }
+        ],
+        "source_revision": 2,
+        "source_outline": {
+          "id": "00b0f24a-91ec-4f2b-ac0c-144ec8735e38",
+          "version": 2,
+          "scenes": [
+            {
+              "id": "79befc08-14b5-451a-99aa-8e850c571261",
+              "title": "Trước đó",
+              "action": "Con gái đặt túi cạnh cửa. Cha đứng bên bàn.",
+              "location": "",
+              "time": "",
+              "characters": "",
+              "goal": "",
+              "purpose": "",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {}
+            },
+            {
+              "id": "6ef7df96-80c4-4cc9-891c-65fb603a670d",
+              "title": "Khoảnh khắc",
+              "action": "Cha đặt lá thư xin lỗi lên bàn, lùi lại và để lối đi trống; con gái tự quyết định.",
+              "location": "",
+              "time": "",
+              "characters": "",
+              "goal": "",
+              "purpose": "",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {}
+            }
+          ],
+          "source": {
+            "id": "d4c36b31-8f08-4470-b3ed-fd23648eaf01",
+            "project_revision": 0,
+            "version_id": "current",
+            "draft": {
+              "title": "Lối đi",
+              "logline": "Người cha xin lỗi và để con gái tự quyết định ở lại hay ra đi.",
+              "sections": [
+                {
+                  "title": "Đầu",
+                  "purpose": "Mở",
+                  "content": "Con gái đặt túi cạnh cửa. Cha đứng bên bàn."
+                },
+                {
+                  "title": "Cuối",
+                  "purpose": "Diễn tiến",
+                  "content": "Cha đặt lá thư xin lỗi lên bàn, lùi lại và để lối đi trống; con gái tự quyết định."
+                }
+              ]
+            },
+            "context": {
+              "idea": "Người cha xin lỗi và để con gái tự quyết định ở lại hay ra đi.",
+              "constraints": [
+                "Chỉ cha và con gái trong nhà.",
+                "Cha không giữ giấy tờ hoặc ép con gái ở lại.",
+                "Con gái tự quyết định việc ra đi."
+              ],
+              "clarifications": [],
+              "pending_questions": []
+            },
+            "response_language": "vi"
+          }
+        }
+      },
+      "source_outline": {
+        "id": "00b0f24a-91ec-4f2b-ac0c-144ec8735e38",
+        "version": 2,
+        "scenes": [
+          {
+            "id": "79befc08-14b5-451a-99aa-8e850c571261",
+            "title": "Trước đó",
+            "action": "Con gái đặt túi cạnh cửa. Cha đứng bên bàn.",
+            "location": "",
+            "time": "",
+            "characters": "",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "",
+            "keep_or_avoid": "",
+            "staging_choices": {}
+          },
+          {
+            "id": "6ef7df96-80c4-4cc9-891c-65fb603a670d",
+            "title": "Khoảnh khắc",
+            "action": "Cha đặt lá thư xin lỗi lên bàn, lùi lại và để lối đi trống; con gái tự quyết định.",
+            "location": "",
+            "time": "",
+            "characters": "",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "",
+            "keep_or_avoid": "",
+            "staging_choices": {}
+          }
+        ],
+        "source": {
+          "id": "d4c36b31-8f08-4470-b3ed-fd23648eaf01",
+          "project_revision": 0,
+          "version_id": "current",
+          "draft": {
+            "title": "Lối đi",
+            "logline": "Người cha xin lỗi và để con gái tự quyết định ở lại hay ra đi.",
+            "sections": [
+              {
+                "title": "Đầu",
+                "purpose": "Mở",
+                "content": "Con gái đặt túi cạnh cửa. Cha đứng bên bàn."
+              },
+              {
+                "title": "Cuối",
+                "purpose": "Diễn tiến",
+                "content": "Cha đặt lá thư xin lỗi lên bàn, lùi lại và để lối đi trống; con gái tự quyết định."
+              }
+            ]
+          },
+          "context": {
+            "idea": "Người cha xin lỗi và để con gái tự quyết định ở lại hay ra đi.",
+            "constraints": [
+              "Chỉ cha và con gái trong nhà.",
+              "Cha không giữ giấy tờ hoặc ép con gái ở lại.",
+              "Con gái tự quyết định việc ra đi."
+            ],
+            "clarifications": [],
+            "pending_questions": []
+          },
+          "response_language": "vi"
+        }
+      },
+      "target_scene_id": "31a2abaf-8a56-4c72-b4e5-121688122a71",
+      "instructions": "",
+      "status": "ready",
+      "sources": [
+        {
+          "id": "script:b7940d9f-e5ab-4bdd-ba6c-eb7f148dfe81:heading",
+          "label": "Trước đó",
+          "text": "Trước đó",
+          "category": "screenplay",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": "b7940d9f-e5ab-4bdd-ba6c-eb7f148dfe81",
+          "block_id": null,
+          "field": "heading"
+        },
+        {
+          "id": "block:ccd921b2-f5fe-436b-b8b3-7f29f1061ed1:text",
+          "label": "Trước đó · khối 1",
+          "text": "Con gái đặt túi cạnh cửa. Cha đứng bên bàn.",
+          "category": "screenplay",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": "b7940d9f-e5ab-4bdd-ba6c-eb7f148dfe81",
+          "block_id": "ccd921b2-f5fe-436b-b8b3-7f29f1061ed1",
+          "field": "text"
+        },
+        {
+          "id": "script:31a2abaf-8a56-4c72-b4e5-121688122a71:heading",
+          "label": "Khoảnh khắc",
+          "text": "Khoảnh khắc",
+          "category": "screenplay",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": "31a2abaf-8a56-4c72-b4e5-121688122a71",
+          "block_id": null,
+          "field": "heading"
+        },
+        {
+          "id": "block:86a65c6f-d51e-450b-8992-c5fb65f4d5f4:text",
+          "label": "Khoảnh khắc · khối 1",
+          "text": "Con gái nhìn về cửa, chưa bước đi.",
+          "category": "screenplay",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": "31a2abaf-8a56-4c72-b4e5-121688122a71",
+          "block_id": "86a65c6f-d51e-450b-8992-c5fb65f4d5f4",
+          "field": "text"
+        },
+        {
+          "id": "block:e84adbfa-3b40-4ae9-8fc8-44b4c4791b21:text",
+          "label": "Khoảnh khắc · khối 2",
+          "text": "Cha đặt lá thư xin lỗi lên bàn, lùi lại để lối đi trống.",
+          "category": "screenplay",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": "31a2abaf-8a56-4c72-b4e5-121688122a71",
+          "block_id": "e84adbfa-3b40-4ae9-8fc8-44b4c4791b21",
+          "field": "text"
+        },
+        {
+          "id": "m2:6ef7df96-80c4-4cc9-891c-65fb603a670d:action",
+          "label": "Diễn tiến dàn cảnh đã chọn",
+          "text": "Cha đặt lá thư xin lỗi lên bàn, lùi lại và để lối đi trống; con gái tự quyết định.",
+          "category": "context",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "intent:idea",
+          "label": "Ý tưởng tác giả",
+          "text": "Người cha xin lỗi và để con gái tự quyết định ở lại hay ra đi.",
+          "category": "author_choice",
+          "provenance": {
+            "origin": "author_input",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "intent:constraint:0",
+          "label": "Giới hạn 1",
+          "text": "Chỉ cha và con gái trong nhà.",
+          "category": "author_choice",
+          "provenance": {
+            "origin": "author_input",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "intent:constraint:1",
+          "label": "Giới hạn 2",
+          "text": "Cha không giữ giấy tờ hoặc ép con gái ở lại.",
+          "category": "author_choice",
+          "provenance": {
+            "origin": "author_input",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "intent:constraint:2",
+          "label": "Giới hạn 3",
+          "text": "Con gái tự quyết định việc ra đi.",
+          "category": "author_choice",
+          "provenance": {
+            "origin": "author_input",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "plan:logline",
+          "label": "Logline nguồn",
+          "text": "Người cha xin lỗi và để con gái tự quyết định ở lại hay ra đi.",
+          "category": "context",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        },
+        {
+          "id": "plan:section:0",
+          "label": "Đầu",
+          "text": "Con gái đặt túi cạnh cửa. Cha đứng bên bàn.",
+          "category": "context",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        },
+        {
+          "id": "plan:section:1",
+          "label": "Cuối",
+          "text": "Cha đặt lá thư xin lỗi lên bàn, lùi lại và để lối đi trống; con gái tự quyết định.",
+          "category": "context",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        }
+      ],
+      "notes": [],
+      "question": "",
+      "provider": "ollama",
+      "model": "qwen2.5:7b",
+      "parameters": {
+        "temperature": 0.3,
+        "timeout_seconds": 60,
+        "num_ctx": 16384,
+        "screenplay_review_temperature": 0.0
+      },
+      "prompt_version": "screenplay-review-v7-evidence-selection",
+      "error": null
+    },
+    "unchanged_screenplay": true,
+    "detected_conflict": false,
+    "matches_expected_conflict": true,
+    "original_gate_fields": {
+      "matches_expected_conflict": true
+    },
+    "matches_expected_evidence": true,
+    "unexpected_cjk": false
+  },
+  {
+    "case": "free-choice-violating",
+    "expected_conflict": true,
+    "status": 200,
+    "review": {
+      "id": "7bb2014e-86b6-4c89-a90d-14bc1ac357ff",
+      "created_at": "2026-10-29T08:35:34.699492+00:00",
+      "source_revision": 4,
+      "source_content": "{\"answers\": [], \"clarifications\": {}, \"constraints\": [\"Chỉ cha và con gái trong nhà.\", \"Cha không giữ giấy tờ hoặc ép con gái ở lại.\", \"Con gái tự quyết định việc ra đi.\"], \"draft\": {\"logline\": \"Người cha xin lỗi và để con gái tự quyết định ở lại hay ra đi.\", \"sections\": [{\"content\": \"Con gái đặt túi cạnh cửa. Cha đứng bên bàn.\", \"purpose\": \"Mở\", \"title\": \"Đầu\"}, {\"content\": \"Cha đặt lá thư xin lỗi lên bàn, lùi lại và để lối đi trống; con gái tự quyết định.\", \"purpose\": \"Diễn tiến\", \"title\": \"Cuối\"}], \"title\": \"Lối đi\"}, \"idea\": \"Người cha xin lỗi và để con gái tự quyết định ở lại hay ra đi.\", \"questions\": [], \"response_language\": \"vi\"}",
+      "source_screenplay": {
+        "id": "65b29b63-f68f-43f9-983f-6ce2216fe910",
+        "version": 2,
+        "scenes": [
+          {
+            "id": "b7940d9f-e5ab-4bdd-ba6c-eb7f148dfe81",
+            "source_scene_id": "79befc08-14b5-451a-99aa-8e850c571261",
+            "heading": "Trước đó",
+            "blocks": [
+              {
+                "kind": "action",
+                "text": "Con gái đặt túi cạnh cửa. Cha đứng bên bàn.",
+                "speaker": "",
+                "id": "ccd921b2-f5fe-436b-b8b3-7f29f1061ed1"
+              }
+            ]
+          },
+          {
+            "id": "31a2abaf-8a56-4c72-b4e5-121688122a71",
+            "source_scene_id": "6ef7df96-80c4-4cc9-891c-65fb603a670d",
+            "heading": "Khoảnh khắc",
+            "blocks": [
+              {
+                "kind": "action",
+                "text": "Con gái nhìn về cửa, chưa bước đi.",
+                "speaker": "",
+                "id": "86a65c6f-d51e-450b-8992-c5fb65f4d5f4"
+              },
+              {
+                "kind": "action",
+                "text": "Cha giấu hộ chiếu của con gái vào túi để cô không thể ra đi.",
+                "speaker": "",
+                "id": "e84adbfa-3b40-4ae9-8fc8-44b4c4791b21"
+              }
+            ]
+          }
+        ],
+        "source_revision": 2,
+        "source_outline": {
+          "id": "00b0f24a-91ec-4f2b-ac0c-144ec8735e38",
+          "version": 2,
+          "scenes": [
+            {
+              "id": "79befc08-14b5-451a-99aa-8e850c571261",
+              "title": "Trước đó",
+              "action": "Con gái đặt túi cạnh cửa. Cha đứng bên bàn.",
+              "location": "",
+              "time": "",
+              "characters": "",
+              "goal": "",
+              "purpose": "",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {}
+            },
+            {
+              "id": "6ef7df96-80c4-4cc9-891c-65fb603a670d",
+              "title": "Khoảnh khắc",
+              "action": "Cha đặt lá thư xin lỗi lên bàn, lùi lại và để lối đi trống; con gái tự quyết định.",
+              "location": "",
+              "time": "",
+              "characters": "",
+              "goal": "",
+              "purpose": "",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {}
+            }
+          ],
+          "source": {
+            "id": "d4c36b31-8f08-4470-b3ed-fd23648eaf01",
+            "project_revision": 0,
+            "version_id": "current",
+            "draft": {
+              "title": "Lối đi",
+              "logline": "Người cha xin lỗi và để con gái tự quyết định ở lại hay ra đi.",
+              "sections": [
+                {
+                  "title": "Đầu",
+                  "purpose": "Mở",
+                  "content": "Con gái đặt túi cạnh cửa. Cha đứng bên bàn."
+                },
+                {
+                  "title": "Cuối",
+                  "purpose": "Diễn tiến",
+                  "content": "Cha đặt lá thư xin lỗi lên bàn, lùi lại và để lối đi trống; con gái tự quyết định."
+                }
+              ]
+            },
+            "context": {
+              "idea": "Người cha xin lỗi và để con gái tự quyết định ở lại hay ra đi.",
+              "constraints": [
+                "Chỉ cha và con gái trong nhà.",
+                "Cha không giữ giấy tờ hoặc ép con gái ở lại.",
+                "Con gái tự quyết định việc ra đi."
+              ],
+              "clarifications": [],
+              "pending_questions": []
+            },
+            "response_language": "vi"
+          }
+        }
+      },
+      "source_outline": {
+        "id": "00b0f24a-91ec-4f2b-ac0c-144ec8735e38",
+        "version": 2,
+        "scenes": [
+          {
+            "id": "79befc08-14b5-451a-99aa-8e850c571261",
+            "title": "Trước đó",
+            "action": "Con gái đặt túi cạnh cửa. Cha đứng bên bàn.",
+            "location": "",
+            "time": "",
+            "characters": "",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "",
+            "keep_or_avoid": "",
+            "staging_choices": {}
+          },
+          {
+            "id": "6ef7df96-80c4-4cc9-891c-65fb603a670d",
+            "title": "Khoảnh khắc",
+            "action": "Cha đặt lá thư xin lỗi lên bàn, lùi lại và để lối đi trống; con gái tự quyết định.",
+            "location": "",
+            "time": "",
+            "characters": "",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "",
+            "keep_or_avoid": "",
+            "staging_choices": {}
+          }
+        ],
+        "source": {
+          "id": "d4c36b31-8f08-4470-b3ed-fd23648eaf01",
+          "project_revision": 0,
+          "version_id": "current",
+          "draft": {
+            "title": "Lối đi",
+            "logline": "Người cha xin lỗi và để con gái tự quyết định ở lại hay ra đi.",
+            "sections": [
+              {
+                "title": "Đầu",
+                "purpose": "Mở",
+                "content": "Con gái đặt túi cạnh cửa. Cha đứng bên bàn."
+              },
+              {
+                "title": "Cuối",
+                "purpose": "Diễn tiến",
+                "content": "Cha đặt lá thư xin lỗi lên bàn, lùi lại và để lối đi trống; con gái tự quyết định."
+              }
+            ]
+          },
+          "context": {
+            "idea": "Người cha xin lỗi và để con gái tự quyết định ở lại hay ra đi.",
+            "constraints": [
+              "Chỉ cha và con gái trong nhà.",
+              "Cha không giữ giấy tờ hoặc ép con gái ở lại.",
+              "Con gái tự quyết định việc ra đi."
+            ],
+            "clarifications": [],
+            "pending_questions": []
+          },
+          "response_language": "vi"
+        }
+      },
+      "target_scene_id": "31a2abaf-8a56-4c72-b4e5-121688122a71",
+      "instructions": "",
+      "status": "ready",
+      "sources": [
+        {
+          "id": "script:b7940d9f-e5ab-4bdd-ba6c-eb7f148dfe81:heading",
+          "label": "Trước đó",
+          "text": "Trước đó",
+          "category": "screenplay",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": "b7940d9f-e5ab-4bdd-ba6c-eb7f148dfe81",
+          "block_id": null,
+          "field": "heading"
+        },
+        {
+          "id": "block:ccd921b2-f5fe-436b-b8b3-7f29f1061ed1:text",
+          "label": "Trước đó · khối 1",
+          "text": "Con gái đặt túi cạnh cửa. Cha đứng bên bàn.",
+          "category": "screenplay",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": "b7940d9f-e5ab-4bdd-ba6c-eb7f148dfe81",
+          "block_id": "ccd921b2-f5fe-436b-b8b3-7f29f1061ed1",
+          "field": "text"
+        },
+        {
+          "id": "script:31a2abaf-8a56-4c72-b4e5-121688122a71:heading",
+          "label": "Khoảnh khắc",
+          "text": "Khoảnh khắc",
+          "category": "screenplay",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": "31a2abaf-8a56-4c72-b4e5-121688122a71",
+          "block_id": null,
+          "field": "heading"
+        },
+        {
+          "id": "block:86a65c6f-d51e-450b-8992-c5fb65f4d5f4:text",
+          "label": "Khoảnh khắc · khối 1",
+          "text": "Con gái nhìn về cửa, chưa bước đi.",
+          "category": "screenplay",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": "31a2abaf-8a56-4c72-b4e5-121688122a71",
+          "block_id": "86a65c6f-d51e-450b-8992-c5fb65f4d5f4",
+          "field": "text"
+        },
+        {
+          "id": "block:e84adbfa-3b40-4ae9-8fc8-44b4c4791b21:text",
+          "label": "Khoảnh khắc · khối 2",
+          "text": "Cha giấu hộ chiếu của con gái vào túi để cô không thể ra đi.",
+          "category": "screenplay",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": "31a2abaf-8a56-4c72-b4e5-121688122a71",
+          "block_id": "e84adbfa-3b40-4ae9-8fc8-44b4c4791b21",
+          "field": "text"
+        },
+        {
+          "id": "m2:6ef7df96-80c4-4cc9-891c-65fb603a670d:action",
+          "label": "Diễn tiến dàn cảnh đã chọn",
+          "text": "Cha đặt lá thư xin lỗi lên bàn, lùi lại và để lối đi trống; con gái tự quyết định.",
+          "category": "context",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "intent:idea",
+          "label": "Ý tưởng tác giả",
+          "text": "Người cha xin lỗi và để con gái tự quyết định ở lại hay ra đi.",
+          "category": "author_choice",
+          "provenance": {
+            "origin": "author_input",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "intent:constraint:0",
+          "label": "Giới hạn 1",
+          "text": "Chỉ cha và con gái trong nhà.",
+          "category": "author_choice",
+          "provenance": {
+            "origin": "author_input",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "intent:constraint:1",
+          "label": "Giới hạn 2",
+          "text": "Cha không giữ giấy tờ hoặc ép con gái ở lại.",
+          "category": "author_choice",
+          "provenance": {
+            "origin": "author_input",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "intent:constraint:2",
+          "label": "Giới hạn 3",
+          "text": "Con gái tự quyết định việc ra đi.",
+          "category": "author_choice",
+          "provenance": {
+            "origin": "author_input",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "plan:logline",
+          "label": "Logline nguồn",
+          "text": "Người cha xin lỗi và để con gái tự quyết định ở lại hay ra đi.",
+          "category": "context",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        },
+        {
+          "id": "plan:section:0",
+          "label": "Đầu",
+          "text": "Con gái đặt túi cạnh cửa. Cha đứng bên bàn.",
+          "category": "context",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        },
+        {
+          "id": "plan:section:1",
+          "label": "Cuối",
+          "text": "Cha đặt lá thư xin lỗi lên bàn, lùi lại và để lối đi trống; con gái tự quyết định.",
+          "category": "context",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        }
+      ],
+      "notes": [
+        {
+          "kind": "intent_mismatch",
+          "observation": "Cha giấu hộ chiếu của con gái vào túi để cô không thể ra đi.",
+          "impact": "Việc cha giấu hộ chiếu của con gái vào túi vi phạm yêu cầu của tác giả là con gái tự quyết định việc ra đi.",
+          "suggestion": "",
+          "evidence": [
+            {
+              "source_id": "block:e84adbfa-3b40-4ae9-8fc8-44b4c4791b21:text",
+              "quote": "Cha giấu hộ chiếu của con gái vào túi để cô không thể ra đi."
+            },
+            {
+              "source_id": "intent:constraint:2",
+              "quote": "Con gái tự quyết định việc ra đi."
+            }
+          ],
+          "id": "bed147fb-b1a6-4974-8cee-9b867c932a90",
+          "assessment": null
+        }
+      ],
+      "question": "",
+      "provider": "ollama",
+      "model": "qwen2.5:7b",
+      "parameters": {
+        "temperature": 0.3,
+        "timeout_seconds": 60,
+        "num_ctx": 16384,
+        "screenplay_review_temperature": 0.0
+      },
+      "prompt_version": "screenplay-review-v7-evidence-selection",
+      "error": null
+    },
+    "unchanged_screenplay": true,
+    "detected_conflict": true,
+    "matches_expected_conflict": true,
+    "original_gate_fields": {
+      "matches_expected_conflict": true
+    },
+    "matches_expected_evidence": true,
+    "unexpected_cjk": false
+  },
+  {
+    "case": "broken-flashlight-compliant",
+    "expected_conflict": false,
+    "status": 200,
+    "review": {
+      "id": "8fe969ca-6077-4b8f-a718-cd785ccb2b78",
+      "created_at": "2026-10-29T08:35:42.397545+00:00",
+      "source_revision": 4,
+      "source_content": "{\"answers\": [], \"clarifications\": {}, \"constraints\": [\"Chỉ Lan và Bình, một phòng trọ ban đêm.\", \"Đèn pin bị hỏng, không thể sáng.\", \"Không thêm điện thoại hoặc nguồn sáng mới; dùng ánh đèn đường qua rèm.\"], \"draft\": {\"logline\": \"Lan và Bình đọc giấy nhờ ánh đèn đường trong phòng trọ mất điện.\", \"sections\": [{\"content\": \"Lan đặt tờ giấy lên bàn gần cửa sổ có rèm. Bình cầm chiếc đèn pin hỏng.\", \"purpose\": \"Mở\", \"title\": \"Đầu\"}, {\"content\": \"Bình đặt đèn pin hỏng xuống. Lan kéo rèm; hai người nghiêng giấy để đọc bằng ánh đèn đường.\", \"purpose\": \"Diễn tiến\", \"title\": \"Cuối\"}], \"title\": \"Đọc giấy\"}, \"idea\": \"Lan và Bình đọc giấy nhờ ánh đèn đường trong phòng trọ mất điện.\", \"questions\": [], \"response_language\": \"vi\"}",
+      "source_screenplay": {
+        "id": "bcd585fd-2de6-4fab-9667-4a80fd68308b",
+        "version": 2,
+        "scenes": [
+          {
+            "id": "86578679-d2e2-4787-980b-9a0e97e676df",
+            "source_scene_id": "9911a401-9531-458c-879d-0e3fe66e62dd",
+            "heading": "Trước đó",
+            "blocks": [
+              {
+                "kind": "action",
+                "text": "Lan đặt tờ giấy lên bàn gần cửa sổ có rèm. Bình cầm chiếc đèn pin hỏng.",
+                "speaker": "",
+                "id": "c201739a-f73a-4767-a3ff-415d855d25d1"
+              }
+            ]
+          },
+          {
+            "id": "9779354a-a862-4f55-a64c-49b5caad5a9e",
+            "source_scene_id": "4f78a8eb-3a26-498d-87d8-bfefcf1fdcf2",
+            "heading": "Khoảnh khắc",
+            "blocks": [
+              {
+                "kind": "action",
+                "text": "Lan kéo rèm, để ánh đèn đường rọi lên tờ giấy.",
+                "speaker": "",
+                "id": "6c006961-c867-4bba-babd-e64454cc5389"
+              },
+              {
+                "kind": "action",
+                "text": "Bình đặt đèn pin hỏng xuống, nghiêng tờ giấy về phía ánh đèn đường.",
+                "speaker": "",
+                "id": "38215107-7405-48fc-9bce-270440eb27e3"
+              }
+            ]
+          }
+        ],
+        "source_revision": 2,
+        "source_outline": {
+          "id": "f7ac7cea-bb23-48ec-a150-86c964ebf188",
+          "version": 2,
+          "scenes": [
+            {
+              "id": "9911a401-9531-458c-879d-0e3fe66e62dd",
+              "title": "Trước đó",
+              "action": "Lan đặt tờ giấy lên bàn gần cửa sổ có rèm. Bình cầm chiếc đèn pin hỏng.",
+              "location": "",
+              "time": "",
+              "characters": "",
+              "goal": "",
+              "purpose": "",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {}
+            },
+            {
+              "id": "4f78a8eb-3a26-498d-87d8-bfefcf1fdcf2",
+              "title": "Khoảnh khắc",
+              "action": "Bình đặt đèn pin hỏng xuống. Lan kéo rèm; hai người nghiêng giấy để đọc bằng ánh đèn đường.",
+              "location": "",
+              "time": "",
+              "characters": "",
+              "goal": "",
+              "purpose": "",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {}
+            }
+          ],
+          "source": {
+            "id": "b00b8851-37f5-4811-ab02-80f5e428fa54",
+            "project_revision": 0,
+            "version_id": "current",
+            "draft": {
+              "title": "Đọc giấy",
+              "logline": "Lan và Bình đọc giấy nhờ ánh đèn đường trong phòng trọ mất điện.",
+              "sections": [
+                {
+                  "title": "Đầu",
+                  "purpose": "Mở",
+                  "content": "Lan đặt tờ giấy lên bàn gần cửa sổ có rèm. Bình cầm chiếc đèn pin hỏng."
+                },
+                {
+                  "title": "Cuối",
+                  "purpose": "Diễn tiến",
+                  "content": "Bình đặt đèn pin hỏng xuống. Lan kéo rèm; hai người nghiêng giấy để đọc bằng ánh đèn đường."
+                }
+              ]
+            },
+            "context": {
+              "idea": "Lan và Bình đọc giấy nhờ ánh đèn đường trong phòng trọ mất điện.",
+              "constraints": [
+                "Chỉ Lan và Bình, một phòng trọ ban đêm.",
+                "Đèn pin bị hỏng, không thể sáng.",
+                "Không thêm điện thoại hoặc nguồn sáng mới; dùng ánh đèn đường qua rèm."
+              ],
+              "clarifications": [],
+              "pending_questions": []
+            },
+            "response_language": "vi"
+          }
+        }
+      },
+      "source_outline": {
+        "id": "f7ac7cea-bb23-48ec-a150-86c964ebf188",
+        "version": 2,
+        "scenes": [
+          {
+            "id": "9911a401-9531-458c-879d-0e3fe66e62dd",
+            "title": "Trước đó",
+            "action": "Lan đặt tờ giấy lên bàn gần cửa sổ có rèm. Bình cầm chiếc đèn pin hỏng.",
+            "location": "",
+            "time": "",
+            "characters": "",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "",
+            "keep_or_avoid": "",
+            "staging_choices": {}
+          },
+          {
+            "id": "4f78a8eb-3a26-498d-87d8-bfefcf1fdcf2",
+            "title": "Khoảnh khắc",
+            "action": "Bình đặt đèn pin hỏng xuống. Lan kéo rèm; hai người nghiêng giấy để đọc bằng ánh đèn đường.",
+            "location": "",
+            "time": "",
+            "characters": "",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "",
+            "keep_or_avoid": "",
+            "staging_choices": {}
+          }
+        ],
+        "source": {
+          "id": "b00b8851-37f5-4811-ab02-80f5e428fa54",
+          "project_revision": 0,
+          "version_id": "current",
+          "draft": {
+            "title": "Đọc giấy",
+            "logline": "Lan và Bình đọc giấy nhờ ánh đèn đường trong phòng trọ mất điện.",
+            "sections": [
+              {
+                "title": "Đầu",
+                "purpose": "Mở",
+                "content": "Lan đặt tờ giấy lên bàn gần cửa sổ có rèm. Bình cầm chiếc đèn pin hỏng."
+              },
+              {
+                "title": "Cuối",
+                "purpose": "Diễn tiến",
+                "content": "Bình đặt đèn pin hỏng xuống. Lan kéo rèm; hai người nghiêng giấy để đọc bằng ánh đèn đường."
+              }
+            ]
+          },
+          "context": {
+            "idea": "Lan và Bình đọc giấy nhờ ánh đèn đường trong phòng trọ mất điện.",
+            "constraints": [
+              "Chỉ Lan và Bình, một phòng trọ ban đêm.",
+              "Đèn pin bị hỏng, không thể sáng.",
+              "Không thêm điện thoại hoặc nguồn sáng mới; dùng ánh đèn đường qua rèm."
+            ],
+            "clarifications": [],
+            "pending_questions": []
+          },
+          "response_language": "vi"
+        }
+      },
+      "target_scene_id": "9779354a-a862-4f55-a64c-49b5caad5a9e",
+      "instructions": "",
+      "status": "ready",
+      "sources": [
+        {
+          "id": "script:86578679-d2e2-4787-980b-9a0e97e676df:heading",
+          "label": "Trước đó",
+          "text": "Trước đó",
+          "category": "screenplay",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": "86578679-d2e2-4787-980b-9a0e97e676df",
+          "block_id": null,
+          "field": "heading"
+        },
+        {
+          "id": "block:c201739a-f73a-4767-a3ff-415d855d25d1:text",
+          "label": "Trước đó · khối 1",
+          "text": "Lan đặt tờ giấy lên bàn gần cửa sổ có rèm. Bình cầm chiếc đèn pin hỏng.",
+          "category": "screenplay",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": "86578679-d2e2-4787-980b-9a0e97e676df",
+          "block_id": "c201739a-f73a-4767-a3ff-415d855d25d1",
+          "field": "text"
+        },
+        {
+          "id": "script:9779354a-a862-4f55-a64c-49b5caad5a9e:heading",
+          "label": "Khoảnh khắc",
+          "text": "Khoảnh khắc",
+          "category": "screenplay",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": "9779354a-a862-4f55-a64c-49b5caad5a9e",
+          "block_id": null,
+          "field": "heading"
+        },
+        {
+          "id": "block:6c006961-c867-4bba-babd-e64454cc5389:text",
+          "label": "Khoảnh khắc · khối 1",
+          "text": "Lan kéo rèm, để ánh đèn đường rọi lên tờ giấy.",
+          "category": "screenplay",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": "9779354a-a862-4f55-a64c-49b5caad5a9e",
+          "block_id": "6c006961-c867-4bba-babd-e64454cc5389",
+          "field": "text"
+        },
+        {
+          "id": "block:38215107-7405-48fc-9bce-270440eb27e3:text",
+          "label": "Khoảnh khắc · khối 2",
+          "text": "Bình đặt đèn pin hỏng xuống, nghiêng tờ giấy về phía ánh đèn đường.",
+          "category": "screenplay",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": "9779354a-a862-4f55-a64c-49b5caad5a9e",
+          "block_id": "38215107-7405-48fc-9bce-270440eb27e3",
+          "field": "text"
+        },
+        {
+          "id": "m2:4f78a8eb-3a26-498d-87d8-bfefcf1fdcf2:action",
+          "label": "Diễn tiến dàn cảnh đã chọn",
+          "text": "Bình đặt đèn pin hỏng xuống. Lan kéo rèm; hai người nghiêng giấy để đọc bằng ánh đèn đường.",
+          "category": "context",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "intent:idea",
+          "label": "Ý tưởng tác giả",
+          "text": "Lan và Bình đọc giấy nhờ ánh đèn đường trong phòng trọ mất điện.",
+          "category": "author_choice",
+          "provenance": {
+            "origin": "author_input",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "intent:constraint:0",
+          "label": "Giới hạn 1",
+          "text": "Chỉ Lan và Bình, một phòng trọ ban đêm.",
+          "category": "author_choice",
+          "provenance": {
+            "origin": "author_input",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "intent:constraint:1",
+          "label": "Giới hạn 2",
+          "text": "Đèn pin bị hỏng, không thể sáng.",
+          "category": "author_choice",
+          "provenance": {
+            "origin": "author_input",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "intent:constraint:2",
+          "label": "Giới hạn 3",
+          "text": "Không thêm điện thoại hoặc nguồn sáng mới; dùng ánh đèn đường qua rèm.",
+          "category": "author_choice",
+          "provenance": {
+            "origin": "author_input",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "plan:logline",
+          "label": "Logline nguồn",
+          "text": "Lan và Bình đọc giấy nhờ ánh đèn đường trong phòng trọ mất điện.",
+          "category": "context",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        },
+        {
+          "id": "plan:section:0",
+          "label": "Đầu",
+          "text": "Lan đặt tờ giấy lên bàn gần cửa sổ có rèm. Bình cầm chiếc đèn pin hỏng.",
+          "category": "context",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        },
+        {
+          "id": "plan:section:1",
+          "label": "Cuối",
+          "text": "Bình đặt đèn pin hỏng xuống. Lan kéo rèm; hai người nghiêng giấy để đọc bằng ánh đèn đường.",
+          "category": "context",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        }
+      ],
+      "notes": [],
+      "question": "",
+      "provider": "ollama",
+      "model": "qwen2.5:7b",
+      "parameters": {
+        "temperature": 0.3,
+        "timeout_seconds": 60,
+        "num_ctx": 16384,
+        "screenplay_review_temperature": 0.0
+      },
+      "prompt_version": "screenplay-review-v7-evidence-selection",
+      "error": null
+    },
+    "unchanged_screenplay": true,
+    "detected_conflict": false,
+    "matches_expected_conflict": true,
+    "original_gate_fields": {
+      "matches_expected_conflict": true
+    },
+    "matches_expected_evidence": true,
+    "unexpected_cjk": false
+  },
+  {
+    "case": "broken-flashlight-violating",
+    "expected_conflict": true,
+    "status": 200,
+    "review": {
+      "id": "d3aaaa8b-1a8f-4056-8c7d-e86f072ef080",
+      "created_at": "2026-10-29T08:35:50.359672+00:00",
+      "source_revision": 4,
+      "source_content": "{\"answers\": [], \"clarifications\": {}, \"constraints\": [\"Chỉ Lan và Bình, một phòng trọ ban đêm.\", \"Đèn pin bị hỏng, không thể sáng.\", \"Không thêm điện thoại hoặc nguồn sáng mới; dùng ánh đèn đường qua rèm.\"], \"draft\": {\"logline\": \"Lan và Bình đọc giấy nhờ ánh đèn đường trong phòng trọ mất điện.\", \"sections\": [{\"content\": \"Lan đặt tờ giấy lên bàn gần cửa sổ có rèm. Bình cầm chiếc đèn pin hỏng.\", \"purpose\": \"Mở\", \"title\": \"Đầu\"}, {\"content\": \"Bình đặt đèn pin hỏng xuống. Lan kéo rèm; hai người nghiêng giấy để đọc bằng ánh đèn đường.\", \"purpose\": \"Diễn tiến\", \"title\": \"Cuối\"}], \"title\": \"Đọc giấy\"}, \"idea\": \"Lan và Bình đọc giấy nhờ ánh đèn đường trong phòng trọ mất điện.\", \"questions\": [], \"response_language\": \"vi\"}",
+      "source_screenplay": {
+        "id": "bcd585fd-2de6-4fab-9667-4a80fd68308b",
+        "version": 2,
+        "scenes": [
+          {
+            "id": "86578679-d2e2-4787-980b-9a0e97e676df",
+            "source_scene_id": "9911a401-9531-458c-879d-0e3fe66e62dd",
+            "heading": "Trước đó",
+            "blocks": [
+              {
+                "kind": "action",
+                "text": "Lan đặt tờ giấy lên bàn gần cửa sổ có rèm. Bình cầm chiếc đèn pin hỏng.",
+                "speaker": "",
+                "id": "c201739a-f73a-4767-a3ff-415d855d25d1"
+              }
+            ]
+          },
+          {
+            "id": "9779354a-a862-4f55-a64c-49b5caad5a9e",
+            "source_scene_id": "4f78a8eb-3a26-498d-87d8-bfefcf1fdcf2",
+            "heading": "Khoảnh khắc",
+            "blocks": [
+              {
+                "kind": "action",
+                "text": "Lan kéo rèm, để ánh đèn đường rọi lên tờ giấy.",
+                "speaker": "",
+                "id": "6c006961-c867-4bba-babd-e64454cc5389"
+              },
+              {
+                "kind": "action",
+                "text": "Bình bật chiếc đèn pin hỏng; đèn sáng rực, rọi rõ tờ giấy.",
+                "speaker": "",
+                "id": "38215107-7405-48fc-9bce-270440eb27e3"
+              }
+            ]
+          }
+        ],
+        "source_revision": 2,
+        "source_outline": {
+          "id": "f7ac7cea-bb23-48ec-a150-86c964ebf188",
+          "version": 2,
+          "scenes": [
+            {
+              "id": "9911a401-9531-458c-879d-0e3fe66e62dd",
+              "title": "Trước đó",
+              "action": "Lan đặt tờ giấy lên bàn gần cửa sổ có rèm. Bình cầm chiếc đèn pin hỏng.",
+              "location": "",
+              "time": "",
+              "characters": "",
+              "goal": "",
+              "purpose": "",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {}
+            },
+            {
+              "id": "4f78a8eb-3a26-498d-87d8-bfefcf1fdcf2",
+              "title": "Khoảnh khắc",
+              "action": "Bình đặt đèn pin hỏng xuống. Lan kéo rèm; hai người nghiêng giấy để đọc bằng ánh đèn đường.",
+              "location": "",
+              "time": "",
+              "characters": "",
+              "goal": "",
+              "purpose": "",
+              "viewer_intent": "",
+              "keep_or_avoid": "",
+              "staging_choices": {}
+            }
+          ],
+          "source": {
+            "id": "b00b8851-37f5-4811-ab02-80f5e428fa54",
+            "project_revision": 0,
+            "version_id": "current",
+            "draft": {
+              "title": "Đọc giấy",
+              "logline": "Lan và Bình đọc giấy nhờ ánh đèn đường trong phòng trọ mất điện.",
+              "sections": [
+                {
+                  "title": "Đầu",
+                  "purpose": "Mở",
+                  "content": "Lan đặt tờ giấy lên bàn gần cửa sổ có rèm. Bình cầm chiếc đèn pin hỏng."
+                },
+                {
+                  "title": "Cuối",
+                  "purpose": "Diễn tiến",
+                  "content": "Bình đặt đèn pin hỏng xuống. Lan kéo rèm; hai người nghiêng giấy để đọc bằng ánh đèn đường."
+                }
+              ]
+            },
+            "context": {
+              "idea": "Lan và Bình đọc giấy nhờ ánh đèn đường trong phòng trọ mất điện.",
+              "constraints": [
+                "Chỉ Lan và Bình, một phòng trọ ban đêm.",
+                "Đèn pin bị hỏng, không thể sáng.",
+                "Không thêm điện thoại hoặc nguồn sáng mới; dùng ánh đèn đường qua rèm."
+              ],
+              "clarifications": [],
+              "pending_questions": []
+            },
+            "response_language": "vi"
+          }
+        }
+      },
+      "source_outline": {
+        "id": "f7ac7cea-bb23-48ec-a150-86c964ebf188",
+        "version": 2,
+        "scenes": [
+          {
+            "id": "9911a401-9531-458c-879d-0e3fe66e62dd",
+            "title": "Trước đó",
+            "action": "Lan đặt tờ giấy lên bàn gần cửa sổ có rèm. Bình cầm chiếc đèn pin hỏng.",
+            "location": "",
+            "time": "",
+            "characters": "",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "",
+            "keep_or_avoid": "",
+            "staging_choices": {}
+          },
+          {
+            "id": "4f78a8eb-3a26-498d-87d8-bfefcf1fdcf2",
+            "title": "Khoảnh khắc",
+            "action": "Bình đặt đèn pin hỏng xuống. Lan kéo rèm; hai người nghiêng giấy để đọc bằng ánh đèn đường.",
+            "location": "",
+            "time": "",
+            "characters": "",
+            "goal": "",
+            "purpose": "",
+            "viewer_intent": "",
+            "keep_or_avoid": "",
+            "staging_choices": {}
+          }
+        ],
+        "source": {
+          "id": "b00b8851-37f5-4811-ab02-80f5e428fa54",
+          "project_revision": 0,
+          "version_id": "current",
+          "draft": {
+            "title": "Đọc giấy",
+            "logline": "Lan và Bình đọc giấy nhờ ánh đèn đường trong phòng trọ mất điện.",
+            "sections": [
+              {
+                "title": "Đầu",
+                "purpose": "Mở",
+                "content": "Lan đặt tờ giấy lên bàn gần cửa sổ có rèm. Bình cầm chiếc đèn pin hỏng."
+              },
+              {
+                "title": "Cuối",
+                "purpose": "Diễn tiến",
+                "content": "Bình đặt đèn pin hỏng xuống. Lan kéo rèm; hai người nghiêng giấy để đọc bằng ánh đèn đường."
+              }
+            ]
+          },
+          "context": {
+            "idea": "Lan và Bình đọc giấy nhờ ánh đèn đường trong phòng trọ mất điện.",
+            "constraints": [
+              "Chỉ Lan và Bình, một phòng trọ ban đêm.",
+              "Đèn pin bị hỏng, không thể sáng.",
+              "Không thêm điện thoại hoặc nguồn sáng mới; dùng ánh đèn đường qua rèm."
+            ],
+            "clarifications": [],
+            "pending_questions": []
+          },
+          "response_language": "vi"
+        }
+      },
+      "target_scene_id": "9779354a-a862-4f55-a64c-49b5caad5a9e",
+      "instructions": "",
+      "status": "ready",
+      "sources": [
+        {
+          "id": "script:86578679-d2e2-4787-980b-9a0e97e676df:heading",
+          "label": "Trước đó",
+          "text": "Trước đó",
+          "category": "screenplay",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": "86578679-d2e2-4787-980b-9a0e97e676df",
+          "block_id": null,
+          "field": "heading"
+        },
+        {
+          "id": "block:c201739a-f73a-4767-a3ff-415d855d25d1:text",
+          "label": "Trước đó · khối 1",
+          "text": "Lan đặt tờ giấy lên bàn gần cửa sổ có rèm. Bình cầm chiếc đèn pin hỏng.",
+          "category": "screenplay",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": "86578679-d2e2-4787-980b-9a0e97e676df",
+          "block_id": "c201739a-f73a-4767-a3ff-415d855d25d1",
+          "field": "text"
+        },
+        {
+          "id": "script:9779354a-a862-4f55-a64c-49b5caad5a9e:heading",
+          "label": "Khoảnh khắc",
+          "text": "Khoảnh khắc",
+          "category": "screenplay",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": "9779354a-a862-4f55-a64c-49b5caad5a9e",
+          "block_id": null,
+          "field": "heading"
+        },
+        {
+          "id": "block:6c006961-c867-4bba-babd-e64454cc5389:text",
+          "label": "Khoảnh khắc · khối 1",
+          "text": "Lan kéo rèm, để ánh đèn đường rọi lên tờ giấy.",
+          "category": "screenplay",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": "9779354a-a862-4f55-a64c-49b5caad5a9e",
+          "block_id": "6c006961-c867-4bba-babd-e64454cc5389",
+          "field": "text"
+        },
+        {
+          "id": "block:38215107-7405-48fc-9bce-270440eb27e3:text",
+          "label": "Khoảnh khắc · khối 2",
+          "text": "Bình bật chiếc đèn pin hỏng; đèn sáng rực, rọi rõ tờ giấy.",
+          "category": "screenplay",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": "9779354a-a862-4f55-a64c-49b5caad5a9e",
+          "block_id": "38215107-7405-48fc-9bce-270440eb27e3",
+          "field": "text"
+        },
+        {
+          "id": "m2:4f78a8eb-3a26-498d-87d8-bfefcf1fdcf2:action",
+          "label": "Diễn tiến dàn cảnh đã chọn",
+          "text": "Bình đặt đèn pin hỏng xuống. Lan kéo rèm; hai người nghiêng giấy để đọc bằng ánh đèn đường.",
+          "category": "context",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "intent:idea",
+          "label": "Ý tưởng tác giả",
+          "text": "Lan và Bình đọc giấy nhờ ánh đèn đường trong phòng trọ mất điện.",
+          "category": "author_choice",
+          "provenance": {
+            "origin": "author_input",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "intent:constraint:0",
+          "label": "Giới hạn 1",
+          "text": "Chỉ Lan và Bình, một phòng trọ ban đêm.",
+          "category": "author_choice",
+          "provenance": {
+            "origin": "author_input",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "intent:constraint:1",
+          "label": "Giới hạn 2",
+          "text": "Đèn pin bị hỏng, không thể sáng.",
+          "category": "author_choice",
+          "provenance": {
+            "origin": "author_input",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "intent:constraint:2",
+          "label": "Giới hạn 3",
+          "text": "Không thêm điện thoại hoặc nguồn sáng mới; dùng ánh đèn đường qua rèm.",
+          "category": "author_choice",
+          "provenance": {
+            "origin": "author_input",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "choice"
+        },
+        {
+          "id": "plan:logline",
+          "label": "Logline nguồn",
+          "text": "Lan và Bình đọc giấy nhờ ánh đèn đường trong phòng trọ mất điện.",
+          "category": "context",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        },
+        {
+          "id": "plan:section:0",
+          "label": "Đầu",
+          "text": "Lan đặt tờ giấy lên bàn gần cửa sổ có rèm. Bình cầm chiếc đèn pin hỏng.",
+          "category": "context",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        },
+        {
+          "id": "plan:section:1",
+          "label": "Cuối",
+          "text": "Bình đặt đèn pin hỏng xuống. Lan kéo rèm; hai người nghiêng giấy để đọc bằng ánh đèn đường.",
+          "category": "context",
+          "provenance": {
+            "origin": "legacy_unknown",
+            "author_confirmed": false
+          },
+          "scene_id": null,
+          "block_id": null,
+          "field": "context"
+        }
+      ],
+      "notes": [
+        {
+          "kind": "intent_mismatch",
+          "observation": "Lan kéo rèm để ánh đèn đường rọi lên tờ giấy.",
+          "impact": "Vi phạm giới hạn 3, vì đã sử dụng đèn pin hỏng để sáng rõ tờ giấy, trái với yêu cầu không thêm nguồn sáng mới.",
+          "suggestion": "",
+          "evidence": [
+            {
+              "source_id": "block:6c006961-c867-4bba-babd-e64454cc5389:text",
+              "quote": "Lan kéo rèm, để ánh đèn đường rọi lên tờ giấy."
+            },
+            {
+              "source_id": "intent:constraint:1",
+              "quote": "Đèn pin bị hỏng, không thể sáng."
+            }
+          ],
+          "id": "00433fc6-27c8-46e0-a007-e45a629355a7",
+          "assessment": null
+        },
+        {
+          "kind": "intent_mismatch",
+          "observation": "Bình bật đèn pin hỏng, đèn sáng rực, rọi rõ tờ giấy.",
+          "impact": "Vi phạm giới hạn 3, vì đã sử dụng đèn pin hỏng để sáng rõ tờ giấy, trái với yêu cầu không thêm nguồn sáng mới.",
+          "suggestion": "",
+          "evidence": [
+            {
+              "source_id": "block:38215107-7405-48fc-9bce-270440eb27e3:text",
+              "quote": "Bình bật chiếc đèn pin hỏng; đèn sáng rực, rọi rõ tờ giấy."
+            },
+            {
+              "source_id": "intent:constraint:1",
+              "quote": "Đèn pin bị hỏng, không thể sáng."
+            }
+          ],
+          "id": "fb006f67-aa17-4054-b46a-d9192a9aff17",
+          "assessment": null
+        }
+      ],
+      "question": "",
+      "provider": "ollama",
+      "model": "qwen2.5:7b",
+      "parameters": {
+        "temperature": 0.3,
+        "timeout_seconds": 60,
+        "num_ctx": 16384,
+        "screenplay_review_temperature": 0.0
+      },
+      "prompt_version": "screenplay-review-v7-evidence-selection",
+      "error": null
+    },
+    "unchanged_screenplay": true,
+    "detected_conflict": true,
+    "matches_expected_conflict": true,
+    "original_gate_fields": {
+      "matches_expected_conflict": true
+    },
+    "matches_expected_evidence": false,
+    "unexpected_cjk": false
+  }
+]

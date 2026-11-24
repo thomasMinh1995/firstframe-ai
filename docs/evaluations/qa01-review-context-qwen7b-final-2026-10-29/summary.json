@@ -1,0 +1,9 @@
+{
+  "calls": 8,
+  "http_200": 2,
+  "all_screenplays_unchanged": true,
+  "context_rejections": 0,
+  "truncated_outputs": 0,
+  "model_seconds": 134.05,
+  "release_acceptance": "pending: invalid evidence, false positive, independent reader/device QA"
+}

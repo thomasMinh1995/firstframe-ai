@@ -1,0 +1,23 @@
+{
+  "checks": {
+    "ready": false,
+    "review_completed": false,
+    "author_scene_limit": true,
+    "all_scenes_written": false
+  },
+  "http": {
+    "start": 200,
+    "continue": 200
+  },
+  "project_id": "2704bbee-2e89-4f5b-b87b-0895d25713cb",
+  "run_id": "2fadb419-62c6-481c-8eae-b82b62f811b2",
+  "run_status": "interrupted",
+  "review_error": null,
+  "scene_count": 2,
+  "reviewed_scenes": 0,
+  "total_seconds": 109.934,
+  "model_seconds": 109.662,
+  "call_count": 5,
+  "technical_pass": false,
+  "release_approved": false
+}

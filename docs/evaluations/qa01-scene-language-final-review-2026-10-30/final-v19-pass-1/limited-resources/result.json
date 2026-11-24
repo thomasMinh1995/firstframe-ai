@@ -1,0 +1,24 @@
+{
+  "scene": {
+    "id": "309e1a8e-5563-4415-aed7-cb832abce7a8",
+    "source_scene_id": "c5d358ed-0a16-4b6f-8b27-6dc3600aedbf",
+    "heading": "Khoảnh khắc",
+    "blocks": [
+      {
+        "kind": "action",
+        "text": "Bình đặt đèn pin xuống.",
+        "speaker": "",
+        "id": "4a833b42-e72d-4f13-99b1-7663e7b0514d"
+      },
+      {
+        "kind": "action",
+        "text": "Lan kéo rèm để ánh đèn đường rọi vào bàn; cả hai nghiêng tờ giấy để đọc.",
+        "speaker": "",
+        "id": "e4748826-d7e8-4dba-a17c-70e2d7c235b0"
+      }
+    ]
+  },
+  "prompt_version": "screenplay-scene-v19-source-composition",
+  "model": "qwen2.5:7b",
+  "status": "ready"
+}

@@ -1,0 +1,30 @@
+{
+  "scene": {
+    "id": "e40317cd-07a3-4a95-b7f6-0ba50f908d6f",
+    "source_scene_id": "474fcdcf-6fb1-485f-9293-03411fe34e66",
+    "heading": "Khoảnh khắc",
+    "blocks": [
+      {
+        "kind": "action",
+        "text": "Nam cầm chiếc túi nhỏ, cố gắng che chỗ khóa áo kẹt. Hà đứng bên cạnh, nhìn Nam lúng túng.",
+        "speaker": "",
+        "id": "a5d445a8-cc23-48d4-b51b-d3624752a8fa"
+      },
+      {
+        "kind": "dialogue",
+        "text": "Em... em không biết sao cả, chị ạ.",
+        "speaker": "Nam",
+        "id": "b3ba619d-43fb-404c-954e-54693a6587d5"
+      },
+      {
+        "kind": "action",
+        "text": "Hà đưa tay ra, mỉm cười nhẹ nhàng. Nam ngại ngùng đưa vạt áo ra, hai người cùng cười.",
+        "speaker": "",
+        "id": "6e280228-3d1d-4bce-b4ea-e28d73d8256b"
+      }
+    ]
+  },
+  "prompt_version": "screenplay-scene-v10",
+  "model": "qwen2.5:7b",
+  "status": "ready"
+}

@@ -1,0 +1,10 @@
+{
+  "content_pass": true,
+  "checks": {
+    "all_author_beats_exact_and_ordered": true,
+    "two_speakers_each_scene": true,
+    "unresolved_departure_kept": true,
+    "outline_snapshot_kept": true
+  },
+  "reading": "Con nhận/cất vé đúng cảnh 2; không nhận lại hay chốt đi/không đi. Mẹ/con đúng vai, mỗi cảnh hai lượt thoại, không lặp nguyên câu. Outline AI mâu thuẫn vẫn được giữ làm snapshot không xác nhận, không dùng nó để sửa kết mở tác giả."
+}
