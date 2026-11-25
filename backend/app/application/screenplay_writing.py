@@ -45,6 +45,8 @@ def write_scene(proposal: ScreenplayProposal, provider: StructuredProvider) -> S
         )
     if unanswered:
         instructions += UNANSWERED_QUESTIONS_RULE
+    if proposal.dialogue_only:
+        instructions += "\nRevise spoken text only. Preserve the kind and exact speaker of every selected dialogue block."
     request = StructuredRequest(
         stage="screenplay_generation", instructions=instructions + (
             "\nRevise ONLY the selected block IDs. Return replacements with exact expected original kind/text/speaker and a replacement. "
@@ -99,6 +101,8 @@ def write_scene(proposal: ScreenplayProposal, provider: StructuredProvider) -> S
                         raise ValueError("Invalid replacement text/speaker")
                 validate_writing_language([r.replacement.model_dump() for r in output.replacements], request.input_text)
                 ScriptScene.model_validate(scene.model_dump())
+                if proposal.dialogue_only:
+                    validate_preview(proposal, scene)
                 return proposal.model_copy(update={"scene": scene, "status": "ready", "model": result.model})
             output = (render_composition(request.response_model.model_validate(result.output.model_dump()), beats, language, json.loads(request.input_text))
                       if composed else SceneWritingResult.model_validate(result.output.model_dump()).scene)
@@ -135,3 +139,8 @@ def validate_preview(proposal, scene):
             raise ValueError("Sửa khối không thay tiêu đề, thêm/bớt hoặc đổi thứ tự khối.")
         if any(b != target.blocks[i] for i,b in enumerate(scene.blocks) if b.id not in proposal.block_ids):
             raise ValueError("Phần ngoài các khối đã chọn phải giữ nguyên.")
+        if proposal.dialogue_only and any(
+            old.kind != "dialogue" or (new.kind, new.speaker) != (old.kind, old.speaker)
+            for old, new in zip(target.blocks, scene.blocks) if old.id in proposal.block_ids
+        ):
+            raise ValueError("Chỉ được đổi nội dung lời thoại. Giữ nguyên người nói và loại khối.")

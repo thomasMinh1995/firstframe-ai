@@ -95,3 +95,4 @@ jobs:
           cat "$RUNNER_TEMP/fixture.log"
           exit 1
       - run: NODE_PATH="$RUNNER_TEMP/browser/node_modules" node tests/screenplay-context.browser.cjs
+      - run: NODE_PATH="$RUNNER_TEMP/browser/node_modules" node tests/dialogue-revision.browser.cjs

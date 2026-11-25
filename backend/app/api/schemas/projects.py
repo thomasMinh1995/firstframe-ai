@@ -271,6 +271,7 @@ def screenplay_content(script: Screenplay) -> dict:
 
 class ScreenplayProposal(BaseModel):
     scope: Literal["scene", "blocks"] = "scene"
+    dialogue_only: bool = False
     block_ids: list[SceneId] = Field(default_factory=list)
     review_id: SceneId | None = None
     note_id: SceneId | None = None

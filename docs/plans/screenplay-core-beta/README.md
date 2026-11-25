@@ -1,5 +1,5 @@
 # Kế hoạch PR: kịch bản, thoại Việt và hình minh họa
-Ngày rà soát: 24/11/2026. PR 1–5 đã squash merge vào dev qua #100, #115, #117, #119 và #121. PR 6 có kết quả kiểm tra thoại BK-05. PR 7–17 là kế hoạch.
+Ngày rà soát: 25/11/2026. PR 1–6 đã squash merge vào dev qua #100, #115, #117, #119, #121 và #123. PR 7 triển khai chế độ chỉ sửa lời thoại đã chọn. PR 8–17 là kế hoạch.
 Kế thừa [định hướng](../vietnam-first-screenplay-mvp.md) và [Task 2](../screenplay-quality-and-feedback.md).
 BK/HA/QA là nhóm mục tiêu; bảng bên dưới mới là đơn vị PR. Không gom một nhóm vào một PR lớn.
 
@@ -65,7 +65,7 @@ Dự toán dưới đây là giới hạn lập kế hoạch, chưa phải số 
 | 4 | [BK-03 — Ngữ cảnh nhân vật khi viết cảnh](../../evaluations/bk-03-character-context-2026-11-24/README.md) | codex/ff-sb-04-character-context | PR 3. | 350 |
 | 5 | [BK-04 — Diễn tiến và đạo cụ giữa hai cảnh](../../evaluations/bk-04-scene-progression-2026-11-24/README.md) | codex/ff-sb-05-scene-progression | PR 3–4. | 350 |
 | 6 | [BK-05 — Thoại tự chọn trong cảnh nối tiếp](../../evaluations/bk-05-vietnamese-dialogue-2026-11-24/README.md) | codex/ff-sb-06-vietnamese-dialogue | PR 4–5; model và ngân sách giữ cố định trong phép so sánh. | 450 |
-| 7 | BK-06 | codex/ff-sb-07-dialogue-revision | PR 4, 6. | 450 |
+| 7 | BK-06 | feat/ff-sb-07-dialogue-revision | PR 4, 6. | 450 |
 | 8 | BK-07 backend | codex/ff-sb-08-feedback-source | PR 3–6; chỉ triển khai khi đã chốt lỗi cần sửa. | 400 |
 | 9 | BK-07 frontend | codex/ff-sb-09-feedback-reading | PR 8. | 350 |
 | 10 | HA-01 | codex/ff-sb-10-screenplay-image-source | PR 1; nền đăng nhập/phân quyền phải đã merge vào dev. | 450 |
