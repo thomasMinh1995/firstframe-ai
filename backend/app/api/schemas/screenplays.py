@@ -60,6 +60,7 @@ class StartScreenplay(BaseModel):
 
 class SceneWritingRequest(StartScreenplay):
     scope: Literal["scene", "blocks"] = "scene"
+    dialogue_only: bool = False
     block_ids: list[SceneId] = Field(default_factory=list, max_length=20)
     review_id: SceneId | None = None
     note_id: SceneId | None = None

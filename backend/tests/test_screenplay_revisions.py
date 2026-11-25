@@ -56,6 +56,67 @@ def test_undo_refuses_target_edited_after_apply(writing):
     assert client.get(url).json()==p
 
 
+@pytest.mark.parametrize("outcome", ["action_selected", "speaker_changed", "kind_changed", "apply", "discard", "stale"])
+def test_dialogue_only_revision_lifecycle(writing, monkeypatch, outcome):
+    client, provider, project = setup_blocks(writing, monkeypatch)
+    url = f"/api/projects/{project['id']}"
+    scene = project["screenplay"]["scenes"][0]
+    index = 0 if outcome == "action_selected" else 1
+    request = {"revision": project["revision"], "request_id": str(uuid4()),
+               "target_scene_id": scene["id"], "scope": "blocks", "dialogue_only": True,
+               "block_ids": [scene["blocks"][index]["id"]]}
+    generate_revision = provider.request_structured
+    if outcome in ("speaker_changed", "kind_changed"):
+        def altered(request):
+            result = generate_revision(request)
+            replacement = result.output.replacements[0].replacement
+            replacement.speaker = "Cha" if outcome == "speaker_changed" else ""
+            if outcome == "kind_changed":
+                replacement.kind = "action"
+            return result
+        monkeypatch.setattr(provider, "request_structured", altered)
+    response = client.post(url + "/screenplay-proposals", json=request)
+    if index == 0:
+        assert response.status_code == 422 and "khối thoại" in response.json()["detail"]
+        assert not provider.requests
+        return
+    if outcome in ("speaker_changed", "kind_changed"):
+        assert response.status_code == 502
+        assert client.get(url).json()["screenplay"] == project["screenplay"]
+        return
+
+    assert response.status_code == 200, response.text
+    ready = response.json()
+    proposal = ready["screenplay_proposals"][-1]
+    assert proposal["dialogue_only"] is True
+    assert ready["screenplay"] == project["screenplay"]
+    assert proposal["scene"]["blocks"][::2] == scene["blocks"][::2]
+    route = url + f"/screenplay-proposals/{proposal['id']}"
+    replay = {**request, "dialogue_only": False}
+    assert client.post(url + "/screenplay-proposals", json=replay).status_code == 409
+    forged = deepcopy(proposal["scene"])
+    forged["blocks"][1]["speaker"] = "Cha"
+    assert client.post(route + "/apply", json={"revision": ready["revision"], "scene": forged}).status_code == 422
+    if outcome == "discard":
+        saved = client.post(route + "/discard", json={"revision": ready["revision"]}).json()
+        assert saved["screenplay"] == project["screenplay"]
+        assert client.post(route + "/apply", json={"revision": saved["revision"]}).status_code == 409
+    elif outcome == "stale":
+        changed = edit(ready)
+        changed["screenplay"]["scenes"][0]["blocks"][1]["text"] = "Chữ mới của tác giả."
+        saved = client.put(url, json=changed).json()
+        assert client.post(route + "/apply", json={"revision": saved["revision"]}).status_code == 409
+        assert client.get(url).json()["screenplay"] == saved["screenplay"]
+    else:
+        preview = deepcopy(proposal["scene"])
+        preview["blocks"][1]["text"] = "  Con sẽ nghĩ thêm.  "
+        saved = client.post(route + "/apply", json={"revision": ready["revision"], "scene": preview}).json()
+        assert saved["screenplay"]["scenes"][0] == preview
+        restored = client.post(route + "/undo", json={"revision": saved["revision"]}).json()
+        assert restored["screenplay"]["scenes"] == project["screenplay"]["scenes"]
+    assert len(provider.requests) == 1
+
+
 @pytest.mark.parametrize('foreign_replacement', [False, True])
 def test_block_script_guard_preserves_foreign_author_text_outside_scope(writing, monkeypatch, foreign_replacement):
     client, provider, p = setup_blocks(writing, monkeypatch)

@@ -130,7 +130,7 @@ def propose_scene(project_id: str, request: SceneWritingRequest):
             project = projects.load_project(project_id)
             existing = next((p for p in project.screenplay_proposals if p.id == request.request_id), None)
             if existing:
-                if (existing.target_scene_id, existing.instructions, existing.scope, existing.block_ids, existing.review_id, existing.note_id) != (request.target_scene_id, request.instructions, request.scope, request.block_ids, request.review_id, request.note_id):
+                if (existing.target_scene_id, existing.instructions, existing.scope, existing.block_ids, existing.review_id, existing.note_id, existing.dialogue_only) != (request.target_scene_id, request.instructions, request.scope, request.block_ids, request.review_id, request.note_id, request.dialogue_only):
                     raise HTTPException(409, "ID tác vụ đã dùng cho cảnh hoặc yêu cầu khác.")
                 return project
             if project.revision != request.revision:
@@ -148,7 +148,8 @@ def propose_scene(project_id: str, request: SceneWritingRequest):
                 source_screenplay=script.model_copy(deep=True),
                 source_outline=project.scene_outline.model_copy(deep=True) if project.scene_outline else None,
                 target_scene_id=request.target_scene_id, instructions=request.instructions, prompt_version=PROMPT_VERSION,
-                scope=request.scope, block_ids=request.block_ids, review_id=request.review_id, note_id=request.note_id)
+                scope=request.scope, block_ids=request.block_ids, review_id=request.review_id, note_id=request.note_id,
+                dialogue_only=request.dialogue_only)
             project.screenplay_proposals.append(proposal)
             projects.save_project(project, "screenplay_checkpoint")
 

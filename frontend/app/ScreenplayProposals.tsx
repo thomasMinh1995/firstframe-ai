@@ -10,26 +10,33 @@ export function ScreenplayProposals({project,scene,canUse,onWrite,onInspect,onPr
   onPreview:(id:string,scene:ScriptScene)=>void;onUse:(id:string,scene:ScriptScene)=>void;onDiscard:(id:string)=>void;
 }) {
   const id=useId();const [instructions,setInstructions]=useState('');const [sent,setSent]=useState<string|null>(null);
-  const [blocks,setBlocks]=useState<string[]>([]),[scope,setScope]=useState<'scene'|'blocks'>('scene');
-  const [resolved,setResolved]=useState<{kind:string;scene_id:string|null;message:string;affected_scene_ids:string[]}|null>(null),[error,setError]=useState('');
+  const [blocks,setBlocks]=useState<string[]>([]),[scope,setScope]=useState<'scene'|'blocks'|'dialogue'>('scene');
+  const [resolution,setResolution]=useState<{kind:string;scene_id:string|null;message:string;affected_scene_ids:string[];key:string}|null>(null),[error,setError]=useState('');
+  const dialogueOnly=scope==='dialogue';
+  const selectable=scene.blocks.filter(b=>!dialogueOnly||b.kind==='dialogue');
+  const selection=selectable.filter(b=>blocks.includes(b.id)).map(b=>b.id);
+  const key=JSON.stringify([project.revision,scene.id,instructions,scope,selection]);
+  const resolved=resolution?.key===key?resolution:null;
   const all=project.screenplay_proposals??[];
   const uncertain=sent!==null&&!all.some(p=>p.id===sent);
   return <section className="screenplay-proposals" aria-label="FirstFrame viết thử một cảnh">
     <h3>Phương án sửa cảnh</h3>
-    <p>Chọn cả cảnh hoặc các khối cần sửa. AI giữ phương án riêng để bạn đọc, chỉnh và quyết định dùng hay bỏ.</p>
-    <label htmlFor={`${id}-request`}>Bạn muốn sửa điều gì? · tùy chọn</label><textarea id={`${id}-request`} maxLength={2000} value={instructions} onChange={e=>{setInstructions(e.target.value);setResolved(null)}}/>
-    <label>Phạm vi sửa<select value={scope} onChange={e=>{setScope(e.target.value as 'scene'|'blocks');setResolved(null)}}><option value="scene">Cảnh đang chọn</option><option value="blocks">Chỉ các khối được chọn</option></select></label>
-    {scope==='blocks'&&<fieldset><legend>Chọn khối được phép thay đổi</legend>{scene.blocks.map((b,i)=><label key={b.id}><input type="checkbox" checked={blocks.includes(b.id)} onChange={e=>{setBlocks(ids=>e.target.checked?[...ids,b.id]:ids.filter(id=>id!==b.id));setResolved(null)}}/>Khối {i+1} · {b.text.slice(0,70)}</label>)}</fieldset>}
-    <button type="button" className="secondary" onClick={()=>{setError('');void request(`/${project.id}/screenplay-revision-target`,'POST',{revision:project.revision,request_id:crypto.randomUUID(),target_scene_id:scene.id,instructions}).then(r=>setResolved(r as typeof resolved)).catch(e=>setError(String(e)))}}>Xem phạm vi sửa</button>
-    {resolved&&<p role="status">{resolved.message} {resolved.kind==='scene'?`Cảnh ${project.screenplay!.scenes.findIndex(s=>s.id===resolved.scene_id)+1} · ${scope==='blocks'?blocks.length+' khối':'toàn cảnh'}`:resolved.kind==='candidate'?`${resolved.affected_scene_ids.length} cảnh có thể bị ảnh hưởng.`:''}</p>}
+    <label htmlFor={`${id}-request`}>Bạn muốn sửa điều gì? · tùy chọn</label><textarea id={`${id}-request`} maxLength={2000} value={instructions} onChange={e=>{setInstructions(e.target.value);setResolution(null)}}/>
+    <label>Phạm vi sửa<select value={scope} onChange={e=>{setScope(e.target.value as typeof scope);setBlocks([]);setResolution(null)}}><option value="scene">Cảnh đang chọn</option><option value="blocks">Chỉ các khối được chọn</option><option value="dialogue">Chỉ lời thoại đã chọn</option></select></label>
+    {scope!=='scene'&&<fieldset><legend>{dialogueOnly?'Chọn lời thoại cần sửa':'Chọn khối được phép thay đổi'}</legend>
+      {dialogueOnly&&!selectable.length&&<p>Cảnh này chưa có khối thoại.</p>}
+      {selectable.map((b,i)=><label key={b.id}><input type="checkbox" checked={selection.includes(b.id)} disabled={selection.length>=20&&!selection.includes(b.id)} onChange={e=>{setBlocks(ids=>e.target.checked?[...ids,b.id]:ids.filter(id=>id!==b.id));setResolution(null)}}/>{dialogueOnly?b.speaker:`Khối ${i+1}`} · {b.text.slice(0,70)}</label>)}
+    </fieldset>}
+    <button type="button" className="secondary" disabled={scope!=='scene'&&!selection.length} onClick={()=>{setError('');void request(`/${project.id}/screenplay-revision-target`,'POST',{revision:project.revision,request_id:crypto.randomUUID(),target_scene_id:scene.id,instructions}).then(r=>setResolution({...r as NonNullable<typeof resolution>,key})).catch(e=>setError(String(e)))}}>Xem phạm vi sửa</button>
+    {resolved&&<p role="status">{resolved.message} {resolved.kind==='scene'?`Cảnh ${project.screenplay!.scenes.findIndex(s=>s.id===resolved.scene_id)+1} · ${scope==='scene'?'toàn cảnh':selection.length+(dialogueOnly?' khối thoại':' khối')}`:resolved.kind==='candidate'?`${resolved.affected_scene_ids.length} cảnh có thể bị ảnh hưởng.`:''}</p>}
     {resolved?.kind==='scene'&&resolved.scene_id!==scene.id&&<p>Chọn cảnh được nêu ở danh sách phía trên rồi kiểm tra lại phạm vi.</p>}
     {resolved?.kind==='scene'&&resolved.scene_id!==scene.id&&scope==='scene'&&onChooseScene&&<button type="button" disabled={uncertain||all.length>=100||[...all,...(project.screenplay_reviews??[])].some(p=>p.status==='pending')} onClick={()=>{
       const target=resolved.scene_id!;const request_id=crypto.randomUUID();setSent(request_id);
       void onWrite({request_id,target_scene_id:target,instructions,scope:'scene',block_ids:[]}).then(()=>onChooseScene(target));
     }}>Tạo phương án cho cảnh đã nêu</button>}
-    {resolved?.kind==='candidate' &&onStructural&&<button type="button" onClick={()=>onStructural(instructions)}>Tạo candidate thay đổi cấu trúc</button>}
-    <button type="button" disabled={!resolved||resolved.kind!=='scene'||resolved.scene_id!==scene.id||(scope==='blocks'&&!blocks.length)||uncertain||[...all,...(project.screenplay_reviews??[])].some(p=>p.status==='pending')||all.length>=100} onClick={()=>{
-      const request_id=crypto.randomUUID();setSent(request_id);void onWrite({request_id,target_scene_id:scene.id,instructions,scope,block_ids:scope==='blocks'?blocks:[]});
+    {resolved?.kind==='candidate' &&!dialogueOnly&&onStructural&&<button type="button" onClick={()=>onStructural(instructions)}>Tạo candidate thay đổi cấu trúc</button>}
+    <button type="button" disabled={!resolved||resolved.kind!=='scene'||resolved.scene_id!==scene.id||(scope!=='scene'&&!selection.length)||uncertain||[...all,...(project.screenplay_reviews??[])].some(p=>p.status==='pending')||all.length>=100} onClick={()=>{
+      const request_id=crypto.randomUUID();setSent(request_id);void onWrite({request_id,target_scene_id:scene.id,instructions,scope:scope==='scene'?'scene':'blocks',block_ids:scope==='scene'?[]:selection,...(dialogueOnly?{dialogue_only:true}:{})});
     }}>Tạo phương án sửa trong phạm vi này</button>
     {error&&<p role="alert">{error}</p>}
     <button type="button" className="secondary" onClick={async()=>{if(await onInspect())setSent(null);}}>Kiểm tra phương án đã lưu</button>
@@ -60,7 +67,7 @@ function Proposal({proposal:p,value,current,eligible,selected,onPreview,onUse,on
       {p.source_screenplay.scenes.map(s=><div key={s.id}><h4>{s.heading}</h4>{s.blocks.map(b=><p key={b.id} className="preserve-lines">{b.speaker&&<strong>{b.speaker}: </strong>}{b.text}</p>)}</div>)}
       <p className="preserve-lines">Yêu cầu thêm: {p.instructions||'Không có'}</p>
     </details>
-    <p>Phạm vi: {p.scope==='blocks'?`${p.block_ids?.length??0} khối; giữ tiêu đề và các khối khác`:'toàn bộ cảnh đã chọn'}. Các cảnh khác giữ nguyên.</p>
+    <p>Phạm vi: {p.dialogue_only?`${p.block_ids?.length??0} khối thoại; giữ người nói và hành động`:p.scope==='blocks'?`${p.block_ids?.length??0} khối; giữ tiêu đề và các khối khác`:'toàn bộ cảnh đã chọn'}. Các cảnh khác giữ nguyên.</p>
     {p.status==='applied'&&p.applied_scene&&p.undone_revision==null&&onUndo&&<button type="button" className="secondary" onClick={onUndo}>Hoàn tác lần nhận này</button>}
     {p.undone_revision!=null&&<p>Đã hoàn tác và giữ lịch sử.</p>}
     {value&&<>

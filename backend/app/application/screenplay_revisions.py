@@ -44,6 +44,9 @@ def validate_request(project, request):
     if resolved['kind'] != 'scene' or resolved['scene_id'] != request.target_scene_id:
         raise HTTPException(422, resolved['message'] + ' Kiểm tra lại cảnh đích trước khi gửi.')
     target = next(s for s in project.screenplay.scenes if s.id == request.target_scene_id)
+    if request.dialogue_only and (request.scope != 'blocks' or not request.block_ids
+            or not set(request.block_ids) <= {b.id for b in target.blocks if b.kind == 'dialogue'}):
+        raise HTTPException(422, 'Hãy chọn các khối thoại trong cảnh đích.')
     if (request.scope == 'blocks' and (not request.block_ids or len(set(request.block_ids)) != len(request.block_ids)
         or not set(request.block_ids) <= {b.id for b in target.blocks})) or (request.scope == 'scene' and request.block_ids):
         raise HTTPException(422, 'Phạm vi khối không khớp cảnh đã chọn.')
